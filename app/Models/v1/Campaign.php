@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Models\v1;
+
+use App\UuidForKey;
+use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Campaign extends Model
+{
+    use SoftDeletes, Filterable, UuidForKey;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'campaigns';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'countries', 'description'
+    ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'started_at', 'ended_at', 'created_at',
+        'updated_at', 'deleted_at'
+    ];
+
+    /**
+     * All of the relationships to be touched.
+     * Update the parent's timestamp.
+     *
+     * @var array
+     */
+    protected $touches = [];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'countries' => 'array',
+    ];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+
+    /**
+     * Set the campaign's countries.
+     *
+     * @param $value
+     */
+    public function setCountriesAttribute($value)
+    {
+        $this->attributes['countries'] = json_encode($value);
+    }
+
+    /**
+     * Set the campaign's name.
+     *
+     * @param $value
+     */
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = trim(strtolower($value));
+    }
+
+    /**
+     * Set the campaign's description.
+     *
+     * @param $value
+     */
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = trim($value);
+    }
+
+    /**
+     * Get all the campaign's trips.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function trips()
+    {
+        return $this->hasMany(Trip::class);
+    }
+
+    /**
+     * Get all the campaign's associated groups.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function groups()
+    {
+        return $this->hasManyThrough(Group::class, Trip::class);
+    }
+
+}

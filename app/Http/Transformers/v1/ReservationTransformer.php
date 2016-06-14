@@ -1,0 +1,195 @@
+<?php
+
+namespace App\Http\Transformers\v1;
+
+use App\Models\v1\Reservation;
+use App\Utilities\v1\ShirtSize;
+use League\Fractal\TransformerAbstract;
+
+class ReservationTransformer extends TransformerAbstract
+{
+
+    /**
+     * List of resources available to include
+     *
+     * @var array
+     */
+    protected $availableIncludes = [
+        'user', 'trip', 'rep', 'costs', 'deadlines',
+        'requirements', 'notes', 'todos', 'companions',
+        'fundraisers', 'member'
+    ];
+
+    /**
+     * Turn this item object into a generic array
+     *
+     * @param Reservation $reservation
+     * @return array
+     */
+    public function transform(Reservation $reservation)
+    {
+        return [
+            'id'              => $reservation->id,
+            'given_names'     => $reservation->given_names,
+            'surname'         => $reservation->surname,
+            'gender'          => $reservation->gender,
+            'status'          => $reservation->status,
+            'shirt_size'      => $reservation->shirt_size,
+            'shirt_size_name' => array_values(ShirtSize::get($reservation->shirt_size)),
+            'birthday'        => $reservation->birthday->toDateString(),
+            'companion_limit' => (int) $reservation->companions_limit,
+            'created_at'      => $reservation->created_at->toDateTimeString(),
+            'updated_at'      => $reservation->updated_at->toDateTimeString(),
+            'links'           => [
+                [
+                    'rel' => 'self',
+                    'uri' => '/reservations/' . $reservation->id,
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Include User
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeUser(Reservation $reservation)
+    {
+        $user = $reservation->user;
+
+        return $this->item($user, new UserTransformer);
+    }
+
+    /**
+     * Include Trip
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeTrip(Reservation $reservation)
+    {
+        $trip = $reservation->trip;
+
+        return $this->item($trip, new TripTransformer);
+    }
+
+    /**
+     * Include Rep
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeRep(Reservation $reservation)
+    {
+        $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
+
+        return $this->item($rep, new RepTransformer);
+    }
+
+    /**
+     * Include Costs
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeCosts(Reservation $reservation)
+    {
+        $costs = $reservation->costs;
+
+        return $this->collection($costs, new CostTransformer);
+    }
+
+    /**
+     * Include Deadlines
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeDeadlines(Reservation $reservation)
+    {
+        $deadlines = $reservation->deadlines;
+
+        return $this->collection($deadlines, new DeadlineTransformer);
+    }
+
+    /**
+     * Include Requirements
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeRequirements(Reservation $reservation)
+    {
+        $requirements = $reservation->requirements;
+
+        return $this->collection($requirements, new RequirementTransformer);
+    }
+
+    /**
+     * Include Notes
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeNotes(Reservation $reservation)
+    {
+        $notes = $reservation->notes;
+
+        return $this->collection($notes, new NoteTransformer);
+    }
+
+    /**
+     * Include Todos
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeTodos(Reservation $reservation)
+    {
+        $todos = $reservation->todos;
+
+        return $this->collection($todos, new TodoTransformer);
+    }
+
+    /**
+     * Include Companions
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeCompanions(Reservation $reservation)
+    {
+        $companions = $reservation->companions;
+
+        return $this->collection($companions, new CompanionTransformer);
+    }
+
+    /**
+     * Include Fundraisers
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeFundraisers(Reservation $reservation)
+    {
+        $fundraisers = $reservation->fundraisers;
+
+        return $this->collection($fundraisers, new FundraiserTransformer);
+    }
+
+    /**
+     * Include Member
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeMember(Reservation $reservation)
+    {
+        $member = $reservation->member;
+
+        return $this->item($member, new TeamMemberTransformer);
+    }
+
+}

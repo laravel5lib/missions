@@ -22,8 +22,8 @@ class GroupsController extends Controller
      */
     public function __construct(Group $group)
     {
-        $this->middleware('api.auth', ['except' => ['index','show']]);
-        $this->middleware('jwt.refresh', ['except' => ['index','show']]);
+        // $this->middleware('api.auth', ['except' => ['index','show']]);
+        // $this->middleware('jwt.refresh', ['except' => ['index','show']]);
         $this->group = $group;
     }
 

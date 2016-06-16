@@ -29,10 +29,12 @@
             }
         },
         ready(){
-            var resource = this.$resource('campaigns{/id}', { include: "groups" });
+            var resource = this.$resource('campaigns{/id}', { include: "trips.group" });
 
             resource.query({id: this.id}).then(function(campaign){
-                this.groups = campaign.data.data.groups.data
+				for (var i in campaign.data.data.trips.data) {
+					this.groups.push(campaign.data.data.trips.data[i].group.data)
+				}
             })
         }
     }

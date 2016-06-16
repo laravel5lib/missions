@@ -34,6 +34,10 @@ Route::get('/dashboard', function () {
     return view('dashboard.index');
 });
 
+Route::get('/campaigns', function () {
+    return view('site.campaigns.index');
+});
+
 Route::get('/', function () {
     return view('site.index');
 });

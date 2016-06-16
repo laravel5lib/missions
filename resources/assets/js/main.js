@@ -55,12 +55,6 @@ new Vue({
         }
     },
     ready: function() {
-        // GET request
-        this.$http({url: 'someUrl', method: 'GET'}).then(function (response) {
-            // success callback
-        }, function (response) {
-            // error callback
-        });
-
+        console.log('vue is ready')
     }
 });

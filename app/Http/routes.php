@@ -38,6 +38,18 @@ Route::get('/campaigns', function () {
     return view('site.campaigns.index');
 });
 
+Route::get('/campaigns/{id}', function ($id = null) use ($dispatcher) {
+    try {
+        $campaign = $dispatcher->get('campaigns', ["id" => $id])->first();
+    } catch (Dingo\Api\Exception\InternalHttpException $e) {
+        // We can get the response here to check the status code of the error or response body.
+        $response = $e->getResponse();
+
+        return $response;
+    }
+    return view('site.campaigns.show', compact('campaign'));
+});
+
 Route::get('/', function () {
     return view('site.index');
 });

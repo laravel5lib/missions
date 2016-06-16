@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Requests;
 use App\Models\v1\Campaign;
@@ -8,7 +8,7 @@ use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\CampaignRequest;
 use App\Http\Transformers\v1\CampaignTransformer;
 
-class CampaignsController extends Controller
+class CampaignsController extends ApiController
 {
 
     /**
@@ -35,10 +35,6 @@ class CampaignsController extends Controller
      */
     public function index(Request $request)
     {
-        if ( ! $this->auth->user()->isAdmin()) {
-            abort(403);
-        }
-
         $campaigns = $this->campaign
                           ->filter($request->all())
                           ->paginate($request->get('per_page', 25));
@@ -54,10 +50,6 @@ class CampaignsController extends Controller
      */
     public function show($id)
     {
-        if ( ! $this->auth->user()->isAdmin()) {
-            abort(403);
-        }
-
         $campaign = $this->campaign->findOrFail($id);
 
         return $this->response->item($campaign, new CampaignTransformer);
@@ -100,10 +92,6 @@ class CampaignsController extends Controller
      */
     public function destroy($id)
     {
-        if ( ! $this->auth->user()->isAdmin()) {
-            abort(403);
-        }
-
         $campaign = $this->campaign->findOrFail($id);
 
         $campaign->delete();

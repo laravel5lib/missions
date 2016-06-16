@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import campaigns from './components/campaigns/campaigns.vue';
+import campaignGroups from './components/campaigns/campaign-groups.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery')
@@ -46,9 +47,10 @@ Vue.http.interceptors.push({
 
 new Vue({
     el: '#app',
-    components: {
-        campaigns
-    },
+    components: [
+        campaigns,
+        campaignGroups
+    ],
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

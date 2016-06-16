@@ -4,3 +4,6 @@
 Homestead.yaml
 Homestead.json
 .env
+
+#  jetbrains phpStorm IDE files
+.idea/

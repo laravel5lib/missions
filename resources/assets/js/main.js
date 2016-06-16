@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import campaigns from './components/campaigns/campaigns.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery')
@@ -45,6 +46,9 @@ Vue.http.interceptors.push({
 
 new Vue({
     el: '#app',
+    components: {
+        campaigns
+    },
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

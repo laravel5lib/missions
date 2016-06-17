@@ -26,6 +26,16 @@ class CampaignFilter extends ModelFilter
     }
 
     /**
+     * Show Only Published Campaigns
+     * 
+     * @return mixed
+     */
+    public function published()
+    {
+        return $this->public();
+    }
+
+    /**
      * Filter by country
      *
      * @param $country

@@ -1,18 +1,21 @@
 <template>
-    <div class="container">
-        <div class="col-sm-6 col-md-4" v-for="campaign in campaigns">
-            <div class="thumbnail">
-                <img v-bind:src="'http://lorempixel.com/242/200/city/' + $index" v-bind:alt="campaign.name">
-                <div class="caption">
+    <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+    
+        <div class="col-sm-6 col-md-4" v-for="campaign in campaigns" style="display:flex">
+            <div class="panel panel-default">
+                <img v-bind:src="campaign.thumb_src" v-bind:alt="campaign.name" class="img-responsive">
+                <div class="panel-body">
                     <h4>{{campaign.name}}</h4>
-                    <h6>{{campaign.countries}}</h6>
+                    <h6>{{campaign.country}}</h6>
                     <p>{{campaign.description}}</p>
+                </div><!-- end panel-body -->
+                <div class="panel-footer">
                     <p>
-						<a v-bind:href="campaign.links[0].uri" class="btn btn-primary btn-block" role="button">Details</a>
-					</p>
+                        <a v-bind:href="'/campaigns/' + campaign.page_url" class="btn btn-primary btn-block" role="button">Details</a>
+                    </p>
                 </div>
-            </div>
-        </div>
+            </div><!-- end panel -->
+        </div><!-- end col -->
     </div>
 
 </template>
@@ -26,7 +29,7 @@
             }
         },
         ready(){
-            var resource = this.$resource('campaigns');
+            var resource = this.$resource('campaigns?published=true');
 
             resource.query().then(function(campaigns){
                 this.campaigns = campaigns.data.data

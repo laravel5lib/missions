@@ -35,14 +35,12 @@ Route::get('/dashboard', function () {
 });
 
 Route::get('/campaigns', function () {
-    Auth::loginUsingId('fc4b1442-3a03-4339-86e2-6ecbfc0e3e30');
     return view('site.campaigns.index');
 });
 
-Route::get('/campaigns/{id}', function ($id = null) use ($dispatcher) {
-    Auth::loginUsingId('fc4b1442-3a03-4339-86e2-6ecbfc0e3e30');
+Route::get('/campaigns/{slug}', function ($slug = null) use ($dispatcher) {
     try {
-        $campaign = $dispatcher->be(auth()->user())->get('campaigns/' . $id);
+        $campaign = $dispatcher->get('campaigns/' . $slug);
     } catch (Dingo\Api\Exception\InternalHttpException $e) {
         // We can get the response here to check the status code of the error or response body.
         $response = $e->getResponse();
@@ -53,9 +51,8 @@ Route::get('/campaigns/{id}', function ($id = null) use ($dispatcher) {
 });
 
 Route::get('/trips', function () use ($dispatcher) {
-    Auth::loginUsingId('fc4b1442-3a03-4339-86e2-6ecbfc0e3e30');
     try {
-        $trips = $dispatcher->be(auth()->user())->get('trips', ['include' => 'campaign']);
+        $trips = $dispatcher->get('trips', ['include' => 'campaign']);
     } catch (Dingo\Api\Exception\InternalHttpException $e) {
         // We can get the response here to check the status code of the error or response body.
         $response = $e->getResponse();
@@ -66,9 +63,8 @@ Route::get('/trips', function () use ($dispatcher) {
 });
 
 Route::get('/trips/{id}', function ($id = null) use ($dispatcher) {
-    Auth::loginUsingId('fc4b1442-3a03-4339-86e2-6ecbfc0e3e30');
     try {
-        $trip = $dispatcher->be(auth()->user())->get('trips/'. $id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines']);
+        $trip = $dispatcher->get('trips/'. $id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines']);
     } catch (Dingo\Api\Exception\InternalHttpException $e) {
         // We can get the response here to check the status code of the error or response body.
         $response = $e->getResponse();

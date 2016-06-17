@@ -24,7 +24,8 @@ class Campaign extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'countries', 'description'
+        'name', 'country_code', 'short_desc', 'page_url', 'thumb_src',
+        'started_at', 'ended_at', 'published_at'
     ];
 
     /**
@@ -34,7 +35,7 @@ class Campaign extends Model
      */
     protected $dates = [
         'started_at', 'ended_at', 'created_at',
-        'updated_at', 'deleted_at'
+        'updated_at', 'deleted_at', 'published_at'
     ];
 
     /**
@@ -108,7 +109,12 @@ class Campaign extends Model
      */
     public function groups()
     {
-        return $this->hasManyThrough(Group::class, Trip::class);
+        return $this->belongsToMany(Group::class, 'trips');
+    }
+
+    public function scopePublic($query)
+    {
+        return $query->whereDate('published_at', '<=', date('Y-m-d'));
     }
 
 }

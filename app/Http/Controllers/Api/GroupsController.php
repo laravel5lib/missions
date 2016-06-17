@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\v1\Group;
 use Dingo\Api\Contract\Http\Request;

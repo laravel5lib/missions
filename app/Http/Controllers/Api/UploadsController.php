@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadRequest;
 use App\Http\Transformers\v1\UploadTransformer;
 use App\Models\v1\Upload;

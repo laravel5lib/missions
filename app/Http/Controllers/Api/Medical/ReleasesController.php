@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1\Medical;
+namespace App\Http\Controllers\Api\Medical;
 
-use App\Http\Controllers\v1\Controller;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\Medical\ReleaseRequest;
 use App\Http\Transformers\v1\Medical\ReleaseTransformer;
 use App\Models\v1\Medical\Release;

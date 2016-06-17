@@ -26,13 +26,18 @@ class CampaignTransformer extends TransformerAbstract
     public function transform(Campaign $campaign)
     {
         $array = [
-            'id'          => $campaign->id,
-            'name'        => $campaign->name,
-            'countries'   => $campaign->countries,
-            'description' => $campaign->description,
-            'created_at'  => $campaign->created_at->toDateTimeString(),
-            'updated_at'  => $campaign->updated_at->toDateTimeString(),
-            'links'       => [
+            'id'           => $campaign->id,
+            'name'         => $campaign->name,
+            'country'      => country($campaign->country_code),
+            'description'  => $campaign->short_desc,
+            'page_url'     => $campaign->page_url,
+            'thumb_src'    => $campaign->thumb_src,
+            'started_at'   => $campaign->started_at->toDateString(),
+            'ended_at'     => $campaign->ended_at->toDateString(),
+            'published_at' => $campaign->published_at ? $campaign->published_at->toDateTimeString() : null,
+            'created_at'   => $campaign->created_at->toDateTimeString(),
+            'updated_at'   => $campaign->updated_at->toDateTimeString(),
+            'links'        => [
                 [
                     'rel' => 'self',
                     'uri' => '/campaigns/' . $campaign->id,

@@ -109,9 +109,14 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
 $factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker)
 {
     return [
-        'name'        => $faker->catchPhrase,
-        'countries'   => ['hn', 'ni', 'ec'],
-        'description' => $faker->paragraph(10)
+        'name'         => $faker->catchPhrase,
+        'country_code' => $faker->randomElement(['hn', 'ni', 'ec']),
+        'short_desc'   => $faker->paragraph(3),
+        'page_url'     => $faker->word,
+        'thumb_src'    => $faker->imageUrl,
+        'started_at'   => $faker->dateTimeThisYear,
+        'ended_at'     => $faker->dateTimeThisYear,
+        'published_at' => $faker->dateTimeThisYear,
     ];
 });
 

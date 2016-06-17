@@ -40,7 +40,7 @@ Route::get('/campaigns', function () {
 
 Route::get('/campaigns/{id}', function ($id = null) use ($dispatcher) {
     try {
-        $campaign = $dispatcher->get('campaigns', ["id" => $id])->first();
+        $campaign = $dispatcher->get('campaigns/' . $id);
     } catch (Dingo\Api\Exception\InternalHttpException $e) {
         // We can get the response here to check the status code of the error or response body.
         $response = $e->getResponse();
@@ -48,6 +48,32 @@ Route::get('/campaigns/{id}', function ($id = null) use ($dispatcher) {
         return $response;
     }
     return view('site.campaigns.show', compact('campaign'));
+});
+
+Route::get('/trips', function () use ($dispatcher) {
+    Auth::loginUsingId('5bdbf545-90f9-41f1-876e-915d18a1e415');
+    try {
+        $trips = $dispatcher->be(auth()->user())->get('trips', ['include' => 'campaign']);
+    } catch (Dingo\Api\Exception\InternalHttpException $e) {
+        // We can get the response here to check the status code of the error or response body.
+        $response = $e->getResponse();
+
+        return $response;
+    }
+    return view('site.trips.index')->with('trips', $trips);
+});
+
+Route::get('/trips/{id}', function ($id = null) use ($dispatcher) {
+    Auth::loginUsingId('5bdbf545-90f9-41f1-876e-915d18a1e415');
+    try {
+        $trip = $dispatcher->be(auth()->user())->get('trips/'. $id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines']);
+    } catch (Dingo\Api\Exception\InternalHttpException $e) {
+        // We can get the response here to check the status code of the error or response body.
+        $response = $e->getResponse();
+
+        return $response;
+    }
+    return view('site.trips.show')->with('trip', $trip);
 });
 
 Route::get('/', function () {

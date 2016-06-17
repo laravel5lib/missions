@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
+import groupTrips from './components/campaigns/group-trips.vue';
+import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery')
@@ -49,7 +51,9 @@ new Vue({
     el: '#app',
     components: [
         campaigns,
-        campaignGroups
+        campaignGroups,
+        groupTrips,
+        groupTripWrapper
     ],
     http: {
         headers: {

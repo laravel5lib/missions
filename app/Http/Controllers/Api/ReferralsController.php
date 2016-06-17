@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\v1\ReferralRequest;
 use App\Http\Transformers\v1\ReferralTransformer;

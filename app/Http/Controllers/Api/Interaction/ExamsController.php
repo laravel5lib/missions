@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1\Interaction;
+namespace App\Http\Controllers\Api\Interaction;
 
-use App\Http\Controllers\v1\Controller;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\Interaction\ExamRequest;
 use App\Http\Transformers\v1\Interaction\ExamTransformer;
 use App\Models\v1\Interaction\Exam;

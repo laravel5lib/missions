@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\v1\Campaign;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\CampaignRequest;
 use App\Http\Transformers\v1\CampaignTransformer;
 
-class CampaignsController extends ApiController
+class CampaignsController extends Controller
 {
 
     /**

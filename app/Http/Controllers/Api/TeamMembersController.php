@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\TeamMemberRequest;
 use App\Http\Transformers\v1\TeamMemberTransformer;
 use App\Models\v1\TeamMember;

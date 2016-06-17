@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\v1\User;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\UserRequest;
 use App\Http\Transformers\v1\UserTransformer;
 
-class UsersController extends ApiController
+class UsersController extends Controller
 {
 
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1\interaction;
+namespace App\Http\Controllers\Api\Interaction;
 
-use App\Http\Controllers\v1\Controller;
+use App\Http\Controllers\Controller;
 use App\Models\v1\Interaction\Exam;
 use App\Models\v1\Interaction\Site;
 //use App\models\v1\interaction\Stat;

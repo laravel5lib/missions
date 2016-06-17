@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\v1\Campaign;
 use Dingo\Api\Contract\Http\Request;

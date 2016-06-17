@@ -35,12 +35,14 @@ Route::get('/dashboard', function () {
 });
 
 Route::get('/campaigns', function () {
+    Auth::loginUsingId('fc4b1442-3a03-4339-86e2-6ecbfc0e3e30');
     return view('site.campaigns.index');
 });
 
 Route::get('/campaigns/{id}', function ($id = null) use ($dispatcher) {
+    Auth::loginUsingId('fc4b1442-3a03-4339-86e2-6ecbfc0e3e30');
     try {
-        $campaign = $dispatcher->get('campaigns', ["id" => $id])->first();
+        $campaign = $dispatcher->be(auth()->user())->get('campaigns/' . $id);
     } catch (Dingo\Api\Exception\InternalHttpException $e) {
         // We can get the response here to check the status code of the error or response body.
         $response = $e->getResponse();
@@ -48,6 +50,32 @@ Route::get('/campaigns/{id}', function ($id = null) use ($dispatcher) {
         return $response;
     }
     return view('site.campaigns.show', compact('campaign'));
+});
+
+Route::get('/trips', function () use ($dispatcher) {
+    Auth::loginUsingId('fc4b1442-3a03-4339-86e2-6ecbfc0e3e30');
+    try {
+        $trips = $dispatcher->be(auth()->user())->get('trips', ['include' => 'campaign']);
+    } catch (Dingo\Api\Exception\InternalHttpException $e) {
+        // We can get the response here to check the status code of the error or response body.
+        $response = $e->getResponse();
+
+        return $response;
+    }
+    return view('site.trips.index')->with('trips', $trips);
+});
+
+Route::get('/trips/{id}', function ($id = null) use ($dispatcher) {
+    Auth::loginUsingId('fc4b1442-3a03-4339-86e2-6ecbfc0e3e30');
+    try {
+        $trip = $dispatcher->be(auth()->user())->get('trips/'. $id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines']);
+    } catch (Dingo\Api\Exception\InternalHttpException $e) {
+        // We can get the response here to check the status code of the error or response body.
+        $response = $e->getResponse();
+
+        return $response;
+    }
+    return view('site.trips.show')->with('trip', $trip);
 });
 
 Route::get('/', function () {

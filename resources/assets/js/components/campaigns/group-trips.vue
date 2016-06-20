@@ -46,7 +46,22 @@
 
 				resource.query({id: this.id}).then(function (group) {
 					this.group = group.data.data;
-					this.trips = this.group.trips.data
+					var t = this.group.trips.data, cId = this.campaignId, arr = [];
+					t.forEach(function (val, i) {
+						if( val.campaign_id === cId) {
+							arr.push(val);
+						}
+
+					});
+					this.trips = arr;
+				});
+			},
+			calcStartingCost(costs) {
+				var lowest;
+				costs.forEach(function(val, i) {
+					if (val.amount < lowest || isNaN(lowest) ) {
+						lowest = val.amount;
+					}
 				});
 				return lowest;
 			}

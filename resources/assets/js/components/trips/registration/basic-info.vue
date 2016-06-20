@@ -51,30 +51,20 @@
 			<hr>
 		</div>
 		<div class="col-sm-12">
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" v-model="tosAgree">
-					I have read and agree to the Terms of Service.
-				</label>
+			<div class="btn-group btn-group-justified" role="group" aria-label="...">
+				<a class="btn btn-danger">I Disagree</a>
+				<a class="btn btn-success">I Agree</a>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
 	export default{
-		name: 'legal-tos',
+		name: 'roca',
 		data(){
 			return {
-				title: 'Legal (Terms of Service)',
-				tosAgree: false
+				title: 'Rules of Conduct Agreement'
 			}
 		},
-		watch:{
-			'tosAgree'(val, oldVal) {
-
-				this.$dispatch('tos-agree', val)
-			}
-		}
-
 	}
 </script>

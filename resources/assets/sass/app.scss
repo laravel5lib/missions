@@ -72,7 +72,7 @@ a {
   }
 }
 
-.navmenu, .navbar-offcanvas {width: 55px;}
+.navmenu, .navbar-offcanvas {width: 55px; z-index: 9999;}
 
 @media (min-width: 992px) {
 #dashboard {
@@ -142,6 +142,7 @@ body {
   margin: 0 auto -200px;
   /* Pad bottom by footer height */
   padding: 0 0 250px;
+  padding-top: 100px;
 }
 #footer-mm {
   color: $gray-light;

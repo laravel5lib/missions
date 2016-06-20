@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -36,10 +36,6 @@ class CampaignsController extends Controller
      */
     public function index(Request $request)
     {
-        if ( ! $this->auth->user()->isAdmin()) {
-            abort(403);
-        }
-
         $campaigns = $this->campaign
                           ->filter($request->all())
                           ->paginate($request->get('per_page', 25));
@@ -55,11 +51,7 @@ class CampaignsController extends Controller
      */
     public function show($id)
     {
-        if ( ! $this->auth->user()->isAdmin()) {
-            abort(403);
-        }
-
-        $campaign = $this->campaign->findOrFail($id);
+        $campaign = $this->campaign->whereId($id)->orWhere('page_url', $id)->firstOrFail();
 
         return $this->response->item($campaign, new CampaignTransformer);
     }
@@ -101,10 +93,6 @@ class CampaignsController extends Controller
      */
     public function destroy($id)
     {
-        if ( ! $this->auth->user()->isAdmin()) {
-            abort(403);
-        }
-
         $campaign = $this->campaign->findOrFail($id);
 
         $campaign->delete();

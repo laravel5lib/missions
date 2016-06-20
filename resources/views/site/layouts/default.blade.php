@@ -5,8 +5,8 @@
 @endsection()
 
 @section('layout')
+@include('_topnav')
 <div id="page-wrap"><!-- page-wrap important for sticky footer -->
-  @include('_topnav')
   @yield('content')
 </div>
   @include('_footernav')

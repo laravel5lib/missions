@@ -14,7 +14,7 @@
 			<tbody>
 			<tr v-for="trip in trips">
 				<td style="text-transform: capitalize;">{{ trip.type }}</td>
-				<td>{{ trip.costs.data[0].amount | currency }}</td>
+				<td>{{ calcStartingCost(trip.costs.data) | currency }}</td>
 				<td>{{ trip.spots }}</td>
 				<td>{ list of prospects }</td>
 				<td><a class="btn btn-primary btn-sm">Join Group</a></td>
@@ -26,7 +26,7 @@
 <script>
 	export default{
 		name: 'group-trips',
-		props: ['id'],
+		props: ['id', 'campaignId'],
 		data(){
 			return {
 				group:{},
@@ -48,15 +48,17 @@
 					this.group = group.data.data;
 					this.trips = this.group.trips.data
 				});
+				return lowest;
 			}
 		},
 		ready(){
-			if (this.id && this.id.length>0 && !this.$parent.currentView) {
+			if (this.id && this.campaignId && this.id.length>0 && !this.$parent.currentView) {
 				this.getTrips();
 			}
 		},
 		activate(done){
 			this.id = this.$parent.groupId;
+			this.campaignId = this.$parent.campaignId;
 			this.getTrips();
 			done();
 		}

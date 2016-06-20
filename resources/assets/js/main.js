@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import login from './components/login.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
@@ -21,6 +22,7 @@ Vue.http.interceptors.push({
     request: function (request) {
         var token, headers
 
+        // swap local storage to cookie
         token = window.localStorage.getItem('jwt-token')
         headers = request.headers || (request.headers = {})
 
@@ -33,14 +35,19 @@ Vue.http.interceptors.push({
 
     response: function (response) {
         if (response.status && response.status === 401) {
+            // swap local storage to cookie
             window.localStorage.removeItem('jwt-token')
         }
         if (response.headers && response.headers('Authorization')) {
             console.log('found authorization header')
-            window.localStorage.setItem('jwt-token', response.headers('Authorization'))
+            // swap local storage to cookie
+            document.cookie = 'jwt-token=' + response.headers('Authorization')
+            // window.localStorage.setItem('jwt-token', response.headers('Authorization'))
         }
         if (response.data && response.data.token && response.data.token.length > 10) {
-            window.localStorage.setItem('jwt-token', 'Bearer ' + response.data.token)
+            // swap local storage to cookie
+            document.cookie = 'jwt-token=' + response.data.token
+            // window.localStorage.setItem('jwt-token', 'Bearer ' + response.data.token)
         }
 
         return response
@@ -50,6 +57,7 @@ Vue.http.interceptors.push({
 new Vue({
     el: '#app',
     components: [
+        login,
         campaigns,
         campaignGroups,
         groupTrips,

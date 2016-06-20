@@ -26,10 +26,6 @@ Route::get('/admin/users', function () use ($dispatcher) {
     return View::make('admin.users')->with('users', $users);
 });
 
-Route::get('/admin', function () {
-    return view('admin.index');
-});
-
 Route::get('/dashboard', function () {
     return view('dashboard.index');
 });
@@ -74,6 +70,14 @@ Route::get('/trips/{id}', function ($id = null) use ($dispatcher) {
     return view('site.trips.show')->with('trip', $trip);
 });
 
+Route::get('/login', function () {
+    return view('site.login');
+});
+
 Route::get('/', function () {
     return view('site.index');
 });
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');

@@ -23,8 +23,9 @@ class CampaignsController extends Controller
      */
     public function __construct(Campaign $campaign)
     {
-        // $this->middleware('api.auth');
-        // $this->middleware('jwt.refresh');
+        $this->middleware('internal');
+        $this->middleware('api.auth');
+        $this->middleware('jwt.refresh');
         $this->campaign = $campaign;
     }
 

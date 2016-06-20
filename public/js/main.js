@@ -12281,6 +12281,306 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],4:[function(require,module,exports){
+var Vue // late bind
+var map = Object.create(null)
+var shimmed = false
+var isBrowserify = false
+
+/**
+ * Determine compatibility and apply patch.
+ *
+ * @param {Function} vue
+ * @param {Boolean} browserify
+ */
+
+exports.install = function (vue, browserify) {
+  if (shimmed) return
+  shimmed = true
+
+  Vue = vue
+  isBrowserify = browserify
+
+  exports.compatible = !!Vue.internalDirectives
+  if (!exports.compatible) {
+    console.warn(
+      '[HMR] vue-loader hot reload is only compatible with ' +
+      'Vue.js 1.0.0+.'
+    )
+    return
+  }
+
+  // patch view directive
+  patchView(Vue.internalDirectives.component)
+  console.log('[HMR] Vue component hot reload shim applied.')
+  // shim router-view if present
+  var routerView = Vue.elementDirective('router-view')
+  if (routerView) {
+    patchView(routerView)
+    console.log('[HMR] vue-router <router-view> hot reload shim applied.')
+  }
+}
+
+/**
+ * Shim the view directive (component or router-view).
+ *
+ * @param {Object} View
+ */
+
+function patchView (View) {
+  var unbuild = View.unbuild
+  View.unbuild = function (defer) {
+    if (!this.hotUpdating) {
+      var prevComponent = this.childVM && this.childVM.constructor
+      removeView(prevComponent, this)
+      // defer = true means we are transitioning to a new
+      // Component. Register this new component to the list.
+      if (defer) {
+        addView(this.Component, this)
+      }
+    }
+    // call original
+    return unbuild.call(this, defer)
+  }
+}
+
+/**
+ * Add a component view to a Component's hot list
+ *
+ * @param {Function} Component
+ * @param {Directive} view - view directive instance
+ */
+
+function addView (Component, view) {
+  var id = Component && Component.options.hotID
+  if (id) {
+    if (!map[id]) {
+      map[id] = {
+        Component: Component,
+        views: [],
+        instances: []
+      }
+    }
+    map[id].views.push(view)
+  }
+}
+
+/**
+ * Remove a component view from a Component's hot list
+ *
+ * @param {Function} Component
+ * @param {Directive} view - view directive instance
+ */
+
+function removeView (Component, view) {
+  var id = Component && Component.options.hotID
+  if (id) {
+    map[id].views.$remove(view)
+  }
+}
+
+/**
+ * Create a record for a hot module, which keeps track of its construcotr,
+ * instnaces and views (component directives or router-views).
+ *
+ * @param {String} id
+ * @param {Object} options
+ */
+
+exports.createRecord = function (id, options) {
+  if (typeof options === 'function') {
+    options = options.options
+  }
+  if (typeof options.el !== 'string' && typeof options.data !== 'object') {
+    makeOptionsHot(id, options)
+    map[id] = {
+      Component: null,
+      views: [],
+      instances: []
+    }
+  }
+}
+
+/**
+ * Make a Component options object hot.
+ *
+ * @param {String} id
+ * @param {Object} options
+ */
+
+function makeOptionsHot (id, options) {
+  options.hotID = id
+  injectHook(options, 'created', function () {
+    var record = map[id]
+    if (!record.Component) {
+      record.Component = this.constructor
+    }
+    record.instances.push(this)
+  })
+  injectHook(options, 'beforeDestroy', function () {
+    map[id].instances.$remove(this)
+  })
+}
+
+/**
+ * Inject a hook to a hot reloadable component so that
+ * we can keep track of it.
+ *
+ * @param {Object} options
+ * @param {String} name
+ * @param {Function} hook
+ */
+
+function injectHook (options, name, hook) {
+  var existing = options[name]
+  options[name] = existing
+    ? Array.isArray(existing)
+      ? existing.concat(hook)
+      : [existing, hook]
+    : [hook]
+}
+
+/**
+ * Update a hot component.
+ *
+ * @param {String} id
+ * @param {Object|null} newOptions
+ * @param {String|null} newTemplate
+ */
+
+exports.update = function (id, newOptions, newTemplate) {
+  var record = map[id]
+  // force full-reload if an instance of the component is active but is not
+  // managed by a view
+  if (!record || (record.instances.length && !record.views.length)) {
+    console.log('[HMR] Root or manually-mounted instance modified. Full reload may be required.')
+    if (!isBrowserify) {
+      window.location.reload()
+    } else {
+      // browserify-hmr somehow sends incomplete bundle if we reload here
+      return
+    }
+  }
+  if (!isBrowserify) {
+    // browserify-hmr already logs this
+    console.log('[HMR] Updating component: ' + format(id))
+  }
+  var Component = record.Component
+  // update constructor
+  if (newOptions) {
+    // in case the user exports a constructor
+    Component = record.Component = typeof newOptions === 'function'
+      ? newOptions
+      : Vue.extend(newOptions)
+    makeOptionsHot(id, Component.options)
+  }
+  if (newTemplate) {
+    Component.options.template = newTemplate
+  }
+  // handle recursive lookup
+  if (Component.options.name) {
+    Component.options.components[Component.options.name] = Component
+  }
+  // reset constructor cached linker
+  Component.linker = null
+  // reload all views
+  record.views.forEach(function (view) {
+    updateView(view, Component)
+  })
+  // flush devtools
+  if (window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
+    window.__VUE_DEVTOOLS_GLOBAL_HOOK__.emit('flush')
+  }
+}
+
+/**
+ * Update a component view instance
+ *
+ * @param {Directive} view
+ * @param {Function} Component
+ */
+
+function updateView (view, Component) {
+  if (!view._bound) {
+    return
+  }
+  view.Component = Component
+  view.hotUpdating = true
+  // disable transitions
+  view.vm._isCompiled = false
+  // save state
+  var state = extractState(view.childVM)
+  // remount, make sure to disable keep-alive
+  var keepAlive = view.keepAlive
+  view.keepAlive = false
+  view.mountComponent()
+  view.keepAlive = keepAlive
+  // restore state
+  restoreState(view.childVM, state, true)
+  // re-eanble transitions
+  view.vm._isCompiled = true
+  view.hotUpdating = false
+}
+
+/**
+ * Extract state from a Vue instance.
+ *
+ * @param {Vue} vm
+ * @return {Object}
+ */
+
+function extractState (vm) {
+  return {
+    cid: vm.constructor.cid,
+    data: vm.$data,
+    children: vm.$children.map(extractState)
+  }
+}
+
+/**
+ * Restore state to a reloaded Vue instance.
+ *
+ * @param {Vue} vm
+ * @param {Object} state
+ */
+
+function restoreState (vm, state, isRoot) {
+  var oldAsyncConfig
+  if (isRoot) {
+    // set Vue into sync mode during state rehydration
+    oldAsyncConfig = Vue.config.async
+    Vue.config.async = false
+  }
+  // actual restore
+  if (isRoot || !vm._props) {
+    vm.$data = state.data
+  } else {
+    Object.keys(state.data).forEach(function (key) {
+      if (!vm._props[key]) {
+        // for non-root, only restore non-props fields
+        vm.$data[key] = state.data[key]
+      }
+    })
+  }
+  // verify child consistency
+  var hasSameChildren = vm.$children.every(function (c, i) {
+    return state.children[i] && state.children[i].cid === c.constructor.cid
+  })
+  if (hasSameChildren) {
+    // rehydrate children
+    vm.$children.forEach(function (c, i) {
+      restoreState(c, state.children[i])
+    })
+  }
+  if (isRoot) {
+    Vue.config.async = oldAsyncConfig
+  }
+}
+
+function format (id) {
+  return id.match(/[^\/]+\.vue$/)[0]
+}
+
+},{}],5:[function(require,module,exports){
 /*!
  * vue-resource v0.7.4
  * https://github.com/vuejs/vue-resource
@@ -13657,7 +13957,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 module.exports = plugin;
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v1.0.24
@@ -23690,12 +23990,182 @@ setTimeout(function () {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":3}],6:[function(require,module,exports){
+},{"_process":3}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'campaign-groups',
+	props: ['id'],
+	data: function data() {
+		return {
+			groups: [],
+			page: 1,
+			pagination: {},
+			searchText: ''
+		};
+	},
+
+	watch: {
+		'searchText': function searchText(val, oldVal) {
+			this.page = 1;
+			this.searchGroups();
+		},
+		'page': function page(val, oldVal) {
+			this.searchGroups();
+		}
+	},
+	methods: {
+		searchGroups: function searchGroups() {
+			var resource = this.$resource('trips', {
+				include: "group",
+				campaign: this.id,
+				per_page: 8,
+				search: this.searchText,
+				page: this.page
+			});
+
+			resource.query().then(function (trips) {
+				this.pagination = trips.data.meta.pagination;
+				var arr = [];
+				for (var i in trips.data.data) {
+					arr.push(trips.data.data[i].group.data);
+				}
+				this.groups = arr;
+			});
+		}
+	},
+	ready: function ready() {
+		this.searchGroups();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"container\">\n\t<div class=\"col-sm-12\">\n\t\t<input type=\"text\" class=\"form-control\" v-model=\"searchText\" debounce=\"500\" placeholder=\"Search for a group\">\n\t\t<br>\n\t</div>\n\n\t<div class=\"col-sm-4 col-md-3\" v-for=\"group in groups\">\n\t\t<div class=\"thumbnail\">\n\t\t\t<img :src=\"'http://lorempixel.com/242/200/people/' + $index\" :alt=\"group.name\">\n\t\t\t<div class=\"caption\">\n\t\t\t\t<h4>{{group.name}}</h4>\n\t\t\t\t<p>\n\t\t\t\t\t<a href=\"#\" class=\"btn btn-primary btn-block\" role=\"button\">Select</a>\n\t\t\t\t</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n\t<div class=\"col-sm-12 text-center\">\n\t\t<nav>\n\t\t\t<ul class=\"pagination\">\n\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t</a>\n\t\t\t\t</li>\n\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t</a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</nav>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-71409450", module.exports)
+  } else {
+    hotAPI.update("_v-71409450", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":6,"vue-hot-reload-api":4}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'campaigns',
+    data: function data() {
+        return {
+            campaigns: []
+        };
+    },
+    ready: function ready() {
+        var resource = this.$resource('campaigns?published=true');
+
+        resource.query().then(function (campaigns) {
+            this.campaigns = campaigns.data.data;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\n    <div class=\"col-sm-6 col-md-4\" v-for=\"campaign in campaigns\" style=\"display:flex\">\n        <div class=\"panel panel-default\">\n            <img v-bind:src=\"campaign.thumb_src\" v-bind:alt=\"campaign.name\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h4>{{campaign.name}}</h4>\n                <h6>{{campaign.country}}</h6>\n                <p>{{campaign.description}}</p>\n            </div><!-- end panel-body -->\n            <div class=\"panel-footer\">\n                <p>\n                    <a v-bind:href=\"'/campaigns/' + campaign.page_url\" class=\"btn btn-primary btn-block\" role=\"button\">Details</a>\n                </p>\n            </div>\n        </div><!-- end panel -->\n    </div><!-- end col -->\n</div>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-483b544a", module.exports)
+  } else {
+    hotAPI.update("_v-483b544a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":6,"vue-hot-reload-api":4}],9:[function(require,module,exports){
+'use strict';
+
+module.exports = {
+  name: 'login',
+
+  data: function data() {
+    return {
+      user: {
+        email: null,
+        password: null
+      },
+      messages: []
+    };
+  },
+
+  methods: {
+    attempt: function attempt(e) {
+      e.preventDefault();
+      var that = this;
+      that.$http.post('login', this.user).then(function (response) {
+        // that.$dispatch('userHasFetchedToken', response.token)
+        that.getUserData();
+      }, function (response) {
+        that.messages = [];
+        if (response.status && response.status === 401) that.messages.push({
+          type: 'danger',
+          message: 'Sorry, we couldn\'t find an account that matches the email and password you provided.'
+        });
+
+        if (response.status && response.status === 422) {
+          that.messages = [{
+            type: 'danger',
+            message: 'Please enter a valid email and password.'
+          }];
+        }
+      });
+    },
+
+    getUserData: function getUserData() {
+      var that = this;
+      that.$http.get('/users/me').then(function (response) {
+        that.$dispatch('userHasLoggedIn', response.data.data);
+        // that.$route.router.go('/dashboard/settings/account')
+      }, function (response) {
+        console.log(response);
+      });
+    }
+  }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"container\">\n  <div class=\"row\">\n    <hr class=\"divider inv lg\">\n    <div class=\"col-md-6 col-md-offset-3\">\n      <h5 class=\"text-uppercase text-center\">Welcome Back To Missions.Me</h5>\n      <hr class=\"divider inv\">\n      <div class=\"panel panel-default\">\n        <div class=\"panel-body\">\n          <form class=\"form-horizontal\" role=\"form\">\n            <div id=\"alerts\" v-if=\"messages.length > 0\">\n              <div v-for=\"message in messages\" class=\"alert alert-{{ message.type }} alert-dismissible\" role=\"alert\">\n                {{ message.message }}\n              </div>\n            </div><!-- end alert -->\n            <div class=\"form-group\">\n              <div class=\"col-xs-10  col-xs-offset-1\">\n                <label class=\"control-label\">E-Mail Address</label>\n                <input type=\"email\" class=\"form-control\" v-model=\"user.email\">\n              </div><!-- end col -->\n            </div><!-- end form-group -->\n            <div class=\"form-group\">\n              <div class=\"col-xs-10  col-xs-offset-1\">\n                <label class=\"control-label\">Password</label>\n                <input type=\"password\" class=\"form-control\" v-model=\"user.password\">\n              </div><!-- end col -->\n            </div><!-- end form-group -->\n            <div class=\"form-group\">\n              <div class=\"col-xs-10  col-xs-offset-1\">\n                <button type=\"submit\" class=\"btn btn-primary btn-block\" v-on:click=\"attempt\">\n                  Login\n                </button>\n                <a class=\"btn btn-block btn-link\" href=\"#\">Forgot Your Password?</a>\n              </div><!-- end col -->\n            </div><!-- end form-group -->\n          </form><!-- end form -->\n        </div><!-- end panel-body -->\n      </div>\n    </div><!-- end col -->\n  </div><!-- end row -->\n</div><!-- end container -->"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-d1dcd388", module.exports)
+  } else {
+    hotAPI.update("_v-d1dcd388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":6,"vue-hot-reload-api":4}],10:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
 
 var _vue2 = _interopRequireDefault(_vue);
+
+var _login = require('./components/login.vue');
+
+var _login2 = _interopRequireDefault(_login);
+
+var _campaigns = require('./components/campaigns/campaigns.vue');
+
+var _campaigns2 = _interopRequireDefault(_campaigns);
+
+var _campaignGroups = require('./components/campaigns/campaign-groups.vue');
+
+var _campaignGroups2 = _interopRequireDefault(_campaignGroups);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23716,6 +24186,7 @@ _vue2.default.http.interceptors.push({
     request: function request(_request) {
         var token, headers;
 
+        // swap local storage to cookie
         token = window.localStorage.getItem('jwt-token');
         headers = _request.headers || (_request.headers = {});
 
@@ -23728,14 +24199,19 @@ _vue2.default.http.interceptors.push({
 
     response: function response(_response) {
         if (_response.status && _response.status === 401) {
+            // swap local storage to cookie
             window.localStorage.removeItem('jwt-token');
         }
         if (_response.headers && _response.headers('Authorization')) {
             console.log('found authorization header');
-            window.localStorage.setItem('jwt-token', _response.headers('Authorization'));
+            // swap local storage to cookie
+            document.cookie = 'jwt-token=' + _response.headers('Authorization');
+            // window.localStorage.setItem('jwt-token', response.headers('Authorization'))
         }
         if (_response.data && _response.data.token && _response.data.token.length > 10) {
-            window.localStorage.setItem('jwt-token', 'Bearer ' + _response.data.token);
+            // swap local storage to cookie
+            document.cookie = 'jwt-token=' + _response.data.token;
+            // window.localStorage.setItem('jwt-token', 'Bearer ' + response.data.token)
         }
 
         return _response;
@@ -23744,21 +24220,17 @@ _vue2.default.http.interceptors.push({
 
 new _vue2.default({
     el: '#app',
+    components: [_login2.default, _campaigns2.default, _campaignGroups2.default],
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     },
     ready: function ready() {
-        // GET request
-        this.$http({ url: 'someUrl', method: 'GET' }).then(function (response) {
-            // success callback
-        }, function (response) {
-            // error callback
-        });
+        console.log('vue is ready');
     }
 });
 
-},{"bootstrap-sass":1,"jquery":2,"vue":5,"vue-resource":4}]},{},[6]);
+},{"./components/campaigns/campaign-groups.vue":7,"./components/campaigns/campaigns.vue":8,"./components/login.vue":9,"bootstrap-sass":1,"jquery":2,"vue":6,"vue-resource":5}]},{},[10]);
 
 //# sourceMappingURL=main.js.map

@@ -14,13 +14,6 @@ class TripFilter extends ModelFilter
     */
     public $relations = [];
 
-    public function setup()
-    {
-        if ( ! app(Auth::class)->user()->isAdmin())
-        {
-            $this->onlyPublished();
-        }
-    }
 
     public function onlyPublished()
     {

@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="row">
 		<div class="col-sm-12">
 			<input type="text" class="form-control" v-model="searchText" debounce="500"
 				   placeholder="Search for a group">
@@ -13,7 +13,7 @@
 				<div class="caption">
 					<h4>{{group.name}}</h4>
 					<p>
-						<a href="#" class="btn btn-primary btn-block" role="button">Select</a>
+						<a class="btn btn-primary btn-block" role="button" @click="selectGroup(group)">Select</a>
 					</p>
 				</div>
 			</div>
@@ -76,11 +76,21 @@
 						arr.push(trips.data.data[i].group.data)
 					}
 					this.groups = arr;
-				})
+				});
+			},
+			selectGroup(group) {
+				if (this.$parent.currentView) {
+					this.$parent.groupId = group.id;
+					this.$parent.currentView = 'tripSelection';
+				}
 			}
 		},
 		ready(){
 			this.searchGroups();
+		},
+		activate(done){
+			this.id = this.$parent.campaignId;
+			done();
 		}
 	}
 </script>

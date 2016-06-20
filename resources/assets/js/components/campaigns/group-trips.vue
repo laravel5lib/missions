@@ -14,7 +14,7 @@
 			<tbody>
 			<tr v-for="trip in trips">
 				<td style="text-transform: capitalize;">{{ trip.type }}</td>
-				<td>{{ calcStartingCost(trip.costs.data) | currency }}</td>
+				<td>{{ trip.lowest | currency }}</td>
 				<td>{{ trip.spots }}</td>
 				<td>{ list of prospects }</td>
 				<td><a class="btn btn-primary btn-sm">Join Group</a></td>
@@ -46,9 +46,10 @@
 
 				resource.query({id: this.id}).then(function (group) {
 					this.group = group.data.data;
-					var t = this.group.trips.data, cId = this.campaignId, arr = [];
+					var t = this.group.trips.data, cId = this.campaignId, arr = [], calcLowest = this.calcStartingCost;
 					t.forEach(function (val, i) {
 						if( val.campaign_id === cId) {
+							val.lowest = calcLowest(val.costs.data);
 							arr.push(val);
 						}
 

@@ -58,7 +58,23 @@ Vue.http.interceptors.push({
 
         return response
     }
-})
+});
+
+// Register email validator function.
+Vue.validator('email', function (val) {
+    return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
+});
+
+Vue.filter('phone', {
+    read:function (phone) {
+        return phone.replace(/[^0-9]/g, '')
+            .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+    },
+    write: function(phone, phoneVal) {
+        return phone.replace(/[^0-9]/g, '')
+            .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+    }
+});
 
 new Vue({
     el: '#app',

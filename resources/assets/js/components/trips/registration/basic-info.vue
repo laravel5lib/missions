@@ -1,6 +1,6 @@
-<template>
+<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
-		<div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
+		<div class="col-sm-12">
 			<validator name="BasicInfo" @valid="onValid" @invalid="onInvalid">
 				<form novalidate name="BasicInfoForm" id="BasicInfoForm">
 					<div class="col-md-6">
@@ -43,12 +43,12 @@
 
 						<div class="form-group">
 							<label for="infoPhone">Home Phone</label>
-							<input type="text" class="form-control input-sm" v-model="phone" v-validate:phone="{ required: true }" id="infoPhone" placeholder="123-456-7890">
+							<input type="text" class="form-control input-sm" v-model="phone | phone" v-validate:phone="{ required: true }" id="infoPhone" placeholder="123-456-7890">
 						</div>
 
 						<div class="form-group">
 							<label for="infoMobile">Cell Phone</label>
-							<input type="text" class="form-control input-sm" v-model="mobile" v-validate:mobile="{ required: false }" id="infoMobile" placeholder="123-456-7890">
+							<input type="text" class="form-control input-sm" v-model="mobile | phone" v-validate:mobile="{ required: false }" id="infoMobile" placeholder="123-456-7890">
 						</div>
 
 					</div>
@@ -78,7 +78,7 @@
 
 						<div class="form-group">
 							<label for="infoEmailAddress">Email Address</label>
-							<input type="text" class="form-control input-sm" v-model="email" v-validate:email="{ required: true }" id="infoEmailAddress">
+							<input type="text" class="form-control input-sm" v-model="email" v-validate:email="['email']" id="infoEmailAddress">
 						</div>
 
 						<label>Date of Birth</label>
@@ -194,9 +194,6 @@
 				</form>
 			</validator>
 		</div>
-		<div class="col-sm-12">
-			<hr>
-		</div>
 	</div>
 </template>
 <script>
@@ -212,8 +209,8 @@
 				state:null,
 				zipCode:null,
 				country:'us',
-				phone:null,
-				mobile:null,
+				phone:'',
+				mobile:'',
 				firstName:null,
 				middleName:null,
 				lastName:null,
@@ -223,7 +220,7 @@
 				dobYearCalc:'',
 				dobYear:null,
 				gender:null,
-				relStatus:null,
+				relStatus:'single',
 				size:null,
 				height:null,
 				weight:null
@@ -240,8 +237,12 @@
 			},
 			onInvalid(){
 				// for now allow to continue
-				this.$dispatch('basic-info', true)
-			},
+				this.$dispatch('basic-info', false)
+			}
+		},
+		activate(done){
+			$('html, body').animate({scrollTop : 0},300);
+			done();
 		}
 	}
 </script>

@@ -70,6 +70,19 @@ Route::get('/trips/{id}', function ($id = null) use ($dispatcher) {
     return view('site.trips.show')->with('trip', $trip);
 });
 
+Route::get('/trips/{id}/register', function ($id = null) use ($dispatcher) {
+    try {
+        $trip = $dispatcher->get('trips/'. $id);
+    } catch (Dingo\Api\Exception\InternalHttpException $e) {
+        // We can get the response here to check the status code of the error or response body.
+        $response = $e->getResponse();
+
+        return $response;
+    }
+    return view('site.trips.register')->with('trip', $trip);
+});
+
+
 Route::get('/login', function () {
     return view('site.login');
 });

@@ -1,55 +1,46 @@
 <template>
 	<div class="row">
 		<div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
-			<h4>Terms of Service</h4>
-			<p>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet convallis nisl. Aenean
-				varius non enim tincidunt sagittis. Ut quis cursus orci, nec posuere sem. Fusce dignissim porttitor
-				tristique. Etiam in orci metus. Donec facilisis vel erat quis rhoncus. Etiam non pulvinar est, a
-				efficitur massa. Curabitur feugiat ornare quam, at aliquet urna auctor eget. Proin id porta odio.
-				Suspendisse tincidunt, mi et faucibus suscipit, ex enim pretium nisi, in sagittis lacus ipsum gravida
-				diam. Nullam lacinia nunc nec ante tincidunt egestas. Integer id arcu in turpis pretium convallis a sit
-				amet purus.
-			</p>
-			<p>
-				Sed nisi velit, venenatis et laoreet at, cursus at diam. Fusce eu sodales mi. Etiam orci urna, congue
-				placerat erat sed, tincidunt mattis diam. In vel mauris blandit, iaculis mauris sed, faucibus magna.
-				Fusce non mattis nisi. Morbi faucibus, nisl id maximus scelerisque, tellus ipsum placerat felis, quis
-				pellentesque metus est in leo. Nullam enim urna, luctus ac erat tincidunt, finibus vestibulum arcu.
-				Vestibulum sed maximus lorem. Proin blandit nibh sapien, ac rhoncus neque dapibus vitae. Suspendisse
-				volutpat mi turpis, non tincidunt nisl vulputate et. Vestibulum mollis elit at ex tempus, ut tristique
-				lorem malesuada. Vivamus arcu velit, porttitor ac facilisis quis, elementum ut nisl.
-			</p>
-			<p>
-				Sed eros turpis, tempor sed bibendum quis, imperdiet ultrices arcu. Maecenas lobortis urna eu urna
-				efficitur rutrum. Maecenas nec ultricies lorem. Curabitur fermentum risus diam, in suscipit nibh
-				ultricies eget. Vestibulum porttitor tincidunt pharetra. Nullam mollis lorem nibh, at dictum ligula
-				condimentum in. Cras quis diam eget purus blandit egestas et nec risus. Nullam id arcu lectus.
-			</p>
-			<p>
-				Mauris iaculis scelerisque risus, nec consectetur sapien imperdiet ac. Vestibulum vestibulum et lorem ac
-				viverra. Sed a lacus a tortor aliquam tempus eu vel neque. Praesent feugiat leo odio, nec pulvinar felis
-				euismod sed. Maecenas molestie dolor eget vestibulum ultricies. Nam sed ipsum sed nisi euismod maximus.
-				Aliquam sem metus, euismod cursus neque id, volutpat bibendum metus. Maecenas blandit elit vitae nisi
-				consequat commodo.
-			</p>
-			<p>
-				Maecenas ullamcorper in nisi vitae commodo. Aliquam porttitor turpis nulla, a ornare felis ultricies sit
-				amet. Praesent tempor diam vel magna tincidunt semper. Sed auctor libero eu libero rhoncus dictum tempus
-				in nunc. Suspendisse dignissim massa sed leo feugiat interdum. Mauris ornare lacus nec cursus cursus.
-				Cras ac ligula mi. Maecenas tempus nec augue non commodo. Curabitur at risus turpis. Maecenas mollis
-				lorem nec congue euismod.
-			</p>
-			<p>
-				Suspendisse sit amet volutpat diam. Nunc varius a metus vel vestibulum. Nulla accumsan orci eget magna
-				posuere, non aliquam tortor dictum. Integer ultrices gravida leo, a iaculis elit pulvinar porttitor.
-				Morbi et convallis purus. Suspendisse vel dolor dolor. Donec vitae neque justo. Nullam interdum tellus
-				sed lorem accumsan, id sollicitudin sem tristique. In quis facilisis ligula, imperdiet interdum sem.
-				Duis dignissim imperdiet imperdiet. Maecenas et bibendum purus, in vulputate lorem.
-			</p>
-		</div>
-		<div class="col-sm-12">
-			<hr>
+				<h4>Terms of Service</h4>
+				<p><a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> WAIVER AND RELEASE FROM LIABILITY, AND AUTHORIZATION TO PARTICIPATE IN TRIP, AND STATEMENT OF RESPONSIBILITY (“Agreement”).</p>
+				<p>The agreement must be signed and returned to <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a>. If the Participant (as shown below) is not 18 years of age or older on the date of execution of this Agreement , this Agreement also must be signed and notarized by the parent or guardian. Failure to accept and/or abide by the terms and conditions of this Agreement as provided may result in the Participants’ inability to participate in the trip.</p>
+				<p>I (missionary), have agreed to be a Participant in the mission trip sponsored in whole or in part by <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a>. In consideration of being allowed to participate in this trip, I hereby state and agree as follows:</p>
+				<ol>
+					<li>STANDARDS OF CONDUCT</li>
+				</ol>
+				<p>A. I agree to abide by <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a>'s conduct regulations and the directions of the group sponsor and his or her designees. I understand that the group sponsor has the right to enforce appropriate standards of behavior and that I may be dismissed from the trip at any time for failure to comply with such standards. <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> reserves the right to physically remove me from the trip at any time should my actions or general behavior impede the trip, or the rights and welfare of any person, including but not limited to my own welfare. Similarly, if my conduct violates any policy or procedure of <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a>, I understand that I may be required to leave the trip at the sole discretion of <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a>'s agents and representatives. I understand that if my participation in the trip is terminated by the group sponsor, I will be sent home with no refund of fees. If I am sent home before completion of the trip, I understand that I will be responsible for any and all costs and expenses associated with my return home.</p>
+				<p>B. I acknowledge and understand that, while I am a participant, I am responsible for my own behavior and any legal or financial consequences just as I would be if I were not a Participant on the <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> trip.</p>
+				<ol>
+					<li>INSTITUTIONAL ARRANGEMENTS</li>
+				</ol>
+				<p>I understand that <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> does not represent or act as an agent for, and can not control the acts of omissions of, any host institution, host family, transportation carrier, hotel, tour organizer, or other provider of goods or services involved in the trip. I understand that <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> is not responsible for matters that are beyond its control. I hereby release <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> from any injury, loss, damage, accident, delay, or expense arising out of any such matters.</p>
+				<ol>
+					<li>PROGRAM CHANGES</li>
+				</ol>
+				<p>I understand that <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> reserves the right to make cancellations, substitutions, or changes to the trip in its sole discretion, with or without notice, and that <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> shall not be liable for any loss to the Participants by reason of any such cancellation or change. <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> is not responsible for penalties assessed by air carriers that may result due to operational and/or itinerary changes, regardless of whether the Participant or <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> makes a flight arrangement. Any additional expense resulting from the above will be paid by the Participant. <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> reserves the right to substitute hotels or accommodations or housing or a similar category at any time. If I become detached from the group, fail to meet a departure vehicle, airplane, boat, or train, I will at my own expense seek out, contact, and reach the group at its next available destination.</p>
+				<ol>
+					<li>INDEPENDENT ACTIVITY</li>
+				</ol>
+				<p>I understand that, if I choose to travel independently before, after or during my free time in the trip, such travel will be unsupervised by <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a>’s agents or employees. I agree that <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> and its agents and employees shall have no responsibility or liability for injury, damage or loss suffered by me during such periods of independent travel.</p>
+				<ol>
+					<li>HEALTH AND SAFETY</li>
+				</ol>
+				<p>A. I release and absolve <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> of all responsibility and liability for any injuries, illnesses (including death), claims, damages, charges, bills and/or expenses I may incur while abroad, including all times before, during, and after the duration of the trip. For the avoidance of doubt, I am fully releasing <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> of any liability that may result for any aspect relating to a <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> trip.</p>
+				<p>B. I understand that I am responsible for ensuring that I am adequately covered by health and accident insurance including periods before, during, and after the duration of the trip. I have provided evidence of emergency contact information and any information I want <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> to have on me regarding coverage for accident, illness, hospitalization, accidental death and dismemberment, and emergency medical evacuation as an attachment to this agreement.</p>
+				<p>C. I agree that <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a>, through its agent and employees, may take whatever action is deemed necessary in their sole discretion with respect to my health and safety, I authorize <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> and its agents and employees to place me, at their discretion and without my further consent, in a hospital or in the care of a local doctor for medical services and treatment. If necessary or desirable, I also authorize them to transport me back to the United States for medical treatment. I agree that I, along with my parents or guardian, will be fully responsible for any and all expenses, including transportation costs, associated with or in any way related to my medical care.</p>
+				<p>D. I agree to report to the group sponsor, as soon as I become aware of such, any physical or mental condition I have which may require special medical attention or accommodation while traveling.</p>
+				<p>E. I am aware of all applicable personal medical needs. I have arranged, through insurance or otherwise, to meet any and all needs for payment of medical costs while I participate in the trip. I recognize that <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> is not obligated to attend to any of my medical or medication needs, and I assume all risk and responsibility therefore. If I require medical treatment or hospital care, before, after, or during the trip, <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> is not responsible for the cost or quality of such treatment or care.</p>
+				<ol>
+					<li>ASSUMPTION OF RISK AND RELEASE OF CLAIMS</li>
+				</ol>
+				<p>A. I hereby acknowledge my awareness that my participation in the trip may expose me to risk of property damage and bodily or personal injury, including death. I understand that the risks I may encounter include by way of example: airplane crashes, motor vehicle accidents, terrorist incidents, cuts, bruises, broken bones, political unrest, strikes, acts of God, criminal acts, sickness including but not limited to zika fever and its long-term effects, malaria, dengue fever, dehydration, as well as other risks that may or may not be foreseeable. I HEREBY ASSUME ANY AND ALL SUCH RISKS, AND I ACKNOWLEDGE THAT I AM RESPONSIBLE TO ACT REASONABLY AND PRUDENTLY WITH RESPECT TO MATERS OF PERSONAL HEATH AND SAFETY.</p>
+				<p>I understand and acknowledge that <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> assumes no responsibility or liability, in whole or in part, for any delays, delayed or changed departure or arrival times, fare changes, dishonors of hotel, airline or vehicle rental reservations, missed carrier connections, sickness, disease, injuries (including death), losses, damages, weather, strikes, acts of God, war, quarantine, civil unrest, public health risks, criminal activity, terrorism, expense, inconveniences, cessation of operations, mechanical defects, failure or negligence of any nature howsoever caused in connection with any accommodation, restaurant, transportation, or other services or any substitution of hotels or of common carrier or other circumstances, whether or not beyond <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a>’s control, with or without notice, or for any additional expenses occasioned by any of the foregoing. If I am required to spend additional nights in the trip country, the airport, back in the US, or any reason whatsoever, <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> will not be responsible for my hotel transfers, meal costs, or other expenses. My baggage and personal property is at my risk entirely. The right is reserved by <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a>, in its sole discretion, to cancel the trip or any aspect thereof after departure, requiring that all participants return home, if <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> determines or believes that any person is or will be in danger if the trip or any aspect thereof is continued.</p>
+				<p>KNOWING THE RISKS DESCRIBED ABOVE, and in consideration of <a href="http://Missions.Me" target="_blank" rel="noreferrer">Missions.Me</a> allowing my participation in the trip, individually and on behalf of any family, heirs, assigns, and legal and personal representative(s) (and if applicable, on behalf of my minor child/ward), to the maximum extent permitted by law, I HEREBY ASSUME ALL THESE RISKS AND RELEASE, WAIVE, AND FOREVER DISCHARGE MISSIONS. ME, ITS BOARD OF TRUSTEES, ITS OFFICERS, DIRECTORS, AGENTS, EMPLOYEES, VOLUNTEERS (WHETHER OFFICIAL OR UNOFFICIAL) , SUBSIDIARIES, AFFILIATES, SUCCESSORS, (THE “RELEASEES”) FROM LIABILITY FOR ANY AND ALL HARM, INJURY, CLAIMS, DEMANDS, RIGHTS, CAUSES OF ACTION, COSTS AND EXPENSES OF WHATEVER KIND, ARISING FROM OR BY REASON OF ANY LOSS, DAMAGE, OR INJURY SUSTAINED (WHETHER PHYSICAL OR FINANCIAL) BY ME OR CAUSED TO MY PROPERTY, OR THE CONSEQUENCES, WHETHER KNOWN OR UNKNOWN, BOTH NOW AND FOREVER IN THE FUTURE, RESULTING FROM, OR IN ANY WAY CONNECTED WITH, MY PARTICIPATION IN THE MISSION TRIP OR ANY PRELIMINARY OR FOLLOW UP ACTIVIITY RELATED THERETO.</p>
+				<p>B. The terms of this agreement shall be severable, such that if a court holds any term to be illegal, unenforceable, or in conflict with any law governing this agreement, the validity of the remaining portions shall not be affected thereby.</p>
+				<ol>
+					<li>ACKNOWLEGDMENT</li>
+				</ol>
+				<p>I hereby acknowledge that I have read, understand and will abide by each of the terms and conditions of this agreement.</p>
 		</div>
 		<div class="col-sm-12">
 			<div class="checkbox">
@@ -74,6 +65,10 @@
 			'tosAgree'(val, oldVal) {
 				this.$dispatch('tos-agree', val)
 			}
+		},
+		activate(done){
+			$('html, body').animate({scrollTop : 0},300);
+			done();
 		}
 
 	}

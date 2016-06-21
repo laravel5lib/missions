@@ -49,9 +49,6 @@
 			</p>
 		</div>
 		<div class="col-sm-12">
-			<hr>
-		</div>
-		<div class="col-sm-12">
 			<div class="checkbox">
 				<label>
 					<input type="checkbox" v-model="deadlineAgree">

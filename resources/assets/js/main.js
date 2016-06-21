@@ -4,6 +4,7 @@ import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
+import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery')
@@ -15,8 +16,10 @@ $( document ).ready(function() {
 
 // Vue Resource
 Vue.use(require('vue-resource'));
+// Vue Validator
+Vue.use(require('vue-validator'));
 
-Vue.http.options.root = '/api'
+Vue.http.options.root = '/api';
 Vue.http.interceptors.push({
 
     request: function (request) {
@@ -61,7 +64,8 @@ new Vue({
         campaigns,
         campaignGroups,
         groupTrips,
-        groupTripWrapper
+        groupTripWrapper,
+        tripRegWizard,
     ],
     http: {
         headers: {

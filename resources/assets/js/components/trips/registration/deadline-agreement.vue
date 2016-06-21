@@ -1,7 +1,7 @@
 <template>
 	<div class="row">
 		<div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
-			<h4>Terms of Service</h4>
+			<h4>Deadline Agreement</h4>
 			<p>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet convallis nisl. Aenean
 				varius non enim tincidunt sagittis. Ut quis cursus orci, nec posuere sem. Fusce dignissim porttitor
@@ -54,8 +54,8 @@
 		<div class="col-sm-12">
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" v-model="tosAgree">
-					I have read and agree to the Terms of Service.
+					<input type="checkbox" v-model="deadlineAgree">
+					I have read and agree to the Deadline Agreement.
 				</label>
 			</div>
 		</div>
@@ -63,16 +63,16 @@
 </template>
 <script>
 	export default{
-		name: 'legal-tos',
+		name: 'deadline-agreement',
 		data(){
 			return {
-				title: 'Legal (Terms of Service)',
-				tosAgree: false
+				title: 'Deadline Agreement',
+				deadlineAgree: false
 			}
 		},
 		watch:{
-			'tosAgree'(val, oldVal) {
-				this.$dispatch('tos-agree', val)
+			'deadlineAgree'(val, oldVal) {
+				this.$dispatch('deadline-agree', val)
 			}
 		}
 

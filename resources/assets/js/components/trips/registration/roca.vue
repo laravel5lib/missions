@@ -1,6 +1,7 @@
 <template>
 	<div class="row">
-		<div class="col-sm-12" style="max-height: 300px;overflow-y: auto;">
+		<div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
+			<h4>Rules of Conduct</h4>
 			<p>
 				Ut in consequat sapien. Morbi gravida sapien in posuere volutpat. Integer vel enim luctus, luctus massa
 				vel, ullamcorper sapien. Duis scelerisque laoreet lectus, quis auctor ex mollis vel. Curabitur quis

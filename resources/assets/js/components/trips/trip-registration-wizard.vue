@@ -1,6 +1,6 @@
 <template>
 	<div class="row">
-		<div class="col-sm-4">
+		<div class="col-sm-3">
 			<ul class="nav nav-pills nav-stacked">
 				<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
 					<a>
@@ -11,13 +11,15 @@
 
 			</ul>
 		</div>
-		<div class="col-sm-8">
+		<div class="col-sm-9">
 			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 			</component>
-			<div class="btn-group pull-right" role="group" aria-label="...">
+			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
+				<a class="btn btn-link" data-dismiss="modal">Cancel</a>
 				<a class="btn btn-default" @click="backStep()">Back</a>
-				<a class="btn btn-primary" :class="{'disabled': !canContinue }" @click="nextStep()">Continue</a>
+				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep()">Continue</a>
+				<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">Finish</a>
 			</div>
 		</div>
 
@@ -33,37 +35,36 @@
 	}
 </style>
 <script>
+	import login from '../login.vue';
 	import tos from './registration/tos.vue';
 	import roca from './registration/roca.vue';
 	import basicInfo from './registration/basic-info.vue';
-	// import groupTrips from './group-trips.vue';
+	import additionalOptions from './registration/additional-trip-options.vue';
+	import paymentDetails from './registration/payment-details.vue';
+	import deadlineAgreement from './registration/deadline-agreement.vue';
+	import review from './registration/review.vue';
 	export default{
 		name: 'trip-registration-wizard',
 		props: ["tripId"],
 		data(){
 			return {
 				stepList:[
-					{name: 'Login/Register', view: 'step1', complete:true},
+					{name: 'Login/Register', view: 'step1', complete:true}, // login component skipped for now
 					{name: 'Legal (Terms of Service)', view: 'step2', complete:false},
 					{name: 'Rules of Conduct Agreement', view: 'step3', complete:false},
 					{name: 'Basic Traveler Information', view: 'step4', complete:false},
-					//{name: 'Legal (Terms of Service)', view: 'step2', order:5, complete:false},
-					//{name: 'Legal (Terms of Service)', view: 'step2', order:6, complete:false},
+					{name: 'Additional Trip Options', view: 'step5', complete:false},
+					{name: 'Payment Details', view: 'step6', complete:false},
+					{name: 'Deadline Agreements', view: 'step7', complete:false},
+					{name: 'Review', view: 'step8', complete:false},
 				],
 				currentStep: null,
 				canContinue: false,
-				tosAgree: false,
-				rocaAgree: false,
 			}
 		},
 		computed: {
 			canContinue(){
-				switch (this.currentStep.view) {
-					case 'step2':
-						return this.tosAgree;
-					case 'step3':
-						return this.rocaAgree;
-				}
+				return this.currentStep.complete;
 			}
 		},
 		methods: {
@@ -87,25 +88,51 @@
 					}
 				});
 				this.currentStep = ns;
+			},
+			finish(){
+				// do something here
+
+				// close form or redirect page
+				$('#tripRegistration').modal('hide')
 			}
 		},
 		components: {
+			'step1': login,
 			'step2': tos,
 			'step3': roca,
 			'step4': basicInfo,
-			//'tripSelection': groupTrips
+			'step5': additionalOptions,
+			'step6': paymentDetails,
+			'step7': deadlineAgreement,
+			'step8': review,
+
 		},
 		created(){
+			// login component skipped for now
 			this.currentStep = this.stepList[1];
 		},
 		events: {
 			'tos-agree'(val){
-				this.currentStep.complete = true;
-				this.tosAgree = val;
+				this.currentStep.complete = val;
 			},
 			'roca-agree'(val){
-				this.currentStep.complete = true;
-				this.rocaAgree = val;
+				this.currentStep.complete = val;
+			},
+			'basic-info'(val){
+				this.currentStep.complete = val;
+			},
+			'ato-complete'(val){
+				this.currentStep.complete = val;
+			},
+			'payment-complete'(val){
+				this.currentStep.complete = val;
+			},
+			'deadline-agree'(val){
+				this.currentStep.complete = val;
+			},
+			'review'(val){
+				this.currentStep.complete = val;
+				this.wizardComplete = true
 			}
 		}
 	}

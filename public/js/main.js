@@ -2365,6 +2365,125 @@ if (typeof jQuery === 'undefined') {
 
 },{}],2:[function(require,module,exports){
 /*!
+ * jQuery Cookie Plugin v1.4.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD
+		define(['jquery'], factory);
+	} else if (typeof exports === 'object') {
+		// CommonJS
+		factory(require('jquery'));
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
+
+	var pluses = /\+/g;
+
+	function encode(s) {
+		return config.raw ? s : encodeURIComponent(s);
+	}
+
+	function decode(s) {
+		return config.raw ? s : decodeURIComponent(s);
+	}
+
+	function stringifyCookieValue(value) {
+		return encode(config.json ? JSON.stringify(value) : String(value));
+	}
+
+	function parseCookieValue(s) {
+		if (s.indexOf('"') === 0) {
+			// This is a quoted cookie as according to RFC2068, unescape...
+			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+		}
+
+		try {
+			// Replace server-side written pluses with spaces.
+			// If we can't decode the cookie, ignore it, it's unusable.
+			// If we can't parse the cookie, ignore it, it's unusable.
+			s = decodeURIComponent(s.replace(pluses, ' '));
+			return config.json ? JSON.parse(s) : s;
+		} catch(e) {}
+	}
+
+	function read(s, converter) {
+		var value = config.raw ? s : parseCookieValue(s);
+		return $.isFunction(converter) ? converter(value) : value;
+	}
+
+	var config = $.cookie = function (key, value, options) {
+
+		// Write
+
+		if (value !== undefined && !$.isFunction(value)) {
+			options = $.extend({}, config.defaults, options);
+
+			if (typeof options.expires === 'number') {
+				var days = options.expires, t = options.expires = new Date();
+				t.setTime(+t + days * 864e+5);
+			}
+
+			return (document.cookie = [
+				encode(key), '=', stringifyCookieValue(value),
+				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+				options.path    ? '; path=' + options.path : '',
+				options.domain  ? '; domain=' + options.domain : '',
+				options.secure  ? '; secure' : ''
+			].join(''));
+		}
+
+		// Read
+
+		var result = key ? undefined : {};
+
+		// To prevent the for loop in the first place assign an empty array
+		// in case there are no cookies at all. Also prevents odd result when
+		// calling $.cookie().
+		var cookies = document.cookie ? document.cookie.split('; ') : [];
+
+		for (var i = 0, l = cookies.length; i < l; i++) {
+			var parts = cookies[i].split('=');
+			var name = decode(parts.shift());
+			var cookie = parts.join('=');
+
+			if (key && key === name) {
+				// If second argument (value) is a function it's a converter...
+				result = read(cookie, value);
+				break;
+			}
+
+			// Prevent storing a cookie that we couldn't decode.
+			if (!key && (cookie = read(cookie)) !== undefined) {
+				result[name] = cookie;
+			}
+		}
+
+		return result;
+	};
+
+	config.defaults = {};
+
+	$.removeCookie = function (key, options) {
+		if ($.cookie(key) === undefined) {
+			return false;
+		}
+
+		// Must not alter options, thus extending a fresh object...
+		$.cookie(key, '', $.extend({}, options, { expires: -1 }));
+		return !$.cookie(key);
+	};
+
+}));
+
+},{"jquery":3}],3:[function(require,module,exports){
+/*!
  * jQuery JavaScript Library v2.2.4
  * http://jquery.com/
  *
@@ -12179,7 +12298,7 @@ if ( !noGlobal ) {
 return jQuery;
 }));
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -12280,7 +12399,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var Vue // late bind
 var map = Object.create(null)
 var shimmed = false
@@ -12580,7 +12699,7 @@ function format (id) {
   return id.match(/[^\/]+\.vue$/)[0]
 }
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 /*!
  * vue-resource v0.7.4
  * https://github.com/vuejs/vue-resource
@@ -13957,7 +14076,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 module.exports = plugin;
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v1.0.24
@@ -23990,7 +24109,27 @@ setTimeout(function () {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":3}],7:[function(require,module,exports){
+},{"_process":4}],8:[function(require,module,exports){
+var inserted = exports.cache = {}
+
+exports.insert = function (css) {
+  if (inserted[css]) return
+  inserted[css] = true
+
+  var elem = document.createElement('style')
+  elem.setAttribute('type', 'text/css')
+
+  if ('textContent' in elem) {
+    elem.textContent = css
+  } else {
+    elem.styleSheet.cssText = css
+  }
+
+  document.getElementsByTagName('head')[0].appendChild(elem)
+  return elem
+}
+
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24035,14 +24174,24 @@ exports.default = {
 				}
 				this.groups = arr;
 			});
+		},
+		selectGroup: function selectGroup(group) {
+			if (this.$parent.currentView) {
+				this.$parent.groupId = group.id;
+				this.$parent.currentView = 'tripSelection';
+			}
 		}
 	},
 	ready: function ready() {
 		this.searchGroups();
+	},
+	activate: function activate(done) {
+		this.id = this.$parent.campaignId;
+		done();
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"container\">\n\t<div class=\"col-sm-12\">\n\t\t<input type=\"text\" class=\"form-control\" v-model=\"searchText\" debounce=\"500\" placeholder=\"Search for a group\">\n\t\t<br>\n\t</div>\n\n\t<div class=\"col-sm-4 col-md-3\" v-for=\"group in groups\">\n\t\t<div class=\"thumbnail\">\n\t\t\t<img :src=\"'http://lorempixel.com/242/200/people/' + $index\" :alt=\"group.name\">\n\t\t\t<div class=\"caption\">\n\t\t\t\t<h4>{{group.name}}</h4>\n\t\t\t\t<p>\n\t\t\t\t\t<a href=\"#\" class=\"btn btn-primary btn-block\" role=\"button\">Select</a>\n\t\t\t\t</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n\t<div class=\"col-sm-12 text-center\">\n\t\t<nav>\n\t\t\t<ul class=\"pagination\">\n\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t</a>\n\t\t\t\t</li>\n\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t</a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</nav>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<input type=\"text\" class=\"form-control\" v-model=\"searchText\" debounce=\"500\" placeholder=\"Search for a group\">\n\t\t<br>\n\t</div>\n\n\t<div class=\"col-sm-4 col-md-3\" v-for=\"group in groups\">\n\t\t<div class=\"thumbnail\">\n\t\t\t<img :src=\"'http://lorempixel.com/242/200/people/' + $index\" :alt=\"group.name\">\n\t\t\t<div class=\"caption\">\n\t\t\t\t<h4>{{group.name}}</h4>\n\t\t\t\t<p>\n\t\t\t\t\t<a class=\"btn btn-primary btn-block\" role=\"button\" @click=\"selectGroup(group)\">Select</a>\n\t\t\t\t</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n\t<div class=\"col-sm-12 text-center\">\n\t\t<nav>\n\t\t\t<ul class=\"pagination\">\n\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t</a>\n\t\t\t\t</li>\n\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t</a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</nav>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -24053,7 +24202,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-71409450", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":4}],8:[function(require,module,exports){
+},{"vue":7,"vue-hot-reload-api":5}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24075,7 +24224,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\n    <div class=\"col-sm-6 col-md-4\" v-for=\"campaign in campaigns\" style=\"display:flex\">\n        <div class=\"panel panel-default\">\n            <img v-bind:src=\"campaign.thumb_src\" v-bind:alt=\"campaign.name\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h4>{{campaign.name}}</h4>\n                <h6>{{campaign.country}}</h6>\n                <p>{{campaign.description}}</p>\n            </div><!-- end panel-body -->\n            <div class=\"panel-footer\">\n                <p>\n                    <a v-bind:href=\"'/campaigns/' + campaign.page_url\" class=\"btn btn-primary btn-block\" role=\"button\">Details</a>\n                </p>\n            </div>\n        </div><!-- end panel -->\n    </div><!-- end col -->\n</div>\n\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n    <div class=\"col-sm-6 col-md-4\" v-for=\"campaign in campaigns\" style=\"display:flex\">\n        <div class=\"panel panel-default\">\n            <img :src=\"campaign.thumb_src\" :alt=\"campaign.name\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h4>{{campaign.name}}</h4>\n                <h6>{{campaign.country}}</h6>\n                <p>{{campaign.description}}</p>\n            </div><!-- end panel-body -->\n            <div class=\"panel-footer\">\n                <p>\n                    <a :href=\"'/campaigns/' + campaign.page_url\" class=\"btn btn-primary btn-block\" role=\"button\">Details</a>\n                </p>\n            </div>\n        </div><!-- end panel -->\n    </div><!-- end col -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -24086,7 +24235,141 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-483b544a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":4}],9:[function(require,module,exports){
+},{"vue":7,"vue-hot-reload-api":5}],11:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'group-trips',
+	props: ['id', 'campaignId'],
+	data: function data() {
+		return {
+			group: {},
+			trips: [],
+			page: 1
+		};
+	},
+
+	methods: {
+		getTrips: function getTrips() {
+			var resource = this.$resource('groups{/id}', {
+				include: "trips.costs",
+				//campaign: this.id,
+				//per_page: 8,
+				//search: this.searchText,
+				page: this.page
+			});
+
+			resource.query({ id: this.id }).then(function (group) {
+				this.group = group.data.data;
+				var t = this.group.trips.data,
+				    cId = this.campaignId,
+				    arr = [],
+				    calcLowest = this.calcStartingCost;
+				t.forEach(function (val, i) {
+					if (val.campaign_id === cId) {
+						val.lowest = calcLowest(val.costs.data);
+						arr.push(val);
+					}
+				});
+				this.trips = arr;
+			});
+		},
+		calcStartingCost: function calcStartingCost(costs) {
+			var lowest;
+			costs.forEach(function (val, i) {
+				if (val.amount < lowest || isNaN(lowest)) {
+					lowest = val.amount;
+				}
+			});
+			return lowest;
+		}
+	},
+	ready: function ready() {
+		if (this.id && this.campaignId && this.id.length > 0 && !this.$parent.currentView) {
+			this.getTrips();
+		}
+	},
+	activate: function activate(done) {
+		this.id = this.$parent.groupId;
+		this.campaignId = this.$parent.campaignId;
+		this.getTrips();
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<h4>{{ group.name }}</h4>\n\t<table class=\"table table-hover\">\n\t\t<thead>\n\t\t<tr>\n\t\t\t<th>Trip Type</th>\n\t\t\t<th>Trip Starting Cost</th>\n\t\t\t<th>Spots Available</th>\n\t\t\t<th>Ideal For</th>\n\t\t\t<th></th>\n\t\t</tr>\n\t\t</thead>\n\t\t<tbody>\n\t\t<tr v-for=\"trip in trips\">\n\t\t\t<td style=\"text-transform: capitalize;\">{{ trip.type }}</td>\n\t\t\t<td>{{ trip.lowest | currency }}</td>\n\t\t\t<td>{{ trip.spots }}</td>\n\t\t\t<td>{ list of prospects }</td>\n\t\t\t<td><a class=\"btn btn-primary btn-sm\">Join Group</a></td>\n\t\t</tr>\n\t\t</tbody>\n\t</table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-e0395672", module.exports)
+  } else {
+    hotAPI.update("_v-e0395672", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":7,"vue-hot-reload-api":5}],12:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _campaignGroups = require('./campaign-groups.vue');
+
+var _campaignGroups2 = _interopRequireDefault(_campaignGroups);
+
+var _groupTrips = require('./group-trips.vue');
+
+var _groupTrips2 = _interopRequireDefault(_groupTrips);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'group-trip-wrapper',
+	props: ["campaignId"],
+	data: function data() {
+		return {
+			currentView: 'groupSelection',
+			groupId: null
+		};
+	},
+
+	methods: {
+		toggleView: function toggleView() {
+			this.currentView = this.currentView === 'groupSelection' ? 'tripSelection' : 'groupSelection';
+		},
+		restartView: function restartView() {
+			this.currentView = 'groupSelection';
+		}
+	},
+	components: {
+		'groupSelection': _campaignGroups2.default,
+		'tripSelection': _groupTrips2.default
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<a v-show=\"currentView!='groupSelection'\" @click=\"restartView()\" class=\"btn btn-default btn-sm\">Start Over</a>\n\t\t<hr>\n\t</div>\n\n\t<component :is=\"currentView\" transition=\"fade\" transition-mode=\"out-in\">&gt;\n\t\t<!-- component changes when vm.currentview changes! -->\n\t</component>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-1f091c63", module.exports)
+  } else {
+    hotAPI.update("_v-1f091c63", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./campaign-groups.vue":9,"./group-trips.vue":11,"vue":7,"vue-hot-reload-api":5,"vueify/lib/insert-css":8}],13:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -24148,7 +24431,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d1dcd388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":6,"vue-hot-reload-api":4}],10:[function(require,module,exports){
+},{"vue":7,"vue-hot-reload-api":5}],14:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -24167,10 +24450,19 @@ var _campaignGroups = require('./components/campaigns/campaign-groups.vue');
 
 var _campaignGroups2 = _interopRequireDefault(_campaignGroups);
 
+var _groupTrips = require('./components/campaigns/group-trips.vue');
+
+var _groupTrips2 = _interopRequireDefault(_groupTrips);
+
+var _groupsTripsSelectionWrapper = require('./components/campaigns/groups-trips-selection-wrapper.vue');
+
+var _groupsTripsSelectionWrapper2 = _interopRequireDefault(_groupsTripsSelectionWrapper);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
+require('jquery.cookie');
 require('bootstrap-sass');
 
 $(document).ready(function () {
@@ -24187,7 +24479,9 @@ _vue2.default.http.interceptors.push({
         var token, headers;
 
         // swap local storage to cookie
-        token = window.localStorage.getItem('jwt-token');
+        // token = window.localStorage.getItem('jwt-token')
+        token = 'Bearer ' + $.cookie('jwt_token');
+        console.log(token);
         headers = _request.headers || (_request.headers = {});
 
         if (token !== null && token !== 'undefined') {
@@ -24198,21 +24492,21 @@ _vue2.default.http.interceptors.push({
     },
 
     response: function response(_response) {
-        if (_response.status && _response.status === 401) {
-            // swap local storage to cookie
-            window.localStorage.removeItem('jwt-token');
-        }
-        if (_response.headers && _response.headers('Authorization')) {
-            console.log('found authorization header');
-            // swap local storage to cookie
-            document.cookie = 'jwt-token=' + _response.headers('Authorization');
-            // window.localStorage.setItem('jwt-token', response.headers('Authorization'))
-        }
-        if (_response.data && _response.data.token && _response.data.token.length > 10) {
-            // swap local storage to cookie
-            document.cookie = 'jwt-token=' + _response.data.token;
-            // window.localStorage.setItem('jwt-token', 'Bearer ' + response.data.token)
-        }
+        // if (response.status && response.status === 401) {
+        //     // swap local storage to cookie
+        //     window.localStorage.removeItem('jwt-token')
+        // }
+        // if (response.headers && response.headers('Authorization')) {
+        //     console.log('found authorization header')
+        //     // swap local storage to cookie
+        //     document.cookie = 'jwt_token=' + response.headers('Authorization')
+        //     // window.localStorage.setItem('jwt-token', response.headers('Authorization'))
+        // }
+        // if (response.data && response.data.token && response.data.token.length > 10) {
+        //     // swap local storage to cookie
+        //     document.cookie = 'jwt_token=' + response.data.token
+        //     // window.localStorage.setItem('jwt-token', 'Bearer ' + response.data.token)
+        // }
 
         return _response;
     }
@@ -24220,7 +24514,7 @@ _vue2.default.http.interceptors.push({
 
 new _vue2.default({
     el: '#app',
-    components: [_login2.default, _campaigns2.default, _campaignGroups2.default],
+    components: [_login2.default, _campaigns2.default, _campaignGroups2.default, _groupTrips2.default, _groupsTripsSelectionWrapper2.default],
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -24231,6 +24525,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/campaigns/campaign-groups.vue":7,"./components/campaigns/campaigns.vue":8,"./components/login.vue":9,"bootstrap-sass":1,"jquery":2,"vue":6,"vue-resource":5}]},{},[10]);
+},{"./components/campaigns/campaign-groups.vue":9,"./components/campaigns/campaigns.vue":10,"./components/campaigns/group-trips.vue":11,"./components/campaigns/groups-trips-selection-wrapper.vue":12,"./components/login.vue":13,"bootstrap-sass":1,"jquery":3,"jquery.cookie":2,"vue":7,"vue-resource":6}]},{},[14]);
 
 //# sourceMappingURL=main.js.map

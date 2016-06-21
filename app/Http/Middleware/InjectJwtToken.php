@@ -3,9 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
-// use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Dingo\Api\Http\InternalRequest;
+use Dingo\Api\Http\Response;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class InjectJwtToken
 {
@@ -16,16 +17,14 @@ class InjectJwtToken
         if($request->user()) {
           $token = JWTAuth::fromUser($request->user());
           $request->headers->set('authorization', sprintf('Bearer %s', $token));
-          response('Cookie set!')->withCookie(cookie('jwt-token', $token, 60));
+
+          $response = $next($request);
+          $response->withCookie(cookie('jwt-token', sprintf('Bearer %s', $token), 60));
+
+          return $response;
         }
       }
 
-        // if ($request instanceof Dingo\Api\Http\InternalRequest) {
-        //   if ($request->cookie('jwt-token')) {
-        //         $request->headers->set('authorization', sprintf('Bearer %s', $request->cookie('jwt-token')));
-        //     }
-        // }
-
-        return $next($request);
+      return$next($request);
     }
 }

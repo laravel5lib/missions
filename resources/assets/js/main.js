@@ -7,6 +7,7 @@ import groupTripWrapper from './components/campaigns/groups-trips-selection-wrap
 
 // jQuery
 window.$ = window.jQuery = require('jquery')
+require('jquery.cookie');
 require('bootstrap-sass');
 
 $( document ).ready(function() {
@@ -23,7 +24,9 @@ Vue.http.interceptors.push({
         var token, headers
 
         // swap local storage to cookie
-        token = window.localStorage.getItem('jwt-token')
+        // token = window.localStorage.getItem('jwt-token')
+        token = 'Bearer ' + $.cookie('jwt_token');
+        console.log(token);
         headers = request.headers || (request.headers = {})
 
         if (token !== null && token !== 'undefined') {
@@ -41,12 +44,12 @@ Vue.http.interceptors.push({
         if (response.headers && response.headers('Authorization')) {
             console.log('found authorization header')
             // swap local storage to cookie
-            document.cookie = 'jwt-token=' + response.headers('Authorization')
+            document.cookie = 'jwt_token=' + response.headers('Authorization')
             // window.localStorage.setItem('jwt-token', response.headers('Authorization'))
         }
         if (response.data && response.data.token && response.data.token.length > 10) {
             // swap local storage to cookie
-            document.cookie = 'jwt-token=' + response.data.token
+            document.cookie = 'jwt_token=' + response.data.token
             // window.localStorage.setItem('jwt-token', 'Bearer ' + response.data.token)
         }
 

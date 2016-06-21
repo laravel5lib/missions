@@ -1,6 +1,6 @@
 <template>
 	<div class="row">
-		<div class="col-sm-3">
+		<div class="col-sm-4 col-md-3">
 			<ul class="nav nav-pills nav-stacked">
 				<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
 					<a>
@@ -11,10 +11,11 @@
 
 			</ul>
 		</div>
-		<div class="col-sm-9">
+		<div class="col-sm-8 col-md-9">
 			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 			</component>
+			<hr>
 			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
 				<a class="btn btn-link" data-dismiss="modal">Cancel</a>
 				<a class="btn btn-default" @click="backStep()">Back</a>
@@ -49,7 +50,7 @@
 		data(){
 			return {
 				stepList:[
-					{name: 'Login/Register', view: 'step1', complete:true}, // login component skipped for now
+					{name: 'Login/Register', view: 'step1', complete:false}, // login component skipped for now
 					{name: 'Legal (Terms of Service)', view: 'step2', complete:false},
 					{name: 'Rules of Conduct Agreement', view: 'step3', complete:false},
 					{name: 'Basic Traveler Information', view: 'step4', complete:false},
@@ -60,6 +61,7 @@
 				],
 				currentStep: null,
 				canContinue: false,
+				selectedOptions: [],
 			}
 		},
 		computed: {
@@ -92,8 +94,6 @@
 			finish(){
 				// do something here
 
-				// close form or redirect page
-				$('#tripRegistration').modal('hide')
 			}
 		},
 		components: {

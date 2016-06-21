@@ -63,7 +63,7 @@
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <div class="panel panel-default">
             	<div class="panel-body">
-                    <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#tripRegistration">Register Now</a>
+                    <a href="/trips/{{ $trip->id }}/register" class="btn btn-primary btn-block">Register Now</a>
                     <hr>
 
                     <h4>Dates</h4>
@@ -126,7 +126,7 @@
                 <h4 class="modal-title">Modal title</h4>
             </div>--}}
             <div class="modal-body">
-                <trip-registration-wizard trip-id="{{ $trip->id }}"></trip-registration-wizard>
+
             </div>
             {{--<div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

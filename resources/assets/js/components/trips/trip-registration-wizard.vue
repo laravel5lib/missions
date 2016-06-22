@@ -81,6 +81,14 @@
 				this.currentStep = bs;
 			},
 			nextStep(){
+				// ensure form is valid before continuing
+				if (this.currentStep.view === 'step4') {
+					// if form is invalid do not continue
+					if (this.$children[2].$BasicInfo.invalid) {
+						this.$children[2].attemptedContinue = true;
+						return false;
+					}
+				}
 				var cs = this.currentStep;
 				var ns;
 				this.stepList.forEach(function(val, i, list) {

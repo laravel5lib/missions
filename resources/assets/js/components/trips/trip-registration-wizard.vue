@@ -83,13 +83,9 @@
 			nextStep(){
 				// ensure form is valid before continuing
 				if (this.currentStep.view === 'step4') {
-					// initialize validator if it is a function
-					var getType = {};
-					if (this.$children[2].$activateValidator && getType.toString.call(this.$children[2].$activateValidator) === '[object Function]') {
-						this.$children[2].$activateValidator();
-					}
-					//check if form is valid
+					// if form is invalid do not continue
 					if (this.$children[2].$BasicInfo.invalid) {
+						this.$children[2].attemptedContinue = true;
 						return false;
 					}
 				}

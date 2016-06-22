@@ -81,6 +81,18 @@
 				this.currentStep = bs;
 			},
 			nextStep(){
+				// ensure form is valid before continuing
+				if (this.currentStep.view === 'step4') {
+					// initialize validator if it is a function
+					var getType = {};
+					if (this.$children[2].$activateValidator && getType.toString.call(this.$children[2].$activateValidator) === '[object Function]') {
+						this.$children[2].$activateValidator();
+					}
+					//check if form is valid
+					if (this.$children[2].$BasicInfo.invalid) {
+						return false;
+					}
+				}
 				var cs = this.currentStep;
 				var ns;
 				this.stepList.forEach(function(val, i, list) {

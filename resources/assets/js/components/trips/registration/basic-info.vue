@@ -1,92 +1,108 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="BasicInfo" @valid="onValid" @invalid="onInvalid">
+			<validator lazy name="BasicInfo" @valid="onValid" @invalid="onInvalid">
 				<form novalidate name="BasicInfoForm" id="BasicInfoForm">
 					<div class="col-md-6">
-						<div class="form-group">
+						<div class="form-group" v-validate-class>
 							<label for="infoAddress">Address</label>
-							<input type="text" class="form-control input-sm" v-model="address" v-validate:address="{ required: true }" id="infoAddress" placeholder="Street Address">
+							<input type="text" class="form-control input-sm" v-model="address"
+								   v-validate:address="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoAddress"
+								   placeholder="Street Address">
 						</div>
 
 						<div class="row">
 							<div class="col-sm-6">
-								<div class="form-group">
+								<div class="form-group" v-validate-class>
 									<label for="infoCity">City</label>
-									<input type="text" class="form-control input-sm" v-model="city" v-validate:city="{ required: true }" id="infoCity" placeholder="">
+									<input type="text" class="form-control input-sm" v-model="city"
+										   v-validate:city="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoCity" placeholder="">
 								</div>
 							</div>
 							<div class="col-sm-6">
-								<div class="form-group">
+								<div class="form-group" v-validate-class>
 									<label for="infoState">State/Prov.</label>
-									<input type="text" class="form-control input-sm" v-model="state" v-validate:state="{ required: true }" id="infoState" placeholder="">
+									<input type="text" class="form-control input-sm" v-model="state"
+										   v-validate:state="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoState" placeholder="">
 								</div>
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="col-sm-6">
-								<div class="form-group">
+								<div class="form-group" v-validate-class>
 									<label for="infoZip">ZIP/Postal Code</label>
-									<input type="text" class="form-control input-sm" v-model="zipCode" v-validate:zipCode="{ required: true }" id="infoZip" placeholder="12345">
+									<input type="text" class="form-control input-sm" v-model="zipCode"
+										   v-validate:zipCode="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoZip" placeholder="12345">
 								</div>
 							</div>
 							<div class="col-sm-6">
-								<div class="form-group">
+								<div class="form-group" v-validate-class>
 									<label for="infoCountry">Country</label>
-									<select class="form-control input-sm" v-model="country" v-validate:country="{ required: true }" id="infoCountry">
+									<select class="form-control input-sm" v-model="country"
+											v-validate:country="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoCountry">
 										<option value="us" selected>United States</option>
 									</select>
 								</div>
 							</div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" v-validate-class>
 							<label for="infoPhone">Home Phone</label>
-							<input type="text" class="form-control input-sm" v-model="phone | phone" v-validate:phone="{ required: true }" id="infoPhone" placeholder="123-456-7890">
+							<input type="text" class="form-control input-sm" v-model="phone | phone"
+								   v-validate:phone="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoPhone" placeholder="123-456-7890">
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" v-validate-class>
 							<label for="infoMobile">Cell Phone</label>
-							<input type="text" class="form-control input-sm" v-model="mobile | phone" v-validate:mobile="{ required: false }" id="infoMobile" placeholder="123-456-7890">
+							<input type="text" class="form-control input-sm" v-model="mobile | phone"
+								   v-validate:mobile="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoMobile" placeholder="123-456-7890">
 						</div>
-
 					</div>
 
 					<div class="col-md-6">
 						<label>Full Legal Name</label>
 						<div class="row">
 							<div class="col-sm-4">
-								<div class="form-group">
+								<div class="form-group" v-validate-class>
 									<!--<label for="infoFirstName">First</label>-->
-									<input type="text" class="form-control input-sm" v-model="firstName" v-validate:firstName="{ required: true }" placeholder="First" id="infoFirstName">
+									<input type="text" class="form-control input-sm" v-model="firstName"
+										   v-validate:firstName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="First"
+										   id="infoFirstName">
 								</div>
 							</div>
 							<div class="col-sm-4">
-								<div class="form-group">
+								<div class="form-group" v-validate-class>
 									<!--<label for="infoMiddleName">Middle</label>-->
-									<input type="text" class="form-control input-sm" v-model="middleName" v-validate:middleName="{ required: true }" placeholder="Middle" id="infoMiddleName">
+									<input type="text" class="form-control input-sm" v-model="middleName"
+										   v-validate:middleName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="Middle"
+										   id="infoMiddleName">
 								</div>
 							</div>
 							<div class="col-sm-4">
-								<div class="form-group">
+								<div class="form-group" v-validate-class>
 									<!--<label for="infoLastName">Last</label>-->
-									<input type="text" class="form-control input-sm" v-model="lastName" v-validate:lastName="{ required: true }" placeholder="Last" id="infoLastName">
+									<input type="text" class="form-control input-sm" v-model="lastName"
+										   v-validate:lastName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="Last"
+										   id="infoLastName">
 								</div>
 							</div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" v-validate-class>
 							<label for="infoEmailAddress">Email Address</label>
-							<input type="text" class="form-control input-sm" v-model="email" v-validate:email="['email']" id="infoEmailAddress">
+							<input type="text" class="form-control input-sm" v-model="email" id="infoEmailAddress"
+								   :classes="{ invalid: 'has-error' }" v-validate:email="['required', 'email']">
+							<span class="help-block" v-show="$BasicInfo.email.email">Invalid email address</span>
 						</div>
 
 						<label>Date of Birth</label>
 						<div class="row">
 							<div class="col-sm-4">
-								<div class="form-group">
+								<div class="form-group" v-validate-class>
 									<!--<label for="infoDobMonth">Month</label>-->
-									<select class="form-control input-sm" v-model="dobMonth" v-validate:dobMonth="{ required: true }" id="infoDobMonth">
+									<select class="form-control input-sm" v-model="dobMonth"
+											v-validate:dobMonth="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoDobMonth">
 										<option value="">Month</option>
 										<option value="01">January</option>
 										<option value="02">February</option>
@@ -104,9 +120,10 @@
 								</div>
 							</div>
 							<div class="col-sm-4">
-								<div class="form-group">
+								<div class="form-group" v-validate-class>
 									<!--<label for="infoDobDay">Day</label>-->
-									<select class="form-control input-sm" v-model="dobDay" v-validate:dobDay="{ required: true }" id="infoDobDay">
+									<select class="form-control input-sm" v-model="dobDay"
+											v-validate:dobDay="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoDobDay">
 										<option value="">Day</option>
 										<option value="01">01</option>
 										<option value="02">02</option>
@@ -143,9 +160,10 @@
 								</div>
 							</div>
 							<div class="col-sm-4">
-								<div class="form-group">
+								<div class="form-group" v-validate-class>
 									<!--<label for="infoDobYear">Year</label>-->
-									<select class="form-control input-sm" v-model="dobYearCalc" v-validate:dobYear="{ required: true }" id="infoDobYear">
+									<select class="form-control input-sm" v-model="dobYearCalc"
+											v-validate:dobYear="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoDobYear">
 										<option value="">Year</option>
 										<option v-for="n in 100 | orderBy true -1" :value="n">
 											{{ currentYear - 100 + n }}
@@ -159,16 +177,18 @@
 							<div class="col-sm-6">
 								<label>Gender</label>
 								<label class="radio">
-									<input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }" value="male"> Male
+									<input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }"
+										   value="male"> Male
 								</label>
 								<label class="radio">
 									<input type="radio" v-model="gender" v-validate:gender value="female"> Female
 								</label>
 							</div>
 							<div class="col-sm-6">
-								<div class="form-group">
+								<div class="form-group" v-validate-class>
 									<label for="infoRelStatus">Relationship Status</label>
-									<select class="form-control input-sm" v-model="relStatus" v-validate:relStatus="{ required: true }" id="infoRelStatus">
+									<select class="form-control input-sm" v-model="relStatus"
+											v-validate:relStatus="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoRelStatus">
 										<option value="single">Single</option>
 										<option value="married">Married</option>
 										<option value="divorced">Divorced</option>
@@ -179,9 +199,10 @@
 							</div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" v-validate-class>
 							<label for="infoShirtSize">Shirt Sizes</label>
-							<select class="form-control input-sm" v-model="size" v-validate:size="{ required: true }" id="infoShirtSize">
+							<select class="form-control input-sm" v-model="size" v-validate:size="{ required: true }" :classes="{ invalid: 'has-error' }"
+									id="infoShirtSize">
 								<option value="s">S (Small)</option>
 								<option value="m">M (Medium)</option>
 								<option value="l">L (Large)</option>
@@ -196,34 +217,35 @@
 		</div>
 	</div>
 </template>
+
 <script>
 	export default{
-		name: 'roca',
+		name: 'basic-info',
 		data(){
 			return {
-				title: 'Rules of Conduct Agreement',
+				title: 'Basic Traveler Information',
 				currentYear: new Date().getFullYear(),
 				// basic info data
 				address: null,
-				city:null,
-				state:null,
-				zipCode:null,
-				country:'us',
-				phone:'',
-				mobile:'',
-				firstName:null,
-				middleName:null,
-				lastName:null,
-				email:null,
-				dobDay:'',
-				dobMonth:'',
-				dobYearCalc:'',
-				dobYear:null,
-				gender:null,
-				relStatus:'single',
-				size:null,
-				height:null,
-				weight:null
+				city: null,
+				state: null,
+				zipCode: null,
+				country: 'us',
+				phone: '',
+				mobile: '',
+				firstName: null,
+				middleName: null,
+				lastName: null,
+				email: null,
+				dobDay: '',
+				dobMonth: '',
+				dobYearCalc: '',
+				dobYear: null,
+				gender: null,
+				relStatus: 'single',
+				size: null,
+				height: null,
+				weight: null
 			}
 		},
 		computed: {
@@ -233,15 +255,15 @@
 		},
 		methods: {
 			onValid(){
-				this.$dispatch('basic-info', true)
+				//this.$dispatch('basic-info', true)
 			},
 			onInvalid(){
 				// for now allow to continue
-				this.$dispatch('basic-info', false)
 			}
 		},
 		activate(done){
-			$('html, body').animate({scrollTop : 0},300);
+			this.$dispatch('basic-info', true);
+			$('html, body').animate({scrollTop: 0}, 300);
 			done();
 		}
 	}

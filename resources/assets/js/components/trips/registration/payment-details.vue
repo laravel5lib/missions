@@ -147,7 +147,7 @@
 				cardZip: null,
 
 				// stripe vars
-				stripeKey: 'pk_test_tWeuAhefc6TL2SVgEKsmGoYh',
+				stripeKey: null,
 				stripeError: null,
 				monthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 				placeholders: {
@@ -197,16 +197,12 @@
 			},
 			devMode: {
 				'default': true
-			},
-			shopUri: {
-				required: false
-			}/*,
-			card: {
-				required: true,
-				twoWay: true
-			}*/
+			}
 		},
 		computed: {
+			stripeKey() {
+				return this.$parent.stripeKey
+			},
 			staticCosts(){
 				return this.$parent.tripCosts.static;
 			},
@@ -278,7 +274,7 @@
 				var amount = cost.amount;
 
 				// if payments arr is populated
-				/*if (cost.payments.data.length) {
+				if (cost.payments.data.length) {
 					// loop through each payment
 					cost.payments.data.forEach(function (payment) {
 						if (moment(payment.due_at).isAfter()) {
@@ -287,7 +283,7 @@
 						}
 
 					})
-				}*/
+				}
 
 				return amount;
 			},

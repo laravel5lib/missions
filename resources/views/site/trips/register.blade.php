@@ -7,7 +7,7 @@
     			<h3 class="panel-title">{{ $trip->country_name }} Trip Registration</h3>
     	  </div>
     	  <div class="panel-body">
-                <trip-registration-wizard trip-id="{{ $trip->id }}"></trip-registration-wizard>
+                <trip-registration-wizard trip-id="{{ $trip->id }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}"></trip-registration-wizard>
     	  </div>
     </div>
 </div>

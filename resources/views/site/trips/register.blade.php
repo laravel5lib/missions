@@ -15,7 +15,4 @@
 
 @section('scripts')
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-<script type="text/javascript">
-	Stripe.setPublishableKey('pk_test_tWeuAhefc6TL2SVgEKsmGoYh');
-</script>
 @endsection

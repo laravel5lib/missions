@@ -129,7 +129,7 @@
 		},
 		ready(){
 			//get trip costs
-			var resource = this.$resource('trips{/id}', { include: "costs.payments,deadlines" });
+			var resource = this.$resource('trips{/id}', { include: 'costs.payments,deadlines' });
 			resource.query({id: this.tripId}).then(function (trip) {
 				// deadlines
 				this.deadlines =  trip.data.data.deadlines.data;

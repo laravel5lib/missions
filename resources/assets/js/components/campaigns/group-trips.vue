@@ -21,7 +21,7 @@
 						{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
 					</span>
 				</td>
-				<td><a class="btn btn-primary btn-sm">Join Group</a></td>
+				<td><a href="/trips/{{ trip.id }}" class="btn btn-primary btn-sm">Select</a></td>
 			</tr>
 			</tbody>
 		</table>

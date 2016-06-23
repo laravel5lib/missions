@@ -326,10 +326,10 @@
 		},
 		methods: {
 			onValid(){
-				//this.$dispatch('basic-info', true)
+				this.$parent.userInfo = this.userInfo;
 			},
 			onInvalid(){
-				// for now allow to continue
+
 			},
 			checkForError(field){
 				return this.$BasicInfo[field.toLowerCase()].invalid && this.attemptedContinue

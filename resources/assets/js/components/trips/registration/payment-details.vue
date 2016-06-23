@@ -60,7 +60,8 @@
 								<div class="input-group">
 									<span class="input-group-addon"><span class="fa fa-lock"></span></span>
 									<input type="text" class="form-control" id="cardNumber" placeholder="Valid Card Number"
-										   v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 16 }"/>
+										   v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
+										   @keyup="formatCard($event)" maxlength="19"/>
 								</div>
 								<span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
 							</div>
@@ -349,10 +350,8 @@
 				}
 				if (status === 200) {
 					this.card = resp;
+					this.$parent.stripeTokenData = resp;
 					this.$dispatch('payment-complete', true);
-
-					// Send to API to associate with account and customer object
-
 				}
 			}
 		}

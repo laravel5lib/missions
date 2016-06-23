@@ -62,8 +62,12 @@
 				currentStep: null,
 				canContinue: false,
 				tripCosts: {},
+				deadlines:[],
+
+				// user generated data
 				selectedOptions: [],
-				deadlines:[]
+				userInfo: {},
+				stripeTokenData: {},
 			}
 		},
 		computed: {
@@ -164,7 +168,7 @@
 				this.currentStep.complete = val;
 			},
 			'basic-info'(val){
-				this.currentStep.complete = val;
+				this.currentStep.complete = val
 			},
 			'ato-complete'(val){
 				this.currentStep.complete = val;

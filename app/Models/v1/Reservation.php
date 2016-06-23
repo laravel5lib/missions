@@ -93,7 +93,7 @@ class Reservation extends Model
     public function costs()
     {
         return $this->belongsToMany(Cost::class, 'reservation_costs')
-                    ->withPivot('grace_period')
+                    ->withPivot('grace_period', 'locked')
                     ->withTimestamps();
     }
 

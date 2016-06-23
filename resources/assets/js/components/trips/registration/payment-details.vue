@@ -5,28 +5,65 @@
 			<hr>
 			<div class="row">
 				<div class="col-md-6">
+					<ul class="list-group">
+						<li class="list-group-item">
+							Item
+							<span class="pull-right">Cost</span>
+						</li>
+						<li class="list-group-item" v-for="c in staticCosts">
+							<h5 class="list-group-item-heading">
+								{{c.name}}
+								<span class="pull-right">{{currentIncrementAmount(c) | currency}}</span>
+							</h5>
+							<p class="list-group-item-text">
+
+							</p>
+							<table class="table">
+								<tbody>
+									<tr v-for="p in c.payments.data" :class="{'text-danger': p.upfront}">
+										<td>{{toDate(p.due_at)}}</td>
+										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</li>
+						<li class="list-group-item" v-for="c in incrementalCosts">
+							<h5 class="list-group-item-heading">
+								{{c.name}}
+								<span class="pull-right">{{currentIncrementAmount(c) | currency}}</span>
+							</h5>
+							<p class="list-group-item-text">
+
+							</p>
+							<table class="table">
+								<tbody>
+									<tr v-for="p in c.payments.data" :class="{'text-danger': p.upfront}">
+										<td>{{toDate(p.due_at)}}</td>
+										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</li>
+						<li class="list-group-item" v-for="c in selectedOptions">
+							<h5 class="list-group-item-heading">
+								{{c.name}}
+								<span class="pull-right">{{currentIncrementAmount(c) | currency}}</span>
+							</h5>
+							<p class="list-group-item-text">
+
+							</p>
+							<table class="table">
+								<tbody>
+									<tr v-for="p in c.payments.data" :class="{'text-danger': p.upfront}">
+										<td>{{toDate(p.due_at)}}</td>
+										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</li>
+					</ul>
+
 					<table class="table table-hover">
-						<caption>Cost Summary</caption>
-						<thead>
-						<tr>
-							<th>Item</th>
-							<th>Cost</th>
-						</tr>
-						</thead>
-						<tbody>
-						<tr v-for="c in selectedOptions">
-							<td>{{c.name}}</td>
-							<td>{{c.amount | currency}}</td>
-						</tr>
-						<tr v-for="c in incrementalCosts">
-							<td>{{c.name}}</td>
-							<td>{{currentIncrementAmount(c) | currency}}</td>
-						</tr>
-						<tr v-for="c in staticCosts">
-							<td>{{c.name}}</td>
-							<td>{{c.amount | currency}}</td>
-						</tr>
-						</tbody>
 						<tfoot>
 							<tr>
 								<td style="border-top:2px solid #000000;">Fundraising Goal</td>
@@ -37,8 +74,12 @@
 								<td class="text-danger">{{-deposit | currency}}</td>
 							</tr>
 							<tr>
+								<td>Up-front Charges</td>
+								<td class="text-danger">{{-upfrontTotal | currency}}</td>
+							</tr>
+							<tr>
 								<td style="border-top:2px solid #000000;">Total to Raise</td>
-								<td style="border-top:2px solid #000000;">{{(totalCosts - deposit) | currency}}</td>
+								<td style="border-top:2px solid #000000;">{{(totalCosts - deposit - upfrontTotal) | currency}}</td>
 							</tr>
 
 						</tfoot>
@@ -112,7 +153,7 @@
 
 							<button type="button" class="btn btn-primary btn-block" @click="createToken()">Save payment Details</button>
 
-							<p class="help-block text-success">Your card will be charged $100.00 Deposit along with any upfront fees
+							<p class="help-block text-success">Your card will be charged a $100.00 deposit along with any upfront fees
 								immediately after your trip registration process is complete to secure your spot on this trip.</p>
 						</form>
 
@@ -132,6 +173,7 @@
 				staticCosts: [],
 				incrementalCosts: [],
 				selectedOptions: [],
+				upfrontTotal:0,
 				deposit: 100,
 				totalCosts: 0,
 				attemptedCreateToken: false,
@@ -207,7 +249,6 @@
 				return this.$parent.tripCosts.static;
 			},
 			incrementalCosts(){
-				console.log(this.$parent.tripCosts.incremental);
 				return this.$parent.tripCosts.incremental;
 			},
 			selectedOptions(){
@@ -225,6 +266,50 @@
 				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
 					this.selectedOptions.forEach(function (c) {
 						amount += c.amount;
+					});
+				}
+
+				// add incremental costs
+				if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
+					this.incrementalCosts.forEach(function (c) {
+						amount += c.amount;
+					});
+				}
+
+				return amount;
+			},
+			upfrontTotal(){
+				var amount = 0;
+				// add static costs
+				if(this.staticCosts && this.staticCosts.constructor === Array) {
+					this.staticCosts.forEach(function (c) {
+						c.payments.data.forEach(function (payment) {
+							if (payment.upfront) {
+								amount += payment.amount_owed;
+							}
+						});
+
+					});
+				}
+				// add optional costs
+				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
+					this.selectedOptions.forEach(function (c) {
+						c.payments.data.forEach(function (payment) {
+							if (payment.upfront) {
+								amount += payment.amount_owed;
+							}
+						});
+					});
+				}
+
+				// add incremental costs
+				if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
+					this.incrementalCosts.forEach(function (c) {
+						c.payments.data.forEach(function (payment) {
+							if (payment.upfront) {
+								amount += payment.amount_owed;
+							}
+						});
 					});
 				}
 
@@ -268,6 +353,9 @@
 			onInvalid(){
 				// for now allow to continue
 				//this.$dispatch('payment-complete', true)
+			},
+			toDate(date){
+				return moment(date).format('LL');
 			},
 			currentIncrementAmount(cost){
 				// default to main amount value

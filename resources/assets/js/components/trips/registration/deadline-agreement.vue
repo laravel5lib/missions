@@ -1,7 +1,20 @@
 <template>
 	<div class="row">
 		<div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
-			<h4>Deadlines</h4>
+			<h4>Requirements</h4>
+			<div class="list-group">
+				<a href="#" class="list-group-item" v-for="dl in requirements">
+					<h4 class="list-group-item-heading">
+						{{dl.item}}
+					</h4>
+					<p class="list-group-item-text">
+						This {{dl.enforced ? 'must' : 'should'}} be completed by {{ toDate(dl.date) }}. The
+						grace period is {{dl.grace_period}} {{dl.grace_period|pluralize 'day' 'days'}}.
+					</p>
+				</a>
+			</div>
+			<hr>
+			<h4>Cost Deadlines</h4>
 			<div class="panel panel-default" v-for="cost in costs.static">
 				<!-- Default panel contents -->
 				<div class="panel-heading">
@@ -65,24 +78,18 @@
 					</div>
 				</div>
 			</div>
-			<div class="panel panel-default">
-				<!-- Default panel contents -->
-				<div class="panel-heading">
-					Other Deadlines
-				</div>
-				<div class="panel-body">
-					<div class="list-group">
-						<a href="#" class="list-group-item" v-for="dl in deadlines">
-							<h4 class="list-group-item-heading">
-								{{dl.name}}
-							</h4>
-							<p class="list-group-item-text">
-								This {{dl.enforced ? 'must' : 'should'}} be completed by {{ toDate(dl.date) }}. The
-								grace period is {{dl.grace_period}} {{dl.grace_period|pluralize 'day' 'days'}}.
-							</p>
-						</a>
-					</div>
-				</div>
+			<hr>
+			<h4>Other Deadlines</h4>
+			<div class="list-group">
+				<a href="#" class="list-group-item" v-for="dl in deadlines">
+					<h4 class="list-group-item-heading">
+						{{dl.name}}
+					</h4>
+					<p class="list-group-item-text">
+						This {{dl.enforced ? 'must' : 'should'}} be completed by {{ toDate(dl.date) }}. The
+						grace period is {{dl.grace_period}} {{dl.grace_period|pluralize 'day' 'days'}}.
+					</p>
+				</a>
 			</div>
 
 		</div>
@@ -112,6 +119,9 @@
 		computed:{
 			deadlines(){
 				return this.$parent.deadlines;
+			},
+			requirements(){
+				return this.$parent.requirements;
 			},
 			costs(){
 				return this.$parent.tripCosts;

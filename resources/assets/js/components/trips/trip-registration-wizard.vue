@@ -63,6 +63,7 @@
 				canContinue: false,
 				tripCosts: {},
 				deadlines:[],
+				requirements:[],
 
 				// user generated data
 				selectedOptions: [],
@@ -137,6 +138,7 @@
 			resource.query({id: this.tripId}).then(function (trip) {
 				// deadlines
 				this.deadlines =  trip.data.data.deadlines.data;
+				this.requirements =  trip.data.data.requirements.data;
 
 				// filter costs by type
 				var optionalArr = [], staticArr = [], incrementalArr = [];

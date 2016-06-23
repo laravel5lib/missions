@@ -97,6 +97,18 @@ class Trip extends Model
     }
 
     /**
+     * Get all the trip's active costs.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function activeCosts()
+    {
+        return $this->morphMany(Cost::class, 'cost_assignable')
+                    ->whereDate('active_at', '<=', Carbon::now())
+                    ->orderBy('active_at', 'desc');
+    }
+
+    /**
      * Get all the trip's deadlines.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany

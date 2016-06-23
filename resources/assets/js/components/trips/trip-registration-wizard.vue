@@ -61,7 +61,9 @@
 				],
 				currentStep: null,
 				canContinue: false,
+				tripCosts: {},
 				selectedOptions: [],
+				deadlines:[]
 			}
 		},
 		computed: {
@@ -82,13 +84,19 @@
 			},
 			nextStep(){
 				// ensure form is valid before continuing
-				if (this.currentStep.view === 'step4') {
+				/*if (this.currentStep.view === 'step4') {
+					// find child
+					var thisChild;
+					this.$children.forEach(function (v) {
+						if (v.hasOwnProperty('$BasicInfo'))
+								thisChild = v;
+					});
 					// if form is invalid do not continue
-					if (this.$children[2].$BasicInfo.invalid) {
-						this.$children[2].attemptedContinue = true;
+					if (thisChild.$BasicInfo.invalid) {
+						thisChild.attemptedContinue = true;
 						return false;
 					}
-				}
+				}*/
 				var cs = this.currentStep;
 				var ns;
 				this.stepList.forEach(function(val, i, list) {
@@ -112,12 +120,41 @@
 			'step5': additionalOptions,
 			'step6': paymentDetails,
 			'step7': deadlineAgreement,
-			'step8': review,
+			'step8': review
 
 		},
 		created(){
 			// login component skipped for now
 			this.currentStep = this.stepList[1];
+		},
+		ready(){
+			//get trip costs
+			var resource = this.$resource('trips{/id}', { include: "costs.payments,deadlines" });
+			resource.query({id: this.tripId}).then(function (trip) {
+				// deadlines
+				this.deadlines =  trip.data.data.deadlines.data;
+
+				// filter costs by type
+				var optionalArr = [], staticArr = [], incrementalArr = [];
+				trip.data.data.costs.data.forEach(function (cost) {
+					switch (cost.type) {
+						case 'static':
+							staticArr.push(cost);
+							break;
+						case 'incremental':
+							incrementalArr.push(cost);
+							break;
+						case 'optional':
+							optionalArr.push(cost);
+							break;
+					}
+				});
+				this.tripCosts = {
+					static: staticArr,
+					incremental: incrementalArr,
+					optional: optionalArr,
+				}
+			});
 		},
 		events: {
 			'tos-agree'(val){

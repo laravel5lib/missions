@@ -4,7 +4,7 @@
 <div class="container">
     <div class="panel panel-default">
     	  <div class="panel-heading">
-    			<h3 class="panel-title">Trip Registration</h3>
+    			<h3 class="panel-title">{{ $trip->country_name }} Trip Registration</h3>
     	  </div>
     	  <div class="panel-body">
                 <trip-registration-wizard trip-id="{{ $trip->id }}"></trip-registration-wizard>
@@ -16,6 +16,6 @@
 @section('scripts')
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript">
-	Stripe.setPublishableKey('');
+	Stripe.setPublishableKey('pk_test_tWeuAhefc6TL2SVgEKsmGoYh');
 </script>
 @endsection

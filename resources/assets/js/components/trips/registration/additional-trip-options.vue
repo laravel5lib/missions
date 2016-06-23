@@ -19,13 +19,17 @@
 <script>
 	export default{
 		name: 'additional-trip-options',
-		props: ["tripId"],
 		data(){
 			return {
 				title: 'Additional Trip Options',
 				atoComplete: true,
 				options: [],
 				selectedOptions: []
+			}
+		},
+		computed:{
+			options(){
+				return this.$parent.tripCosts.optional;
 			}
 		},
 		watch:{
@@ -38,17 +42,6 @@
 		},
 		ready(){
 		    this.$dispatch('ato-complete', true);
-
-			//get trip costs
-			var resource = this.$resource('trips{/id}', { include: "costs" });
-			resource.query({id: this.$parent.tripId}).then(function (trip) {
-				var arr = [];
-				for (var i in trip.data.data.costs.data) {
-					if(trip.data.data.costs.data[i].type === 'optional')
-						arr.push(trip.data.data.costs.data[i])
-				}
-				this.options = arr;
-			});
 		}
 	}
 </script>

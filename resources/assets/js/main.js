@@ -7,7 +7,8 @@ import groupTripWrapper from './components/campaigns/groups-trips-selection-wrap
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 
 // jQuery
-window.$ = window.jQuery = require('jquery')
+window.$ = window.jQuery = require('jquery');
+window.moment = require('moment');
 require('jquery.cookie');
 require('bootstrap-sass');
 

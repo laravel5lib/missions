@@ -62,7 +62,7 @@
 									<input type="text" class="form-control" id="cardNumber" placeholder="Valid Card Number"
 										   v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 16 }"/>
 								</div>
-								<span class="help-block" v-show="validationErrors.cardNumber">{{stripeError.message}}</span>
+								<span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
 							</div>
 							<div class="row">
 								<div class="col-xs-7 col-md-7">

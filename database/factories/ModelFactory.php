@@ -98,6 +98,10 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
         'started_at'      => $started_at,
         'ended_at'        => $ended_at,
         'todos'           => $faker->sentences(6),
+        'prospects'       => $faker->randomElements([
+            'adults', 'teens', 'men', 'women', 'medical professionals', 
+            'media professionals', 'business professionals', 'pastors', 
+            'families'], 4),
         'description'     => $faker->paragraph(10),
         'published_at'    => $faker->optional(0.9)->dateTimeThisYear
     ];

@@ -28,7 +28,7 @@ class Trip extends Model
         'group_id', 'campaign_id', 'rep_id', 'spots',
         'country', 'type', 'difficulty', 'thumb_src',
         'started_at', 'ended_at', 'description', 'todos',
-        'companion_limit', 'published_at'
+        'companion_limit', 'published_at', 'prospects'
     ];
 
     /**
@@ -55,7 +55,8 @@ class Trip extends Model
      * @var array
      */
     protected $casts = [
-        'todos' => 'array'
+        'todos' => 'array',
+        'prospects' => 'array'
     ];
 
     /**
@@ -83,16 +84,6 @@ class Trip extends Model
     public function campaign()
     {
         return $this->belongsTo(Campaign::class);
-    }
-
-    /**
-     * Get all the trip's prospects.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function prospects()
-    {
-        return $this->belongsToMany(Prospect::class);
     }
 
     /**

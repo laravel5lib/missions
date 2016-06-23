@@ -49,6 +49,7 @@ class TripRequest extends FormRequest
             'costs.*.payments.*.upfront'      => 'boolean',
             'costs.*.payments.*.grace_period' => 'required|numeric',
             'todos'                           => 'array',
+            'prospects'                       => 'array',
             'description'                     => 'string',
             'deadlines'                       => 'sometimes|required|array',
             'deadlines.*.name'                => 'required|string',

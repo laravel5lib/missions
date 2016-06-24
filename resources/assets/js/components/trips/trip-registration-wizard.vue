@@ -46,7 +46,7 @@
 	import review from './registration/review.vue';
 	export default{
 		name: 'trip-registration-wizard',
-		props: ["tripId"],
+		props: ['tripId', 'stripeKey'],
 		data(){
 			return {
 				stepList:[
@@ -62,8 +62,13 @@
 				currentStep: null,
 				canContinue: false,
 				tripCosts: {},
+				deadlines:[],
+				requirements:[],
+
+				// user generated data
 				selectedOptions: [],
-				deadlines:[]
+				userInfo: {},
+				stripeTokenData: {},
 			}
 		},
 		computed: {
@@ -129,10 +134,11 @@
 		},
 		ready(){
 			//get trip costs
-			var resource = this.$resource('trips{/id}', { include: "costs.payments,deadlines" });
+			var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
 			resource.query({id: this.tripId}).then(function (trip) {
 				// deadlines
 				this.deadlines =  trip.data.data.deadlines.data;
+				this.requirements =  trip.data.data.requirements.data;
 
 				// filter costs by type
 				var optionalArr = [], staticArr = [], incrementalArr = [];
@@ -164,7 +170,7 @@
 				this.currentStep.complete = val;
 			},
 			'basic-info'(val){
-				this.currentStep.complete = val;
+				this.currentStep.complete = val
 			},
 			'ato-complete'(val){
 				this.currentStep.complete = val;

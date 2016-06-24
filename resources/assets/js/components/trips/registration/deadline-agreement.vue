@@ -8,8 +8,7 @@
 						{{dl.item}}
 					</h4>
 					<p class="list-group-item-text">
-						This {{dl.enforced ? 'must' : 'should'}} be completed by {{ toDate(dl.date) }}. The
-						grace period is {{dl.grace_period}} {{dl.grace_period|pluralize 'day' 'days'}}.
+						This {{dl.enforced ? 'must' : 'should'}} be completed by {{ toDate(dl.date) }}.
 					</p>
 				</a>
 			</div>
@@ -30,7 +29,7 @@
 							</h4>
 							<p class="list-group-item-text">
 								The amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}&percnt; of the total amount, is due.
-								If this amount is not received after {{payment.grace_period}} {{payment.grace_period| pluralize 'day' 'days'}} of the deadline, the next is applied.
+								If this amount is not received by deadline, the next is applied.
 							</p>
 						</a>
 					</div>
@@ -51,7 +50,7 @@
 							</h4>
 							<p class="list-group-item-text">
 								The amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
-								If this amount is not received within {{payment.grace_period}} {{payment.grace_period| pluralize 'day' 'days'}} of the deadline, the next is applied.
+								If this amount is not received by the deadline, the next is applied.
 							</p>
 						</a>
 					</div>
@@ -72,7 +71,7 @@
 							</h4>
 							<p class="list-group-item-text">
 								The amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
-								If this amount is not received within {{payment.grace_period}} {{payment.grace_period| pluralize 'day' 'days'}} of the deadline, the next is applied.
+								If this amount is not received by the deadline, the next is applied.
 							</p>
 						</a>
 					</div>
@@ -86,8 +85,7 @@
 						{{dl.name}}
 					</h4>
 					<p class="list-group-item-text">
-						This {{dl.enforced ? 'must' : 'should'}} be completed by {{ toDate(dl.date) }}. The
-						grace period is {{dl.grace_period}} {{dl.grace_period|pluralize 'day' 'days'}}.
+						This {{dl.enforced ? 'must' : 'should'}} be completed by {{ toDate(dl.date) }}.
 					</p>
 				</a>
 			</div>

@@ -149,9 +149,14 @@
 										<input type="text" class="form-control input-sm" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
 									</div>
 								</div>
+								<div class="col-sm-12">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" v-model="cardSave">Save payment details for next time.
+										</label>
+									</div>
+								</div>
 							</div>
-
-							<button type="button" class="btn btn-primary btn-block" @click="createToken()">Save payment Details</button>
 
 							<p class="help-block text-success">Your card will be charged a $100.00 deposit along with any upfront fees
 								immediately after your trip registration process is complete to secure your spot on this trip.</p>
@@ -187,6 +192,7 @@
 				cardCVC: '',
 				cardEmail: null,
 				cardZip: null,
+				cardSave: false,
 
 				// stripe vars
 				stripeKey: null,
@@ -203,7 +209,8 @@
 					cardCVC: '',
 					cardYear: '',
 					cardMonth: ''
-				}
+				},
+				stripeDeferred: {}
 			}
 		},
 		watch: {
@@ -220,6 +227,7 @@
 			}
 		},
 		ready: function () {
+			this.$dispatch('payment-complete', true);
 			if (this.devMode) {
 				this.cardNumber = '4242424242424242';
 				this.cardCVC = '123';
@@ -342,7 +350,7 @@
 					expMonth: this.cardMonth,
 					expYear: this.cardYear,
 					cvc: this.cardCVC,
-					address_zip: this.cardZip
+					address_zip: this.cardZip,
 				};
 			}
 		},
@@ -400,12 +408,16 @@
 				return this.$PaymentDetails[field.toLowerCase()].invalid && this.attemptedCreateToken
 			},
 			createToken() {
+				this.stripeDeferred = $.Deferred();
+
 				if (this.$PaymentDetails.invalid) {
 					this.attemptedCreateToken = true;
-					return false;
+					this.stripeDeferred.reject(false);
+				} else {
+					Stripe.setPublishableKey(this.stripeKey);
+					Stripe.card.createToken(this.cardParams, this.createTokenCallback);
 				}
-				Stripe.setPublishableKey(this.stripeKey);
-				return Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+				return this.stripeDeferred.promise();
 			},
 			createTokenCallback(status, resp) {
 				console.log(status);
@@ -431,11 +443,17 @@
 					if (this.stripeError.param === 'cvc') {
 						this.validationErrors.cardCVC = 'error';
 					}
+					this.stripeDeferred.reject(false);
 				}
 				if (status === 200) {
 					this.card = resp;
-					this.$parent.stripeTokenData = resp;
-					this.$dispatch('payment-complete', true);
+					this.$parent.paymentInfo = {
+						token: resp,
+						save: this.cardSave,
+						email: this.cardEmail
+					};
+					this.$parent.upfrontTotal = this.upfrontTotal;
+					this.stripeDeferred.resolve(true);
 				}
 			}
 		}

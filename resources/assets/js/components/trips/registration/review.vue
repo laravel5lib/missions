@@ -16,14 +16,14 @@
 						{{userInfo.country | uppercase}}<br>
 						<br>
 						Date of Birth: {{userInfo.dob}}<br>
-						Gender: {{userInfo.gender}}<br>
-						Relationship Status: {{userInfo.relStatus}}<br>
+						Gender: {{userInfo.gender|capitalize}}<br>
+						Relationship Status: {{userInfo.relStatus|capitalize}}<br>
 						Height: {{userInfo.height}}<br>
-						Weight: {{userInfo.weight}}<br>
+						Weight: {{userInfo.weight}} lbs.<br>
 						<br>
-						<abbr title="Phone">P:</abbr> {{userInfo.phone}}<br>
-						<abbr title="Mobile">M:</abbr> {{userInfo.mobile}}<br>
-						<abbr title="Email"><i class="fa fa-envelope"></i></abbr> {{userInfo.email}}<br>
+						<abbr title="Phone"><span class="fa fa-phone"></span></abbr> {{userInfo.phone}}<br>
+						<abbr title="Mobile"><span class="fa fa-mobile"></span></abbr> {{userInfo.mobile}}<br>
+						<abbr title="Email"><span class="fa fa-envelope"></span></abbr> {{userInfo.email}}<br>
 					</address>
 				</div>
 			</div>
@@ -39,18 +39,18 @@
 						<dt>Card Holder Name</dt>
 						<dd>{{paymentInfo.token.card.name}}</dd>
 						<dt>Card Number</dt>
-						<dd>.... .... .... {{paymentInfo.token.card.last4}}</dd>
+						<dd>&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; {{paymentInfo.token.card.last4}}</dd>
 						<dt>Card Expiration</dt>
-						<dd>{{paymentInfo.token.card.exp_month}} {{paymentInfo.token.card.exp_year}}</dd>
+						<dd>{{paymentInfo.token.card.exp_month}}/{{paymentInfo.token.card.exp_year}}</dd>
 						<dt>Billing Email</dt>
 						<dd>{{paymentInfo.email}}</dd>
-						<dt>Billing Zip/Postal Code</dt>
-						<dd>{{paymentInfo.token.card.zip}}</dd>
-						<dt>Save payment method</dt>
+						<dt>Billing Zip</dt>
+						<dd>{{paymentInfo.token.card.address_zip}}</dd>
+						<dt>Save Payment Method</dt>
 						<dd>{{paymentInfo.save ? 'Yes' : 'No'}}</dd>
 					</dl>
 					<hr>
-					<p>Amount to be charged immediately: {{upfrontTotal|currency}}</p>
+					<p class="list-group-item-text">Amount to be charged immediately: {{upfrontTotal|currency}}</p>
 				</div>
 			</div>
 

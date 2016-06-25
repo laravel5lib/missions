@@ -207,8 +207,7 @@
 				this.currentStep.complete = val;
 			},
 			'review'(val){
-				this.currentStep.complete = val;
-				this.wizardComplete = true
+				this.currentStep.complete = this.wizardComplete = val;
 			}
 		}
 	}

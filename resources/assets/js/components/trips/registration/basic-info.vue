@@ -316,6 +316,7 @@
 					dobDay: this.dobDay,
 					dobMonth: this.dobMonth,
 					dobYear: this.dobYear,
+					dob: moment().set({year: this.dobYear, month: this.dobMonth, day:this.dobDay}).format('LL'),
 					gender: this.gender,
 					relStatus: this.relStatus,
 					size: this.size,

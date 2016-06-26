@@ -2,15 +2,57 @@
 	<div class="row">
 		<div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
 			<h4>Review</h4>
-			<p>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet convallis nisl. Aenean
-				varius non enim tincidunt sagittis. Ut quis cursus orci, nec posuere sem. Fusce dignissim porttitor
-				tristique. Etiam in orci metus. Donec facilisis vel erat quis rhoncus. Etiam non pulvinar est, a
-				efficitur massa. Curabitur feugiat ornare quam, at aliquet urna auctor eget. Proin id porta odio.
-				Suspendisse tincidunt, mi et faucibus suscipit, ex enim pretium nisi, in sagittis lacus ipsum gravida
-				diam. Nullam lacinia nunc nec ante tincidunt egestas. Integer id arcu in turpis pretium convallis a sit
-				amet purus.
-			</p>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<div class="panel-title">
+						Basic Traveler Information
+					</div>
+				</div>
+				<div class="panel-body">
+					<address>
+						<strong>{{userInfo.firstName}} {{userInfo.middleName}} {{userInfo.lastName}}</strong><br>
+						{{userInfo.address}}<br>
+						{{userInfo.city}}, {{userInfo.state}} {{userInfo.zipCode}}<br>
+						{{userInfo.country | uppercase}}<br>
+						<br>
+						Date of Birth: {{userInfo.dob}}<br>
+						Gender: {{userInfo.gender|capitalize}}<br>
+						Relationship Status: {{userInfo.relStatus|capitalize}}<br>
+						Height: {{userInfo.height}}<br>
+						Weight: {{userInfo.weight}} lbs.<br>
+						<br>
+						<abbr title="Phone"><span class="fa fa-phone"></span></abbr> {{userInfo.phone}}<br>
+						<abbr title="Mobile"><span class="fa fa-mobile"></span></abbr> {{userInfo.mobile}}<br>
+						<abbr title="Email"><span class="fa fa-envelope"></span></abbr> {{userInfo.email}}<br>
+					</address>
+				</div>
+			</div>
+
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<div class="panel-title">
+						Payment Details
+					</div>
+				</div>
+				<div class="panel-body">
+					<dl class="dl-horizontal" v-if="paymentInfo">
+						<dt>Card Holder Name</dt>
+						<dd>{{paymentInfo.token.card.name}}</dd>
+						<dt>Card Number</dt>
+						<dd>&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; {{paymentInfo.token.card.last4}}</dd>
+						<dt>Card Expiration</dt>
+						<dd>{{paymentInfo.token.card.exp_month}}/{{paymentInfo.token.card.exp_year}}</dd>
+						<dt>Billing Email</dt>
+						<dd>{{paymentInfo.email}}</dd>
+						<dt>Billing Zip</dt>
+						<dd>{{paymentInfo.token.card.address_zip}}</dd>
+						<dt>Save Payment Method</dt>
+						<dd>{{paymentInfo.save ? 'Yes' : 'No'}}</dd>
+					</dl>
+					<hr>
+					<p class="list-group-item-text">Amount to be charged immediately: {{upfrontTotal|currency}}</p>
+				</div>
+			</div>
 
 		</div>
 		<div class="col-sm-12">
@@ -33,6 +75,17 @@
 			return {
 				title: 'Review',
 				review: false
+			}
+		},
+		computed:{
+			userInfo(){
+				return this.$parent.userInfo;
+			},
+			paymentInfo(){
+				return this.$parent.paymentInfo;
+			},
+			upfrontTotal(){
+				return this.$parent.upfrontTotal;
 			}
 		},
 		watch:{

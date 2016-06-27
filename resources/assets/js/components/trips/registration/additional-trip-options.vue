@@ -4,7 +4,7 @@
             <h4>Additional Trip Options</h4>
 			<validator name="AdditionalOptions">
 				<form>
-					<div class="checkbox" v-for="op in options | orderBy 'name'">
+					<div class="checkbox" v-for="op in optionalCosts | orderBy 'name'">
 						<label style="display:block" for="option{{$index}}">
 							<input type="checkbox" id="option{{$index}}" v-model="selectedOptions" :value="op">
 							{{op.name}}
@@ -23,12 +23,12 @@
 			return {
 				title: 'Additional Trip Options',
 				atoComplete: true,
-				options: [],
+				optionalCosts: [],
 				selectedOptions: []
 			}
 		},
 		computed:{
-			options(){
+			optionalCosts(){
 				return this.$parent.tripCosts.optional;
 			}
 		},

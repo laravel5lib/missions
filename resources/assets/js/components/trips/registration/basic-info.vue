@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="BasicInfo" @valid="onValid" @invalid="onInvalid">
+			<validator name="BasicInfo" @valid="onValid">
 				<form novalidate name="BasicInfoForm" id="BasicInfoForm">
 					<div class="col-md-6">
 						<div class="form-group" :class="{ 'has-error': checkForError('address') }">
@@ -209,11 +209,11 @@
 							<label for="infoShirtSize">Shirt Sizes</label>
 							<select class="form-control input-sm" v-model="size" v-validate:size="{ required: true }" :classes="{ invalid: 'has-error' }"
 									id="infoShirtSize">
-								<option value="s">S (Small)</option>
-								<option value="m">M (Medium)</option>
-								<option value="l">L (Large)</option>
-								<option value="xl">XL (Extra Large)</option>
-								<option value="xxl">2XL (2 Extra Large)</option>
+								<option value="S">S (Small)</option>
+								<option value="M">M (Medium)</option>
+								<option value="L">L (Large)</option>
+								<option value="XL">XL (Extra Large)</option>
+								<option value="XXL">XXL (2 Extra Large)</option>
 							</select>
 						</div>
 
@@ -321,6 +321,8 @@
 					relStatus: this.relStatus,
 					size: this.size,
 					height: this.height,
+					heightA: this.heightA,
+					heightB: this.heightB,
 					weight: this.weight,
 				}
 			}
@@ -329,10 +331,8 @@
 			onValid(){
 				this.$parent.userInfo = this.userInfo;
 			},
-			onInvalid(){
-
-			},
 			checkForError(field){
+				// if user clicked continue button while the field is invalid trigger error styles
 				return this.$BasicInfo[field.toLowerCase()].invalid && this.attemptedContinue
 			}
 		},

@@ -13,7 +13,7 @@
 						<li class="list-group-item" v-for="c in staticCosts">
 							<h5 class="list-group-item-heading">
 								{{c.name}}
-								<span class="pull-right">{{currentIncrementAmount(c) | currency}}</span>
+								<span class="pull-right">{{c.amount | currency}}</span>
 							</h5>
 							<p class="list-group-item-text">
 
@@ -30,7 +30,7 @@
 						<li class="list-group-item" v-for="c in incrementalCosts">
 							<h5 class="list-group-item-heading">
 								{{c.name}}
-								<span class="pull-right">{{currentIncrementAmount(c) | currency}}</span>
+								<span class="pull-right">{{c.amount | currency}}</span>
 							</h5>
 							<p class="list-group-item-text">
 
@@ -47,7 +47,7 @@
 						<li class="list-group-item" v-for="c in selectedOptions">
 							<h5 class="list-group-item-heading">
 								{{c.name}}
-								<span class="pull-right">{{currentIncrementAmount(c) | currency}}</span>
+								<span class="pull-right">{{c.amount | currency}}</span>
 							</h5>
 							<p class="list-group-item-text">
 
@@ -79,7 +79,7 @@
 							</tr>
 							<tr>
 								<td style="border-top:2px solid #000000;">Total to Raise</td>
-								<td style="border-top:2px solid #000000;">{{(totalCosts - deposit - upfrontTotal) | currency}}</td>
+								<td style="border-top:2px solid #000000;">{{fundraisingGoal | currency}}</td>
 							</tr>
 
 						</tfoot>
@@ -210,6 +210,8 @@
 					cardYear: '',
 					cardMonth: ''
 				},
+				// deferred variable used for card validation
+				// needs to be on `this` scope to access in response callback
 				stripeDeferred: {}
 			}
 		},
@@ -253,6 +255,9 @@
 			stripeKey() {
 				return this.$parent.stripeKey
 			},
+			fundraisingGoal(){
+				return this.totalCosts - this.deposit - this.upfrontTotal;
+			},
 			staticCosts(){
 				return this.$parent.tripCosts.static;
 			},
@@ -264,20 +269,20 @@
 			},
 			totalCosts(){
 				var amount = 0;
-				// add static costs
+				// add static costs if they exists
 				if(this.staticCosts && this.staticCosts.constructor === Array) {
 					this.staticCosts.forEach(function (c) {
 						amount += c.amount;
 					});
 				}
-				// add optional costs
+				// add optional costs if they exists
 				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
 					this.selectedOptions.forEach(function (c) {
 						amount += c.amount;
 					});
 				}
 
-				// add incremental costs
+				// add incremental costs if they exists
 				if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
 					this.incrementalCosts.forEach(function (c) {
 						amount += c.amount;
@@ -288,7 +293,7 @@
 			},
 			upfrontTotal(){
 				var amount = 0;
-				// add static costs
+				// add static costs if they exists
 				if(this.staticCosts && this.staticCosts.constructor === Array) {
 					this.staticCosts.forEach(function (c) {
 						c.payments.data.forEach(function (payment) {
@@ -299,7 +304,7 @@
 
 					});
 				}
-				// add optional costs
+				// add optional costs if they exists
 				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
 					this.selectedOptions.forEach(function (c) {
 						c.payments.data.forEach(function (payment) {
@@ -310,7 +315,7 @@
 					});
 				}
 
-				// add incremental costs
+				// add incremental costs if they exists
 				if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
 					this.incrementalCosts.forEach(function (c) {
 						c.payments.data.forEach(function (payment) {
@@ -322,12 +327,6 @@
 				}
 
 				return amount;
-			},
-			yearIsPlaceholder() {
-				return this.cardYear.length === 0;
-			},
-			monthIsPlaceholder() {
-				return this.cardMonth.length === 0;
 			},
 			yearList() {
 				var num, today, years, yyyy;
@@ -364,24 +363,6 @@
 			},
 			toDate(date){
 				return moment(date).format('LL');
-			},
-			currentIncrementAmount(cost){
-				// default to main amount value
-				var amount = cost.amount;
-
-				// if payments arr is populated
-				if (cost.payments.data.length) {
-					// loop through each payment
-					cost.payments.data.forEach(function (payment) {
-						if (moment(payment.due_at).isAfter()) {
-							debugger;
-
-						}
-
-					})
-				}
-
-				return amount;
 			},
 			resetCaching() {
 				console.log('resetting ');
@@ -422,7 +403,6 @@
 			createTokenCallback(status, resp) {
 				console.log(status);
 				console.log(resp);
-				var uploadReq;
 				this.validationErrors = {
 					cardNumber: '',
 					cardCVC: '',
@@ -447,12 +427,14 @@
 				}
 				if (status === 200) {
 					this.card = resp;
+					// send payment data to parent
 					this.$parent.paymentInfo = {
 						token: resp,
 						save: this.cardSave,
 						email: this.cardEmail
 					};
 					this.$parent.upfrontTotal = this.upfrontTotal;
+					this.$parent.fundraisingGoal = this.fundraisingGoal;
 					this.stripeDeferred.resolve(true);
 				}
 			}

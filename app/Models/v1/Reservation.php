@@ -26,7 +26,7 @@ class Reservation extends Model
      */
     protected $fillable = [
         'given_names', 'surname', 'gender', 'status',
-        'shirt_size', 'birthday', 'amount', 'user_id',
+        'shirt_size', 'birthday', 'user_id',
         'trip_id', 'rep_id', 'todos', 'companions', 'costs',
         'passport_id'
     ];

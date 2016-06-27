@@ -7,7 +7,7 @@
             <div class="col-sm-12">
                 <h3>
                     Current Campaigns
-                    <a href="" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus"></i> New</a>
+                    <a href="/admin/campaigns/create" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus"></i> New</a>
                 </h3>
 
                 <ul class="nav nav-pills">

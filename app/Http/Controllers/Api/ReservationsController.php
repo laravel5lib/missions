@@ -65,11 +65,17 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        $reservation = Reservation::create($request->except('deadlines'));
+        $reservation = Reservation::create($request->all());
 
-        $location = url('/reservations/'.$reservation->id);
+        // Eager load trip relationships for sync
+        $reservation->load('trip.costs', 'trip.requirements', 'trip.deadlines');
 
-        return $this->response->created($location);
+        $reservation->syncCosts($reservation->trip->costs);
+        $reservation->syncRequirements($reservation->trip->requirements);
+        $reservation->syncDeadlines($reservation->trip->deadlines);
+        $reservation->addTodos($reservation->trip->todos);
+
+        return $this->response->item($reservation, new ReservationTransformer);
     }
 
     /**
@@ -83,7 +89,12 @@ class ReservationsController extends Controller
     {
         $reservation = Reservation::findOrFail($id);
 
-        $reservation->update($request->all());
+        $reservation->update($request->except('costs', 'requirements', 'deadlines', 'todos'));
+
+        $reservation->syncCosts($request->get('costs'));
+        $reservation->syncRequirements($request->get('requirements'));
+        $reservation->syncDeadlines($request->get('deadlines'));
+        $reservation->syncTodos($request->get('todos'));
 
         return $this->response->item($reservation, new ReservationTransformer);
     }

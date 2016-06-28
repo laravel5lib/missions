@@ -27,7 +27,7 @@ class CampaignsController extends Controller
     {
         //$campaign = $this->api->get('campaigns/'.$id);
 
-        return view('admin.campaigns.show')->with('campaignId', $id);
+        return view('admin.campaigns.edit')->with('campaignId', $id);
     }
 
     public function create()

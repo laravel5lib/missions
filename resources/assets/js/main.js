@@ -6,6 +6,10 @@ import groupTrips from './components/campaigns/group-trips.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 
+// admin components
+import campaignCreate from './components/campaigns/admin-campaign-create.vue';
+import campaignDetails from './components/campaigns/admin-campaign-details.vue';
+
 // jQuery
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
@@ -86,6 +90,8 @@ new Vue({
         groupTrips,
         groupTripWrapper,
         tripRegWizard,
+        campaignCreate,
+        campaignDetails,
     ],
     http: {
         headers: {

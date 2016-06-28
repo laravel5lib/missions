@@ -48,7 +48,8 @@ module.exports = {
     return {
       user: {
         email: null,
-        password: null
+        password: null,
+        _token: $('meta[name="csrf-token"]').attr('content')
       },
       messages: []
     }
@@ -58,10 +59,9 @@ module.exports = {
     attempt: function (e) {
       e.preventDefault()
       var that = this
-      that.$http.post('login', this.user).then(
+      that.$http.post('/login', this.user).then(
         function (response) {
-          // that.$dispatch('userHasFetchedToken', response.token)
-          that.getUserData()
+          that.getUserData(response.data.redirect_to);
         },
         function (response) {
           that.messages = []
@@ -80,12 +80,12 @@ module.exports = {
       )
     },
 
-    getUserData: function () {
+    getUserData: function (redirectTo) {
       var that = this
-      that.$http.get('/users/me').then(
+      that.$http.get('/api/users/me').then(
         function (response) {
-          that.$dispatch('userHasLoggedIn', response.data.data)
-          // that.$route.router.go('/dashboard/settings/account')
+          that.$dispatch('userHasLoggedIn', response.data.data);
+          location.href=redirectTo;
         },
         function (response) {
           console.log(response)

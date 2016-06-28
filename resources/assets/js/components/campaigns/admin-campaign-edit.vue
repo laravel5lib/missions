@@ -378,7 +378,7 @@
 			update(){
 				this.attemptSubmit = true;
 				if (this.$UpdateCampaign.valid) {
-					this.resource.update(null, {
+					this.resource.update({id: this.campaignId}, {
 						name: this.name,
 						country_code: this.country_code,
 						short_desc: this.description

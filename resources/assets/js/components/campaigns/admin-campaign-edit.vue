@@ -12,7 +12,7 @@
 			<div class="form-group" :class="{ 'has-error': checkForError('country') }">
 				<label for="country" class="col-sm-2 control-label">Country</label>
 				<div class="col-sm-10">
-					<select name="country" id="country" class="form-control" v-model="country" v-validate:country="{ required: true }" required>
+					<select name="country" id="country" class="form-control" v-model="country_code" v-validate:country="{ required: true }" required>
 						<option value="af">Afghanistan</option>
 						<option value="ax">Åland Islands</option>
 						<option value="al">Albania</option>
@@ -354,7 +354,6 @@
 		data(){
 			return {
 				name: null,
-				country: null,
 				country_code: null,
 				short_desc: null,
 				started_at: null,
@@ -363,11 +362,6 @@
 				page_url: null,
 				attemptSubmit: false,
 				resource: this.$resource('campaigns{/id}')
-			}
-		},
-		computed: {
-			country_code(){
-				return [this.country];
 			}
 		},
 		methods: {
@@ -381,9 +375,14 @@
 					this.resource.update({id: this.campaignId}, {
 						name: this.name,
 						country_code: this.country_code,
-						short_desc: this.description
+						short_desc: this.short_desc,
+						started_at: this.started_at,
+						ended_at: this.ended_at,
+						published_at: this.published_at,
+						page_url: this.page_url
+
 					}).then(function (resp) {
-						debugger;
+						$.extend(this, resp.data.data);
 					}, function (error) {
 						debugger;
 					});
@@ -411,7 +410,7 @@
 						return selectedValue = option.value;
 					}
 				});
-				this.country = selectedValue;
+				this.country_code = selectedValue;
 			});
 
 		}

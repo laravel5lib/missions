@@ -57,7 +57,7 @@
 					{name: 'Additional Trip Options', view: 'step5', complete:false},
 					{name: 'Payment Details', view: 'step6', complete:false},
 					{name: 'Deadline Agreements', view: 'step7', complete:false},
-					{name: 'Review', view: 'step8', complete:false},
+					{name: 'Review', view: 'step8', complete:false}
 				],
 				currentStep: null,
 				canContinue: false,
@@ -70,7 +70,8 @@
 				selectedOptions: [],
 				userInfo: {},
 				paymentInfo: {},
-				upfrontTotal: 0
+				upfrontTotal: 0,
+				fundraisingGoal: 0
 			}
 		},
 		computed: {
@@ -85,24 +86,23 @@
 				}
 			},
 			backStep(){
-				var cs = this.currentStep;
-				var bs;
-				this.stepList.forEach(function(val, i, list) {
-					if (cs.view === val.view){
-						bs = list[i-1];
+				this.stepList.some(function(step, i, list) {
+					if (this.currentStep.view === step.view){
+						return this.currentStep = list[i-1];
 					}
-				});
-				this.currentStep = bs;
+				}, this);
 			},
 			nextStep(){
 				var thisChild;
 				switch (this.currentStep.view) {
 					case 'step4':
+
 						// find child
-						this.$children.forEach(function (v) {
-							if (v.hasOwnProperty('$BasicInfo'))
-								thisChild = v;
+						this.$children.forEach(function (child) {
+							if (child.hasOwnProperty('$BasicInfo'))
+								thisChild = child;
 						});
+
 						// if form is invalid do not continue
 						if (thisChild.$BasicInfo.invalid) {
 							thisChild.attemptedContinue = true;
@@ -112,11 +112,12 @@
 						break;
 					case 'step6':
 						// find child
-						this.$children.forEach(function (v) {
-							if (v.hasOwnProperty('$PaymentDetails'))
-								thisChild = v;
+						this.$children.forEach(function (child) {
+							if (child.hasOwnProperty('$PaymentDetails'))
+								thisChild = child;
 						});
 						var self = this;
+							// promise needed to wait for async response from stripe
 						$.when(thisChild.createToken())
 								.done(function (success) {
 									self.nextStepCallback();
@@ -127,18 +128,36 @@
 				}
 			},
 			nextStepCallback(){
-				var cs = this.currentStep;
-				var ns;
-				this.stepList.forEach(function(val, i, list) {
-					if (cs.view === val.view){
-						ns = list[i+1];
-						return list[i].complete = cs.complete;
+				this.stepList.some(function(step, i, list) {
+					if (this.currentStep.view === step.view){
+						list[i].complete = this.currentStep.complete;
+						return this.currentStep = list[i+1];
 					}
-				});
-				this.currentStep = ns;
+				}, this);
 			},
 			finish(){
-				// do something here
+				// 1. Create customer with stripe
+				// 2. if they chose to save data, save card to customer
+				// 3. charge card
+				// 4. update user account with customer id
+				// 5. create reservation
+				this.$http.post('reservations', {
+					given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
+					surname: this.userInfo.lastName,
+					gender: this.userInfo.gender,
+					status: this.userInfo.relStatus,
+					shirt_size: this.userInfo.size,
+					birthday: moment(this.userInfo.dob).toISOString(),
+					amount: this.fundraisingGoal,
+					// get a userId from db until login component is complete
+//					user_id: userId,
+					user_id: 'ec458b88-e47a-4809-8beb-eadabc19d007',
+					trip_id: this.tripId,
+
+				}).then(function (response) {
+					debugger;
+				}, errorCallback);
+
 
 			}
 		},
@@ -161,7 +180,7 @@
 			//get trip costs
 			var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
 			resource.query({id: this.tripId}).then(function (trip) {
-				// deadlines
+				// deadlines and requirements
 				this.deadlines =  trip.data.data.deadlines.data;
 				this.requirements =  trip.data.data.requirements.data;
 

@@ -1,6 +1,6 @@
 <template>
 	<div class="row">
-		<div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
+		<div class="col-sm-12">
 			<h4>Review</h4>
 			<div class="panel panel-primary">
 				<div class="panel-heading">
@@ -17,7 +17,7 @@
 						<br>
 						Date of Birth: {{userInfo.dob}}<br>
 						Gender: {{userInfo.gender|capitalize}}<br>
-						Relationship Status: {{userInfo.relStatus|capitalize}}<br>
+						Relationship Status: {{userInfo.relationshipStatus|capitalize}}<br>
 						Height: {{userInfo.height}}<br>
 						Weight: {{userInfo.weight}} lbs.<br>
 						<br>

@@ -19,7 +19,8 @@ class InjectJwtToken
           $request->headers->set('authorization', sprintf('Bearer %s', $token));
 
           $response = $next($request);
-          $response->withCookie(cookie('jwt-token', sprintf('Bearer %s', $token), 60));
+          // Won't work here. Move to Authentication Process.
+          // $response->withCookie(cookie('jwt-token', sprintf('Bearer %s', $token), 60));
 
           return $response;
         }

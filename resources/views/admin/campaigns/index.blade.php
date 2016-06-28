@@ -87,7 +87,9 @@
                                             <i class="fa fa-pencil"></i> Draft
                                         @endif
                                     </td>
-                                    <td><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-pencil"></i></a>
+                                    <td>
+                                        <a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-eye"></i></a>
+                                        <a href="/admin/campaigns/{{ $campaign->id }}/edit"><i class="fa fa-pencil"></i></a>
                                     </td>
                                 </tr>
                                 @endif

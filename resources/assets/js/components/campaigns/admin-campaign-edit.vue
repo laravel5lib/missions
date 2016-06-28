@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-	<validator name="CreateCampaign">
-		<form id="CreateCampaignForm" class="form-horizontal" novalidate>
+	<validator name="UpdateCampaign">
+		<form id="UpdateCampaignForm" class="form-horizontal" novalidate>
 			<div class="form-group" :class="{ 'has-error': checkForError('name') }">
 				<label for="name" class="col-sm-2 control-label">Name</label>
 				<div class="col-sm-10">
@@ -316,18 +316,41 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
-					<a href="/admin/campaigns" class="btn btn-default">Cancel</a>
-					<a @click="submit()" class="btn btn-primary">Create</a>
+					<a href="/admin/campaigns/{{campaignId}}" class="btn btn-default btn-sm">Cancel</a>
+					<a @click="update()" class="btn btn-primary btn-sm">Update</a>
+					<a class="btn btn-danger btn-sm pull-right" data-toggle="modal" data-target="#deleteConfirmationModal"	>Delete</a>
 				</div>
 			</div>
 		</form>
+
+		<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModal">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">Delete Campaign</h4>
+					</div>
+					<div class="modal-body">
+						<p>Are you sure you want to delete this campaign?</p>
+						<div class="row">
+							<div class="col-xs-6"><a class="btn btn-sm btn-block btn-default" data-dismiss="modal">No</a></div>
+							<div class="col-xs-6"><a @click="deleteCampaign()" class="btn btn-sm btn-block btn-primary">Yes</a></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
 	</validator>
 </template>
 <script>
 	export default{
-		name: 'campaign-create',
+		name: 'campaign-edit',
+		props: ['campaignId'],
 		data(){
 			return {
 				name: null,
@@ -338,7 +361,8 @@
 				ended_at: null,
 				published_at: null,
 				page_url: null,
-				attemptSubmit: false
+				attemptSubmit: false,
+				resource: this.$resource('campaigns{/id}')
 			}
 		},
 		computed: {
@@ -349,28 +373,47 @@
 		methods: {
 			checkForError(field){
 				// if user clicked submit button while the field is invalid trigger error styles 
-				return this.$CreateCampaign[field].invalid && this.attemptSubmit;
+				return this.$UpdateCampaign[field].invalid && this.attemptSubmit;
 			},
-			submit(){
+			update(){
 				this.attemptSubmit = true;
-				if (this.$CreateCampaign.valid) {
-					var resource = this.$resource('campaigns');
-					resource.save(null, {
+				if (this.$UpdateCampaign.valid) {
+					this.resource.update(null, {
 						name: this.name,
 						country_code: this.country_code,
-						short_desc: this.description,
-						started_at: this.started_at,
-						ended_at: this.ended_at,
-						published_at: this.published_at,
-						page_url: this.page_url,
-
+						short_desc: this.description
 					}).then(function (resp) {
 						debugger;
 					}, function (error) {
 						debugger;
 					});
 				}
+			},
+			deleteCampaign(){
+				// delete campaign
+				this.resource.delete({id: this.campaignId}).then(function(response) {
+					window.location.href = '/admin/campaigns/'
+				});
 			}
+		},
+		created(){
+			// get campaign data
+			this.resource.get({id: this.campaignId}).then(function(response) {
+				var campaign = response.data.data;
+
+				$.extend(this, campaign);
+				// loop through list of countries
+				var country = campaign.country;
+				var selectedValue = null;
+				$.each($('#country option'), function (index, option) {
+					// find country that matches name, get country code
+					if (option.innerHTML === country) {
+						return selectedValue = option.value;
+					}
+				});
+				this.country = selectedValue;
+			});
+
 		}
 	}
 </script> 

@@ -7,7 +7,8 @@ import groupTripWrapper from './components/campaigns/groups-trips-selection-wrap
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 
 // admin components
-import campaignCreate from './components/campaigns/campaign-create.vue';
+import campaignCreate from './components/campaigns/admin-campaign-create.vue';
+import campaignDetails from './components/campaigns/admin-campaign-details.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -90,6 +91,7 @@ new Vue({
         groupTripWrapper,
         tripRegWizard,
         campaignCreate,
+        campaignDetails,
     ],
     http: {
         headers: {

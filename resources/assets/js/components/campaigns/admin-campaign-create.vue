@@ -343,7 +343,7 @@
 		},
 		computed: {
 			country_code(){
-				return [this.country];
+				return this.country;
 			}
 		},
 		methods: {

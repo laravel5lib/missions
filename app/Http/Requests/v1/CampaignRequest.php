@@ -25,8 +25,12 @@ class CampaignRequest extends FormRequest
     {
         return [
             'name' => 'required|max:100',
-            'countries' => 'required|array',
-            'description' => 'string|max:120'
+            'country_code' => 'required|string',
+            'description' => 'string|max:120',
+            'started_at' => 'required|date',
+            'ended_at' => 'required|date',
+            'published_at' => 'date',
+            'page_url' => 'required_with:published_at|string|unique:campaigns,page_url'
         ];
     }
 }

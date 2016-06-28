@@ -6,9 +6,14 @@
         <div class="panel-body">
             ...
         </div>
-        <div class="panel-footer text-muted small">
-            Campaign ID: {{ campaignId }}
-        </div>
+        <table class="table table-hover">
+            <tbody>
+            <tr v-for="trip in trips">
+                <td>{{trip.type|capitalize}} Trip</td>
+                <td>{{trip.reservations}} reservations</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 <script>
@@ -16,7 +21,12 @@
         name: 'trips',
         data(){
             return{
-                msg:'hello vue'
+                trips: [],
+            }
+        },
+        computed:{
+            trips(){
+                return this.$parent.campaign.trips.data;
             }
         },
         activate(done){

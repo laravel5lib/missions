@@ -8,6 +8,7 @@ import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
+import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
 import campaignDetails from './components/campaigns/admin-campaign-details.vue';
 
 // jQuery
@@ -90,6 +91,7 @@ new Vue({
         groupTripWrapper,
         tripRegWizard,
         campaignCreate,
+        campaignEdit,
         campaignDetails,
     ],
     http: {

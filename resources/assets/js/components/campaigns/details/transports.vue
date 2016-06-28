@@ -6,9 +6,14 @@
         <div class="panel-body">
             ...
         </div>
-        <div class="panel-footer text-muted small">
-            Campaign ID: {{ campaignId }}
-        </div>
+        <table class="table table-hover">
+            <tbody>
+            <tr v-for="transport in transports">
+                <td>{{transport.name}}</td>
+                <td>{{transport.type|capitalize}}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 <script>
@@ -16,10 +21,15 @@
         name: 'transports',
         data(){
             return{
-                msg:'hello vue'
+                transports:[]
             }
         },
         activate(done){
+            // get transport data
+            var resource = this.$resource('transports', {'campaign_id': this.$parent.campaignId});
+            resource.get().then(function(response) {
+                this.transports = response.data.data;
+            });
             done();
         }
     }

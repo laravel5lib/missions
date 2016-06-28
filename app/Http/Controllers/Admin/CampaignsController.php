@@ -18,9 +18,16 @@ class CampaignsController extends Controller
 
     public function show($id)
     {
-        $campaign = $this->api->get('campaigns/'.$id);
+        //$campaign = $this->api->get('campaigns/'.$id);
 
-        return view('admin.campaigns.show')->with('campaign', $campaign);
+        return view('admin.campaigns.show')->with('campaignId', $id);
+    }
+
+    public function edit($id)
+    {
+        //$campaign = $this->api->get('campaigns/'.$id);
+
+        return view('admin.campaigns.show')->with('campaignId', $id);
     }
 
     public function create()

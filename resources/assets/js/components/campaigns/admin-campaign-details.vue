@@ -40,10 +40,31 @@
 			</div>
 		</div>
 		<div class="col-sm-9">
-			<component :is="currentView" transition="fade" transition-mode="out-in">
+			<h4>
+				{{campaign.name}} <small>Campaign</small>
 
-			</component>
+				<!-- Single button -->
+				<div class="btn-group pull-right">
+					<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Actions <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a href="/admin/campaigns">Back</a></li>
+						<li><a href="/admin/campaigns/{{campaignId}}/edit">Edit</a></li>
+					</ul>
+				</div>
+			</h4>
+			<div class="row">
+				<div class="col-sm-12">
+					<hr>
+					<component :is="currentView" transition="fade" transition-mode="out-in">
+
+					</component>
+				</div>
+			</div>
+
 		</div>
+
 	</div>
 </template>
 <style>
@@ -61,10 +82,11 @@
 	import transports from './details/transports.vue';
 	export default{
 		name: 'admin-campaign-details',
-		props: ['campaign', 'campaignId'],
+		props: ['campaignId'],
 		data(){
 			return {
-				currentView: null
+				currentView: null,
+				campaign: {}
 			}
 		},
 		methods: {
@@ -74,6 +96,12 @@
 		},
 		created(){
 			this.currentView = 'details';
+
+			// get campaign data
+			var resource = this.$resource('campaigns{/id}', {'include': 'trips,groups,'});
+			resource.get({id: this.campaignId}).then(function(response) {
+				this.campaign = response.data.data;
+			});
 		},
 		components: {
 			'details': details,

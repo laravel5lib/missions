@@ -1,14 +1,53 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4>Campaign Details</h4>
+            <h4><i class="fa fa-info-circle"></i> Details</h4>
         </div>
-        <div class="panel-body">
-            ...
-        </div>
-        <div class="panel-footer text-muted small">
-            Campaign ID: {{ campaignId }}
-        </div>
+        <table class="table table-hover">
+            <tbody>
+            <tr>
+                <td>Name</td>
+                <td v-if="!editMode">{{campaign.name}}</td>
+            </tr>
+            <tr>
+                <td>Country</td>
+                <td>{{campaign.country}}</td>
+                <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
+            </tr>
+            <tr>
+                <td>Thumbnail</td>
+                <td>{{campaign.thumb_src}}</td>
+                <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
+            </tr>
+            <tr>
+                <td>Start Date</td>
+                <td>{{toDate(campaign.started_at)}}</td>
+                <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
+            </tr>
+            <tr>
+                <td>End Date</td>
+                <td>{{toDate(campaign.ended_at)}}</td>
+                <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
+            </tr>
+            <tr>
+                <td>Created At</td>
+                <td>{{toDate(campaign.updated_at)}}</td>
+                <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
+            </tr>
+            <tr>
+                <td>Updated At</td>
+                <td>{{toDate(campaign.created_at)}}</td>
+                <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
+            </tr>
+            </tbody>
+        </table>
+        <!--<div class="panel-body">
+            <ul class="list-group">
+                <li class="list-group-item" v-for="(key, value) in campaign">
+                    {{key}}: {{value}}
+                </li>
+            </ul>
+        </div>-->
     </div>
 </template>
 <script>
@@ -16,8 +55,20 @@
         name: 'details',
         data(){
             return{
-                msg:'hello vue'
+                //campaign: null
+                editMode: false
             }
+        },
+        computed:{
+            campaign(){
+                return this.$parent.campaign;
+            }
+        },
+        methods:{
+            toDate(date){
+                return moment(date).format('LL');
+            }
+
         },
         activate(done){
             done();

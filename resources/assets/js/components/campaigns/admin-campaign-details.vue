@@ -40,6 +40,7 @@
 			</div>
 		</div>
 		<div class="col-sm-9">
+			<h2>{{campaign.name}} <small>Campaign</small></h2>
 			<component :is="currentView" transition="fade" transition-mode="out-in">
 
 			</component>
@@ -61,10 +62,11 @@
 	import transports from './details/transports.vue';
 	export default{
 		name: 'admin-campaign-details',
-		props: ['campaign', 'campaignId'],
+		props: ['campaignId'],
 		data(){
 			return {
-				currentView: null
+				currentView: null,
+				campaign: {}
 			}
 		},
 		methods: {
@@ -74,6 +76,12 @@
 		},
 		created(){
 			this.currentView = 'details';
+
+			// get campaign data
+			var resource = this.$resource('campaigns{/id}', {'include': 'trips,groups,'});
+			resource.get({id: this.campaignId}).then(function(response) {
+				this.campaign = response.data.data;
+			});
 		},
 		components: {
 			'details': details,

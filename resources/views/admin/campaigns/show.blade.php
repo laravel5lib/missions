@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container">
-  <admin-campaign-details campaign="{{ json_encode($campaign) }}" campaign-id="{{ $campaign->id }}"></admin-campaign-details>
+    <admin-campaign-details campaign-id="{{ $campaignId }}"></admin-campaign-details>
 </div>
 
 @endsection

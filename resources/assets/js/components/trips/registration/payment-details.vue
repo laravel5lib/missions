@@ -10,51 +10,51 @@
 							Item
 							<span class="pull-right">Cost</span>
 						</li>
-						<li class="list-group-item" v-for="c in staticCosts">
+						<li class="list-group-item" v-for="cost in staticCosts">
 							<h5 class="list-group-item-heading">
-								{{c.name}}
-								<span class="pull-right">{{c.amount | currency}}</span>
+								{{cost.name}}
+								<span class="pull-right">{{cost.amount | currency}}</span>
 							</h5>
 							<p class="list-group-item-text">
 
 							</p>
 							<table class="table">
 								<tbody>
-									<tr v-for="p in c.payments.data" :class="{'text-danger': p.upfront}">
+									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
 										<td>{{toDate(p.due_at)}}</td>
 										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
 									</tr>
 								</tbody>
 							</table>
 						</li>
-						<li class="list-group-item" v-for="c in incrementalCosts">
+						<li class="list-group-item" v-for="cost in incrementalCosts">
 							<h5 class="list-group-item-heading">
-								{{c.name}}
-								<span class="pull-right">{{c.amount | currency}}</span>
+								{{cost.name}}
+								<span class="pull-right">{{cost.amount | currency}}</span>
 							</h5>
 							<p class="list-group-item-text">
 
 							</p>
 							<table class="table">
 								<tbody>
-									<tr v-for="p in c.payments.data" :class="{'text-danger': p.upfront}">
+									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
 										<td>{{toDate(p.due_at)}}</td>
 										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
 									</tr>
 								</tbody>
 							</table>
 						</li>
-						<li class="list-group-item" v-for="c in selectedOptions">
+						<li class="list-group-item" v-for="cost in selectedOptions">
 							<h5 class="list-group-item-heading">
-								{{c.name}}
-								<span class="pull-right">{{c.amount | currency}}</span>
+								{{cost.name}}
+								<span class="pull-right">{{cost.amount | currency}}</span>
 							</h5>
 							<p class="list-group-item-text">
 
 							</p>
 							<table class="table">
 								<tbody>
-									<tr v-for="p in c.payments.data" :class="{'text-danger': p.upfront}">
+									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
 										<td>{{toDate(p.due_at)}}</td>
 										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
 									</tr>
@@ -271,21 +271,21 @@
 				var amount = 0;
 				// add static costs if they exists
 				if(this.staticCosts && this.staticCosts.constructor === Array) {
-					this.staticCosts.forEach(function (c) {
-						amount += c.amount;
+					this.staticCosts.forEach(function (cost) {
+						amount += cost.amount;
 					});
 				}
 				// add optional costs if they exists
 				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
-					this.selectedOptions.forEach(function (c) {
-						amount += c.amount;
+					this.selectedOptions.forEach(function (cost) {
+						amount += cost.amount;
 					});
 				}
 
 				// add incremental costs if they exists
 				if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
-					this.incrementalCosts.forEach(function (c) {
-						amount += c.amount;
+					this.incrementalCosts.forEach(function (cost) {
+						amount += cost.amount;
 					});
 				}
 
@@ -295,8 +295,8 @@
 				var amount = 0;
 				// add static costs if they exists
 				if(this.staticCosts && this.staticCosts.constructor === Array) {
-					this.staticCosts.forEach(function (c) {
-						c.payments.data.forEach(function (payment) {
+					this.staticCosts.forEach(function (cost) {
+						cost.payments.data.forEach(function (payment) {
 							if (payment.upfront) {
 								amount += payment.amount_owed;
 							}
@@ -306,8 +306,8 @@
 				}
 				// add optional costs if they exists
 				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
-					this.selectedOptions.forEach(function (c) {
-						c.payments.data.forEach(function (payment) {
+					this.selectedOptions.forEach(function (cost) {
+						cost.payments.data.forEach(function (payment) {
 							if (payment.upfront) {
 								amount += payment.amount_owed;
 							}
@@ -317,8 +317,8 @@
 
 				// add incremental costs if they exists
 				if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
-					this.incrementalCosts.forEach(function (c) {
-						c.payments.data.forEach(function (payment) {
+					this.incrementalCosts.forEach(function (cost) {
+						cost.payments.data.forEach(function (payment) {
 							if (payment.upfront) {
 								amount += payment.amount_owed;
 							}

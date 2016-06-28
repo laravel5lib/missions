@@ -4,11 +4,11 @@
             <h4>Additional Trip Options</h4>
 			<validator name="AdditionalOptions">
 				<form>
-					<div class="checkbox" v-for="op in optionalCosts | orderBy 'name'">
+					<div class="checkbox" v-for="option in optionalCosts | orderBy 'name'">
 						<label style="display:block" for="option{{$index}}">
-							<input type="checkbox" id="option{{$index}}" v-model="selectedOptions" :value="op">
-							{{op.name}}
-							<span class="pull-right">{{op.amount | currency}}</span>
+							<input type="checkbox" id="option{{$index}}" v-model="selectedOptions" :value="option">
+							{{option.name}}
+							<span class="pull-right">{{option.amount | currency}}</span>
 						</label>
 					</div>
 				</form>

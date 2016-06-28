@@ -3,12 +3,12 @@
 		<div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
 			<h4>Requirements</h4>
 			<div class="list-group">
-				<a href="#" class="list-group-item" v-for="dl in requirements">
+				<a href="#" class="list-group-item" v-for="requirement in requirements">
 					<h4 class="list-group-item-heading">
-						{{dl.item}}
+						{{requirement.item}}
 					</h4>
 					<p class="list-group-item-text">
-						This {{dl.enforced ? 'must' : 'should'}} be completed by {{ toDate(dl.date) }}.
+						This {{requirement.enforced ? 'must' : 'should'}} be completed by {{ toDate(requirement.date) }}.
 					</p>
 				</a>
 			</div>
@@ -80,12 +80,12 @@
 			<hr>
 			<h4>Other Deadlines</h4>
 			<div class="list-group">
-				<a href="#" class="list-group-item" v-for="dl in deadlines">
+				<a href="#" class="list-group-item" v-for="deadline in deadlines">
 					<h4 class="list-group-item-heading">
-						{{dl.name}}
+						{{deadline.name}}
 					</h4>
 					<p class="list-group-item-text">
-						This {{dl.enforced ? 'must' : 'should'}} be completed by {{ toDate(dl.date) }}.
+						This {{deadline.enforced ? 'must' : 'should'}} be completed by {{ toDate(deadline.date) }}.
 					</p>
 				</a>
 			</div>

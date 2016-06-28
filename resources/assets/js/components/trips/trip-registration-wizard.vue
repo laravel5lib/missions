@@ -86,8 +86,8 @@
 				}
 			},
 			backStep(){
-				this.stepList.some(function(val, i, list) {
-					if (this.currentStep.view === val.view){
+				this.stepList.some(function(step, i, list) {
+					if (this.currentStep.view === step.view){
 						return this.currentStep = list[i-1];
 					}
 				}, this);
@@ -98,9 +98,9 @@
 					case 'step4':
 
 						// find child
-						this.$children.forEach(function (v) {
-							if (v.hasOwnProperty('$BasicInfo'))
-								thisChild = v;
+						this.$children.forEach(function (child) {
+							if (child.hasOwnProperty('$BasicInfo'))
+								thisChild = child;
 						});
 
 						// if form is invalid do not continue
@@ -112,9 +112,9 @@
 						break;
 					case 'step6':
 						// find child
-						this.$children.forEach(function (v) {
-							if (v.hasOwnProperty('$PaymentDetails'))
-								thisChild = v;
+						this.$children.forEach(function (child) {
+							if (child.hasOwnProperty('$PaymentDetails'))
+								thisChild = child;
 						});
 						var self = this;
 							// promise needed to wait for async response from stripe
@@ -128,8 +128,8 @@
 				}
 			},
 			nextStepCallback(){
-				this.stepList.some(function(val, i, list) {
-					if (this.currentStep.view === val.view){
+				this.stepList.some(function(step, i, list) {
+					if (this.currentStep.view === step.view){
 						list[i].complete = this.currentStep.complete;
 						return this.currentStep = list[i+1];
 					}

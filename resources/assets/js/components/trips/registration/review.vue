@@ -17,7 +17,7 @@
 						<br>
 						Date of Birth: {{userInfo.dob}}<br>
 						Gender: {{userInfo.gender|capitalize}}<br>
-						Relationship Status: {{userInfo.relStatus|capitalize}}<br>
+						Relationship Status: {{userInfo.relationshipStatus|capitalize}}<br>
 						Height: {{userInfo.height}}<br>
 						Weight: {{userInfo.weight}} lbs.<br>
 						<br>

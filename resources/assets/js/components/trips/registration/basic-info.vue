@@ -191,10 +191,10 @@
 
 							</div>
 							<div class="col-sm-6">
-								<div class="form-group" :class="{ 'has-error': checkForError('relStatus') }">
+								<div class="form-group" :class="{ 'has-error': checkForError('relationshipStatus') }">
 									<label for="infoRelStatus">Relationship Status</label>
-									<select class="form-control input-sm" v-model="relStatus"
-											v-validate:relStatus="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoRelStatus">
+									<select class="form-control input-sm" v-model="relationshipStatus"
+											v-validate:relationshipStatus="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoRelStatus">
 										<option value="single">Single</option>
 										<option value="married">Married</option>
 										<option value="divorced">Divorced</option>
@@ -284,7 +284,7 @@
 				dobMonth: '',
 				dobYear: null,
 				gender: null,
-				relStatus: 'single',
+				relationshipStatus: 'single',
 				size: null,
 				height: null,
 				heightA: null,
@@ -318,7 +318,7 @@
 					dobYear: this.dobYear,
 					dob: moment().set({year: this.dobYear, month: this.dobMonth, day:this.dobDay}).format('LL'),
 					gender: this.gender,
-					relStatus: this.relStatus,
+					relationshipStatus: this.relationshipStatus,
 					size: this.size,
 					height: this.height,
 					heightA: this.heightA,

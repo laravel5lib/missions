@@ -1,10 +1,4 @@
 <template>
-<div class="container">
-  <div class="row">
-    <hr class="divider inv lg">
-    <div class="col-md-6 col-md-offset-3">
-      <h5 class="text-uppercase text-center">Welcome Back To Missions.Me</h5>
-      <hr class="divider inv">
       <div class="panel panel-default">
         <div class="panel-body">
           <form class="form-horizontal" role="form">
@@ -35,10 +29,7 @@
             </div><!-- end form-group -->
           </form><!-- end form -->
         </div><!-- end panel-body -->
-      </div>
-    </div><!-- end col -->
-  </div><!-- end row -->
-</div><!-- end container --></template>
+</template>
 
 <script>
 module.exports = {

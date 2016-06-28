@@ -19,7 +19,7 @@ class UsersController extends Controller
     public function __construct(User $user)
     {
         $this->middleware('api.auth', ['except' => ['show']]);
-        // $this->middleware('jwt.refresh', ['except' => ['show']]);
+        $this->middleware('jwt.refresh', ['except' => ['show']]);
         $this->user = $user;
     }
 

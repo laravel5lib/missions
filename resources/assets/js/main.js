@@ -6,6 +6,10 @@ import groupTrips from './components/campaigns/group-trips.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 
+// admin components
+import campaignCreate from './components/campaigns/admin-campaign-create.vue';
+import campaignDetails from './components/campaigns/admin-campaign-details.vue';
+
 // jQuery
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
@@ -27,10 +31,8 @@ Vue.http.interceptors.push({
     request: function (request) {
         var token, headers
 
-        // swap local storage to cookie
-        // token = window.localStorage.getItem('jwt-token')
-        token = 'Bearer ' + $.cookie('jwt_token');
-        console.log(token);
+        token = 'Bearer ' + $.cookie('api_token');
+
         headers = request.headers || (request.headers = {})
 
         if (token !== null && token !== 'undefined') {
@@ -42,19 +44,13 @@ Vue.http.interceptors.push({
 
     response: function (response) {
         if (response.status && response.status === 401) {
-            // swap local storage to cookie
-            window.localStorage.removeItem('jwt-token')
+            $.removeCookie('api_token');
         }
         if (response.headers && response.headers('Authorization')) {
-            console.log('found authorization header')
-            // swap local storage to cookie
-            document.cookie = 'jwt_token=' + response.headers('Authorization')
-            // window.localStorage.setItem('jwt-token', response.headers('Authorization'))
+            $.cookie('api_token', response.headers('Authorization'));
         }
         if (response.data && response.data.token && response.data.token.length > 10) {
-            // swap local storage to cookie
-            document.cookie = 'jwt_token=' + response.data.token
-            // window.localStorage.setItem('jwt-token', 'Bearer ' + response.data.token)
+            $.cookie('api_token', response.data.token);
         }
 
         return response
@@ -79,6 +75,13 @@ Vue.filter('phone', {
 
 new Vue({
     el: '#app',
+    data: {
+      user: {
+        name: '',
+        email: '',
+        public: false
+      }
+    },
     components: [
         login,
         campaigns,
@@ -86,6 +89,8 @@ new Vue({
         groupTrips,
         groupTripWrapper,
         tripRegWizard,
+        campaignCreate,
+        campaignDetails,
     ],
     http: {
         headers: {
@@ -93,6 +98,16 @@ new Vue({
         }
     },
     ready: function() {
-        console.log('vue is ready')
+        // console.log('vue is ready'),
+        this.$on('userHasLoggedIn', function (user) {
+          this.setUser(user)
+        })
+    },
+    methods: {
+        setUser: function (user) {
+          // Save user info
+          this.user = user
+          this.authenticated = true
+        }
     }
 });

@@ -83,14 +83,10 @@ Route::get('/trips/{id}/register', function ($id = null) use ($dispatcher) {
 });
 
 
-Route::get('/login', function () {
-    return view('site.login');
-});
+Route::get('/login', 'Auth\AuthController@login');
+Route::post('/login', 'Auth\AuthController@authenticate');
+Route::get('/logout', 'Auth\AuthController@logout');
 
 Route::get('/', function () {
     return view('site.index');
 });
-
-Route::auth();
-
-Route::get('/home', 'HomeController@index');

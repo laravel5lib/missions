@@ -4,9 +4,11 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use Carbon\Carbon;
+use App\Models\v1\Todo;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Collection;
 
 class Reservation extends Model
 {
@@ -202,5 +204,105 @@ class Reservation extends Model
         {
             return $this->birthday->diffInYears();
         }
+    }
+
+    /**
+     * Syncronize all the trip's costs.
+     *
+     * @param $costs
+     */
+    public function syncCosts($costs)
+    {
+        if ( ! $costs) return;
+        
+        if ( ! $costs instanceof Collection)
+            $costs = collect($costs);
+
+        $data = $costs->lists('id')->toArray();
+        
+        $this->costs()->sync($data);
+    }
+
+    /**
+     * Syncronize all the reservation's requirements.
+     *
+     * @param $requirements
+     */
+    public function syncRequirements($requirements)
+    {
+        if ( ! $requirements) return;
+
+        if ( ! $requirements instanceof Collection)
+            $requirements = collect($requirements);
+
+        $data = $requirements->keyBy('id')->map(function($item, $key) {
+            return [
+                'grace_period' => $item->grace_period,
+                'status' => $item->status ? $item->status : 'incomplete',
+                'completed_at' => $item->completed_at ? $item->completed_at : null
+            ];
+        })->toArray();
+
+        $this->requirements()->sync($data);
+    }
+
+    /**
+     * Syncronize all the reservation's deadlines.
+     *
+     * @param $deadlines
+     */
+    public function syncDeadlines($deadlines)
+    {
+        if ( ! $deadlines) return;
+
+        if ( ! $deadlines instanceof Collection)
+            $deadlines = collect($deadlines);
+
+        $data = $deadlines->keyBy('id')->map(function($item, $key) {
+            return [
+                'grace_period' => $item->grace_period
+            ];
+        })->toArray();
+
+        $this->deadlines()->sync($data);
+    }
+
+    /**
+     * Add an array of todos to the reservation.
+     * 
+     * @param array $todos [description]
+     */
+    public function addTodos(array $todos)
+    {
+        if ( ! $todos) return;
+
+        $data = collect($todos)->map(function($item, $key) {
+            return new Todo(['task' => $item]);
+        });
+
+        $this->todos()->saveMany($data);
+    }
+
+    /**
+     * Syncronize all the reservation's todos.
+     *
+     * @param $todos
+     */
+    public function syncTodos($todos)
+    {
+        if ( ! $todos) return;
+
+        $ids = $this->todos()->lists('id', 'id');
+
+        foreach($todos as $todo)
+        {
+            if( ! isset($todo['id'])) $todo['id'] = null;
+
+            array_forget($ids, $todo['id']);
+
+            $this->todos()->updateOrCreate(['id' => $todo['id']], $todos);
+        }
+
+        if( ! $ids->isEmpty()) $this->todos()->delete($ids);
     }
 }

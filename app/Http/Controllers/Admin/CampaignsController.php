@@ -22,4 +22,9 @@ class CampaignsController extends Controller
 
         return view('admin.campaigns.show')->with('campaign', $campaign);
     }
+
+    public function create()
+    {
+        return view('admin.campaigns.create');
+    }
 }

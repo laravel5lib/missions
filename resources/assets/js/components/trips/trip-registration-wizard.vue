@@ -154,7 +154,7 @@
 					amount: this.fundraisingGoal,
 					user_id: this.userData.id,
 					trip_id: this.tripId,
-
+					companion_limit: this.companion_limit
 				}).then(function (response) {
 					window.location.href = response.data.data.links[0].uri;
 				}, function (response) {
@@ -183,9 +183,10 @@
 			//get trip costs
 			var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
 			resource.query({id: this.tripId}).then(function (trip) {
-				// deadlines and requirements
+				// deadlines, requirements, and companion_limit
 				this.deadlines =  trip.data.data.deadlines.data;
 				this.requirements =  trip.data.data.requirements.data;
+				this.companion_limit = trip.data.data.companion_limit;
 
 				// filter costs by type
 				var optionalArr = [], staticArr = [], incrementalArr = [];

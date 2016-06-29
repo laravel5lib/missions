@@ -74,6 +74,10 @@ Vue.filter('phone', {
     }
 });
 
+Vue.filter('moment', function (val, format) {
+    return moment(val).format(format||'LL');
+});
+
 new Vue({
     el: '#app',
     data: {

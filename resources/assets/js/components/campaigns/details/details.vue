@@ -64,7 +64,7 @@
         name: 'details',
         data(){
             return{
-                //campaign: null
+                campaignId: this.$parent.campaignId,
                 editMode: false
             }
         },

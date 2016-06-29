@@ -401,6 +401,7 @@
 				var campaign = response.data.data;
 
 				$.extend(this, campaign);
+				this.short_desc = campaign.description;
 				// loop through list of countries
 				var country = campaign.country;
 				var selectedValue = null;

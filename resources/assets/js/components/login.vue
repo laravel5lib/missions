@@ -100,7 +100,9 @@ module.exports = {
   },
   activate: function (done) {
     // Enable child component behavior
-    this.isChildComponent = true;
+    if(this.$parent != this.$root) {
+      this.isChildComponent = true;
+    }
     done();
   },
   ready: function () {

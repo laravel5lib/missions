@@ -42,7 +42,11 @@ module.exports = {
         password: null,
         _token: $('meta[name="csrf-token"]').attr('content')
       },
-      messages: []
+      messages: [],
+
+      // component vars
+      isChildComponent: false,
+      userData: null
     }
   },
 
@@ -72,16 +76,38 @@ module.exports = {
     },
 
     getUserData: function (redirectTo) {
-      var that = this
+      var that = this;
+      var deferred = $.Deferred();
       that.$http.get('/api/users/me').then(
         function (response) {
           that.$dispatch('userHasLoggedIn', response.data.data);
-          location.href=redirectTo;
+
+          if (that.isChildComponent) {
+            that.userData = response.data.data;
+            deferred.resolve(response.data.data);
+          } else {
+            location.href=redirectTo;
+          }
+
         },
         function (response) {
-          console.log(response)
+          console.log(response);
+          deferred.resolve(response.data.data);
         }
       )
+      return deferred.promise();
+    }
+  },
+  activate: function (done) {
+    // Enable child component behavior
+    this.isChildComponent = true;
+    done();
+  },
+  ready: function () {
+    if(this.isChildComponent) {
+      // Check if user is logged in
+      this.getUserData(false).then(function (response) {
+      });
     }
   }
 }

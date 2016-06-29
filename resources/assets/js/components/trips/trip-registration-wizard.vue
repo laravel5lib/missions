@@ -11,7 +11,7 @@
 
 			</ul>
 		</div>
-		<div class="col-sm-8 col-md-9">
+		<div class="col-sm-8 col-md-9 {{currentStep.view}}">
 			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 			</component>
@@ -34,6 +34,8 @@
 	.fade-enter, .fade-leave {
 		opacity: 0;
 	}
+
+	.step1 {}
 </style>
 <script>
 	import login from '../login.vue';
@@ -50,7 +52,7 @@
 		data(){
 			return {
 				stepList:[
-					{name: 'Login/Register', view: 'step1', complete:true}, // login component skipped for now
+					{name: 'Login/Register', view: 'step1', complete:false}, // login component skipped for now
 					{name: 'Legal (Terms of Service)', view: 'step2', complete:false},
 					{name: 'Rules of Conduct Agreement', view: 'step3', complete:false},
 					{name: 'Basic Traveler Information', view: 'step4', complete:false},
@@ -67,6 +69,7 @@
 				wizardComplete: false,
 
 				// user generated data
+				userData: null,
 				selectedOptions: [],
 				userInfo: {},
 				paymentInfo: {},
@@ -145,18 +148,18 @@
 					given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
 					surname: this.userInfo.lastName,
 					gender: this.userInfo.gender,
-					status: this.userInfo.relStatus,
+					status: this.userInfo.relationshipStatus,
 					shirt_size: this.userInfo.size,
-					birthday: moment(this.userInfo.dob).toISOString(),
+					birthday: moment().set({year: this.userInfo.dobYear, month: this.userInfo.dobMonth, day: this.userInfo.dobDay}).format('YYYY-MM-DD'),
 					amount: this.fundraisingGoal,
-					// get a userId from db until login component is complete
-//					user_id: userId,
-					user_id: 'ec458b88-e47a-4809-8beb-eadabc19d007',
+					user_id: this.userData.id,
 					trip_id: this.tripId,
 
 				}).then(function (response) {
-					debugger;
-				}, errorCallback);
+					window.location.href = response.data.data.links[0].uri;
+				}, function (response) {
+					console.log(response);
+				});
 
 
 			}
@@ -174,7 +177,7 @@
 		},
 		created(){
 			// login component skipped for now
-			this.currentStep = this.stepList[1];
+			this.currentStep = this.stepList[0];
 		},
 		ready(){
 			//get trip costs
@@ -207,6 +210,13 @@
 			});
 		},
 		events: {
+			'userHasLoggedIn'(val){
+				// expecting userData object
+				this.userData = val;
+				this.currentStep.complete = !!val;
+				// force next step
+				this.nextStep();
+			},
 			'tos-agree'(val){
 				this.currentStep.complete = val;
 			},

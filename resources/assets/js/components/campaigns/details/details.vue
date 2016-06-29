@@ -10,6 +10,10 @@
                 <td v-if="!editMode">{{campaign.name}}</td>
             </tr>
             <tr>
+                <td>Description</td>
+                <td v-if="!editMode">{{campaign.description}}</td>
+            </tr>
+            <tr>
                 <td>Country</td>
                 <td>{{campaign.country}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
@@ -31,12 +35,17 @@
             </tr>
             <tr>
                 <td>Created At</td>
-                <td>{{toDate(campaign.updated_at)}}</td>
+                <td>{{toDate(campaign.updated_at, 'LLL')}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
             </tr>
             <tr>
                 <td>Updated At</td>
-                <td>{{toDate(campaign.created_at)}}</td>
+                <td>{{toDate(campaign.created_at, 'LLL')}}</td>
+                <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
+            </tr>
+            <tr>
+                <td>Published At</td>
+                <td>{{toDate(campaign.published_at, 'LLL')}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
             </tr>
             </tbody>
@@ -65,8 +74,8 @@
             }
         },
         methods:{
-            toDate(date){
-                return moment(date).format('LL');
+            toDate(date, format){
+                return moment(date).format(format||'LL');
             }
 
         },

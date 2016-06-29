@@ -42,9 +42,9 @@
                                     <td>{{ $campaign->name }}</td>
                                     <td>{{ $campaign->groups()->count() }} <i class="fa fa-group"></i></td>
                                     <td>
-                                        @if($campaign->published_at->isFuture())
+                                        @if($campaign->published_at and $campaign->published_at->isFuture())
                                             <i class="fa fa-calendar"></i> Scheduled
-                                        @elseif($campaign->published_at->isPast())
+                                        @elseif($campaign->published_at and $campaign->published_at->isPast())
                                             <i class="fa fa-check"></i> Published
                                         @else
                                             <i class="fa fa-pencil"></i> Draft
@@ -79,9 +79,9 @@
                                     <td>{{ $campaign->name }}</td>
                                     <td>{{ $campaign->groups()->count() }} <i class="fa fa-group"></i></td>
                                     <td>
-                                        @if($campaign->published_at->isFuture())
+                                        @if($campaign->published_at and $campaign->published_at->isFuture())
                                             <i class="fa fa-calendar"></i> Scheduled
-                                        @elseif($campaign->published_at->isPast())
+                                        @elseif($campaign->published_at and $campaign->published_at->isPast())
                                             <i class="fa fa-check"></i> Published
                                         @else
                                             <i class="fa fa-pencil"></i> Draft

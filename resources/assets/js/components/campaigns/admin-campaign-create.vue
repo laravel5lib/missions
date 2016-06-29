@@ -341,11 +341,6 @@
 				attemptSubmit: false
 			}
 		},
-		computed: {
-			country_code(){
-				return [this.country];
-			}
-		},
 		methods: {
 			checkForError(field){
 				// if user clicked submit button while the field is invalid trigger error styles 
@@ -358,14 +353,14 @@
 					resource.save(null, {
 						name: this.name,
 						country_code: this.country_code,
-						short_desc: this.description,
+						short_desc: this.short_desc,
 						started_at: this.started_at,
 						ended_at: this.ended_at,
 						published_at: this.published_at,
-						page_url: this.page_url,
+						page_url: this.page_url
 
 					}).then(function (resp) {
-						debugger;
+						window.location.href = '/admin' + resp.data.data.links[0].uri;
 					}, function (error) {
 						debugger;
 					});

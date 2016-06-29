@@ -85,6 +85,8 @@ Route::get('/trips/{id}/register', function ($id = null) use ($dispatcher) {
 
 Route::get('/login', 'Auth\AuthController@login');
 Route::post('/login', 'Auth\AuthController@authenticate');
+Route::get('/register', 'Auth\Authcontroller@create');
+Route::post('/register', 'Auth\AuthController@register');
 Route::get('/logout', 'Auth\AuthController@logout');
 
 Route::get('/', function () {

@@ -8,6 +8,7 @@
 						<div class="col-sm-10">
 							<select id="campaign" class="form-control input-sm" v-model="campaign_id"
 									v-validate:campaign="{ required: true }" required>
+								<option value="">-- select --</option>
 								<option v-for="campaign in campaigns" :value="campaign.id">{{campaign.name}}</option>
 							</select>
 						</div>
@@ -17,8 +18,19 @@
 						<div class="col-sm-10">
 							<select id="group" class="form-control input-sm" v-model="group_id"
 									v-validate:group="{ required: true }" required>
+								<option value="">-- select --</option>
 								<option v-for="group in groups" :value="group.id">{{group.name}}</option>
 							</select>
+						</div>
+					</div>
+
+					<div class="form-group" :class="{ 'has-error': checkForError('description') }">
+						<label for="description" class="col-sm-2 control-label">Description</label>
+						<div class="col-sm-10">
+							<textarea name="description" id="description" rows="2" v-model="description" class="form-control"
+									  v-validate:description="{ required: true, minlength:1, maxlength:120 }" maxlength="255"
+									  minlength="1"></textarea>
+							<div class="help-block">{{description.length}}/255</div>
 						</div>
 					</div>
 
@@ -27,6 +39,7 @@
 						<div class="col-sm-10">
 							<select id="type" class="form-control input-sm" v-model="type"
 									v-validate:type="{ required: true }" required>
+								<option value="">-- select --</option>
 								<option value="full">Full</option>
 								<option value="media">Media</option>
 								<option value="medical">Medical</option>
@@ -38,8 +51,8 @@
 					<div class="form-group" :class="{ 'has-error': checkForError('prospects') }">
 						<label for="collapseOne" data-toggle="collapse" data-target="#collapseOne" class="col-sm-2 control-label">Perfect For</label>
 						<div class="col-sm-10">
-							<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-								<div class="panel panel-default">
+							<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+								<div class="panel panel-default" :class="{ 'panel-danger': checkForError('prospects') }">
 									<div class="panel-heading" role="tab" id="headingOne">
 										<h4 class="panel-title">
 											<a role="button" data-toggle="collapse" data-parent="#accordion"
@@ -54,14 +67,14 @@
 											<h6>General</h6>
 											<div class="checkbox" v-for="(value, name) in prospectsList.general">
 												<label>
-													<input type="checkbox" :value="value" v-model="prospects">
+													<input type="checkbox" :value="value" v-model="prospects" v-validate:prospects="{ required: true }">
 													{{name}}
 												</label>
 											</div>
 											<h6>Medical</h6>
 											<div class="checkbox" v-for="(value, name) in prospectsList.medical">
 												<label>
-													<input type="checkbox" :value="value" v-model="prospects">
+													<input type="checkbox" :value="value" v-model="prospects" v-validate:prospects>
 													{{name}}
 												</label>
 											</div>
@@ -77,6 +90,7 @@
 						<div class="col-sm-10">
 							<select id="difficulty" class="form-control input-sm" v-model="difficulty"
 									v-validate:difficulty="{ required: true }" required>
+								<option value="">-- select --</option>
 								<option value="level_1">Level 1</option>
 								<option value="level_2">Level 2</option>
 								<option value="level_3">Level 3</option>
@@ -97,6 +111,49 @@
 							</div>
 						</div>
 					</div>
+
+					<div class="form-group" :class="{ 'has-error': (checkForError('start') || checkForError('end')) }">
+						<label for="started_at" class="col-sm-2 control-label">Dates</label>
+						<div class="col-sm-10">
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="input-group input-group-sm" :class="{ 'has-error': checkForError('start') }">
+										<span class="input-group-addon">Start</span>
+										<input type="date" class="form-control" v-model="started_at" id="started_at"
+											   v-validate:start="{ required: true }" required>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="input-group input-group-sm" :class="{ 'has-error': checkForError('end') }">
+										<span class="input-group-addon">End</span>
+										<input type="date" class="form-control" v-model="ended_at" id="ended_at"
+											   v-validate:end="{ required: true }" required>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="published_at" class="col-sm-2 control-label">Publish</label>
+						<div class="col-sm-10">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Published</span>
+								<input type="date" class="form-control" v-model="published_at" id="published_at">
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group" :class="{ 'has-error': checkForError('closed') }">
+						<label for="closed_at" class="col-sm-2 control-label">Closed</label>
+						<div class="col-sm-10">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Closed</span>
+								<input type="date" class="form-control" v-model="closed_at" v-validate:closed="{ required: true }" id="closed_at">
+							</div>
+						</div>
+					</div>
+
 				</form>
 			</validator>
 		</div>
@@ -175,12 +232,17 @@
 				attemptedContinue: false,
 
 				// details data
-				campaign_id: null,
-				group_id: null,
-				type: null,
-				difficulty: null,
+				campaign_id: '',
+				group_id: '',
+				description: '',
+				type: '',
+				difficulty: '',
 				companion_limit: 0,
 				prospects: [],
+				started_at: null,
+				ended_at: null,
+				closed_at: moment().toDate(),
+				published_at: null,
 			}
 		},
 		computed: {
@@ -211,16 +273,12 @@
 		methods: {
 			onValid(){
 				this.$parent.details = this.details;
+				this.$dispatch('details', true);
 			},
 			checkForError(field){
 				// if user clicked continue button while the field is invalid trigger error styles
 				return this.$TripDetails[field.toLowerCase()].invalid && this.attemptedContinue
 			}
-		},
-		activate(done){
-			this.$dispatch('details', true);
-			//$('html, body').animate({scrollTop: 0}, 300);
-			done();
 		}
 	}
 </script>

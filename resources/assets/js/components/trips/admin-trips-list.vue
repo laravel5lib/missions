@@ -37,10 +37,10 @@
                     <i @click="setOrderByField('campaign.data.name')" v-if="orderByField !== 'campaign.data.name'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th :class="{'text-primary': orderByField === 'published_at'}">
-                    Published
-                    <i @click="setOrderByField('published_at')" v-if="orderByField !== 'published_at'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'published_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                <th :class="{'text-primary': orderByField === 'status'}">
+                    Status
+                    <i @click="setOrderByField('status')" v-if="orderByField !== 'status'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'status'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
                 <th>
                     Start &amp; End
@@ -54,7 +54,7 @@
                 <td>{{trip.group.data.name}}</td>
                 <td>{{trip.type|capitalize}}</td>
                 <td>{{trip.campaign.data.name|capitalize}}</td>
-                <td>{{trip.published_at|moment 'lll'}}</td>
+                <td>{{trip.status}}</td>
                 <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>
                 <td>{{trip.reservations}}</td>
                 <td>

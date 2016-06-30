@@ -3,49 +3,10 @@
 		<div class="col-sm-12">
 			<validator name="TripSettings">
 				<form id="TripSettings" class="form-horizontal" novalidate>
-					<div class="form-group" :class="{ 'has-error': checkForError('description') }">
-						<label for="description" class="col-sm-2 control-label">Description</label>
-						<div class="col-sm-10">
-					<textarea name="short_desc" id="description" rows="2" v-model="short_desc" class="form-control"
-							  v-validate:description="{ required: true, minlength:1, maxlength:120 }" maxlength="120"
-							  minlength="1"></textarea>
-						</div>
-					</div>
 
-					<div class="form-group" :class="{ 'has-error': (checkForError('start') || checkForError('end')) }">
-						<label for="started_at" class="col-sm-2 control-label">Dates</label>
-						<div class="col-sm-10">
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="input-group" :class="{ 'has-error': checkForError('start') }">
-										<span class="input-group-addon">Start</span>
-										<input type="date" class="form-control" v-model="started_at" id="started_at"
-											   v-validate:start="{ required: true }" required>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									<div class="input-group" :class="{ 'has-error': checkForError('end') }">
-										<span class="input-group-addon">End</span>
-										<input type="date" class="form-control" v-model="ended_at" id="ended_at"
-											   v-validate:end="{ required: true }" required>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label for="published_at" class="col-sm-2 control-label">Published Date</label>
-						<div class="col-sm-10">
-							<div class="input-group">
-								<span class="input-group-addon">Published</span>
-								<input type="date" class="form-control" v-model="published_at" id="published_at">
-							</div>
-						</div>
-					</div>
 
 					<div class="form-group" :class="{ 'has-error': checkForError('url') }">
-						<label for="description" class="col-sm-2 control-label">Page Url</label>
+						<label for="page_url" class="col-sm-2 control-label">Page Url</label>
 						<div class="col-sm-10">
 							<div class="input-group">
 								<span class="input-group-addon">www.missions.me/campaigns/</span>
@@ -64,7 +25,7 @@
 		name: 'trip-settings',
 		data(){
 			return {
-				campaigns: [],
+				roles: [],
 				groups: [],
 				prospectsList: {
 					general: {

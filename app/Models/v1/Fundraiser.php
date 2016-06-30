@@ -24,7 +24,8 @@ class Fundraiser extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'expires_at', 'goal_amount', 'description'
+        'name', 'expires_at', 'goal_amount', 'description',
+        'sponsor_id', 'sponsor_type'
     ];
 
     /**

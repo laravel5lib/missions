@@ -39,13 +39,19 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Reservation::created(function ($reservation) {
-            $reservation->fundraisers()->create([
-                'name' => 'General Fundraiser',
-                'sponsor_type' => User::class,
-                'sponsor_id' => $reservation->user_id,
-                'goal_amount' => 1000,
-                'expires_at' => $reservation->trip->ended_at
+            // needs to fire after costs sync
+//            $reservation->fundraisers()->create([
+//                'name' => 'General Fundraiser',
+//                'sponsor_type' => User::class,
+//                'sponsor_id' => $reservation->user_id,
+//                'goal_amount' => $reservation->costs()->sum('amount'),
+//                'expires_at' => $reservation->trip->started_at
+//            ]);
+            $reservation->trip()->update([
+               'spots' => $reservation->trip->spots - 1
             ]);
+
+            // send confirmation email.
         });
     }
 

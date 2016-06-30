@@ -23,8 +23,9 @@ class TripsController extends Controller
      */
     public function __construct(Trip $trip)
     {
-        // $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
+        $this->middleware('internal', ['only' => ['store', 'update', 'destroy']]);
+        $this->middleware('api.auth', ['only' => ['store', 'update', 'destroy']]);
+        $this->middleware('jwt.refresh', ['only' => ['store', 'update', 'destroy']]);
         $this->trip = $trip;
     }
 

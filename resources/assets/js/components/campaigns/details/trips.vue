@@ -5,9 +5,13 @@
                 <form class="form-inline text-right" novalidate>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
-                        <span class="input-group-addon">
-                           <i class="fa fa-search"></i>
-                        </span>
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon">Show</span>
+                        <select class="form-control" v-model="per_page">
+                            <option v-for="option in perPageOptions" :value="option">{{option}}</option>
+                        </select>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
                     | <a class="btn btn-primary btn-sm" href="{{campaignId}}/trips/create"><i class="fa fa-plus"></i> New</a>
@@ -53,6 +57,29 @@
                 </td>
             </tr>
             </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="7">
+                    <div class="col-sm-12 text-center">
+                        <nav>
+                            <ul class="pagination pagination-sm">
+                                <li :class="{ 'disabled': pagination.current_page == 1 }">
+                                    <a aria-label="Previous" @click="page=pagination.current_page-1">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
+                                <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
+                                    <a aria-label="Next" @click="page=pagination.current_page+1">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
         </table>
     </div>
 </template>
@@ -65,13 +92,26 @@
                 trips: [],
                 orderByField: 'group.data.name',
                 direction: 1,
-                search: null
+                page: 1,
+                per_page: 10,
+                perPageOptions: [5, 10, 25, 50, 100],
+                pagination: {},
+                search: ''
+            }
+        },
+        watch: {
+            'search': function (val, oldVal) {
+                this.page = 1;
+                this.searchTrips();
+            },
+            'page': function (val, oldVal) {
+                this.searchTrips();
+            },
+            'per_page': function (val, oldVal) {
+                this.searchTrips();
             }
         },
         computed:{
-            trips(){
-                return this.$parent.campaign.trips.data;
-            }
         },
         methods:{
             setOrderByField(field){
@@ -81,9 +121,23 @@
                 this.orderByField = 'group.data.name';
                 this.direction = 1;
                 this.search = null;
+            },
+            searchTrips(){
+                this.$http.get('trips', {
+                    campaign_id: this.campaignId,
+                    include:'campaign,group',
+                    search: this.searchText,
+                    per_page: this.per_page,
+                    page: this.page
+                }).then(function (response) {
+                    this.pagination = response.data.meta.pagination;
+                    this.trips = response.data.data;
+                })
             }
+
         },
         activate(done){
+            this.searchTrips();
             done();
         }
     }

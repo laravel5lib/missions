@@ -43,16 +43,11 @@
 			<h4>
 				{{campaign.name}} <small>Campaign</small>
 
-				<!-- Single button -->
-				<div class="btn-group pull-right">
-					<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Actions <span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><a href="/admin/campaigns">Back</a></li>
-						<li><a href="/admin/campaigns/{{campaignId}}/edit">Edit</a></li>
-					</ul>
+				<div class="pull-right">
+					<a class="btn btn-default btn-xs"><i class="fa fa-chevron-left"></i></a>
+					<a class="btn btn-info btn-xs" href="/admin/campaigns/{{campaignId}}/edit"><i class="fa fa-pencil"></i></a>
 				</div>
+
 			</h4>
 			<div class="row">
 				<div class="col-sm-12">
@@ -98,7 +93,7 @@
 			this.currentView = 'details';
 
 			// get campaign data
-			var resource = this.$resource('campaigns{/id}', {'include': 'trips,groups,'});
+			var resource = this.$resource('campaigns{/id}', {'include': 'trips.group'});
 			resource.get({id: this.campaignId}).then(function(response) {
 				this.campaign = response.data.data;
 			});

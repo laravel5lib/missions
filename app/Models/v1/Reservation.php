@@ -218,7 +218,7 @@ class Reservation extends Model
         if ( ! $costs instanceof Collection)
             $costs = collect($costs);
 
-        $data = $costs->lists('id')->toArray();
+        $data = $costs->pluck('id')->all();
         
         $this->costs()->sync($data);
     }

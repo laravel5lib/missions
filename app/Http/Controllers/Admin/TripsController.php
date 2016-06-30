@@ -10,22 +10,29 @@ use App\Http\Controllers\Controller;
 class TripsController extends Controller
 {
 
-    public function show($id)
+    public function index()
     {
-        //$campaign = $this->api->get('campaigns/'.$id);
+        $trips = $this->api->get('trips');
 
-        return view('admin.campaigns.trips.show')->with('campaignId', $id);
+        return view('admin.trips.index')->with('trips', $trips);
     }
 
-    public function edit($id)
+    public function show($id)
+    {
+        $trip = $this->api->get('trips/'.$id);
+
+        return view('admin.trips.show')->with('trip', $trip);
+    }
+
+    public function edit($id, $tripId=null)
     {
         //$campaign = $this->api->get('campaigns/'.$id);
 
-        return view('admin.campaigns.trips.edit')->with('campaignId', $id);
+        return view('admin.trips.edit')->with('campaignId', $id);
     }
 
     public function create()
     {
-        return view('admin.campaigns.trips.create');
+        return view('admin.trips.create');
     }
 }

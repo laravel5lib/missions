@@ -7,9 +7,11 @@ import groupTripWrapper from './components/campaigns/groups-trips-selection-wrap
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 
 // admin components
-import campaignCreate from './components/campaigns/admin-campaign-create.vue';
-import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
-import campaignDetails from './components/campaigns/admin-campaign-details.vue';
+import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
+import adminCampaignEdit from './components/campaigns/admin-campaign-edit.vue';
+import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
+import adminCampaignTripCreate from './components/trips/admin-trip-create.vue';
+import adminTrips from './components/trips/admin-trips-list.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -94,9 +96,11 @@ new Vue({
         groupTrips,
         groupTripWrapper,
         tripRegWizard,
-        campaignCreate,
-        campaignEdit,
-        campaignDetails,
+        adminCampaignCreate,
+        adminCampaignEdit,
+        adminCampaignDetails,
+        adminCampaignTripCreate,
+        adminTrips,
     ],
     http: {
         headers: {

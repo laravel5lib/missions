@@ -4,6 +4,19 @@
 			<validator name="TripSettings">
 				<form id="TripSettings" class="form-horizontal" novalidate>
 
+					<div class="form-group" :class="{ 'has-error': checkForError('spots') }">
+						<label for="spots" class="col-sm-2 control-label">Spots Available</label>
+						<div class="col-sm-10">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon"><i class="fa fa-users"></i></span>
+								<input type="number" id="spots" v-model="spots" class="form-control"
+									   v-validate:spots="{ required: true, min:0 }"/>
+							</div>
+							<div class="help-block">Number of companions a user can have. Leave at 0 to disable
+								companions.
+							</div>
+						</div>
+					</div>
 
 					<div class="form-group" :class="{ 'has-error': checkForError('url') }">
 						<label for="page_url" class="col-sm-2 control-label">Page Url</label>
@@ -26,47 +39,10 @@
 		data(){
 			return {
 				roles: [],
-				groups: [],
-				prospectsList: {
-					general: {
-						"ADLT": "Adults",
-						"YNGA": "Young Adults (18-29)",
-						"TEEN": "Teens (13+)",
-						"FAMS": "Families",
-						"MMEN": "Men",
-						"WMEN": "Women",
-						"MEDI": "Media Professionals",
-						"PSTR": "Pastors",
-						"BUSL": "Business Leaders",
-						"MDPF": "Medical Professionals"
-					},
-					medical: {
-						"MDPF": "Medical Professionals",
-						"PHYS": "Physicians",
-						"SURG": "Surgeons",
-						"REGN": "Registered Nurses",
-						"DENT": "Dentists",
-						"HYGN": "Hygienists",
-						"DENA": "Dental Assistants",
-						"PHYA": "Physician Assistants",
-						"NURP": "Nurse Practitioners",
-						"PHAR": "Pharmacists",
-						"PHYT": "Physical Therapists",
-						"CHRO": "Chiropractors",
-						"MSTU": "Medical Students",
-						"DSTU": "Dental Students",
-						"NSTU": "Nursing Students"
-					}
-				},
 				attemptedContinue: false,
 
 				// details data
-				campaign_id: null,
-				group_id: null,
-				type: null,
-				difficulty: null,
-				companion_limit: 0,
-				prospects: [],
+				spots: null
 			}
 		},
 		computed: {
@@ -74,7 +50,7 @@
 		},
 		methods: {
 			onValid(){
-				this.$parent.details = this.details;
+				//this.$parent.details = this.details;
 			},
 			checkForError(field){
 				// if user clicked continue button while the field is invalid trigger error styles

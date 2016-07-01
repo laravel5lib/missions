@@ -134,26 +134,6 @@
 						</div>
 					</div>
 
-					<div class="form-group">
-						<label for="published_at" class="col-sm-2 control-label">Publish</label>
-						<div class="col-sm-10">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon">Published</span>
-								<input type="date" class="form-control" v-model="published_at" id="published_at">
-							</div>
-						</div>
-					</div>
-
-					<div class="form-group" :class="{ 'has-error': checkForError('closed') }">
-						<label for="closed_at" class="col-sm-2 control-label">Closed</label>
-						<div class="col-sm-10">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon">Closed</span>
-								<input type="date" class="form-control" v-model="closed_at" v-validate:closed="{ required: true }" id="closed_at">
-							</div>
-						</div>
-					</div>
-
 				</form>
 			</validator>
 		</div>
@@ -241,8 +221,6 @@
 				prospects: [],
 				started_at: null,
 				ended_at: null,
-				closed_at: moment().toDate(),
-				published_at: null,
 			}
 		},
 		computed: {
@@ -278,7 +256,12 @@
 			checkForError(field){
 				// if user clicked continue button while the field is invalid trigger error styles
 				return this.$TripDetails[field.toLowerCase()].invalid && this.attemptedContinue
+			},
+			activate(done){
+				$('html, body').animate({scrollTop: 0}, 300);
+				done();
 			}
+
 		}
 	}
 </script>

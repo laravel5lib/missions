@@ -76,6 +76,15 @@ Vue.filter('phone', {
     }
 });
 
+Vue.filter('number', {
+    read:function (number, decimals) {
+        return number.toFixed(decimals);
+    },
+    write: function(number, decimals) {
+        return number.toFixed(decimals);
+    }
+});
+
 Vue.filter('moment', function (val, format) {
     return moment(val).format(format||'LL');
 });

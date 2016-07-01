@@ -33,6 +33,9 @@ class CreateUsersTable extends Migration
             $table->string('url', 60)->unique();
             $table->boolean('public')->default(false);
             $table->boolean('admin')->default(false);
+            $table->string('stripe_id')->nullable();
+            $table->string('card_brand')->nullable();
+            $table->string('card_last_four')->nullable();
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

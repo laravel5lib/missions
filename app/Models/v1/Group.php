@@ -28,7 +28,8 @@ class Group extends Model
         'name', 'type', 'timezone', 'url', 'public',
         'address_one', 'address_two',
         'city', 'state', 'zip', 'country', 'phone_one',
-        'phone_two', 'email', 'description'
+        'phone_two', 'email', 'description',
+        'stripe_id', 'card_brand', 'card_last_four'
     ];
 
     /**

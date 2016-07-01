@@ -15,10 +15,11 @@ class CreateDonationsTable extends Migration
         Schema::create('donations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->integer('amount');
+            $table->string('currency', 3);
             $table->string('description', 120)->nullable();
             $table->string('message', 120)->nullable();
             $table->boolean('anonymous')->default(false);
-            $table->string('email', 60);
+            $table->string('email', 60)->nullable();
             $table->string('phone', 60)->nullable();
             $table->string('name', 60);
             $table->string('company_name', 60)->nullable();
@@ -31,7 +32,6 @@ class CreateDonationsTable extends Migration
             $table->string('donor_type');
             $table->uuid('designation_id')->index();
             $table->string('designation_type');
-            $table->uuid('payment_id')->index();
             $table->string('payment_type');
             $table->timestamps();
             $table->softDeletes();

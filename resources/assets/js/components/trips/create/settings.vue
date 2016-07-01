@@ -18,16 +18,20 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('url') }">
-						<label for="page_url" class="col-sm-2 control-label">Page Url</label>
+					<div class="form-group" :class="{ 'has-error': checkForError('closed') }">
+						<label for="closed_at" class="col-sm-2 control-label">Registration Closes</label>
 						<div class="col-sm-10">
-							<div class="input-group">
-								<span class="input-group-addon">www.missions.me/campaigns/</span>
-								<input type="text" id="page_url" v-model="page_url" class="form-control"
-									   v-validate:url="{ required: false,  }"/>
-							</div>
+							<input type="date" class="form-control input-sm" v-model="closed_at" v-validate:closed="{ required: true }" id="closed_at">
 						</div>
 					</div>
+
+					<div class="form-group">
+						<label for="published_at" class="col-sm-2 control-label">Publish</label>
+						<div class="col-sm-10">
+							<input type="date" class="form-control input-sm" v-model="published_at" id="published_at">
+						</div>
+					</div>
+
 				</form>
 			</validator>
 		</div>
@@ -42,7 +46,9 @@
 				attemptedContinue: false,
 
 				// details data
-				spots: null
+				spots: null,
+				closed_at: moment().toDate(),
+				published_at: null,
 			}
 		},
 		computed: {
@@ -50,6 +56,7 @@
 		},
 		methods: {
 			onValid(){
+				this.$dispatch('settings', true);
 				//this.$parent.details = this.details;
 			},
 			checkForError(field){
@@ -58,8 +65,7 @@
 			}
 		},
 		activate(done){
-			this.$dispatch('settings', true);
-			//$('html, body').animate({scrollTop: 0}, 300);
+			$('html, body').animate({scrollTop: 0}, 300);
 			done();
 		}
 	}

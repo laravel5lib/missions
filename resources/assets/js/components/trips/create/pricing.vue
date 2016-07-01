@@ -34,6 +34,15 @@
 														<textarea class="form-control input-sm" id="cost_description"
 																  v-model="newCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
 													</div>
+													<div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
+														<label for="cost_type">Type</label>
+														<select id="cost_type" class="form-control input-sm" v-model="newCost.type" v-validate:costType="{ required: true }">
+															<option value="">-- select --</option>
+															<option value="static">Static</option>
+															<option value="incremental">Incremental</option>
+															<option value="optional">Optional</option>
+														</select>
+													</div>
 													<div class="row">
 														<div class="col-sm-6">
 															<div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
@@ -75,6 +84,7 @@
 										</div>
 										<div class="col-sm-6">
 											<ul class="list-unstyled">
+												<li>{{cost.type|capitalize}}</li>
 												<li>{{cost.active_at|moment}}</li>
 												<li>{{cost.amount|currency}}</li>
 											</ul>

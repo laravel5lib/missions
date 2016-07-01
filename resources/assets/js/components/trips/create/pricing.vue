@@ -110,9 +110,6 @@
 									</tbody>
 								</table>
 								<ul class="list-group">
-									<li class="list-group-item" v-for="payment in cost.payments">
-										{{payment|json}}
-									</li>
 									<li class="list-group-item" v-if="(editPaymentMode && cost.toggleNewPayment) || toggleNewPayment">
 										<validator name="TripPricingCostPayment">
 											<form class="form-inline" novalidate>
@@ -188,20 +185,7 @@
 		name: 'trip-pricing',
 		data(){
 			return {
-				costs: [
-					{
-						id: "abcs",
-						"name": "Cost A",
-						"description": "Lorem Ipsum",
-						"active_at": "2016-06-30",
-						"amount": "220",
-						"type": "",
-						"toggleNewPayment": false,
-						"payments": [
-							{ id:"mwhi", "amount_owed": 22, "percent_owed": 10, "due_at": null, "upfront": false, "grace_period": 0 }
-						],
-					}
-				],
+				costs: [],
 				attemptedContinue: false,
 				attemptedAddCost: false,
 				attemptedAddPayment: false,

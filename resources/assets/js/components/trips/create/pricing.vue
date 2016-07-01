@@ -97,21 +97,28 @@
 										<th>Amount</th>
 										<th>Percent</th>
 										<th>Due</th>
-										<th>Upfront</th>
 										<th>Grace</th>
 										<th>Actions</th>
 									</tr>
 									</thead>
 									<tbody>
-									<tr v-for="payment in cost.payments">
+									<tr v-for="payment in cost.payments|orderBy 'due_at'">
 										<td>{{payment.amount_owed|currency}}</td>
-										<td>{{payment.percent_owed}}%</td>
+										<td>{{payment.percent_owed|number 2}}%</td>
 										<td>
-											<span v-if="payment.due_at">{{payment.due_at|moment}}</span>
-											<span v-else>None</span>
+											<span v-if="payment.upfront">Upfront</span>
+											<span v-else>
+												<span v-if="payment.due_at">{{payment.due_at|moment}}</span>
+												<span v-else>None</span>
+											</span>
+
 										</td>
-										<td>{{payment.upfront}}</td>
-										<td>{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}</td>
+										<td>
+											<span v-if="payment.upfront">N/A</span>
+											<span v-else>
+												{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}
+											</span>
+										</td>
 										<td>
 											<a @click="editPayment(payment, cost)"><i class="fa fa-pencil"></i></a>
 											<a @click="cost.payments.$remove(payment)"><i class="fa fa-times"></i></a>
@@ -122,7 +129,7 @@
 								<ul class="list-group">
 									<li class="list-group-item" v-if="(editPaymentMode && cost.toggleNewPayment) || toggleNewPayment">
 										<validator name="TripPricingCostPayment">
-											<form class="form-inline" novalidate>
+											<form class="form-inline">
 												<div class="row">
 													<div class="col-sm-12">
 														<label for="amountOwed">Owed</label>
@@ -136,17 +143,24 @@
 													</div>
 													<div class="col-sm-6">
 														<div class="input-group input-group-sm" :class="{'has-error': checkForErrorPayment('percent') }">
-															<input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(cost)" v-model="newPayment.percent_owed"
+															<input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(cost)" v-model="newPayment.percent_owed|number 2"
 																   v-validate:percent="{required: true, min: 0.01}" debounce="100">
 															<span class="input-group-addon"><i class="fa fa-percent"></i></span>
 														</div>
 													</div>
 												</div>
-												<div class="row">
+												<br>
+												<div class="checkbox">
+													<label>
+														<input type="checkbox" v-model="newPayment.upfront">
+														Due upfront?
+													</label>
+												</div>
+												<div class="row" v-if="!newPayment.upfront">
 													<div class="col-sm-6">
 														<div class="form-group">
 															<label for="dueAt">Due</label>
-															<input id="dueAt" class="form-control input-sm" type="date" v-model="newPayment.due_at">
+															<input id="dueAt" class="form-control input-sm" type="date" v-model="newPayment.due_at" required>
 														</div>
 													</div>
 													<div class="col-sm-6">
@@ -157,21 +171,17 @@
 																	   v-validate:grace="{required: true, min:0}">
 																<span class="input-group-addon">Days</span>
 															</div>
-
 														</div>
 													</div>
 												</div>
-												<div class="checkbox">
-													<label>
-														<input type="checkbox" v-model="newPayment.upfront">
-														Due upfront?
-													</label>
-												</div>
 												<div class="row">
-													<div class="col-sm-12">
+													<div class="col-sm-12" v-if="!editPaymentMode">
 														<a class="btn btn-xs btn-default" @click="toggleNewPayment=false"><i class="fa fa-times"></i> Cancel</a>
-														<a class="btn btn-xs btn-success" v-if="!editPaymentMode" @click="addPayment(cost)"><i class="fa fa-plus"></i> Add Payment</a>
-														<a class="btn btn-xs btn-info" v-if="editPaymentMode" @click="updatePayment(cost)"><i class="fa fa-plus"></i> Update Payment</a>
+														<a class="btn btn-xs btn-success" @click="addPayment(cost)"><i class="fa fa-plus"></i> Add Payment</a>
+													</div>
+													<div class="col-sm-12" v-if="editPaymentMode">
+														<a class="btn btn-xs btn-default" @click="cancelEditPayment(cost)"><i class="fa fa-times"></i> Cancel</a>
+														<a class="btn btn-xs btn-info" @click="updatePayment(cost)"><i class="fa fa-plus"></i> Update Payment</a>
 													</div>
 												</div>
 											</form>
@@ -248,31 +258,43 @@
 				//this.$parent.details = this.details;
 			},
 			checkForError(field){
-				// if user clicked continue button while the field is invalid trigger error styles
 				return this.$TripPricing[field.toLowerCase()].invalid && this.attemptedContinue;
 			},
 			checkForErrorCost(field){
-				// if user clicked continue button while the field is invalid trigger error styles
 				return this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
 			},
 			checkForErrorPayment(field){
-				// if user clicked continue button while the field is invalid trigger error styles
 				return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
 			},
-			toggleNewPaymentForm(cost, updateMode) {
-				this.selectedCost = cost; //this.selectedCost != cost ? cost : null;
-				if(updateMode) {
-					this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
-				} else {
-					this.toggleNewPayment = !this.toggleNewPayment;
+			resetCost(){
+				this.newCost = {
+					name: '',
+					description: '',
+					active_at: null,
+					amount: 0,
+					type: '',
+					payments: [],
+					toggleNewPayment: false
+				}
+			},
+			resetPayment(){
+				this.newPayment = {
+					amount_owed: 0,
+					percent_owed: 0,
+					due_at: null,
+					upfront: false,
+					grace_period: 0,
 				}
 			},
 			calculateMaxAmount(cost){
 				var max = cost.amount;
 				if (cost.payments.length) {
 					cost.payments.forEach(function (payment) {
-						max -= payment.amount_owed;
-					})
+						// must ignore current payment in editMode
+						if(this.newPayment !== payment) {
+							max -= payment.amount_owed;
+						}
+					}, this);
 				}
 				return max;
 			},
@@ -280,10 +302,12 @@
 				var max = 100;
 				if (cost.payments.length) {
 					cost.payments.forEach(function (payment) {
-						max -= payment.percent_owed;
-					})
+						// must ignore current payment in editMode
+						if(this.newPayment !== payment) {
+							max -= payment.percent_owed;
+						}
+					}, this);
 				}
-
 				return max;
 			},
 			editCost(cost){
@@ -291,25 +315,28 @@
 				this.toggleNewCost = true;
 				this.newCost = cost;
 			},
+			cancelEditPayment(){
+				this.editPaymentMode = false;
+				this.resetCost();
+			},
 			editPayment(payment, cost){
 				this.editPaymentMode = true;
 				this.toggleNewPaymentForm(cost, true);
 				this.newPayment = payment;
 			},
+			toggleNewPaymentForm(cost, updateMode) {
+				this.selectedCost = cost;
+				if(updateMode) {
+					this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
+				} else {
+					this.toggleNewPayment = !this.toggleNewPayment;
+				}
+			},
 			addCost(){
 				this.attemptedAddCost = true;
 				if (this.$TripPricingCost.valid) {
 					this.costs.push(this.newCost);
-					this.newCost = {
-						id: this.generateUUID(), // used for tracking only
-						name: '',
-						description: '',
-						active_at: null,
-						amount: 0,
-						type: '',
-						payments: [],
-						toggleNewPayment: false
-					};
+					this.resetCost();
 					this.toggleNewCost = false;
 					this.attemptedAddCost = false;
 				}
@@ -317,16 +344,7 @@
 			updateCost(){
 				this.attemptedAddCost = true;
 				if (this.$TripPricingCost.valid) {
-					this.newCost = {
-						id: this.generateUUID(), // used for tracking only
-						name: '',
-						description: '',
-						active_at: null,
-						amount: 0,
-						type: '',
-						payments: [],
-						toggleNewPayment: false
-					};
+					this.resetCost();
 					this.toggleNewCost = false;
 					this.attemptedAddCost = false;
 					this.editCostMode = false;
@@ -336,14 +354,7 @@
 				this.attemptedAddPayment = true;
 				if(this.$TripPricingCostPayment.valid) {
 					cost.payments.push(this.newPayment);
-					this.newPayment = {
-						id: this.generateUUID(), // used for tracking only
-						amount_owed: 0,
-						percent_owed: 0,
-						due_at: null,
-						upfront: false,
-						grace_period: 0
-					};
+					this.resetPayment();
 					this.toggleNewPayment = false;
 					this.attemptedAddPayment = false;
 				}
@@ -351,13 +362,7 @@
 			updatePayment(cost){
 				this.attemptedAddPayment = true;
 				if(this.$TripPricingCostPayment.valid) {
-					this.newPayment = {
-						amount_owed: 0,
-						percent_owed: 0,
-						due_at: null,
-						upfront: false,
-						grace_period: 0
-					};
+					this.resetPayment();
 					this.selectedCost.toggleNewPayment = false;
 					this.attemptedAddPayment = false;
 					this.editPaymentMode = false;

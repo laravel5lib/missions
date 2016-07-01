@@ -299,6 +299,7 @@ $factory->define(App\Models\v1\Donation::class, function (Faker\Generator $faker
     return [
         'name'                 => $faker->name,
         'amount'               => $faker->numberBetween(1, 1000) * 100,
+        'currency'             => $faker->currencyCode,
         'description'          => $faker->sentence(4),
         'message'              => $faker->sentence(5),
         'anonymous'            => $faker->boolean(25),
@@ -314,8 +315,7 @@ $factory->define(App\Models\v1\Donation::class, function (Faker\Generator $faker
         'designation_type'     => 'fundraisers',
         'donor_id'             => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
         'donor_type'           => 'users',
-        'payment_id'           => 'foo',
-        'payment_type'         => 'cards',
+        'payment_type'         => 'card',
     ];
 });
 

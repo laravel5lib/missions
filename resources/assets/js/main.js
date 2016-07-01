@@ -78,10 +78,10 @@ Vue.filter('phone', {
 
 Vue.filter('number', {
     read:function (number, decimals) {
-        return number.toFixed(decimals);
+        return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
     },
-    write: function(number, decimals) {
-        return number.toFixed(decimals);
+    write: function(number, numberVal, decimals) {
+        return number;
     }
 });
 

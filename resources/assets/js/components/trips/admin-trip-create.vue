@@ -37,13 +37,9 @@
 <script>
 	import details from './create/details.vue';
 	import settings from './create/settings.vue';
-	import options from './create/details.vue';
-	import referrals from './create/details.vue';
-	import resources from './create/details.vue';
-	import pricing from './create/details.vue';
-	import support from './create/details.vue';
-	import hq from './create/hq.vue';
-	import parking from './create/parking.vue';
+	import pricing from './create/pricing.vue';
+	import reqs from './create/requirements.vue';
+	import deadlines from './create/requirements.vue';
 
 	export default{
 		name: 'campaign-trip-create-wizard',
@@ -53,13 +49,9 @@
 				stepList:[
 					{name: 'Details', view: 'step1', form:'$TripDetails', valid: null, complete:false},
 					{name: 'Registration Settings', view: 'step2', form:'$TripSettings', valid: null, complete:false},
-					{name: 'Options', view: 'step3', form:'$TripOptions', valid: null, complete:false},
-					{name: 'Referral Campaigns', view: 'step4', form:'$TripDetails', valid: null, complete:false},
-					{name: 'Resources', view: 'step5', form:'$TripDetails', valid: null, complete:false},
-					{name: 'Pricing', view: 'step6', form:'$TripDetails', valid: null, complete:false},
-					{name: 'Default Support Message', view: 'step7', form:'$TripDetails', valid: null, complete:false},
-					{name: 'Trip HQ', view: 'step8', form:'$TripHQ', valid: null, complete:false},
-					{name: 'Suggested Parking', view: 'step9', form:'$TripParking', valid: null, complete:false},
+					{name: 'Pricing', view: 'step3', form:'$TripPricing', valid: null, complete:false},
+					{name: 'Requirements', view: 'step4', form:'$TripReqs', valid: null, complete:false},
+					{name: 'Other Deadlines', view: 'step5', form:'$TripDeadlines', valid: null, complete:false},
 				],
 				currentStep: null,
 				canContinue: false,
@@ -79,13 +71,9 @@
 		components:{
 			'step1': details,
 			'step2': settings,
-			'step3': options,
-			'step4': referrals,
-			'step5': resources,
-			'step6': pricing,
-			'step7': support,
-			'step8': hq,
-			'step9': parking
+			'step3': pricing,
+			'step4': reqs,
+			'step5': deadlines
 		},
 		methods: {
 			back(){
@@ -179,26 +167,14 @@
 			'settings'(val){
 				this.currentStep.complete = val;
 			},
-			'basic-info'(val){
+			'pricing'(val){
+				this.currentStep.complete = val;
+			},
+			'reqs'(val){
 				this.currentStep.complete = val
 			},
-			'ato-complete'(val){
-				this.currentStep.complete = val;
-			},
-			'payment-complete'(val){
-				this.currentStep.complete = val;
-			},
-			'deadline-agree'(val){
-				this.currentStep.complete = val;
-			},
-			'parking'(val){
-				this.currentStep.complete = this.wizardComplete = val;
-			},
-			'hq'(val){
-				this.currentStep.complete = this.wizardComplete = val;
-			},
-			'parking'(val){
-				this.currentStep.complete = this.wizardComplete = val;
+			'deadlines'(val){
+				this.currentStep.complete = this.wizardComplete = val
 			},
 		}
 	}

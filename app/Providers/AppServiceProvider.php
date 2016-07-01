@@ -40,13 +40,13 @@ class AppServiceProvider extends ServiceProvider
 
         Reservation::created(function ($reservation) {
             // needs to fire after costs sync
-//            $reservation->fundraisers()->create([
-//                'name' => 'General Fundraiser',
-//                'sponsor_type' => User::class,
-//                'sponsor_id' => $reservation->user_id,
-//                'goal_amount' => $reservation->costs()->sum('amount'),
-//                'expires_at' => $reservation->trip->started_at
-//            ]);
+            $reservation->fundraisers()->create([
+                'name' => 'General Fundraiser',
+                'sponsor_type' => User::class,
+                'sponsor_id' => $reservation->user_id,
+                'goal_amount' => $reservation->costs()->sum('amount'),
+                'expires_at' => $reservation->trip->started_at
+            ]);
             $reservation->trip()->update([
                'spots' => $reservation->trip->spots - 1
             ]);

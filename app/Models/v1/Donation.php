@@ -27,7 +27,8 @@ class Donation extends Model
         'amount', 'description', 'message', 'anonymous',
         'email', 'phone', 'name', 'company_name',
         'address_street', 'address_city', 'address_state',
-        'address_zip', 'address_country'
+        'address_zip', 'address_country', 'currency',
+        'payment_type'
     ];
 
     /**
@@ -78,16 +79,6 @@ class Donation extends Model
     public function donor()
     {
         return $this->morphTo(); // User or Group
-    }
-
-    /**
-     * Get the donation's payment method.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
-     */
-    public function payment()
-    {
-        return $this->morphTo(); // Card, Check, Cash, Credit
     }
 
     /**

@@ -39,7 +39,7 @@
 	import settings from './create/settings.vue';
 	import pricing from './create/pricing.vue';
 	import reqs from './create/requirements.vue';
-	import deadlines from './create/requirements.vue';
+	import deadlines from './create/deadlines.vue';
 
 	export default{
 		name: 'campaign-trip-create-wizard',

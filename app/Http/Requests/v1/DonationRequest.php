@@ -43,6 +43,8 @@ class DonationRequest extends FormRequest
             'designation_id' => 'required|string',
             'designation_type' => 'required|string|in:reservations,projects,fundraisers,trips',
             'payment_type' => 'required|string|in:card,check,cash,credit,refund',
+//            'customer' => 'array',
+//            'customer.*.id' => 'required_string',
             'card' => 'required_if:payment_type,card|array',
             'card.*.number' => 'required_with:card|string',
             'card.*.exp_month' => 'required_with:card|digits:2',

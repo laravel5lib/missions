@@ -64,11 +64,17 @@ class DonationsController extends Controller
         return $this->response->item($donation, new DonationTransformer);
     }
 
+    /**
+     * Create a new donation.
+     *
+     * @param DonationRequest $request
+     * @return \Dingo\Api\Http\Response
+     */
     public function store(DonationRequest $request)
     {
         if($request->has('card')) {
-            $this->chargeCard($request->only(
-                'card', 'stripe_id', 'amount', 'currency'
+            $this->chargeAndCaptureCard($request->only(
+                'card', 'stripe_id', 'amount', 'currency', 'description'
             ));
         }
 
@@ -77,21 +83,111 @@ class DonationsController extends Controller
         return $this->response->item($donation, new DonationTransformer);
     }
 
-    protected function chargeCard($params, $capture = true)
+    /**
+     * Helper method that charges and
+     * captures a credit card.
+     *
+     * @param $params
+     * @return mixed
+     */
+    public function chargeAndCaptureCard($params)
     {
-        $charge = $this->stripe->charges()->create([
-            'customer' => isset($params['stripe_id']) ? $params['stripe_id'] : null,
-            'currency' => $params['currency'],
-            'amount'   => $params['amount'],
-            'source'   => [
-                'number'    => '4242424242424242', // $params['card']['number']
-                'exp_month' => 10,
-                'cvc'       => 314,
-                'exp_year'  => 2020,
+        // Tokenize card details
+        $token = $this->createCardToken($params);
+
+        // Create the charge object but don't capture
+        $charge = $this->createCharge($params, $token);
+
+        // Capture the charge
+        $response =$this->captureCharge($charge);
+
+        return $response;
+    }
+
+
+    /**
+     * Create a Stripe Card Token.
+     *
+     * @param array $card
+     * @return mixed
+     */
+    public function createCardToken(array $card)
+    {
+        $token = $this->stripe->tokens()->create([
+            'card' => [
+                'number'    => $card['number'],
+                'exp_month' => $card['exp_month'],
+                'exp_year'  => $card['exp_year'],
+                'cvc'       => $card['cvc'],
             ],
-            'capture'  => $capture
         ]);
 
-        return $charge;
+        return $token['id'];
+    }
+
+    /**
+     * Create a Stripe Customer.
+     *
+     * @param array $customer
+     * @param $card_token
+     * @return mixed
+     */
+    public function createCustomer(array $customer, $card_token)
+    {
+        $customer = $this->stripe->customers()->create([
+            'email' => $customer['email'],
+            'source' => $card_token
+        ]);
+
+        return $customer['id'];
+    }
+
+    /**
+     * Create a Stripe Charge.
+     *
+     * @param array $charge
+     * @param null $customer_id
+     * @param null $card_token
+     * @return mixed
+     */
+    public function createCharge(array $charge, $card_token, $customer_id = null)
+    {
+        $charge = $this->stripe->charges()->create([
+            'customer' => $customer_id,
+            'currency' => $charge['currency'],
+            'amount'   => $charge['amount'],
+            'source'   => $card_token,
+            'description' => $charge['description'],
+            'statement_description' => $charge['description'],
+            'capture'  => false
+        ]);
+
+        return $charge['id'];
+    }
+
+    /**
+     * Capture a credit card charge.
+     *
+     * @param $charge_id
+     * @param array $params
+     * @return mixed
+     */
+    public function captureCharge($charge_id, $params = [])
+    {
+        return $this->stripe->charges()->capture($charge_id, $params);
+    }
+
+    /**
+     * Refund a Charge.
+     *
+     * @param $charge_id
+     * @param $amount
+     * @return mixed
+     */
+    public function refundCharge($charge_id, $amount)
+    {
+        $refund = $this->stripe->refunds()->create($charge_id, $amount);
+
+        return $refund[id];
     }
 }

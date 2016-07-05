@@ -1,25 +1,23 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripDetails">
+			<validator name="TripDetails" @valid="onValid">
 				<form id="TripDetailsForm" class="form-horizontal" novalidate>
 					<div class="form-group" :class="{ 'has-error': checkForError('campaign') }">
 						<label for="campaign" class="col-sm-2 control-label">Campaign</label>
 						<div class="col-sm-10">
-							<select id="campaign" class="form-control input-sm" v-model="campaign_id"
-									v-validate:campaign="{ required: true }" required>
-								<option value="">-- select --</option>
-								<option v-for="campaign in campaigns" :value="campaign.id">{{campaign.name}}</option>
+							<v-select class="form-controls" id="campaign" :value.sync="campaignObj" :options="campaigns" label="name"></v-select>
+							<select hidden v-model="campaign_id" v-validate:campaign="{ required: true}">
+								<option :value="campaign.id" v-for="campaign in campaigns">{{campaign.name}}</option>
 							</select>
 						</div>
 					</div>
 					<div class="form-group" :class="{ 'has-error': checkForError('group') }">
 						<label for="group" class="col-sm-2 control-label">Group</label>
 						<div class="col-sm-10">
-							<select id="group" class="form-control input-sm" v-model="group_id"
-									v-validate:group="{ required: true }" required>
-								<option value="">-- select --</option>
-								<option v-for="group in groups" :value="group.id">{{group.name}}</option>
+							<v-select class="form-controls" id="group" :value.sync="groupObj" :options="groups" label="name"></v-select>
+							<select hidden v-model="group_id" v-validate:group="{ required: true}">
+								<option :value="group.id" v-for="group in groups">{{group.name}}</option>
 							</select>
 						</div>
 					</div>
@@ -49,39 +47,13 @@
 					</div>
 
 					<div class="form-group" :class="{ 'has-error': checkForError('prospects') }">
-						<label for="collapseOne" data-toggle="collapse" data-target="#collapseOne" class="col-sm-2 control-label">Perfect For</label>
+						<label class="col-sm-2 control-label">Perfect For</label>
 						<div class="col-sm-10">
-							<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-								<div class="panel panel-default" :class="{ 'panel-danger': checkForError('prospects') }">
-									<div class="panel-heading" role="tab" id="headingOne">
-										<h4 class="panel-title">
-											<a role="button" data-toggle="collapse" data-parent="#accordion"
-											   href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-												Prospects: {{prospectsNames}}
-											</a>
-										</h4>
-									</div>
-									<div id="collapseOne" class="panel-collapse collapse" role="tabpanel"
-										 aria-labelledby="headingOne">
-										<div class="panel-body">
-											<h6>General</h6>
-											<div class="checkbox" v-for="(value, name) in prospectsList.general">
-												<label>
-													<input type="checkbox" :value="value" v-model="prospects" v-validate:prospects="{ required: true }">
-													{{name}}
-												</label>
-											</div>
-											<h6>Medical</h6>
-											<div class="checkbox" v-for="(value, name) in prospectsList.medical">
-												<label>
-													<input type="checkbox" :value="value" v-model="prospects" v-validate:prospects>
-													{{name}}
-												</label>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							<v-select multiple class="form-controls" id="group" :value.sync="prospectsObj"
+									  :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
+							<select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
+								<option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}</option>
+							</select>
 						</div>
 					</div>
 
@@ -134,6 +106,17 @@
 						</div>
 					</div>
 
+					<div class="form-group" :class="{ 'has-error': checkForError('rep') }">
+						<label for="rep" class="col-sm-2 control-label">Trip Rep.</label>
+						<div class="col-sm-10">
+							<v-select multiple class="form-controls" id="rep" :value.sync="repObj" :options="reps" label="name"></v-select>
+							<!--v-validate:rep="{ required: false}"-->
+							<select hidden v-model="rep_id">
+								<option v-for="rep in reps" :value="rep">{{rep}}</option>
+							</select>
+						</div>
+					</div>
+
 				</form>
 			</validator>
 		</div>
@@ -146,111 +129,98 @@
 	}
 </style>
 <script>
+	import vSelect from "vue-select"
 	export default{
 		name: 'trip-details',
+		components: {vSelect},
 		data(){
 			return {
+				reps: [],
 				campaigns: [],
 				groups: [],
-				prospectsList: {
-					general: {
-						"ADLT": "Adults",
-						"YNGA": "Young Adults (18-29)",
-						"TEEN": "Teens (13+)",
-						"FAMS": "Families",
-						"MMEN": "Men",
-						"WMEN": "Women",
-						"MEDI": "Media Professionals",
-						"PSTR": "Pastors",
-						"BUSL": "Business Leaders",
-						"MDPF": "Medical Professionals"
-					},
-					medical: {
-						"MDPF": "Medical Professionals",
-						"PHYS": "Physicians",
-						"SURG": "Surgeons",
-						"REGN": "Registered Nurses",
-						"DENT": "Dentists",
-						"HYGN": "Hygienists",
-						"DENA": "Dental Assistants",
-						"PHYA": "Physician Assistants",
-						"NURP": "Nurse Practitioners",
-						"PHAR": "Pharmacists",
-						"PHYT": "Physical Therapists",
-						"CHRO": "Chiropractors",
-						"MSTU": "Medical Students",
-						"DSTU": "Dental Students",
-						"NSTU": "Nursing Students"
-					},
-					all: [
-						{value: "ADLT", name: "Adults"},
-						{value: "YNGA", name: "Young Adults (18-29)"},
-						{value: "TEEN", name: "Teens (13+)"},
-						{value: "FAMS", name: "Families"},
-						{value: "MMEN", name: "Men"},
-						{value: "WMEN", name: "Women"},
-						{value: "MEDI", name: "Media Professionals"},
-						{value: "PSTR", name: "Pastors"},
-						{value: "BUSL", name: "Business Leaders"},
-						{value: "MDPF", name: "Medical Professionals"},
-						{value: "PHYS", name: "Physicians"},
-						{value: "SURG", name: "Surgeons"},
-						{value: "REGN", name: "Registered Nurses"},
-						{value: "DENT", name: "Dentists"},
-						{value: "HYGN", name: "Hygienists"},
-						{value: "DENA", name: "Dental Assistants"},
-						{value: "PHYA", name: "Physician Assistants"},
-						{value: "NURP", name: "Nurse Practitioners"},
-						{value: "PHAR", name: "Pharmacists"},
-						{value: "PHYT", name: "Physical Therapists"},
-						{value: "CHRO", name: "Chiropractors"},
-						{value: "MSTU", name: "Medical Students"},
-						{value: "DSTU", name: "Dental Students"},
-						{value: "NSTU", name: "Nursing Students"}
-					]
-				},
+				prospectsList: [
+					{value: "ADLT", name: "Adults"},
+					{value: "YNGA", name: "Young Adults (18-29)"},
+					{value: "TEEN", name: "Teens (13+)"},
+					{value: "FAMS", name: "Families"},
+					{value: "MMEN", name: "Men"},
+					{value: "WMEN", name: "Women"},
+					{value: "MEDI", name: "Media Professionals"},
+					{value: "PSTR", name: "Pastors"},
+					{value: "BUSL", name: "Business Leaders"},
+					{value: "MDPF", name: "Medical Professionals"},
+					{value: "PHYS", name: "Physicians"},
+					{value: "SURG", name: "Surgeons"},
+					{value: "REGN", name: "Registered Nurses"},
+					{value: "DENT", name: "Dentists"},
+					{value: "HYGN", name: "Hygienists"},
+					{value: "DENA", name: "Dental Assistants"},
+					{value: "PHYA", name: "Physician Assistants"},
+					{value: "NURP", name: "Nurse Practitioners"},
+					{value: "PHAR", name: "Pharmacists"},
+					{value: "PHYT", name: "Physical Therapists"},
+					{value: "CHRO", name: "Chiropractors"},
+					{value: "MSTU", name: "Medical Students"},
+					{value: "DSTU", name: "Dental Students"},
+					{value: "NSTU", name: "Nursing Students"}
+				],
 				attemptedContinue: false,
 
 				// details data
-				campaign_id: '',
+				campaign_id: this.$parent.campaignId,
+				campaignObj: _.findWhere(this.campaigns, {campaign_id: this.campaign_id}),
+				groupObj: null,
 				group_id: '',
 				description: '',
 				type: '',
 				difficulty: '',
 				companion_limit: 0,
+				prospectsObj: null,
 				prospects: [],
 				started_at: null,
 				ended_at: null,
+				repObj: null,
+				rep_id: '',
 			}
 		},
 		computed: {
+			campaign_id(){
+				return _.isObject(this.campaignObj) ? this.campaignObj.id : null;
+			},
+			group_id(){
+				return _.isObject(this.groupObj) ? this.groupObj.id : null;
+			},
+			rep_id(){
+				return _.isObject(this.repObj) ? this.repObj.id : null;
+			},
+			prospects(){
+				return _.pluck(this.prospectsObj, 'value');
+			},
 			campaigns(){
 				return this.$parent.campaigns;
 			},
 			groups(){
 				return this.$parent.groups;
-			},
-			prospectsNames(){
-				var arr = this.prospects;
-				var names = [];
-				if (arr.length) {
-					arr.forEach(function (prospect) {
-						this.prospectsList.all.some(function (obj) {
-							if (obj.value === prospect) {
-								names.push(obj.name);
-								return true;
-							}
-						}, this);
-					}, this);
-					return names.toString().replace(/,/g, ', ');
-				} else {
-					return 'None Selected';
-				}
 			}
 		},
 		methods: {
+			populateWizardData(){
+				$.extend(this.$parent.wizardData, {
+					campaign_id: this.campaign_id,
+					group_id: this.group_id,
+					description: this.description,
+					type: this.type,
+					difficulty: this.difficulty,
+					companion_limit: this.companion_limit,
+					prospects: this.prospects,
+					started_at: this.started_at,
+					ended_at: this.ended_at,
+					rep_id: this.rep_id,
+
+				});
+			},
 			onValid(){
-				this.$parent.details = this.details;
+				this.populateWizardData()
 				this.$dispatch('details', true);
 			},
 			checkForError(field){

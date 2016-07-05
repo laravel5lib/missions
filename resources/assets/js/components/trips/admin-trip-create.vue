@@ -43,7 +43,7 @@
 
 	export default{
 		name: 'campaign-trip-create-wizard',
-		props:['campaignId'],
+		props:['campaignId', 'campaignCountries'],
 		data(){
 			return {
 				stepList:[
@@ -60,7 +60,9 @@
 				groups: [],
 
 				// admin generated data
-				wizardData: null,
+				wizardData: {
+					country_code: this.campaignCountries
+				},
 			}
 		},
 		computed: {
@@ -79,23 +81,24 @@
 			back(){
 				window.location.href = window.location.href.split('/create')[0];
 			},
-			toStep(step){
-				var thisChild;
+			childValidationTrigger(){
+				var self = this;
 				// find child
-				this.$children.some(function (child) {
-					if (child.hasOwnProperty(this.currentStep.form))
-						return thisChild = child;
-				}, this);
+				var thisChild = _.find(this.$children, function (child) {
+					return child.hasOwnProperty(self.currentStep.form);
+				});
 
 				// if form is invalid mark as invalid step, but continue anyway
 				this.currentStep.valid = !thisChild[this.currentStep.form].invalid;
-				if (thisChild[this.currentStep.form].invalid) {
-					thisChild.attemptedContinue = true;
-				}
-
+				thisChild.attemptedContinue = true;
+				thisChild.populateWizardData();
+			},
+			toStep(step){
+				this.childValidationTrigger();
 				this.currentStep = step;
 			},
 			backStep(){
+				this.childValidationTrigger();
 				this.stepList.some(function(step, i, list) {
 					if (this.currentStep.view === step.view){
 						return this.currentStep = list[i-1];
@@ -103,18 +106,7 @@
 				}, this);
 			},
 			nextStep(){
-				var thisChild;
-				// find child
-				this.$children.some(function (child) {
-					if (child.hasOwnProperty(this.currentStep.form))
-						return thisChild = child;
-				}, this);
-
-				// if form is invalid mark as invalid step, but continue anyway
-				this.currentStep.valid = !thisChild[this.currentStep.form].invalid;
-				if (thisChild[this.currentStep.form].invalid) {
-					thisChild.attemptedContinue = true;
-				}
+				this.childValidationTrigger();
 				this.nextStepCallback();
 			},
 			nextStepCallback(){
@@ -125,31 +117,15 @@
 				}, this);
 			},
 			finish(){
-
-			},
-			submit(){
-				this.attemptSubmit = true;
-				if (this.wizardComplete) {
-					var resource = this.$resource('trips');
-					resource.save(null, {
-						name: this.name,
-						country_code: this.country_code,
-						short_desc: this.short_desc,
-						started_at: this.started_at,
-						ended_at: this.ended_at,
-						published_at: this.published_at,
-						page_url: this.page_url
-
-					}).then(function (resp) {
-						window.location.href = '/admin' + resp.data.data.links[0].uri;
-					}, function (error) {
-						debugger;
-					});
-				}
+				var resource = this.$resource('trips');
+				resource.save(null, this.wizardData).then(function (resp) {
+					window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
+				}, function (error) {
+					debugger;
+				});
 			}
 		},
 		created(){
-			// login component skipped for now
 			this.currentStep = this.stepList[0];
 
 			this.$http.get('campaigns').then(function (response) {
@@ -175,7 +151,7 @@
 			},
 			'deadlines'(val){
 				this.currentStep.complete = this.wizardComplete = val
-			},
+			}
 		}
 	}
 </script> 

@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripPricing">
+			<validator name="TripPricing" @valid="onValid">
 				<form id="TripPricing" class="form-horizontal" novalidate>
 					<div class="text-right">
 						<button type="button" class="btn btn-sm btn-primary" @click="toggleNewCost=!toggleNewCost">
@@ -70,12 +70,12 @@
 								</div>
 								<div class="panel-footer text-right">
 									<a class="btn btn-xs btn-default" @click="toggleNewCost=false"><i class="fa fa-times"></i> Cancel</a>
-									<button type="button" class="btn btn-xs btn-success" @click="addCost()"><i
-											class="fa fa-plus"></i> Add Cost
+									<button type="button" class="btn btn-xs btn-success" @click="addCost()">
+										<i class="fa fa-plus"></i> Add Cost
 									</button>
 								</div>
 							</div>
-							<div class="panel panel-default" v-for="cost in costs">
+							<div class="panel panel-default" v-for="cost in costs" :class="{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }">
 								<div class="panel-heading">{{cost.name}}</div>
 								<div class="panel-body">
 									<div class="row">
@@ -124,10 +124,18 @@
 											<a @click="cost.payments.$remove(payment)"><i class="fa fa-times"></i></a>
 										</td>
 									</tr>
+									<tr v-if="costsErrors[$index] != false" class="danger">
+										<td colspan="5" v-if="costsErrors[$index] === 'empty'">
+											<b>At least 1 payment is required!</b>
+										</td>
+										<td colspan="5" v-else>
+											<b>Payments must total the cost amount!</b>
+										</td>
+									</tr>
 									</tbody>
 								</table>
 								<ul class="list-group">
-									<li class="list-group-item" v-if="(editPaymentMode && cost.toggleNewPayment) || toggleNewPayment">
+									<li class="list-group-item" v-if="cost.toggleNewPayment">
 										<validator name="TripPricingCostPayment">
 											<form class="form-inline">
 												<div class="row">
@@ -176,7 +184,7 @@
 												</div>
 												<div class="row">
 													<div class="col-sm-12" v-if="!editPaymentMode">
-														<a class="btn btn-xs btn-default" @click="toggleNewPayment=false"><i class="fa fa-times"></i> Cancel</a>
+														<a class="btn btn-xs btn-default" @click="cost.toggleNewPayment=false"><i class="fa fa-times"></i> Cancel</a>
 														<a class="btn btn-xs btn-success" @click="addPayment(cost)"><i class="fa fa-plus"></i> Add Payment</a>
 													</div>
 													<div class="col-sm-12" v-if="editPaymentMode">
@@ -188,8 +196,8 @@
 										</validator>
 									</li>
 								</ul>
-								<div class="panel-footer text-right">
-									<a v-if="calculateMaxAmount(cost) > 0" @click="toggleNewPaymentForm(cost)" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i> New Payment</a>
+								<div class="panel-footer text-right" v-if="calculateMaxAmount(cost) > 0">
+									<a @click="toggleNewPaymentForm(cost)" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i> New Payment</a>
 								</div>
 							</div>
 
@@ -205,7 +213,6 @@
 		name: 'trip-pricing',
 		data(){
 			return {
-				costs: [],
 				attemptedContinue: false,
 				attemptedAddCost: false,
 				attemptedAddPayment: false,
@@ -214,9 +221,10 @@
 				selectedCost: null,
 				editCostMode: false,
 				editPaymentMode: false,
+				costsErrors:[],
 
 				// pricing data
-				spots: null,
+				costs: [],
 				newCost: {
 					name: '',
 					description: '',
@@ -235,25 +243,41 @@
 				}
 			}
 		},
+		/*validators:{
+			costs
+		},*/
 		watch:{
 			'newPayment.amount_owed': function (val, oldVal) {
 				var max = this.calculateMaxAmount(this.selectedCost);
 				if (val > max)
 					this.newPayment.amount_owed = this.selectedCost.amount;
 				this.newPayment.percent_owed = (val / this.selectedCost.amount) * 100;
+				if ( _.isFunction(this.$validate) )
+					this.$validate('percent', true);
 			},
 			'newPayment.percent_owed': function (val, oldVal) {
 				var max = this.calculateMaxPercent(this.selectedCost);
 				if (val > max)
 					this.newPayment.percent_owed = max;
 				this.newPayment.amount_owed = (val / 100) * this.selectedCost.amount;
+				if ( _.isFunction(this.$validate) )
+					this.$validate('amount', true);
+			},
+			'costs': function (val, oldVal) {
+				this.checkCostsErrors();
 			}
 		},
 		computed: {
 
 		},
 		methods: {
+			populateWizardData(){
+				$.extend(this.$parent.wizardData, {
+					costs: this.costs,
+				});
+			},
 			onValid(){
+
 				this.$dispatch('pricing', true);
 				//this.$parent.details = this.details;
 			},
@@ -265,6 +289,29 @@
 			},
 			checkForErrorPayment(field){
 				return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
+			},
+			checkCostsErrors(){
+				var errors = [];
+				this.costs.forEach(function (cost, index) {
+					// cost must have at least 1 payment
+					if (!cost.payments.length) {
+						errors.push('empty');
+					} else {
+						// cost payments must total full amount owed and percent owed
+						var amount = 0;
+						cost.payments.forEach(function (payment, index) {
+							amount += payment.amount_owed;
+						}, this);
+						// evaluate difference
+						if (amount != cost.amount) {
+							errors.push('incomplete');
+						}
+					}
+
+					// no errors
+					errors.push(false);
+				}, this);
+				this.costsErrors = errors;
 			},
 			resetCost(){
 				this.newCost = {
@@ -326,11 +373,7 @@
 			},
 			toggleNewPaymentForm(cost, updateMode) {
 				this.selectedCost = cost;
-				if(updateMode) {
 					this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
-				} else {
-					this.toggleNewPayment = !this.toggleNewPayment;
-				}
 			},
 			addCost(){
 				this.attemptedAddCost = true;
@@ -340,6 +383,7 @@
 					this.toggleNewCost = false;
 					this.attemptedAddCost = false;
 				}
+				this.checkCostsErrors();
 			},
 			updateCost(){
 				this.attemptedAddCost = true;
@@ -349,15 +393,17 @@
 					this.attemptedAddCost = false;
 					this.editCostMode = false;
 				}
+				this.checkCostsErrors();
 			},
 			addPayment(cost){
 				this.attemptedAddPayment = true;
 				if(this.$TripPricingCostPayment.valid) {
 					cost.payments.push(this.newPayment);
 					this.resetPayment();
-					this.toggleNewPayment = false;
+					this.selectedCost.toggleNewPayment = false;
 					this.attemptedAddPayment = false;
 				}
+				this.checkCostsErrors();
 			},
 			updatePayment(cost){
 				this.attemptedAddPayment = true;
@@ -367,6 +413,7 @@
 					this.attemptedAddPayment = false;
 					this.editPaymentMode = false;
 				}
+				this.checkCostsErrors();
 			},
 			generateUUID() {
 				return ("0000" + (Math.random()*Math.pow(36,4) << 0).toString(36)).slice(-4);
@@ -374,6 +421,7 @@
 		},
 		activate(done){
 			$('html, body').animate({scrollTop: 0}, 300);
+			this.$dispatch('pricing', true);
 			done();
 		}
 	}

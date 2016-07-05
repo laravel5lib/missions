@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripDeadlines">
+			<validator name="TripDeadlines" @valid="onValid">
 				<form id="TripDeadlines" class="form-horizontal" novalidate>
 
 					<div class="form-group">
@@ -107,14 +107,13 @@
 		name: 'trip-deadlines',
 		data(){
 			return {
-				todos: [],
-				deadlines: [],
 				toggleNewDeadline: false,
 				attemptedAddDeadline: false,
 				attemptedContinue: false,
 
 				// deadlines data
-				rep_id: null,
+				todos: [],
+				deadlines: [],
 				newDeadline: {
 					name: '',
 					date: null,
@@ -127,9 +126,15 @@
 
 		},
 		methods: {
+			populateWizardData(){
+				$.extend(this.$parent.wizardData, {
+					todos: this.todos,
+					deadlines: this.deadlines
+				});
+			},
 			onValid(){
-				this.$dispatch('reqs', true);
-				//this.$parent.details = this.details;
+				this.populateWizardData();
+				this.$dispatch('deadlines', true);
 			},
 			checkForError(field){
 				return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
@@ -155,6 +160,7 @@
 		},
 		activate(done){
 			$('html, body').animate({scrollTop: 0}, 300);
+			this.$dispatch('deadlines', true);
 			done();
 		}
 	}

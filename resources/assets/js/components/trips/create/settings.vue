@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripSettings">
+			<validator name="TripSettings" @valid="onValid">
 				<form id="TripSettings" class="form-horizontal" novalidate>
 
 					<div class="form-group" :class="{ 'has-error': checkForError('spots') }">
@@ -55,9 +55,16 @@
 
 		},
 		methods: {
+			populateWizardData(){
+				$.extend(this.$parent.wizardData, {
+					spots: this.spots,
+					closed_at: this.closed_at,
+					published_at: this.published_at
+				});
+			},
 			onValid(){
+				this.populateWizardData();
 				this.$dispatch('settings', true);
-				//this.$parent.details = this.details;
 			},
 			checkForError(field){
 				// if user clicked continue button while the field is invalid trigger error styles

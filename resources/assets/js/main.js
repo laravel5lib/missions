@@ -16,6 +16,7 @@ import adminTrips from './components/trips/admin-trips-list.vue';
 // jQuery
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
+window._ = require('underscore');
 require('jquery.cookie');
 require('bootstrap-sass');
 

@@ -1,18 +1,8 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripReqs">
+			<validator name="TripReqs" @valid="onValid">
 				<form id="TripReqs" class="form-horizontal" novalidate>
-
-					<div class="form-group" :class="{ 'has-error': checkForError('rep') }">
-						<label for="rep" class="col-sm-2 control-label">Trip Rep.</label>
-						<div class="col-sm-10">
-							<select id="rep" class="form-control-input-sm" v-model="rep_id">
-								<option value="">-- select --</option>
-								<option v-for="rep in reps" :value="rep">{{rep}}</option>
-							</select>
-						</div>
-					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Requirements</label>
@@ -89,8 +79,8 @@
 								</div>
 								<div class="panel-footer text-right">
 									<a class="btn btn-xs btn-default" @click="toggleNewRequirement=false"><i class="fa fa-times"></i> Cancel</a>
-									<button type="button" class="btn btn-xs btn-success" @click="addRequirement()"><i
-											class="fa fa-plus"></i> Add Requirement
+									<button type="button" class="btn btn-xs btn-success" @click="addRequirement()">
+										<i class="fa fa-plus"></i> Add Requirement
 									</button>
 								</div>
 							</div>
@@ -136,7 +126,6 @@
 		name: 'trip-requirement',
 		data(){
 			return {
-				reps: [],
 				resources: [
 					'Medical Release',
 					'Passport',
@@ -152,7 +141,6 @@
 				attemptedContinue: false,
 
 				// requirements data
-				rep_id: null,
 				requirements:[],
 				newReq: {
 					item: '',
@@ -167,8 +155,15 @@
 
 		},
 		methods: {
+			populateWizardData(){
+				$.extend(this.$parent.wizardData, {
+					requirements: this.requirements,
+				});
+			},
+
 			onValid(){
-				this.$dispatch('deadlines', true);
+				this.populateWizardData();
+				this.$dispatch('reqs', true);
 				//this.$parent.details = this.details;
 			},
 			checkForError(field){
@@ -195,6 +190,7 @@
 		},
 		activate(done){
 			$('html, body').animate({scrollTop: 0}, 300);
+			this.$dispatch('reqs', true);
 			done();
 		}
 	}

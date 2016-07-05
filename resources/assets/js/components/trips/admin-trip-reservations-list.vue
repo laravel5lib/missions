@@ -92,6 +92,7 @@
 <script>
     export default{
         name: 'admin-trip-reservations',
+        props: ['tripId'],
         data(){
             return{
                 reservations: [],
@@ -128,7 +129,7 @@
             },
             searchReservations(){
                 this.$http.get('reservations', {
-                    trip_id: this.tripId,
+                    trip_id: new Array(this.tripId),
                     include:'user',
                     search: this.searchText,
                     per_page: this.per_page,

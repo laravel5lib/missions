@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -17,23 +18,23 @@ class TripsController extends Controller
         return view('admin.trips.index')->with('trips', $trips);
     }
 
-    public function show($id)
+    public function show($campaignId, $id)
     {
         $trip = $this->api->get('trips/'.$id);
 
         return view('admin.trips.show')->with('trip', $trip);
     }
 
-    public function edit($id, $tripId=null)
+    public function edit($campaignId, $id=null)
     {
 
-        return view('admin.trips.edit')->with('campaignId', $id);
+        return view('admin.trips.edit')->with('campaignId', $campaignId);
     }
 
     public function create($campaignId)
     {
-        $campaign = $this->api->get('campaigns/'.$campaignId);
-
+        $campaign = Campaign::whereId($campaignId)->orWhere('page_url', $campaignId)->first();
+        // $this->api->get('campaigns/'.$campaignId);
         return view('admin.trips.create')->with('campaign', $campaign);
     }
 }

@@ -55,6 +55,7 @@ $api->version('v1', [
     $api->get('fundraisers.donations', 'DonationsController@index');
     $api->resource('fundraisers', 'FundraisersController');
     $api->resource('donations', 'DonationsController');
+    $api->post('donations/authorize', 'DonationsController@authorize');
     $api->resource('passports', 'PassportsController');
     $api->resource('visas', 'VisasController');
     $api->resource('referrals', 'ReferralsController');

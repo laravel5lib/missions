@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Requests\v1\CardRequest;
 use App\Http\Requests\v1\DonationRequest;
 use App\Models\v1\Donation;
 use App\Http\Transformers\v1\DonationTransformer;
-use Cartalyst\Stripe\Stripe;
+use App\Services\PaymentGateway;
 
 class DonationsController extends Controller
 {
@@ -16,21 +17,22 @@ class DonationsController extends Controller
      * @var Donation
      */
     private $donation;
+
     /**
-     * @var Stripe
+     * @var PaymentGateway
      */
-    private $stripe;
+    private $paymentGateway;
 
     /**
      * DonationsController constructor.
      *
      * @param Donation $donation
-     * @param Stripe $stripe
+     * @param PaymentGateway $paymentGateway
      */
-    public function __construct(Donation $donation, Stripe $stripe)
+    public function __construct(Donation $donation, PaymentGateway $paymentGateway)
     {
         $this->donation = $donation;
-        $this->stripe = $stripe;
+        $this->payment = $paymentGateway;
 
         $this->middleware('api.auth');
         $this->middleware('jwt.refresh');
@@ -72,10 +74,16 @@ class DonationsController extends Controller
      */
     public function store(DonationRequest $request)
     {
+        // has no charge object been created?
         if($request->has('card')) {
-            $this->chargeAndCaptureCard($request->only(
-                'card', 'stripe_id', 'amount', 'currency', 'description'
+            $this->payment->chargeAndCaptureCard($request->only(
+                'card', 'customer_id', 'amount', 'currency', 'description'
             ));
+        }
+
+        // has the card been authorized and a charge object created already?
+        if($request->has('charge_id')) {
+            $this->payment->captureCharge($request->get('charge_id'));
         }
 
         $donation = $this->donation->create($request->all());
@@ -84,110 +92,19 @@ class DonationsController extends Controller
     }
 
     /**
-     * Helper method that charges and
-     * captures a credit card.
+     * Only authorize the credit card and return the stripe charge object.
      *
-     * @param $params
+     * @param CardRequest $request
      * @return mixed
      */
-    public function chargeAndCaptureCard($params)
+    public function authorize(CardRequest $request)
     {
-        // Tokenize card details
-        $token = $this->createCardToken($params);
+        $token = $this->payment->createCardToken($request->all());
 
-        // Create the charge object but don't capture
-        $charge = $this->createCharge($params, $token);
-
-        // Capture the charge
-        $response =$this->captureCharge($charge);
-
-        return $response;
-    }
-
-
-    /**
-     * Create a Stripe Card Token.
-     *
-     * @param array $card
-     * @return mixed
-     */
-    public function createCardToken(array $card)
-    {
-        $token = $this->stripe->tokens()->create([
-            'card' => [
-                'number'    => $card['number'],
-                'exp_month' => $card['exp_month'],
-                'exp_year'  => $card['exp_year'],
-                'cvc'       => $card['cvc'],
-            ],
-        ]);
-
-        return $token['id'];
-    }
-
-    /**
-     * Create a Stripe Customer.
-     *
-     * @param array $customer
-     * @param $card_token
-     * @return mixed
-     */
-    public function createCustomer(array $customer, $card_token)
-    {
-        $customer = $this->stripe->customers()->create([
-            'email' => $customer['email'],
-            'source' => $card_token
-        ]);
-
-        return $customer['id'];
-    }
-
-    /**
-     * Create a Stripe Charge.
-     *
-     * @param array $charge
-     * @param null $customer_id
-     * @param null $card_token
-     * @return mixed
-     */
-    public function createCharge(array $charge, $card_token, $customer_id = null)
-    {
-        $charge = $this->stripe->charges()->create([
-            'customer' => $customer_id,
-            'currency' => $charge['currency'],
-            'amount'   => $charge['amount'],
-            'source'   => $card_token,
-            'description' => $charge['description'],
-            'statement_description' => $charge['description'],
-            'capture'  => false
-        ]);
-
-        return $charge['id'];
-    }
-
-    /**
-     * Capture a credit card charge.
-     *
-     * @param $charge_id
-     * @param array $params
-     * @return mixed
-     */
-    public function captureCharge($charge_id, $params = [])
-    {
-        return $this->stripe->charges()->capture($charge_id, $params);
-    }
-
-    /**
-     * Refund a Charge.
-     *
-     * @param $charge_id
-     * @param $amount
-     * @return mixed
-     */
-    public function refundCharge($charge_id, $amount)
-    {
-        $refund = $this->stripe->refunds()->create($charge_id, $amount);
-
-        return $refund[id];
+        return $this->payment->createCharge(
+            $request->all(),
+            $token,
+            $request->get('customer_id')
+        );
     }
 }

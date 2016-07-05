@@ -20,8 +20,10 @@
                                     Action <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Edit</a></li>
-                                    <li><a href="#">Delete</a></li>
+                                    <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                                    <li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
                                 </ul>
                             </div>
                         </h3>
@@ -246,6 +248,10 @@
 
             </div>
         </div>
+
+        <admin-trip-duplicate trip-id="{{ $trip->id }}"></admin-trip-duplicate>
+        <admin-trip-delete trip-id="{{ $trip->id }}"></admin-trip-delete>
+
     </div>
     <style>
         .panel dd {

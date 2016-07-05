@@ -13,6 +13,8 @@ import adminCampaignDetails from './components/campaigns/admin-campaign-details.
 import adminCampaignTripCreate from './components/trips/admin-trip-create.vue';
 import adminTrips from './components/trips/admin-trips-list.vue';
 import adminTripsReservations from './components/trips/admin-trip-reservations-list.vue';
+import adminTripsDuplicate from './components/trips/admin-trip-duplicate.vue';
+import adminTripsDelete from './components/trips/admin-trip-delete.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -113,6 +115,8 @@ new Vue({
         adminCampaignTripCreate,
         adminTrips,
         adminTripsReservations,
+        adminTripsDuplicate,
+        adminTripsDelete,
     ],
     http: {
         headers: {

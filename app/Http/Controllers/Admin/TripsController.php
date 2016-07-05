@@ -20,7 +20,7 @@ class TripsController extends Controller
 
     public function show($campaignId, $id)
     {
-        $trip = $this->api->get('trips/'.$id);
+        $trip = $this->api->get('trips/'.$id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines   ']);
 
         return view('admin.trips.show')->with('trip', $trip);
     }

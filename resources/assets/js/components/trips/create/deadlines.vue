@@ -86,7 +86,7 @@
 								<tr v-for="deadline in deadlines|orderBy 'due_at'">
 									<td>{{deadline.name}}</td>
 									<td>{{deadline.due_at|moment}}</td>
-									<td>{{deadline.grace_period}} {{deadline.amount_owed|pluralize 'day'}}</td>
+									<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>
 									<td>{{deadline.enforced}}</td>
 									<td>
 										<!--<a @click="editPayment(payment, cost)"><i class="fa fa-pencil"></i></a>-->

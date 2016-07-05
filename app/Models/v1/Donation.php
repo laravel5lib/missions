@@ -28,7 +28,8 @@ class Donation extends Model
         'email', 'phone', 'name', 'company_name',
         'address_street', 'address_city', 'address_state',
         'address_zip', 'address_country', 'currency',
-        'payment_type'
+        'payment_type', 'donor_id', 'donor_type', 'designation_id',
+        'designation_type'
     ];
 
     /**

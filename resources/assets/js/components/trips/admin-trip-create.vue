@@ -43,7 +43,7 @@
 
 	export default{
 		name: 'campaign-trip-create-wizard',
-		props:['campaignId', 'campaignCountries'],
+		props:['campaignId', 'countryCode'],
 		data(){
 			return {
 				stepList:[
@@ -56,12 +56,12 @@
 				currentStep: null,
 				canContinue: false,
 				wizardComplete: false,
-				campaigns: [],
-				groups: [],
+				campaign: {},
 
 				// admin generated data
 				wizardData: {
-					country_code: this.campaignCountries
+					campaign_id: this.campaignId,
+					country_code: [this.countryCode]
 				},
 			}
 		},
@@ -121,19 +121,15 @@
 				resource.save(null, this.wizardData).then(function (resp) {
 					window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
 				}, function (error) {
-					debugger;
+					console.log(error);
 				});
 			}
 		},
 		created(){
 			this.currentStep = this.stepList[0];
 
-			this.$http.get('campaigns').then(function (response) {
-				this.$set('campaigns', response.data.data);
-			});
-
-			this.$http.get('groups').then(function (response) {
-				this.$set('groups', response.data.data);
+			this.$http.get('campaigns/' + this.campaignId).then(function (response) {
+				this.campaign = response.data.data;
 			});
 		},
 		events: {

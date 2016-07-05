@@ -3,19 +3,17 @@
 		<div class="col-sm-12">
 			<validator name="TripDetails" @valid="onValid">
 				<form id="TripDetailsForm" class="form-horizontal" novalidate>
-					<div class="form-group" :class="{ 'has-error': checkForError('campaign') }">
-						<label for="campaign" class="col-sm-2 control-label">Campaign</label>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Campaign</label>
 						<div class="col-sm-10">
-							<v-select class="form-controls" id="campaign" :value.sync="campaignObj" :options="campaigns" label="name"></v-select>
-							<select hidden v-model="campaign_id" v-validate:campaign="{ required: true}">
-								<option :value="campaign.id" v-for="campaign in campaigns">{{campaign.name}}</option>
-							</select>
+							<p>{{$parent.campaign.name|capitalize}}</p>
 						</div>
 					</div>
 					<div class="form-group" :class="{ 'has-error': checkForError('group') }">
-						<label for="group" class="col-sm-2 control-label">Group</label>
+						<label class="col-sm-2 control-label">Group</label>
 						<div class="col-sm-10">
-							<v-select class="form-controls" id="group" :value.sync="groupObj" :options="groups" label="name"></v-select>
+							<v-select class="form-controls" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
+									  label="name"></v-select>
 							<select hidden v-model="group_id" v-validate:group="{ required: true}">
 								<option :value="group.id" v-for="group in groups">{{group.name}}</option>
 							</select>
@@ -25,8 +23,10 @@
 					<div class="form-group" :class="{ 'has-error': checkForError('description') }">
 						<label for="description" class="col-sm-2 control-label">Description</label>
 						<div class="col-sm-10">
-							<textarea name="description" id="description" rows="2" v-model="description" class="form-control"
-									  v-validate:description="{ required: true, minlength:1, maxlength:120 }" maxlength="255"
+							<textarea name="description" id="description" rows="2" v-model="description"
+									  class="form-control"
+									  v-validate:description="{ required: true, minlength:1, maxlength:120 }"
+									  maxlength="255"
 									  minlength="1"></textarea>
 							<div class="help-block">{{description.length}}/255</div>
 						</div>
@@ -52,7 +52,8 @@
 							<v-select multiple class="form-controls" id="group" :value.sync="prospectsObj"
 									  :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
 							<select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
-								<option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}</option>
+								<option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
+								</option>
 							</select>
 						</div>
 					</div>
@@ -89,14 +90,16 @@
 						<div class="col-sm-10">
 							<div class="row">
 								<div class="col-sm-6">
-									<div class="input-group input-group-sm" :class="{ 'has-error': checkForError('start') }">
+									<div class="input-group input-group-sm"
+										 :class="{ 'has-error': checkForError('start') }">
 										<span class="input-group-addon">Start</span>
 										<input type="date" class="form-control" v-model="started_at" id="started_at"
 											   v-validate:start="{ required: true }" required>
 									</div>
 								</div>
 								<div class="col-sm-6">
-									<div class="input-group input-group-sm" :class="{ 'has-error': checkForError('end') }">
+									<div class="input-group input-group-sm"
+										 :class="{ 'has-error': checkForError('end') }">
 										<span class="input-group-addon">End</span>
 										<input type="date" class="form-control" v-model="ended_at" id="ended_at"
 											   v-validate:end="{ required: true }" required>
@@ -107,9 +110,10 @@
 					</div>
 
 					<div class="form-group" :class="{ 'has-error': checkForError('rep') }">
-						<label for="rep" class="col-sm-2 control-label">Trip Rep.</label>
+						<label class="col-sm-2 control-label">Trip Rep.</label>
 						<div class="col-sm-10">
-							<v-select multiple class="form-controls" id="rep" :value.sync="repObj" :options="reps" label="name"></v-select>
+							<v-select multiple class="form-controls" id="rep" :value.sync="repObj" :options="reps"
+									  label="name"></v-select>
 							<!--v-validate:rep="{ required: false}"-->
 							<select hidden v-model="rep_id">
 								<option v-for="rep in reps" :value="rep">{{rep}}</option>
@@ -136,7 +140,7 @@
 		data(){
 			return {
 				reps: [],
-				campaigns: [],
+				//campaigns: [],
 				groups: [],
 				prospectsList: [
 					{value: "ADLT", name: "Adults"},
@@ -167,8 +171,6 @@
 				attemptedContinue: false,
 
 				// details data
-				campaign_id: this.$parent.campaignId,
-				campaignObj: _.findWhere(this.campaigns, {campaign_id: this.campaign_id}),
 				groupObj: null,
 				group_id: '',
 				description: '',
@@ -184,9 +186,6 @@
 			}
 		},
 		computed: {
-			campaign_id(){
-				return _.isObject(this.campaignObj) ? this.campaignObj.id : null;
-			},
 			group_id(){
 				return _.isObject(this.groupObj) ? this.groupObj.id : null;
 			},
@@ -195,18 +194,13 @@
 			},
 			prospects(){
 				return _.pluck(this.prospectsObj, 'value');
-			},
-			campaigns(){
-				return this.$parent.campaigns;
-			},
-			groups(){
-				return this.$parent.groups;
 			}
 		},
 		methods: {
-			populateWizardData(){
+			populateWizardData(onValid){
+				if (!onValid)
+					this.$validate(true);
 				$.extend(this.$parent.wizardData, {
-					campaign_id: this.campaign_id,
 					group_id: this.group_id,
 					description: this.description,
 					type: this.type,
@@ -219,19 +213,31 @@
 
 				});
 			},
+			getGroups(search, loading){
+				loading(true);
+				this.$http.get('groups', { search: search }).then(function (response) {
+					this.groups = response.data.data;
+					loading(false);
+				});
+			},
 			onValid(){
-				this.populateWizardData()
+				this.populateWizardData(true);
 				this.$dispatch('details', true);
 			},
 			checkForError(field){
 				// if user clicked continue button while the field is invalid trigger error styles
 				return this.$TripDetails[field.toLowerCase()].invalid && this.attemptedContinue
 			},
-			activate(done){
-				$('html, body').animate({scrollTop: 0}, 300);
-				done();
-			}
+		},
+		activate(done){
+			$('html, body').animate({scrollTop: 0}, 300);
 
+			// get some groups
+			this.$http.get('groups').then(function (response) {
+				this.groups = response.data.data;
+			});
+			done();
 		}
+
 	}
 </script>

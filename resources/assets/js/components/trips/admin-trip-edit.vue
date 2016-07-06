@@ -128,24 +128,28 @@
 			this.currentStep = this.stepList[0];
 
 			this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines'}).then(function (trip) {
-				this.trip = trip.data.data;
-				$.extend(this.trip, {
+				var trip = trip.data.data;
+				$.extend(trip, {
 					type: this.type,
 					group_id: this.group_id
 				});
 				// trim costs
-				_.each(this.trip.costs.data, function (cost) {
+				_.each(trip.costs.data, function (cost) {
 					cost.payments = cost.payments.data;
 				});
-				this.trip.costs = this.trip.costs.data;
+				trip.costs = trip.costs.data;
 				// trim campaign
-				this.trip.campaign = this.trip.campaign.data;
+				trip.campaign = trip.campaign.data;
 				// trim deadlines
-				this.trip.deadlines = this.trip.deadlines.data;
+				trip.deadlines = trip.deadlines.data;
 				// trim requirements
-				this.trip.requirements = this.trip.requirements.data;
+				trip.requirements = trip.requirements.data;
 				// trim notes
-				this.trip.notes = this.trip.notes.data;
+				trip.notes = trip.notes.data;
+				// for now remove rep_id
+				delete trip.rep_id;
+				console.log(trip);
+				this.trip = trip;
 			});
 		},
 		events: {

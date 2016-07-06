@@ -103,8 +103,12 @@
                         // trim notes
                         this.trip.notes = this.trip.notes.data;
 
+                        // for now remove rep_id
+                        delete this.trip.rep_id;
+
                         this.$http.post('trips', this.trip).then(function (response) {
                             console.log(response);
+                            window.location.href = window.location.href.split('/trips')[0] + response.data.data.links[0].uri;
                         }, function (error) {
                             console.log(error);
                         });

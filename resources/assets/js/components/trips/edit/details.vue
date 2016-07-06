@@ -26,9 +26,9 @@
 							<textarea name="description" id="description" rows="2" v-model="description"
 									  class="form-control"
 									  v-validate:description="{ required: true, minlength:1, maxlength:120 }"
-									  maxlength="255"
+									  maxlength="120"
 									  minlength="1"></textarea>
-							<div class="help-block">{{description.length}}/255</div>
+							<div class="help-block">{{description.length}}/120</div>
 						</div>
 					</div>
 

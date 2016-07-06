@@ -59,9 +59,7 @@
 				trip: {},
 
 				// admin generated data
-				wizardData: {
-					campaign_id: this.tripId,
-				},
+				wizardData: {},
 			}
 		},
 		computed: {
@@ -150,6 +148,7 @@
 				delete trip.rep_id;
 				console.log(trip);
 				this.trip = trip;
+				this.wizardData.campaign_id =  this.trip.campaign_id;
 				this.wizardData.country_code = this.trip.country_code;
 
 				this.$broadcast('trip', this.trip);

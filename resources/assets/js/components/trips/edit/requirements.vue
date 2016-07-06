@@ -190,6 +190,9 @@
 		},
 		activate(done){
 			$('html, body').animate({scrollTop: 0}, 300);
+			$.extend(this, {
+				requirements: this.$parent.trip.requirements,
+			});
 			this.$dispatch('reqs', true);
 			done();
 		}

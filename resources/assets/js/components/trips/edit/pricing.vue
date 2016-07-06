@@ -23,20 +23,27 @@
 										<form class="form" novalidate>
 											<div class="row">
 												<div class="col-sm-12">
-													<div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
+													<div class="form-group"
+														 :class="{'has-error': checkForErrorCost('costName')}">
 														<label for="cost_name">Name</label>
 														<input type="text" class="form-control input-sm" id="cost_name"
-															   v-model="newCost.name" v-validate:costName="{required: true}"
+															   v-model="newCost.name"
+															   v-validate:costName="{required: true}"
 															   placeholder="Name" autofocus>
 													</div>
-													<div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
+													<div class="form-group"
+														 :class="{'has-error': checkForErrorCost('costDescription')}">
 														<label for="cost_description">Description</label>
 														<textarea class="form-control input-sm" id="cost_description"
-																  v-model="newCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
+																  v-model="newCost.description"
+																  v-validate:costDescription="{required: true, minlength:1}"></textarea>
 													</div>
-													<div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
+													<div class="form-group"
+														 :class="{'has-error': checkForErrorCost('costType')}">
 														<label for="cost_type">Type</label>
-														<select id="cost_type" class="form-control input-sm" v-model="newCost.type" v-validate:costType="{ required: true }">
+														<select id="cost_type" class="form-control input-sm"
+																v-model="newCost.type"
+																v-validate:costType="{ required: true }">
 															<option value="">-- select --</option>
 															<option value="static">Static</option>
 															<option value="incremental">Incremental</option>
@@ -45,20 +52,27 @@
 													</div>
 													<div class="row">
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
+															<div class="form-group"
+																 :class="{'has-error': checkForErrorCost('costActive')}">
 																<label for="newCost_active_at">Active</label>
-																<input type="date" id="newCost_active_at" class="form-control input-sm"
-																	   v-model="newCost.active_at" v-validate:costActive="{required: true}">
+																<input type="date" id="newCost_active_at"
+																	   class="form-control input-sm"
+																	   v-model="newCost.active_at"
+																	   v-validate:costActive="{required: true}">
 															</div>
 
 														</div>
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
+															<div class="form-group"
+																 :class="{'has-error': checkForErrorCost('costAmount')}">
 																<label for="newCost_amount">Amount</label>
 																<div class="input-group input-group-sm">
-																	<span class="input-group-addon"><i class="fa fa-usd"></i></span>
-																	<input type="number" number id="newCost_amount" class="form-control"
-																		   v-model="newCost.amount" v-validate:costAmount="{required: true, min: 1}">
+																	<span class="input-group-addon"><i
+																			class="fa fa-usd"></i></span>
+																	<input type="number" number id="newCost_amount"
+																		   class="form-control"
+																		   v-model="newCost.amount"
+																		   v-validate:costAmount="{required: true, min: 1}">
 																</div>
 															</div>
 														</div>
@@ -69,13 +83,15 @@
 									</validator>
 								</div>
 								<div class="panel-footer text-right">
-									<a class="btn btn-xs btn-default" @click="toggleNewCost=false"><i class="fa fa-times"></i> Cancel</a>
+									<a class="btn btn-xs btn-default" @click="toggleNewCost=false"><i
+											class="fa fa-times"></i> Cancel</a>
 									<button type="button" class="btn btn-xs btn-success" @click="addCost()">
 										<i class="fa fa-plus"></i> Add Cost
 									</button>
 								</div>
 							</div>
-							<div class="panel panel-default" v-for="cost in costs" :class="{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }">
+							<div class="panel panel-default" v-for="cost in costs"
+								 :class="{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }">
 								<div class="panel-heading">{{cost.name}}</div>
 								<div class="panel-body">
 									<div class="row">
@@ -90,6 +106,7 @@
 											</ul>
 										</div>
 									</div>
+									{{cost|json}}
 								</div>
 								<table class="table table-striped table-hover">
 									<thead>
@@ -143,17 +160,27 @@
 														<label for="amountOwed">Owed</label>
 													</div>
 													<div class="col-sm-6">
-														<div class="input-group input-group-sm" :class="{'has-error': checkForErrorPayment('amount') }">
-															<span class="input-group-addon"><i class="fa fa-usd"></i></span>
-															<input id="amountOwed" class="form-control" type="number" :max="calculateMaxAmount(cost)" number v-model="newPayment.amount_owed"
-															   v-validate:amount="{required: true, min: 0.01}" debounce="100">
+														<div class="input-group input-group-sm"
+															 :class="{'has-error': checkForErrorPayment('amount') }">
+															<span class="input-group-addon"><i
+																	class="fa fa-usd"></i></span>
+															<input id="amountOwed" class="form-control" type="number"
+																   :max="calculateMaxAmount(cost)" number
+																   v-model="newPayment.amount_owed"
+																   v-validate:amount="{required: true, min: 0.01}"
+																   debounce="100">
 														</div>
 													</div>
 													<div class="col-sm-6">
-														<div class="input-group input-group-sm" :class="{'has-error': checkForErrorPayment('percent') }">
-															<input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(cost)" v-model="newPayment.percent_owed|number 2"
-																   v-validate:percent="{required: true, min: 0.01}" debounce="100">
-															<span class="input-group-addon"><i class="fa fa-percent"></i></span>
+														<div class="input-group input-group-sm"
+															 :class="{'has-error': checkForErrorPayment('percent') }">
+															<input id="percentOwed" class="form-control" type="number"
+																   number :max="calculateMaxPercent(cost)"
+																   v-model="newPayment.percent_owed|number 2"
+																   v-validate:percent="{required: true, min: 0.01}"
+																   debounce="100">
+															<span class="input-group-addon"><i
+																	class="fa fa-percent"></i></span>
 														</div>
 													</div>
 												</div>
@@ -168,14 +195,19 @@
 													<div class="col-sm-6">
 														<div class="form-group">
 															<label for="dueAt">Due</label>
-															<input id="dueAt" class="form-control input-sm" type="date" v-model="newPayment.due_at" required>
+															<input id="dueAt" class="form-control input-sm" type="date"
+																   v-model="newPayment.due_at" required>
 														</div>
 													</div>
 													<div class="col-sm-6">
-														<div class="form-group" :class="{'has-error': checkForErrorPayment('grace') }">
+														<div class="form-group"
+															 :class="{'has-error': checkForErrorPayment('grace') }">
 															<label for="grace_period">Grace Period</label>
-															<div class="input-group input-group-sm" :class="{'has-error': checkForErrorPayment('grace') }">
-																<input id="grace_period" type="number" class="form-control" number v-model="newPayment.grace_period"
+															<div class="input-group input-group-sm"
+																 :class="{'has-error': checkForErrorPayment('grace') }">
+																<input id="grace_period" type="number"
+																	   class="form-control" number
+																	   v-model="newPayment.grace_period"
 																	   v-validate:grace="{required: true, min:0}">
 																<span class="input-group-addon">Days</span>
 															</div>
@@ -184,12 +216,20 @@
 												</div>
 												<div class="row">
 													<div class="col-sm-12" v-if="!editPaymentMode">
-														<a class="btn btn-xs btn-default" @click="cost.toggleNewPayment=false"><i class="fa fa-times"></i> Cancel</a>
-														<a class="btn btn-xs btn-success" @click="addPayment(cost)"><i class="fa fa-plus"></i> Add Payment</a>
+														<a class="btn btn-xs btn-default"
+														   @click="cost.toggleNewPayment=false">
+															<i class="fa fa-times"></i> Cancel
+														</a>
+														<a class="btn btn-xs btn-success" @click="addPayment(cost)">
+															<i class="fa fa-plus"></i> Add Payment
+														</a>
 													</div>
 													<div class="col-sm-12" v-if="editPaymentMode">
-														<a class="btn btn-xs btn-default" @click="cancelEditPayment(cost)"><i class="fa fa-times"></i> Cancel</a>
-														<a class="btn btn-xs btn-info" @click="updatePayment(cost)"><i class="fa fa-plus"></i> Update Payment</a>
+														<a class="btn btn-xs btn-default"
+														   @click="cancelEditPayment(cost)"><i class="fa fa-times"></i>
+															Cancel</a>
+														<a class="btn btn-xs btn-info" @click="updatePayment(cost)">
+															<i class="fa fa-plus"></i> Update Payment</a>
 													</div>
 												</div>
 											</form>
@@ -197,13 +237,14 @@
 									</li>
 								</ul>
 								<div class="panel-footer text-right" v-if="calculateMaxAmount(cost) > 0">
-									<a @click="toggleNewPaymentForm(cost)" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i> New Payment</a>
+									<a @click="toggleNewPaymentForm(cost)" class="btn btn-xs btn-primary">
+										<i class="fa fa-plus"></i> New Payment</a>
 								</div>
 							</div>
 
 						</div>
 					</div>
-					</form>
+				</form>
 			</validator>
 		</div>
 	</div>
@@ -221,7 +262,7 @@
 				selectedCost: null,
 				editCostMode: false,
 				editPaymentMode: false,
-				costsErrors:[],
+				costsErrors: [],
 
 				// pricing data
 				costs: [],
@@ -244,15 +285,15 @@
 			}
 		},
 		/*validators:{
-			costs
-		},*/
-		watch:{
+		 costs
+		 },*/
+		watch: {
 			'newPayment.amount_owed': function (val, oldVal) {
 				var max = this.calculateMaxAmount(this.selectedCost);
 				if (val > max)
 					this.newPayment.amount_owed = this.selectedCost.amount;
 				this.newPayment.percent_owed = (val / this.selectedCost.amount) * 100;
-				if ( _.isFunction(this.$validate) )
+				if (_.isFunction(this.$validate))
 					this.$validate('percent', true);
 			},
 			'newPayment.percent_owed': function (val, oldVal) {
@@ -260,16 +301,14 @@
 				if (val > max)
 					this.newPayment.percent_owed = max;
 				this.newPayment.amount_owed = (val / 100) * this.selectedCost.amount;
-				if ( _.isFunction(this.$validate) )
+				if (_.isFunction(this.$validate))
 					this.$validate('amount', true);
 			},
 			'costs': function (val, oldVal) {
 				this.checkCostsErrors();
 			}
 		},
-		computed: {
-
-		},
+		computed: {},
 		methods: {
 			populateWizardData(){
 				$.extend(this.$parent.wizardData, {
@@ -338,7 +377,7 @@
 				if (cost.payments.length) {
 					cost.payments.forEach(function (payment) {
 						// must ignore current payment in editMode
-						if(this.newPayment !== payment) {
+						if (this.newPayment !== payment) {
 							max -= payment.amount_owed;
 						}
 					}, this);
@@ -350,7 +389,7 @@
 				if (cost.payments.length) {
 					cost.payments.forEach(function (payment) {
 						// must ignore current payment in editMode
-						if(this.newPayment !== payment) {
+						if (this.newPayment !== payment) {
 							max -= payment.percent_owed;
 						}
 					}, this);
@@ -373,7 +412,7 @@
 			},
 			toggleNewPaymentForm(cost, updateMode) {
 				this.selectedCost = cost;
-					this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
+				this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
 			},
 			addCost(){
 				this.attemptedAddCost = true;
@@ -397,7 +436,7 @@
 			},
 			addPayment(cost){
 				this.attemptedAddPayment = true;
-				if(this.$TripPricingCostPayment.valid) {
+				if (this.$TripPricingCostPayment.valid) {
 					cost.payments.push(this.newPayment);
 					this.resetPayment();
 					this.selectedCost.toggleNewPayment = false;
@@ -407,7 +446,7 @@
 			},
 			updatePayment(cost){
 				this.attemptedAddPayment = true;
-				if(this.$TripPricingCostPayment.valid) {
+				if (this.$TripPricingCostPayment.valid) {
 					this.resetPayment();
 					this.selectedCost.toggleNewPayment = false;
 					this.attemptedAddPayment = false;
@@ -416,13 +455,17 @@
 				this.checkCostsErrors();
 			},
 			generateUUID() {
-				return ("0000" + (Math.random()*Math.pow(36,4) << 0).toString(36)).slice(-4);
+				return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
 			}
 		},
-		activate(done){
+		ready(){
 			$('html, body').animate({scrollTop: 0}, 300);
+			this.$set('costs', this.$parent.trip.costs);
+			// add toggle data
+			_.each(this.costs, function (cost) {
+				cost.toggleNewPayment = false;
+			});
 			this.$dispatch('pricing', true);
-			done();
 		}
 	}
 </script>

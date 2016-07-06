@@ -160,6 +160,10 @@
 		},
 		activate(done){
 			$('html, body').animate({scrollTop: 0}, 300);
+			$.extend(this, {
+				todos: this.$parent.trip.todos,
+				deadlines: this.$parent.trip.deadlines
+			});
 			this.$dispatch('deadlines', true);
 			done();
 		}

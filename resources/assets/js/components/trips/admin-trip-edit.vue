@@ -12,7 +12,7 @@
 			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 			</component>
-			<div class="alert alert-danger alert-dismissible" role="alert" v-if="!!globalErrors.step1">
+			<div class="alert alert-danger alert-dismissible" role="alert" v-if="!stepList[0].valid">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them then try again.
 			</div>
@@ -63,7 +63,6 @@
 
 				// admin generated data
 				wizardData: {},
-				globalErrors: { step1: false }
 			}
 		},
 		computed: {
@@ -119,8 +118,7 @@
 			},
 			finish(){
 				// if details form is incomplete
-				this.globalErrors.step1 = this.$children[0]['$TripDetails'].invalid;
-				if (this.globalErrors.step1) {
+				if (!this.stepList[0].valid) {
 					// show error and discontinue
 					return false;
 				}

@@ -60,7 +60,7 @@
 
 				// admin generated data
 				wizardData: {
-					campaign_id: this.tripId
+					campaign_id: this.tripId,
 				},
 			}
 		},
@@ -116,8 +116,8 @@
 				}, this);
 			},
 			finish(){
-				var resource = this.$resource('trips');
-				resource.save(null, this.wizardData).then(function (resp) {
+				var resource = this.$resource('trips{/id}');
+				resource.update({ id: this.tripId}, this.wizardData).then(function (resp) {
 					window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
 				}, function (error) {
 					console.log(error);
@@ -150,6 +150,9 @@
 				delete trip.rep_id;
 				console.log(trip);
 				this.trip = trip;
+				this.wizardData.country_code = this.trip.country_code;
+
+				this.$broadcast('trip', this.trip);
 			});
 		},
 		events: {

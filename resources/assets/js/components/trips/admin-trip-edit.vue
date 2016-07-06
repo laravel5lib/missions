@@ -14,7 +14,7 @@
 			</component>
 			<div class="alert alert-danger alert-dismissible" role="alert" v-if="!stepList[0].valid">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them then try again.
+				<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them before updating.
 			</div>
 			<hr>
 			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">

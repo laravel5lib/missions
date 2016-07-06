@@ -209,7 +209,8 @@
 					prospects: this.prospects,
 					started_at: this.started_at,
 					ended_at: this.ended_at,
-					//rep_id: this.rep_id,
+					rep_id: this.rep_id,
+
 				});
 			},
 			getGroups(search, loading){

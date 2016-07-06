@@ -12,7 +12,7 @@
 			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 			</component>
-			<div class="alert alert-danger alert-dismissible" role="alert" v-if="!stepList[0].valid">
+			<div class="alert alert-danger alert-dismissible" role="alert" v-if="!stepList[0].valid && !!$children[0].attemptedContinue">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them before updating.
 			</div>

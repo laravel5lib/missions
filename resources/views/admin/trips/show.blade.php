@@ -49,6 +49,9 @@
                                     {{--<dt>Thumbnail</dt>--}}
                                     {{--<dd><a href="#">{{ $trip->campaign->thumb_src }}</a></dd>--}}
 
+                                    <dt>Description</dt>
+                                    <dd>{{ $trip->description }}</dd>
+
                                     <dt>Campaign</dt>
                                     <dd><a href="#">{{ $trip->campaign->name }}</a></dd>
 

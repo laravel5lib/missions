@@ -25,10 +25,10 @@ class TripsController extends Controller
         return view('admin.trips.show')->with('trip', $trip);
     }
 
-    public function edit($campaignId, $id=null)
+    public function edit($campaignId, $tripId=null)
     {
 
-        return view('admin.trips.edit')->with('campaignId', $campaignId);
+        return view('admin.trips.edit')->with('tripId', $tripId);
     }
 
     public function create($campaignId)

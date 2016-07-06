@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <trip-edit trip-id="{{ $campaignId }}"></trip-edit>
+                <campaign-trip-edit-wizard trip-id="{{ $tripId }}"></campaign-trip-edit-wizard>
             </div>
         </div>
     </div>

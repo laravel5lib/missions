@@ -91,6 +91,18 @@
                             type: this.type,
                             group_id: this.group_id
                         });
+                        // trim costs
+                        _.each(this.trip.costs.data, function (cost) {
+                            cost.payments = cost.payments.data;
+                        });
+                        this.trip.costs = this.trip.costs.data;
+                        // trim deadlines
+                        this.trip.deadlines = this.trip.deadlines.data;
+                        // trim requirements
+                        this.trip.requirements = this.trip.requirements.data;
+                        // trim notes
+                        this.trip.notes = this.trip.notes.data;
+
                         this.$http.post('trips', this.trip).then(function (response) {
                             console.log(response);
                         }, function (error) {

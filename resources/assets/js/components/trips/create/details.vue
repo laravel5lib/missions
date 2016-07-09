@@ -25,10 +25,7 @@
 						<div class="col-sm-10">
 							<textarea name="description" id="description" rows="2" v-model="description"
 									  class="form-control"
-									  v-validate:description="{ required: true, minlength:1, maxlength:120 }"
-									  maxlength="255"
-									  minlength="1"></textarea>
-							<div class="help-block">{{description.length}}/255</div>
+									  v-validate:description="{ required: true}"></textarea>
 						</div>
 					</div>
 
@@ -143,30 +140,30 @@
 				//campaigns: [],
 				groups: [],
 				prospectsList: [
-					{value: "ADLT", name: "Adults"},
-					{value: "YNGA", name: "Young Adults (18-29)"},
-					{value: "TEEN", name: "Teens (13+)"},
-					{value: "FAMS", name: "Families"},
-					{value: "MMEN", name: "Men"},
-					{value: "WMEN", name: "Women"},
-					{value: "MEDI", name: "Media Professionals"},
-					{value: "PSTR", name: "Pastors"},
-					{value: "BUSL", name: "Business Leaders"},
-					{value: "MDPF", name: "Medical Professionals"},
-					{value: "PHYS", name: "Physicians"},
-					{value: "SURG", name: "Surgeons"},
-					{value: "REGN", name: "Registered Nurses"},
-					{value: "DENT", name: "Dentists"},
-					{value: "HYGN", name: "Hygienists"},
-					{value: "DENA", name: "Dental Assistants"},
-					{value: "PHYA", name: "Physician Assistants"},
-					{value: "NURP", name: "Nurse Practitioners"},
-					{value: "PHAR", name: "Pharmacists"},
-					{value: "PHYT", name: "Physical Therapists"},
-					{value: "CHRO", name: "Chiropractors"},
-					{value: "MSTU", name: "Medical Students"},
-					{value: "DSTU", name: "Dental Students"},
-					{value: "NSTU", name: "Nursing Students"}
+					{value: "adults", name: "Adults"},
+					{value: "young adults", name: "Young Adults (18-29)"},
+					{value: "teens", name: "Teens (13+)"},
+					{value: "families", name: "Families"},
+					{value: "men", name: "Men"},
+					{value: "women", name: "Women"},
+					{value: "media professionals", name: "Media Professionals"},
+					{value: "pastors", name: "Pastors"},
+					{value: "business leaders", name: "Business Leaders"},
+					{value: "medical professionals", name: "Medical Professionals"},
+					{value: "physicians", name: "Physicians"},
+					{value: "surgeons", name: "Surgeons"},
+					{value: "registered nurses", name: "Registered Nurses"},
+					{value: "dentists", name: "Dentists"},
+					{value: "hygienists", name: "Hygienists"},
+					{value: "dental assistants", name: "Dental Assistants"},
+					{value: "physician assistants", name: "Physician Assistants"},
+					{value: "nurse practitioners", name: "Nurse Practitioners"},
+					{value: "pharmacists", name: "Pharmacists"},
+					{value: "physical therapists", name: "Physical Therapists"},
+					{value: "chiropractors", name: "Chiropractors"},
+					{value: "medical students", name: "Medical Students"},
+					{value: "dental students", name: "Dental Students"},
+					{value: "nursing students", name: "Nursing Students"}
 				],
 				attemptedContinue: false,
 

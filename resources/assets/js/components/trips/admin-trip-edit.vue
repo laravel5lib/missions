@@ -12,6 +12,10 @@
 			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 			</component>
+			<div class="alert alert-danger alert-dismissible" role="alert" v-if="!stepList[0].valid && !!$children[0].attemptedContinue">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them before updating.
+			</div>
 			<hr>
 			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
 				<a class="btn btn-link" @click="back()">Cancel</a>
@@ -20,7 +24,6 @@
 				<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">Finish</a>
 			</div>
 		</div>
-		<hr>
 	</div>
 </template>
 <style>
@@ -114,6 +117,12 @@
 				}, this);
 			},
 			finish(){
+				// if details form is incomplete
+				if (!this.stepList[0].valid) {
+					// show error and discontinue
+					return false;
+				}
+
 				var resource = this.$resource('trips{/id}');
 				resource.update({ id: this.tripId}, this.wizardData).then(function (resp) {
 					window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;

@@ -42,8 +42,8 @@ class RequirementTransformer extends TransformerAbstract
         if ($requirement->pivot)
         {
             $array = [
-                'id'           => (int) $requirement->pivot->id,
-                'item'         => $requirement->name,
+                'item'         => $requirement->item,
+                'item_type'    => $requirement->item_type,
                 'due_at'       => $requirement->due_at->toDateTimeString(),
                 'grace_period' => (int) $requirement->pivot->grace_period ? $requirement->pivot->grace_period : $requirement->grace_period,
                 'enforced'     => (bool) $requirement->enforced,

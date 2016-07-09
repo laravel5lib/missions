@@ -45,7 +45,7 @@ Route::get('/dashboard', function () use ($dispatcher) {
 
 Route::get('/dashboard/reservations/{id}', function ($id) use ($dispatcher) {
     try {
-        $reservation = $dispatcher->get('reservations/' . $id);
+        $reservation = $dispatcher->get('reservations/' . $id, ['include' => 'trip.campaign,trip.group']);
     } catch (Dingo\Api\Exception\InternalHttpException $e) {
         // We can get the response here to check the status code of the error or response body.
         $response = $e->getResponse();

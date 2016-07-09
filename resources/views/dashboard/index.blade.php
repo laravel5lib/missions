@@ -23,7 +23,7 @@
             <table class="table table-hover">
             	<thead>
             		<tr>
-            			<th>Name</th>
+                        <th>Name (Surname, Given Names)</th>
             			<th>Country</th>
             			<th>Group</th>
             			<th>Trip Type</th>
@@ -52,7 +52,7 @@
               <table class="table table-hover">
                   <thead>
                   <tr>
-                      <th>Name</th>
+                      <th>Name (Surname, Given Names)</th>
                       <th>Country</th>
                       <th>Group</th>
                       <th>Trip Type</th>

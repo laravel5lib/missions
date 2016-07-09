@@ -51,6 +51,7 @@ $api->version('v1', [
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
     $api->resource('reservations', 'ReservationsController');
+    $api->get('reservations/{id}/donations', 'ReservationsController@donations');
     $api->resource('assignments', 'AssignmentsController');
     $api->get('fundraisers.donations', 'DonationsController@index');
     $api->resource('fundraisers', 'FundraisersController');

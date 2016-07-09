@@ -3,8 +3,6 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use Carbon\Carbon;
-use App\Models\v1\Todo;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -139,7 +137,7 @@ class Reservation extends Model
     public function requirements()
     {
         return $this->belongsToMany(Requirement::class, 'reservation_requirements')
-                    ->withPivot('id','grace_period', 'status', 'completed_at')
+                    ->withPivot('grace_period', 'status', 'completed_at')
                     ->withTimestamps();
     }
 
@@ -151,6 +149,16 @@ class Reservation extends Model
     public function fundraisers()
     {
         return $this->morphMany(Fundraiser::class, 'fundable');
+    }
+
+    /**
+     * Get all of the reservation's donations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function donations()
+    {
+        return $this->morphMany(Donation::class, 'designation');
     }
 
     /**

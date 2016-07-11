@@ -73,14 +73,14 @@
                                         </ul>
                                     </dd>
 
-                                    <dt>Requirements</dt>
+                                    {{--<dt>Requirements</dt>
                                     <dd>
                                         <ul class="list-inline">
                                             @foreach($trip->requirements as $requirement)
                                                 <li class="badge">{{ $requirement->item_type }} {{ $requirement->item }}</li>
                                             @endforeach
                                         </ul>
-                                    </dd>
+                                    </dd>--}}
 
                                     <dt>Public Page</dt>
                                     <dd>{{ $trip->page_url }}</dd>
@@ -167,12 +167,9 @@
                                 </div>
                             @endforeach
                         </div>
-                        {{--<div class="panel panel-default">
+                        <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Requirements</h3>
-                            </div>
-                            <div class="panel-body">
-                                {{ $trip->requirements }}
                             </div>
                             <table class="table">
                                 <thead>
@@ -184,17 +181,17 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($trip->requirements as $deadline)
+                                @foreach($trip->requirements as $requirement)
                                     <tr>
-                                        <td style="text-transform: capitalize">{{ $deadline->name }}</td>
-                                        <td>{{ date('F d, Y', strtotime($deadline->due_at)) }}</td>
-                                        <td>{{ $deadline->grace_period }} {{ $deadline->grace_period > 1 ? 'days' : 'day' }}</td>
-                                        <td>{{ $deadline->enforced ? 'Yes' : 'No' }}</td>
+                                        <td style="text-transform: capitalize">{{ $requirement->item }} {{ $requirement->item_type }}</td>
+                                        <td>{{ date('F d, Y', strtotime($requirement->due_at)) }}</td>
+                                        <td>{{ $requirement->grace_period }} {{ $requirement->grace_period > 1 ? 'days' : 'day' }}</td>
+                                        <td>{{ $requirement->enforced ? 'Yes' : 'No' }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
-                        </div>--}}
+                        </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Deadlines</h3>

@@ -22,11 +22,11 @@
                 <br>
                 <div class="row">
                     @foreach($reservation->fundraisers as $fundraiser)
-                    <div class="col-sm-12">
+                    <div class="col-sm-12 col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 {{ $fundraiser->name }}
-                                <span class="pull-right">Expires: {{ carbon($fundraiser->expires_at)->toFormattedDateString() }}</span>
+                                <span class="pull-right">Ends: {{ carbon($fundraiser->expires_at)->toFormattedDateString() }}</span>
                             </div>
                             <div class="panel-body">
                                 {{ $fundraiser->description or 'No Description'}}

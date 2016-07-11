@@ -1,12 +1,12 @@
 @extends('dashboard.layouts.default')
 
 @section('content')
-    <div class="container">
+    <div class="container"> 
         <div class="row">
             <div class="col-sm-12">
                 <div class="media">
                     <a class="pull-left" href="#">
-                        <img class="media-object" style="width:100px; height:100px" src="{{ $reservation->trip->campaign->thumb_src }}" alt="Image">
+                        <img class="media-object" style="width:100px; height:100px" src="{{ $reservation->trip->campaign->thumb_src }}" alt="{{ $reservation->trip->campaign->name }}">
                     </a>
                     <div class="media-body">
                         <h3 class="media-heading">
@@ -40,6 +40,7 @@
                             <dt>Trip Starts In</dt>
                             <dd>{{ carbon($reservation->trip->started_at)->diffInDays() }} days</dd>
                         </dl>
+
                     </div>
                 </div>
             </div>

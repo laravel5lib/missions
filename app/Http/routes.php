@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Http\Request;
+
 $dispatcher = app('Dingo\Api\Dispatcher');
 
 Route::get('/admin/users', function () use ($dispatcher) {
@@ -47,7 +49,7 @@ Route::get('/dashboard/reservations', function () use ($dispatcher) {
     return view('dashboard.reservations.index', compact('user'));
 });
 
-Route::get('/dashboard/reservations/{id}', function ($id) use ($dispatcher) {
+Route::get('/dashboard/reservations/{id}', function ($id, Request $request) use ($dispatcher) {
     try {
         $reservation = $dispatcher->get('reservations/' . $id, ['include' => 'trip.campaign,trip.group']);
     } catch (Dingo\Api\Exception\InternalHttpException $e) {
@@ -56,9 +58,34 @@ Route::get('/dashboard/reservations/{id}', function ($id) use ($dispatcher) {
 
         return $response;
     }
-    
-    return view('dashboard.reservations.show', compact('reservation'));
+    $active = 'details';
+    return view('dashboard.reservations.show', compact('reservation', 'active'));
+});
 
+Route::get('/dashboard/reservations/{id}/requirements', function ($id, Request $request) use ($dispatcher) {
+    try {
+        $reservation = $dispatcher->get('reservations/' . $id, ['include' => 'trip.campaign,requirements']);
+    } catch (Dingo\Api\Exception\InternalHttpException $e) {
+        // We can get the response here to check the status code of the error or response body.
+        $response = $e->getResponse();
+
+        return $response;
+    }
+    $active = $request->segment(4);
+    return view('dashboard.reservations.requirements', compact('reservation', 'active'));
+});
+
+Route::get('/dashboard/reservations/{id}/fundraisers', function ($id, Request $request) use ($dispatcher) {
+    try {
+        $reservation = $dispatcher->get('reservations/' . $id, ['include' => 'trip.campaign,fundraisers']);
+    } catch (Dingo\Api\Exception\InternalHttpException $e) {
+        // We can get the response here to check the status code of the error or response body.
+        $response = $e->getResponse();
+
+        return $response;
+    }
+    $active = $request->segment(4);
+    return view('dashboard.reservations.fundraisers', compact('reservation', 'active'));
 });
 
 Route::get('/campaigns', function () {

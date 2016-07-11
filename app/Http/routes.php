@@ -27,7 +27,11 @@ Route::get('/admin/users', function () use ($dispatcher) {
     return View::make('admin.users')->with('users', $users);
 });
 
-Route::get('/dashboard', function () use ($dispatcher) {
+Route::get('/dashboard', function () {
+    return view('dashboard.index');
+});
+
+Route::get('/dashboard/reservations', function () use ($dispatcher) {
     //Auth::loginUsingId(Auth::user()->id);
     Auth::loginUsingId('39edac0c-51dc-48af-a631-983659a6a630');
 
@@ -40,7 +44,7 @@ Route::get('/dashboard', function () use ($dispatcher) {
     }
 
 //    return $reservations;
-    return view('dashboard.index', compact('user'));
+    return view('dashboard.reservations.index', compact('user'));
 });
 
 Route::get('/dashboard/reservations/{id}', function ($id) use ($dispatcher) {

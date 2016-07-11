@@ -32,7 +32,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($user->reservations as $reservation)
+                            @foreach($reservations as $reservation)
                                 @if ($reservation->trip->ended_at->gt(now()))
                                     <tr>
                                         <td>{{ $reservation->surname }}, {{ $reservation->given_names }}</td>
@@ -61,7 +61,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($user->reservations as $reservation)
+                            @foreach($reservations as $reservation)
                                 @if ($reservation->trip->ended_at->lt(now()))
                                     <tr>
                                         <td>{{ $reservation->surname }}, {{ $reservation->given_names }}</td>

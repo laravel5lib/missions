@@ -101,6 +101,19 @@ Route::get('/dashboard/reservations/{id}/fundraisers', function ($id, Request $r
     return view('dashboard.reservations.fundraisers', compact('reservation', 'active'));
 });
 
+Route::get('/dashboard/reservations/{id}/fundraisers', function ($id, Request $request) use ($dispatcher) {
+    try {
+        $reservation = $dispatcher->get('reservations/' . $id, ['include' => 'trip.campaign,fundraisers']);
+    } catch (Dingo\Api\Exception\InternalHttpException $e) {
+        // We can get the response here to check the status code of the error or response body.
+        $response = $e->getResponse();
+
+        return $response;
+    }
+    $active = $request->segment(4);
+    return view('dashboard.reservations.fundraisers', compact('reservation', 'active'));
+});
+
 Route::get('/dashboard/reservations/{id}/deadlines', function ($id, Request $request) use ($dispatcher) {
     try {
         $reservation = $dispatcher->get('reservations/' . $id, ['include' => 'trip.campaign,deadlines,requirements,costs.payments']);

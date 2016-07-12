@@ -37,8 +37,9 @@
                                     <span class="pull-right">Goal: ${{ number_format($fundraiser->goal_amount, 2) }}</span>
                                 </h6>
                                 <div class="progress">
-                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 50%;">
-                                        50%
+                                    <?php $fundraiser->raised_percent = (($fundraiser->raised() /100) > $fundraiser->goal_amount) ? 100 : $fundraiser->raised() /100 ?>
+                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ $fundraiser->raised_percent }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{ $fundraiser->raised_percent }}%;">
+                                        ${{ number_format($fundraiser->raised() / 100, 2) }}
                                     </div>
                                 </div>
                             </div>

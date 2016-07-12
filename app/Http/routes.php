@@ -103,7 +103,40 @@ Route::get('/dashboard/reservations/{id}/fundraisers', function ($id, Request $r
 
 Route::get('/dashboard/reservations/{id}/deadlines', function ($id, Request $request) use ($dispatcher) {
     try {
-        $reservation = $dispatcher->get('reservations/' . $id, ['include' => 'trip.campaign,deadlines']);
+        $reservation = $dispatcher->get('reservations/' . $id, ['include' => 'trip.campaign,deadlines,requirements,costs.payments']);
+
+        // Pluck payments
+        $payments = [];
+        foreach ($reservation->costs as $cost) {
+            foreach ($cost->payments as $payment) {
+                $payment->cost_name = $cost->name;
+                $payments[] = $payment;
+            }
+        }
+        //return response()->json($payments);
+        // add 'due_at' property to deadlines just as payments and requirements
+        $deadlines = [];
+        foreach ($reservation->deadlines as $key => $deadline) {
+            $deadline->due_at = $deadline->date->toDateTimeString();
+            $deadlines[] = $deadline;
+        }
+
+        $requirements = $reservation->requirements->toArray();
+
+        $merged_deadlines = array_merge($deadlines, $requirements, $payments);
+        // Sort merged deadlines by due_at property
+        usort($merged_deadlines, function($a, $b) {
+            $ad = carbon($a['due_at']);
+            $bd = carbon($b['due_at']);
+
+            if ($ad->eq($bd)) {
+                return 0;
+            }
+
+            return $ad->lt($bd) ? -1 : 1;
+        });
+        $all_deadlines = collect($merged_deadlines);
+
     } catch (Dingo\Api\Exception\InternalHttpException $e) {
         // We can get the response here to check the status code of the error or response body.
         $response = $e->getResponse();
@@ -111,7 +144,7 @@ Route::get('/dashboard/reservations/{id}/deadlines', function ($id, Request $req
         return $response;
     }
     $active = $request->segment(4);
-    return view('dashboard.reservations.deadlines', compact('reservation', 'active'));
+    return view('dashboard.reservations.deadlines', compact('reservation', 'active', 'all_deadlines'));
 });
 
 Route::get('/campaigns', function () {

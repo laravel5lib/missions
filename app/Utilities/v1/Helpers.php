@@ -16,3 +16,8 @@ function now()
 {
     return Carbon::now();
 }
+
+function carbon($date)
+{
+    return new Carbon($date);
+}

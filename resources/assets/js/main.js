@@ -5,6 +5,8 @@ import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
+import reservationsList from './components/reservations/reservations-list.vue';
+import donationsList from './components/reservations/donations-list.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -110,6 +112,10 @@ new Vue({
         groupTrips,
         groupTripWrapper,
         tripRegWizard,
+        reservationsList,
+        donationsList,
+
+        // admin components
         adminCampaignCreate,
         adminCampaignEdit,
         adminCampaignDetails,
@@ -134,8 +140,8 @@ new Vue({
     methods: {
         setUser: function (user) {
           // Save user info
-          this.user = user
-          this.authenticated = true
+          this.user = user;
+          this.authenticated = true;
         }
     }
 });

@@ -29,10 +29,7 @@
                                 <span class="pull-right">Ends: {{ carbon($fundraiser->expires_at)->toFormattedDateString() }}</span>
                             </div>
                             <div class="panel-body">
-                                {{ $fundraiser->description or 'No Description'}}
-                                <a href="{{ url()->current() . '/' . $fundraiser->id . '/donations' }}" class="btn btn-block btn-primary">View Donations</a>
-                            </div>
-                            <div class="panel-footer">
+                                <p>{{ $fundraiser->description or 'No Description'}}</p>
                                 <h6>
                                     Amount Raised
                                     <span class="pull-right">Goal: ${{ number_format($fundraiser->goal_amount, 2) }}</span>
@@ -43,6 +40,10 @@
                                         ${{ number_format($fundraiser->raised() / 100, 2) }}
                                     </div>
                                 </div>
+                            </div>
+                            <div class="panel-footer">
+                                <a href="{{ url()->current() . '/' . $fundraiser->id . '/donations' }}" class="btn btn-sm btn-block btn-primary">View Donations</a>
+
                             </div>
                         </div>
                     </div>

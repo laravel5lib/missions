@@ -18,63 +18,12 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-
                     <div role="tabpanel" class="tab-pane active" id="active">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>Name (Surname, Given Names)</th>
-                                <th>Country</th>
-                                <th>Group</th>
-                                <th>Trip Type</th>
-                                <th>Campaign Name</th>
-                                <th><i class="fa fa-cog"></i></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($reservations as $reservation)
-                                @if ($reservation->trip->ended_at->gt(now()))
-                                    <tr>
-                                        <td>{{ $reservation->surname }}, {{ $reservation->given_names }}</td>
-                                        <td>{{ country($reservation->trip->campaign->country_code) }}</td>
-                                        <td>{{ $reservation->trip->group->name }}</td>
-                                        <td>{{ $reservation->trip->type }} Missionary</td>
-                                        <td>{{ $reservation->trip->campaign->name }}</td>
-                                        <td><a href="/dashboard/reservations/{{ $reservation->id}}">View</a></td>
-                                    </tr>
-                                @endif
-                            @endforeach
-                            </tbody>
-                        </table>
+                        <reservations-list reservations="{{ json_encode($activeReservations) }}"></reservations-list>
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="archive">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>Name (Surname, Given Names)</th>
-                                <th>Country</th>
-                                <th>Group</th>
-                                <th>Trip Type</th>
-                                <th>Campaign Name</th>
-                                <th><i class="fa fa-cog"></i></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($reservations as $reservation)
-                                @if ($reservation->trip->ended_at->lt(now()))
-                                    <tr>
-                                        <td>{{ $reservation->surname }}, {{ $reservation->given_names }}</td>
-                                        <td>{{ country($reservation->trip->campaign->country_code) }}</td>
-                                        <td>{{ $reservation->trip->group->name }}</td>
-                                        <td>{{ $reservation->trip->type }} Missionary</td>
-                                        <td>{{ $reservation->trip->campaign->name }}</td>
-                                        <td><a href="/dashboard/reservations/{{ $reservation->id}}">View</a></td>
-                                    </tr>
-                                @endif
-                            @endforeach
-                            </tbody>
-                        </table>
+                        <reservations-list reservations="{{ json_encode($inactiveReservations) }}"></reservations-list>
                     </div>
 
                 </div>

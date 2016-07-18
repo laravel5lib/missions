@@ -22,7 +22,79 @@
                 <br>
                 <div class="row">
                     <div class="col-sm-12">
-                        <h4>Fundraisers</h4>
+                        <h4>
+                            Funding Progress
+                            {{--<span class="pull-right">${{ number_format($totalAmountDue,2) }}</span>--}}
+                        </h4>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ ($totalAmountRaised/$totalAmountDue) * 100 }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{ ($totalAmountRaised/$totalAmountDue) * 100 }}%;">
+                                {{ number_format(($totalAmountRaised/$totalAmountDue) * 100, 2) }}% of ${{ number_format($totalAmountDue,2) }} Raised
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <table class="table table-striped table-hover">
+                                <caption>Breakdown</caption>
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Due Date</th>
+                                    <th>Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($reservation->costs as $cost)
+                                    <tr style="border-top: 2px solid #cccccc">
+                                        <td>{{ $cost->name }}</td>
+                                        <td></td>
+                                        <td><b>${{ number_format($cost->amount, 2) }}</b></td>
+                                    </tr>
+                                    @foreach($cost->payments as $payment)
+                                        <tr class="@if($cost->type === 'incremental' && $payment->upfront){{'success'}}@endif">
+                                            <td>
+                                                @if($cost->type === 'incremental' && $payment->upfront)
+                                                    <small class="badge badge-success">Paid</small>
+                                                @endif
+                                                @if($cost->type === 'incremental' && !$payment->upfront && $payment->due_next)
+                                                    <small class="badge badge-danger">Next Defaulting Amount</small>
+                                                @endif
+                                                @if($cost->type === 'incremental' && $payment->due_at->between(now()->startOfMonth(), now()->endOfMonth()))
+                                                    <small class="badge badge-info">Due this month</small>
+                                                @endif
+                                                @if($cost->type === 'incremental' && $payment->due_at->between(now()->addMonth()->startOfMonth(),now()->addMonth()->endOfMonth()))
+                                                    <small class="badge badge-warning">Due next month</small>
+                                                @endif
+                                            </td>
+                                            <td>{{ carbon($payment->due_at)->toFormattedDateString() }}</td>
+                                            <td>${{ number_format($payment->amount_owed) }}</td>
+                                        </tr>
+                                        {{--<li class="list-group-item">{{ $payment->amount_owed }}</li>--}}
+                                    @endforeach
+                                @endforeach
+
+                                </tbody>
+                                <tfoot style="border-top: 2px solid #000000">
+                                <tr>
+                                    <th>Total Amount Due</th>
+                                    <th></th>
+                                    <th>${{ number_format($totalAmountDue, 2) }}</th>
+                                </tr>
+                                <tr>
+                                    <th>Total Amount Raised</th>
+                                    <th></th>
+                                    <th>${{ number_format($totalAmountRaised, 2) }}</th>
+                                </tr>
+                                <tr>
+                                    <th>Total Amount Remaining</th>
+                                    <th></th>
+                                    <th>${{ number_format($totalAmountDue - $totalAmountRaised, 2) }}</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    {{--<div class="col-sm-12">
+                        <h4>Costs</h4>
                         <hr>
                     </div>
                     @foreach($reservation->costs as $cost)
@@ -33,7 +105,7 @@
                                 <span class="pull-right">Ends: {{ carbon($cost->expires_at)->toFormattedDateString() }}</span>
                             </div>
                             <div class="panel-body">
-                                {{--{{ $cost }}--}}
+                                --}}{{--{{ $cost }}--}}{{--
                                 {{ $cost->description or 'No Description'}}
                                 <ul class="list-group">
                                     @foreach($cost->payments as $payment)
@@ -42,19 +114,11 @@
                                 </ul>
                             </div>
                             <div class="panel-footer">
-                                <h6>
-                                    Amount Raised
-                                    <span class="pull-right">Goal: ${{ number_format($cost->goal_amount, 2) }}</span>
-                                </h6>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 50%;">
-                                        50%
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>
-                    @endforeach
+                    @endforeach--}}
 
 
                     <div class="col-sm-12">

@@ -98,8 +98,28 @@ Route::get('/dashboard/reservations/{id}/funding', function ($id, Request $reque
 
         return $response;
     }
+
+    // Calculate total due
+    $totalAmountDue = 0;
+    foreach ($reservation->costs as $cost) {
+        $totalAmountDue += $cost->amount;
+        if($cost->type === 'incremental') {
+            foreach ($cost->payments as $payment) {
+                if($payment->due_at->gt(now())){
+                    $payment->due_next = true;
+                    break;
+                }
+            }
+        }
+    }
+    // Calculate total raised
+    $totalAmountRaised = 0;
+    foreach($reservation->fundraisers as $fundraiser) {
+        $totalAmountRaised = $fundraiser->raised() / 100;
+    }
+
     $active = $request->segment(4);
-    return view('dashboard.reservations.funding', compact('reservation', 'active'));
+    return view('dashboard.reservations.funding', compact('reservation', 'totalAmountDue', 'totalAmountRaised', 'active'));
 });
 
 Route::get('/dashboard/reservations/{id}/funding/{fid}/donations', function ($id, $fid, Request $request) use ($dispatcher) {

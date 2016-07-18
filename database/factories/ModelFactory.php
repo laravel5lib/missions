@@ -37,7 +37,8 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
     return array_merge($user, [
         'name'     => 'Admin',
         'email'    => 'admin@admin.com',
-        'password' => 'secret'
+        'password' => 'secret',
+        'admin'    => true
     ]);
 });
 
@@ -619,5 +620,17 @@ $factory->define(App\Models\v1\Upload::class, function (Faker\Generator $faker)
         'name' => $faker->userName,
         'source' => $faker->imageUrl(),
         'type' => $faker->randomElement(['photo', 'thumbnail', 'avatar', 'banner', 'file'])
+    ];
+});
+
+
+/**
+ * Tag Factory
+ */
+$factory->define(App\Models\v1\Tag::class, function (Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->word,
+        'color' => $faker->hexColor
     ];
 });

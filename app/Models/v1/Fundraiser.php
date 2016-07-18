@@ -83,4 +83,14 @@ class Fundraiser extends Model
     {
         return $this->donations()->sum('amount');
     }
+
+    /**
+     * Get all of the fundraiser's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

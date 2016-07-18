@@ -112,6 +112,16 @@ class Campaign extends Model
         return $this->belongsToMany(Group::class, 'trips');
     }
 
+    /**
+     * Get all of the campaign's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+
     public function scopePublic($query)
     {
         return $query->whereDate('published_at', '<=', date('Y-m-d'));

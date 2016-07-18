@@ -10,7 +10,9 @@ class StatFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'tags' => ['tags']
+    ];
 
     public function region($id)
     {

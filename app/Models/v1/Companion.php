@@ -23,4 +23,14 @@ class Companion extends Model
     {
         return $this->belongsTo(Reservation::class, 'companion_reservation_id');
     }
+
+    /**
+     * Get all of the companion's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

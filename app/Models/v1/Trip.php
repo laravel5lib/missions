@@ -28,7 +28,8 @@ class Trip extends Model
         'group_id', 'campaign_id', 'rep_id', 'spots',
         'country', 'type', 'difficulty', 'thumb_src',
         'started_at', 'ended_at', 'description', 'todos',
-        'companion_limit', 'published_at'
+        'companion_limit', 'published_at', 'closed_at',
+        'prospects'
     ];
 
     /**
@@ -38,7 +39,8 @@ class Trip extends Model
      */
     protected $dates = [
         'started_at', 'ended_at', 'created_at',
-        'updated_at', 'deleted_at', 'published_at'
+        'updated_at', 'deleted_at', 'published_at',
+        'closed_at'
     ];
 
     /**
@@ -55,8 +57,16 @@ class Trip extends Model
      * @var array
      */
     protected $casts = [
-        'todos' => 'array'
+        'todos' => 'array',
+        'prospects' => 'array'
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['status'];
 
     /**
      * Indicates if the model should be timestamped
@@ -86,16 +96,6 @@ class Trip extends Model
     }
 
     /**
-     * Get all the trip's prospects.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function prospects()
-    {
-        return $this->belongsToMany(Prospect::class);
-    }
-
-    /**
      * Get all the trip's costs.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -103,6 +103,18 @@ class Trip extends Model
     public function costs()
     {
         return $this->morphMany(Cost::class, 'cost_assignable');
+    }
+
+    /**
+     * Get all the trip's active costs.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function activeCosts()
+    {
+        return $this->morphMany(Cost::class, 'cost_assignable')
+                    ->whereDate('active_at', '<=', Carbon::now())
+                    ->orderBy('active_at', 'desc');
     }
 
     /**
@@ -153,6 +165,16 @@ class Trip extends Model
     public function reservations()
     {
         return $this->hasMany(Reservation::class);
+    }
+
+    /**
+     * Get all of the trip's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     /**
@@ -239,5 +261,31 @@ class Trip extends Model
         if (is_null($this->published_at)) return false;
         
         return $this->published_at <= Carbon::now() ? true : false;
+    }
+
+    /**
+     * Get the status of the trip.
+     *
+     * @return string
+     */
+    public function getStatusAttribute()
+    {
+        // default status
+        $status = 'active';
+
+        // close it if past closing date
+        $status = $this->closed_at->isPast() ? 'closed' : $status;
+
+        // close it if no more spots are available
+        $status = $this->spots === 0 ? 'closed' : $status;
+
+        // a future published date means it's scheduled
+        $status = ! is_null($this->published_at) &&
+        $this->published_at->isFuture() ? 'scheduled' : $status;
+
+        // no published date indicates a draft status
+        $status = is_null($this->published_at) ? 'draft' : $status;
+
+        return $status;
     }
 }

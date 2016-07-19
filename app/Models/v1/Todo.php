@@ -78,4 +78,14 @@ class Todo extends Model
     {
         return $this->morphTo();
     }
+
+    /**
+     * Get all of the to do's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

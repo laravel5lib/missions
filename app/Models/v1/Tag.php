@@ -6,13 +6,13 @@ use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
-class Prospect extends Model
+class Tag extends Model
 {
     use Filterable, UuidForKey;
-    
-    protected $table = 'prospects';
 
     protected $fillable = [
-        'name'
+        'name', 'color'
     ];
+
+    public $timestamps = false;
 }

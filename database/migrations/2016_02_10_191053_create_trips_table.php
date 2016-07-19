@@ -25,8 +25,10 @@ class CreateTripsTable extends Migration
             $table->date('started_at');
             $table->date('ended_at');
             $table->json('todos')->nullable();
+            $table->json('prospects')->nullable();
             $table->text('description');
             $table->timestamp('published_at')->nullable();
+            $table->timestamp('closed_at');
             $table->timestamps();
             $table->softDeletes();
         });

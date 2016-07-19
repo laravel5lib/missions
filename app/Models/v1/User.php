@@ -28,7 +28,8 @@ class User extends Authenticatable implements JWTSubject
         'name', 'email', 'password', 'alt_email',
         'phone_one', 'phone_two', 'gender', 'status',
         'birthday', 'street', 'city', 'zip', 'country_code',
-        'state', 'timezone', 'url', 'public', 'bio'
+        'state', 'timezone', 'url', 'public', 'bio',
+        'stripe_id', 'card_brand', 'card_last_four'
     ];
 
     /**
@@ -412,6 +413,16 @@ class User extends Authenticatable implements JWTSubject
     public function notes()
     {
         return $this->hasMany(Note::class);
+    }
+
+    /**
+     * Get all of the user's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     /**

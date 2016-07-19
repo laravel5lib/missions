@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Transformers\v1\DonationTransformer;
 use App\Models\v1\Reservation;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\ReservationRequest;
@@ -23,8 +24,8 @@ class ReservationsController extends Controller
      */
     public function __construct(Reservation $reservation)
     {
-        $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('api.auth');
+//        $this->middleware('jwt.refresh');
         $this->reservation = $reservation;
     }
 
@@ -58,6 +59,22 @@ class ReservationsController extends Controller
     }
 
     /**
+     * Show all the donations for the specified reservation.
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function donations($id, Request $request)
+    {
+        $donations = Reservation::findOrFail($id)
+                        ->donations()
+                        ->paginate($request->get('per_page', 10));
+
+        return $this->response->paginator($donations, new DonationTransformer);
+    }
+
+    /**
      * Store a reservation.
      *
      * @param ReservationRequest $request
@@ -65,11 +82,17 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        $reservation = Reservation::create($request->except('deadlines'));
+        $reservation = Reservation::create($request->all());
 
-        $location = url('/reservations/'.$reservation->id);
+        // Eager load trip relationships for sync
+        $reservation->load('trip.costs', 'trip.requirements', 'trip.deadlines');
 
-        return $this->response->created($location);
+        $reservation->syncCosts($reservation->trip->costs);
+        $reservation->syncRequirements($reservation->trip->requirements);
+        $reservation->syncDeadlines($reservation->trip->deadlines);
+        $reservation->addTodos($reservation->trip->todos);
+
+        return $this->response->item($reservation, new ReservationTransformer);
     }
 
     /**
@@ -83,7 +106,12 @@ class ReservationsController extends Controller
     {
         $reservation = Reservation::findOrFail($id);
 
-        $reservation->update($request->all());
+        $reservation->update($request->except('costs', 'requirements', 'deadlines', 'todos'));
+
+        $reservation->syncCosts($request->get('costs'));
+        $reservation->syncRequirements($request->get('requirements'));
+        $reservation->syncDeadlines($request->get('deadlines'));
+        $reservation->syncTodos($request->get('todos'));
 
         return $this->response->item($reservation, new ReservationTransformer);
     }

@@ -67,7 +67,7 @@ class Cost extends Model
     public function reservations()
     {
         return $this->belongsToMany(Reservation::class, 'reservation_costs')
-                    ->withPivot('grace_period')
+                    ->withPivot('grace_period', 'locked')
                     ->withTimestamps();
     }
 
@@ -79,5 +79,15 @@ class Cost extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Get all of the cost's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 }

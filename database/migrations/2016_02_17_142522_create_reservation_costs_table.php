@@ -16,6 +16,7 @@ class CreateReservationCostsTable extends Migration
             $table->uuid('cost_id')->index();
             $table->uuid('reservation_id')->index();
             $table->integer('grace_period')->default(0);
+            $table->boolean('locked')->default(false);
             $table->timestamps();
         });
     }

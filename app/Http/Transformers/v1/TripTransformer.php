@@ -3,10 +3,13 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Trip;
+use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
 class TripTransformer extends TransformerAbstract
 {
+
+    private $validParams = ['status'];
 
     /**
      * List of resources to automatically include
@@ -34,6 +37,7 @@ class TripTransformer extends TransformerAbstract
             'campaign_id'     => $trip->campaign_id,
             'rep_id'          => $trip->rep_id,
             'spots'           => (int) $trip->spots,
+            'status'          => $trip->status,
             'companion_limit' => (int) $trip->companion_limit,
             'reservations'    => (int) $trip->reservations()->count(),
             'country_code'    => $trip->country_code,
@@ -43,8 +47,10 @@ class TripTransformer extends TransformerAbstract
             'started_at'      => $trip->started_at->toDateString(),
             'ended_at'        => $trip->ended_at->toDateString(),
             'todos'           => $trip->todos,
+            'prospects'       => $trip->prospects,
             'description'     => $trip->description,
             'published_at'    => $trip->published_at ? $trip->published_at->toDateTimeString() : null,
+            'closed_at'       => $trip->closed_at->toDateTimeString(),
             'created_at'      => $trip->created_at->toDateTimeString(),
             'updated_at'      => $trip->updated_at->toDateTimeString(),
             'links'           => [
@@ -110,14 +116,31 @@ class TripTransformer extends TransformerAbstract
      * @param Trip $trip
      * @return \League\Fractal\Resource\Item
      */
-    public function includeCosts(Trip $trip)
+    public function includeCosts(Trip $trip, ParamBag $params = null)
     {
-        $costs = $trip->costs;
 
-        if($costs)
-            return $this->collection($costs, new CostTransformer);
+        // Optional params validation
+        if ( ! is_null($params)) {
+            $this->validateParams($params); 
 
-        return null;
+            $costs = [];
+            
+            if (in_array('active', $params->get('status')))
+            {
+                $active = $trip->activeCosts;
+
+                $maxDate = $active->where('type', 'incremental')->max('active_at');
+
+                $costs = $active->reject(function ($value, $key) use($maxDate) {
+                    return $value->type == 'incremental' && $value->active_at < $maxDate;
+                });
+            }
+        
+        } else {
+            $costs = $trip->costs;
+        }
+
+        return $this->collection($costs, new CostTransformer);
     }
 
     /**
@@ -170,5 +193,17 @@ class TripTransformer extends TransformerAbstract
         $facilitators = $trip->facilitators;
 
         return $this->collection($facilitators, new FacilitatorTransformer);
+    }
+
+    private function validateParams($params)
+    {
+        $usedParams = array_keys(iterator_to_array($params));
+        if ($invalidParams = array_diff($usedParams, $this->validParams)) {
+            throw new \Exception(sprintf(
+                'Invalid param(s): "%s". Valid param(s): "%s"', 
+                implode(',', $usedParams), 
+                implode(',', $this->validParams)
+            ));
+        }
     }
 }

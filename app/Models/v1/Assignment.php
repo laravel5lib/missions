@@ -24,4 +24,14 @@ class Assignment extends Model
     {
         return $this->morphOne(TeamMember::class, 'assignable');
     }
+
+    /**
+     * Get all of the assignment's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

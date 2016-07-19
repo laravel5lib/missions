@@ -30,7 +30,7 @@ class TripRequest extends FormRequest
             'campaign_id'                     => 'exists:campaigns,id',
             'rep_id'                          => 'exists:reps,id',
             'spots'                           => 'numeric',
-            'country_code'                    => 'required|in:' . $this->getCountries(),
+            'country_code'                    => 'required',
             'type'                            => 'required|in:full,media,medical,short',
             'difficulty'                      => 'required|in:level_1,level_2,level_3',
             'thumb_src'                       => 'image',
@@ -43,14 +43,15 @@ class TripRequest extends FormRequest
             'costs.*.amount'                  => 'required|numeric',
             'costs.*.type'                    => 'required|string',
             'costs.*.payments'                => 'sometimes|required|array',
-            'costs.*.payments.*.amount_owed'  => 'requied|numeric',
-            'costs.*.payments.*.percent_owed' => 'requied|numeric',
+            'costs.*.payments.*.amount_owed'  => 'required|numeric',
+            'costs.*.payments.*.percent_owed' => 'required|numeric',
             'costs.*.payments.*.due_at'       => 'date',
             'costs.*.payments.*.upfront'      => 'boolean',
             'costs.*.payments.*.grace_period' => 'required|numeric',
             'todos'                           => 'array',
+            'prospects'                       => 'array',
             'description'                     => 'string',
-            'deadlines'                       => 'sometimes|required|array',
+            'deadlines'                       => 'array',
             'deadlines.*.name'                => 'required|string',
             'deadlines.*.date'                => 'required|date',
             'deadlines.*.grace_period'        => 'numeric',
@@ -58,28 +59,9 @@ class TripRequest extends FormRequest
             'published_at'                    => 'date',
             'companion_limit'                 => 'numeric',
             'requirements'                    => 'sometimes|required|array',
-            'requirements.*.name'             => 'required|string',
-            'requirements.*.resources'        => 'required|array',
+            'requirements.*.item'             => 'required|string',
             'requirements.*.due_at'           => 'required|date',
             'requirements.*.grace_period'     => 'numeric'
         ];
-    }
-
-    /**
-     * Get allowable country codes
-     *
-     * @return string
-     */
-    private function getCountries()
-    {
-        $country_codes = Country::codes();
-
-        if($this->has('campaign_id'))
-        {
-            $campaign = Campaign::findOrFail($this->get('campaign_id'));
-            $country_codes = implode(',', array_values($campaign->countries));
-        }
-
-        return $country_codes;
     }
 }

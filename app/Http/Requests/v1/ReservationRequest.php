@@ -32,7 +32,6 @@ class ReservationRequest extends FormRequest
             'status' => 'required|in:single,married',
             'shirt_size' => 'required|in:'.$this->getShirtSizes(),
             'birthday' => 'required|date|before:'.Carbon::now()->subYears(12),
-            'amount' => 'required|numeric',
             'user_id' => 'required|exists:users,id',
             'trip_id' => 'required|exists:trips,id',
             'rep_id' => 'exists|reps,id',

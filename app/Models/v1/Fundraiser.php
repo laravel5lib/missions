@@ -24,7 +24,8 @@ class Fundraiser extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'expires_at', 'goal_amount', 'description'
+        'name', 'expires_at', 'goal_amount', 'description',
+        'sponsor_id', 'sponsor_type'
     ];
 
     /**
@@ -81,5 +82,15 @@ class Fundraiser extends Model
     public function raised()
     {
         return $this->donations()->sum('amount');
+    }
+
+    /**
+     * Get all of the fundraiser's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 }

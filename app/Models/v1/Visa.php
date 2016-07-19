@@ -85,6 +85,16 @@ class Visa extends Model
     }
 
     /**
+     * Get all of the visa's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    /**
      * Set the visa's given names.
      *
      * @param $value

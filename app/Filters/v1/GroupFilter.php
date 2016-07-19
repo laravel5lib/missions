@@ -11,7 +11,9 @@ class GroupFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'tags' => ['tags']
+    ];
 
     /**
      * Apply automatically.

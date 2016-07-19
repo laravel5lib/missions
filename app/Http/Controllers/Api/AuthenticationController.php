@@ -9,7 +9,7 @@ use App\Http\Requests\v1\UserRequest;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\v1\AuthenticationRequest;
 
-class AuthenticationController extends ApiController
+class AuthenticationController extends Controller
 {
     /**
      * Authenticate a user.

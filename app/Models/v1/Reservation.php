@@ -3,10 +3,10 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Collection;
 
 class Reservation extends Model
 {
@@ -26,7 +26,7 @@ class Reservation extends Model
      */
     protected $fillable = [
         'given_names', 'surname', 'gender', 'status',
-        'shirt_size', 'birthday', 'amount', 'user_id',
+        'shirt_size', 'birthday', 'user_id',
         'trip_id', 'rep_id', 'todos', 'companions', 'costs',
         'passport_id'
     ];
@@ -93,7 +93,7 @@ class Reservation extends Model
     public function costs()
     {
         return $this->belongsToMany(Cost::class, 'reservation_costs')
-                    ->withPivot('grace_period')
+                    ->withPivot('grace_period', 'locked')
                     ->withTimestamps();
     }
 
@@ -130,6 +130,16 @@ class Reservation extends Model
     }
 
     /**
+     * Get all of the reservation's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    /**
      * Get all of the reservation's requirements
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -137,7 +147,7 @@ class Reservation extends Model
     public function requirements()
     {
         return $this->belongsToMany(Requirement::class, 'reservation_requirements')
-                    ->withPivot('id','grace_period', 'status', 'completed_at')
+                    ->withPivot('grace_period', 'status', 'completed_at')
                     ->withTimestamps();
     }
 
@@ -149,6 +159,16 @@ class Reservation extends Model
     public function fundraisers()
     {
         return $this->morphMany(Fundraiser::class, 'fundable');
+    }
+
+    /**
+     * Get all of the reservation's donations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function donations()
+    {
+        return $this->morphMany(Donation::class, 'designation');
     }
 
     /**
@@ -202,5 +222,105 @@ class Reservation extends Model
         {
             return $this->birthday->diffInYears();
         }
+    }
+
+    /**
+     * Syncronize all the trip's costs.
+     *
+     * @param $costs
+     */
+    public function syncCosts($costs)
+    {
+        if ( ! $costs) return;
+        
+        if ( ! $costs instanceof Collection)
+            $costs = collect($costs);
+
+        $data = $costs->pluck('id')->all();
+        
+        $this->costs()->sync($data);
+    }
+
+    /**
+     * Syncronize all the reservation's requirements.
+     *
+     * @param $requirements
+     */
+    public function syncRequirements($requirements)
+    {
+        if ( ! $requirements) return;
+
+        if ( ! $requirements instanceof Collection)
+            $requirements = collect($requirements);
+
+        $data = $requirements->keyBy('id')->map(function($item, $key) {
+            return [
+                'grace_period' => $item->grace_period,
+                'status' => $item->status ? $item->status : 'incomplete',
+                'completed_at' => $item->completed_at ? $item->completed_at : null
+            ];
+        })->toArray();
+
+        $this->requirements()->sync($data);
+    }
+
+    /**
+     * Syncronize all the reservation's deadlines.
+     *
+     * @param $deadlines
+     */
+    public function syncDeadlines($deadlines)
+    {
+        if ( ! $deadlines) return;
+
+        if ( ! $deadlines instanceof Collection)
+            $deadlines = collect($deadlines);
+
+        $data = $deadlines->keyBy('id')->map(function($item, $key) {
+            return [
+                'grace_period' => $item->grace_period
+            ];
+        })->toArray();
+
+        $this->deadlines()->sync($data);
+    }
+
+    /**
+     * Add an array of todos to the reservation.
+     * 
+     * @param array $todos [description]
+     */
+    public function addTodos(array $todos)
+    {
+        if ( ! $todos) return;
+
+        $data = collect($todos)->map(function($item, $key) {
+            return new Todo(['task' => $item]);
+        });
+
+        $this->todos()->saveMany($data);
+    }
+
+    /**
+     * Syncronize all the reservation's todos.
+     *
+     * @param $todos
+     */
+    public function syncTodos($todos)
+    {
+        if ( ! $todos) return;
+
+        $ids = $this->todos()->lists('id', 'id');
+
+        foreach($todos as $todo)
+        {
+            if( ! isset($todo['id'])) $todo['id'] = null;
+
+            array_forget($ids, $todo['id']);
+
+            $this->todos()->updateOrCreate(['id' => $todo['id']], $todos);
+        }
+
+        if( ! $ids->isEmpty()) $this->todos()->delete($ids);
     }
 }

@@ -27,7 +27,9 @@ class Donation extends Model
         'amount', 'description', 'message', 'anonymous',
         'email', 'phone', 'name', 'company_name',
         'address_street', 'address_city', 'address_state',
-        'address_zip', 'address_country'
+        'address_zip', 'address_country', 'currency',
+        'payment_type', 'donor_id', 'donor_type', 'designation_id',
+        'designation_type'
     ];
 
     /**
@@ -81,16 +83,6 @@ class Donation extends Model
     }
 
     /**
-     * Get the donation's payment method.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
-     */
-    public function payment()
-    {
-        return $this->morphTo(); // Card, Check, Cash, Credit
-    }
-
-    /**
      * Scope a query to only include donations
      * designated to a specific fundraiser.
      *
@@ -102,6 +94,16 @@ class Donation extends Model
     {
         return $query->where('designation_type', 'App\Models\v1\Fundraiser')
                      ->where('designation_id', $id);
+    }
+
+    /**
+     * Get all of the donation's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
 }

@@ -10,7 +10,9 @@ class TransportFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'tags' => ['tags']
+    ];
 
     /**
      * Filter by campaign

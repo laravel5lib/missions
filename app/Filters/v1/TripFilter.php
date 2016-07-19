@@ -12,15 +12,10 @@ class TripFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'tags' => ['tags']
+    ];
 
-    public function setup()
-    {
-        if ( ! app(Auth::class)->user()->isAdmin())
-        {
-            $this->onlyPublished();
-        }
-    }
 
     public function onlyPublished()
     {

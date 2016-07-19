@@ -23,8 +23,9 @@ class TripsController extends Controller
      */
     public function __construct(Trip $trip)
     {
-        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
+        $this->middleware('internal', ['only' => ['store', 'update', 'destroy']]);
+        $this->middleware('api.auth', ['only' => ['store', 'update', 'destroy']]);
+        $this->middleware('jwt.refresh', ['only' => ['store', 'update', 'destroy']]);
         $this->trip = $trip;
     }
 
@@ -53,12 +54,6 @@ class TripsController extends Controller
     {
         $trip = $this->trip->findOrFail($id);
 
-        if ($this->auth->user()->cannot('show', $trip)) {
-            abort(403);
-        }
-
-        $this->authorize($trip);
-
         return $this->response->item($trip, new TripTransformer);
     }
 
@@ -71,10 +66,6 @@ class TripsController extends Controller
     public function store(TripRequest $request)
     {
         $trip = $this->trip->create($request->except('deadlines', 'requirements', 'costs'));
-
-        if ($this->auth->user()->cannot('store', $trip)) {
-            abort(403);
-        }
 
         // Syncronize resources
         $trip->syncDeadlines($request->get('deadlines'));
@@ -95,10 +86,6 @@ class TripsController extends Controller
     {
         $trip = $this->trip->findOrFail($id);
 
-        if ($this->auth->user()->cannot('update', $trip)) {
-            abort(403);
-        }
-
         $trip->update($request->except('deadlines', 'requirements', 'costs'));
 
         // Syncronize resources
@@ -118,11 +105,7 @@ class TripsController extends Controller
     public function destroy($id)
     {
         $trip = Trip::findOrFail($id);
-
-        if ($this->auth->user()->cannot('destroy', $trip)) {
-            abort(403);
-        }
-
+        
         $trip->delete();
 
         return $this->response->noContent();

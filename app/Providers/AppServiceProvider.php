@@ -28,15 +28,15 @@ class AppServiceProvider extends ServiceProvider
             'App\Models\v1\Assignment'
         ]);
 
-        User::created(function ($user) {
-            Mail::queue('emails.welcome', $user->toArray(), function ($message) use($user) {
-                $message->from('mail@missions.me', 'Missions.Me');
-                $message->sender('mail@missions.me', 'Missions.Me');
-                $message->to($user->email, $user->name);
-                $message->replyTo('go@missions.me', 'Missions.Me');
-                $message->subject('Welcome to Missions.Me');
-            });
-        });
+//        User::created(function ($user) {
+//            Mail::queue('emails.welcome', $user->toArray(), function ($message) use($user) {
+//                $message->from('mail@missions.me', 'Missions.Me');
+//                $message->sender('mail@missions.me', 'Missions.Me');
+//                $message->to($user->email, $user->name);
+//                $message->replyTo('go@missions.me', 'Missions.Me');
+//                $message->subject('Welcome to Missions.Me');
+//            });
+//        });
 
         Reservation::created(function ($reservation) {
             // needs to fire after costs sync

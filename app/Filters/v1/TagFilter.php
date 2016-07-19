@@ -2,7 +2,7 @@
 
 use EloquentFilter\ModelFilter;
 
-class AssignmentFilter extends ModelFilter
+class TagFilter extends ModelFilter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -10,7 +10,10 @@ class AssignmentFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [
-        'tags' => ['tags']
-    ];
+    public $relations = [];
+
+    public function tags($names)
+    {
+        return $this->whereIn('name', $names);
+    }
 }

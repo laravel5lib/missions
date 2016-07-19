@@ -35,7 +35,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/dashboard/reservations', function () use ($dispatcher) {
     //Auth::loginUsingId(Auth::user()->id);
-    Auth::loginUsingId('39edac0c-51dc-48af-a631-983659a6a630');
+//    Auth::loginUsingId('39edac0c-51dc-48af-a631-983659a6a630');
 
     try {
         $reservations = $dispatcher->get('reservations', ['include' => 'trip.campaign,trip.group', 'user' => array(Auth::user()->id)]);

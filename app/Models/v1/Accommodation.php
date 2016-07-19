@@ -22,11 +22,23 @@ class Accommodation extends Model
 
     public function region()
     {
+        // PROPOSED CHANGE
+//        return $this->belongsToMany(Region::class, 'region_accommodations');
         return $this->belongsTo(Region::class);
     }
 
     public function occupants()
     {
         return $this->hasMany(Occupant::class);
+    }
+
+    /**
+     * Get all of the accommodation's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 }

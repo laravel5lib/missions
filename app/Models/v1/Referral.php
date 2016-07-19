@@ -30,4 +30,14 @@ class Referral extends Model
     {
         return $this->morphTo();
     }
+
+    /**
+     * Get all of the referral's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

@@ -12,7 +12,9 @@ class TeamFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'tags' => ['tags']
+    ];
 
     public function setup()
     {

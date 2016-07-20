@@ -23,13 +23,29 @@ class CardRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'card_id' => 'required_without:number',
-            'number' => 'required_without:card_id|string',
+        $required = [
+            'card_id'   => 'required_without:number',
+            'number'    => 'required_without:card_id|string',
             'exp_month' => 'required_with:number|digits:2',
-            'exp_year' => 'required_with:number|digits:4',
-            'cvc' => 'required_with:number|digits_between:3,4',
+            'exp_year'  => 'required_with:number|digits:4',
+            'cvc'       => 'required_with:number|digits_between:3,4',
+        ];
+
+        if ($this->isMethod('put'))
+        {
+            $required = [
+                'card_id'   => 'sometimes|required_without:number',
+                'number'    => 'sometimes|required_without:card_id|string',
+                'exp_month' => 'sometimes|required_with:number|digits:2',
+                'exp_year'  => 'sometimes|required_with:number|digits:4',
+                'cvc'       => 'sometimes|required_with:number|digits_between:3,4',
+            ];
+        }
+
+        $optional = [
             'customer_id' => 'string'
         ];
+
+        return $rules = $required + $optional;
     }
 }

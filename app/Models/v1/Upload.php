@@ -14,15 +14,5 @@ class Upload extends Model
         'id', 'source', 'name', 'type'
     ];
 
-    /**
-     * Get all of the upload's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
-    }
-
 }
 

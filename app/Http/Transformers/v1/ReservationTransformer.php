@@ -28,6 +28,8 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function transform(Reservation $reservation)
     {
+        $reservation->load('tagged');
+
         return [
             'id'              => $reservation->id,
             'given_names'     => $reservation->given_names,
@@ -40,6 +42,7 @@ class ReservationTransformer extends TransformerAbstract
             'companion_limit' => (int) $reservation->companions_limit,
             'created_at'      => $reservation->created_at->toDateTimeString(),
             'updated_at'      => $reservation->updated_at->toDateTimeString(),
+            'tags'            => $reservation->tagNames(),
             'links'           => [
                 [
                     'rel' => 'self',

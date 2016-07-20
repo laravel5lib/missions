@@ -111,5 +111,8 @@ class TripsController extends Controller
         $trip->syncCosts($request->get('costs'));
         $trip->syncRequirements($request->get('requirements'));
         $trip->syncFacilitators($request->get('facilitators'));
+
+        if ($request->has('tags'))
+            $trip->retag($request->get('tags'));
     }
 }

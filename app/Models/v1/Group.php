@@ -83,7 +83,9 @@ class Group extends Model
      */
     public function managers()
     {
-        return $this->hasMany(Manager::class);
+        return $this->belongsToMany(User::class, 'managers')
+                    ->withTimestamps()
+                    ->withPivot('permissions');
     }
 
     /**
@@ -114,5 +116,17 @@ class Group extends Model
     public function tags()
     {
         return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    /**
+     * Synchronize all the group's managers.
+     *
+     * @param $user_ids
+     */
+    public function syncManagers($user_ids)
+    {
+        if ( ! $user_ids) return;
+
+        $this->managers()->sync($user_ids);
     }
 }

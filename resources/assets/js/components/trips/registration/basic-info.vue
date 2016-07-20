@@ -31,7 +31,7 @@
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="form-group" :class="{ 'has-error': checkForError('zip') }">
-									<label for="infoZip">ZIP/Postal Code</label>
+									<label for="infoZip">Zip Code</label>
 									<input type="text" class="form-control input-sm" v-model="zipCode"
 										   v-validate:zip="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoZip" placeholder="12345">
 								</div>
@@ -311,7 +311,7 @@
 					<div class="col-md-6">
 						<label>Full Legal Name</label>
 						<div class="row">
-							<div class="col-sm-4">
+							<div class="col-sm-6">
 								<div class="form-group" :class="{ 'has-error': checkForError('firstName') }">
 									<!--<label for="infoFirstName">First</label>-->
 									<input type="text" class="form-control input-sm" v-model="firstName"
@@ -319,7 +319,7 @@
 										   id="infoFirstName">
 								</div>
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-6">
 								<div class="form-group" :class="{ 'has-error': checkForError('middleName') }">
 									<!--<label for="infoMiddleName">Middle</label>-->
 									<input type="text" class="form-control input-sm" v-model="middleName"
@@ -327,7 +327,7 @@
 										   id="infoMiddleName">
 								</div>
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-6">
 								<div class="form-group" :class="{ 'has-error': checkForError('lastName') }">
 									<!--<label for="infoLastName">Last</label>-->
 									<input type="text" class="form-control input-sm" v-model="lastName"
@@ -453,20 +453,8 @@
 							</div>
 						</div>
 
-						<div class="form-group" :class="{ 'has-error': checkForError('size') }">
-							<label for="infoShirtSize">Shirt Sizes</label>
-							<select class="form-control input-sm" v-model="size" v-validate:size="{ required: true }" :classes="{ invalid: 'has-error' }"
-									id="infoShirtSize">
-								<option value="S">S (Small)</option>
-								<option value="M">M (Medium)</option>
-								<option value="L">L (Large)</option>
-								<option value="XL">XL (Extra Large)</option>
-								<option value="XXL">XXL (2 Extra Large)</option>
-							</select>
-						</div>
-
 						<div class="row">
-							<div class="col-sm-7">
+							<div class="col-sm-12">
 								<div class="row">
 									<div class="col-sm-12">
 										<label for="infoHeightA">Height</label>
@@ -489,7 +477,10 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-5">
+						</div>
+
+						<div class="row">
+							<div class="col-sm-6">
 								<div class="form-group" :class="{ 'has-error': checkForError('weight') }">
 									<label for="infoWeight">Weight</label>
 									<div class="input-group input-group-sm">
@@ -498,8 +489,20 @@
 									</div>
 								</div>
 							</div>
+							<div class="col-sm-6">
+								<div class="form-group" :class="{ 'has-error': checkForError('size') }">
+									<label for="infoShirtSize">Shirt Sizes</label>
+									<select class="form-control input-sm" v-model="size" v-validate:size="{ required: true }" :classes="{ invalid: 'has-error' }"
+											id="infoShirtSize">
+										<option value="S">S (Small)</option>
+										<option value="M">M (Medium)</option>
+										<option value="L">L (Large)</option>
+										<option value="XL">XL (Extra Large)</option>
+										<option value="XXL">XXL (2 Extra Large)</option>
+									</select>
+								</div>
+							</div>
 						</div>
-
 					</div>
 				</form>
 			</validator>

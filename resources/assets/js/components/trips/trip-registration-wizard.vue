@@ -1,6 +1,6 @@
 <template>
 	<div class="row">
-		<div class="col-sm-4 col-md-3">
+		<div class="col-sm-5 col-md-4">
 			<ul class="nav nav-pills nav-stacked">
 				<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
 					<a @click="toStep(step)">
@@ -11,7 +11,7 @@
 
 			</ul>
 		</div>
-		<div class="col-sm-8 col-md-9 {{currentStep.view}}">
+		<div class="col-sm-7 col-md-8 {{currentStep.view}}">
 			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 			</component>

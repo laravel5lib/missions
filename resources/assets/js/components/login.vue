@@ -24,7 +24,8 @@
                 <button type="submit" class="btn btn-primary btn-block" v-on:click="attempt">
                   Login
                 </button>
-                <a class="btn btn-block btn-link" href="#">Forgot Your Password?</a>
+                <hr class="divider inv sm" />
+                <a class="small" href="#">Forgot Password?</a>
               </div><!-- end col -->
             </div><!-- end form-group -->
           </form><!-- end form -->

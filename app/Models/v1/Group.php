@@ -28,7 +28,8 @@ class Group extends Model
         'name', 'type', 'timezone', 'url', 'public',
         'address_one', 'address_two',
         'city', 'state', 'zip', 'country', 'phone_one',
-        'phone_two', 'email', 'description'
+        'phone_two', 'email', 'description',
+        'stripe_id', 'card_brand', 'card_last_four'
     ];
 
     /**
@@ -103,5 +104,15 @@ class Group extends Model
     public function fundraisers()
     {
         return $this->morphMany(Fundraiser::class, 'sponsor');
+    }
+
+    /**
+     * Get all of the group's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 }

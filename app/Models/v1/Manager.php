@@ -74,4 +74,14 @@ class Manager extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get all of the manager's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

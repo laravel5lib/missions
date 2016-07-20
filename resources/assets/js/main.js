@@ -5,15 +5,24 @@ import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
+import reservationsList from './components/reservations/reservations-list.vue';
+import donationsList from './components/reservations/donations-list.vue';
 
 // admin components
-import campaignCreate from './components/campaigns/admin-campaign-create.vue';
-import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
-import campaignDetails from './components/campaigns/admin-campaign-details.vue';
+import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
+import adminCampaignEdit from './components/campaigns/admin-campaign-edit.vue';
+import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
+import adminCampaignTripCreate from './components/trips/admin-trip-create.vue';
+import adminCampaignTripEdit from './components/trips/admin-trip-edit.vue';
+import adminTrips from './components/trips/admin-trips-list.vue';
+import adminTripsReservations from './components/trips/admin-trip-reservations-list.vue';
+import adminTripsDuplicate from './components/trips/admin-trip-duplicate.vue';
+import adminTripsDelete from './components/trips/admin-trip-delete.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
+window._ = require('underscore');
 require('jquery.cookie');
 require('bootstrap-sass');
 
@@ -74,6 +83,19 @@ Vue.filter('phone', {
     }
 });
 
+Vue.filter('number', {
+    read:function (number, decimals) {
+        return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
+    },
+    write: function(number, numberVal, decimals) {
+        return number;
+    }
+});
+
+Vue.filter('moment', function (val, format) {
+    return moment(val).format(format||'LL');
+});
+
 new Vue({
     el: '#app',
     data: {
@@ -90,9 +112,19 @@ new Vue({
         groupTrips,
         groupTripWrapper,
         tripRegWizard,
-        campaignCreate,
-        campaignEdit,
-        campaignDetails,
+        reservationsList,
+        donationsList,
+
+        // admin components
+        adminCampaignCreate,
+        adminCampaignEdit,
+        adminCampaignDetails,
+        adminCampaignTripCreate,
+        adminCampaignTripEdit,
+        adminTrips,
+        adminTripsReservations,
+        adminTripsDuplicate,
+        adminTripsDelete,
     ],
     http: {
         headers: {
@@ -108,8 +140,8 @@ new Vue({
     methods: {
         setUser: function (user) {
           // Save user info
-          this.user = user
-          this.authenticated = true
+          this.user = user;
+          this.authenticated = true;
         }
     }
 });

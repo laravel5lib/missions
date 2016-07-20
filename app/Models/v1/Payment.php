@@ -24,4 +24,14 @@ class Payment extends Model
     {
         return $this->belongsTo(Cost::class);
     }
+
+    /**
+     * Get all of the payment's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

@@ -28,4 +28,14 @@ class Passenger extends Model
     {
         return $this->belongsTo(Transport::class);
     }
+
+    /**
+     * Get all of the passenger's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

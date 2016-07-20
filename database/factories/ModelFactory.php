@@ -37,7 +37,8 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
     return array_merge($user, [
         'name'     => 'Admin',
         'email'    => 'admin@admin.com',
-        'password' => 'secret'
+        'password' => 'secret',
+        'admin'    => true
     ]);
 });
 
@@ -99,11 +100,12 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
         'ended_at'        => $ended_at,
         'todos'           => $faker->sentences(6),
         'prospects'       => $faker->randomElements([
-            'adults', 'teens', 'men', 'women', 'medical professionals', 
-            'media professionals', 'business professionals', 'pastors', 
+            'adults', 'teens', 'men', 'women', 'medical professionals',
+            'media professionals', 'business professionals', 'pastors',
             'families'], 4),
         'description'     => $faker->paragraph(10),
-        'published_at'    => $faker->optional(0.9)->dateTimeThisYear
+        'published_at'    => $faker->optional(0.9)->dateTimeThisYear,
+        'closed_at'       => $faker->dateTimeThisYear
     ];
 });
 
@@ -298,6 +300,7 @@ $factory->define(App\Models\v1\Donation::class, function (Faker\Generator $faker
     return [
         'name'                 => $faker->name,
         'amount'               => $faker->numberBetween(1, 1000) * 100,
+        'currency'             => $faker->currencyCode,
         'description'          => $faker->sentence(4),
         'message'              => $faker->sentence(5),
         'anonymous'            => $faker->boolean(25),
@@ -313,8 +316,7 @@ $factory->define(App\Models\v1\Donation::class, function (Faker\Generator $faker
         'designation_type'     => 'fundraisers',
         'donor_id'             => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
         'donor_type'           => 'users',
-        'payment_id'           => 'foo',
-        'payment_type'         => 'cards',
+        'payment_type'         => 'card',
     ];
 });
 
@@ -618,5 +620,17 @@ $factory->define(App\Models\v1\Upload::class, function (Faker\Generator $faker)
         'name' => $faker->userName,
         'source' => $faker->imageUrl(),
         'type' => $faker->randomElement(['photo', 'thumbnail', 'avatar', 'banner', 'file'])
+    ];
+});
+
+
+/**
+ * Tag Factory
+ */
+$factory->define(App\Models\v1\Tag::class, function (Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->word,
+        'color' => $faker->hexColor
     ];
 });

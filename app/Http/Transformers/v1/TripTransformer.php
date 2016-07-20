@@ -37,6 +37,7 @@ class TripTransformer extends TransformerAbstract
             'campaign_id'     => $trip->campaign_id,
             'rep_id'          => $trip->rep_id,
             'spots'           => (int) $trip->spots,
+            'status'          => $trip->status,
             'companion_limit' => (int) $trip->companion_limit,
             'reservations'    => (int) $trip->reservations()->count(),
             'country_code'    => $trip->country_code,
@@ -49,6 +50,7 @@ class TripTransformer extends TransformerAbstract
             'prospects'       => $trip->prospects,
             'description'     => $trip->description,
             'published_at'    => $trip->published_at ? $trip->published_at->toDateTimeString() : null,
+            'closed_at'       => $trip->closed_at->toDateTimeString(),
             'created_at'      => $trip->created_at->toDateTimeString(),
             'updated_at'      => $trip->updated_at->toDateTimeString(),
             'links'           => [

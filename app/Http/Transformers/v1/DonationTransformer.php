@@ -28,7 +28,7 @@ class DonationTransformer extends TransformerAbstract
             'id'           => $donation->id,
             'name'         => $donation->name,
             'company_name' => $donation->company_name,
-            'amount'       => $donation->amount / 100,
+            'amount'       => (int) $donation->amount,
             'description'  => $donation->description,
             'message'      => $donation->message,
             'anonymous'    => (bool) $donation->anonymous,

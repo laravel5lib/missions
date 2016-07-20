@@ -66,14 +66,4 @@ class TeamMember extends Model
     {
         return $this->belongsTo(Role::class);
     }
-
-    /**
-     * Get all of the member's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
-    }
 }

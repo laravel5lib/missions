@@ -31,14 +31,4 @@ class Accommodation extends Model
     {
         return $this->hasMany(Occupant::class);
     }
-
-    /**
-     * Get all of the accommodation's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
-    }
 }

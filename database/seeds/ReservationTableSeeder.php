@@ -48,10 +48,7 @@ class ReservationTableSeeder extends Seeder
 
             $r->notes()->save(factory(App\Models\v1\Note::class)->make());
 
-            $r->tags()->saveMany([
-                factory(App\Models\v1\Tag::class)->make(),
-                factory(App\Models\v1\Tag::class)->make()
-            ]);
+            $r->tag(['vip', 'missionary']);
         });
     }
 }

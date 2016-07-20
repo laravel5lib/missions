@@ -144,7 +144,9 @@ class Trip extends Model
      */
     public function facilitators()
     {
-        return $this->hasMany(Facilitator::class);
+        return $this->belongsToMany(User::class, 'facilitators')
+                    ->withTimestamps()
+                    ->withPivot('permissions');
     }
 
     /**
@@ -165,16 +167,6 @@ class Trip extends Model
     public function reservations()
     {
         return $this->hasMany(Reservation::class);
-    }
-
-    /**
-     * Get all of the trip's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     /**
@@ -256,6 +248,23 @@ class Trip extends Model
         if( ! $ids->isEmpty()) Requirement::destroy($ids);
     }
 
+    /**
+     * Syncronize all the trip's facilitators.
+     *
+     * @param $user_ids
+     */
+    public function syncFacilitators($user_ids)
+    {
+        if ( ! $user_ids) return;
+
+        $this->facilitators()->sync($user_ids);
+    }
+
+    /**
+     * Check if trip is published.
+     *
+     * @return bool
+     */
     public function isPublished()
     {
         if (is_null($this->published_at)) return false;

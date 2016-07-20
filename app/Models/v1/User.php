@@ -416,16 +416,6 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get all of the user's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
-    }
-
-    /**
      * Check if user is an admin.
      *
      * @return bool

@@ -52,6 +52,7 @@ class GroupRequest extends FormRequest
             'email'        => 'email',
             'country_code' => 'required|in:' . Country::codes(),
             'public'       => 'boolean',
+            'managers'     => 'array'
         ];
     }
 }

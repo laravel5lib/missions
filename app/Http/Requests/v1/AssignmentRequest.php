@@ -23,15 +23,31 @@ class AssignmentRequest extends Request
      */
     public function rules()
     {
-        return [
+        $required = [
             'user_id'     => 'required|exists:users,id',
             'given_names' => 'required|string|max:100',
-            'surname'     => 'string|max:100',
-            'gender'      => 'in:male,female',
-            'status'      => 'in:single,married',
-            'birthday'    => 'date',
             'campaign_id' => 'required|exists:campaigns,id',
             'type'        => 'required|in:translator,coordinator,transportation,director'
         ];
+
+        if ($this->isMethod('put'))
+        {
+            $required = [
+                'user_id'     => 'sometimes|required|exists:users,id',
+                'given_names' => 'sometimes|required|string|max:100',
+                'campaign_id' => 'sometimes|required|exists:campaigns,id',
+                'type'        => 'sometimes|required|in:translator,coordinator,transportation,director'
+            ];
+        }
+
+        $optional = [
+            'surname'  => 'string|max:100',
+            'gender'   => 'in:male,female',
+            'status'   => 'in:single,married',
+            'birthday' => 'date',
+            'tags'     => 'array'
+        ];
+
+        return $rules = $required + $optional;
     }
 }

@@ -1,29 +1,37 @@
 <template>
-	<div class="row">
-		<div class="col-sm-4 col-md-3">
-			<ul class="nav nav-pills nav-stacked">
-				<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
-					<a @click="toStep(step)">
-						<span class="fa" :class="{'fa-chevron-right':!step.complete, 'fa-check': step.complete}"></span>
-						{{step.name}}
-					</a>
-				</li>
-
-			</ul>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">{{ $trip->country_name }} Trip Registration</h3>
 		</div>
-		<div class="col-sm-8 col-md-9 {{currentStep.view}}">
-			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-4 col-md-3">
+					<ul class="nav nav-pills nav-stacked">
+						<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
+							<a @click="toStep(step)">
+								<span class="fa" :class="{'fa-chevron-right':!step.complete, 'fa-check': step.complete}"></span>
+								{{step.name}}
+							</a>
+						</li>
 
-			</component>
-			<hr>
-			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
+					</ul>
+				</div>
+				<div class="col-sm-8 col-md-9 {{currentStep.view}}">
+					<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
+
+					</component>
+				</div>
+
+			</div>
+		</div>
+		<div class="panel-footer text-right">
+			<div class="btn-group btn-group-sm" role="group" aria-label="...">
 				<!--<a class="btn btn-link" data-dismiss="modal">Cancel</a>-->
 				<a class="btn btn-default" @click="backStep()">Back</a>
 				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep()">Continue</a>
 				<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">Finish</a>
 			</div>
 		</div>
-
 	</div>
 </template>
 <style>

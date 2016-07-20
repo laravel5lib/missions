@@ -4,7 +4,7 @@
 			<h4>Payment Details</h4>
 			<hr>
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-12">
 					<ul class="list-group">
 						<li class="list-group-item">
 							Item
@@ -78,14 +78,15 @@
 								<td class="text-danger">{{-upfrontTotal | currency}}</td>
 							</tr>
 							<tr>
-								<td style="border-top:2px solid #000000;">Total to Raise</td>
-								<td style="border-top:2px solid #000000;">{{fundraisingGoal | currency}}</td>
+								<td style="border-top:2px solid #000000;"><h5>Total to Raise</h5></td>
+								<td style="border-top:2px solid #000000;"><h5 class="success">{{fundraisingGoal | currency}}</h5></td>
 							</tr>
 
 						</tfoot>
 					</table>
 				</div>
-				<div class="col-md-6">
+				<hr class="divider" />
+				<div class="col-md-12">
 					<validator name="PaymentDetails">
 						<form novalidate role="form">
 							<div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">

@@ -2,6 +2,8 @@
     <div class="row">
         <div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
             <h4>Additional Trip Options</h4>
+            <hr class="divider" />
+            <hr class="divider inv sm" />
 			<validator name="AdditionalOptions">
 				<form>
 					<div class="checkbox" v-for="option in optionalCosts | orderBy 'name'">

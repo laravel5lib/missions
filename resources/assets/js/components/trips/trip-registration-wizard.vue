@@ -15,8 +15,8 @@
 			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 			</component>
-			<hr>
-			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
+			<hr class="divider" />
+			<div class="btn-group btn-group pull-right" role="group" aria-label="...">
 				<!--<a class="btn btn-link" data-dismiss="modal">Cancel</a>-->
 				<a class="btn btn-default" @click="backStep()">Back</a>
 				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep()">Continue</a>

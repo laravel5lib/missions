@@ -35287,81 +35287,213 @@ if (module.hot) {(function () {  module.hot.accept()
 },{"./campaign-groups.vue":116,"./group-trips.vue":122,"vue":111,"vue-hot-reload-api":107,"vueify/lib/insert-css":112}],124:[function(require,module,exports){
 'use strict';
 
-module.exports = {
-  name: 'login',
-
-  data: function data() {
-    return {
-      user: {
-        email: null,
-        password: null,
-        _token: $('meta[name="csrf-token"]').attr('content')
-      },
-      messages: [],
-
-      // component vars
-      isChildComponent: false,
-      userData: null
-    };
-  },
-
-  methods: {
-    attempt: function attempt(e) {
-      e.preventDefault();
-      var that = this;
-      that.$http.post('/login', this.user).then(function (response) {
-        that.getUserData(response.data.redirect_to);
-      }, function (response) {
-        that.messages = [];
-        if (response.status && response.status === 401) that.messages.push({
-          type: 'danger',
-          message: 'Sorry, we couldn\'t find an account that matches the email and password you provided.'
-        });
-
-        if (response.status && response.status === 422) {
-          that.messages = [{
-            type: 'danger',
-            message: 'Please enter a valid email and password.'
-          }];
-        }
-      });
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-groups',
+    data: function data() {
+        return {
+            groups: [],
+            orderByField: 'name',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {},
+            search: '',
+            status: '',
+            type: ''
+        };
     },
 
-    getUserData: function getUserData(redirectTo) {
-      var that = this;
-      var deferred = $.Deferred();
-      that.$http.get('/api/users/me').then(function (response) {
-        that.$dispatch('userHasLoggedIn', response.data.data);
-
-        if (that.isChildComponent) {
-          that.userData = response.data.data;
-          deferred.resolve(response.data.data);
-        } else {
-          location.href = redirectTo;
+    watch: {
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchGroups();
+        },
+        'page': function page(val, oldVal) {
+            this.searchGroups();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchGroups();
         }
-      }, function (response) {
-        console.log(response);
-        deferred.resolve(response.data.data);
-      });
-      return deferred.promise();
+    },
+
+    methods: {
+        setOrderByField: function setOrderByField(field) {
+            return this.orderByField = field, this.direction = 1;
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'name';
+            this.direction = 1;
+            this.search = '';
+            this.status = '';
+            this.type = '';
+        },
+        searchGroups: function searchGroups() {
+            this.$http.get('groups', {
+                include: 'trips:onlyPublished',
+                search: this.searchText,
+                per_page: this.per_page,
+                page: this.page
+            }).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.groups = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchGroups();
     }
-  },
-  activate: function activate(done) {
-    // Enable child component behavior
-    if (this.$parent != this.$root) {
-      this.isChildComponent = true;
-    }
-    done();
-  },
-  ready: function ready() {
-    if (this.isChildComponent) {
-      // Check if user is logged in
-      this.getUserData(false).then(function (response) {});
-    }
-  }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n      <div class=\"panel panel-default\">\n        <div class=\"panel-body\">\n          <form class=\"form-horizontal\" role=\"form\">\n            <div id=\"alerts\" v-if=\"messages.length > 0\">\n              <div v-for=\"message in messages\" class=\"alert alert-{{ message.type }} alert-dismissible\" role=\"alert\">\n                {{ message.message }}\n              </div>\n            </div><!-- end alert -->\n            <div class=\"form-group\">\n              <div class=\"col-xs-10  col-xs-offset-1\">\n                <label class=\"control-label\">E-Mail Address</label>\n                <input type=\"email\" class=\"form-control\" v-model=\"user.email\">\n              </div><!-- end col -->\n            </div><!-- end form-group -->\n            <div class=\"form-group\">\n              <div class=\"col-xs-10  col-xs-offset-1\">\n                <label class=\"control-label\">Password</label>\n                <input type=\"password\" class=\"form-control\" v-model=\"user.password\">\n              </div><!-- end col -->\n            </div><!-- end form-group -->\n            <div class=\"form-group\">\n              <div class=\"col-xs-10  col-xs-offset-1\">\n                <button type=\"submit\" class=\"btn btn-primary btn-block\" v-on:click=\"attempt\">\n                  Login\n                </button>\n                <hr class=\"divider inv sm\">\n                <a class=\"small\" href=\"#\">Forgot Password?</a>\n              </div><!-- end col -->\n            </div><!-- end form-group -->\n          </form><!-- end form -->\n        </div><!-- end panel-body -->\n</div>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Filters\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"status\" value=\"\"> Any Status\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"status\" value=\"true\"> Public Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"status\" value=\"false\"> Private only\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"\"> Any Type\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"church\"> Church Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"business\"> Business only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"nonprofit\"> Non-Profit Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"youth\"> Private only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"other\"> Other only\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <span class=\"input-group-addon\">Show</span>\n                    <select class=\"form-control\" v-model=\"per_page\">\n                        <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                    </select>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n                | <a class=\"btn btn-primary btn-sm\" href=\"groups/create\"><i class=\"fa fa-plus\"></i> New</a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'name'}\">\n                Group\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                Location\n                <!--<i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>-->\n                <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'public'}\">\n                Status\n                <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th>Active Trips</th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"group in groups|filterBy search|orderBy orderByField direction|filterBy status in 'public'|filterBy type in 'type'\">\n            <td>{{group.name}}</td>\n            <td>{{group.type|capitalize}}</td>\n            <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n            <td>{{group.public ? 'Public' : 'Private'}}</td>\n            <td>{{group.trips.data.length}}</td>\n            <td>\n                <a href=\"/admin{{group.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <a href=\"/admin{{group.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-6170d6da", module.exports)
+  } else {
+    hotAPI.update("_v-6170d6da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],125:[function(require,module,exports){
+'use strict';
+
+module.exports = {
+	name: 'login',
+
+	data: function data() {
+		return {
+			currentState: 'login',
+			user: {
+				email: null,
+				password: null,
+				_token: $('meta[name="csrf-token"]').attr('content')
+			},
+			newUser: {
+				name: null,
+				email: null,
+				password: null,
+				password_confirmation: null,
+				dobMonth: null,
+				dobDay: null,
+				dobYear: null,
+				dob: null,
+				gender: null,
+				country_code: null,
+				timezone: null
+			},
+			reset: {
+				email: null
+			},
+			messages: [],
+
+			// component vars
+			isChildComponent: false,
+			userData: null
+		};
+	},
+
+	watch: {
+		'currentState': function currentState(val, oldVal) {
+			if (val === 'create') {
+				//preset timezone to user's browser
+				var tz = new Date().toString().match(/([A-Z]+[\+-][0-9]+)/)[1];
+				tz = tz.indexOf(0) == 4 ? tz.slice(0, 4) + tz.slice(5, 6) + ':' + tz.slice(6, 8) : tz.slice(0, 6) + ':' + tz.slice(6, 8);
+
+				var option = _.find($('#timezone option'), function (option) {
+					return option.innerHTML.indexOf(tz) != -1;
+				});
+				this.newUser.timezone = option.value;
+			}
+		}
+	},
+	computed: {},
+
+	methods: {
+		attempt: function attempt(e) {
+			e.preventDefault();
+			var that = this;
+			that.$http.post('/login', this.user).then(function (response) {
+				that.getUserData(response.data.redirect_to);
+			}, function (response) {
+				that.messages = [];
+				if (response.status && response.status === 401) that.messages.push({
+					type: 'danger',
+					message: 'Sorry, we couldn\'t find an account that matches the email and password you provided.'
+				});
+
+				if (response.status && response.status === 422) {
+					that.messages = [{
+						type: 'danger',
+						message: 'Please enter a valid email and password.'
+					}];
+				}
+			});
+		},
+
+		getUserData: function getUserData(redirectTo) {
+			var that = this;
+			var deferred = $.Deferred();
+			that.$http.get('/api/users/me').then(function (response) {
+				that.$dispatch('userHasLoggedIn', response.data.data);
+
+				if (that.isChildComponent) {
+					that.userData = response.data.data;
+					deferred.resolve(response.data.data);
+				} else {
+					location.href = redirectTo;
+				}
+			}, function (response) {
+				console.log(response);
+				deferred.resolve(response.data.data);
+			});
+			return deferred.promise();
+		},
+
+		registerUser: function registerUser(e) {
+			e.preventDefault();
+			$.extend(this.newUser, {
+				dob: moment().set({ year: this.newUser.dobYear, month: this.newUser.dobMonth, day: this.newUser.dobDay }).format('LL')
+			});
+
+			this.$http.post('/api/register', this.newUser).then(function (response) {
+				console.log(response.data.token);
+				this.getUserData();
+			}, function (response) {
+				console.log(response);
+				var messages = [];
+				_.each(response.data.errors, function (error) {
+					messages.push({
+						type: 'danger',
+						message: _.values(error)[0]
+					});
+				});
+				this.messages = messages;
+			});
+		},
+
+		requestReset: function requestReset(e) {}
+	},
+	activate: function activate(done) {
+		// Enable child component behavior
+		if (this.$parent != this.$root) {
+			this.isChildComponent = true;
+		}
+		done();
+	},
+	ready: function ready() {
+		if (this.isChildComponent) {
+			// Check if user is logged in
+			this.getUserData(false).then(function (response) {});
+		}
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-body\">\n\t\t<form class=\"form-horizontal\" role=\"form\" v-if=\"currentState==='login'\">\n\t\t\t<div id=\"alerts\" v-if=\"messages.length > 0\">\n\t\t\t\t<div v-for=\"message in messages\" class=\"alert alert-{{ message.type }} alert-dismissible\" role=\"alert\">\n\t\t\t\t\t{{ message.message }}\n\t\t\t\t</div>\n\t\t\t</div><!-- end alert -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">E-Mail Address</label>\n\t\t\t\t\t<input type=\"email\" class=\"form-control\" v-model=\"user.email\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">Password</label>\n\t\t\t\t\t<input type=\"password\" class=\"form-control\" v-model=\"user.password\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<button type=\"submit\" class=\"btn btn-primary btn-block\" @click=\"attempt\">\n\t\t\t\t\t\tLogin\n\t\t\t\t\t</button>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t</form><!-- end form -->\n\t\t<form class=\"form-horizontal\" role=\"form\" v-if=\"currentState==='reset'\">\n\t\t\t<div id=\"alerts\" v-if=\"messages.length > 0\">\n\t\t\t\t<div v-for=\"message in messages\" class=\"alert alert-{{ message.type }} alert-dismissible\" role=\"alert\">\n\t\t\t\t\t{{ message.message }}\n\t\t\t\t</div>\n\t\t\t</div><!-- end alert -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">E-Mail Address</label>\n\t\t\t\t\t<input type=\"email\" class=\"form-control\" v-model=\"user.email\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">Password</label>\n\t\t\t\t\t<input type=\"password\" class=\"form-control\" v-model=\"user.password\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<button type=\"submit\" class=\"btn btn-primary btn-block\" @click=\"requestReset\">\n\t\t\t\t\t\tRequest Password Reset\n\t\t\t\t\t</button>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t</form><!-- end form -->\n\t\t<form class=\"form-horizontal\" role=\"form\" v-if=\"currentState==='create'\">\n\t\t\t<div id=\"alerts\" v-if=\"messages.length > 0\">\n\t\t\t\t<div v-for=\"message in messages\" class=\"alert alert-{{ message.type }} alert-dismissible\" role=\"alert\">\n\t\t\t\t\t{{ message.message }}\n\t\t\t\t</div>\n\t\t\t</div><!-- end alert -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">First And Last Name</label>\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"newUser.name\" placeholder=\"John Doe\" required=\"\" maxlength=\"100\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">E-Mail Address</label>\n\t\t\t\t\t<input type=\"email\" class=\"form-control\" v-model=\"newUser.email\" placeholder=\"example@gmail.com\" required=\"\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">Password</label>\n\t\t\t\t\t<input type=\"password\" class=\"form-control\" v-model=\"newUser.password\" required=\"\" minlength=\"8\">\n\t\t\t\t\t<div class=\"help-block\">Password must be at least 8 characters long</div>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">Password Again</label>\n\t\t\t\t\t<input type=\"password\" class=\"form-control\" v-model=\"newUser.password_confirmation\" required=\"\" minlength=\"8\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">Date of Birth</label>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-5\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"dob_month\" v-model=\"newUser.dobMonth\" required=\"\">\n\t\t\t\t\t\t\t\t<option value=\"01\">January</option>\n\t\t\t\t\t\t\t\t<option value=\"02\">February</option>\n\t\t\t\t\t\t\t\t<option value=\"03\">March</option>\n\t\t\t\t\t\t\t\t<option value=\"04\">April</option>\n\t\t\t\t\t\t\t\t<option value=\"05\">May</option>\n\t\t\t\t\t\t\t\t<option value=\"06\">June</option>\n\t\t\t\t\t\t\t\t<option value=\"07\">July</option>\n\t\t\t\t\t\t\t\t<option value=\"08\">August</option>\n\t\t\t\t\t\t\t\t<option value=\"09\">September</option>\n\t\t\t\t\t\t\t\t<option value=\"10\">October</option>\n\t\t\t\t\t\t\t\t<option value=\"11\">November</option>\n\t\t\t\t\t\t\t\t<option value=\"12\">December</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t<h6 class=\"help-block lightcolor\">Month</h6>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-3\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"dob_day\" v-model=\"newUser.dobDay\" required=\"\">\n\t\t\t\t\t\t\t\t<option value=\"01\">1</option>\n\t\t\t\t\t\t\t\t<option value=\"02\">2</option>\n\t\t\t\t\t\t\t\t<option value=\"03\">3</option>\n\t\t\t\t\t\t\t\t<option value=\"04\">4</option>\n\t\t\t\t\t\t\t\t<option value=\"05\">5</option>\n\t\t\t\t\t\t\t\t<option value=\"06\">6</option>\n\t\t\t\t\t\t\t\t<option value=\"07\">7</option>\n\t\t\t\t\t\t\t\t<option value=\"08\">8</option>\n\t\t\t\t\t\t\t\t<option value=\"09\">9</option>\n\t\t\t\t\t\t\t\t<option value=\"10\">10</option>\n\t\t\t\t\t\t\t\t<option value=\"11\">11</option>\n\t\t\t\t\t\t\t\t<option value=\"12\">12</option>\n\t\t\t\t\t\t\t\t<option value=\"13\">13</option>\n\t\t\t\t\t\t\t\t<option value=\"14\">14</option>\n\t\t\t\t\t\t\t\t<option value=\"15\">15</option>\n\t\t\t\t\t\t\t\t<option value=\"16\">16</option>\n\t\t\t\t\t\t\t\t<option value=\"17\">17</option>\n\t\t\t\t\t\t\t\t<option value=\"18\">18</option>\n\t\t\t\t\t\t\t\t<option value=\"19\">19</option>\n\t\t\t\t\t\t\t\t<option value=\"20\">20</option>\n\t\t\t\t\t\t\t\t<option value=\"21\">21</option>\n\t\t\t\t\t\t\t\t<option value=\"22\">22</option>\n\t\t\t\t\t\t\t\t<option value=\"23\">23</option>\n\t\t\t\t\t\t\t\t<option value=\"24\">24</option>\n\t\t\t\t\t\t\t\t<option value=\"25\">25</option>\n\t\t\t\t\t\t\t\t<option value=\"26\">26</option>\n\t\t\t\t\t\t\t\t<option value=\"27\">27</option>\n\t\t\t\t\t\t\t\t<option value=\"28\">28</option>\n\t\t\t\t\t\t\t\t<option value=\"29\">29</option>\n\t\t\t\t\t\t\t\t<option value=\"30\">30</option>\n\t\t\t\t\t\t\t\t<option value=\"31\">31</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t<h6 class=\"help-block lightcolor\">Day</h6>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-4\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"dob_year\" v-model=\"newUser.dobYear\">\n\t\t\t\t\t\t\t\t<option value=\"1930\">1930</option>\n\t\t\t\t\t\t\t\t<option value=\"1931\">1931</option>\n\t\t\t\t\t\t\t\t<option value=\"1932\">1932</option>\n\t\t\t\t\t\t\t\t<option value=\"1933\">1933</option>\n\t\t\t\t\t\t\t\t<option value=\"1934\">1934</option>\n\t\t\t\t\t\t\t\t<option value=\"1935\">1935</option>\n\t\t\t\t\t\t\t\t<option value=\"1936\">1936</option>\n\t\t\t\t\t\t\t\t<option value=\"1937\">1937</option>\n\t\t\t\t\t\t\t\t<option value=\"1938\">1938</option>\n\t\t\t\t\t\t\t\t<option value=\"1939\">1939</option>\n\t\t\t\t\t\t\t\t<option value=\"1940\">1940</option>\n\t\t\t\t\t\t\t\t<option value=\"1941\">1941</option>\n\t\t\t\t\t\t\t\t<option value=\"1942\">1942</option>\n\t\t\t\t\t\t\t\t<option value=\"1943\">1943</option>\n\t\t\t\t\t\t\t\t<option value=\"1944\">1944</option>\n\t\t\t\t\t\t\t\t<option value=\"1945\">1945</option>\n\t\t\t\t\t\t\t\t<option value=\"1946\">1946</option>\n\t\t\t\t\t\t\t\t<option value=\"1947\">1947</option>\n\t\t\t\t\t\t\t\t<option value=\"1948\">1948</option>\n\t\t\t\t\t\t\t\t<option value=\"1949\">1949</option>\n\t\t\t\t\t\t\t\t<option value=\"1950\">1950</option>\n\t\t\t\t\t\t\t\t<option value=\"1951\">1951</option>\n\t\t\t\t\t\t\t\t<option value=\"1952\">1952</option>\n\t\t\t\t\t\t\t\t<option value=\"1953\">1953</option>\n\t\t\t\t\t\t\t\t<option value=\"1954\">1954</option>\n\t\t\t\t\t\t\t\t<option value=\"1955\">1955</option>\n\t\t\t\t\t\t\t\t<option value=\"1956\">1956</option>\n\t\t\t\t\t\t\t\t<option value=\"1957\">1957</option>\n\t\t\t\t\t\t\t\t<option value=\"1958\">1958</option>\n\t\t\t\t\t\t\t\t<option value=\"1959\">1959</option>\n\t\t\t\t\t\t\t\t<option value=\"1960\">1960</option>\n\t\t\t\t\t\t\t\t<option value=\"1961\">1961</option>\n\t\t\t\t\t\t\t\t<option value=\"1962\">1962</option>\n\t\t\t\t\t\t\t\t<option value=\"1963\">1963</option>\n\t\t\t\t\t\t\t\t<option value=\"1964\">1964</option>\n\t\t\t\t\t\t\t\t<option value=\"1965\">1965</option>\n\t\t\t\t\t\t\t\t<option value=\"1966\">1966</option>\n\t\t\t\t\t\t\t\t<option value=\"1967\">1967</option>\n\t\t\t\t\t\t\t\t<option value=\"1968\">1968</option>\n\t\t\t\t\t\t\t\t<option value=\"1969\">1969</option>\n\t\t\t\t\t\t\t\t<option value=\"1970\">1970</option>\n\t\t\t\t\t\t\t\t<option value=\"1971\">1971</option>\n\t\t\t\t\t\t\t\t<option value=\"1972\">1972</option>\n\t\t\t\t\t\t\t\t<option value=\"1973\">1973</option>\n\t\t\t\t\t\t\t\t<option value=\"1974\">1974</option>\n\t\t\t\t\t\t\t\t<option value=\"1975\">1975</option>\n\t\t\t\t\t\t\t\t<option value=\"1976\">1976</option>\n\t\t\t\t\t\t\t\t<option value=\"1977\">1977</option>\n\t\t\t\t\t\t\t\t<option value=\"1978\">1978</option>\n\t\t\t\t\t\t\t\t<option value=\"1979\">1979</option>\n\t\t\t\t\t\t\t\t<option value=\"1980\">1980</option>\n\t\t\t\t\t\t\t\t<option value=\"1981\">1981</option>\n\t\t\t\t\t\t\t\t<option value=\"1982\">1982</option>\n\t\t\t\t\t\t\t\t<option value=\"1983\">1983</option>\n\t\t\t\t\t\t\t\t<option value=\"1984\">1984</option>\n\t\t\t\t\t\t\t\t<option value=\"1985\">1985</option>\n\t\t\t\t\t\t\t\t<option value=\"1986\">1986</option>\n\t\t\t\t\t\t\t\t<option value=\"1987\">1987</option>\n\t\t\t\t\t\t\t\t<option value=\"1988\">1988</option>\n\t\t\t\t\t\t\t\t<option value=\"1989\">1989</option>\n\t\t\t\t\t\t\t\t<option value=\"1990\" selected=\"selected\">1990</option>\n\t\t\t\t\t\t\t\t<option value=\"1991\">1991</option>\n\t\t\t\t\t\t\t\t<option value=\"1992\">1992</option>\n\t\t\t\t\t\t\t\t<option value=\"1993\">1993</option>\n\t\t\t\t\t\t\t\t<option value=\"1994\">1994</option>\n\t\t\t\t\t\t\t\t<option value=\"1995\">1995</option>\n\t\t\t\t\t\t\t\t<option value=\"1996\">1996</option>\n\t\t\t\t\t\t\t\t<option value=\"1997\">1997</option>\n\t\t\t\t\t\t\t\t<option value=\"1998\">1998</option>\n\t\t\t\t\t\t\t\t<option value=\"1999\">1999</option>\n\t\t\t\t\t\t\t\t<option value=\"2000\">2000</option>\n\t\t\t\t\t\t\t\t<option value=\"2001\">2001</option>\n\t\t\t\t\t\t\t\t<option value=\"2002\">2002</option>\n\t\t\t\t\t\t\t\t<option value=\"2003\">2003</option>\n\t\t\t\t\t\t\t\t<option value=\"2004\">2004</option>\n\t\t\t\t\t\t\t\t<option value=\"2005\">2005</option>\n\t\t\t\t\t\t\t\t<option value=\"2006\">2006</option>\n\t\t\t\t\t\t\t\t<option value=\"2007\">2007</option>\n\t\t\t\t\t\t\t\t<option value=\"2008\">2008</option>\n\t\t\t\t\t\t\t\t<option value=\"2009\">2009</option>\n\t\t\t\t\t\t\t\t<option value=\"2010\">2010</option>\n\t\t\t\t\t\t\t\t<option value=\"2011\">2011</option>\n\t\t\t\t\t\t\t\t<option value=\"2012\">2012</option>\n\t\t\t\t\t\t\t\t<option value=\"2013\">2013</option>\n\t\t\t\t\t\t\t\t<option value=\"2014\">2014</option>\n\t\t\t\t\t\t\t\t<option value=\"2015\">2015</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t<h6 class=\"help-block lightcolor\">Year</h6>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-labal\">Gender</label>\n\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t<label class=\"radio-inline lightcolor\">\n\t\t\t\t\t\t\t<input name=\"gender\" type=\"radio\" value=\"Male\" id=\"gender\" v-model=\"newUser.gender\"> Male</label>\n\t\t\t\t\t\t<label class=\"radio-inline lightcolor\">\n\t\t\t\t\t\t\t<input name=\"gender\" type=\"radio\" value=\"Female\" id=\"gender\" v-model=\"newUser.gender\"> Female</label>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10 col-xs-offset-1\">\n\t\t\t\t\t<label for=\"country\" class=\"control-label\">Country</label>\n\t\t\t\t\t<select name=\"country\" id=\"country\" class=\"form-control\" v-model=\"newUser.country_code\" required=\"\">\n\t\t\t\t\t\t<option value=\"af\">Afghanistan</option>\n\t\t\t\t\t\t<option value=\"ax\">Åland Islands</option>\n\t\t\t\t\t\t<option value=\"al\">Albania</option>\n\t\t\t\t\t\t<option value=\"dz\">Algeria</option>\n\t\t\t\t\t\t<option value=\"as\">American Samoa</option>\n\t\t\t\t\t\t<option value=\"ad\">Andorra</option>\n\t\t\t\t\t\t<option value=\"ao\">Angola</option>\n\t\t\t\t\t\t<option value=\"ai\">Anguilla</option>\n\t\t\t\t\t\t<option value=\"aq\">Antarctica</option>\n\t\t\t\t\t\t<option value=\"ag\">Antigua and Barbuda</option>\n\t\t\t\t\t\t<option value=\"ar\">Argentina</option>\n\t\t\t\t\t\t<option value=\"am\">Armenia</option>\n\t\t\t\t\t\t<option value=\"aw\">Aruba</option>\n\t\t\t\t\t\t<option value=\"au\">Australia</option>\n\t\t\t\t\t\t<option value=\"at\">Austria</option>\n\t\t\t\t\t\t<option value=\"az\">Azerbaijan</option>\n\t\t\t\t\t\t<option value=\"bs\">Bahamas</option>\n\t\t\t\t\t\t<option value=\"bh\">Bahrain</option>\n\t\t\t\t\t\t<option value=\"bd\">Bangladesh</option>\n\t\t\t\t\t\t<option value=\"bb\">Barbados</option>\n\t\t\t\t\t\t<option value=\"by\">Belarus</option>\n\t\t\t\t\t\t<option value=\"be\">Belgium</option>\n\t\t\t\t\t\t<option value=\"bz\">Belize</option>\n\t\t\t\t\t\t<option value=\"bj\">Benin</option>\n\t\t\t\t\t\t<option value=\"bm\">Bermuda</option>\n\t\t\t\t\t\t<option value=\"bt\">Bhutan</option>\n\t\t\t\t\t\t<option value=\"bo\">Bolivia, Plurinational State of</option>\n\t\t\t\t\t\t<option value=\"bq\">Bonaire, Sint Eustatius and Saba</option>\n\t\t\t\t\t\t<option value=\"ba\">Bosnia and Herzegovina</option>\n\t\t\t\t\t\t<option value=\"bw\">Botswana</option>\n\t\t\t\t\t\t<option value=\"bv\">Bouvet Island</option>\n\t\t\t\t\t\t<option value=\"br\">Brazil</option>\n\t\t\t\t\t\t<option value=\"io\">British Indian Ocean Territory</option>\n\t\t\t\t\t\t<option value=\"bn\">Brunei Darussalam</option>\n\t\t\t\t\t\t<option value=\"bg\">Bulgaria</option>\n\t\t\t\t\t\t<option value=\"bf\">Burkina Faso</option>\n\t\t\t\t\t\t<option value=\"bi\">Burundi</option>\n\t\t\t\t\t\t<option value=\"kh\">Cambodia</option>\n\t\t\t\t\t\t<option value=\"cm\">Cameroon</option>\n\t\t\t\t\t\t<option value=\"ca\">Canada</option>\n\t\t\t\t\t\t<option value=\"cv\">Cape Verde</option>\n\t\t\t\t\t\t<option value=\"ky\">Cayman Islands</option>\n\t\t\t\t\t\t<option value=\"cf\">Central African Republic</option>\n\t\t\t\t\t\t<option value=\"td\">Chad</option>\n\t\t\t\t\t\t<option value=\"cl\">Chile</option>\n\t\t\t\t\t\t<option value=\"cn\">China</option>\n\t\t\t\t\t\t<option value=\"cx\">Christmas Island</option>\n\t\t\t\t\t\t<option value=\"cc\">Cocos (Keeling) Islands</option>\n\t\t\t\t\t\t<option value=\"co\">Colombia</option>\n\t\t\t\t\t\t<option value=\"km\">Comoros</option>\n\t\t\t\t\t\t<option value=\"cg\">Congo</option>\n\t\t\t\t\t\t<option value=\"cd\">Congo, the Democratic Republic of the</option>\n\t\t\t\t\t\t<option value=\"ck\">Cook Islands</option>\n\t\t\t\t\t\t<option value=\"cr\">Costa Rica</option>\n\t\t\t\t\t\t<option value=\"ci\">Côte d'Ivoire</option>\n\t\t\t\t\t\t<option value=\"hr\">Croatia</option>\n\t\t\t\t\t\t<option value=\"cu\">Cuba</option>\n\t\t\t\t\t\t<option value=\"cw\">Curaçao</option>\n\t\t\t\t\t\t<option value=\"cy\">Cyprus</option>\n\t\t\t\t\t\t<option value=\"cz\">Czech Republic</option>\n\t\t\t\t\t\t<option value=\"dk\">Denmark</option>\n\t\t\t\t\t\t<option value=\"dj\">Djibouti</option>\n\t\t\t\t\t\t<option value=\"dm\">Dominica</option>\n\t\t\t\t\t\t<option value=\"do\">Dominican Republic</option>\n\t\t\t\t\t\t<option value=\"ec\">Ecuador</option>\n\t\t\t\t\t\t<option value=\"eg\">Egypt</option>\n\t\t\t\t\t\t<option value=\"sv\">El Salvador</option>\n\t\t\t\t\t\t<option value=\"gq\">Equatorial Guinea</option>\n\t\t\t\t\t\t<option value=\"er\">Eritrea</option>\n\t\t\t\t\t\t<option value=\"ee\">Estonia</option>\n\t\t\t\t\t\t<option value=\"et\">Ethiopia</option>\n\t\t\t\t\t\t<option value=\"fk\">Falkland Islands (Malvinas)</option>\n\t\t\t\t\t\t<option value=\"fo\">Faroe Islands</option>\n\t\t\t\t\t\t<option value=\"fj\">Fiji</option>\n\t\t\t\t\t\t<option value=\"fi\">Finland</option>\n\t\t\t\t\t\t<option value=\"fr\">France</option>\n\t\t\t\t\t\t<option value=\"gf\">French Guiana</option>\n\t\t\t\t\t\t<option value=\"pf\">French Polynesia</option>\n\t\t\t\t\t\t<option value=\"tf\">French Southern Territories</option>\n\t\t\t\t\t\t<option value=\"ga\">Gabon</option>\n\t\t\t\t\t\t<option value=\"gm\">Gambia</option>\n\t\t\t\t\t\t<option value=\"ge\">Georgia</option>\n\t\t\t\t\t\t<option value=\"de\">Germany</option>\n\t\t\t\t\t\t<option value=\"gh\">Ghana</option>\n\t\t\t\t\t\t<option value=\"gi\">Gibraltar</option>\n\t\t\t\t\t\t<option value=\"gr\">Greece</option>\n\t\t\t\t\t\t<option value=\"gl\">Greenland</option>\n\t\t\t\t\t\t<option value=\"gd\">Grenada</option>\n\t\t\t\t\t\t<option value=\"gp\">Guadeloupe</option>\n\t\t\t\t\t\t<option value=\"gu\">Guam</option>\n\t\t\t\t\t\t<option value=\"gt\">Guatemala</option>\n\t\t\t\t\t\t<option value=\"gg\">Guernsey</option>\n\t\t\t\t\t\t<option value=\"gn\">Guinea</option>\n\t\t\t\t\t\t<option value=\"gw\">Guinea-Bissau</option>\n\t\t\t\t\t\t<option value=\"gy\">Guyana</option>\n\t\t\t\t\t\t<option value=\"ht\">Haiti</option>\n\t\t\t\t\t\t<option value=\"hm\">Heard Island and McDonald Islands</option>\n\t\t\t\t\t\t<option value=\"va\">Holy See (Vatican City State)</option>\n\t\t\t\t\t\t<option value=\"hn\">Honduras</option>\n\t\t\t\t\t\t<option value=\"hk\">Hong Kong</option>\n\t\t\t\t\t\t<option value=\"hu\">Hungary</option>\n\t\t\t\t\t\t<option value=\"is\">Iceland</option>\n\t\t\t\t\t\t<option value=\"in\">India</option>\n\t\t\t\t\t\t<option value=\"id\">Indonesia</option>\n\t\t\t\t\t\t<option value=\"ir\">Iran, Islamic Republic of</option>\n\t\t\t\t\t\t<option value=\"iq\">Iraq</option>\n\t\t\t\t\t\t<option value=\"ie\">Ireland</option>\n\t\t\t\t\t\t<option value=\"im\">Isle of Man</option>\n\t\t\t\t\t\t<option value=\"il\">Israel</option>\n\t\t\t\t\t\t<option value=\"it\">Italy</option>\n\t\t\t\t\t\t<option value=\"jm\">Jamaica</option>\n\t\t\t\t\t\t<option value=\"jp\">Japan</option>\n\t\t\t\t\t\t<option value=\"je\">Jersey</option>\n\t\t\t\t\t\t<option value=\"jo\">Jordan</option>\n\t\t\t\t\t\t<option value=\"kz\">Kazakhstan</option>\n\t\t\t\t\t\t<option value=\"ke\">Kenya</option>\n\t\t\t\t\t\t<option value=\"ki\">Kiribati</option>\n\t\t\t\t\t\t<option value=\"kp\">Korea, Democratic People's Republic of</option>\n\t\t\t\t\t\t<option value=\"kr\">Korea, Republic of</option>\n\t\t\t\t\t\t<option value=\"kw\">Kuwait</option>\n\t\t\t\t\t\t<option value=\"kg\">Kyrgyzstan</option>\n\t\t\t\t\t\t<option value=\"la\">Lao People's Democratic Republic</option>\n\t\t\t\t\t\t<option value=\"lv\">Latvia</option>\n\t\t\t\t\t\t<option value=\"lb\">Lebanon</option>\n\t\t\t\t\t\t<option value=\"ls\">Lesotho</option>\n\t\t\t\t\t\t<option value=\"lr\">Liberia</option>\n\t\t\t\t\t\t<option value=\"ly\">Libya</option>\n\t\t\t\t\t\t<option value=\"li\">Liechtenstein</option>\n\t\t\t\t\t\t<option value=\"lt\">Lithuania</option>\n\t\t\t\t\t\t<option value=\"lu\">Luxembourg</option>\n\t\t\t\t\t\t<option value=\"mo\">Macao</option>\n\t\t\t\t\t\t<option value=\"mk\">Macedonia, the former Yugoslav Republic of</option>\n\t\t\t\t\t\t<option value=\"mg\">Madagascar</option>\n\t\t\t\t\t\t<option value=\"mw\">Malawi</option>\n\t\t\t\t\t\t<option value=\"my\">Malaysia</option>\n\t\t\t\t\t\t<option value=\"mv\">Maldives</option>\n\t\t\t\t\t\t<option value=\"ml\">Mali</option>\n\t\t\t\t\t\t<option value=\"mt\">Malta</option>\n\t\t\t\t\t\t<option value=\"mh\">Marshall Islands</option>\n\t\t\t\t\t\t<option value=\"mq\">Martinique</option>\n\t\t\t\t\t\t<option value=\"mr\">Mauritania</option>\n\t\t\t\t\t\t<option value=\"mu\">Mauritius</option>\n\t\t\t\t\t\t<option value=\"yt\">Mayotte</option>\n\t\t\t\t\t\t<option value=\"mx\">Mexico</option>\n\t\t\t\t\t\t<option value=\"fm\">Micronesia, Federated States of</option>\n\t\t\t\t\t\t<option value=\"md\">Moldova, Republic of</option>\n\t\t\t\t\t\t<option value=\"mc\">Monaco</option>\n\t\t\t\t\t\t<option value=\"mn\">Mongolia</option>\n\t\t\t\t\t\t<option value=\"me\">Montenegro</option>\n\t\t\t\t\t\t<option value=\"ms\">Montserrat</option>\n\t\t\t\t\t\t<option value=\"ma\">Morocco</option>\n\t\t\t\t\t\t<option value=\"mz\">Mozambique</option>\n\t\t\t\t\t\t<option value=\"mm\">Myanmar</option>\n\t\t\t\t\t\t<option value=\"na\">Namibia</option>\n\t\t\t\t\t\t<option value=\"nr\">Nauru</option>\n\t\t\t\t\t\t<option value=\"np\">Nepal</option>\n\t\t\t\t\t\t<option value=\"nl\">Netherlands</option>\n\t\t\t\t\t\t<option value=\"nc\">New Caledonia</option>\n\t\t\t\t\t\t<option value=\"nz\">New Zealand</option>\n\t\t\t\t\t\t<option value=\"ni\">Nicaragua</option>\n\t\t\t\t\t\t<option value=\"ne\">Niger</option>\n\t\t\t\t\t\t<option value=\"ng\">Nigeria</option>\n\t\t\t\t\t\t<option value=\"nu\">Niue</option>\n\t\t\t\t\t\t<option value=\"nf\">Norfolk Island</option>\n\t\t\t\t\t\t<option value=\"mp\">Northern Mariana Islands</option>\n\t\t\t\t\t\t<option value=\"no\">Norway</option>\n\t\t\t\t\t\t<option value=\"om\">Oman</option>\n\t\t\t\t\t\t<option value=\"pk\">Pakistan</option>\n\t\t\t\t\t\t<option value=\"pw\">Palau</option>\n\t\t\t\t\t\t<option value=\"ps\">Palestinian Territory, Occupied</option>\n\t\t\t\t\t\t<option value=\"pa\">Panama</option>\n\t\t\t\t\t\t<option value=\"pg\">Papua New Guinea</option>\n\t\t\t\t\t\t<option value=\"py\">Paraguay</option>\n\t\t\t\t\t\t<option value=\"pe\">Peru</option>\n\t\t\t\t\t\t<option value=\"ph\">Philippines</option>\n\t\t\t\t\t\t<option value=\"pn\">Pitcairn</option>\n\t\t\t\t\t\t<option value=\"pl\">Poland</option>\n\t\t\t\t\t\t<option value=\"pt\">Portugal</option>\n\t\t\t\t\t\t<option value=\"pr\">Puerto Rico</option>\n\t\t\t\t\t\t<option value=\"qa\">Qatar</option>\n\t\t\t\t\t\t<option value=\"re\">Réunion</option>\n\t\t\t\t\t\t<option value=\"ro\">Romania</option>\n\t\t\t\t\t\t<option value=\"ru\">Russian Federation</option>\n\t\t\t\t\t\t<option value=\"rw\">Rwanda</option>\n\t\t\t\t\t\t<option value=\"bl\">Saint Barthélemy</option>\n\t\t\t\t\t\t<option value=\"sh\">Saint Helena, Ascension and Tristan da Cunha</option>\n\t\t\t\t\t\t<option value=\"kn\">Saint Kitts and Nevis</option>\n\t\t\t\t\t\t<option value=\"lc\">Saint Lucia</option>\n\t\t\t\t\t\t<option value=\"mf\">Saint Martin (French part)</option>\n\t\t\t\t\t\t<option value=\"pm\">Saint Pierre and Miquelon</option>\n\t\t\t\t\t\t<option value=\"vc\">Saint Vincent and the Grenadines</option>\n\t\t\t\t\t\t<option value=\"ws\">Samoa</option>\n\t\t\t\t\t\t<option value=\"sm\">San Marino</option>\n\t\t\t\t\t\t<option value=\"st\">Sao Tome and Principe</option>\n\t\t\t\t\t\t<option value=\"sa\">Saudi Arabia</option>\n\t\t\t\t\t\t<option value=\"sn\">Senegal</option>\n\t\t\t\t\t\t<option value=\"rs\">Serbia</option>\n\t\t\t\t\t\t<option value=\"sc\">Seychelles</option>\n\t\t\t\t\t\t<option value=\"sl\">Sierra Leone</option>\n\t\t\t\t\t\t<option value=\"sg\">Singapore</option>\n\t\t\t\t\t\t<option value=\"sx\">Sint Maarten (Dutch part)</option>\n\t\t\t\t\t\t<option value=\"sk\">Slovakia</option>\n\t\t\t\t\t\t<option value=\"si\">Slovenia</option>\n\t\t\t\t\t\t<option value=\"sb\">Solomon Islands</option>\n\t\t\t\t\t\t<option value=\"so\">Somalia</option>\n\t\t\t\t\t\t<option value=\"za\">South Africa</option>\n\t\t\t\t\t\t<option value=\"gs\">South Georgia and the South Sandwich Islands</option>\n\t\t\t\t\t\t<option value=\"ss\">South Sudan</option>\n\t\t\t\t\t\t<option value=\"es\">Spain</option>\n\t\t\t\t\t\t<option value=\"lk\">Sri Lanka</option>\n\t\t\t\t\t\t<option value=\"sd\">Sudan</option>\n\t\t\t\t\t\t<option value=\"sr\">Suriname</option>\n\t\t\t\t\t\t<option value=\"sj\">Svalbard and Jan Mayen</option>\n\t\t\t\t\t\t<option value=\"sz\">Swaziland</option>\n\t\t\t\t\t\t<option value=\"se\">Sweden</option>\n\t\t\t\t\t\t<option value=\"ch\">Switzerland</option>\n\t\t\t\t\t\t<option value=\"sy\">Syrian Arab Republic</option>\n\t\t\t\t\t\t<option value=\"tw\">Taiwan, Province of China</option>\n\t\t\t\t\t\t<option value=\"tj\">Tajikistan</option>\n\t\t\t\t\t\t<option value=\"tz\">Tanzania, United Republic of</option>\n\t\t\t\t\t\t<option value=\"th\">Thailand</option>\n\t\t\t\t\t\t<option value=\"tl\">Timor-Leste</option>\n\t\t\t\t\t\t<option value=\"tg\">Togo</option>\n\t\t\t\t\t\t<option value=\"tk\">Tokelau</option>\n\t\t\t\t\t\t<option value=\"to\">Tonga</option>\n\t\t\t\t\t\t<option value=\"tt\">Trinidad and Tobago</option>\n\t\t\t\t\t\t<option value=\"tn\">Tunisia</option>\n\t\t\t\t\t\t<option value=\"tr\">Turkey</option>\n\t\t\t\t\t\t<option value=\"tm\">Turkmenistan</option>\n\t\t\t\t\t\t<option value=\"tc\">Turks and Caicos Islands</option>\n\t\t\t\t\t\t<option value=\"tv\">Tuvalu</option>\n\t\t\t\t\t\t<option value=\"ug\">Uganda</option>\n\t\t\t\t\t\t<option value=\"ua\">Ukraine</option>\n\t\t\t\t\t\t<option value=\"ae\">United Arab Emirates</option>\n\t\t\t\t\t\t<option value=\"gb\">United Kingdom</option>\n\t\t\t\t\t\t<option value=\"us\">United States</option>\n\t\t\t\t\t\t<option value=\"um\">United States Minor Outlying Islands</option>\n\t\t\t\t\t\t<option value=\"uy\">Uruguay</option>\n\t\t\t\t\t\t<option value=\"uz\">Uzbekistan</option>\n\t\t\t\t\t\t<option value=\"vu\">Vanuatu</option>\n\t\t\t\t\t\t<option value=\"ve\">Venezuela, Bolivarian Republic of</option>\n\t\t\t\t\t\t<option value=\"vn\">Viet Nam</option>\n\t\t\t\t\t\t<option value=\"vg\">Virgin Islands, British</option>\n\t\t\t\t\t\t<option value=\"vi\">Virgin Islands, U.S.</option>\n\t\t\t\t\t\t<option value=\"wf\">Wallis and Futuna</option>\n\t\t\t\t\t\t<option value=\"eh\">Western Sahara</option>\n\t\t\t\t\t\t<option value=\"ye\">Yemen</option>\n\t\t\t\t\t\t<option value=\"zm\">Zambia</option>\n\t\t\t\t\t\t<option value=\"zw\">Zimbabwe</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10 col-xs-offset-1\">\n\t\t\t\t\t<label for=\"timezone\" class=\"control-label\">Timezone</label>\n\t\t\t\t\t<select name=\"timezone\" id=\"timezone\" class=\"form-control\" v-model=\"newUser.timezone\">\n\t\t\t\t\t\t<option value=\"America/Adak\">(GMT-10:00) America/Adak (Hawaii-Aleutian Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Atka\">(GMT-10:00) America/Atka (Hawaii-Aleutian Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Anchorage\">(GMT-9:00) America/Anchorage (Alaska Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Juneau\">(GMT-9:00) America/Juneau (Alaska Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Nome\">(GMT-9:00) America/Nome (Alaska Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Yakutat\">(GMT-9:00) America/Yakutat (Alaska Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Dawson\">(GMT-8:00) America/Dawson (Pacific Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Ensenada\">(GMT-8:00) America/Ensenada (Pacific Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Los_Angeles\">(GMT-8:00) America/Los_Angeles (Pacific Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Tijuana\">(GMT-8:00) America/Tijuana (Pacific Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Vancouver\">(GMT-8:00) America/Vancouver (Pacific Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Whitehorse\">(GMT-8:00) America/Whitehorse (Pacific Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Canada/Pacific\">(GMT-8:00) Canada/Pacific (Pacific Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Canada/Yukon\">(GMT-8:00) Canada/Yukon (Pacific Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Mexico/BajaNorte\">(GMT-8:00) Mexico/BajaNorte (Pacific Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Boise\">(GMT-7:00) America/Boise (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Cambridge_Bay\">(GMT-7:00) America/Cambridge_Bay (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Chihuahua\">(GMT-7:00) America/Chihuahua (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Dawson_Creek\">(GMT-7:00) America/Dawson_Creek (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Denver\">(GMT-7:00) America/Denver (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Edmonton\">(GMT-7:00) America/Edmonton (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Hermosillo\">(GMT-7:00) America/Hermosillo (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Inuvik\">(GMT-7:00) America/Inuvik (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Mazatlan\">(GMT-7:00) America/Mazatlan (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Phoenix\">(GMT-7:00) America/Phoenix (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Shiprock\">(GMT-7:00) America/Shiprock (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Yellowknife\">(GMT-7:00) America/Yellowknife (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Canada/Mountain\">(GMT-7:00) Canada/Mountain (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Mexico/BajaSur\">(GMT-7:00) Mexico/BajaSur (Mountain Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Belize\">(GMT-6:00) America/Belize (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Cancun\">(GMT-6:00) America/Cancun (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Chicago\">(GMT-6:00) America/Chicago (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Costa_Rica\">(GMT-6:00) America/Costa_Rica (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/El_Salvador\">(GMT-6:00) America/El_Salvador (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Guatemala\">(GMT-6:00) America/Guatemala (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Knox_IN\">(GMT-6:00) America/Knox_IN (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Managua\">(GMT-6:00) America/Managua (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Menominee\">(GMT-6:00) America/Menominee (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Merida\">(GMT-6:00) America/Merida (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Mexico_City\">(GMT-6:00) America/Mexico_City (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Monterrey\">(GMT-6:00) America/Monterrey (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Rainy_River\">(GMT-6:00) America/Rainy_River (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Rankin_Inlet\">(GMT-6:00) America/Rankin_Inlet (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Regina\">(GMT-6:00) America/Regina (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Swift_Current\">(GMT-6:00) America/Swift_Current (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Tegucigalpa\">(GMT-6:00) America/Tegucigalpa (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Winnipeg\">(GMT-6:00) America/Winnipeg (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Canada/Central\">(GMT-6:00) Canada/Central (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Canada/East-Saskatchewan\">(GMT-6:00) Canada/East-Saskatchewan (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Canada/Saskatchewan\">(GMT-6:00) Canada/Saskatchewan (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Chile/EasterIsland\">(GMT-6:00) Chile/EasterIsland (Easter Is. Time)</option>\n\t\t\t\t\t\t<option value=\"Mexico/General\">(GMT-6:00) Mexico/General (Central Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Atikokan\">(GMT-5:00) America/Atikokan (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Bogota\">(GMT-5:00) America/Bogota (Colombia Time)</option>\n\t\t\t\t\t\t<option value=\"America/Cayman\">(GMT-5:00) America/Cayman (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Coral_Harbour\">(GMT-5:00) America/Coral_Harbour (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Detroit\">(GMT-5:00) America/Detroit (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Fort_Wayne\">(GMT-5:00) America/Fort_Wayne (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Grand_Turk\">(GMT-5:00) America/Grand_Turk (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Guayaquil\">(GMT-5:00) America/Guayaquil (Ecuador Time)</option>\n\t\t\t\t\t\t<option value=\"America/Havana\">(GMT-5:00) America/Havana (Cuba Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Indianapolis\">(GMT-5:00) America/Indianapolis (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Iqaluit\">(GMT-5:00) America/Iqaluit (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Jamaica\">(GMT-5:00) America/Jamaica (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Lima\">(GMT-5:00) America/Lima (Peru Time)</option>\n\t\t\t\t\t\t<option value=\"America/Louisville\">(GMT-5:00) America/Louisville (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Montreal\">(GMT-5:00) America/Montreal (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Nassau\">(GMT-5:00) America/Nassau (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/New_York\">(GMT-5:00) America/New_York (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Nipigon\">(GMT-5:00) America/Nipigon (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Panama\">(GMT-5:00) America/Panama (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Pangnirtung\">(GMT-5:00) America/Pangnirtung (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Port-au-Prince\">(GMT-5:00) America/Port-au-Prince (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Resolute\">(GMT-5:00) America/Resolute (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Thunder_Bay\">(GMT-5:00) America/Thunder_Bay (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Toronto\">(GMT-5:00) America/Toronto (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Canada/Eastern\">(GMT-5:00) Canada/Eastern (Eastern Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Caracas\">(GMT-4:-30) America/Caracas (Venezuela Time)</option>\n\t\t\t\t\t\t<option value=\"America/Anguilla\">(GMT-4:00) America/Anguilla (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Antigua\">(GMT-4:00) America/Antigua (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Aruba\">(GMT-4:00) America/Aruba (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Asuncion\">(GMT-4:00) America/Asuncion (Paraguay Time)</option>\n\t\t\t\t\t\t<option value=\"America/Barbados\">(GMT-4:00) America/Barbados (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Blanc-Sablon\">(GMT-4:00) America/Blanc-Sablon (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Boa_Vista\">(GMT-4:00) America/Boa_Vista (Amazon Time)</option>\n\t\t\t\t\t\t<option value=\"America/Campo_Grande\">(GMT-4:00) America/Campo_Grande (Amazon Time)</option>\n\t\t\t\t\t\t<option value=\"America/Cuiaba\">(GMT-4:00) America/Cuiaba (Amazon Time)</option>\n\t\t\t\t\t\t<option value=\"America/Curacao\">(GMT-4:00) America/Curacao (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Dominica\">(GMT-4:00) America/Dominica (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Eirunepe\">(GMT-4:00) America/Eirunepe (Amazon Time)</option>\n\t\t\t\t\t\t<option value=\"America/Glace_Bay\">(GMT-4:00) America/Glace_Bay (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Goose_Bay\">(GMT-4:00) America/Goose_Bay (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Grenada\">(GMT-4:00) America/Grenada (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Guadeloupe\">(GMT-4:00) America/Guadeloupe (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Guyana\">(GMT-4:00) America/Guyana (Guyana Time)</option>\n\t\t\t\t\t\t<option value=\"America/Halifax\">(GMT-4:00) America/Halifax (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/La_Paz\">(GMT-4:00) America/La_Paz (Bolivia Time)</option>\n\t\t\t\t\t\t<option value=\"America/Manaus\">(GMT-4:00) America/Manaus (Amazon Time)</option>\n\t\t\t\t\t\t<option value=\"America/Marigot\">(GMT-4:00) America/Marigot (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Martinique\">(GMT-4:00) America/Martinique (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Moncton\">(GMT-4:00) America/Moncton (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Montserrat\">(GMT-4:00) America/Montserrat (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Port_of_Spain\">(GMT-4:00) America/Port_of_Spain (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Porto_Acre\">(GMT-4:00) America/Porto_Acre (Amazon Time)</option>\n\t\t\t\t\t\t<option value=\"America/Porto_Velho\">(GMT-4:00) America/Porto_Velho (Amazon Time)</option>\n\t\t\t\t\t\t<option value=\"America/Puerto_Rico\">(GMT-4:00) America/Puerto_Rico (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Rio_Branco\">(GMT-4:00) America/Rio_Branco (Amazon Time)</option>\n\t\t\t\t\t\t<option value=\"America/Santiago\">(GMT-4:00) America/Santiago (Chile Time)</option>\n\t\t\t\t\t\t<option value=\"America/Santo_Domingo\">(GMT-4:00) America/Santo_Domingo (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/St_Barthelemy\">(GMT-4:00) America/St_Barthelemy (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/St_Kitts\">(GMT-4:00) America/St_Kitts (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/St_Lucia\">(GMT-4:00) America/St_Lucia (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/St_Thomas\">(GMT-4:00) America/St_Thomas (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/St_Vincent\">(GMT-4:00) America/St_Vincent (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Thule\">(GMT-4:00) America/Thule (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Tortola\">(GMT-4:00) America/Tortola (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Virgin\">(GMT-4:00) America/Virgin (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Antarctica/Palmer\">(GMT-4:00) Antarctica/Palmer (Chile Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/Bermuda\">(GMT-4:00) Atlantic/Bermuda (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/Stanley\">(GMT-4:00) Atlantic/Stanley (Falkland Is. Time)</option>\n\t\t\t\t\t\t<option value=\"Brazil/Acre\">(GMT-4:00) Brazil/Acre (Amazon Time)</option>\n\t\t\t\t\t\t<option value=\"Brazil/West\">(GMT-4:00) Brazil/West (Amazon Time)</option>\n\t\t\t\t\t\t<option value=\"Canada/Atlantic\">(GMT-4:00) Canada/Atlantic (Atlantic Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Chile/Continental\">(GMT-4:00) Chile/Continental (Chile Time)</option>\n\t\t\t\t\t\t<option value=\"America/St_Johns\">(GMT-3:-30) America/St_Johns (Newfoundland Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Canada/Newfoundland\">(GMT-3:-30) Canada/Newfoundland (Newfoundland Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Araguaina\">(GMT-3:00) America/Araguaina (Brasilia Time)</option>\n\t\t\t\t\t\t<option value=\"America/Bahia\">(GMT-3:00) America/Bahia (Brasilia Time)</option>\n\t\t\t\t\t\t<option value=\"America/Belem\">(GMT-3:00) America/Belem (Brasilia Time)</option>\n\t\t\t\t\t\t<option value=\"America/Buenos_Aires\">(GMT-3:00) America/Buenos_Aires (Argentine Time)</option>\n\t\t\t\t\t\t<option value=\"America/Catamarca\">(GMT-3:00) America/Catamarca (Argentine Time)</option>\n\t\t\t\t\t\t<option value=\"America/Cayenne\">(GMT-3:00) America/Cayenne (French Guiana Time)</option>\n\t\t\t\t\t\t<option value=\"America/Cordoba\">(GMT-3:00) America/Cordoba (Argentine Time)</option>\n\t\t\t\t\t\t<option value=\"America/Fortaleza\">(GMT-3:00) America/Fortaleza (Brasilia Time)</option>\n\t\t\t\t\t\t<option value=\"America/Godthab\">(GMT-3:00) America/Godthab (Western Greenland Time)</option>\n\t\t\t\t\t\t<option value=\"America/Jujuy\">(GMT-3:00) America/Jujuy (Argentine Time)</option>\n\t\t\t\t\t\t<option value=\"America/Maceio\">(GMT-3:00) America/Maceio (Brasilia Time)</option>\n\t\t\t\t\t\t<option value=\"America/Mendoza\">(GMT-3:00) America/Mendoza (Argentine Time)</option>\n\t\t\t\t\t\t<option value=\"America/Miquelon\">(GMT-3:00) America/Miquelon (Pierre &amp; Miquelon Standard Time)</option>\n\t\t\t\t\t\t<option value=\"America/Montevideo\">(GMT-3:00) America/Montevideo (Uruguay Time)</option>\n\t\t\t\t\t\t<option value=\"America/Paramaribo\">(GMT-3:00) America/Paramaribo (Suriname Time)</option>\n\t\t\t\t\t\t<option value=\"America/Recife\">(GMT-3:00) America/Recife (Brasilia Time)</option>\n\t\t\t\t\t\t<option value=\"America/Rosario\">(GMT-3:00) America/Rosario (Argentine Time)</option>\n\t\t\t\t\t\t<option value=\"America/Santarem\">(GMT-3:00) America/Santarem (Brasilia Time)</option>\n\t\t\t\t\t\t<option value=\"America/Sao_Paulo\">(GMT-3:00) America/Sao_Paulo (Brasilia Time)</option>\n\t\t\t\t\t\t<option value=\"Antarctica/Rothera\">(GMT-3:00) Antarctica/Rothera (Rothera Time)</option>\n\t\t\t\t\t\t<option value=\"Brazil/East\">(GMT-3:00) Brazil/East (Brasilia Time)</option>\n\t\t\t\t\t\t<option value=\"America/Noronha\">(GMT-2:00) America/Noronha (Fernando de Noronha Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/South_Georgia\">(GMT-2:00) Atlantic/South_Georgia (South Georgia Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Brazil/DeNoronha\">(GMT-2:00) Brazil/DeNoronha (Fernando de Noronha Time)</option>\n\t\t\t\t\t\t<option value=\"America/Scoresbysund\">(GMT-1:00) America/Scoresbysund (Eastern Greenland Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/Azores\">(GMT-1:00) Atlantic/Azores (Azores Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/Cape_Verde\">(GMT-1:00) Atlantic/Cape_Verde (Cape Verde Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Abidjan\">(GMT+0:00) Africa/Abidjan (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Accra\">(GMT+0:00) Africa/Accra (Ghana Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Bamako\">(GMT+0:00) Africa/Bamako (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Banjul\">(GMT+0:00) Africa/Banjul (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Bissau\">(GMT+0:00) Africa/Bissau (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Casablanca\">(GMT+0:00) Africa/Casablanca (Western European Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Conakry\">(GMT+0:00) Africa/Conakry (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Dakar\">(GMT+0:00) Africa/Dakar (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/El_Aaiun\">(GMT+0:00) Africa/El_Aaiun (Western European Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Freetown\">(GMT+0:00) Africa/Freetown (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Lome\">(GMT+0:00) Africa/Lome (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Monrovia\">(GMT+0:00) Africa/Monrovia (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Nouakchott\">(GMT+0:00) Africa/Nouakchott (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Ouagadougou\">(GMT+0:00) Africa/Ouagadougou (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Sao_Tome\">(GMT+0:00) Africa/Sao_Tome (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Timbuktu\">(GMT+0:00) Africa/Timbuktu (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"America/Danmarkshavn\">(GMT+0:00) America/Danmarkshavn (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/Canary\">(GMT+0:00) Atlantic/Canary (Western European Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/Faeroe\">(GMT+0:00) Atlantic/Faeroe (Western European Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/Faroe\">(GMT+0:00) Atlantic/Faroe (Western European Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/Madeira\">(GMT+0:00) Atlantic/Madeira (Western European Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/Reykjavik\">(GMT+0:00) Atlantic/Reykjavik (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/St_Helena\">(GMT+0:00) Atlantic/St_Helena (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Belfast\">(GMT+0:00) Europe/Belfast (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Dublin\">(GMT+0:00) Europe/Dublin (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Guernsey\">(GMT+0:00) Europe/Guernsey (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Isle_of_Man\">(GMT+0:00) Europe/Isle_of_Man (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Jersey\">(GMT+0:00) Europe/Jersey (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Lisbon\">(GMT+0:00) Europe/Lisbon (Western European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/London\">(GMT+0:00) Europe/London (Greenwich Mean Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Algiers\">(GMT+1:00) Africa/Algiers (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Bangui\">(GMT+1:00) Africa/Bangui (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Brazzaville\">(GMT+1:00) Africa/Brazzaville (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Ceuta\">(GMT+1:00) Africa/Ceuta (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Douala\">(GMT+1:00) Africa/Douala (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Kinshasa\">(GMT+1:00) Africa/Kinshasa (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Lagos\">(GMT+1:00) Africa/Lagos (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Libreville\">(GMT+1:00) Africa/Libreville (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Luanda\">(GMT+1:00) Africa/Luanda (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Malabo\">(GMT+1:00) Africa/Malabo (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Ndjamena\">(GMT+1:00) Africa/Ndjamena (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Niamey\">(GMT+1:00) Africa/Niamey (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Porto-Novo\">(GMT+1:00) Africa/Porto-Novo (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Tunis\">(GMT+1:00) Africa/Tunis (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Windhoek\">(GMT+1:00) Africa/Windhoek (Western African Time)</option>\n\t\t\t\t\t\t<option value=\"Arctic/Longyearbyen\">(GMT+1:00) Arctic/Longyearbyen (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Atlantic/Jan_Mayen\">(GMT+1:00) Atlantic/Jan_Mayen (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Amsterdam\">(GMT+1:00) Europe/Amsterdam (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Andorra\">(GMT+1:00) Europe/Andorra (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Belgrade\">(GMT+1:00) Europe/Belgrade (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Berlin\">(GMT+1:00) Europe/Berlin (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Bratislava\">(GMT+1:00) Europe/Bratislava (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Brussels\">(GMT+1:00) Europe/Brussels (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Budapest\">(GMT+1:00) Europe/Budapest (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Copenhagen\">(GMT+1:00) Europe/Copenhagen (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Gibraltar\">(GMT+1:00) Europe/Gibraltar (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Ljubljana\">(GMT+1:00) Europe/Ljubljana (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Luxembourg\">(GMT+1:00) Europe/Luxembourg (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Madrid\">(GMT+1:00) Europe/Madrid (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Malta\">(GMT+1:00) Europe/Malta (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Monaco\">(GMT+1:00) Europe/Monaco (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Oslo\">(GMT+1:00) Europe/Oslo (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Paris\">(GMT+1:00) Europe/Paris (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Podgorica\">(GMT+1:00) Europe/Podgorica (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Prague\">(GMT+1:00) Europe/Prague (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Rome\">(GMT+1:00) Europe/Rome (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/San_Marino\">(GMT+1:00) Europe/San_Marino (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Sarajevo\">(GMT+1:00) Europe/Sarajevo (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Skopje\">(GMT+1:00) Europe/Skopje (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Stockholm\">(GMT+1:00) Europe/Stockholm (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Tirane\">(GMT+1:00) Europe/Tirane (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Vaduz\">(GMT+1:00) Europe/Vaduz (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Vatican\">(GMT+1:00) Europe/Vatican (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Vienna\">(GMT+1:00) Europe/Vienna (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Warsaw\">(GMT+1:00) Europe/Warsaw (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Zagreb\">(GMT+1:00) Europe/Zagreb (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Zurich\">(GMT+1:00) Europe/Zurich (Central European Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Blantyre\">(GMT+2:00) Africa/Blantyre (Central African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Bujumbura\">(GMT+2:00) Africa/Bujumbura (Central African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Cairo\">(GMT+2:00) Africa/Cairo (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Gaborone\">(GMT+2:00) Africa/Gaborone (Central African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Harare\">(GMT+2:00) Africa/Harare (Central African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Johannesburg\">(GMT+2:00) Africa/Johannesburg (South Africa Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Kigali\">(GMT+2:00) Africa/Kigali (Central African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Lubumbashi\">(GMT+2:00) Africa/Lubumbashi (Central African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Lusaka\">(GMT+2:00) Africa/Lusaka (Central African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Maputo\">(GMT+2:00) Africa/Maputo (Central African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Maseru\">(GMT+2:00) Africa/Maseru (South Africa Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Mbabane\">(GMT+2:00) Africa/Mbabane (South Africa Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Tripoli\">(GMT+2:00) Africa/Tripoli (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Amman\">(GMT+2:00) Asia/Amman (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Beirut\">(GMT+2:00) Asia/Beirut (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Damascus\">(GMT+2:00) Asia/Damascus (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Gaza\">(GMT+2:00) Asia/Gaza (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Istanbul\">(GMT+2:00) Asia/Istanbul (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Jerusalem\">(GMT+2:00) Asia/Jerusalem (Israel Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Nicosia\">(GMT+2:00) Asia/Nicosia (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Tel_Aviv\">(GMT+2:00) Asia/Tel_Aviv (Israel Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Athens\">(GMT+2:00) Europe/Athens (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Bucharest\">(GMT+2:00) Europe/Bucharest (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Chisinau\">(GMT+2:00) Europe/Chisinau (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Helsinki\">(GMT+2:00) Europe/Helsinki (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Istanbul\">(GMT+2:00) Europe/Istanbul (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Kaliningrad\">(GMT+2:00) Europe/Kaliningrad (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Kiev\">(GMT+2:00) Europe/Kiev (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Mariehamn\">(GMT+2:00) Europe/Mariehamn (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Minsk\">(GMT+2:00) Europe/Minsk (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Nicosia\">(GMT+2:00) Europe/Nicosia (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Riga\">(GMT+2:00) Europe/Riga (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Simferopol\">(GMT+2:00) Europe/Simferopol (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Sofia\">(GMT+2:00) Europe/Sofia (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Tallinn\">(GMT+2:00) Europe/Tallinn (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Tiraspol\">(GMT+2:00) Europe/Tiraspol (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Uzhgorod\">(GMT+2:00) Europe/Uzhgorod (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Vilnius\">(GMT+2:00) Europe/Vilnius (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Zaporozhye\">(GMT+2:00) Europe/Zaporozhye (Eastern European Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Addis_Ababa\">(GMT+3:00) Africa/Addis_Ababa (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Asmara\">(GMT+3:00) Africa/Asmara (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Asmera\">(GMT+3:00) Africa/Asmera (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Dar_es_Salaam\">(GMT+3:00) Africa/Dar_es_Salaam (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Djibouti\">(GMT+3:00) Africa/Djibouti (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Kampala\">(GMT+3:00) Africa/Kampala (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Khartoum\">(GMT+3:00) Africa/Khartoum (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Mogadishu\">(GMT+3:00) Africa/Mogadishu (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Africa/Nairobi\">(GMT+3:00) Africa/Nairobi (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Antarctica/Syowa\">(GMT+3:00) Antarctica/Syowa (Syowa Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Aden\">(GMT+3:00) Asia/Aden (Arabia Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Baghdad\">(GMT+3:00) Asia/Baghdad (Arabia Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Bahrain\">(GMT+3:00) Asia/Bahrain (Arabia Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Kuwait\">(GMT+3:00) Asia/Kuwait (Arabia Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Qatar\">(GMT+3:00) Asia/Qatar (Arabia Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Moscow\">(GMT+3:00) Europe/Moscow (Moscow Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Volgograd\">(GMT+3:00) Europe/Volgograd (Volgograd Time)</option>\n\t\t\t\t\t\t<option value=\"Indian/Antananarivo\">(GMT+3:00) Indian/Antananarivo (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Indian/Comoro\">(GMT+3:00) Indian/Comoro (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Indian/Mayotte\">(GMT+3:00) Indian/Mayotte (Eastern African Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Tehran\">(GMT+3:30) Asia/Tehran (Iran Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Baku\">(GMT+4:00) Asia/Baku (Azerbaijan Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Dubai\">(GMT+4:00) Asia/Dubai (Gulf Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Muscat\">(GMT+4:00) Asia/Muscat (Gulf Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Tbilisi\">(GMT+4:00) Asia/Tbilisi (Georgia Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Yerevan\">(GMT+4:00) Asia/Yerevan (Armenia Time)</option>\n\t\t\t\t\t\t<option value=\"Europe/Samara\">(GMT+4:00) Europe/Samara (Samara Time)</option>\n\t\t\t\t\t\t<option value=\"Indian/Mahe\">(GMT+4:00) Indian/Mahe (Seychelles Time)</option>\n\t\t\t\t\t\t<option value=\"Indian/Mauritius\">(GMT+4:00) Indian/Mauritius (Mauritius Time)</option>\n\t\t\t\t\t\t<option value=\"Indian/Reunion\">(GMT+4:00) Indian/Reunion (Reunion Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Kabul\">(GMT+4:30) Asia/Kabul (Afghanistan Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Aqtau\">(GMT+5:00) Asia/Aqtau (Aqtau Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Aqtobe\">(GMT+5:00) Asia/Aqtobe (Aqtobe Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Ashgabat\">(GMT+5:00) Asia/Ashgabat (Turkmenistan Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Ashkhabad\">(GMT+5:00) Asia/Ashkhabad (Turkmenistan Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Dushanbe\">(GMT+5:00) Asia/Dushanbe (Tajikistan Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Karachi\">(GMT+5:00) Asia/Karachi (Pakistan Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Oral\">(GMT+5:00) Asia/Oral (Oral Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Samarkand\">(GMT+5:00) Asia/Samarkand (Uzbekistan Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Tashkent\">(GMT+5:00) Asia/Tashkent (Uzbekistan Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Yekaterinburg\">(GMT+5:00) Asia/Yekaterinburg (Yekaterinburg Time)</option>\n\t\t\t\t\t\t<option value=\"Indian/Kerguelen\">(GMT+5:00) Indian/Kerguelen (French Southern &amp; Antarctic Lands Time)</option>\n\t\t\t\t\t\t<option value=\"Indian/Maldives\">(GMT+5:00) Indian/Maldives (Maldives Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Calcutta\">(GMT+5:30) Asia/Calcutta (India Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Colombo\">(GMT+5:30) Asia/Colombo (India Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Kolkata\">(GMT+5:30) Asia/Kolkata (India Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Katmandu\">(GMT+5:45) Asia/Katmandu (Nepal Time)</option>\n\t\t\t\t\t\t<option value=\"Antarctica/Mawson\">(GMT+6:00) Antarctica/Mawson (Mawson Time)</option>\n\t\t\t\t\t\t<option value=\"Antarctica/Vostok\">(GMT+6:00) Antarctica/Vostok (Vostok Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Almaty\">(GMT+6:00) Asia/Almaty (Alma-Ata Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Bishkek\">(GMT+6:00) Asia/Bishkek (Kirgizstan Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Dacca\">(GMT+6:00) Asia/Dacca (Bangladesh Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Dhaka\">(GMT+6:00) Asia/Dhaka (Bangladesh Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Novosibirsk\">(GMT+6:00) Asia/Novosibirsk (Novosibirsk Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Omsk\">(GMT+6:00) Asia/Omsk (Omsk Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Qyzylorda\">(GMT+6:00) Asia/Qyzylorda (Qyzylorda Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Thimbu\">(GMT+6:00) Asia/Thimbu (Bhutan Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Thimphu\">(GMT+6:00) Asia/Thimphu (Bhutan Time)</option>\n\t\t\t\t\t\t<option value=\"Indian/Chagos\">(GMT+6:00) Indian/Chagos (Indian Ocean Territory Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Rangoon\">(GMT+6:30) Asia/Rangoon (Myanmar Time)</option>\n\t\t\t\t\t\t<option value=\"Indian/Cocos\">(GMT+6:30) Indian/Cocos (Cocos Islands Time)</option>\n\t\t\t\t\t\t<option value=\"Antarctica/Davis\">(GMT+7:00) Antarctica/Davis (Davis Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Bangkok\">(GMT+7:00) Asia/Bangkok (Indochina Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Ho_Chi_Minh\">(GMT+7:00) Asia/Ho_Chi_Minh (Indochina Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Hovd\">(GMT+7:00) Asia/Hovd (Hovd Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Jakarta\">(GMT+7:00) Asia/Jakarta (West Indonesia Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Krasnoyarsk\">(GMT+7:00) Asia/Krasnoyarsk (Krasnoyarsk Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Phnom_Penh\">(GMT+7:00) Asia/Phnom_Penh (Indochina Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Pontianak\">(GMT+7:00) Asia/Pontianak (West Indonesia Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Saigon\">(GMT+7:00) Asia/Saigon (Indochina Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Vientiane\">(GMT+7:00) Asia/Vientiane (Indochina Time)</option>\n\t\t\t\t\t\t<option value=\"Indian/Christmas\">(GMT+7:00) Indian/Christmas (Christmas Island Time)</option>\n\t\t\t\t\t\t<option value=\"Antarctica/Casey\">(GMT+8:00) Antarctica/Casey (Western Standard Time (Australia))</option>\n\t\t\t\t\t\t<option value=\"Asia/Brunei\">(GMT+8:00) Asia/Brunei (Brunei Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Choibalsan\">(GMT+8:00) Asia/Choibalsan (Choibalsan Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Chongqing\">(GMT+8:00) Asia/Chongqing (China Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Chungking\">(GMT+8:00) Asia/Chungking (China Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Harbin\">(GMT+8:00) Asia/Harbin (China Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Hong_Kong\">(GMT+8:00) Asia/Hong_Kong (Hong Kong Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Irkutsk\">(GMT+8:00) Asia/Irkutsk (Irkutsk Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Kashgar\">(GMT+8:00) Asia/Kashgar (China Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Kuala_Lumpur\">(GMT+8:00) Asia/Kuala_Lumpur (Malaysia Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Kuching\">(GMT+8:00) Asia/Kuching (Malaysia Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Macao\">(GMT+8:00) Asia/Macao (China Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Macau\">(GMT+8:00) Asia/Macau (China Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Makassar\">(GMT+8:00) Asia/Makassar (Central Indonesia Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Manila\">(GMT+8:00) Asia/Manila (Philippines Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Shanghai\">(GMT+8:00) Asia/Shanghai (China Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Singapore\">(GMT+8:00) Asia/Singapore (Singapore Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Taipei\">(GMT+8:00) Asia/Taipei (China Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Ujung_Pandang\">(GMT+8:00) Asia/Ujung_Pandang (Central Indonesia Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Ulaanbaatar\">(GMT+8:00) Asia/Ulaanbaatar (Ulaanbaatar Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Ulan_Bator\">(GMT+8:00) Asia/Ulan_Bator (Ulaanbaatar Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Urumqi\">(GMT+8:00) Asia/Urumqi (China Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Australia/Perth\">(GMT+8:00) Australia/Perth (Western Standard Time (Australia))</option>\n\t\t\t\t\t\t<option value=\"Australia/West\">(GMT+8:00) Australia/West (Western Standard Time (Australia))</option>\n\t\t\t\t\t\t<option value=\"Australia/Eucla\">(GMT+8:45) Australia/Eucla (Central Western Standard Time (Australia))</option>\n\t\t\t\t\t\t<option value=\"Asia/Dili\">(GMT+9:00) Asia/Dili (Timor-Leste Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Jayapura\">(GMT+9:00) Asia/Jayapura (East Indonesia Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Pyongyang\">(GMT+9:00) Asia/Pyongyang (Korea Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Seoul\">(GMT+9:00) Asia/Seoul (Korea Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Tokyo\">(GMT+9:00) Asia/Tokyo (Japan Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Yakutsk\">(GMT+9:00) Asia/Yakutsk (Yakutsk Time)</option>\n\t\t\t\t\t\t<option value=\"Australia/Adelaide\">(GMT+9:30) Australia/Adelaide (Central Standard Time (South Australia))</option>\n\t\t\t\t\t\t<option value=\"Australia/Broken_Hill\">(GMT+9:30) Australia/Broken_Hill (Central Standard Time (South Australia/New South Wales))</option>\n\t\t\t\t\t\t<option value=\"Australia/Darwin\">(GMT+9:30) Australia/Darwin (Central Standard Time (Northern Territory))</option>\n\t\t\t\t\t\t<option value=\"Australia/North\">(GMT+9:30) Australia/North (Central Standard Time (Northern Territory))</option>\n\t\t\t\t\t\t<option value=\"Australia/South\">(GMT+9:30) Australia/South (Central Standard Time (South Australia))</option>\n\t\t\t\t\t\t<option value=\"Australia/Yancowinna\">(GMT+9:30) Australia/Yancowinna (Central Standard Time (South Australia/New South Wales))</option>\n\t\t\t\t\t\t<option value=\"Antarctica/DumontDUrville\">(GMT+10:00) Antarctica/DumontDUrville (Dumont-d'Urville Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Sakhalin\">(GMT+10:00) Asia/Sakhalin (Sakhalin Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Vladivostok\">(GMT+10:00) Asia/Vladivostok (Vladivostok Time)</option>\n\t\t\t\t\t\t<option value=\"Australia/ACT\">(GMT+10:00) Australia/ACT (Eastern Standard Time (New South Wales))</option>\n\t\t\t\t\t\t<option value=\"Australia/Brisbane\">(GMT+10:00) Australia/Brisbane (Eastern Standard Time (Queensland))</option>\n\t\t\t\t\t\t<option value=\"Australia/Canberra\">(GMT+10:00) Australia/Canberra (Eastern Standard Time (New South Wales))</option>\n\t\t\t\t\t\t<option value=\"Australia/Currie\">(GMT+10:00) Australia/Currie (Eastern Standard Time (New South Wales))</option>\n\t\t\t\t\t\t<option value=\"Australia/Hobart\">(GMT+10:00) Australia/Hobart (Eastern Standard Time (Tasmania))</option>\n\t\t\t\t\t\t<option value=\"Australia/Lindeman\">(GMT+10:00) Australia/Lindeman (Eastern Standard Time (Queensland))</option>\n\t\t\t\t\t\t<option value=\"Australia/Melbourne\">(GMT+10:00) Australia/Melbourne (Eastern Standard Time (Victoria))</option>\n\t\t\t\t\t\t<option value=\"Australia/NSW\">(GMT+10:00) Australia/NSW (Eastern Standard Time (New South Wales))</option>\n\t\t\t\t\t\t<option value=\"Australia/Queensland\">(GMT+10:00) Australia/Queensland (Eastern Standard Time (Queensland))</option>\n\t\t\t\t\t\t<option value=\"Australia/Sydney\">(GMT+10:00) Australia/Sydney (Eastern Standard Time (New South Wales))</option>\n\t\t\t\t\t\t<option value=\"Australia/Tasmania\">(GMT+10:00) Australia/Tasmania (Eastern Standard Time (Tasmania))</option>\n\t\t\t\t\t\t<option value=\"Australia/Victoria\">(GMT+10:00) Australia/Victoria (Eastern Standard Time (Victoria))</option>\n\t\t\t\t\t\t<option value=\"Australia/LHI\">(GMT+10:30) Australia/LHI (Lord Howe Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Australia/Lord_Howe\">(GMT+10:30) Australia/Lord_Howe (Lord Howe Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Magadan\">(GMT+11:00) Asia/Magadan (Magadan Time)</option>\n\t\t\t\t\t\t<option value=\"Antarctica/McMurdo\">(GMT+12:00) Antarctica/McMurdo (New Zealand Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Antarctica/South_Pole\">(GMT+12:00) Antarctica/South_Pole (New Zealand Standard Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Anadyr\">(GMT+12:00) Asia/Anadyr (Anadyr Time)</option>\n\t\t\t\t\t\t<option value=\"Asia/Kamchatka\">(GMT+12:00) Asia/Kamchatka (Petropavlovsk-Kamchatski Time)</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<button type=\"submit\" class=\"btn btn-primary btn-block\" @click=\"registerUser\">\n\t\t\t\t\t\tCreate Account\n\t\t\t\t\t</button>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t</form><!-- end form -->\n\t\t<!--<a v-if=\"currentState === 'login' || currentState === 'create'\" class=\"btn btn-block btn-link\" @click=\"currentState='reset'\">Forgot Your Password?</a>-->\n\t\t<a v-if=\"currentState === 'reset' || currentState === 'create'\" class=\"btn btn-block btn-link\" @click=\"currentState='login'\">I Have An Account</a>\n\t\t<a v-if=\"currentState === 'login' || currentState === 'reset'\" class=\"btn btn-block btn-link\" @click=\"currentState='create'\">Create A New Account</a>\n\t</div>\n</div><!-- end panel-body -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -35372,7 +35504,107 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7dce67a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],125:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],126:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'donations-list',
+    props: {
+        fundraiserId: String,
+        donations: {
+            default: [],
+            coerce: function coerce(val) {
+                return JSON.parse(val);
+            }
+        }
+    },
+    data: function data() {
+        return {
+            search: '',
+            orderByField: 'name',
+            direction: 1
+        };
+    },
+
+    watch: {
+        'donations': function donations() {}
+    },
+    methods: {
+        getDonations: function getDonations() {
+            this.$http.get('fundraisers.donations', {}).then(function (response) {
+                this.donations = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        //this.getDonations();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n\t\t\t<form class=\"form-inline text-right\" novalidate=\"\">\n\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search (name, amount)\">\n\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t<span class=\"input-group-addon\">Sort:</span>\n\t\t\t\t\t<select class=\"form-control\" v-model=\"orderByField\">\n\t\t\t\t\t\t<option value=\"name\">Name</option>\n\t\t\t\t\t\t<option value=\"amount\">Amount</option>\n\t\t\t\t\t\t<option value=\"date\">Date</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t<span class=\"input-group-addon\">Order</span>\n\t\t\t\t\t<select class=\"form-control\" v-model=\"direction\">\n\t\t\t\t\t\t<option :value=\"1\">Desc.</option>\n\t\t\t\t\t\t<option :value=\"-1\">Asc.</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t\t<hr>\n        </div>\n\t\t<div class=\"col-sm-12\">\n\t\t\t<div class=\"media\" v-for=\"donation in donations|filterBy search|orderBy orderByField direction\">\n                <a class=\"media-left\" href=\"#\">\n                    <img src=\"http://placehold.it/64x64\" style=\"width: 64px; height: 64px;\">\n                </a>\n                <div class=\"media-body\">\n                    <h4 class=\"media-heading\">{{ donation.name }} <small>donated</small> {{ donation.amount|currency }} <small class=\"pull-right\">{{ donation.created_at|moment }}</small></h4>\n                    <p><b>Message</b>: {{ donation.message }}</p>\n                </div>\n            </div>\n        </div>\n\n    </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-5e12a7a6", module.exports)
+  } else {
+    hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],127:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'reservations-list',
+    props: {
+        reservations: {
+            default: [],
+            coerce: function coerce(val) {
+                return JSON.parse(val);
+            }
+        }
+    },
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        country: function country(code) {
+            return code;
+        },
+        getReservations: function getReservations() {
+            this.$http.get('reservations', {
+                include: 'trip.campaign,trip.group'
+                //                    , user: array(Auth::user()->id)
+            }).then(function (response) {
+                this.reservations = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        //this.getReservations();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\" v-for=\"reservation in reservations\">\n    <div class=\"panel-heading\">\n        <h2 class=\"panel-title\">\n            {{ reservation.trip.campaign.name }}\n            <small>{{ reservation.country }}</small>\n        </h2>\n    </div>\n    <div class=\"panel-body\">\n\n        <h5>\n            {{ reservation.surname }}, {{ reservation.given_names }}\n            <small>{{ reservation.trip.group.name }}</small>\n        </h5>\n        <p>{{ reservation.trip.type }} Missionary</p>\n        <a class=\"btn btn-sm btn-primary\" href=\"/dashboard/reservations/{{ reservation.id }}\">View Reservation</a>\n        <br>\n    </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-01de7a71", module.exports)
+  } else {
+    hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],128:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -35474,6 +35706,12 @@ exports.default = {
 			}, this);
 		},
 		finish: function finish() {
+			// if details form is incomplete
+			if (!this.stepList[0].valid) {
+				// show error and discontinue
+				return false;
+			}
+
 			var resource = this.$resource('trips');
 			resource.save(null, this.wizardData).then(function (resp) {
 				window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
@@ -35509,7 +35747,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-4 col-md-3\">\n\t\t<ul class=\"lizt-group\">\n\t\t\t\t<a @click=\"toStep(step)\" role=\"step\" v-for=\"step in stepList\" class=\"list-group-item\" :class=\"{'active': currentStep.view === step.view, 'list-group-item-danger' : step.valid === false}\">\n\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete &amp;&amp; step.valid === null, 'fa-check': step.complete, 'fa-exclamation-triangle' : step.valid === false}\"></span>\n\t\t\t\t\t{{step.name}}\n\t\t\t\t</a>\n\t\t</ul>\n\t</div>\n\t<div class=\"col-sm-8 col-md-9 {{currentStep.view}}\">\n\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t</component>\n\t\t<hr>\n\t\t<div class=\"btn-group btn-group-sm pull-right\" role=\"group\" aria-label=\"...\">\n\t\t\t<a class=\"btn btn-link\" @click=\"back()\">Cancel</a>\n\t\t\t<a class=\"btn btn-default\" v-if=\"currentStep.view !== 'step1'\" @click=\"backStep()\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n\t<hr>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-4 col-md-3\">\n\t\t<ul class=\"lizt-group\">\n\t\t\t\t<a @click=\"toStep(step)\" role=\"step\" v-for=\"step in stepList\" class=\"list-group-item\" :class=\"{'active': currentStep.view === step.view, 'list-group-item-danger' : step.valid === false}\">\n\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete &amp;&amp; step.valid === null, 'fa-check': step.complete, 'fa-exclamation-triangle' : step.valid === false}\"></span>\n\t\t\t\t\t{{step.name}}\n\t\t\t\t</a>\n\t\t</ul>\n\t</div>\n\t<div class=\"col-sm-8 col-md-9 {{currentStep.view}}\">\n\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t</component>\n\t\t<div class=\"alert alert-danger alert-dismissible\" role=\"alert\" v-if=\"!stepList[0].valid &amp;&amp; !!$children[0].attemptedContinue\">\n\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them before saving.\n\t\t</div>\n\t\t<hr>\n\t\t<div class=\"btn-group btn-group-sm pull-right\" role=\"group\" aria-label=\"...\">\n\t\t\t<a class=\"btn btn-link\" @click=\"back()\">Cancel</a>\n\t\t\t<a class=\"btn btn-default\" v-if=\"currentStep.view !== 'step1'\" @click=\"backStep()\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n\t<hr>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -35524,7 +35762,389 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":127,"./create/details.vue":128,"./create/pricing.vue":129,"./create/requirements.vue":130,"./create/settings.vue":131,"vue":111,"vue-hot-reload-api":107,"vueify/lib/insert-css":112}],126:[function(require,module,exports){
+},{"./create/deadlines.vue":134,"./create/details.vue":135,"./create/pricing.vue":136,"./create/requirements.vue":137,"./create/settings.vue":138,"vue":111,"vue-hot-reload-api":107,"vueify/lib/insert-css":112}],129:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-trip-delete',
+    props: ['tripId'],
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        deleteTrip: function deleteTrip() {
+            this.$http.delete('trips/' + this.tripId).then(function (response) {
+                console.log(response);
+                window.location.href = window.location.href.split('/trips/b41ba11e-71a8-4683-9fdf-a49f5e70a92b')[0];
+            }, function (error) {
+                console.log(error);
+            });
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" id=\"deleteConfirmationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"deleteConfirmationModal\">\n    <div class=\"modal-dialog modal-sm\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n                <h4 class=\"modal-title\" id=\"myModalLabel\">Delete Trip</h4>\n            </div>\n            <div class=\"modal-body\">\n                <p>Are you sure you want to delete this Trip?</p>\n                <div class=\"row\">\n                    <div class=\"col-xs-6\"><a class=\"btn btn-sm btn-block btn-default\" data-dismiss=\"modal\">No</a></div>\n                    <div class=\"col-xs-6\"><a @click=\"deleteTrip()\" class=\"btn btn-sm btn-block btn-primary\">Yes</a></div>\n                </div>\n            </div>\n\n        </div>\n    </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-1f88c822", module.exports)
+  } else {
+    hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],130:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'admin-trip-duplicate',
+    props: ['tripId'],
+    components: { vSelect: _vueSelect2.default },
+    data: function data() {
+        return {
+            attemptedContinue: false,
+            groups: [],
+            groupObj: null,
+            group_id: null,
+            type: '',
+            trip: null
+        };
+    },
+
+    computed: {
+        group_id: function group_id() {
+            return _.isObject(this.groupObj) ? this.groupObj.id : null;
+        }
+    },
+    methods: {
+        getGroups: function getGroups(search, loading) {
+            loading(true);
+            this.$http.get('groups', { search: search }).then(function (response) {
+                this.groups = response.data.data;
+                loading(false);
+            });
+        },
+        checkForError: function checkForError(field) {
+            // if user clicked continue button while the field is invalid trigger error styles
+            return this.$TripDuplication[field.toLowerCase()].invalid && this.attemptedContinue;
+        },
+        duplicateTrip: function duplicateTrip() {
+            this.$validate('group', true);
+            this.attemptedContinue = true;
+            if (this.$TripDuplication.valid) {
+                this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines' }).then(function (trip) {
+                    this.trip = trip.data.data;
+                    $.extend(this.trip, {
+                        type: this.type,
+                        group_id: this.group_id
+                    });
+                    // trim costs
+                    _.each(this.trip.costs.data, function (cost) {
+                        cost.payments = cost.payments.data;
+                    });
+                    this.trip.costs = this.trip.costs.data;
+                    // trim deadlines
+                    this.trip.deadlines = this.trip.deadlines.data;
+                    // trim requirements
+                    this.trip.requirements = this.trip.requirements.data;
+                    // trim notes
+                    this.trip.notes = this.trip.notes.data;
+
+                    // for now remove rep_id
+                    delete this.trip.rep_id;
+
+                    this.$http.post('trips', this.trip).then(function (response) {
+                        console.log(response);
+                        window.location.href = window.location.href.split('/trips')[0] + response.data.data.links[0].uri;
+                    }, function (error) {
+                        console.log(error);
+                    });
+                });
+            }
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" id=\"duplicationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"duplicationModal\">\n    <div class=\"modal-dialog\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n                <h4 class=\"modal-title\" id=\"myModalLabel\">Duplicate Trip</h4>\n            </div>\n            <div class=\"modal-body\">\n                <p>Are you sure you want to duplicate this trip?</p>\n                <hr>\n                <validator name=\"TripDuplication\">\n                    <form class=\"form-horizontal\" novalidate=\"\">\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n                            <label class=\"col-sm-2 control-label\">Group</label>\n                            <div class=\"col-sm-10\">\n                                <v-select class=\"form-controls\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n                                <select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n                                    <option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n                                </select>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n                            <label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n                            <div class=\"col-sm-10\">\n                                <select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                                    <option value=\"\">-- select --</option>\n                                    <option value=\"full\">Full</option>\n                                    <option value=\"media\">Media</option>\n                                    <option value=\"medical\">Medical</option>\n                                    <option value=\"short\">Short</option>\n                                </select>\n                            </div>\n                        </div>\n                    </form>\n                </validator>\n                <div class=\"row\">\n                    <div class=\"col-xs-6\"><a class=\"btn btn-sm btn-block btn-default\" data-dismiss=\"modal\">No</a></div>\n                    <div class=\"col-xs-6\"><a @click=\"duplicateTrip()\" class=\"btn btn-sm btn-block btn-primary\">Yes</a></div>\n                </div>\n            </div>\n\n        </div>\n    </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-07829d12", module.exports)
+  } else {
+    hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],131:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _details = require('./edit/details.vue');
+
+var _details2 = _interopRequireDefault(_details);
+
+var _settings = require('./edit/settings.vue');
+
+var _settings2 = _interopRequireDefault(_settings);
+
+var _pricing = require('./edit/pricing.vue');
+
+var _pricing2 = _interopRequireDefault(_pricing);
+
+var _requirements = require('./edit/requirements.vue');
+
+var _requirements2 = _interopRequireDefault(_requirements);
+
+var _deadlines = require('./edit/deadlines.vue');
+
+var _deadlines2 = _interopRequireDefault(_deadlines);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'campaign-trip-edit-wizard',
+	props: ['tripId'],
+	data: function data() {
+		return {
+			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }, { name: 'Pricing', view: 'step3', form: '$TripPricing', valid: null, complete: false }, { name: 'Requirements', view: 'step4', form: '$TripReqs', valid: null, complete: false }, { name: 'Other Deadlines', view: 'step5', form: '$TripDeadlines', valid: null, complete: false }],
+			currentStep: null,
+			canContinue: false,
+			wizardComplete: false,
+			trip: {},
+
+			// admin generated data
+			wizardData: {}
+		};
+	},
+
+	computed: {
+		canContinue: function canContinue() {
+			return this.currentStep.complete;
+		}
+	},
+	components: {
+		'step1': _details2.default,
+		'step2': _settings2.default,
+		'step3': _pricing2.default,
+		'step4': _requirements2.default,
+		'step5': _deadlines2.default
+	},
+	methods: {
+		back: function back() {
+			window.location.href = window.location.href.split('/create')[0];
+		},
+		childValidationTrigger: function childValidationTrigger() {
+			var self = this;
+			// find child
+			var thisChild = _.find(this.$children, function (child) {
+				return child.hasOwnProperty(self.currentStep.form);
+			});
+
+			// if form is invalid mark as invalid step, but continue anyway
+			this.currentStep.valid = !thisChild[this.currentStep.form].invalid;
+			thisChild.attemptedContinue = true;
+			thisChild.populateWizardData();
+		},
+		toStep: function toStep(step) {
+			this.childValidationTrigger();
+			this.currentStep = step;
+		},
+		backStep: function backStep() {
+			this.childValidationTrigger();
+			this.stepList.some(function (step, i, list) {
+				if (this.currentStep.view === step.view) {
+					return this.currentStep = list[i - 1];
+				}
+			}, this);
+		},
+		nextStep: function nextStep() {
+			this.childValidationTrigger();
+			this.nextStepCallback();
+		},
+		nextStepCallback: function nextStepCallback() {
+			this.stepList.some(function (step, i, list) {
+				if (this.currentStep.view === step.view) {
+					return this.currentStep = list[i + 1];
+				}
+			}, this);
+		},
+		finish: function finish() {
+			// if details form is incomplete
+			if (!this.stepList[0].valid) {
+				// show error and discontinue
+				return false;
+			}
+
+			var resource = this.$resource('trips{/id}');
+			resource.update({ id: this.tripId }, this.wizardData).then(function (resp) {
+				window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
+			}, function (error) {
+				console.log(error);
+			});
+		}
+	},
+	created: function created() {
+		this.currentStep = this.stepList[0];
+
+		this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines' }).then(function (trip) {
+			var trip = trip.data.data;
+			$.extend(trip, {
+				type: this.type,
+				group_id: this.group_id
+			});
+			// trim costs
+			_.each(trip.costs.data, function (cost) {
+				cost.payments = cost.payments.data;
+			});
+			trip.costs = trip.costs.data;
+			// trim campaign
+			trip.campaign = trip.campaign.data;
+			// trim deadlines
+			trip.deadlines = trip.deadlines.data;
+			// trim requirements
+			trip.requirements = trip.requirements.data;
+			// trim notes
+			trip.notes = trip.notes.data;
+			// for now remove rep_id
+			delete trip.rep_id;
+			console.log(trip);
+			this.trip = trip;
+			this.wizardData.campaign_id = this.trip.campaign_id;
+			this.wizardData.country_code = this.trip.country_code;
+
+			this.$broadcast('trip', this.trip);
+		});
+	},
+
+	events: {
+		'details': function details(val) {
+			this.currentStep.complete = val;
+		},
+		'settings': function settings(val) {
+			this.currentStep.complete = val;
+		},
+		'pricing': function pricing(val) {
+			this.currentStep.complete = val;
+		},
+		'reqs': function reqs(val) {
+			this.currentStep.complete = val;
+		},
+		'deadlines': function deadlines(val) {
+			this.currentStep.complete = this.wizardComplete = val;
+		}
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-4 col-md-3\">\n\t\t<ul class=\"lizt-group\">\n\t\t\t\t<a @click=\"toStep(step)\" role=\"step\" v-for=\"step in stepList\" class=\"list-group-item\" :class=\"{'active': currentStep.view === step.view, 'list-group-item-danger' : step.valid === false}\">\n\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete &amp;&amp; step.valid === null, 'fa-check': step.complete, 'fa-exclamation-triangle' : step.valid === false}\"></span>\n\t\t\t\t\t{{step.name}}\n\t\t\t\t</a>\n\t\t</ul>\n\t</div>\n\t<div class=\"col-sm-8 col-md-9 {{currentStep.view}}\">\n\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t</component>\n\t\t<div class=\"alert alert-danger alert-dismissible\" role=\"alert\" v-if=\"!stepList[0].valid &amp;&amp; !!$children[0].attemptedContinue\">\n\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them before updating.\n\t\t</div>\n\t\t<hr>\n\t\t<div class=\"btn-group btn-group-sm pull-right\" role=\"group\" aria-label=\"...\">\n\t\t\t<a class=\"btn btn-link\" @click=\"back()\">Cancel</a>\n\t\t\t<a class=\"btn btn-default\" v-if=\"currentStep.view !== 'step1'\" @click=\"backStep()\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-1684d064", module.exports)
+  } else {
+    hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./edit/deadlines.vue":139,"./edit/details.vue":140,"./edit/pricing.vue":141,"./edit/requirements.vue":142,"./edit/settings.vue":143,"vue":111,"vue-hot-reload-api":107,"vueify/lib/insert-css":112}],132:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-trip-reservations',
+    props: ['tripId'],
+    data: function data() {
+        return {
+            reservations: [],
+            orderByField: 'surname',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {},
+            search: ''
+        };
+    },
+
+    watch: {
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchReservations();
+        },
+        'page': function page(val, oldVal) {
+            this.searchReservations();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchReservations();
+        }
+    },
+
+    methods: {
+        setOrderByField: function setOrderByField(field) {
+            return this.orderByField = field, this.direction = 1;
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'surname';
+            this.direction = 1;
+            this.search = null;
+        },
+        searchReservations: function searchReservations() {
+            this.$http.get('reservations', {
+                trip_id: new Array(this.tripId),
+                include: 'user',
+                search: this.searchText,
+                per_page: this.per_page,
+                page: this.page
+            }).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.reservations = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchReservations();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <span class=\"input-group-addon\">Show</span>\n                    <select class=\"form-control\" v-model=\"per_page\">\n                        <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                    </select>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n                <!--| <a class=\"btn btn-primary btn-sm\" href=\"reservations/create\"><i class=\"fa fa-plus\"></i> New</a>-->\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'user.data.name'}\">\n                User\n                <i @click=\"setOrderByField('user.data.name')\" v-if=\"orderByField !== 'user.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'user.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Email\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'campaign.data.name'}\">\n                Phone\n                <i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'status'}\">\n                Status\n                <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th>\n                Start &amp; End\n            </th>\n            <th><i class=\"fa fa-plane\"></i></th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n            <td>{{reservation.given_names|capitalize}} {{reservation.surname|capitalize}}</td>\n            <td>{{reservation.user.data.email}}</td>\n            <td>{{reservation.user.data.phone_one}}</td>\n            <td>{{reservation.status}}</td>\n            <td>{{reservation.created_at|moment 'll'}}</td>\n            <td>View</td>\n            <td>\n                <a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <!--<a href=\"/admin{{campaignId + reservation.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>-->\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-25146f20", module.exports)
+  } else {
+    hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],133:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35595,7 +36215,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],127:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],134:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35662,7 +36282,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDeadlines\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDeadlines\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Deadlines</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewDeadline=!toggleNewDeadline\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Deadline\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewDeadline\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Deadline\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripDeadlinesCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewDeadline=false\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addDeadline()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Deadline\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"deadline in deadlines|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{deadline.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.due_at|moment}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.grace_period}} {{deadline.amount_owed|pluralize 'day'}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"deadlines.$remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDeadlines\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDeadlines\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Deadlines</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewDeadline=!toggleNewDeadline\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Deadline\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewDeadline\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Deadline\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripDeadlinesCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewDeadline=false\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addDeadline()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Deadline\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"deadline in deadlines|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{deadline.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.due_at|moment}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"deadlines.$remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -35673,7 +36293,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],128:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],135:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 "use strict";
@@ -35696,7 +36316,7 @@ exports.default = {
 			reps: [],
 			//campaigns: [],
 			groups: [],
-			prospectsList: [{ value: "ADLT", name: "Adults" }, { value: "YNGA", name: "Young Adults (18-29)" }, { value: "TEEN", name: "Teens (13+)" }, { value: "FAMS", name: "Families" }, { value: "MMEN", name: "Men" }, { value: "WMEN", name: "Women" }, { value: "MEDI", name: "Media Professionals" }, { value: "PSTR", name: "Pastors" }, { value: "BUSL", name: "Business Leaders" }, { value: "MDPF", name: "Medical Professionals" }, { value: "PHYS", name: "Physicians" }, { value: "SURG", name: "Surgeons" }, { value: "REGN", name: "Registered Nurses" }, { value: "DENT", name: "Dentists" }, { value: "HYGN", name: "Hygienists" }, { value: "DENA", name: "Dental Assistants" }, { value: "PHYA", name: "Physician Assistants" }, { value: "NURP", name: "Nurse Practitioners" }, { value: "PHAR", name: "Pharmacists" }, { value: "PHYT", name: "Physical Therapists" }, { value: "CHRO", name: "Chiropractors" }, { value: "MSTU", name: "Medical Students" }, { value: "DSTU", name: "Dental Students" }, { value: "NSTU", name: "Nursing Students" }],
+			prospectsList: [{ value: "adults", name: "Adults" }, { value: "young adults", name: "Young Adults (18-29)" }, { value: "teens", name: "Teens (13+)" }, { value: "families", name: "Families" }, { value: "men", name: "Men" }, { value: "women", name: "Women" }, { value: "media professionals", name: "Media Professionals" }, { value: "pastors", name: "Pastors" }, { value: "business leaders", name: "Business Leaders" }, { value: "medical professionals", name: "Medical Professionals" }, { value: "physicians", name: "Physicians" }, { value: "surgeons", name: "Surgeons" }, { value: "registered nurses", name: "Registered Nurses" }, { value: "dentists", name: "Dentists" }, { value: "hygienists", name: "Hygienists" }, { value: "dental assistants", name: "Dental Assistants" }, { value: "physician assistants", name: "Physician Assistants" }, { value: "nurse practitioners", name: "Nurse Practitioners" }, { value: "pharmacists", name: "Pharmacists" }, { value: "physical therapists", name: "Physical Therapists" }, { value: "chiropractors", name: "Chiropractors" }, { value: "medical students", name: "Medical Students" }, { value: "dental students", name: "Dental Students" }, { value: "nursing students", name: "Nursing Students" }],
 			attemptedContinue: false,
 
 			// details data
@@ -35737,9 +36357,7 @@ exports.default = {
 				companion_limit: this.companion_limit,
 				prospects: this.prospects,
 				started_at: this.started_at,
-				ended_at: this.ended_at,
-				rep_id: this.rep_id
-
+				ended_at: this.ended_at
 			});
 		},
 		getGroups: function getGroups(search, loading) {
@@ -35769,7 +36387,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDetails\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDetailsForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Campaign</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<p>{{$parent.campaign.name|capitalize}}</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Group</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<textarea name=\"description\" id=\"description\" rows=\"2\" v-model=\"description\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:120 }\" maxlength=\"255\" minlength=\"1\"></textarea>\n\t\t\t\t\t\t<div class=\"help-block\">{{description.length}}/255</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"full\">Full</option>\n\t\t\t\t\t\t\t<option value=\"media\">Media</option>\n\t\t\t\t\t\t\t<option value=\"medical\">Medical</option>\n\t\t\t\t\t\t\t<option value=\"short\">Short</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('prospects') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Perfect For</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-controls\" id=\"group\" :value.sync=\"prospectsObj\" :options=\"prospectsList\" label=\"name\" placeholder=\"Select Prospects\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" multiple=\"\" v-model=\"prospects\" v-validate:prospects=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"prospect.value\" v-for=\"prospect in prospectsList\">{{prospect.name}}\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('difficulty') }\">\n\t\t\t\t\t<label for=\"difficulty\" class=\"col-sm-2 control-label\">Difficulty</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"difficulty\" class=\"form-control input-sm\" v-model=\"difficulty\" v-validate:difficulty=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"level_1\">Level 1</option>\n\t\t\t\t\t\t\t<option value=\"level_2\">Level 2</option>\n\t\t\t\t\t\t\t<option value=\"level_3\">Level 3</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n\t\t\t\t\t<label for=\"companion_limit\" class=\"col-sm-2 control-label\">Companion Limit</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"companion_limit\" v-model=\"companion_limit\" class=\"form-control\" v-validate:companions=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('rep') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Trip Rep.</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-controls\" id=\"rep\" :value.sync=\"repObj\" :options=\"reps\" label=\"name\"></v-select>\n\t\t\t\t\t\t<!--v-validate:rep=\"{ required: false}\"-->\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"rep_id\">\n\t\t\t\t\t\t\t<option v-for=\"rep in reps\" :value=\"rep\">{{rep}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDetails\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDetailsForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Campaign</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<p>{{$parent.campaign.name|capitalize}}</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Group</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<textarea name=\"description\" id=\"description\" rows=\"2\" v-model=\"description\" class=\"form-control\" v-validate:description=\"{ required: true}\"></textarea>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"full\">Full</option>\n\t\t\t\t\t\t\t<option value=\"media\">Media</option>\n\t\t\t\t\t\t\t<option value=\"medical\">Medical</option>\n\t\t\t\t\t\t\t<option value=\"short\">Short</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('prospects') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Perfect For</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-controls\" id=\"group\" :value.sync=\"prospectsObj\" :options=\"prospectsList\" label=\"name\" placeholder=\"Select Prospects\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" multiple=\"\" v-model=\"prospects\" v-validate:prospects=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"prospect.value\" v-for=\"prospect in prospectsList\">{{prospect.name}}\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('difficulty') }\">\n\t\t\t\t\t<label for=\"difficulty\" class=\"col-sm-2 control-label\">Difficulty</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"difficulty\" class=\"form-control input-sm\" v-model=\"difficulty\" v-validate:difficulty=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"level_1\">Level 1</option>\n\t\t\t\t\t\t\t<option value=\"level_2\">Level 2</option>\n\t\t\t\t\t\t\t<option value=\"level_3\">Level 3</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n\t\t\t\t\t<label for=\"companion_limit\" class=\"col-sm-2 control-label\">Companion Limit</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"companion_limit\" v-model=\"companion_limit\" class=\"form-control\" v-validate:companions=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('rep') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Trip Rep.</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-controls\" id=\"rep\" :value.sync=\"repObj\" :options=\"reps\" label=\"name\"></v-select>\n\t\t\t\t\t\t<!--v-validate:rep=\"{ required: false}\"-->\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"rep_id\">\n\t\t\t\t\t\t\t<option v-for=\"rep in reps\" :value=\"rep\">{{rep}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -35784,7 +36402,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":112}],129:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":112}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36013,7 +36631,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],130:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36092,7 +36710,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],131:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],138:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36147,7 +36765,595 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],132:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],139:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-deadlines',
+	data: function data() {
+		return {
+			toggleNewDeadline: false,
+			attemptedAddDeadline: false,
+			attemptedContinue: false,
+
+			// deadlines data
+			todos: [],
+			deadlines: [],
+			newDeadline: {
+				name: '',
+				date: null,
+				grace_period: 0,
+				enforced: false
+			}
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				todos: this.todos,
+				deadlines: this.deadlines
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('deadlines', true);
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
+		},
+		resetDeadline: function resetDeadline() {
+			this.newDeadline = {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0,
+				enforced: false
+			};
+		},
+		addDeadline: function addDeadline() {
+			this.attemptedAddDeadline = true;
+			if (this.$TripDeadlinesCreate.valid) {
+				this.deadlines.push(this.newDeadline);
+				this.resetDeadline();
+				this.toggleNewDeadline = false;
+				this.attemptedAddDeadline = false;
+			}
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		$.extend(this, {
+			todos: this.$parent.trip.todos,
+			deadlines: this.$parent.trip.deadlines
+		});
+		this.$dispatch('deadlines', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDeadlines\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDeadlines\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Deadlines</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewDeadline=!toggleNewDeadline\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Deadline\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewDeadline\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Deadline\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripDeadlinesCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewDeadline=false\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addDeadline()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Deadline\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"deadline in deadlines|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{deadline.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.due_at|moment}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"deadlines.$remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-03d4d92c", module.exports)
+  } else {
+    hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],140:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vueSelect = require("vue-select");
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'trip-details',
+	components: { vSelect: _vueSelect2.default },
+	data: function data() {
+		return {
+			reps: [],
+			//campaigns: [],
+			groups: [],
+			prospectsList: [{ value: "adults", name: "Adults" }, { value: "young adults", name: "Young Adults (18-29)" }, { value: "teens", name: "Teens (13+)" }, { value: "families", name: "Families" }, { value: "men", name: "Men" }, { value: "women", name: "Women" }, { value: "media professionals", name: "Media Professionals" }, { value: "pastors", name: "Pastors" }, { value: "business leaders", name: "Business Leaders" }, { value: "medical professionals", name: "Medical Professionals" }, { value: "physicians", name: "Physicians" }, { value: "surgeons", name: "Surgeons" }, { value: "registered nurses", name: "Registered Nurses" }, { value: "dentists", name: "Dentists" }, { value: "hygienists", name: "Hygienists" }, { value: "dental assistants", name: "Dental Assistants" }, { value: "physician assistants", name: "Physician Assistants" }, { value: "nurse practitioners", name: "Nurse Practitioners" }, { value: "pharmacists", name: "Pharmacists" }, { value: "physical therapists", name: "Physical Therapists" }, { value: "chiropractors", name: "Chiropractors" }, { value: "medical students", name: "Medical Students" }, { value: "dental students", name: "Dental Students" }, { value: "nursing students", name: "Nursing Students" }],
+			attemptedContinue: false,
+
+			// details data
+			groupObj: null,
+			group_id: '',
+			description: '',
+			type: '',
+			difficulty: '',
+			companion_limit: 0,
+			prospectsObj: null,
+			prospects: [],
+			started_at: null,
+			ended_at: null,
+			repObj: null,
+			rep_id: ''
+		};
+	},
+
+	computed: {
+		group_id: function group_id() {
+			return _.isObject(this.groupObj) ? this.groupObj.id : null;
+		},
+		rep_id: function rep_id() {
+			return _.isObject(this.repObj) ? this.repObj.id : null;
+		},
+		prospects: function prospects() {
+			return _.pluck(this.prospectsObj, 'value');
+		}
+	},
+	methods: {
+		populateWizardData: function populateWizardData(onValid) {
+			if (!onValid) this.$validate(true);
+			$.extend(this.$parent.wizardData, {
+				group_id: this.group_id,
+				description: this.description,
+				type: this.type,
+				difficulty: this.difficulty,
+				companion_limit: this.companion_limit,
+				prospects: this.prospects,
+				started_at: this.started_at,
+				ended_at: this.ended_at,
+				rep_id: this.rep_id
+
+			});
+		},
+		getGroups: function getGroups(search, loading) {
+			loading(true);
+			this.$http.get('groups', { search: search }).then(function (response) {
+				this.groups = response.data.data;
+				loading(false);
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData(true);
+			this.$dispatch('details', true);
+		},
+		checkForError: function checkForError(field) {
+			// if user clicked continue button while the field is invalid trigger error styles
+			return this.$TripDetails[field.toLowerCase()].invalid && this.attemptedContinue;
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+
+		// get some groups
+		this.$http.get('groups').then(function (response) {
+			this.groups = response.data.data;
+		});
+		done();
+	},
+
+	events: {
+		'trip': function trip(val) {
+			this.$http.get('groups/' + val.group_id).then(function (response) {
+				this.groupObj = response.data.data;
+			});
+			var arr = [];
+			_.forEach(this.prospectsList, function (prospect) {
+				if (_.contains(val.prospects, prospect.value)) arr.push(prospect);
+			});
+			this.prospectsObj = arr;
+			$.extend(this, {
+				group_id: val.group_id,
+				description: val.description,
+				type: val.type,
+				difficulty: val.difficulty,
+				companion_limit: val.companion_limit,
+				prospects: val.prospects,
+				started_at: val.started_at,
+				ended_at: val.ended_at,
+				rep_id: val.rep_id
+
+			});
+		}
+	}
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDetails\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDetailsForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Campaign</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<p>{{$parent.trip.campaign.name|capitalize}}</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Group</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<textarea name=\"description\" id=\"description\" rows=\"2\" v-model=\"description\" class=\"form-control\" v-validate:description=\"{ required: true}\"></textarea>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"full\">Full</option>\n\t\t\t\t\t\t\t<option value=\"media\">Media</option>\n\t\t\t\t\t\t\t<option value=\"medical\">Medical</option>\n\t\t\t\t\t\t\t<option value=\"short\">Short</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('prospects') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Perfect For</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-controls\" id=\"group\" :value.sync=\"prospectsObj\" :options=\"prospectsList\" label=\"name\" placeholder=\"Select Prospects\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" multiple=\"\" v-model=\"prospects\" v-validate:prospects=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"prospect.value\" v-for=\"prospect in prospectsList\">{{prospect.name}}\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('difficulty') }\">\n\t\t\t\t\t<label for=\"difficulty\" class=\"col-sm-2 control-label\">Difficulty</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"difficulty\" class=\"form-control input-sm\" v-model=\"difficulty\" v-validate:difficulty=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"level_1\">Level 1</option>\n\t\t\t\t\t\t\t<option value=\"level_2\">Level 2</option>\n\t\t\t\t\t\t\t<option value=\"level_3\">Level 3</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n\t\t\t\t\t<label for=\"companion_limit\" class=\"col-sm-2 control-label\">Companion Limit</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"companion_limit\" v-model=\"companion_limit\" class=\"form-control\" v-validate:companions=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('rep') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Trip Rep.</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-controls\" id=\"rep\" :value.sync=\"repObj\" :options=\"reps\" label=\"name\"></v-select>\n\t\t\t\t\t\t<!--v-validate:rep=\"{ required: false}\"-->\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"rep_id\">\n\t\t\t\t\t\t\t<option v-for=\"rep in reps\" :value=\"rep\">{{rep}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-5888d913", module.exports)
+  } else {
+    hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],141:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-pricing',
+	data: function data() {
+		return {
+			attemptedContinue: false,
+			attemptedAddCost: false,
+			attemptedAddPayment: false,
+			toggleNewCost: false,
+			toggleNewPayment: false,
+			selectedCost: null,
+			editCostMode: false,
+			editPaymentMode: false,
+			costsErrors: [],
+
+			// pricing data
+			costs: [],
+			newCost: {
+				name: '',
+				description: '',
+				active_at: null,
+				amount: 0,
+				type: '',
+				payments: [],
+				toggleNewPayment: false
+			},
+			newPayment: {
+				amount_owed: 0,
+				percent_owed: 0,
+				due_at: null,
+				upfront: false,
+				grace_period: 0
+			}
+		};
+	},
+
+	/*validators:{
+  costs
+  },*/
+	watch: {
+		'newPayment.amount_owed': function newPaymentAmount_owed(val, oldVal) {
+			var max = this.calculateMaxAmount(this.selectedCost);
+			if (val > max) this.newPayment.amount_owed = this.selectedCost.amount;
+			this.newPayment.percent_owed = val / this.selectedCost.amount * 100;
+			if (_.isFunction(this.$validate)) this.$validate('percent', true);
+		},
+		'newPayment.percent_owed': function newPaymentPercent_owed(val, oldVal) {
+			var max = this.calculateMaxPercent(this.selectedCost);
+			if (val > max) this.newPayment.percent_owed = max;
+			this.newPayment.amount_owed = val / 100 * this.selectedCost.amount;
+			if (_.isFunction(this.$validate)) this.$validate('amount', true);
+		},
+		'costs': function costs(val, oldVal) {
+			this.checkCostsErrors();
+		}
+	},
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				costs: this.costs
+			});
+		},
+		onValid: function onValid() {
+
+			this.$dispatch('pricing', true);
+			//this.$parent.details = this.details;
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripPricing[field.toLowerCase()].invalid && this.attemptedContinue;
+		},
+		checkForErrorCost: function checkForErrorCost(field) {
+			return this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
+		},
+		checkForErrorPayment: function checkForErrorPayment(field) {
+			return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
+		},
+		checkCostsErrors: function checkCostsErrors() {
+			var errors = [];
+			this.costs.forEach(function (cost, index) {
+				// cost must have at least 1 payment
+				if (!cost.payments.length) {
+					errors.push('empty');
+				} else {
+					// cost payments must total full amount owed and percent owed
+					var amount = 0;
+					cost.payments.forEach(function (payment, index) {
+						amount += payment.amount_owed;
+					}, this);
+					// evaluate difference
+					if (amount != cost.amount) {
+						errors.push('incomplete');
+					}
+				}
+
+				// no errors
+				errors.push(false);
+			}, this);
+			this.costsErrors = errors;
+		},
+		resetCost: function resetCost() {
+			this.newCost = {
+				name: '',
+				description: '',
+				active_at: null,
+				amount: 0,
+				type: '',
+				payments: [],
+				toggleNewPayment: false
+			};
+		},
+		resetPayment: function resetPayment() {
+			this.newPayment = {
+				amount_owed: 0,
+				percent_owed: 0,
+				due_at: null,
+				upfront: false,
+				grace_period: 0
+			};
+		},
+		calculateMaxAmount: function calculateMaxAmount(cost) {
+			var max = cost.amount;
+			if (cost.payments.length) {
+				cost.payments.forEach(function (payment) {
+					// must ignore current payment in editMode
+					if (this.newPayment !== payment) {
+						max -= payment.amount_owed;
+					}
+				}, this);
+			}
+			return max;
+		},
+		calculateMaxPercent: function calculateMaxPercent(cost) {
+			var max = 100;
+			if (cost.payments.length) {
+				cost.payments.forEach(function (payment) {
+					// must ignore current payment in editMode
+					if (this.newPayment !== payment) {
+						max -= payment.percent_owed;
+					}
+				}, this);
+			}
+			return max;
+		},
+		editCost: function editCost(cost) {
+			this.editCostMode = true;
+			this.toggleNewCost = true;
+			this.newCost = cost;
+		},
+		cancelEditPayment: function cancelEditPayment() {
+			this.editPaymentMode = false;
+			this.resetCost();
+		},
+		editPayment: function editPayment(payment, cost) {
+			this.editPaymentMode = true;
+			this.toggleNewPaymentForm(cost, true);
+			this.newPayment = payment;
+		},
+		toggleNewPaymentForm: function toggleNewPaymentForm(cost, updateMode) {
+			this.selectedCost = cost;
+			this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
+		},
+		addCost: function addCost() {
+			this.attemptedAddCost = true;
+			if (this.$TripPricingCost.valid) {
+				this.costs.push(this.newCost);
+				this.resetCost();
+				this.toggleNewCost = false;
+				this.attemptedAddCost = false;
+			}
+			this.checkCostsErrors();
+		},
+		updateCost: function updateCost() {
+			this.attemptedAddCost = true;
+			if (this.$TripPricingCost.valid) {
+				this.resetCost();
+				this.toggleNewCost = false;
+				this.attemptedAddCost = false;
+				this.editCostMode = false;
+			}
+			this.checkCostsErrors();
+		},
+		addPayment: function addPayment(cost) {
+			this.attemptedAddPayment = true;
+			if (this.$TripPricingCostPayment.valid) {
+				cost.payments.push(this.newPayment);
+				this.resetPayment();
+				this.selectedCost.toggleNewPayment = false;
+				this.attemptedAddPayment = false;
+			}
+			this.checkCostsErrors();
+		},
+		updatePayment: function updatePayment(cost) {
+			this.attemptedAddPayment = true;
+			if (this.$TripPricingCostPayment.valid) {
+				this.resetPayment();
+				this.selectedCost.toggleNewPayment = false;
+				this.attemptedAddPayment = false;
+				this.editPaymentMode = false;
+			}
+			this.checkCostsErrors();
+		},
+		generateUUID: function generateUUID() {
+			return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
+		}
+	},
+	ready: function ready() {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		this.$set('costs', this.$parent.trip.costs);
+		// add toggle data
+		_.each(this.costs, function (cost) {
+			cost.toggleNewPayment = false;
+		});
+		this.$dispatch('pricing', true);
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripPricing\" @valid=\"onValid\">\n\t\t\t<form id=\"TripPricing\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewCost=!toggleNewCost\">\n\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Cost\n\t\t\t\t\t</button>\n\n\t\t\t\t</div>\n\t\t\t\t<hr>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Pricing</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewCost\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Cost\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripPricingCost\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_description\">Description</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<textarea class=\"form-control input-sm\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_type\">Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"cost_type\" class=\"form-control input-sm\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"static\">Static</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"incremental\">Incremental</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"optional\">Optional</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_active_at\">Active</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"newCost_active_at\" class=\"form-control input-sm\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_amount\">Amount</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewCost=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addCost()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Cost\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-for=\"cost in costs\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">{{cost.name}}</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t{{cost.description}}\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t<ul class=\"list-unstyled\">\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.type|capitalize}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.active_at|moment}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.amount|currency}}</li>\n\t\t\t\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t\t<th>Amount</th>\n\t\t\t\t\t\t\t\t\t<th>Percent</th>\n\t\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"payment in cost.payments|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t\t<td>{{payment.amount_owed|currency}}</td>\n\t\t\t\t\t\t\t\t\t<td>{{payment.percent_owed|number 2}}%</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">Upfront</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.due_at\">{{payment.due_at|moment}}</span>\n\t\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">None</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">N/A</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"cost.payments.$remove(payment)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t<tr v-if=\"costsErrors[$index] != false\" class=\"danger\">\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-if=\"costsErrors[$index] === 'empty'\">\n\t\t\t\t\t\t\t\t\t\t<b>At least 1 payment is required!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t<b>Payments must total the cost amount!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t\t</table>\n\t\t\t\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t\t\t\t<li class=\"list-group-item\" v-if=\"cost.toggleNewPayment\">\n\t\t\t\t\t\t\t\t\t<validator name=\"TripPricingCostPayment\">\n\t\t\t\t\t\t\t\t\t\t<form class=\"form-inline\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"amountOwed\">Owed</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('amount') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(cost)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('percent') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t\tDue upfront?\n\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\" v-if=\"!newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"dueAt\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"!editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cost.toggleNewPayment=false\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-success\" @click=\"addPayment(cost)\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Payment\n\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cancelEditPayment(cost)\"><i class=\"fa fa-times\"></i>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tCancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-info\" @click=\"updatePayment(cost)\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Update Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\" v-if=\"calculateMaxAmount(cost) > 0\">\n\t\t\t\t\t\t\t\t<a @click=\"toggleNewPaymentForm(cost)\" class=\"btn btn-xs btn-primary\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Payment</a>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-2e8e2497", module.exports)
+  } else {
+    hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],142:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-requirement',
+	data: function data() {
+		return {
+			resources: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Itinerary'],
+			toggleNewRequirement: false,
+			attemptedAddRequirement: false,
+			attemptedContinue: false,
+
+			// requirements data
+			requirements: [],
+			newReq: {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0,
+				enforced: false
+			}
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				requirements: this.requirements
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('reqs', true);
+			//this.$parent.details = this.details;
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripReqsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
+		},
+		resetRequirement: function resetRequirement() {
+			this.newReq = {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0,
+				enforced: false
+			};
+		},
+		addRequirement: function addRequirement() {
+			this.attemptedAddRequirement = true;
+			if (this.$TripReqsCreate.valid) {
+				this.requirements.push(this.newReq);
+				this.resetRequirement();
+				this.toggleNewRequirement = false;
+				this.attemptedAddRequirement = false;
+			}
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		$.extend(this, {
+			requirements: this.$parent.trip.requirements
+		});
+		this.$dispatch('reqs', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripReqs\" @valid=\"onValid\">\n\t\t\t<form id=\"TripReqs\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Requirements</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewRequirement=!toggleNewRequirement\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Requirement\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewRequirement\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Requirement\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripReqsCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"item\">Item</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"item\" class=\"form-control input-sm\" v-model=\"newReq.item\" v-validate:item=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option :value=\"option\" v-for=\"option in resources\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"type\">Item Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"newReq.item_type\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newReq.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newReq.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newReq.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewRequirement=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addRequirement()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Requirement\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Item</th>\n\t\t\t\t\t\t\t\t<th>Type</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"requirement in requirements|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{requirement.item}}</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.item_type}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.due_at|moment}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"requirements.$remove(requirement)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-3dd864e2", module.exports)
+  } else {
+    hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],143:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-settings',
+	data: function data() {
+		return {
+			roles: [],
+			attemptedContinue: false,
+
+			// details data
+			spots: null,
+			closed_at: moment().toDate(),
+			published_at: null
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				spots: this.spots,
+				closed_at: this.closed_at,
+				published_at: this.published_at
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('settings', true);
+		},
+		checkForError: function checkForError(field) {
+			// if user clicked continue button while the field is invalid trigger error styles
+			return this.$TripSettings[field.toLowerCase()].invalid && this.attemptedContinue;
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		$.extend(this, {
+			spots: this.$parent.trip.spots,
+			closed_at: moment(this.$parent.trip.closed_at).format('Y-MM-DD'),
+			published_at: moment(this.$parent.trip.published_at).format('Y-MM-DD')
+		});
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripSettings\" @valid=\"onValid\">\n\t\t\t<form id=\"TripSettings\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('spots') }\">\n\t\t\t\t\t<label for=\"spots\" class=\"col-sm-2 control-label\">Spots Available</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"spots\" v-model=\"spots\" class=\"form-control\" v-validate:spots=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('closed') }\">\n\t\t\t\t\t<label for=\"closed_at\" class=\"col-sm-2 control-label\">Registration Closes</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<input type=\"date\" class=\"form-control input-sm\" v-model=\"closed_at\" v-validate:closed=\"{ required: true }\" id=\"closed_at\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Publish</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<input type=\"date\" class=\"form-control input-sm\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-f3e5b1bc", module.exports)
+  } else {
+    hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36182,7 +37388,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div class=\"row\">\n        <div class=\"col-sm-12\" style=\"max-height: 500px;overflow-y: auto;\">\n            <h4>Additional Trip Options</h4>\n\t\t\t<validator name=\"AdditionalOptions\">\n\t\t\t\t<form>\n\t\t\t\t\t<div class=\"checkbox\" v-for=\"option in optionalCosts | orderBy 'name'\">\n\t\t\t\t\t\t<label style=\"display:block\" for=\"option{{$index}}\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" id=\"option{{$index}}\" v-model=\"selectedOptions\" :value=\"option\">\n\t\t\t\t\t\t\t{{option.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{option.amount | currency}}</span>\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</form>\n\t\t\t</validator>\n        </div>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div class=\"row\">\n        <div class=\"col-sm-12\" style=\"max-height: 500px;overflow-y: auto;\">\n            <h4>Additional Trip Options</h4>\n            <hr class=\"divider\">\n            <hr class=\"divider inv sm\">\n\t\t\t<validator name=\"AdditionalOptions\">\n\t\t\t\t<form>\n\t\t\t\t\t<div class=\"checkbox\" v-for=\"option in optionalCosts | orderBy 'name'\">\n\t\t\t\t\t\t<label style=\"display:block\" for=\"option{{$index}}\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" id=\"option{{$index}}\" v-model=\"selectedOptions\" :value=\"option\">\n\t\t\t\t\t\t\t{{option.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{option.amount | currency}}</span>\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</form>\n\t\t\t</validator>\n        </div>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -36193,7 +37399,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],133:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36284,7 +37490,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"BasicInfo\" @valid=\"onValid\">\n\t\t\t<form novalidate=\"\" name=\"BasicInfoForm\" id=\"BasicInfoForm\">\n\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('address') }\">\n\t\t\t\t\t\t<label for=\"infoAddress\">Address</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"address\" v-validate:address=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoAddress\" placeholder=\"Street Address\">\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('city') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoCity\">City</label>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"city\" v-validate:city=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoCity\" placeholder=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('state') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoState\">State/Prov.</label>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"state\" v-validate:state=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoState\" placeholder=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('zip') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoZip\">Zip Code</label>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"zipCode\" v-validate:zip=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoZip\" placeholder=\"12345\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoCountry\">Country</label>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"country\" v-validate:country=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoCountry\">\n\t\t\t\t\t\t\t\t\t<option value=\"af\">Afghanistan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ax\">Åland Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"al\">Albania</option>\n\t\t\t\t\t\t\t\t\t<option value=\"dz\">Algeria</option>\n\t\t\t\t\t\t\t\t\t<option value=\"as\">American Samoa</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ad\">Andorra</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ao\">Angola</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ai\">Anguilla</option>\n\t\t\t\t\t\t\t\t\t<option value=\"aq\">Antarctica</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ag\">Antigua and Barbuda</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ar\">Argentina</option>\n\t\t\t\t\t\t\t\t\t<option value=\"am\">Armenia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"aw\">Aruba</option>\n\t\t\t\t\t\t\t\t\t<option value=\"au\">Australia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"at\">Austria</option>\n\t\t\t\t\t\t\t\t\t<option value=\"az\">Azerbaijan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bs\">Bahamas</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bh\">Bahrain</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bd\">Bangladesh</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bb\">Barbados</option>\n\t\t\t\t\t\t\t\t\t<option value=\"by\">Belarus</option>\n\t\t\t\t\t\t\t\t\t<option value=\"be\">Belgium</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bz\">Belize</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bj\">Benin</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bm\">Bermuda</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bt\">Bhutan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bo\">Bolivia, Plurinational State of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bq\">Bonaire, Sint Eustatius and Saba</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ba\">Bosnia and Herzegovina</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bw\">Botswana</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bv\">Bouvet Island</option>\n\t\t\t\t\t\t\t\t\t<option value=\"br\">Brazil</option>\n\t\t\t\t\t\t\t\t\t<option value=\"io\">British Indian Ocean Territory</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bn\">Brunei Darussalam</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bg\">Bulgaria</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bf\">Burkina Faso</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bi\">Burundi</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kh\">Cambodia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cm\">Cameroon</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ca\">Canada</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cv\">Cape Verde</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ky\">Cayman Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cf\">Central African Republic</option>\n\t\t\t\t\t\t\t\t\t<option value=\"td\">Chad</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cl\">Chile</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cn\">China</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cx\">Christmas Island</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cc\">Cocos (Keeling) Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"co\">Colombia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"km\">Comoros</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cg\">Congo</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cd\">Congo, the Democratic Republic of the</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ck\">Cook Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cr\">Costa Rica</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ci\">Côte d'Ivoire</option>\n\t\t\t\t\t\t\t\t\t<option value=\"hr\">Croatia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cu\">Cuba</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cw\">Curaçao</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cy\">Cyprus</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cz\">Czech Republic</option>\n\t\t\t\t\t\t\t\t\t<option value=\"dk\">Denmark</option>\n\t\t\t\t\t\t\t\t\t<option value=\"dj\">Djibouti</option>\n\t\t\t\t\t\t\t\t\t<option value=\"dm\">Dominica</option>\n\t\t\t\t\t\t\t\t\t<option value=\"do\">Dominican Republic</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ec\">Ecuador</option>\n\t\t\t\t\t\t\t\t\t<option value=\"eg\">Egypt</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sv\">El Salvador</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gq\">Equatorial Guinea</option>\n\t\t\t\t\t\t\t\t\t<option value=\"er\">Eritrea</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ee\">Estonia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"et\">Ethiopia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fk\">Falkland Islands (Malvinas)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fo\">Faroe Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fj\">Fiji</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fi\">Finland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fr\">France</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gf\">French Guiana</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pf\">French Polynesia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tf\">French Southern Territories</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ga\">Gabon</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gm\">Gambia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ge\">Georgia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"de\">Germany</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gh\">Ghana</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gi\">Gibraltar</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gr\">Greece</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gl\">Greenland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gd\">Grenada</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gp\">Guadeloupe</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gu\">Guam</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gt\">Guatemala</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gg\">Guernsey</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gn\">Guinea</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gw\">Guinea-Bissau</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gy\">Guyana</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ht\">Haiti</option>\n\t\t\t\t\t\t\t\t\t<option value=\"hm\">Heard Island and McDonald Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"va\">Holy See (Vatican City State)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"hn\">Honduras</option>\n\t\t\t\t\t\t\t\t\t<option value=\"hk\">Hong Kong</option>\n\t\t\t\t\t\t\t\t\t<option value=\"hu\">Hungary</option>\n\t\t\t\t\t\t\t\t\t<option value=\"is\">Iceland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"in\">India</option>\n\t\t\t\t\t\t\t\t\t<option value=\"id\">Indonesia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ir\">Iran, Islamic Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"iq\">Iraq</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ie\">Ireland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"im\">Isle of Man</option>\n\t\t\t\t\t\t\t\t\t<option value=\"il\">Israel</option>\n\t\t\t\t\t\t\t\t\t<option value=\"it\">Italy</option>\n\t\t\t\t\t\t\t\t\t<option value=\"jm\">Jamaica</option>\n\t\t\t\t\t\t\t\t\t<option value=\"jp\">Japan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"je\">Jersey</option>\n\t\t\t\t\t\t\t\t\t<option value=\"jo\">Jordan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kz\">Kazakhstan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ke\">Kenya</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ki\">Kiribati</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kp\">Korea, Democratic People's Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kr\">Korea, Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kw\">Kuwait</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kg\">Kyrgyzstan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"la\">Lao People's Democratic Republic</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lv\">Latvia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lb\">Lebanon</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ls\">Lesotho</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lr\">Liberia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ly\">Libya</option>\n\t\t\t\t\t\t\t\t\t<option value=\"li\">Liechtenstein</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lt\">Lithuania</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lu\">Luxembourg</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mo\">Macao</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mk\">Macedonia, the former Yugoslav Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mg\">Madagascar</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mw\">Malawi</option>\n\t\t\t\t\t\t\t\t\t<option value=\"my\">Malaysia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mv\">Maldives</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ml\">Mali</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mt\">Malta</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mh\">Marshall Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mq\">Martinique</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mr\">Mauritania</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mu\">Mauritius</option>\n\t\t\t\t\t\t\t\t\t<option value=\"yt\">Mayotte</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mx\">Mexico</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fm\">Micronesia, Federated States of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"md\">Moldova, Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mc\">Monaco</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mn\">Mongolia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"me\">Montenegro</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ms\">Montserrat</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ma\">Morocco</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mz\">Mozambique</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mm\">Myanmar</option>\n\t\t\t\t\t\t\t\t\t<option value=\"na\">Namibia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nr\">Nauru</option>\n\t\t\t\t\t\t\t\t\t<option value=\"np\">Nepal</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nl\">Netherlands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nc\">New Caledonia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nz\">New Zealand</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ni\">Nicaragua</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ne\">Niger</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ng\">Nigeria</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nu\">Niue</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nf\">Norfolk Island</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mp\">Northern Mariana Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"no\">Norway</option>\n\t\t\t\t\t\t\t\t\t<option value=\"om\">Oman</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pk\">Pakistan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pw\">Palau</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ps\">Palestinian Territory, Occupied</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pa\">Panama</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pg\">Papua New Guinea</option>\n\t\t\t\t\t\t\t\t\t<option value=\"py\">Paraguay</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pe\">Peru</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ph\">Philippines</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pn\">Pitcairn</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pl\">Poland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pt\">Portugal</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pr\">Puerto Rico</option>\n\t\t\t\t\t\t\t\t\t<option value=\"qa\">Qatar</option>\n\t\t\t\t\t\t\t\t\t<option value=\"re\">Réunion</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ro\">Romania</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ru\">Russian Federation</option>\n\t\t\t\t\t\t\t\t\t<option value=\"rw\">Rwanda</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bl\">Saint Barthélemy</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sh\">Saint Helena, Ascension and Tristan da Cunha</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kn\">Saint Kitts and Nevis</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lc\">Saint Lucia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mf\">Saint Martin (French part)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pm\">Saint Pierre and Miquelon</option>\n\t\t\t\t\t\t\t\t\t<option value=\"vc\">Saint Vincent and the Grenadines</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ws\">Samoa</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sm\">San Marino</option>\n\t\t\t\t\t\t\t\t\t<option value=\"st\">Sao Tome and Principe</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sa\">Saudi Arabia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sn\">Senegal</option>\n\t\t\t\t\t\t\t\t\t<option value=\"rs\">Serbia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sc\">Seychelles</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sl\">Sierra Leone</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sg\">Singapore</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sx\">Sint Maarten (Dutch part)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sk\">Slovakia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"si\">Slovenia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sb\">Solomon Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"so\">Somalia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"za\">South Africa</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gs\">South Georgia and the South Sandwich Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ss\">South Sudan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"es\">Spain</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lk\">Sri Lanka</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sd\">Sudan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sr\">Suriname</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sj\">Svalbard and Jan Mayen</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sz\">Swaziland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"se\">Sweden</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ch\">Switzerland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sy\">Syrian Arab Republic</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tw\">Taiwan, Province of China</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tj\">Tajikistan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tz\">Tanzania, United Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"th\">Thailand</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tl\">Timor-Leste</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tg\">Togo</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tk\">Tokelau</option>\n\t\t\t\t\t\t\t\t\t<option value=\"to\">Tonga</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tt\">Trinidad and Tobago</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tn\">Tunisia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tr\">Turkey</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tm\">Turkmenistan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tc\">Turks and Caicos Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tv\">Tuvalu</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ug\">Uganda</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ua\">Ukraine</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ae\">United Arab Emirates</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gb\">United Kingdom</option>\n\t\t\t\t\t\t\t\t\t<option value=\"us\" selected=\"\">United States</option>\n\t\t\t\t\t\t\t\t\t<option value=\"um\">United States Minor Outlying Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"uy\">Uruguay</option>\n\t\t\t\t\t\t\t\t\t<option value=\"uz\">Uzbekistan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"vu\">Vanuatu</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ve\">Venezuela, Bolivarian Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"vn\">Viet Nam</option>\n\t\t\t\t\t\t\t\t\t<option value=\"vg\">Virgin Islands, British</option>\n\t\t\t\t\t\t\t\t\t<option value=\"vi\">Virgin Islands, U.S.</option>\n\t\t\t\t\t\t\t\t\t<option value=\"wf\">Wallis and Futuna</option>\n\t\t\t\t\t\t\t\t\t<option value=\"eh\">Western Sahara</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ye\">Yemen</option>\n\t\t\t\t\t\t\t\t\t<option value=\"zm\">Zambia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"zw\">Zimbabwe</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('phone') }\">\n\t\t\t\t\t\t<label for=\"infoPhone\">Home Phone</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"phone | phone\" v-validate:phone=\"{ required: true, minlength:10 }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('mobile') }\">\n\t\t\t\t\t\t<label for=\"infoMobile\">Cell Phone</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"mobile | phone\" v-validate:mobile=\"{ required: true, minlength:10 }\" :classes=\"{ invalid: 'has-error'}\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t<label>Full Legal Name</label>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('firstName') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoFirstName\">First</label>-->\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"firstName\" v-validate:firstname=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" placeholder=\"First\" id=\"infoFirstName\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('middleName') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoMiddleName\">Middle</label>-->\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"middleName\" v-validate:middlename=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" placeholder=\"Middle\" id=\"infoMiddleName\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('lastName') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoLastName\">Last</label>-->\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"lastName\" v-validate:lastname=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" placeholder=\"Last\" id=\"infoLastName\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('email')) || ($BasicInfo.email.email &amp;&amp; $BasicInfo.email.dirty) }\">\n\t\t\t\t\t\t<label for=\"infoEmailAddress\">Email Address</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"email\" id=\"infoEmailAddress\" :classes=\"{ invalid: 'has-error' }\" v-validate:email=\"['required', 'email']\">\n\t\t\t\t\t\t<span class=\"help-block\" v-show=\"$BasicInfo.email.email &amp;&amp; $BasicInfo.email.dirty\">Invalid email address</span>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<label>Date of Birth</label>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('dobMonth') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoDobMonth\">Month</label>-->\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"dobMonth\" v-validate:dobmonth=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoDobMonth\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Month</option>\n\t\t\t\t\t\t\t\t\t<option value=\"01\">January</option>\n\t\t\t\t\t\t\t\t\t<option value=\"02\">February</option>\n\t\t\t\t\t\t\t\t\t<option value=\"03\">March</option>\n\t\t\t\t\t\t\t\t\t<option value=\"04\">April</option>\n\t\t\t\t\t\t\t\t\t<option value=\"05\">May</option>\n\t\t\t\t\t\t\t\t\t<option value=\"06\">June</option>\n\t\t\t\t\t\t\t\t\t<option value=\"07\">July</option>\n\t\t\t\t\t\t\t\t\t<option value=\"08\">August</option>\n\t\t\t\t\t\t\t\t\t<option value=\"09\">September</option>\n\t\t\t\t\t\t\t\t\t<option value=\"10\">October</option>\n\t\t\t\t\t\t\t\t\t<option value=\"11\">November</option>\n\t\t\t\t\t\t\t\t\t<option value=\"12\">December</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('dobDay') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoDobDay\">Day</label>-->\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"dobDay\" v-validate:dobday=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoDobDay\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Day</option>\n\t\t\t\t\t\t\t\t\t<option value=\"01\">01</option>\n\t\t\t\t\t\t\t\t\t<option value=\"02\">02</option>\n\t\t\t\t\t\t\t\t\t<option value=\"03\">03</option>\n\t\t\t\t\t\t\t\t\t<option value=\"04\">04</option>\n\t\t\t\t\t\t\t\t\t<option value=\"05\">05</option>\n\t\t\t\t\t\t\t\t\t<option value=\"06\">06</option>\n\t\t\t\t\t\t\t\t\t<option value=\"07\">07</option>\n\t\t\t\t\t\t\t\t\t<option value=\"08\">08</option>\n\t\t\t\t\t\t\t\t\t<option value=\"09\">09</option>\n\t\t\t\t\t\t\t\t\t<option value=\"10\">10</option>\n\t\t\t\t\t\t\t\t\t<option value=\"11\">11</option>\n\t\t\t\t\t\t\t\t\t<option value=\"12\">12</option>\n\t\t\t\t\t\t\t\t\t<option value=\"13\">13</option>\n\t\t\t\t\t\t\t\t\t<option value=\"14\">14</option>\n\t\t\t\t\t\t\t\t\t<option value=\"15\">15</option>\n\t\t\t\t\t\t\t\t\t<option value=\"16\">16</option>\n\t\t\t\t\t\t\t\t\t<option value=\"17\">17</option>\n\t\t\t\t\t\t\t\t\t<option value=\"18\">18</option>\n\t\t\t\t\t\t\t\t\t<option value=\"19\">19</option>\n\t\t\t\t\t\t\t\t\t<option value=\"20\">20</option>\n\t\t\t\t\t\t\t\t\t<option value=\"21\">21</option>\n\t\t\t\t\t\t\t\t\t<option value=\"22\">22</option>\n\t\t\t\t\t\t\t\t\t<option value=\"23\">23</option>\n\t\t\t\t\t\t\t\t\t<option value=\"24\">24</option>\n\t\t\t\t\t\t\t\t\t<option value=\"25\">25</option>\n\t\t\t\t\t\t\t\t\t<option value=\"26\">26</option>\n\t\t\t\t\t\t\t\t\t<option value=\"27\">27</option>\n\t\t\t\t\t\t\t\t\t<option value=\"28\">28</option>\n\t\t\t\t\t\t\t\t\t<option value=\"29\">29</option>\n\t\t\t\t\t\t\t\t\t<option value=\"30\">30</option>\n\t\t\t\t\t\t\t\t\t<option value=\"31\">31</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('dobYear') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoDobYear\">Year</label>-->\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"dobYearCalc\" v-validate:dobyear=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoDobYear\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Year</option>\n\t\t\t\t\t\t\t\t\t<option v-for=\"n in 100 | orderBy true -1\" :value=\"n\">\n\t\t\t\t\t\t\t\t\t\t{{ currentYear - 100 + n }}\n\t\t\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<label>Gender</label>\n\t\t\t\t\t\t\t<div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"radio\" v-model=\"gender\" v-validate:gender=\"{ required: { rule: true} }\" value=\"male\"> Male\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"radio\" v-model=\"gender\" v-validate:gender=\"\" value=\"female\"> Female\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<span class=\"help-block\" v-show=\"checkForError('gender')\">Select a gender</span>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('relationshipStatus') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoRelStatus\">Relationship Status</label>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"relationshipStatus\" v-validate:relationshipstatus=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoRelStatus\">\n\t\t\t\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t\t\t\t\t<option value=\"divorced\">Divorced</option>\n\t\t\t\t\t\t\t\t\t<option value=\"widowed\">Widowed</option>\n\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t<label for=\"infoHeightA\">Height</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('heightA') }\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" id=\"infoHeightA\" v-model=\"heightA\" number=\"\" min=\"0\" max=\"10\" v-validate:heighta=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group-addon\">ft.</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('heightB') }\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" v-model=\"heightB\" number=\"\" min=\"0\" max=\"11.99\" v-validate:heightb=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group-addon\">in.</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('weight') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoWeight\">Weight</label>\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" id=\"infoWeight\" v-model=\"weight\" number=\"\" min=\"0\" v-validate:weight=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\">\n\t\t\t\t\t\t\t\t\t<div class=\"input-group-addon\">lbs.</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('size') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoShirtSize\">Shirt Sizes</label>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"size\" v-validate:size=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoShirtSize\">\n\t\t\t\t\t\t\t\t\t<option value=\"S\">S (Small)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"M\">M (Medium)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"L\">L (Large)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"XL\">XL (Extra Large)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"XXL\">XXL (2 Extra Large)</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"BasicInfo\" @valid=\"onValid\">\n\t\t\t<form novalidate=\"\" name=\"BasicInfoForm\" id=\"BasicInfoForm\">\n\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t<label>Full Legal Name</label>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('firstName') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoFirstName\">First</label>-->\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"firstName\" v-validate:firstname=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" placeholder=\"First\" id=\"infoFirstName\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('middleName') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoMiddleName\">Middle</label>-->\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"middleName\" v-validate:middlename=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" placeholder=\"Middle\" id=\"infoMiddleName\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('lastName') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoLastName\">Last</label>-->\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"lastName\" v-validate:lastname=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" placeholder=\"Last\" id=\"infoLastName\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('email')) || ($BasicInfo.email.email &amp;&amp; $BasicInfo.email.dirty) }\">\n\t\t\t\t\t\t<label for=\"infoEmailAddress\">Email Address</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"email\" id=\"infoEmailAddress\" :classes=\"{ invalid: 'has-error' }\" v-validate:email=\"['required', 'email']\">\n\t\t\t\t\t\t<span class=\"help-block\" v-show=\"$BasicInfo.email.email &amp;&amp; $BasicInfo.email.dirty\">Invalid email address</span>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<label>Date of Birth</label>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('dobMonth') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoDobMonth\">Month</label>-->\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"dobMonth\" v-validate:dobmonth=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoDobMonth\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Month</option>\n\t\t\t\t\t\t\t\t\t<option value=\"01\">January</option>\n\t\t\t\t\t\t\t\t\t<option value=\"02\">February</option>\n\t\t\t\t\t\t\t\t\t<option value=\"03\">March</option>\n\t\t\t\t\t\t\t\t\t<option value=\"04\">April</option>\n\t\t\t\t\t\t\t\t\t<option value=\"05\">May</option>\n\t\t\t\t\t\t\t\t\t<option value=\"06\">June</option>\n\t\t\t\t\t\t\t\t\t<option value=\"07\">July</option>\n\t\t\t\t\t\t\t\t\t<option value=\"08\">August</option>\n\t\t\t\t\t\t\t\t\t<option value=\"09\">September</option>\n\t\t\t\t\t\t\t\t\t<option value=\"10\">October</option>\n\t\t\t\t\t\t\t\t\t<option value=\"11\">November</option>\n\t\t\t\t\t\t\t\t\t<option value=\"12\">December</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('dobDay') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoDobDay\">Day</label>-->\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"dobDay\" v-validate:dobday=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoDobDay\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Day</option>\n\t\t\t\t\t\t\t\t\t<option value=\"01\">01</option>\n\t\t\t\t\t\t\t\t\t<option value=\"02\">02</option>\n\t\t\t\t\t\t\t\t\t<option value=\"03\">03</option>\n\t\t\t\t\t\t\t\t\t<option value=\"04\">04</option>\n\t\t\t\t\t\t\t\t\t<option value=\"05\">05</option>\n\t\t\t\t\t\t\t\t\t<option value=\"06\">06</option>\n\t\t\t\t\t\t\t\t\t<option value=\"07\">07</option>\n\t\t\t\t\t\t\t\t\t<option value=\"08\">08</option>\n\t\t\t\t\t\t\t\t\t<option value=\"09\">09</option>\n\t\t\t\t\t\t\t\t\t<option value=\"10\">10</option>\n\t\t\t\t\t\t\t\t\t<option value=\"11\">11</option>\n\t\t\t\t\t\t\t\t\t<option value=\"12\">12</option>\n\t\t\t\t\t\t\t\t\t<option value=\"13\">13</option>\n\t\t\t\t\t\t\t\t\t<option value=\"14\">14</option>\n\t\t\t\t\t\t\t\t\t<option value=\"15\">15</option>\n\t\t\t\t\t\t\t\t\t<option value=\"16\">16</option>\n\t\t\t\t\t\t\t\t\t<option value=\"17\">17</option>\n\t\t\t\t\t\t\t\t\t<option value=\"18\">18</option>\n\t\t\t\t\t\t\t\t\t<option value=\"19\">19</option>\n\t\t\t\t\t\t\t\t\t<option value=\"20\">20</option>\n\t\t\t\t\t\t\t\t\t<option value=\"21\">21</option>\n\t\t\t\t\t\t\t\t\t<option value=\"22\">22</option>\n\t\t\t\t\t\t\t\t\t<option value=\"23\">23</option>\n\t\t\t\t\t\t\t\t\t<option value=\"24\">24</option>\n\t\t\t\t\t\t\t\t\t<option value=\"25\">25</option>\n\t\t\t\t\t\t\t\t\t<option value=\"26\">26</option>\n\t\t\t\t\t\t\t\t\t<option value=\"27\">27</option>\n\t\t\t\t\t\t\t\t\t<option value=\"28\">28</option>\n\t\t\t\t\t\t\t\t\t<option value=\"29\">29</option>\n\t\t\t\t\t\t\t\t\t<option value=\"30\">30</option>\n\t\t\t\t\t\t\t\t\t<option value=\"31\">31</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('dobYear') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoDobYear\">Year</label>-->\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"dobYearCalc\" v-validate:dobyear=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoDobYear\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Year</option>\n\t\t\t\t\t\t\t\t\t<option v-for=\"n in 100 | orderBy true -1\" :value=\"n\">\n\t\t\t\t\t\t\t\t\t\t{{ currentYear - 100 + n }}\n\t\t\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<label>Gender</label>\n\t\t\t\t\t\t\t<div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"radio\" v-model=\"gender\" v-validate:gender=\"{ required: { rule: true} }\" value=\"male\"> Male\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"radio\" v-model=\"gender\" v-validate:gender=\"\" value=\"female\"> Female\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<span class=\"help-block\" v-show=\"checkForError('gender')\">Select a gender</span>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('relationshipStatus') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoRelStatus\">Relationship Status</label>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"relationshipStatus\" v-validate:relationshipstatus=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoRelStatus\">\n\t\t\t\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t\t\t\t\t<option value=\"divorced\">Divorced</option>\n\t\t\t\t\t\t\t\t\t<option value=\"widowed\">Widowed</option>\n\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t<label for=\"infoHeightA\">Height</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('heightA') }\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" id=\"infoHeightA\" v-model=\"heightA\" number=\"\" min=\"0\" max=\"10\" v-validate:heighta=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group-addon\">ft.</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('heightB') }\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" v-model=\"heightB\" number=\"\" min=\"0\" max=\"11.99\" v-validate:heightb=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group-addon\">in.</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('weight') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoWeight\">Weight</label>\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" id=\"infoWeight\" v-model=\"weight\" number=\"\" min=\"0\" v-validate:weight=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\">\n\t\t\t\t\t\t\t\t\t<div class=\"input-group-addon\">lbs.</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('size') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoShirtSize\">Shirt Sizes</label>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"size\" v-validate:size=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoShirtSize\">\n\t\t\t\t\t\t\t\t\t<option value=\"S\">S (Small)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"M\">M (Medium)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"L\">L (Large)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"XL\">XL (Extra Large)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"XXL\">XXL (2 Extra Large)</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('address') }\">\n\t\t\t\t\t\t<label for=\"infoAddress\">Address</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"address\" v-validate:address=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoAddress\" placeholder=\"Street Address\">\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('city') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoCity\">City</label>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"city\" v-validate:city=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoCity\" placeholder=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('state') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoState\">State/Prov.</label>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"state\" v-validate:state=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoState\" placeholder=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('zip') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoZip\">Zip Code</label>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"zipCode\" v-validate:zip=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoZip\" placeholder=\"12345\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoCountry\">Country</label>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"country\" v-validate:country=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoCountry\">\n\t\t\t\t\t\t\t\t\t<option value=\"af\">Afghanistan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ax\">Åland Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"al\">Albania</option>\n\t\t\t\t\t\t\t\t\t<option value=\"dz\">Algeria</option>\n\t\t\t\t\t\t\t\t\t<option value=\"as\">American Samoa</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ad\">Andorra</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ao\">Angola</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ai\">Anguilla</option>\n\t\t\t\t\t\t\t\t\t<option value=\"aq\">Antarctica</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ag\">Antigua and Barbuda</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ar\">Argentina</option>\n\t\t\t\t\t\t\t\t\t<option value=\"am\">Armenia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"aw\">Aruba</option>\n\t\t\t\t\t\t\t\t\t<option value=\"au\">Australia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"at\">Austria</option>\n\t\t\t\t\t\t\t\t\t<option value=\"az\">Azerbaijan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bs\">Bahamas</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bh\">Bahrain</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bd\">Bangladesh</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bb\">Barbados</option>\n\t\t\t\t\t\t\t\t\t<option value=\"by\">Belarus</option>\n\t\t\t\t\t\t\t\t\t<option value=\"be\">Belgium</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bz\">Belize</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bj\">Benin</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bm\">Bermuda</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bt\">Bhutan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bo\">Bolivia, Plurinational State of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bq\">Bonaire, Sint Eustatius and Saba</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ba\">Bosnia and Herzegovina</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bw\">Botswana</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bv\">Bouvet Island</option>\n\t\t\t\t\t\t\t\t\t<option value=\"br\">Brazil</option>\n\t\t\t\t\t\t\t\t\t<option value=\"io\">British Indian Ocean Territory</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bn\">Brunei Darussalam</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bg\">Bulgaria</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bf\">Burkina Faso</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bi\">Burundi</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kh\">Cambodia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cm\">Cameroon</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ca\">Canada</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cv\">Cape Verde</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ky\">Cayman Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cf\">Central African Republic</option>\n\t\t\t\t\t\t\t\t\t<option value=\"td\">Chad</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cl\">Chile</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cn\">China</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cx\">Christmas Island</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cc\">Cocos (Keeling) Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"co\">Colombia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"km\">Comoros</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cg\">Congo</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cd\">Congo, the Democratic Republic of the</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ck\">Cook Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cr\">Costa Rica</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ci\">Côte d'Ivoire</option>\n\t\t\t\t\t\t\t\t\t<option value=\"hr\">Croatia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cu\">Cuba</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cw\">Curaçao</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cy\">Cyprus</option>\n\t\t\t\t\t\t\t\t\t<option value=\"cz\">Czech Republic</option>\n\t\t\t\t\t\t\t\t\t<option value=\"dk\">Denmark</option>\n\t\t\t\t\t\t\t\t\t<option value=\"dj\">Djibouti</option>\n\t\t\t\t\t\t\t\t\t<option value=\"dm\">Dominica</option>\n\t\t\t\t\t\t\t\t\t<option value=\"do\">Dominican Republic</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ec\">Ecuador</option>\n\t\t\t\t\t\t\t\t\t<option value=\"eg\">Egypt</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sv\">El Salvador</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gq\">Equatorial Guinea</option>\n\t\t\t\t\t\t\t\t\t<option value=\"er\">Eritrea</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ee\">Estonia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"et\">Ethiopia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fk\">Falkland Islands (Malvinas)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fo\">Faroe Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fj\">Fiji</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fi\">Finland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fr\">France</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gf\">French Guiana</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pf\">French Polynesia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tf\">French Southern Territories</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ga\">Gabon</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gm\">Gambia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ge\">Georgia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"de\">Germany</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gh\">Ghana</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gi\">Gibraltar</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gr\">Greece</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gl\">Greenland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gd\">Grenada</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gp\">Guadeloupe</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gu\">Guam</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gt\">Guatemala</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gg\">Guernsey</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gn\">Guinea</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gw\">Guinea-Bissau</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gy\">Guyana</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ht\">Haiti</option>\n\t\t\t\t\t\t\t\t\t<option value=\"hm\">Heard Island and McDonald Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"va\">Holy See (Vatican City State)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"hn\">Honduras</option>\n\t\t\t\t\t\t\t\t\t<option value=\"hk\">Hong Kong</option>\n\t\t\t\t\t\t\t\t\t<option value=\"hu\">Hungary</option>\n\t\t\t\t\t\t\t\t\t<option value=\"is\">Iceland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"in\">India</option>\n\t\t\t\t\t\t\t\t\t<option value=\"id\">Indonesia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ir\">Iran, Islamic Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"iq\">Iraq</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ie\">Ireland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"im\">Isle of Man</option>\n\t\t\t\t\t\t\t\t\t<option value=\"il\">Israel</option>\n\t\t\t\t\t\t\t\t\t<option value=\"it\">Italy</option>\n\t\t\t\t\t\t\t\t\t<option value=\"jm\">Jamaica</option>\n\t\t\t\t\t\t\t\t\t<option value=\"jp\">Japan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"je\">Jersey</option>\n\t\t\t\t\t\t\t\t\t<option value=\"jo\">Jordan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kz\">Kazakhstan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ke\">Kenya</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ki\">Kiribati</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kp\">Korea, Democratic People's Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kr\">Korea, Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kw\">Kuwait</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kg\">Kyrgyzstan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"la\">Lao People's Democratic Republic</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lv\">Latvia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lb\">Lebanon</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ls\">Lesotho</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lr\">Liberia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ly\">Libya</option>\n\t\t\t\t\t\t\t\t\t<option value=\"li\">Liechtenstein</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lt\">Lithuania</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lu\">Luxembourg</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mo\">Macao</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mk\">Macedonia, the former Yugoslav Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mg\">Madagascar</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mw\">Malawi</option>\n\t\t\t\t\t\t\t\t\t<option value=\"my\">Malaysia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mv\">Maldives</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ml\">Mali</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mt\">Malta</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mh\">Marshall Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mq\">Martinique</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mr\">Mauritania</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mu\">Mauritius</option>\n\t\t\t\t\t\t\t\t\t<option value=\"yt\">Mayotte</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mx\">Mexico</option>\n\t\t\t\t\t\t\t\t\t<option value=\"fm\">Micronesia, Federated States of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"md\">Moldova, Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mc\">Monaco</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mn\">Mongolia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"me\">Montenegro</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ms\">Montserrat</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ma\">Morocco</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mz\">Mozambique</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mm\">Myanmar</option>\n\t\t\t\t\t\t\t\t\t<option value=\"na\">Namibia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nr\">Nauru</option>\n\t\t\t\t\t\t\t\t\t<option value=\"np\">Nepal</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nl\">Netherlands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nc\">New Caledonia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nz\">New Zealand</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ni\">Nicaragua</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ne\">Niger</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ng\">Nigeria</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nu\">Niue</option>\n\t\t\t\t\t\t\t\t\t<option value=\"nf\">Norfolk Island</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mp\">Northern Mariana Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"no\">Norway</option>\n\t\t\t\t\t\t\t\t\t<option value=\"om\">Oman</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pk\">Pakistan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pw\">Palau</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ps\">Palestinian Territory, Occupied</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pa\">Panama</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pg\">Papua New Guinea</option>\n\t\t\t\t\t\t\t\t\t<option value=\"py\">Paraguay</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pe\">Peru</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ph\">Philippines</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pn\">Pitcairn</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pl\">Poland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pt\">Portugal</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pr\">Puerto Rico</option>\n\t\t\t\t\t\t\t\t\t<option value=\"qa\">Qatar</option>\n\t\t\t\t\t\t\t\t\t<option value=\"re\">Réunion</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ro\">Romania</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ru\">Russian Federation</option>\n\t\t\t\t\t\t\t\t\t<option value=\"rw\">Rwanda</option>\n\t\t\t\t\t\t\t\t\t<option value=\"bl\">Saint Barthélemy</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sh\">Saint Helena, Ascension and Tristan da Cunha</option>\n\t\t\t\t\t\t\t\t\t<option value=\"kn\">Saint Kitts and Nevis</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lc\">Saint Lucia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"mf\">Saint Martin (French part)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"pm\">Saint Pierre and Miquelon</option>\n\t\t\t\t\t\t\t\t\t<option value=\"vc\">Saint Vincent and the Grenadines</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ws\">Samoa</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sm\">San Marino</option>\n\t\t\t\t\t\t\t\t\t<option value=\"st\">Sao Tome and Principe</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sa\">Saudi Arabia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sn\">Senegal</option>\n\t\t\t\t\t\t\t\t\t<option value=\"rs\">Serbia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sc\">Seychelles</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sl\">Sierra Leone</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sg\">Singapore</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sx\">Sint Maarten (Dutch part)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sk\">Slovakia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"si\">Slovenia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sb\">Solomon Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"so\">Somalia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"za\">South Africa</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gs\">South Georgia and the South Sandwich Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ss\">South Sudan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"es\">Spain</option>\n\t\t\t\t\t\t\t\t\t<option value=\"lk\">Sri Lanka</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sd\">Sudan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sr\">Suriname</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sj\">Svalbard and Jan Mayen</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sz\">Swaziland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"se\">Sweden</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ch\">Switzerland</option>\n\t\t\t\t\t\t\t\t\t<option value=\"sy\">Syrian Arab Republic</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tw\">Taiwan, Province of China</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tj\">Tajikistan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tz\">Tanzania, United Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"th\">Thailand</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tl\">Timor-Leste</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tg\">Togo</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tk\">Tokelau</option>\n\t\t\t\t\t\t\t\t\t<option value=\"to\">Tonga</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tt\">Trinidad and Tobago</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tn\">Tunisia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tr\">Turkey</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tm\">Turkmenistan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tc\">Turks and Caicos Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"tv\">Tuvalu</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ug\">Uganda</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ua\">Ukraine</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ae\">United Arab Emirates</option>\n\t\t\t\t\t\t\t\t\t<option value=\"gb\">United Kingdom</option>\n\t\t\t\t\t\t\t\t\t<option value=\"us\" selected=\"\">United States</option>\n\t\t\t\t\t\t\t\t\t<option value=\"um\">United States Minor Outlying Islands</option>\n\t\t\t\t\t\t\t\t\t<option value=\"uy\">Uruguay</option>\n\t\t\t\t\t\t\t\t\t<option value=\"uz\">Uzbekistan</option>\n\t\t\t\t\t\t\t\t\t<option value=\"vu\">Vanuatu</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ve\">Venezuela, Bolivarian Republic of</option>\n\t\t\t\t\t\t\t\t\t<option value=\"vn\">Viet Nam</option>\n\t\t\t\t\t\t\t\t\t<option value=\"vg\">Virgin Islands, British</option>\n\t\t\t\t\t\t\t\t\t<option value=\"vi\">Virgin Islands, U.S.</option>\n\t\t\t\t\t\t\t\t\t<option value=\"wf\">Wallis and Futuna</option>\n\t\t\t\t\t\t\t\t\t<option value=\"eh\">Western Sahara</option>\n\t\t\t\t\t\t\t\t\t<option value=\"ye\">Yemen</option>\n\t\t\t\t\t\t\t\t\t<option value=\"zm\">Zambia</option>\n\t\t\t\t\t\t\t\t\t<option value=\"zw\">Zimbabwe</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('phone') }\">\n\t\t\t\t\t\t<label for=\"infoPhone\">Home Phone</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"phone | phone\" v-validate:phone=\"{ required: true, minlength:10 }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('mobile') }\">\n\t\t\t\t\t\t<label for=\"infoMobile\">Cell Phone</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"mobile | phone\" v-validate:mobile=\"{ required: true, minlength:10 }\" :classes=\"{ invalid: 'has-error'}\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -36295,7 +37501,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],134:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36352,7 +37558,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],135:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],147:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36631,7 +37837,7 @@ exports.default = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<h4>Payment Details</h4>\n\t\t<hr>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-md-6\">\n\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t<li class=\"list-group-item\">\n\t\t\t\t\t\tItem\n\t\t\t\t\t\t<span class=\"pull-right\">Cost</span>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class=\"list-group-item\" v-for=\"cost in staticCosts\">\n\t\t\t\t\t\t<h5 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\t{{cost.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t\t\t\t</h5>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\n\t\t\t\t\t\t</p>\n\t\t\t\t\t\t<table class=\"table\">\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"p in cost.payments.data\" :class=\"{'text-danger': p.upfront}\">\n\t\t\t\t\t\t\t\t\t<td>{{toDate(p.due_at)}}</td>\n\t\t\t\t\t\t\t\t\t<td class=\"text-right\">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class=\"list-group-item\" v-for=\"cost in incrementalCosts\">\n\t\t\t\t\t\t<h5 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\t{{cost.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t\t\t\t</h5>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\n\t\t\t\t\t\t</p>\n\t\t\t\t\t\t<table class=\"table\">\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"p in cost.payments.data\" :class=\"{'text-danger': p.upfront}\">\n\t\t\t\t\t\t\t\t\t<td>{{toDate(p.due_at)}}</td>\n\t\t\t\t\t\t\t\t\t<td class=\"text-right\">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class=\"list-group-item\" v-for=\"cost in selectedOptions\">\n\t\t\t\t\t\t<h5 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\t{{cost.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t\t\t\t</h5>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\n\t\t\t\t\t\t</p>\n\t\t\t\t\t\t<table class=\"table\">\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"p in cost.payments.data\" :class=\"{'text-danger': p.upfront}\">\n\t\t\t\t\t\t\t\t\t<td>{{toDate(p.due_at)}}</td>\n\t\t\t\t\t\t\t\t\t<td class=\"text-right\">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\n\t\t\t\t<table class=\"table table-hover\">\n\t\t\t\t\t<tfoot>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\">Fundraising Goal</td>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\">{{totalCosts | currency}}</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<td>Non-refundable Deposit</td>\n\t\t\t\t\t\t\t<td class=\"text-danger\">{{-deposit | currency}}</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<td>Up-front Charges</td>\n\t\t\t\t\t\t\t<td class=\"text-danger\">{{-upfrontTotal | currency}}</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\">Total to Raise</td>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\">{{fundraisingGoal | currency}}</td>\n\t\t\t\t\t\t</tr>\n\n\t\t\t\t\t</tfoot>\n\t\t\t\t</table>\n\t\t\t</div>\n\t\t\t<div class=\"col-md-6\">\n\t\t\t\t<validator name=\"PaymentDetails\">\n\t\t\t\t\t<form novalidate=\"\" role=\"form\">\n\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('cardholdername') }\">\n\t\t\t\t\t\t\t<label for=\"cardHolderName\">Card Holder's Name</label>\n\t\t\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><span class=\"fa fa-user\"></span></span>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control\" id=\"cardHolderName\" placeholder=\"Name on card\" v-model=\"cardHolderName\" v-validate:cardholdername=\"{ required: true }\" autofocus=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }\">\n\t\t\t\t\t\t\t<label for=\"cardNumber\">Card Number</label>\n\t\t\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><span class=\"fa fa-lock\"></span></span>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control\" id=\"cardNumber\" placeholder=\"Valid Card Number\" v-model=\"cardNumber\" v-validate:cardnumber=\"{ required: true, maxlength: 19 }\" @keyup=\"formatCard($event)\" maxlength=\"19\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<span class=\"help-block\" v-if=\"validationErrors.cardNumber=='error'\">{{stripeError.message}}</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-xs-7 col-md-7\">\n\t\t\t\t\t\t\t\t<label for=\"expiryMonth\">EXPIRY DATE</label>\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6 col-lg-6\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('month') || validationErrors.cardMonth }\">\n\t\t\t\t\t\t\t\t\t\t\t<select v-model=\"cardMonth\" class=\"form-control\" id=\"expiryMonth\" v-validate:month=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t<option v-for=\"month in monthList\" value=\"{{month}}\">{{month}}</option>\n\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6 col-lg-6\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('year') || validationErrors.cardYear }\">\n\t\t\t\t\t\t\t\t\t\t\t<select v-model=\"cardYear\" class=\"form-control\" id=\"expiryYear\" v-validate:year=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t<option v-for=\"year in yearList\" value=\"{{year}}\">{{year}}</option>\n\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-xs-5 col-md-5 pull-right\">\n\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('code') || validationErrors.cardCVC }\">\n\t\t\t\t\t\t\t\t\t<label for=\"cvCode\">\n\t\t\t\t\t\t\t\t\t\tCV CODE</label>\n\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control\" id=\"cvCode\" maxlength=\"3\" v-model=\"cardCVC\" placeholder=\"CV\" v-validate:code=\"{ required: true, minlength: 3, maxlength: 3 }\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-7\">\n\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n\t\t\t\t\t\t\t\t\t<label for=\"infoEmailAddress\">Billing Email Address</label>\n\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"cardEmail\" v-validate:email=\"['email']\" id=\"infoEmailAddress\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-5\">\n\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('zip') }\">\n\t\t\t\t\t\t\t\t\t<label for=\"infoZip\">Billing ZIP/Postal Code</label>\n\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"cardZip\" v-validate:zip=\"{ required: true }\" id=\"infoZip\" placeholder=\"12345\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"cardSave\">Save payment details for next time.\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<p class=\"help-block text-success\">Your card will be charged a $100.00 deposit along with any upfront fees\n\t\t\t\t\t\t\timmediately after your trip registration process is complete to secure your spot on this trip.</p>\n\t\t\t\t\t</form>\n\n\t\t\t\t</validator>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<h4>Payment Details</h4>\n\t\t<hr>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-md-12\">\n\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t<li class=\"list-group-item\">\n\t\t\t\t\t\tItem\n\t\t\t\t\t\t<span class=\"pull-right\">Cost</span>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class=\"list-group-item\" v-for=\"cost in staticCosts\">\n\t\t\t\t\t\t<h5 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\t{{cost.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t\t\t\t</h5>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\n\t\t\t\t\t\t</p>\n\t\t\t\t\t\t<table class=\"table\">\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"p in cost.payments.data\" :class=\"{'text-danger': p.upfront}\">\n\t\t\t\t\t\t\t\t\t<td>{{toDate(p.due_at)}}</td>\n\t\t\t\t\t\t\t\t\t<td class=\"text-right\">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class=\"list-group-item\" v-for=\"cost in incrementalCosts\">\n\t\t\t\t\t\t<h5 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\t{{cost.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t\t\t\t</h5>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\n\t\t\t\t\t\t</p>\n\t\t\t\t\t\t<table class=\"table\">\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"p in cost.payments.data\" :class=\"{'text-danger': p.upfront}\">\n\t\t\t\t\t\t\t\t\t<td>{{toDate(p.due_at)}}</td>\n\t\t\t\t\t\t\t\t\t<td class=\"text-right\">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class=\"list-group-item\" v-for=\"cost in selectedOptions\">\n\t\t\t\t\t\t<h5 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\t{{cost.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t\t\t\t</h5>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\n\t\t\t\t\t\t</p>\n\t\t\t\t\t\t<table class=\"table\">\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"p in cost.payments.data\" :class=\"{'text-danger': p.upfront}\">\n\t\t\t\t\t\t\t\t\t<td>{{toDate(p.due_at)}}</td>\n\t\t\t\t\t\t\t\t\t<td class=\"text-right\">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\n\t\t\t\t<table class=\"table table-hover\">\n\t\t\t\t\t<tfoot>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\">Fundraising Goal</td>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\">{{totalCosts | currency}}</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<td>Non-refundable Deposit</td>\n\t\t\t\t\t\t\t<td class=\"text-danger\">{{-deposit | currency}}</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<td>Up-front Charges</td>\n\t\t\t\t\t\t\t<td class=\"text-danger\">{{-upfrontTotal | currency}}</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\"><h5>Total to Raise</h5></td>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\"><h5 class=\"success\">{{fundraisingGoal | currency}}</h5></td>\n\t\t\t\t\t\t</tr>\n\n\t\t\t\t\t</tfoot>\n\t\t\t\t</table>\n\t\t\t</div>\n\t\t\t<hr class=\"divider\">\n\t\t\t<div class=\"col-md-12\">\n\t\t\t\t<validator name=\"PaymentDetails\">\n\t\t\t\t\t<form novalidate=\"\" role=\"form\">\n\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('cardholdername') }\">\n\t\t\t\t\t\t\t<label for=\"cardHolderName\">Card Holder's Name</label>\n\t\t\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><span class=\"fa fa-user\"></span></span>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control\" id=\"cardHolderName\" placeholder=\"Name on card\" v-model=\"cardHolderName\" v-validate:cardholdername=\"{ required: true }\" autofocus=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }\">\n\t\t\t\t\t\t\t<label for=\"cardNumber\">Card Number</label>\n\t\t\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><span class=\"fa fa-lock\"></span></span>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control\" id=\"cardNumber\" placeholder=\"Valid Card Number\" v-model=\"cardNumber\" v-validate:cardnumber=\"{ required: true, maxlength: 19 }\" @keyup=\"formatCard($event)\" maxlength=\"19\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<span class=\"help-block\" v-if=\"validationErrors.cardNumber=='error'\">{{stripeError.message}}</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-xs-7 col-md-7\">\n\t\t\t\t\t\t\t\t<label for=\"expiryMonth\">EXPIRY DATE</label>\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6 col-lg-6\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('month') || validationErrors.cardMonth }\">\n\t\t\t\t\t\t\t\t\t\t\t<select v-model=\"cardMonth\" class=\"form-control\" id=\"expiryMonth\" v-validate:month=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t<option v-for=\"month in monthList\" value=\"{{month}}\">{{month}}</option>\n\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6 col-lg-6\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('year') || validationErrors.cardYear }\">\n\t\t\t\t\t\t\t\t\t\t\t<select v-model=\"cardYear\" class=\"form-control\" id=\"expiryYear\" v-validate:year=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t<option v-for=\"year in yearList\" value=\"{{year}}\">{{year}}</option>\n\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-xs-5 col-md-5 pull-right\">\n\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('code') || validationErrors.cardCVC }\">\n\t\t\t\t\t\t\t\t\t<label for=\"cvCode\">\n\t\t\t\t\t\t\t\t\t\tCV CODE</label>\n\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control\" id=\"cvCode\" maxlength=\"3\" v-model=\"cardCVC\" placeholder=\"CV\" v-validate:code=\"{ required: true, minlength: 3, maxlength: 3 }\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-7\">\n\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n\t\t\t\t\t\t\t\t\t<label for=\"infoEmailAddress\">Billing Email Address</label>\n\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"cardEmail\" v-validate:email=\"['email']\" id=\"infoEmailAddress\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-5\">\n\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('zip') }\">\n\t\t\t\t\t\t\t\t\t<label for=\"infoZip\">Billing ZIP/Postal Code</label>\n\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"cardZip\" v-validate:zip=\"{ required: true }\" id=\"infoZip\" placeholder=\"12345\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"cardSave\">Save payment details for next time.\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<p class=\"help-block text-success\">Your card will be charged a $100.00 deposit along with any upfront fees\n\t\t\t\t\t\t\timmediately after your trip registration process is complete to secure your spot on this trip.</p>\n\t\t\t\t\t</form>\n\n\t\t\t\t</validator>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -36642,7 +37848,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],136:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36687,7 +37893,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],137:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],149:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36724,7 +37930,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],138:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36761,7 +37967,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],139:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],151:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -36991,7 +38197,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-5 col-md-4\">\n\t\t<ul class=\"nav nav-pills nav-stacked\">\n\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t{{step.name}}\n\t\t\t\t</a>\n\t\t\t</li>\n\n\t\t</ul>\n\t</div>\n\t<div class=\"col-sm-7 col-md-8 {{currentStep.view}}\">\n\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t</component>\n\t\t<hr>\n\t\t<div class=\"btn-group btn-group-sm pull-right\" role=\"group\" aria-label=\"...\">\n\t\t\t<!--<a class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</a>-->\n\t\t\t<a class=\"btn btn-default\" @click=\"backStep()\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-5 col-md-4\">\n\t\t<ul class=\"nav nav-pills nav-stacked\">\n\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t{{step.name}}\n\t\t\t\t</a>\n\t\t\t</li>\n\n\t\t</ul>\n\t</div>\n\t<div class=\"col-sm-7 col-md-8 {{currentStep.view}}\">\n\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t</component>\n\t\t<hr class=\"divider\">\n\t\t<div class=\"btn-group btn-group pull-right\" role=\"group\" aria-label=\"...\">\n\t\t\t<!--<a class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</a>-->\n\t\t\t<a class=\"btn btn-default\" @click=\"backStep()\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -37006,7 +38212,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":124,"./registration/additional-trip-options.vue":132,"./registration/basic-info.vue":133,"./registration/deadline-agreement.vue":134,"./registration/payment-details.vue":135,"./registration/review.vue":136,"./registration/roca.vue":137,"./registration/tos.vue":138,"vue":111,"vue-hot-reload-api":107,"vueify/lib/insert-css":112}],140:[function(require,module,exports){
+},{"../login.vue":125,"./registration/additional-trip-options.vue":144,"./registration/basic-info.vue":145,"./registration/deadline-agreement.vue":146,"./registration/payment-details.vue":147,"./registration/review.vue":148,"./registration/roca.vue":149,"./registration/tos.vue":150,"vue":111,"vue-hot-reload-api":107,"vueify/lib/insert-css":112}],152:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -37037,6 +38243,14 @@ var _tripRegistrationWizard = require('./components/trips/trip-registration-wiza
 
 var _tripRegistrationWizard2 = _interopRequireDefault(_tripRegistrationWizard);
 
+var _reservationsList = require('./components/reservations/reservations-list.vue');
+
+var _reservationsList2 = _interopRequireDefault(_reservationsList);
+
+var _donationsList = require('./components/reservations/donations-list.vue');
+
+var _donationsList2 = _interopRequireDefault(_donationsList);
+
 var _adminCampaignCreate = require('./components/campaigns/admin-campaign-create.vue');
 
 var _adminCampaignCreate2 = _interopRequireDefault(_adminCampaignCreate);
@@ -37053,17 +38267,37 @@ var _adminTripCreate = require('./components/trips/admin-trip-create.vue');
 
 var _adminTripCreate2 = _interopRequireDefault(_adminTripCreate);
 
+var _adminTripEdit = require('./components/trips/admin-trip-edit.vue');
+
+var _adminTripEdit2 = _interopRequireDefault(_adminTripEdit);
+
 var _adminTripsList = require('./components/trips/admin-trips-list.vue');
 
 var _adminTripsList2 = _interopRequireDefault(_adminTripsList);
 
+var _adminTripReservationsList = require('./components/trips/admin-trip-reservations-list.vue');
+
+var _adminTripReservationsList2 = _interopRequireDefault(_adminTripReservationsList);
+
+var _adminTripDuplicate = require('./components/trips/admin-trip-duplicate.vue');
+
+var _adminTripDuplicate2 = _interopRequireDefault(_adminTripDuplicate);
+
+var _adminTripDelete = require('./components/trips/admin-trip-delete.vue');
+
+var _adminTripDelete2 = _interopRequireDefault(_adminTripDelete);
+
+var _adminGroupsList = require('./components/groups/admin-groups-list.vue');
+
+var _adminGroupsList2 = _interopRequireDefault(_adminGroupsList);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // jQuery
-window.$ = window.jQuery = require('jquery');
+
 
 // admin components
-
+window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 window._ = require('underscore');
 require('jquery.cookie');
@@ -37147,7 +38381,10 @@ new _vue2.default({
             public: false
         }
     },
-    components: [_login2.default, _campaigns2.default, _campaignGroups2.default, _groupTrips2.default, _groupsTripsSelectionWrapper2.default, _tripRegistrationWizard2.default, _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripsList2.default],
+    components: [_login2.default, _campaigns2.default, _campaignGroups2.default, _groupTrips2.default, _groupsTripsSelectionWrapper2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default,
+
+    // admin components
+    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminGroupsList2.default],
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -37168,6 +38405,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/campaigns/admin-campaign-create.vue":113,"./components/campaigns/admin-campaign-details.vue":114,"./components/campaigns/admin-campaign-edit.vue":115,"./components/campaigns/campaign-groups.vue":116,"./components/campaigns/campaigns.vue":117,"./components/campaigns/group-trips.vue":122,"./components/campaigns/groups-trips-selection-wrapper.vue":123,"./components/login.vue":124,"./components/trips/admin-trip-create.vue":125,"./components/trips/admin-trips-list.vue":126,"./components/trips/trip-registration-wizard.vue":139,"bootstrap-sass":15,"jquery":103,"jquery.cookie":102,"moment":104,"underscore":106,"vue":111,"vue-resource":108,"vue-validator":110}]},{},[140]);
+},{"./components/campaigns/admin-campaign-create.vue":113,"./components/campaigns/admin-campaign-details.vue":114,"./components/campaigns/admin-campaign-edit.vue":115,"./components/campaigns/campaign-groups.vue":116,"./components/campaigns/campaigns.vue":117,"./components/campaigns/group-trips.vue":122,"./components/campaigns/groups-trips-selection-wrapper.vue":123,"./components/groups/admin-groups-list.vue":124,"./components/login.vue":125,"./components/reservations/donations-list.vue":126,"./components/reservations/reservations-list.vue":127,"./components/trips/admin-trip-create.vue":128,"./components/trips/admin-trip-delete.vue":129,"./components/trips/admin-trip-duplicate.vue":130,"./components/trips/admin-trip-edit.vue":131,"./components/trips/admin-trip-reservations-list.vue":132,"./components/trips/admin-trips-list.vue":133,"./components/trips/trip-registration-wizard.vue":151,"bootstrap-sass":15,"jquery":103,"jquery.cookie":102,"moment":104,"underscore":106,"vue":111,"vue-resource":108,"vue-validator":110}]},{},[152]);
 
 //# sourceMappingURL=main.js.map

@@ -13,7 +13,7 @@ class TripTableSeeder extends Seeder
     {
 
         factory(App\Models\v1\Trip::class, config('seeders.trips'))->create()->each(function($t) {
-            $t->facilitators()->save(factory(App\Models\v1\Facilitator::class)->make());
+            $t->facilitators()->attach(factory(App\Models\v1\Facilitator::class)->make());
 
             $t->costs()->saveMany(factory(App\Models\v1\Cost::class, 3)->make());
 

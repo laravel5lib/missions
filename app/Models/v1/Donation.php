@@ -96,14 +96,4 @@ class Donation extends Model
                      ->where('designation_id', $id);
     }
 
-    /**
-     * Get all of the donation's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
-    }
-
 }

@@ -170,16 +170,6 @@ class Trip extends Model
     }
 
     /**
-     * Get all of the trip's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
-    }
-
-    /**
      * Set the trip's todos list.
      *
      * @param $value

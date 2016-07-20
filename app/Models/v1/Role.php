@@ -18,14 +18,4 @@ class Role extends Model
     {
         return $this->hasMany(TeamMember::class);
     }
-
-    /**
-     * Get all of the role's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
-    }
 }

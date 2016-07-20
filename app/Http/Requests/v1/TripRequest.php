@@ -25,17 +25,32 @@ class TripRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'group_id'                        => 'required|exists:groups,id',
+        $required = [
+            'group_id'     => 'required|exists:groups,id',
+            'country_code' => 'required',
+            'type'         => 'required|in:full,media,medical,short',
+            'difficulty'   => 'required|in:level_1,level_2,level_3',
+            'started_at'   => 'required|date',
+            'ended_at'     => 'required|date',
+        ];
+
+        if ($this->isMethod('put'))
+        {
+            $required = [
+                'group_id'     => 'sometimes|required|exists:groups,id',
+                'country_code' => 'sometimes|required',
+                'type'         => 'sometimes|required|in:full,media,medical,short',
+                'difficulty'   => 'sometimes|required|in:level_1,level_2,level_3',
+                'started_at'   => 'sometimes|required|date',
+                'ended_at'     => 'sometimes|required|date',
+            ];
+        }
+
+        $optional = [
             'campaign_id'                     => 'exists:campaigns,id',
             'rep_id'                          => 'exists:reps,id',
             'spots'                           => 'numeric',
-            'country_code'                    => 'required',
-            'type'                            => 'required|in:full,media,medical,short',
-            'difficulty'                      => 'required|in:level_1,level_2,level_3',
             'thumb_src'                       => 'image',
-            'started_at'                      => 'required|date',
-            'ended_at'                        => 'required|date',
             'costs'                           => 'sometimes|required|array',
             'costs.*.name'                    => 'required|string',
             'costs.*.description'             => 'string',
@@ -62,7 +77,12 @@ class TripRequest extends FormRequest
             'requirements.*.item'             => 'required|string',
             'requirements.*.due_at'           => 'required|date',
             'requirements.*.grace_period'     => 'numeric',
-            'facilitators'                    => 'array'
+            'facilitators'                    => 'array',
+            'tags'                            => 'array'
         ];
+
+        $rules = $required + $optional;
+
+        return $rules;
     }
 }

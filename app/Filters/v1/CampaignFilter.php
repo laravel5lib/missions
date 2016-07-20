@@ -10,7 +10,9 @@ class CampaignFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'tags' => ['tags']
+    ];
 
     /**
      * Filter by has trips or not

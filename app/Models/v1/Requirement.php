@@ -69,4 +69,14 @@ class Requirement extends Model
     {
         return $this->belongsToMany(Reservation::class, 'reservation_requirements');
     }
+
+    /**
+     * Get all of the requirement's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

@@ -85,4 +85,14 @@ class Facilitator extends Model
     {
         return $this->hasManyThrough(Reservation::class, Trip::class);
     }
+
+    /**
+     * Get all of the facilitator's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

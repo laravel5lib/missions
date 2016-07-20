@@ -105,4 +105,14 @@ class Group extends Model
     {
         return $this->morphMany(Fundraiser::class, 'sponsor');
     }
+
+    /**
+     * Get all of the group's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

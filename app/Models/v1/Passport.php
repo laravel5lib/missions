@@ -43,4 +43,14 @@ class Passport extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+
+    /**
+     * Get all of the passport's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

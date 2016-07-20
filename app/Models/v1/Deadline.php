@@ -69,4 +69,14 @@ class Deadline extends Model
                     ->withPivot('grace_period')
                     ->withTimestamps();
     }
+
+    /**
+     * Get all of the deadline's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

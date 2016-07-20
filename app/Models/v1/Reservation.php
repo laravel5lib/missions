@@ -130,6 +130,16 @@ class Reservation extends Model
     }
 
     /**
+     * Get all of the reservation's tags.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    /**
      * Get all of the reservation's requirements
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

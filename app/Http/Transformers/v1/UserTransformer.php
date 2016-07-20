@@ -90,7 +90,7 @@ class UserTransformer extends TransformerAbstract
      */
     public function includeManaging(User $user)
     {
-        $groups = $user->groupsManaging;
+        $groups = $user->managing;
 
         return $this->collection($groups, new GroupTransformer);
     }
@@ -103,7 +103,7 @@ class UserTransformer extends TransformerAbstract
      */
     public function includeFacilitating(User $user)
     {
-        $trips = $user->tripsFacilitating;
+        $trips = $user->facilitating;
 
         return $this->collection($trips, new TripTransformer);
     }

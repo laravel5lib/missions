@@ -22,6 +22,8 @@ class Accommodation extends Model
 
     public function region()
     {
+        // PROPOSED CHANGE
+//        return $this->belongsToMany(Region::class, 'region_accommodations');
         return $this->belongsTo(Region::class);
     }
 

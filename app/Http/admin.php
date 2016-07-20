@@ -18,3 +18,6 @@ Route::resource('campaigns.regions', 'RegionsController');
 Route::resource('campaigns.transports', 'TransportsController');
 
 Route::resource('trips', 'TripsController');
+
+Route::resource('groups', 'GroupsController');
+

@@ -65,8 +65,7 @@ class GroupsController extends Controller
     {
         $group = $this->group->create($request->all());
 
-        if ($request->has('managers'))
-            $group->managers()->create($request->get('managers'));
+        $group->syncmanagers($request->get('managers'));
 
         return $this->response->item($group, new GroupTransformer);
     }
@@ -83,6 +82,8 @@ class GroupsController extends Controller
         $group = $this->group->findOrFail($id);
 
         $group->update($request->all());
+
+        $group->syncmanagers($request->get('managers'));
 
         return $this->response->item($group, new GroupTransformer);
     }

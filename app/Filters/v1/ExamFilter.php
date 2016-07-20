@@ -10,7 +10,9 @@ class ExamFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'tags' => ['tags']
+    ];
 
     /**
      * Find by party size range

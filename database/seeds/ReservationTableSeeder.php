@@ -47,6 +47,8 @@ class ReservationTableSeeder extends Seeder
             $r->companions()->save(factory(App\Models\v1\Companion::class)->make());
 
             $r->notes()->save(factory(App\Models\v1\Note::class)->make());
+
+            $r->tag(['vip', 'missionary']);
         });
     }
 }

@@ -37,7 +37,8 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
     return array_merge($user, [
         'name'     => 'Admin',
         'email'    => 'admin@admin.com',
-        'password' => 'secret'
+        'password' => 'secret',
+        'admin'    => true
     ]);
 });
 

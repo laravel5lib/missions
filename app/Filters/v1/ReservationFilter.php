@@ -11,12 +11,10 @@ class ReservationFilter extends ModelFilter
     * @var array
     */
     public $relations = [
-        'trip' => ['group', 'campaign'],
-        'todos' => ['task', 'outstandingTasks']
+        'trip' => ['groups', 'campaign'],
+        'todos' => ['task', 'outstandingTasks'],
+        'tags' => ['tags']
     ];
-
-
-// 'todos', 'costs'
 
     public function user($ids)
     {

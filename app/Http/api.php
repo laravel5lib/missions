@@ -13,7 +13,7 @@
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', [
-    'middleware' => 'api.throttle', 'limit' => 50, 'expires' => 1,
+//    'middleware' => 'api.throttle', 'limit' => 50, 'expires' => 1, DISABLE FOR DEVELOPMENT
     'namespace' => 'App\Http\Controllers\Api'
 ], function($api)
 {
@@ -51,6 +51,7 @@ $api->version('v1', [
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
     $api->resource('reservations', 'ReservationsController');
+    $api->get('reservations/{id}/donations', 'ReservationsController@donations');
     $api->resource('assignments', 'AssignmentsController');
     $api->get('fundraisers.donations', 'DonationsController@index');
     $api->resource('fundraisers', 'FundraisersController');

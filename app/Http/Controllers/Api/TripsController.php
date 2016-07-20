@@ -67,10 +67,7 @@ class TripsController extends Controller
     {
         $trip = $this->trip->create($request->except('deadlines', 'requirements', 'costs'));
 
-        // Syncronize resources
-        $trip->syncDeadlines($request->get('deadlines'));
-        $trip->syncCosts($request->get('costs'));
-        $trip->syncRequirements($request->get('requirements'));
+        $this->syncResources($trip, $request);
 
         return $this->response->item($trip, new TripTransformer);
     }
@@ -88,10 +85,7 @@ class TripsController extends Controller
 
         $trip->update($request->except('deadlines', 'requirements', 'costs'));
 
-        // Syncronize resources
-        $trip->syncDeadlines($request->get('deadlines'));
-        $trip->syncCosts($request->get('costs'));
-        $trip->syncRequirements($request->get('requirements'));
+        $this->syncResources($trip, $request);
 
         return $this->response->item($trip, new TripTransformer);
     }
@@ -109,5 +103,13 @@ class TripsController extends Controller
         $trip->delete();
 
         return $this->response->noContent();
+    }
+
+    private function syncResources(Trip $trip, TripRequest $request)
+    {
+        $trip->syncDeadlines($request->get('deadlines'));
+        $trip->syncCosts($request->get('costs'));
+        $trip->syncRequirements($request->get('requirements'));
+        $trip->syncFacilitators($request->get('facilitators'));
     }
 }

@@ -76,7 +76,7 @@ class GroupTransformer extends TransformerAbstract
     {
         $managers = $group->managers;
 
-        return $this->collection($managers, new ManagerTransformer);
+        return $this->collection($managers, new UserTransformer);
     }
 
     /**

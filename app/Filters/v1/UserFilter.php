@@ -13,7 +13,9 @@ class UserFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'tags' => ['tags']
+    ];
 
     /**
      * Find by public or private

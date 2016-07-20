@@ -192,7 +192,7 @@ class TripTransformer extends TransformerAbstract
     {
         $facilitators = $trip->facilitators;
 
-        return $this->collection($facilitators, new FacilitatorTransformer);
+        return $this->collection($facilitators, new UserTransformer);
     }
 
     private function validateParams($params)

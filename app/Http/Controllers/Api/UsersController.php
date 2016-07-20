@@ -48,20 +48,17 @@ class UsersController extends Controller
      */
     public function show($id = null)
     {
-
-        // return $this->auth->user()->withAvailableRegions();
-
         if($id)
         {
             $user = $this->user->findOrFail($id);
 
-            if ( ! $user->public)
-            {
-                if ($user->id !== $this->auth->user()->id and ! $this->auth->user()->isAdmin())
-                {
-                    abort(403);
-                }
-            }
+//            if ( ! $user->public)
+//            {
+//                if ($user->id !== $this->auth->user()->id and ! $this->auth->user()->isAdmin())
+//                {
+//                    abort(403);
+//                }
+//            }
         }
         else
         {

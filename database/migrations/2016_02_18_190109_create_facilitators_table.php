@@ -13,6 +13,7 @@ class CreateFacilitatorsTable extends Migration
     public function up()
     {
         Schema::create('facilitators', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->uuid('trip_id')->index();
             $table->uuid('user_id')->index();
             $table->json('permissions')->nullable();

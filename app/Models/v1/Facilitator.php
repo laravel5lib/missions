@@ -2,10 +2,12 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
 use Illuminate\Database\Eloquent\Model;
 
 class Facilitator extends Model
 {
+    use UuidForKey;
 
     /**
      * The table associated with the model.

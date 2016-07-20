@@ -27,7 +27,7 @@ class FacilitatorTransformer extends TransformerAbstract
         $facilitator->load('user');
 
         return [
-            'id'         => $facilitator->id,
+            'user_id'         => $facilitator->user_id,
             'name'       => $facilitator->user->name,
             'email'      => $facilitator->user->email,
             'gender'     => $facilitator->user->gender,

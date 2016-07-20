@@ -61,7 +61,8 @@ class TripRequest extends FormRequest
             'requirements'                    => 'sometimes|required|array',
             'requirements.*.item'             => 'required|string',
             'requirements.*.due_at'           => 'required|date',
-            'requirements.*.grace_period'     => 'numeric'
+            'requirements.*.grace_period'     => 'numeric',
+            'facilitators'                    => 'array'
         ];
     }
 }

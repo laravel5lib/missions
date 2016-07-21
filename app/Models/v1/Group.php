@@ -4,13 +4,14 @@ namespace App\Models\v1;
 
 use App\Scopes\PublicScope;
 use App\UuidForKey;
+use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Group extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey;
+    use SoftDeletes, Filterable, UuidForKey, Taggable;
 
     /**
      * The table associated with the model.

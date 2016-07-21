@@ -23,14 +23,31 @@ class CampaignRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|max:100',
+        $required = [
+            'name'         => 'required|max:100',
             'country_code' => 'required|string',
-            'description' => 'string|max:120',
-            'started_at' => 'required|date',
-            'ended_at' => 'required|date',
-            'published_at' => 'date',
-            'page_url' => 'required_with:published_at|string|unique:campaigns,page_url'
+            'started_at'   => 'required|date',
+            'ended_at'     => 'required|date',
+            'page_url'     => 'required_with:published_at|string|unique:campaigns,page_url'
         ];
+
+        if ($this->isMethod('put'))
+        {
+            $required = [
+                'name'         => 'sometimes|required|max:100',
+                'country_code' => 'sometimes|required|string',
+                'started_at'   => 'sometimes|required|date',
+                'ended_at'     => 'sometimes|required|date',
+                'page_url'     => 'required_with:published_at|string|unique:campaigns,page_url'
+            ];
+        }
+
+        $optional = [
+            'description'  => 'string|max:120',
+            'published_at' => 'date',
+            'tags'         => 'array'
+        ];
+
+        return $rules = $required + $optional;
     }
 }

@@ -23,10 +23,24 @@ class PassengerRequest extends Request
      */
     public function rules()
     {
-        return [
+        $required = [
             'reservation_id' => 'required|exists:reservations,id',
             'transport_id'   => 'required|exists:transports,id',
-            'seat_no'        => 'string'
         ];
+
+        if ($this->isMethod('put'))
+        {
+            $required = [
+                'reservation_id' => 'sometimes|required|exists:reservations,id',
+                'transport_id'   => 'sometimes|required|exists:transports,id',
+            ];
+        }
+
+        $optional = [
+            'seat_no'        => 'string',
+            'tags'           => 'array'
+        ];
+
+        return $rules = $required + $optional;
     }
 }

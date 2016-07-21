@@ -62,6 +62,7 @@
                             </dl>
                 	  </div>
                 </div>
+                <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
             </div>
         </div>
     </div>

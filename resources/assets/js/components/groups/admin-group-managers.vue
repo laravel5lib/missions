@@ -1,0 +1,131 @@
+<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title"> Managers
+				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddManagerModal"><span
+						class="fa fa-plus"></span> New
+				</button>
+			</h3>
+		</div>
+		<table class="table table-hover">
+			<thead>
+			<tr>
+				<th>Name</th>
+				<th><i class="fa fa-cog"></i></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr v-for="manager in managers" track-by="id">
+				<td>{{ manager.name }}</td>
+				<td>
+					<button class="btn btn-xs btn-danger" @click="removeManager(manager)"><i class="fa fa-times"></i>
+					</button>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		<div class="modal fade" id="AddManagerModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h4 class="modal-title">Modal title</h4></div>
+					<div class="modal-body">
+						<validator name="AddManager">
+							<form class="form-horizontal" novalidate="">
+								<div class="form-group" :class="{ 'has-error': checkForError('user') }"><label
+										class="col-sm-2 control-label">User</label>
+									<div class="col-sm-10">
+										<v-select class="form-controls" id="user" :value.sync="userObj" :options="users"
+												  :on-search="getUsers" label="name"></v-select>
+										<select hidden="" v-model="user_id" v-validate:user="{ required: true}">
+											<option :value="user.id" v-for="user in users">{{user.name}}</option>
+										</select></div>
+								</div>
+							</form>
+						</validator>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary btn-sm" @click="updateGroup()">Save</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal --></div>
+</template>
+<script>
+	import vSelect from "vue-select";
+	export default {
+		name: 'admin-group-managers',
+		components: {vSelect},
+		props: ['groupId'],
+		data: function data() {
+			return {
+				user_id: null,
+				managers: [],
+				users: [],
+				group: null,
+				userObj: null,
+				resource: this.$resource('groups{/id}'),
+				attemptSubmit: false
+			};
+		},
+
+		computed: {
+			user_id: function user_id() {
+				return _.isObject(this.userObj) ? this.userObj.id : null;
+			}
+		},
+		methods: {
+			checkForError: function checkForError(field) {
+				// if user clicked submit button while the field is invalid trigger error styles
+
+				return this.$AddManager[field].invalid && this.attemptSubmit;
+			},
+			getUsers: function getUsers(search, loading) {
+				loading(true);
+				this.$http.get('users', {search: search}).then(function (response) {
+					this.users = response.data.data;
+					loading(false);
+				});
+			},
+			addManager: function addManager() {
+				// Add Manager
+				this.attemptSubmit = true;
+				if (this.$AddManager.valid) {
+					this.managers.push({group_id: this.groupId, user_id: this.user_id});
+					this.group.managers = this.managers;
+					this.updateGroup();
+				}
+			},
+			removeManager: function removeManager(manager) {
+				// Remove Manager
+				this.managers.$remove(manager);
+				this.group.managers = this.managers;
+				this.updateGroup();
+			},
+			updateGroup: function updateGroup() {
+				// Update Group
+				this.resource.update({id: this.groupId}, this.group).then(function (response) {
+					this.group = response.data.data;
+					this.user_id = null;
+					this.userObj = null;
+					this.attemptSubmit = false;
+					$('#AddManagerModal').modal('hide');
+				}, function (response) {
+					console.log(response);
+				});
+			}
+		},
+		ready: function ready() {
+			this.resource.get({id: this.groupId}, {include: 'managers'}).then(function (response) {
+				this.group = response.data.data;
+				this.managers = this.group.managers.data;
+				//                $.extend(this.$data, response.data.data);
+			}, function (response) {
+				console.log('Update Failed! :(');
+				console.log(response);
+			});
+		}
+	};
+</script>

@@ -89,38 +89,44 @@
 				<div class="col-md-12">
 					<validator name="PaymentDetails">
 						<form novalidate role="form">
-							<div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
-								<label for="cardHolderName">Card Holder's Name</label>
-								<div class="input-group">
-									<span class="input-group-addon"><span class="fa fa-user"></span></span>
-									<input type="text" class="form-control" id="cardHolderName" placeholder="Name on card"
-										   v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
+						<div class="row">
+							<div class="col-sm-12 col-md-6">
+								<div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
+									<label for="cardHolderName">Card Holder's Name</label>
+									<div class="input-group">
+										<span class="input-group-addon input-sm"><span class="fa fa-user"></span></span>
+										<input type="text" class="form-control input-sm" id="cardHolderName" placeholder="Name on card"
+											   v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
+									</div>
 								</div>
 							</div>
-							<div class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
-								<label for="cardNumber">Card Number</label>
-								<div class="input-group">
-									<span class="input-group-addon"><span class="fa fa-lock"></span></span>
-									<input type="text" class="form-control" id="cardNumber" placeholder="Valid Card Number"
-										   v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
-										   @keyup="formatCard($event)" maxlength="19"/>
+							<div class="col-sm-12 col-md-6">
+								<div class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
+									<label for="cardNumber">Card Number</label>
+									<div class="input-group">
+										<span class="input-group-addon input-sm"><span class="fa fa-lock"></span></span>
+										<input type="text" class="form-control input-sm" id="cardNumber" placeholder="Valid Card Number"
+											   v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
+											   @keyup="formatCard($event)" maxlength="19"/>
+									</div>
+									<span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
 								</div>
-								<span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
 							</div>
+						</div>
 							<div class="row">
 								<div class="col-xs-7 col-md-7">
 									<label for="expiryMonth">EXPIRY DATE</label>
 									<div class="row">
 										<div class="col-xs-6 col-lg-6">
 											<div class="form-group" :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
-												<select v-model="cardMonth" class="form-control" id="expiryMonth" v-validate:month="{ required: true }">
+												<select v-model="cardMonth" class="form-control input-sm" id="expiryMonth" v-validate:month="{ required: true }">
 													<option v-for="month in monthList" value="{{month}}">{{month}}</option>
 												</select>
 											</div>
 										</div>
 										<div class="col-xs-6 col-lg-6">
 											<div class="form-group" :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
-												<select v-model="cardYear" class="form-control" id="expiryYear" v-validate:year="{ required: true }">
+												<select v-model="cardYear" class="form-control input-sm" id="expiryYear" v-validate:year="{ required: true }">
 													<option v-for="year in yearList" value="{{year}}">{{year}}</option>
 												</select>
 											</div>
@@ -131,7 +137,7 @@
 									<div class="form-group" :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
 										<label for="cvCode">
 											CV CODE</label>
-										<input type="text" class="form-control" id="cvCode" maxlength="3" v-model="cardCVC"
+										<input type="text" class="form-control input-sm" id="cvCode" maxlength="3" v-model="cardCVC"
 											   placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 3 }"/>
 									</div>
 								</div>

@@ -7,14 +7,7 @@
  * Variables...
  */
  
-$border-radius-base: 0;
-$brand-primary: #2B5A84;
 $active-icon-color: #6CC94D;
-$btn-border-radius-base: 4px;
-$btn-font-weight: 300;
-$font-family-sans-serif: "Lato", Helvetica, Arial, sans-serif !default;
-$font-size-base: 14px;
-$navbar-height: 65px;
 /*$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "~font-awesome/fonts/";*/
 
@@ -141,8 +134,8 @@ body {
   /* Negative indent footer by its height */
   margin: 0 auto -200px;
   /* Pad bottom by footer height */
-  padding: 0 0 250px;
-  padding-top: 100px;
+  padding: 0 0 200px;
+  padding-top: 65px;
 }
 #footer-mm {
   color: $gray-light;
@@ -240,6 +233,17 @@ li.av-nav > a {
   @media screen and (max-width: 767px) {
       margin-top: 0;
       margin-bottom: 0;
+  }
+  li a {
+    &.btn {
+      margin-top: 16px;
+      margin-bottom: 16px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+    &.btn-primary, &.btn-default, &.btn-success, &.btn-info, &.btn-warning {
+      color: #fff;
+    }
   }
 }
 .navbar {

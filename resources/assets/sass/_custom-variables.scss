@@ -366,7 +366,7 @@ $container-lg:                 $container-large-desktop;
 //##
 
 // Basics of a navbar
-$navbar-height:                    60px;
+$navbar-height:                    65px;
 $navbar-margin-bottom:             0;
 $navbar-border-radius:             0;
 $navbar-padding-horizontal:        floor(($grid-gutter-width / 2));
@@ -448,7 +448,7 @@ $nav-tabs-justified-active-link-border-color:     $body-bg;
 
 //== Pills
 $nav-pills-border-radius:                   0;
-$nav-pills-active-link-hover-bg:            #fff;
+$nav-pills-active-link-hover-bg:            $gray-lighter;
 $nav-pills-active-link-hover-color:         $brand-primary;
 
 

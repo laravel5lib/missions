@@ -14,6 +14,13 @@
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="nav navbar-nav navbar-right dropdown">
+      <li><a class="btn btn-primary" href="#">Donate</a></li>
+      <!-- <li>
+        <div class="btn-group">
+          <a class="btn btn-link" href="#">Login</a>
+          <a class="btn btn-primary" href="#">Sign Up</a>
+        </div>
+      </li> -->
       <li id="userMenu" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left"src="/images/nelson-prof-pic.jpg" alt="Zech Nelson"> Zech Nelson <i class="fa fa-angle-down"></i></a></li>
       <ul class="dropdown-menu" aria-labelledby="userMenu">
         <li><a href="profile.html">My Profile</a></li>

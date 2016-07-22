@@ -67,19 +67,19 @@
 						<tfoot>
 							<tr>
 								<td style="border-top:2px solid #000000;">Fundraising Goal</td>
-								<td style="border-top:2px solid #000000;">{{totalCosts | currency}}</td>
+								<td style="border-top:2px solid #000000;" class="text-right">{{totalCosts | currency}}</td>
 							</tr>
 							<tr>
 								<td>Non-refundable Deposit</td>
-								<td class="text-danger">{{-deposit | currency}}</td>
+								<td class="text-danger text-right">{{-deposit | currency}}</td>
 							</tr>
 							<tr>
 								<td>Up-front Charges</td>
-								<td class="text-danger">{{-upfrontTotal | currency}}</td>
+								<td class="text-danger text-right>{{-upfrontTotal | currency}}</td>
 							</tr>
 							<tr>
-								<td style="border-top:2px solid #000000;"><h5>Total to Raise</h5></td>
-								<td style="border-top:2px solid #000000;"><h5 class="success">{{fundraisingGoal | currency}}</h5></td>
+								<td style="border-top:2px solid #000000;"><h5 class="text-right">Total to Raise</h5></td>
+								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{fundraisingGoal | currency}}</h5></td>
 							</tr>
 
 						</tfoot>
@@ -87,89 +87,90 @@
 				</div>
 				<hr class="divider" />
 				<div class="col-md-12">
-					<validator name="PaymentDetails">
-						<form novalidate role="form">
-						<div class="row">
-							<div class="col-sm-12 col-md-6">
-								<div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
-									<label for="cardHolderName">Card Holder's Name</label>
-									<div class="input-group">
-										<span class="input-group-addon input-sm"><span class="fa fa-user"></span></span>
-										<input type="text" class="form-control input-sm" id="cardHolderName" placeholder="Name on card"
-											   v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
-									</div>
-								</div>
-							</div>
-							<div class="col-sm-12 col-md-6">
-								<div class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
-									<label for="cardNumber">Card Number</label>
-									<div class="input-group">
-										<span class="input-group-addon input-sm"><span class="fa fa-lock"></span></span>
-										<input type="text" class="form-control input-sm" id="cardNumber" placeholder="Valid Card Number"
-											   v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
-											   @keyup="formatCard($event)" maxlength="19"/>
-									</div>
-									<span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
-								</div>
-							</div>
-						</div>
+					<div class="well">
+						<validator name="PaymentDetails">
+							<form novalidate role="form">
 							<div class="row">
-								<div class="col-xs-7 col-md-7">
-									<label for="expiryMonth">EXPIRY DATE</label>
-									<div class="row">
-										<div class="col-xs-6 col-lg-6">
-											<div class="form-group" :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
-												<select v-model="cardMonth" class="form-control input-sm" id="expiryMonth" v-validate:month="{ required: true }">
-													<option v-for="month in monthList" value="{{month}}">{{month}}</option>
-												</select>
-											</div>
-										</div>
-										<div class="col-xs-6 col-lg-6">
-											<div class="form-group" :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
-												<select v-model="cardYear" class="form-control input-sm" id="expiryYear" v-validate:year="{ required: true }">
-													<option v-for="year in yearList" value="{{year}}">{{year}}</option>
-												</select>
-											</div>
+								<div class="col-sm-12 col-md-6">
+									<div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
+										<label for="cardHolderName">Card Holder's Name</label>
+										<div class="input-group">
+											<span class="input-group-addon input-sm"><span class="fa fa-user"></span></span>
+											<input type="text" class="form-control input-sm" id="cardHolderName" placeholder="Name on card"
+												   v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
 										</div>
 									</div>
 								</div>
-								<div class="col-xs-5 col-md-5 pull-right">
-									<div class="form-group" :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
-										<label for="cvCode">
-											CV CODE</label>
-										<input type="text" class="form-control input-sm" id="cvCode" maxlength="3" v-model="cardCVC"
-											   placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 3 }"/>
+								<div class="col-sm-12 col-md-6">
+									<div class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
+										<label for="cardNumber">Card Number</label>
+										<div class="input-group">
+											<span class="input-group-addon input-sm"><span class="fa fa-lock"></span></span>
+											<input type="text" class="form-control input-sm" id="cardNumber" placeholder="Valid Card Number"
+												   v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
+												   @keyup="formatCard($event)" maxlength="19"/>
+										</div>
+										<span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
 									</div>
 								</div>
 							</div>
-
-							<div class="row">
-								<div class="col-sm-7">
-									<div class="form-group" :class="{ 'has-error': checkForError('email') }">
-										<label for="infoEmailAddress">Billing Email Address</label>
-										<input type="text" class="form-control input-sm" v-model="cardEmail" v-validate:email="['email']" id="infoEmailAddress">
+								<div class="row">
+									<div class="col-xs-7 col-md-7">
+										<label for="expiryMonth">EXPIRY DATE</label>
+										<div class="row">
+											<div class="col-xs-6 col-lg-6">
+												<div class="form-group" :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
+													<select v-model="cardMonth" class="form-control input-sm" id="expiryMonth" v-validate:month="{ required: true }">
+														<option v-for="month in monthList" value="{{month}}">{{month}}</option>
+													</select>
+												</div>
+											</div>
+											<div class="col-xs-6 col-lg-6">
+												<div class="form-group" :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
+													<select v-model="cardYear" class="form-control input-sm" id="expiryYear" v-validate:year="{ required: true }">
+														<option v-for="year in yearList" value="{{year}}">{{year}}</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-5 col-md-5 pull-right">
+										<div class="form-group" :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
+											<label for="cvCode">
+												CV CODE</label>
+											<input type="text" class="form-control input-sm" id="cvCode" maxlength="3" v-model="cardCVC"
+												   placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 3 }"/>
+										</div>
 									</div>
 								</div>
-								<div class="col-sm-5">
-									<div class="form-group" :class="{ 'has-error': checkForError('zip') }">
-										<label for="infoZip">Billing ZIP/Postal Code</label>
-										<input type="text" class="form-control input-sm" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
+
+								<div class="row">
+									<div class="col-sm-7">
+										<div class="form-group" :class="{ 'has-error': checkForError('email') }">
+											<label for="infoEmailAddress">Billing Email Address</label>
+											<input type="text" class="form-control input-sm" v-model="cardEmail" v-validate:email="['email']" id="infoEmailAddress">
+										</div>
+									</div>
+									<div class="col-sm-5">
+										<div class="form-group" :class="{ 'has-error': checkForError('zip') }">
+											<label for="infoZip">Billing ZIP/Postal Code</label>
+											<input type="text" class="form-control input-sm" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
+										</div>
+									</div>
+									<div class="col-sm-12">
+										<div class="checkbox">
+											<label>
+												<input type="checkbox" v-model="cardSave">Save payment details for next time.
+											</label>
+										</div>
 									</div>
 								</div>
-								<div class="col-sm-12">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" v-model="cardSave">Save payment details for next time.
-										</label>
-									</div>
-								</div>
-							</div>
 
-							<p class="help-block text-success">Your card will be charged a $100.00 deposit along with any upfront fees
-								immediately after your trip registration process is complete to secure your spot on this trip.</p>
-						</form>
-
-					</validator>
+								<p class="help-block text-success">Your card will be charged a $100.00 deposit along with any upfront fees
+									immediately after your trip registration process is complete to secure your spot on this trip.</p>
+							</form>
+						</validator>
+					</div>
 				</div>
 			</div>
 		</div>

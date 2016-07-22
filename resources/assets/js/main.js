@@ -19,6 +19,9 @@ import adminTripsReservations from './components/trips/admin-trip-reservations-l
 import adminTripsDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripsDelete from './components/trips/admin-trip-delete.vue';
 import adminGoups from './components/groups/admin-groups-list.vue';
+import adminGroupCreate from './components/groups/admin-group-create.vue';
+import adminGroupEdit from './components/groups/admin-group-edit.vue';
+import adminGroupManagers from './components/groups/admin-group-managers.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -127,6 +130,9 @@ new Vue({
         adminTripsDuplicate,
         adminTripsDelete,
         adminGoups,
+        adminGroupCreate,
+        adminGroupEdit,
+        adminGroupManagers,
     ],
     http: {
         headers: {

@@ -10,6 +10,12 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-2 control-label" for="description">Description</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" v-model="description" id="description" placeholder="Description of Group"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 control-label" for="infoAddress">Address 1</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
@@ -784,6 +790,7 @@
         data(){
             return {
                 name: '',
+                description: '',
                 type: '',
                 country_code: '',
                 timezone: '',
@@ -816,6 +823,7 @@
                     var formData = this.data
                     this.resource.update({id: this.groupId}, {
                         name: this.name,
+                        description: this.description,
                         type: this.type,
                         country_code: this.country_code,
                         timezone: this.timezone,

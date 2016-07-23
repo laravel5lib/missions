@@ -53,12 +53,6 @@
                                 <dd>{{ $group->timezone }}</dd>
                                 <dt>Url slug</dt>
                                 <dd>{{ $group->url }}</dd>
-                                <dt>Trips</dt>
-                                <dd>
-                                    @foreach($group->trips as $trip)
-                                        {{ $trip->type }} Missionary to {{ country($trip->country_code) }}<br>
-                                    @endforeach
-                                </dd>
                             </dl>
                 	  </div>
                 </div>

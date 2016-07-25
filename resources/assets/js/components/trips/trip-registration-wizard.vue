@@ -7,7 +7,7 @@
 			<div class="row visible-xs-block">
 				<div class="col-xs-12">
 					<div class="btn-group btn-group-justified btn-group-xs" style="display:block;" role="group" aria-label="...">
-						<a @click="backStep()" class="btn btn-default" role="button">
+						<a @click="backStep()" class="btn btn-default" :class="{'disabled': currentStep.view === 'step1' }" role="button">
 							<i class="fa fa-chevron-left"></i>
 						</a>
 						<div class="btn-group" role="group">
@@ -56,7 +56,7 @@
 		<div class="panel-footer text-right">
 			<div class="btn-group btn-group" role="group" aria-label="...">
 				<!--<a class="btn btn-link" data-dismiss="modal">Cancel</a>-->
-				<a class="btn btn-default" @click="backStep()">Back</a>
+				<a class="btn btn-default" @click="backStep()" :class="{'disabled': currentStep.view === 'step1' }">Back</a>
 				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep()">Continue</a>
 				<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">Finish</a>
 			</div>

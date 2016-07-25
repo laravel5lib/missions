@@ -10201,19 +10201,19 @@ button.close {
     filter: alpha(opacity=90); }
   .carousel-control .icon-prev,
   .carousel-control .icon-next,
-  .carousel-control .glyphicon-chevron-left,
-  .carousel-control .glyphicon-chevron-right {
+  .carousel-control .fa-angle-left,
+  .carousel-control .fa-angle-right {
     position: absolute;
     top: 50%;
     margin-top: -10px;
     z-index: 5;
     display: inline-block; }
   .carousel-control .icon-prev,
-  .carousel-control .glyphicon-chevron-left {
+  .carousel-control .fa-angle-left {
     left: 50%;
     margin-left: -10px; }
   .carousel-control .icon-next,
-  .carousel-control .glyphicon-chevron-right {
+  .carousel-control .fa-angle-right {
     right: 50%;
     margin-right: -10px; }
   .carousel-control .icon-prev,
@@ -10267,20 +10267,28 @@ button.close {
   text-shadow: none; }
   .carousel-caption .btn {
     text-shadow: none; }
+  .carousel-caption h3 {
+    margin-bottom: 5px; }
+  .carousel-caption h6 {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #3e3e3e;
+    margin-top: 5px;
+    margin-bottom: 5px; }
 
 @media screen and (min-width: 768px) {
-  .carousel-control .glyphicon-chevron-left,
-  .carousel-control .glyphicon-chevron-right,
+  .carousel-control .fa-angle-left,
+  .carousel-control .fa-angle-right,
   .carousel-control .icon-prev,
   .carousel-control .icon-next {
     width: 30px;
     height: 30px;
     margin-top: -10px;
     font-size: 30px; }
-  .carousel-control .glyphicon-chevron-left,
+  .carousel-control .fa-angle-left,
   .carousel-control .icon-prev {
     margin-left: -10px; }
-  .carousel-control .glyphicon-chevron-right,
+  .carousel-control .fa-angle-right,
   .carousel-control .icon-next {
     margin-right: -10px; }
   .carousel-caption {

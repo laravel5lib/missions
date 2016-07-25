@@ -2,12 +2,12 @@
     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
           <!-- Indicators -->
           <ol class="carousel-indicators">
-            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            <!--<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>-->
+            <li data-target="#carousel-example-generic" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="campaign in campaigns"></li>
           </ol>
           <!-- Wrapper for slides -->
           <div class="carousel-inner" role="listbox">
-            <div class="item active">
+            <!--<div class="item active">
               <img src="http://placehold.it/1500x600">
               <div class="carousel-caption">
                 <h6 class="uppercase">Nicaragua</h6>
@@ -15,14 +15,13 @@
                 <p>This is going to be an epic trip!</p>
                 <p><a href="#" class="btn btn-primary">View Details</a></p>
               </div>
-            </div>
-            <div class="item">
-              <img src="http://placehold.it/1500x600">
+            </div>-->
+            <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="campaign in campaigns">
+              <img :src="campaign.thumb_src">
               <div class="carousel-caption">
-                <h6 class="uppercase">Peru</h6>
-                <h3>1Nation1Day 2019</h3>
-                <p>This is going to be an epic trip!</p>
-                <p><a href="#" class="btn btn-primary">View Details</a></p>
+                <h6 class="uppercase">{{campaign.country}}</h6>
+                <h3>{{campaign.name}}</h3>
+                <p>{{campaign.description}}</p>
               </div>
             </div>
           </div>
@@ -45,15 +44,6 @@
             <a href="#" class="btn btn-primary btn-sm">See All</a>
         </div>
     </div>
-    <!-- <div id="code-carousel" class="carousel slide hidden-xs" data-ride="carousel">
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="row">
-                    
-                </div>
-            </div>
-        </div>
-    </div> -->
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
             <div class="col-sm-6 col-md-4" v-for="campaign in campaigns" style="display:flex">
                 <div class="panel panel-default">
@@ -84,7 +74,10 @@
 
             resource.query().then(function(campaigns){
                 this.campaigns = campaigns.data.data
-            })
+            }).then(function () {
+
+
+            });
         }
     }
 </script>

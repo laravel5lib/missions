@@ -10268,6 +10268,7 @@ button.close {
   .carousel-caption .btn {
     text-shadow: none; }
   .carousel-caption h3 {
+    margin-top: 5px;
     margin-bottom: 5px; }
   .carousel-caption h6 {
     display: inline-block;

@@ -34803,6 +34803,9 @@ exports.default = {
 			return this.$UpdateCampaign[field].invalid && this.attemptSubmit;
 		},
 		update: function update() {
+			// Touch fields for proper validation
+			if (_.isFunction(this.$validate)) this.$validate(true);
+
 			this.attemptSubmit = true;
 			if (this.$UpdateCampaign.valid) {
 				this.resource.update({ id: this.campaignId }, {
@@ -34955,7 +34958,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div id=\"carousel-example-generic\" class=\"carousel slide\" data-ride=\"carousel\">\n          <!-- Indicators -->\n          <ol class=\"carousel-indicators\">\n            <li data-target=\"#carousel-example-generic\" data-slide-to=\"0\" class=\"active\"></li>\n            <li data-target=\"#carousel-example-generic\" data-slide-to=\"1\"></li>\n          </ol>\n          <!-- Wrapper for slides -->\n          <div class=\"carousel-inner\" role=\"listbox\">\n            <div class=\"item active\">\n              <img src=\"http://placehold.it/1500x600\">\n              <div class=\"carousel-caption\">\n                <h3>1Nation1Day 2017</h3>\n                <h6 class=\"uppercase\">Nicaragua</h6>\n                <p>This is going to be an epic trip!</p>\n              </div>\n            </div>\n            <div class=\"item\">\n              <img src=\"http://placehold.it/1500x600\">\n              <div class=\"carousel-caption\">\n                <h3>1Nation1Day 2019</h3>\n                <h6 class=\"uppercase\">Peru</h6>\n                <p>This is going to be an epic trip!</p>\n              </div>\n            </div>\n          </div>\n          <!-- Controls -->\n          <a class=\"left carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"prev\">\n            <span class=\"fa fa-angle-left\" aria-hidden=\"true\"></span>\n            <span class=\"sr-only\">Previous</span>\n          </a>\n          <a class=\"right carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"next\">\n            <span class=\"fa fa-angle-right\" aria-hidden=\"true\"></span>\n            <span class=\"sr-only\">Next</span>\n          </a>\n    </div><!-- end carousel -->\n    <hr class=\"divider inv xlg\">\n    <div class=\"container\">\n    <h4>Recent Campaigns</h4>\n    <hr>\n    <div id=\"code-carousel\" class=\"carousel slide hidden-xs\" data-ride=\"carousel\">\n        <div class=\"carousel-inner\">\n            <div class=\"item active\">\n                <div class=\"row\">\n                    \n                </div>\n            </div>\n        </div>\n    <div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n        <div class=\"col-sm-6 col-md-4\" v-for=\"campaign in campaigns\" style=\"display:flex\">\n            <div class=\"panel panel-default\">\n                <img :src=\"campaign.thumb_src\" :alt=\"campaign.name\" class=\"img-responsive\">\n                    <div class=\"panel-body\">\n                        <h4>{{campaign.name}}</h4>\n                        <h6>{{campaign.country}}</h6>\n                        <p>{{campaign.description}}</p>\n                    </div><!-- end panel-body -->\n                    <div class=\"panel-footer\">\n                        <p><a :href=\"'/campaigns/' + campaign.page_url\" class=\"btn btn-primary btn-block\" role=\"button\">Details</a> </p>\n                    </div>\n            </div><!-- end panel -->\n        </div><!-- end col -->\n    </div>\n</div></div>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"carousel-example-generic\" class=\"carousel slide\" data-ride=\"carousel\">\n      <!-- Indicators -->\n      <ol class=\"carousel-indicators\">\n        <li data-target=\"#carousel-example-generic\" data-slide-to=\"0\" class=\"active\"></li>\n        <li data-target=\"#carousel-example-generic\" data-slide-to=\"1\"></li>\n      </ol>\n      <!-- Wrapper for slides -->\n      <div class=\"carousel-inner\" role=\"listbox\">\n        <div class=\"item active\">\n          <img src=\"http://placehold.it/1500x600\">\n          <div class=\"carousel-caption\">\n            <h6 class=\"uppercase\">Nicaragua</h6>\n            <h3>1Nation1Day 2017</h3>\n            <p>This is going to be an epic trip!</p>\n            <p><a href=\"#\" class=\"btn btn-primary\">View Details</a></p>\n          </div>\n        </div>\n        <div class=\"item\">\n          <img src=\"http://placehold.it/1500x600\">\n          <div class=\"carousel-caption\">\n            <h6 class=\"uppercase\">Peru</h6>\n            <h3>1Nation1Day 2019</h3>\n            <p>This is going to be an epic trip!</p>\n            <p><a href=\"#\" class=\"btn btn-primary\">View Details</a></p>\n          </div>\n        </div>\n      </div>\n      <!-- Controls -->\n      <a class=\"left carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"prev\">\n        <span class=\"fa fa-angle-left\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Previous</span>\n      </a>\n      <a class=\"right carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"next\">\n        <span class=\"fa fa-angle-right\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Next</span>\n      </a>\n</div><!-- end carousel -->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-md-6 col-sm-12\">\n        <h4>Recent Campaigns</h4>\n    </div>\n    <div class=\"col-md-6 col-sm-12 text-right\">\n        <a href=\"#\" class=\"btn btn-primary btn-sm\">See All</a>\n    </div>\n</div>\n<!-- <div id=\"code-carousel\" class=\"carousel slide hidden-xs\" data-ride=\"carousel\">\n    <div class=\"carousel-inner\">\n        <div class=\"item active\">\n            <div class=\"row\">\n                \n            </div>\n        </div>\n    </div>\n</div> -->\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n        <div class=\"col-sm-6 col-md-4\" v-for=\"campaign in campaigns\" style=\"display:flex\">\n            <div class=\"panel panel-default\">\n                <img :src=\"campaign.thumb_src\" :alt=\"campaign.name\" class=\"img-responsive\">\n                    <div style=\"min-height:260px;\" class=\"panel-body\">\n                        <h4>{{campaign.name}}</h4>\n                        <h6>{{campaign.country}}</h6>\n                        <p>{{campaign.description}}</p>\n                    </div><!-- end panel-body -->\n                    <div class=\"panel-footer\">\n                        <p><a :href=\"'/campaigns/' + campaign.page_url\" class=\"btn btn-primary btn-block\" role=\"button\">Details</a> </p>\n                    </div>\n            </div><!-- end panel -->\n        </div><!-- end col -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -35372,8 +35375,16 @@ if (module.hot) {(function () {  module.hot.accept()
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
     name: 'group-edit',
+    components: { vSelect: _vueSelect2.default },
     props: ['groupId'],
     data: function data() {
         return {
@@ -35396,7 +35407,9 @@ exports.default = {
             // logic variables
             typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
             attemptSubmit: false,
-            resource: this.$resource('groups{/id}')
+            resource: this.$resource('groups{/id}'),
+            countryCodeObj: null,
+            timezoneObj: null
 
         };
     },
@@ -35457,7 +35470,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7071c3a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":111,"vue-hot-reload-api":107}],126:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],126:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35509,7 +35522,8 @@ exports.default = {
 			this.attemptSubmit = true;
 			if (this.$AddManager.valid) {
 				this.managers.push({ group_id: this.groupId, user_id: this.user_id });
-				this.group.managers = this.managers;
+				this.group.managers = _.pluck(this.managers, 'user_id');
+				//this.group.managers = this.managers;
 				this.updateGroup();
 			}
 		},
@@ -35533,7 +35547,7 @@ exports.default = {
 		}
 	},
 	ready: function ready() {
-		this.resource.get({ id: this.groupId }, { include: 'managers' }).then(function (response) {
+		this.resource.get({ id: this.groupId }, { include: 'managers.user' }).then(function (response) {
 			this.group = response.data.data;
 			this.managers = this.group.managers.data;
 			//                $.extend(this.$data, response.data.data);
@@ -35544,7 +35558,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h3 class=\"panel-title\"> Managers\n\t\t\t<button class=\"btn btn-primary btn-xs\" data-toggle=\"modal\" data-target=\"#AddManagerModal\"><span class=\"fa fa-plus\"></span> New\n\t\t\t</button>\n\t\t</h3>\n\t</div>\n\t<table class=\"table table-hover\">\n\t\t<thead>\n\t\t<tr>\n\t\t\t<th>Name</th>\n\t\t\t<th><i class=\"fa fa-cog\"></i></th>\n\t\t</tr>\n\t\t</thead>\n\t\t<tbody>\n\t\t<tr v-for=\"manager in managers\" track-by=\"id\">\n\t\t\t<td>{{ manager.name }}</td>\n\t\t\t<td>\n\t\t\t\t<button class=\"btn btn-xs btn-danger\" @click=\"removeManager(manager)\"><i class=\"fa fa-times\"></i>\n\t\t\t\t</button>\n\t\t\t</td>\n\t\t</tr>\n\t\t</tbody>\n\t</table>\n\t<div class=\"modal fade\" id=\"AddManagerModal\">\n\t\t<div class=\"modal-dialog\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n\t\t\t\t\t<h4 class=\"modal-title\">Modal title</h4></div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<validator name=\"AddManager\">\n\t\t\t\t\t\t<form class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('user') }\"><label class=\"col-sm-2 control-label\">User</label>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"user\" :value.sync=\"userObj\" :options=\"users\" :on-search=\"getUsers\" label=\"name\"></v-select>\n\t\t\t\t\t\t\t\t\t<select hidden=\"\" v-model=\"user_id\" v-validate:user=\"{ required: true}\">\n\t\t\t\t\t\t\t\t\t\t<option :value=\"user.id\" v-for=\"user in users\">{{user.name}}</option>\n\t\t\t\t\t\t\t\t\t</select></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</form>\n\t\t\t\t\t</validator>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-footer\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-default btn-sm\" data-dismiss=\"modal\">Close</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updateGroup()\">Save</button>\n\t\t\t\t</div>\n\t\t\t</div><!-- /.modal-content -->\n\t\t</div><!-- /.modal-dialog -->\n\t</div><!-- /.modal --></div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h3 class=\"panel-title\"> Managers\n\t\t\t<button class=\"btn btn-primary btn-xs\" data-toggle=\"modal\" data-target=\"#AddManagerModal\"><span class=\"fa fa-plus\"></span> New\n\t\t\t</button>\n\t\t</h3>\n\t</div>\n\t<div>\n\t\t<div class=\"col-xs-3 col-sm-3 col-md-3 col-lg-3\" v-for=\"manager in managers\" track-by=\"id\">\n\t\t\t<div class=\"thumbnail\">\n\t\t\t\t<img src=\"http://lorempixel.com/300/300\" alt=\"\">\n\t\t\t\t<div class=\"caption\">\n\t\t\t\t\t<h3>{{ manager.name }}</h3>\n\t\t\t\t\t<p>\n\t\t\t\t\t\tContent...\n\t\t\t\t\t</p>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<a class=\"btn btn-xs btn-danger\" @click=\"removeManager(manager)\">\n\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Remove\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</p>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"modal fade\" id=\"AddManagerModal\">\n\t\t<div class=\"modal-dialog\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n\t\t\t\t\t<h4 class=\"modal-title\">Modal title</h4></div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<validator name=\"AddManager\">\n\t\t\t\t\t\t<form class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('user') }\"><label class=\"col-sm-2 control-label\">User</label>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"user\" :value.sync=\"userObj\" :options=\"users\" :on-search=\"getUsers\" label=\"name\"></v-select>\n\t\t\t\t\t\t\t\t\t<select hidden=\"\" v-model=\"user_id\" v-validate:user=\"{ required: true}\">\n\t\t\t\t\t\t\t\t\t\t<option :value=\"user.id\" v-for=\"user in users\">{{user.name}}</option>\n\t\t\t\t\t\t\t\t\t</select></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</form>\n\t\t\t\t\t</validator>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-footer\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-default btn-sm\" data-dismiss=\"modal\">Close</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addManager()\">Save</button>\n\t\t\t\t</div>\n\t\t\t</div><!-- /.modal-content -->\n\t\t</div><!-- /.modal-dialog -->\n\t</div><!-- /.modal --></div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -38290,6 +38304,7 @@ exports.default = {
 			{ name: 'Legal (Terms of Service)', view: 'step2', complete: false }, { name: 'Rules of Conduct Agreement', view: 'step3', complete: false }, { name: 'Basic Traveler Information', view: 'step4', complete: false }, { name: 'Additional Trip Options', view: 'step5', complete: false }, { name: 'Payment Details', view: 'step6', complete: false }, { name: 'Deadline Agreements', view: 'step7', complete: false }, { name: 'Review', view: 'step8', complete: false }],
 			currentStep: null,
 			canContinue: false,
+			trip: {},
 			tripCosts: {},
 			deadlines: [],
 			requirements: [],
@@ -38406,6 +38421,7 @@ exports.default = {
 		//get trip costs
 		var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
 		resource.query({ id: this.tripId }).then(function (trip) {
+			this.trip = trip.data.data;
 			// deadlines, requirements, and companion_limit
 			this.deadlines = trip.data.data.deadlines.data;
 			this.requirements = trip.data.data.requirements.data;
@@ -38468,7 +38484,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h5>{{ $trip-&gt;country_name }} Trip Registration</h5>\n\t</div>\n\t<div class=\"panel-body\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-5 col-md-4\">\n\t\t\t\t<ul class=\"nav nav-pills nav-stacked\">\n\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</li>\n\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t\t<div class=\"col-sm-7 col-md-8 {{currentStep.view}}\">\n\t\t\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t\t\t</component>\n\t\t\t</div>\n\n\t\t</div>\n\t</div>\n\t<div class=\"panel-footer text-right\">\n\t\t<div class=\"btn-group btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<!--<a class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</a>-->\n\t\t\t<a class=\"btn btn-default\" @click=\"backStep()\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h5>{{ trip.country_name }} Trip Registration</h5>\n\t</div>\n\t<div class=\"panel-body\">\n\t\t<div class=\"row visible-xs-block\">\n\t\t\t<div class=\"col-xs-12\">\n\t\t\t\t<div class=\"btn-group btn-group-justified btn-group-xs\" style=\"display:block;\" role=\"group\" aria-label=\"...\">\n\t\t\t\t\t<a @click=\"backStep()\" class=\"btn btn-default\" role=\"button\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-left\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<div class=\"btn-group\" role=\"group\">\n\t\t\t\t\t\t<a class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t\t\t\t{{ currentStep.name }} <span class=\"caret\"></span>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<ul class=\"dropdown-menu dropdown-menu-right\">\n\t\t\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n\t\t\t\t\t</div>\n\t\t\t\t\t<!--<a class=\"btn btn-default\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-right\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">\n\t\t\t\t\t\t<i class=\"fa fa-check\"></i>\n\t\t\t\t\t</a>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-5 col-md-4 hidden-xs\">\n\t\t\t\t<ul class=\"nav nav-pills nav-stacked\">\n\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</li>\n\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t\t<div class=\"col-sm-7 col-md-8 {{currentStep.view}}\">\n\t\t\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t\t\t</component>\n\t\t\t</div>\n\n\t\t</div>\n\t</div>\n\t<div class=\"panel-footer text-right\">\n\t\t<div class=\"btn-group btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<!--<a class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</a>-->\n\t\t\t<a class=\"btn btn-default\" @click=\"backStep()\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

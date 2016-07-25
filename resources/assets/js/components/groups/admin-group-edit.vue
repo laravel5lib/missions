@@ -784,8 +784,10 @@
     </validator>
 </template>
 <script>
+    import vSelect from "vue-select";
     export default{
         name: 'group-edit',
+        components: {vSelect},
         props: ['groupId'],
         data(){
             return {
@@ -808,7 +810,9 @@
                 // logic variables
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
                 attemptSubmit: false,
-                resource: this.$resource('groups{/id}')
+                resource: this.$resource('groups{/id}'),
+                countryCodeObj: null,
+                timezoneObj: null,
 
             }
         },

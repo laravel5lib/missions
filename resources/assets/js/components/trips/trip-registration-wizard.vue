@@ -1,11 +1,40 @@
 <template>
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h5>{{ $trip->country_name }} Trip Registration</h5>
+			<h5>{{ trip.country_name }} Trip Registration</h5>
 		</div>
 		<div class="panel-body">
+			<div class="row visible-xs-block">
+				<div class="col-xs-12">
+					<div class="btn-group btn-group-justified btn-group-xs" style="display:block;" role="group" aria-label="...">
+						<a @click="backStep()" class="btn btn-default" role="button">
+							<i class="fa fa-chevron-left"></i>
+						</a>
+						<div class="btn-group" role="group">
+							<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button"
+							   aria-haspopup="true" aria-expanded="false">
+								{{ currentStep.name }} <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu dropdown-menu-right">
+								<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
+									<a @click="toStep(step)">
+										<span class="fa" :class="{'fa-chevron-right':!step.complete, 'fa-check': step.complete}"></span>
+										{{step.name}}
+									</a>
+								</li>
+							</ul>
+						</div>
+						<!--<a class="btn btn-default" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep()">
+							<i class="fa fa-chevron-right"></i>
+						</a>
+						<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">
+							<i class="fa fa-check"></i>
+						</a>-->
+					</div>
+				</div>
+			</div>
 			<div class="row">
-				<div class="col-sm-5 col-md-4">
+				<div class="col-sm-5 col-md-4 hidden-xs">
 					<ul class="nav nav-pills nav-stacked">
 						<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
 							<a @click="toStep(step)">
@@ -71,6 +100,7 @@
 				],
 				currentStep: null,
 				canContinue: false,
+				trip: {},
 				tripCosts: {},
 				deadlines:[],
 				requirements:[],
@@ -191,6 +221,7 @@
 			//get trip costs
 			var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
 			resource.query({id: this.tripId}).then(function (trip) {
+				this.trip = trip.data.data;
 				// deadlines, requirements, and companion_limit
 				this.deadlines =  trip.data.data.deadlines.data;
 				this.requirements =  trip.data.data.requirements.data;

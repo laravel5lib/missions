@@ -7,19 +7,10 @@
           </ol>
           <!-- Wrapper for slides -->
           <div class="carousel-inner" role="listbox">
-            <!--<div class="item active">
-              <img src="http://placehold.it/1500x600">
-              <div class="carousel-caption">
-                <h6 class="uppercase">Nicaragua</h6>
-                <h3>1Nation1Day 2017</h3>
-                <p>This is going to be an epic trip!</p>
-                <p><a href="#" class="btn btn-primary">View Details</a></p>
-              </div>
-            </div>-->
             <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="campaign in campaigns">
               <img :src="campaign.thumb_src">
               <div class="carousel-caption">
-                <h6 class="uppercase">{{campaign.country}}</h6>
+                <h6 class="text-uppercase">{{campaign.country}}</h6>
                 <h3>{{campaign.name}}</h3>
                 <p>{{campaign.description}}</p>
               </div>
@@ -37,27 +28,39 @@
     </div><!-- end carousel -->
     <hr class="divider inv xlg">
     <div class="container">
-        <div class="col-md-6 col-sm-12">
+        <div class="col-xs-6">
             <h4>Recent Campaigns</h4>
         </div>
-        <div class="col-md-6 col-sm-12 text-right">
+        <div class="col-xs-6 text-right">
             <a href="#" class="btn btn-primary btn-sm">See All</a>
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
             <div class="col-sm-6 col-md-4" v-for="campaign in campaigns" style="display:flex">
                 <div class="panel panel-default">
-                    <img :src="campaign.thumb_src" :alt="campaign.name" class="img-responsive">
-                        <div style="min-height:260px;" class="panel-body">
-                            <h4>{{campaign.name}}</h4>
-                            <h6>{{campaign.country}}</h6>
-                            <p>{{campaign.description}}</p>
+                    <a :href="'/campaigns/' + campaign.page_url" role="button">
+                        <img :src="campaign.thumb_src" :alt="campaign.name" class="img-responsive">
+                    </a>
+                        <div style="min-height:220px;" class="panel-body">
+                            <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{campaign.country}}</h6>
+                            <a :href="'/campaigns/' + campaign.page_url" role="button">
+                                <h5 style="text-transform:capitalize;" class="text-primary">{{campaign.name}}</h5>
+                            </a>
+                            <hr class="divider lg" />
+                            <p class="small">{{campaign.description}}</p>
                         </div><!-- end panel-body -->
-                        <div class="panel-footer">
-                            <p><a :href="'/campaigns/' + campaign.page_url" class="btn btn-primary btn-block" role="button">Details</a> </p>
-                        </div>
                 </div><!-- end panel -->
             </div><!-- end col -->
+    </div>
+    <hr class="divider inv xlg">
+    <div class="white-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h2>Why Missions.Me?</h2>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

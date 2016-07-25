@@ -78,10 +78,12 @@ Vue.validator('email', function (val) {
 
 Vue.filter('phone', {
     read:function (phone) {
+        phone = phone||'';
         return phone.replace(/[^0-9]/g, '')
             .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
     },
     write: function(phone, phoneVal) {
+        phone = phone||'';
         return phone.replace(/[^0-9]/g, '')
             .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
     }

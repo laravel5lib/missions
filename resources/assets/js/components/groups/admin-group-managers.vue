@@ -7,23 +7,24 @@
 				</button>
 			</h3>
 		</div>
-		<table class="table table-hover">
-			<thead>
-			<tr>
-				<th>Name</th>
-				<th><i class="fa fa-cog"></i></th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr v-for="manager in managers" track-by="id">
-				<td>{{ manager.name }}</td>
-				<td>
-					<button class="btn btn-xs btn-danger" @click="removeManager(manager)"><i class="fa fa-times"></i>
-					</button>
-				</td>
-			</tr>
-			</tbody>
-		</table>
+		<div>
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="manager in managers" track-by="id">
+				<div class="thumbnail">
+					<img src="http://lorempixel.com/300/300" alt="">
+					<div class="caption">
+						<h3>{{ manager.name }}</h3>
+						<p>
+							Content...
+						</p>
+						<p>
+							<a class="btn btn-xs btn-danger" @click="removeManager(manager)">
+								<i class="fa fa-times"></i> Remove
+							</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="modal fade" id="AddManagerModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -32,7 +33,7 @@
 						<h4 class="modal-title">Modal title</h4></div>
 					<div class="modal-body">
 						<validator name="AddManager">
-							<form class="form-horizontal" novalidate="">
+							<form class="form-horizontal" novalidate>
 								<div class="form-group" :class="{ 'has-error': checkForError('user') }"><label
 										class="col-sm-2 control-label">User</label>
 									<div class="col-sm-10">
@@ -47,7 +48,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary btn-sm" @click="updateGroup()">Save</button>
+						<button type="button" class="btn btn-primary btn-sm" @click="addManager()">Save</button>
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
@@ -94,7 +95,8 @@
 				this.attemptSubmit = true;
 				if (this.$AddManager.valid) {
 					this.managers.push({group_id: this.groupId, user_id: this.user_id});
-					this.group.managers = this.managers;
+					this.group.managers = _.pluck(this.managers, 'user_id');
+					//this.group.managers = this.managers;
 					this.updateGroup();
 				}
 			},
@@ -118,7 +120,7 @@
 			}
 		},
 		ready: function ready() {
-			this.resource.get({id: this.groupId}, {include: 'managers'}).then(function (response) {
+			this.resource.get({id: this.groupId}, {include: 'managers.user'}).then(function (response) {
 				this.group = response.data.data;
 				this.managers = this.group.managers.data;
 				//                $.extend(this.$data, response.data.data);

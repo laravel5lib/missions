@@ -370,6 +370,10 @@
 				return this.$UpdateCampaign[field].invalid && this.attemptSubmit;
 			},
 			update(){
+				// Touch fields for proper validation
+				if ( _.isFunction(this.$validate) )
+					this.$validate(true);
+
 				this.attemptSubmit = true;
 				if (this.$UpdateCampaign.valid) {
 					this.resource.update({id: this.campaignId}, {

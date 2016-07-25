@@ -80,4 +80,10 @@ $api->version('v1', [
         $api->resource('sites', 'Interaction\SitesController');
         $api->resource('stats', 'Interaction\StatsController');
     });
+
+    $api->group(['prefix' => 'utilities'], function ($api) {
+        $api->get('countries', 'UtilitiesController@getCountries');
+        $api->get('countries/{$code}', 'UtilitiesController@getCountry');
+        $api->get('timezones', 'UtilitiesController@getTimezones');
+    });
 });

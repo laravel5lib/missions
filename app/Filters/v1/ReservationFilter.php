@@ -85,8 +85,8 @@ class ReservationFilter extends ModelFilter
         return $this->where(function($q) use ($search)
         {
             return $q->where('given_names', 'LIKE', "%$search%")
-                ->orWhere('surname', 'LIKE', "%$search%")
-                ->orWhere('amount', 'LIKE', "$search%");
+                ->orWhere('surname', 'LIKE', "%$search%");
+//                ->orWhere('amount', 'LIKE', "$search%");
         });
     }
 

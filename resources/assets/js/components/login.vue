@@ -343,6 +343,10 @@
 				var that = this;
 				that.$http.post('/login', this.user).then(
 						function (response) {
+							// reload to set cookie
+							if(this.isChildComponent) {
+								window.location.reload();
+							}
 							that.getUserData(response.data.redirect_to);
 						},
 						function (response) {
@@ -393,6 +397,10 @@
 
 				this.$http.post('/api/register', this.newUser).then(function (response) {
 					console.log(response.data.token);
+					// reload to set cookie
+					if(this.isChildComponent) {
+						window.location.reload();
+					}
 					this.getUserData();
 				}, function (response) {
 					console.log(response);
@@ -428,6 +436,7 @@
 			});
 
 			if (this.isChildComponent) {
+				// After reload from login / registratration
 				// Check if user is logged in
 				this.getUserData(false);
 			}

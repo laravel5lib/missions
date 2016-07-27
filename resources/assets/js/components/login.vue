@@ -429,8 +429,7 @@
 
 			if (this.isChildComponent) {
 				// Check if user is logged in
-				this.getUserData(false).then(function (response) {
-				});
+				this.getUserData(false);
 			}
 
 		}

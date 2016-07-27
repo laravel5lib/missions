@@ -256,6 +256,7 @@
 				this.currentStep.complete = !!val;
 				// force next step
 				this.nextStep();
+				window.location.reload();
 			},
 			'tos-agree'(val){
 				this.currentStep.complete = val;

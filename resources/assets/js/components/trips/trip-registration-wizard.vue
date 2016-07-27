@@ -194,7 +194,7 @@
 					trip_id: this.tripId,
 					companion_limit: this.companion_limit
 				}).then(function (response) {
-					window.location.href = response.data.data.links[0].uri;
+					window.location.href = 'dashboard/' + response.data.data.links[0].uri;
 				}, function (response) {
 					console.log(response);
 				});

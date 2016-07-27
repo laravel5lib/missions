@@ -13,6 +13,9 @@
 							<span class="pull-right">{{option.amount | currency}}</span>
 						</label>
 					</div>
+					<h5 v-if="optionalCosts.length==0">
+						No additional options available
+					</h5>
 				</form>
 			</validator>
         </div>

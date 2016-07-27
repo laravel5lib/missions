@@ -21,3 +21,5 @@ Route::resource('trips', 'TripsController');
 
 Route::resource('groups', 'GroupsController');
 
+Route::resource('reservations', 'ReservationsController');
+

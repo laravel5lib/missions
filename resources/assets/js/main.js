@@ -23,6 +23,7 @@ import adminGoups from './components/groups/admin-groups-list.vue';
 import adminGroupCreate from './components/groups/admin-group-create.vue';
 import adminGroupEdit from './components/groups/admin-group-edit.vue';
 import adminGroupManagers from './components/groups/admin-group-managers.vue';
+import adminReservations from './components/reservations/admin-reservations-list.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -98,6 +99,14 @@ Vue.filter('number', {
         return number;
     }
 });
+Vue.filter('percentage', {
+    read:function (number, decimals) {
+        return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
+    },
+    write: function(number, numberVal, decimals) {
+        return number + '%';
+    }
+});
 
 Vue.filter('moment', function (val, format) {
     return moment(val).format(format||'LL');
@@ -137,6 +146,7 @@ new Vue({
         adminGroupCreate,
         adminGroupEdit,
         adminGroupManagers,
+        adminReservations,
     ],
     http: {
         headers: {

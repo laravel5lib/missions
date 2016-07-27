@@ -70,12 +70,8 @@
 								<td style="border-top:2px solid #000000;" class="text-right">{{totalCosts | currency}}</td>
 							</tr>
 							<tr>
-								<td>Non-refundable Deposit</td>
-								<td class="text-danger text-right">{{-deposit | currency}}</td>
-							</tr>
-							<tr>
 								<td>Up-front Charges</td>
-								<td class="text-danger text-right>{{-upfrontTotal | currency}}</td>
+								<td class="text-danger text-right">{{-upfrontTotal | currency}}</td>
 							</tr>
 							<tr>
 								<td style="border-top:2px solid #000000;"><h5 class="text-right">Total to Raise</h5></td>
@@ -166,7 +162,7 @@
 									</div>
 								</div>
 
-								<p class="help-block text-success">Your card will be charged a $100.00 deposit along with any upfront fees
+								<p class="help-block text-success">Your card will be charged for the upfront fees
 									immediately after your trip registration process is complete to secure your spot on this trip.</p>
 							</form>
 						</validator>
@@ -187,7 +183,6 @@
 				incrementalCosts: [],
 				selectedOptions: [],
 				upfrontTotal:0,
-				deposit: 100,
 				totalCosts: 0,
 				attemptedCreateToken: false,
 
@@ -264,7 +259,7 @@
 				return this.$parent.stripeKey
 			},
 			fundraisingGoal(){
-				return this.totalCosts - this.deposit - this.upfrontTotal;
+				return this.totalCosts - this.upfrontTotal;
 			},
 			staticCosts(){
 				return this.$parent.tripCosts.static;
@@ -373,7 +368,7 @@
 				return moment(date).format('LL');
 			},
 			resetCaching() {
-				console.log('resetting ');
+				console.log('resetting');
 				this.cardMonth = '';
 				this.cardCVC = '';
 				this.cardYear = '';
@@ -447,7 +442,5 @@
 				}
 			}
 		}
-
-
 	}
 </script>

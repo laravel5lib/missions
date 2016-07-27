@@ -41,7 +41,8 @@
 												  :on-search="getUsers" label="name"></v-select>
 										<select hidden="" v-model="user_id" v-validate:user="{ required: true}">
 											<option :value="user.id" v-for="user in users">{{user.name}}</option>
-										</select></div>
+										</select>
+									</div>
 								</div>
 							</form>
 						</validator>
@@ -52,7 +53,8 @@
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal --></div>
+		</div><!-- /.modal -->
+	</div>
 </template>
 <script>
 	import vSelect from "vue-select";

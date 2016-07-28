@@ -12,10 +12,8 @@
 				<div class="thumbnail">
 					<img src="http://lorempixel.com/300/300" alt="">
 					<div class="caption">
-						<h3>{{ manager.name }}</h3>
-						<p>
-							Content...
-						</p>
+						<h5 v-text="manager.name"></h5>
+
 						<p>
 							<a class="btn btn-xs btn-danger" @click="removeManager(manager)">
 								<i class="fa fa-times"></i> Remove
@@ -94,8 +92,9 @@
 				// Add Manager
 				this.attemptSubmit = true;
 				if (this.$AddManager.valid) {
-					this.managers.push({group_id: this.groupId, user_id: this.user_id});
-					this.group.managers = _.pluck(this.managers, 'user_id');
+					var managersArr = this.managers;
+					managersArr.push({group_id: this.groupId, user_id: this.user_id});
+					this.group.managers = _.pluck(managersArr, 'user_id');
 					//this.group.managers = this.managers;
 					this.updateGroup();
 				}
@@ -110,6 +109,7 @@
 				// Update Group
 				this.resource.update({id: this.groupId}, this.group).then(function (response) {
 					this.group = response.data.data;
+					this.managers = this.group.managers.data;
 					this.user_id = null;
 					this.userObj = null;
 					this.attemptSubmit = false;

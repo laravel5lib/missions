@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UploadRequest;
+use App\Http\Requests\v1\UploadRequest;
 use App\Http\Transformers\v1\UploadTransformer;
 use App\Models\v1\Upload;
 use Illuminate\Http\Request;
@@ -27,8 +27,8 @@ class UploadsController extends Controller
     public function __construct(Upload $upload)
     {
         $this->upload = $upload;
-        $this->middleware('api.auth', ['except' => ['show']]);
-        $this->middleware('jwt.refresh', ['except' => ['show']]);
+//        $this->middleware('api.auth', ['except' => ['show']]);
+//        $this->middleware('jwt.refresh', ['except' => ['show']]);
     }
 
     public function index(Request $request)
@@ -42,19 +42,30 @@ class UploadsController extends Controller
 
     public function store(UploadRequest $request)
     {
-        $stream = $this->process($request->file('file'));
+        $stream = $this->process($request);
 
         $source = $this->upload($stream, $request->only('path', 'name', 'file'));
 
-        $upload = $this->save($source, $request->only('name', 'type'));
+        $upload = $this->save($source, $request->get('type'));
 
         $this->response->item($upload, new UploadTransformer);
     }
 
-    private function process($file)
+    private function process($request)
     {
-        // resize and stream image
-        $img = Image::make($file)->resize(500, 500);
+        // resize or crop and stream image
+        $img = Image::make($request->file('file'));
+
+        if($request->has('x_axis') and $request->has('y_axis')) {
+            $img->crop(
+                $request->get('width'), $request->get('height'),
+                $request->get('x_axis'), $request->get('y_axis')
+            );
+        }
+        elseif ($request->has('height') and $request->has('width')) {
+            $img->resize($request->get('width'), $request->get('height'));
+        }
+
         $stream = $img->stream();
 
         return $stream;
@@ -73,18 +84,18 @@ class UploadsController extends Controller
             $stream->__toString()
         );
 
-        return $source;
+        return ['source' => $source, 'filename' => $filename];
     }
 
-    private function save($source, $request)
+    private function save($source, $type)
     {
         // create new upload record
         $upload = new Upload;
-        $upload->id = uniqid();
-        $upload->source = $source;
-        $upload->name = $filename;
-        $upload->type = $request->get('type');
-        $upload->save();
+        $upload->updateOrCreate([
+            'source' => $source['source'],
+            'name' => $source['filename'],
+            'type' => $type
+        ]);
 
         return $upload;
     }

@@ -123,6 +123,9 @@
                                 </dl>
                             </div>
                         </div>
+
+                        <admin-trip-facilitators trip-id="{{ $trip->id }}"></admin-trip-facilitators>
+
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Pricing</h3>

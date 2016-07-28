@@ -1,5 +1,6 @@
 <?php namespace App\Filters\v1;
 
+use Carbon\Carbon;
 use EloquentFilter\ModelFilter;
 
 class ReservationFilter extends ModelFilter
@@ -48,8 +49,9 @@ class ReservationFilter extends ModelFilter
 
     public function age($ages)
     {
-        $start = Carbon::now()->subYears($ages[0]);
-        $end = Carbon::now()->subYears($ages[1]);
+        // $start needs to be te greater number to produce a year ealier than end
+        $start = Carbon::now()->subYears($ages[1]);
+        $end = Carbon::now()->subYears($ages[0]);
         return $this->whereBetween('birthday', [$start, $end]);
     }
 
@@ -85,8 +87,8 @@ class ReservationFilter extends ModelFilter
         return $this->where(function($q) use ($search)
         {
             return $q->where('given_names', 'LIKE', "%$search%")
-                ->orWhere('surname', 'LIKE', "%$search%")
-                ->orWhere('amount', 'LIKE', "$search%");
+                ->orWhere('surname', 'LIKE', "%$search%");
+//                ->orWhere('amount', 'LIKE', "$search%");
         });
     }
 

@@ -124,9 +124,9 @@ class Group extends Model
      *
      * @param $user_ids
      */
-    public function syncManagers($user_ids)
+    public function syncManagers($user_ids = null)
     {
-        if ( ! $user_ids) return;
+        if ( is_null($user_ids)) return;
 
         $this->managers()->sync($user_ids);
     }

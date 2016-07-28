@@ -1,21 +1,20 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title"> Managers
-				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddManagerModal"><span
+			<h3 class="panel-title"> Facilitators
+				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddFacilitatorModal"><span
 						class="fa fa-plus"></span> New
 				</button>
 			</h3>
 		</div>
 		<div>
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="manager in managers" track-by="id">
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">
 				<div class="thumbnail">
 					<img src="http://lorempixel.com/300/300" alt="">
 					<div class="caption">
-						<h5 v-text="manager.name"></h5>
-
+						<h5 v-text="facilitator.name"></h5>
 						<p>
-							<a class="btn btn-xs btn-danger" @click="removeManager(manager)">
+							<a class="btn btn-xs btn-danger" @click="removeFacilitator(facilitator)">
 								<i class="fa fa-times"></i> Remove
 							</a>
 						</p>
@@ -23,49 +22,51 @@
 				</div>
 			</div>
 		</div>
-		<div class="modal fade" id="AddManagerModal">
+		<div class="modal fade" id="AddFacilitatorModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-						<h4 class="modal-title">Modal title</h4></div>
+						<h4 class="modal-title">Select A Facilitator</h4></div>
 					<div class="modal-body">
-						<validator name="AddManager">
+						<validator name="AddFacilitator">
 							<form class="form-horizontal" novalidate>
-								<div class="form-group" :class="{ 'has-error': checkForError('user') }"><label
+								<div class="form-trip" :class="{ 'has-error': checkForError('user') }"><label
 										class="col-sm-2 control-label">User</label>
 									<div class="col-sm-10">
 										<v-select class="form-controls" id="user" :value.sync="userObj" :options="users"
 												  :on-search="getUsers" label="name"></v-select>
 										<select hidden="" v-model="user_id" v-validate:user="{ required: true}">
 											<option :value="user.id" v-for="user in users">{{user.name}}</option>
-										</select></div>
+										</select>
+									</div>
 								</div>
 							</form>
 						</validator>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary btn-sm" @click="addManager()">Save</button>
+						<button type="button" class="btn btn-primary btn-sm" @click="addFacilitator()">Save</button>
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal --></div>
+		</div><!-- /.modal -->
+	</div>
 </template>
 <script>
 	import vSelect from "vue-select";
 	export default {
-		name: 'admin-group-managers',
+		name: 'admin-trip-facilitators',
 		components: {vSelect},
-		props: ['groupId'],
+		props: ['tripId'],
 		data: function data() {
 			return {
 				user_id: null,
-				managers: [],
+				facilitators: [],
 				users: [],
-				group: null,
+				trip: null,
 				userObj: null,
-				resource: this.$resource('groups{/id}'),
+				resource: this.$resource('trips{/id}', {include: 'facilitators.user'}),
 				attemptSubmit: false
 			};
 		},
@@ -79,7 +80,7 @@
 			checkForError: function checkForError(field) {
 				// if user clicked submit button while the field is invalid trigger error styles
 
-				return this.$AddManager[field].invalid && this.attemptSubmit;
+				return this.$AddFacilitator[field].invalid && this.attemptSubmit;
 			},
 			getUsers: function getUsers(search, loading) {
 				loading(true);
@@ -88,41 +89,43 @@
 					loading(false);
 				});
 			},
-			addManager: function addManager() {
-				// Add Manager
+			addFacilitator: function addFacilitator() {
+				// Add Facilitator
 				this.attemptSubmit = true;
-				if (this.$AddManager.valid) {
-					var managersArr = this.managers;
-					managersArr.push({group_id: this.groupId, user_id: this.user_id});
-					this.group.managers = _.pluck(managersArr, 'user_id');
-					//this.group.managers = this.managers;
-					this.updateGroup();
+				if (this.$AddFacilitator.valid) {
+					var facilitatorsArr = this.facilitators;
+					facilitatorsArr.push({trip_id: this.tripId, user_id: this.user_id});
+					this.trip.facilitators = _.pluck(facilitatorsArr, 'user_id');
+					//this.trip.facilitators = this.facilitators;
+					this.updateTrip();
 				}
 			},
-			removeManager: function removeManager(manager) {
-				// Remove Manager
-				this.managers.$remove(manager);
-				this.group.managers = this.managers;
-				this.updateGroup();
+			removeFacilitator: function removeFacilitator(facilitator) {
+				// Remove Facilitator
+				this.facilitators.$remove(facilitator);
+				this.trip.facilitators = this.facilitators;
+				this.updateTrip();
 			},
-			updateGroup: function updateGroup() {
-				// Update Group
-				this.resource.update({id: this.groupId}, this.group).then(function (response) {
-					this.group = response.data.data;
-					this.managers = this.group.managers.data;
+			updateTrip: function updateTrip() {
+				delete this.trip.rep_id;
+				// Update Trip
+				this.resource.update({id: this.tripId}, this.trip).then(function (response) {
+					this.trip = response.data.data;
+					this.facilitators = this.trip.facilitators.data;
+
 					this.user_id = null;
 					this.userObj = null;
 					this.attemptSubmit = false;
-					$('#AddManagerModal').modal('hide');
+					$('#AddFacilitatorModal').modal('hide');
 				}, function (response) {
 					console.log(response);
 				});
 			}
 		},
 		ready: function ready() {
-			this.resource.get({id: this.groupId}, {include: 'managers.user'}).then(function (response) {
-				this.group = response.data.data;
-				this.managers = this.group.managers.data;
+			this.resource.get({id: this.tripId}).then(function (response) {
+				this.trip = response.data.data;
+				this.facilitators = this.trip.facilitators.data;
 				//                $.extend(this.$data, response.data.data);
 			}, function (response) {
 				console.log('Update Failed! :(');

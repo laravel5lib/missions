@@ -12,9 +12,7 @@ class TripFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [
-        'tags' => ['tags']
-    ];
+    public $relations = [];
 
 
     public function onlyPublished()
@@ -275,6 +273,11 @@ class TripFilter extends ModelFilter
                 });
             });
         });
+    }
+
+    public function tags($tags)
+    {
+        $this->withAllTag($tags)->get();
     }
 
     /**

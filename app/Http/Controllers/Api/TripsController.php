@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use App\Models\v1\Trip;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\TripRequest;
@@ -69,6 +68,9 @@ class TripsController extends Controller
 
         $this->syncResources($trip, $request);
 
+        if ($request->has('tags'))
+            $trip->tag($request->get('tags'));
+
         return $this->response->item($trip, new TripTransformer);
     }
 
@@ -86,6 +88,9 @@ class TripsController extends Controller
         $trip->update($request->except('deadlines', 'requirements', 'costs'));
 
         $this->syncResources($trip, $request);
+
+        if ($request->has('tags'))
+            $trip->retag($request->get('tags'));
 
         return $this->response->item($trip, new TripTransformer);
     }

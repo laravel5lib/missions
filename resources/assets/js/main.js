@@ -35,6 +35,9 @@ require('bootstrap-sass');
 
 $( document ).ready(function() {
     console.log($.fn.tooltip.Constructor.VERSION);
+    $('[data-toggle="offcanvas"]').click(function () {
+        $('.row-offcanvas').toggleClass('active')
+    });
 });
 
 // Vue Resource

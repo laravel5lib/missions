@@ -24,6 +24,7 @@ import adminGroupCreate from './components/groups/admin-group-create.vue';
 import adminGroupEdit from './components/groups/admin-group-edit.vue';
 import adminGroupManagers from './components/groups/admin-group-managers.vue';
 import adminReservations from './components/reservations/admin-reservations-list.vue';
+import adminUsers from './components/users/admin-users-list.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -147,6 +148,7 @@ new Vue({
         adminGroupEdit,
         adminGroupManagers,
         adminReservations,
+        adminUsers,
     ],
     http: {
         headers: {

@@ -16,17 +16,7 @@ class GroupRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($this->isMethod('put'))
-        {
-            $groupId = $this->route('groups');
-
-            return Gate::allows('update', Group::findOrFail($groupId));
-        }
-
-        if ($this->isMethod('post'))
-        {
-            return $this->user()->isAdmin();
-        }
+        return true;
     }
 
     /**

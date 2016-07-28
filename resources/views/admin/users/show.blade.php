@@ -15,8 +15,8 @@
                             <li><a href="create">New</a></li>
                             <li><a href="{{ Request::url() }}/edit">Edit</a></li>
                             {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
-                            {{--<li role="separator" class="divider"></li>--}}
-                            {{--<li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>--}}
+                            <li role="separator" class="divider"></li>
+                            <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
                         </ul>
                     </div>
                 </h3>
@@ -75,5 +75,8 @@
                 </dl>
             </div>
         </div>
+
+        <admin-user-delete user-id="{{ $user->id }}"></admin-user-delete>
+
     </div>
 @endsection

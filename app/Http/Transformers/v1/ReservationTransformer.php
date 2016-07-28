@@ -17,7 +17,7 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'member', 'tags'
+        'fundraisers', 'member'
     ];
 
     /**
@@ -193,19 +193,6 @@ class ReservationTransformer extends TransformerAbstract
         $member = $reservation->member;
 
         return $this->item($member, new TeamMemberTransformer);
-    }
-
-    /**
-     * Include Tags
-     *
-     * @param Reservation $reservation
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeTags(Reservation $reservation)
-    {
-        $tags = $reservation->tags;
-
-        return $this->collection($tags, new TagTransformer);
     }
 
 }

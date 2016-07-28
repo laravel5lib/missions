@@ -306,6 +306,14 @@ li.av-nav > a {
   color: #fff;
   background-color: $gray-base;
 }
+.row-no-margin {
+    margin-left: 0;
+    margin-right: 0;
+}
+.col-no-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
 
 // -- Custom Image Sizes -- //
 $img-base-size: 40px;
@@ -362,6 +370,12 @@ $divider-base-size: 10px;
   border-top: 1px solid $gray-light;
   margin-top: $divider-base-size;
   margin-bottom: $divider-base-size;
+  &.red-small {
+    width: 60px;
+    height: 3px;
+    border-top: 1px solid transparent;
+    background-color: #f6323e;
+  }
   &.p-head {
     margin-bottom: 15px;
       width: 60px;

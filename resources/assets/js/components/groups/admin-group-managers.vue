@@ -65,7 +65,7 @@
 				users: [],
 				group: null,
 				userObj: null,
-				resource: this.$resource('groups{/id}'),
+				resource: this.$resource('groups{/id}', {include: 'managers.user'}),
 				attemptSubmit: false
 			};
 		},
@@ -120,7 +120,7 @@
 			}
 		},
 		ready: function ready() {
-			this.resource.get({id: this.groupId}, {include: 'managers.user'}).then(function (response) {
+			this.resource.get({id: this.groupId}).then(function (response) {
 				this.group = response.data.data;
 				this.managers = this.group.managers.data;
 				//                $.extend(this.$data, response.data.data);

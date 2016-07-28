@@ -18,7 +18,6 @@ class UsersController extends Controller
     public function show($id)
     {
         $user = $this->api->get('users/'.$id, ['include' => '']);
-
         return view('admin.users.show')->with('user', $user);
     }
 
@@ -28,7 +27,7 @@ class UsersController extends Controller
         return view('admin.users.edit', compact('id'));
     }
 
-    public function create($campaignId)
+    public function create()
     {
-        // return view('admin.users.create');
+         return view('admin.users.create');
     }}

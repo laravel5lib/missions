@@ -126,7 +126,7 @@ class Group extends Model
      */
     public function syncManagers($user_ids)
     {
-        if ( ! $user_ids) return;
+        //if ( ! $user_ids) return;
 
         $this->managers()->sync($user_ids);
     }

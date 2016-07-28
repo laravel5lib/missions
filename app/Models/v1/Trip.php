@@ -256,7 +256,7 @@ class Trip extends Model
      */
     public function syncFacilitators($user_ids)
     {
-        if ( ! $user_ids) return;
+        //if ( ! $user_ids) return;
 
         $this->facilitators()->sync($user_ids);
     }

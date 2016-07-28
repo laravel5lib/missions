@@ -340,7 +340,7 @@
 
 				// filter vars
 				filters: {
-					//tags:[],
+					tags:[],
 					user: [],
                 	groups: [],
 					campaign: '',
@@ -378,7 +378,7 @@
 				this.searchReservations();
 			},
 			'tagsString': function (val) {
-				//this.filters.tags = val.split(/[\s,]+/)||'';
+				this.filters.tags = val.split(/[\s,]+/)||'';
 				this.searchReservations();
 			},
 			'ageMin': function (val) {

@@ -12,10 +12,7 @@
 				<div class="thumbnail">
 					<img src="http://lorempixel.com/300/300" alt="">
 					<div class="caption">
-						<h3>{{ facilitator.name }}</h3>
-						<p>
-							Content...
-						</p>
+						<h5 v-text="facilitator.name"></h5>
 						<p>
 							<a class="btn btn-xs btn-danger" @click="removeFacilitator(facilitator)">
 								<i class="fa fa-times"></i> Remove
@@ -96,8 +93,9 @@
 				// Add Facilitator
 				this.attemptSubmit = true;
 				if (this.$AddFacilitator.valid) {
-					this.facilitators.push({trip_id: this.tripId, user_id: this.user_id});
-					this.trip.facilitators = _.pluck(this.facilitators, 'user_id');
+					var facilitatorsArr = this.facilitators;
+					facilitatorsArr.push({trip_id: this.tripId, user_id: this.user_id});
+					this.trip.facilitators = _.pluck(facilitatorsArr, 'user_id');
 					//this.trip.facilitators = this.facilitators;
 					this.updateTrip();
 				}
@@ -113,6 +111,8 @@
 				// Update Trip
 				this.resource.update({id: this.tripId}, this.trip).then(function (response) {
 					this.trip = response.data.data;
+					this.facilitators = this.trip.facilitators.data;
+
 					this.user_id = null;
 					this.userObj = null;
 					this.attemptSubmit = false;

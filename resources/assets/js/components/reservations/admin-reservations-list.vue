@@ -7,7 +7,7 @@
                         <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
-                    <div id="toggleFields" class="dropdown" style="display: inline-block;">
+                    <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Fields
                         <span class="caret"></span>
@@ -84,13 +84,109 @@
 							</li>
 						</ul>
                     </div>
+                    <div id="toggleFilters" class="form-toggle-menu dropdown" style="display: inline-block;">
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Filters
+                        <span class="caret"></span>
+                        </button>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width:300px;">
+							<li>
+								<input type="text" class="form-control" style="width:100%" v-model="tagsString"
+									   :debounce="250" placeholder="Tag, tag2, tag3...">
+							</li>
+							<li>
+								<v-select class="form-controls" id="groupFilter" multiple :debounce="250" :on-search="getGroups()"
+										  :value.sync="groupsArr" :options="groupsOptions" label="name"
+										  placeholder="Filter Groups"></v-select>
+							</li>
+							<li>
+								<v-select class="form-controls" id="userFilter" multiple :debounce="250" :on-search="getUsers()"
+										  :value.sync="usersArr" :options="usersOptions" label="name"
+										  placeholder="Filter Users"></v-select>
+							</li>
+							<li>
+								<v-select class="form-controls" id="campaignFilter" :debounce="250" :on-search="getCampaigns()"
+										  :value.sync="campaignObj" :options="campaignOptions" label="name"
+										  placeholder="Filter by Campaign"></v-select>
+							</li>
+							<li>
+								<select class="form-control" v-model="filters.gender" style="width:100%;">
+									<option value="">Any Genders</option>
+									<option value="male">Male</option>
+									<option value="female">Female</option>
+								</select>
+							</li>
+
+							<li>
+								<select class="form-control" v-model="filters.status" style="width:100%;">
+									<option value="">Any Status</option>
+									<option value="single">Single</option>
+									<option value="married">Married</option>
+								</select>
+							</li>
+
+							<li>
+								<v-select class="form-controls" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+										  :options="shirtSizeOptions" label="name" placeholder="Filter Sizes"></v-select>
+							</li>
+
+							<li>
+								<div class="row">
+									<div class="col-xs-6">
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon">Age Min</span>
+											<input type="number" class="form-control" number v-model="ageMin" min="0">
+										</div>
+									</div>
+									<div class="col-xs-6">
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon">Max</span>
+											<input type="number" class="form-control" number v-model="ageMax" max="120">
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<li style="padding: 3px 20px;">
+								<label class="control-label">Travel Companions</label>
+								<div>
+									<label class="radio-inline">
+										<input type="radio" name="companions" id="companions1" v-model="filters.hasCompanions" :value="null"> Any
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="companions" id="companions2" v-model="filters.hasCompanions" value="yes"> Yes
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="companions" id="companions3" v-model="filters.hasCompanions" value="no"> No
+									</label>
+								</div>
+							</li>
+
+							<li style="padding: 3px 20px;">
+								<label class="control-label">Passport</label>
+								<div>
+									<label class="radio-inline">
+										<input type="radio" name="passports" id="passports1" v-model="filters.hasPassport" :value="null"> Any
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="passports" id="passports2" v-model="filters.hasPassport" value="yes"> Yes
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="passports" id="passports3" v-model="filters.hasPassport" value="no"> No
+									</label>
+								</div>
+							</li>
+
+							<li role="separator" class="divider"></li>
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+						</ul>
+                    </div>
                     <div class="input-group input-group-sm">
                         <span class="input-group-addon">Show</span>
                         <select class="form-control" v-model="per_page">
                             <option v-for="option in perPageOptions" :value="option">{{option}}</option>
                         </select>
                     </div>
-                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
                     | <a class="btn btn-primary btn-sm" href="reservations/create"><i class="fa fa-plus"></i> New</a>
                 </form>
             </div>
@@ -199,10 +295,17 @@
         </table>
     </div>
 </template>
+<style>
+	#toggleFilters li {
+		margin-bottom: 3px;
+	}
+</style>
 <script>
-    export default{
+	import vSelect from "vue-select";
+	export default{
         name: 'admin-reservations-list',
-        data(){
+		components: {vSelect},
+		data(){
             return{
                 reservations: [],
                 orderByField: 'surname',
@@ -214,10 +317,76 @@
                 search: '',
 				activeFields: ['given_names', 'surname', 'group', 'campaign', 'type', 'registered'],
 				maxActiveFields: 6,
-				maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9]
+				maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
+				groupsArr: [],
+				groupsOptions: [],
+				usersArr: [],
+				tagsArr: [],
+				tagsString: '',
+				usersOptions: [],
+				campaignObj: null,
+				campaignOptions: [],
+				shirtSizeArr: [],
+				shirtSizeOptions: [
+					{id: 'XS', name: 'Extra Small'},
+					{id: 'S', name: 'Small'},
+					{id: 'M', name: 'Medium'},
+					{id: 'L', name: 'Large'},
+					{id: 'XL', name: 'Extra Large'},
+					{id: 'XXL', name: 'Extra Large X2'},
+				],
+				ageMin: 0,
+				ageMax: 120,
+
+				// filter vars
+				filters: {
+					//tags:[],
+					user: [],
+                	groups: [],
+					campaign: '',
+					gender: '',
+					status: '',
+					shirtSize: [],
+					hasCompanions:null,
+					hasPassport:null,
+				}
             }
         },
+		computed: {
+		},
         watch: {
+			// watch filters obj
+			'filters': {
+				handler: function (val) {
+					// console.log(val);
+					this.searchReservations();
+				},
+				deep: true
+			},
+        	'campaignObj': function (val) {
+				this.filters.campaign = val ? val.id : '';
+			},
+			'shirtSizeArr': function (val) {
+				this.filters.shirtSize = _.pluck(val, 'id')||'';
+			},
+			'groupsArr': function (val) {
+				this.filters.groups = _.pluck(val, 'id')||'';
+				this.searchReservations();
+			},
+			'usersArr': function (val) {
+				this.filters.user = _.pluck(val, 'id')||'';
+				this.searchReservations();
+			},
+			'tagsString': function (val) {
+				//this.filters.tags = val.split(/[\s,]+/)||'';
+				this.searchReservations();
+			},
+			'ageMin': function (val) {
+				this.searchReservations();
+			},
+			'ageMax': function (val) {
+				this.searchReservations();
+			},
         	'activeFields': function (val, oldVal) {
         		// if the orderBy field is removed from view
         		if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
@@ -238,13 +407,37 @@
             'per_page': function (val, oldVal) {
 				this.updateConfig();
 				this.searchReservations();
-            }
+            },
+			'groups':function () {
+				this.searchReservations();
+			}
         },
         methods: {
+			consoleCallback (val) {
+				console.dir(JSON.stringify(val))
+			},
         	updateConfig(){
 				localStorage.AdminReservationsListConfig = JSON.stringify({
 					activeFields: this.activeFields,
 					maxActiveFields: this.maxActiveFields,
+					per_page: this.per_page,
+					ageMin: this.ageMin,
+					ageMax: this.ageMax,
+					groupsArr: this.groupsArr,
+					tagsArr: this.tagsArr,
+					usersArr: this.usersArr,
+					campaignObj: this.campaignObj,
+					filters: {
+						tags:this.filters.tags,
+						user: this.filters.user,
+						groups: this.filters.groups,
+						campaign: this.filters.campaign,
+						gender: this.filters.gender,
+						status: this.filters.status,
+						shirtSize: this.filters.shirtSize,
+						hasCompanions: this.filters.hasCompanions,
+						hasPassport: this.filters.hasPassport,
+					}
 				});
 			},
 			isActive(field){
@@ -260,7 +453,25 @@
                 this.orderByField = 'surname';
                 this.direction = 1;
                 this.search = null;
-            },
+				this.ageMin = 0;
+				this.ageMax = 120;
+				this.groupsArr = [];
+				this.usersArr = [];
+				this.campaignObj = null;
+				this.filters =  {
+					tags:[],
+					user: [],
+					groups: [],
+					campaign: '',
+					gender: '',
+					status: '',
+					shirtSize: [],
+					hasCompanions:null,
+					hasPassport:null,
+				}
+
+
+			},
             country(code){
                 return code;
             },
@@ -283,12 +494,18 @@
                 return moment().diff(birthday, 'years')
             },
             searchReservations(){
-                this.$http.get('reservations', {
-                    include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
-                    search: this.search,
-                    per_page: this.per_page,
-                    page: this.page
-                }).then(function (response) {
+            	var params = {
+					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
+					search: this.search,
+					per_page: this.per_page,
+					page: this.page,
+				};
+
+				$.extend(params, this.filters);
+				$.extend(params, {
+					age: [ this.ageMin, this.ageMax]
+				});
+                this.$http.get('reservations', params).then(function (response) {
                     var self = this;
                     _.each(response.data.data, function (reservation) {
                         reservation.amount_raised = this.totalAmountRaised(reservation);
@@ -298,6 +515,27 @@
                     this.pagination = response.data.meta.pagination;
                 })
             },
+			getGroups(search, loading){
+				loading ? loading(true) : void 0;
+            	this.$http.get('groups', { search: search}).then(function (response) {
+					this.groupsOptions = response.data.data;
+					loading ? loading(false) : void 0;
+				})
+			},
+			getCampaigns(search, loading){
+				loading ? loading(true) : void 0;
+				this.$http.get('campaigns', { search: search}).then(function (response) {
+					this.campaignOptions = response.data.data;
+					loading ? loading(false) : void 0;
+				})
+			},
+			getUsers(search, loading){
+				loading ? loading(true) : void 0;
+				this.$http.get('users', { search: search}).then(function (response) {
+					this.usersOptions = response.data.data;
+					loading ? loading(false) : void 0;
+				})
+			},
         },
         ready(){
             // load view state
@@ -307,10 +545,12 @@
 				this.maxActiveFields = config.maxActiveFields;
 			}
 			// populate
+            this.getGroups();
+            this.getCampaigns();
             this.searchReservations();
 
 			//Manually handle dropdown functionality to keep dropdown open until finished
-			$('#toggleFields ul.dropdown-menu').on('click', function(event){
+			$('.form-toggle-menu .dropdown-menu').on('click', function(event){
 				var events = $._data(document, 'events') || {};
 				events = events.click || [];
 				for(var i = 0; i < events.length; i++) {

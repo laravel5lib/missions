@@ -254,9 +254,9 @@ class Trip extends Model
      *
      * @param $user_ids
      */
-    public function syncFacilitators($user_ids)
+    public function syncFacilitators($user_ids = null)
     {
-        if ( ! $user_ids) return;
+        if ( is_null($user_ids)) return;
 
         $this->facilitators()->sync($user_ids);
     }

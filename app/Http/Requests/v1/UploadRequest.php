@@ -27,7 +27,7 @@ class UploadRequest extends FormRequest
             'file'   => 'required',
             'path'   => 'required|string',
             'name'   => 'string',
-            'type'   => 'required|in:photo,banner,thumbnail,file',
+            'type'   => 'required|in:photo,banner,thumbnail,file,avatar',
             'x_axis' => 'numeric',
             'y_axis' => 'numeric',
             'width'  => 'numeric',

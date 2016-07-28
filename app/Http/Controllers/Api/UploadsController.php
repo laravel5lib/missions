@@ -31,6 +31,12 @@ class UploadsController extends Controller
 //        $this->middleware('jwt.refresh', ['except' => ['show']]);
     }
 
+    /**
+     * Show all uploads.
+     *
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
     public function index(Request $request)
     {
         $uploads = $this->upload
@@ -40,6 +46,11 @@ class UploadsController extends Controller
         return $this->response->paginator($uploads, new UploadTransformer);
     }
 
+    /**
+     * Create and upload a new upload.
+     *
+     * @param UploadRequest $request
+     */
     public function store(UploadRequest $request)
     {
         $stream = $this->process($request);
@@ -51,6 +62,57 @@ class UploadsController extends Controller
         $this->response->item($upload, new UploadTransformer);
     }
 
+    /**
+     * Show the specified upload.
+     *
+     * @param $id
+     * @return \Dingo\Api\Http\Response
+     */
+    public function show($id)
+    {
+        $upload = $this->upload->findOrFail($id);
+
+        return $this->response->item($upload, new UploadTransformer);
+    }
+
+    public function update(UploadRequest $request, $id)
+    {
+        $stream = $this->process($request);
+
+        $source = $this->upload($stream, $request->only('path', 'name', 'file'));
+
+        $upload = $this->upload->findOrFail($id);
+        $upload->update([
+            'source' => $source['source'],
+            'name' => $source['filename'],
+            'type' => $request->get('type')
+        ]);
+
+        $this->response->item($upload, new UploadTransformer);
+    }
+
+    /**
+     * Delete the specified upload.
+     *
+     * @param $id
+     */
+    public function destroy($id)
+    {
+        $upload = $this->upload->findOrFail($id);
+
+        Storage::disk('s3')->delete($upload->source);
+
+        $upload->delete();
+
+        $this->response->noContent();
+    }
+
+    /**
+     * Process the image.
+     *
+     * @param $request
+     * @return mixed
+     */
     private function process($request)
     {
         // resize or crop and stream image
@@ -71,6 +133,13 @@ class UploadsController extends Controller
         return $stream;
     }
 
+    /**
+     * Upload the image to AWS.
+     *
+     * @param $stream
+     * @param $request
+     * @return array
+     */
     private function upload($stream, $request)
     {
         $path = $request['path'];
@@ -87,6 +156,13 @@ class UploadsController extends Controller
         return ['source' => $source, 'filename' => $filename];
     }
 
+    /**
+     * Save the upload record in storage.
+     *
+     * @param $source
+     * @param $type
+     * @return Upload
+     */
     private function save($source, $type)
     {
         // create new upload record
@@ -98,23 +174,5 @@ class UploadsController extends Controller
         ]);
 
         return $upload;
-    }
-
-
-    public function show($id)
-    {
-        $upload = $this->upload->findOrFail($id);
-
-        return $this->response->item($upload, new UploadTransformer);
-    }
-
-    public function update()
-    {
-        //
-    }
-
-    public function destroy()
-    {
-        //
     }
 }

@@ -4,13 +4,14 @@ namespace App\Models\v1;
 
 use App\Scopes\PublicScope;
 use App\UuidForKey;
+use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Group extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey;
+    use SoftDeletes, Filterable, UuidForKey, Taggable;
 
     /**
      * The table associated with the model.
@@ -83,7 +84,9 @@ class Group extends Model
      */
     public function managers()
     {
-        return $this->hasMany(Manager::class);
+        return $this->belongsToMany(User::class, 'managers')
+                    ->withTimestamps()
+                    ->withPivot('permissions');
     }
 
     /**
@@ -114,5 +117,17 @@ class Group extends Model
     public function tags()
     {
         return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    /**
+     * Synchronize all the group's managers.
+     *
+     * @param $user_ids
+     */
+    public function syncManagers($user_ids = null)
+    {
+        if ( is_null($user_ids)) return;
+
+        $this->managers()->sync($user_ids);
     }
 }

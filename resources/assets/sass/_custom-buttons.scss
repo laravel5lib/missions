@@ -72,6 +72,9 @@ a.btn {
 .btn-primary {
   @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
 }
+.btn-primary-darker {
+  @include button-variant($btn-primary-darker-color, $btn-primary-darker-bg, $btn-primary-darker-border);
+}
 // Success appears as green
 .btn-success {
   @include button-variant($btn-success-color, $btn-success-bg, $btn-success-border);
@@ -97,7 +100,7 @@ a.btn {
 .btn-link {
   color: $link-color;
   font-weight: 700;
-  border-radius: 0;
+  border-radius: 4px;
 
   &,
   &:active,
@@ -111,7 +114,7 @@ a.btn {
   &:hover,
   &:focus,
   &:active {
-    border-color: transparent;
+    border-color: $gray-light;
   }
   &:hover,
   &:focus {

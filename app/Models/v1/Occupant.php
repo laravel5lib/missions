@@ -32,14 +32,4 @@ class Occupant extends Model
     {
         // do something amazing
     }
-
-    /**
-     * Get all of the occupant's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
-    }
 }

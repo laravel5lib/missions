@@ -24,8 +24,22 @@ class AccommodationRequest extends Request
      */
     public function rules()
     {
-        return [
+        $required = [
             'name'         => 'required|string',
+            'country_code' => 'required|in:' . Country::codes(),
+            'region_id'    => 'required|exists:regions,id'
+        ];
+
+        if ($this->isMethod('put'))
+        {
+            $required = [
+                'name'         => 'sometimes|required|string',
+                'country_code' => 'sometimes|required|in:' . Country::codes(),
+                'region_id'    => 'sometimes|required|exists:regions,id',
+            ];
+        }
+
+        $optional = [
             'address_one'  => 'string',
             'address_two'  => 'string',
             'city'         => 'string',
@@ -33,13 +47,14 @@ class AccommodationRequest extends Request
             'zip'          => 'string',
             'phone'        => 'string',
             'fax'          => 'string',
-            'country_code' => 'required|in:' . Country::codes(),
             'email'        => 'email',
             'url'          => 'string',
-            'region_id'    => 'required|exists:regions,id',
             'short_desc'   => 'string',
             'check_in_at'  => 'date',
-            'check_out_at' => 'date'
+            'check_out_at' => 'date',
+            'tags'         => 'array'
         ];
+
+        return $rules = $required + $optional;
     }
 }

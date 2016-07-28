@@ -16,8 +16,14 @@ import adminCampaignTripCreate from './components/trips/admin-trip-create.vue';
 import adminCampaignTripEdit from './components/trips/admin-trip-edit.vue';
 import adminTrips from './components/trips/admin-trips-list.vue';
 import adminTripsReservations from './components/trips/admin-trip-reservations-list.vue';
+import adminTripsFacilitators from './components/trips/admin-trip-facilitators.vue';
 import adminTripsDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripsDelete from './components/trips/admin-trip-delete.vue';
+import adminGoups from './components/groups/admin-groups-list.vue';
+import adminGroupCreate from './components/groups/admin-group-create.vue';
+import adminGroupEdit from './components/groups/admin-group-edit.vue';
+import adminGroupManagers from './components/groups/admin-group-managers.vue';
+import adminReservations from './components/reservations/admin-reservations-list.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -74,10 +80,12 @@ Vue.validator('email', function (val) {
 
 Vue.filter('phone', {
     read:function (phone) {
+        phone = phone||'';
         return phone.replace(/[^0-9]/g, '')
             .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
     },
     write: function(phone, phoneVal) {
+        phone = phone||'';
         return phone.replace(/[^0-9]/g, '')
             .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
     }
@@ -89,6 +97,14 @@ Vue.filter('number', {
     },
     write: function(number, numberVal, decimals) {
         return number;
+    }
+});
+Vue.filter('percentage', {
+    read:function (number, decimals) {
+        return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
+    },
+    write: function(number, numberVal, decimals) {
+        return number + '%';
     }
 });
 
@@ -123,8 +139,14 @@ new Vue({
         adminCampaignTripEdit,
         adminTrips,
         adminTripsReservations,
+        adminTripsFacilitators,
         adminTripsDuplicate,
         adminTripsDelete,
+        adminGoups,
+        adminGroupCreate,
+        adminGroupEdit,
+        adminGroupManagers,
+        adminReservations,
     ],
     http: {
         headers: {

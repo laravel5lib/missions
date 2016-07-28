@@ -37,8 +37,8 @@ class GroupTransformer extends TransformerAbstract
             'city'         => $group->city,
             'state'        => $group->state,
             'zip'          => $group->zip,
-            'country_code' => $group->country,
-            'country_name' => country($group->country),
+            'country_code' => $group->country_code,
+            'country_name' => country($group->country_code),
             'phone_one'    => $group->phone_one,
             'phone_two'    => $group->phone_two,
             'email'        => $group->email,
@@ -76,7 +76,7 @@ class GroupTransformer extends TransformerAbstract
     {
         $managers = $group->managers;
 
-        return $this->collection($managers, new ManagerTransformer);
+        return $this->collection($managers, new UserTransformer);
     }
 
     /**

@@ -17,7 +17,7 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'member', 'tags'
+        'fundraisers', 'member'
     ];
 
     /**
@@ -28,6 +28,8 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function transform(Reservation $reservation)
     {
+        $reservation->load('tagged');
+
         return [
             'id'              => $reservation->id,
             'given_names'     => $reservation->given_names,
@@ -40,6 +42,7 @@ class ReservationTransformer extends TransformerAbstract
             'companion_limit' => (int) $reservation->companions_limit,
             'created_at'      => $reservation->created_at->toDateTimeString(),
             'updated_at'      => $reservation->updated_at->toDateTimeString(),
+            'tags'            => $reservation->tagNames(),
             'links'           => [
                 [
                     'rel' => 'self',
@@ -190,19 +193,6 @@ class ReservationTransformer extends TransformerAbstract
         $member = $reservation->member;
 
         return $this->item($member, new TeamMemberTransformer);
-    }
-
-    /**
-     * Include Tags
-     *
-     * @param Reservation $reservation
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeTags(Reservation $reservation)
-    {
-        $tags = $reservation->tags;
-
-        return $this->collection($tags, new TagTransformer);
     }
 
 }

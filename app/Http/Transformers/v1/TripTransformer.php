@@ -53,6 +53,7 @@ class TripTransformer extends TransformerAbstract
             'closed_at'       => $trip->closed_at->toDateTimeString(),
             'created_at'      => $trip->created_at->toDateTimeString(),
             'updated_at'      => $trip->updated_at->toDateTimeString(),
+            'tags'            => $trip->tagNames(),
             'links'           => [
                 [
                     'rel' => 'self',
@@ -192,7 +193,7 @@ class TripTransformer extends TransformerAbstract
     {
         $facilitators = $trip->facilitators;
 
-        return $this->collection($facilitators, new FacilitatorTransformer);
+        return $this->collection($facilitators, new UserTransformer);
     }
 
     private function validateParams($params)

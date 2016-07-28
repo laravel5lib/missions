@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UploadRequest;
+use App\Http\Requests\v1\UploadRequest;
 use App\Http\Transformers\v1\UploadTransformer;
 use App\Models\v1\Upload;
 use Illuminate\Http\Request;
@@ -27,10 +27,16 @@ class UploadsController extends Controller
     public function __construct(Upload $upload)
     {
         $this->upload = $upload;
-        $this->middleware('api.auth', ['except' => ['show']]);
-        $this->middleware('jwt.refresh', ['except' => ['show']]);
+//        $this->middleware('api.auth', ['except' => ['show']]);
+//        $this->middleware('jwt.refresh', ['except' => ['show']]);
     }
 
+    /**
+     * Show all uploads.
+     *
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
     public function index(Request $request)
     {
         $uploads = $this->upload
@@ -40,26 +46,100 @@ class UploadsController extends Controller
         return $this->response->paginator($uploads, new UploadTransformer);
     }
 
+    /**
+     * Create and upload a new upload.
+     *
+     * @param UploadRequest $request
+     */
     public function store(UploadRequest $request)
     {
-        $stream = $this->process($request->file('file'));
+        $stream = $this->process($request);
 
         $source = $this->upload($stream, $request->only('path', 'name', 'file'));
 
-        $upload = $this->save($source, $request->only('name', 'type'));
+        $upload = $this->save($source, $request->get('type'));
 
         $this->response->item($upload, new UploadTransformer);
     }
 
-    private function process($file)
+    /**
+     * Show the specified upload.
+     *
+     * @param $id
+     * @return \Dingo\Api\Http\Response
+     */
+    public function show($id)
     {
-        // resize and stream image
-        $img = Image::make($file)->resize(500, 500);
+        $upload = $this->upload->findOrFail($id);
+
+        return $this->response->item($upload, new UploadTransformer);
+    }
+
+    public function update(UploadRequest $request, $id)
+    {
+        $stream = $this->process($request);
+
+        $source = $this->upload($stream, $request->only('path', 'name', 'file'));
+
+        $upload = $this->upload->findOrFail($id);
+        $upload->update([
+            'source' => $source['source'],
+            'name' => $source['filename'],
+            'type' => $request->get('type')
+        ]);
+
+        $this->response->item($upload, new UploadTransformer);
+    }
+
+    /**
+     * Delete the specified upload.
+     *
+     * @param $id
+     */
+    public function destroy($id)
+    {
+        $upload = $this->upload->findOrFail($id);
+
+        Storage::disk('s3')->delete($upload->source);
+
+        $upload->delete();
+
+        $this->response->noContent();
+    }
+
+    /**
+     * Process the image.
+     *
+     * @param $request
+     * @return mixed
+     */
+    private function process($request)
+    {
+        // resize or crop and stream image
+        $img = Image::make($request->file('file'));
+
+        if($request->has('x_axis') and $request->has('y_axis')) {
+            $img->crop(
+                $request->get('width'), $request->get('height'),
+                $request->get('x_axis'), $request->get('y_axis')
+            );
+        }
+        elseif ($request->has('height') and $request->has('width')) {
+            $img->resize($request->get('width'), $request->get('height'));
+        }
+
         $stream = $img->stream();
 
         return $stream;
     }
 
+    /**
+     * Upload the image to AWS.
+     *
+     * @param $stream
+     * @param $request
+     * @return array
+     */
     private function upload($stream, $request)
     {
         $path = $request['path'];
@@ -73,37 +153,26 @@ class UploadsController extends Controller
             $stream->__toString()
         );
 
-        return $source;
+        return ['source' => $source, 'filename' => $filename];
     }
 
-    private function save($source, $request)
+    /**
+     * Save the upload record in storage.
+     *
+     * @param $source
+     * @param $type
+     * @return Upload
+     */
+    private function save($source, $type)
     {
         // create new upload record
         $upload = new Upload;
-        $upload->id = uniqid();
-        $upload->source = $source;
-        $upload->name = $filename;
-        $upload->type = $request->get('type');
-        $upload->save();
+        $upload->updateOrCreate([
+            'source' => $source['source'],
+            'name' => $source['filename'],
+            'type' => $type
+        ]);
 
         return $upload;
-    }
-
-
-    public function show($id)
-    {
-        $upload = $this->upload->findOrFail($id);
-
-        return $this->response->item($upload, new UploadTransformer);
-    }
-
-    public function update()
-    {
-        //
-    }
-
-    public function destroy()
-    {
-        //
     }
 }

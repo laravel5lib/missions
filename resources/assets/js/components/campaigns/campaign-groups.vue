@@ -1,4 +1,5 @@
 <template>
+<div>
 	<div class="dark-bg-primary">
 		<div class="container">
 			<div class="row">
@@ -45,6 +46,7 @@
 				</nav>
 			</div>
 	</div><!-- end container -->
+</div>
 </template>
 <script>
 	export default {

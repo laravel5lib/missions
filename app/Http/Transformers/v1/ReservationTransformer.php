@@ -4,10 +4,12 @@ namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Reservation;
 use App\Utilities\v1\ShirtSize;
+use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
 class ReservationTransformer extends TransformerAbstract
 {
+    private $validParams = ['status'];
 
     /**
      * List of resources available to include
@@ -95,11 +97,31 @@ class ReservationTransformer extends TransformerAbstract
      * Include Costs
      *
      * @param Reservation $reservation
+     * @param ParamBag $params
      * @return \League\Fractal\Resource\Collection
      */
-    public function includeCosts(Reservation $reservation)
+    public function includeCosts(Reservation $reservation, ParamBag $params = null)
     {
-        $costs = $reservation->costs;
+        // Optional params validation
+        if ( ! is_null($params)) {
+            $this->validateParams($params);
+
+            $costs = [];
+
+            if (in_array('active', $params->get('status')))
+            {
+                $active = $reservation->activeCosts;
+
+                $maxDate = $active->where('type', 'incremental')->max('active_at');
+
+                $costs = $active->reject(function ($value, $key) use($maxDate) {
+                    return $value->type == 'incremental' && $value->active_at < $maxDate;
+                });
+            }
+
+        } else {
+            $costs = $reservation->costs;
+        }
 
         return $this->collection($costs, new CostTransformer);
     }
@@ -193,6 +215,18 @@ class ReservationTransformer extends TransformerAbstract
         $member = $reservation->member;
 
         return $this->item($member, new TeamMemberTransformer);
+    }
+
+    private function validateParams($params)
+    {
+        $usedParams = array_keys(iterator_to_array($params));
+        if ($invalidParams = array_diff($usedParams, $this->validParams)) {
+            throw new \Exception(sprintf(
+                'Invalid param(s): "%s". Valid param(s): "%s"',
+                implode(',', $usedParams),
+                implode(',', $this->validParams)
+            ));
+        }
     }
 
 }

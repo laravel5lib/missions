@@ -36,12 +36,12 @@ class CostTransformer extends TransformerAbstract
         if ($cost->pivot)
         {
             $array = [
-                'id'           => $cost->pivot->id,
+                'cost_id'      => $cost->id,
                 'name'         => $cost->name,
                 'description'  => $cost->description,
                 'amount'       => $cost->amount,
                 'active_at'    => $cost->active_at->toDateTimeString(),
-                'grace_period' => (int) $cost->pivot->grace_period ? $cost->pivot->grace_period : $cost->grace_period,
+                'grace_period' => (int) $cost->pivot->grace_period,
                 'type'         => $cost->type,
                 'updated_at'   => $cost->pivot->updated_at->toDateTimeString()
             ];

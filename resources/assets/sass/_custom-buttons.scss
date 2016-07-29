@@ -90,7 +90,76 @@ a.btn {
 // Danger and error appear as red
 .btn-danger {
   @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
+} 
+
+// Hollow buttons
+// -------------------------
+
+// Make a button that has a hollow background and border only
+.btn-default-hollow {
+  @include button-variant($gray-base, transparent, $btn-default-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($gray-base, 10%) !important;
+    border-color: lighten($btn-default-border, 10%) !important;
+    text-decoration: none;
+  }
 }
+.btn-primary-hollow {
+  @include button-variant($brand-primary, transparent, $btn-primary-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-primary, 10%) !important;
+    border-color: lighten($btn-primary-border, 10%) !important;
+    text-decoration: none;
+  }
+}
+// Success appears as green
+.btn-success-hollow {
+  @include button-variant($brand-success, transparent, $btn-success-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-success, 10%) !important;
+    border-color: lighten($btn-success-border, 10%) !important;
+    text-decoration: none;
+  }
+}
+// Info appears as blue-green
+.btn-info-hollow {
+  @include button-variant($brand-info, transparent, $btn-info-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-info, 10%) !important;
+    border-color: lighten($btn-info-border, 10%) !important;
+    text-decoration: none;
+  }
+}
+// Warning appears as orange
+.btn-warning-hollow {
+  @include button-variant($brand-warning, transparent, $btn-warning-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-warning, 10%) !important;
+    border-color: lighten($btn-warning-border, 10%) !important;
+    text-decoration: none;
+  }
+}
+// Danger and error appear as red
+.btn-danger-hollow {
+  @include button-variant($brand-danger, transparent, $btn-danger-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-danger, 10%) !important;
+    border-color: lighten($btn-danger-border, 10%) !important;
+    text-decoration: none;
+  }
+} 
 
 
 // Link buttons

@@ -25,3 +25,5 @@ Route::resource('reservations', 'ReservationsController');
 
 Route::resource('users', 'UsersController');
 
+Route::resource('uploads', 'UploadsController');
+

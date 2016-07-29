@@ -23,7 +23,7 @@
                 </div>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }">
+            <!--<div class="form-group" :class="{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }">
                 <label for="name" class="col-sm-2 control-label">Password</label>
                 <div class="col-sm-10">
                     <div class="row">
@@ -54,7 +54,7 @@
                     </div>
                     <div class="help-block">Password must be at least 8 characters long</div>
                 </div>
-            </div>
+            </div>-->
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">Date of Birth</label>
@@ -335,7 +335,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <a href="/admin/users" class="btn btn-default">Cancel</a>
-                    <a @click="submit()" class="btn btn-primary">Create</a>
+                    <a @click="submit()" class="btn btn-primary">Update</a>
                 </div>
             </div>
         </form>

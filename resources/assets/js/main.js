@@ -28,6 +28,7 @@ import adminUsers from './components/users/admin-users-list.vue';
 import adminUserCreate from './components/users/admin-user-create.vue';
 import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
+import adminUploads from './components/uploads/admin-uploads-list.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -158,6 +159,7 @@ new Vue({
         adminUserCreate,
         adminUserEdit,
         adminUserDelete,
+        adminUploads,
     ],
     http: {
         headers: {

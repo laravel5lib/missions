@@ -33,6 +33,10 @@ Route::get('/dashboard', function () {
     return view('dashboard.index');
 });
 
+Route::get('dashboard/records', function () {
+   return view('dashboard.records.index');
+});
+
 Route::get('/dashboard/reservations', function () use ($dispatcher) {
     //Auth::loginUsingId(Auth::user()->id);
 //    Auth::loginUsingId('39edac0c-51dc-48af-a631-983659a6a630');

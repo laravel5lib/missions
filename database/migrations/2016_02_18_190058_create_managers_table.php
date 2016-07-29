@@ -13,7 +13,6 @@ class CreateManagersTable extends Migration
     public function up()
     {
         Schema::create('managers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->uuid('group_id')->index();
             $table->uuid('user_id')->index();
             $table->json('permissions')->nullable();

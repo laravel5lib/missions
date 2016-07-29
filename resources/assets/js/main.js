@@ -24,6 +24,10 @@ import adminGroupCreate from './components/groups/admin-group-create.vue';
 import adminGroupEdit from './components/groups/admin-group-edit.vue';
 import adminGroupManagers from './components/groups/admin-group-managers.vue';
 import adminReservations from './components/reservations/admin-reservations-list.vue';
+import adminUsers from './components/users/admin-users-list.vue';
+import adminUserCreate from './components/users/admin-user-create.vue';
+import adminUserEdit from './components/users/admin-user-edit.vue';
+import adminUserDelete from './components/users/admin-user-delete.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -34,6 +38,9 @@ require('bootstrap-sass');
 
 $( document ).ready(function() {
     console.log($.fn.tooltip.Constructor.VERSION);
+    $('[data-toggle="offcanvas"]').click(function () {
+        $('.row-offcanvas').toggleClass('active')
+    });
 });
 
 // Vue Resource
@@ -147,6 +154,10 @@ new Vue({
         adminGroupEdit,
         adminGroupManagers,
         adminReservations,
+        adminUsers,
+        adminUserCreate,
+        adminUserEdit,
+        adminUserDelete,
     ],
     http: {
         headers: {

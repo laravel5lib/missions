@@ -76,7 +76,7 @@ class ReservationFilter extends ModelFilter
 
     public function tags($tags)
     {
-        $this->withAnyTag($tags)->get();
+        $this->withAllTag($tags)->get();
     }
 
     /**

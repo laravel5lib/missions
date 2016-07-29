@@ -12,9 +12,7 @@ class TripFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [
-        'tags' => ['tags']
-    ];
+    public $relations = [];
 
 
     public function onlyPublished()
@@ -269,12 +267,14 @@ class TripFilter extends ModelFilter
             // facilitator's name
             )->orWhereHas('facilitators', function ($f) use ($search)
             {
-                return $f->whereHas('user', function ($u) use ($search)
-                {
-                    return $u->where('name', 'LIKE', "%$search%");
-                });
+                return $f->where('name', 'LIKE', "%$search%");
             });
         });
+    }
+
+    public function tags($tags)
+    {
+        $this->withAllTag($tags)->get();
     }
 
     /**

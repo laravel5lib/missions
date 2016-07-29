@@ -1,42 +1,52 @@
 <template>
-	<div class="row">
-		<div class="col-sm-12">
-			<input type="text" class="form-control" v-model="searchText" debounce="500"
-				   placeholder="Search for a group">
-			<br>
-		</div>
-
-		<div class="col-sm-4 col-md-3"
-			 v-for="group in groups">
-			<div class="thumbnail">
-				<img :src="'http://lorempixel.com/242/200/people/' + $index" :alt="group.name">
-				<div class="caption">
-					<h4>{{group.name}}</h4>
-					<p>
-						<a class="btn btn-primary btn-block" role="button" @click="selectGroup(group)">Select</a>
-					</p>
+<div>
+	<div class="dark-bg-primary">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-1">
+					<hr class="divider inv">
+					<h6 class="text-center text-uppercase">Which group are you traveling with?</h6>
+					<input type="text" class="form-control" v-model="searchText" debounce="500" placeholder="Search for a group">
+					<hr class="divider inv sm">
+					<p class="small text-center">Don't See Your Group?</p>
+					<hr class="divider inv">
 				</div>
 			</div>
 		</div>
-
-		<div class="col-sm-12 text-center">
-			<nav>
-				<ul class="pagination">
-					<li :class="{ 'disabled': pagination.current_page == 1 }">
-						<a aria-label="Previous" @click="page=pagination.current_page-1">
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-					<li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-						<a aria-label="Next" @click="page=pagination.current_page+1">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
 	</div>
+	<hr class="divider inv xlg">
+	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+			<div class="col-xs-6 col-sm-4 col-md-3" v-for="group in groups" style="display:flex">
+				<div class="panel panel-default">
+					<a role="button" @click="selectGroup(group)">
+						<img :src="'http://lorempixel.com/242/200/people/' + $index" :alt="group.name" class="img-responsive">
+					<div class="panel-body">
+						<h5 class="text-center">{{group.name}}</h5>
+					</div>
+					</a>
+				</div>
+			</div>
+	</div>
+	<div class="container">
+			<div class="col-sm-12 text-center">
+				<nav>
+					<ul class="pagination">
+						<li :class="{ 'disabled': pagination.current_page == 1 }">
+							<a aria-label="Previous" @click="page=pagination.current_page-1">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
+						<li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
+							<a aria-label="Next" @click="page=pagination.current_page+1">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+	</div><!-- end container -->
+</div>
 </template>
 <script>
 	export default {

@@ -13,7 +13,7 @@ class UserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'reservations', 'notes', 'managing', 'facilitating'
+        'reservations', 'notes', 'managing', 'facilitating', 'passports', 'visas'
     ];
 
     /**
@@ -67,6 +67,20 @@ class UserTransformer extends TransformerAbstract
         $reservations = $user->reservations;
 
         return $this->collection($reservations, new ReservationTransformer);
+    }
+
+    public function includePassports(User $user)
+    {
+        $passports = $user->passports;
+
+        return $this->collection($passports, new PassportTransformer);
+    }
+
+    public function includeVisas(User $user)
+    {
+        $visas = $user->visas;
+
+        return $this->collection($visas, new VisaTransformer);
     }
 
     /**

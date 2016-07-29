@@ -57,7 +57,7 @@
       <div class="container">
       <div class="content-section">
         <div class="row">
-          <div class="col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 text-center">
+          <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center">
             <h2 class="text-primary">Missions.Me plans trips around you. We create experiences that will maximize your specific abilities and desires.</h2>
           </div><!-- end col -->
         </div><!-- end row -->

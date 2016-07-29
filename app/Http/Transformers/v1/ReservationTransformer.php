@@ -19,7 +19,7 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'member'
+        'fundraisers', 'member', 'passport', 'visa'
     ];
 
     /**
@@ -215,6 +215,20 @@ class ReservationTransformer extends TransformerAbstract
         $member = $reservation->member;
 
         return $this->item($member, new TeamMemberTransformer);
+    }
+
+    public function includePassport(Reservation $reservation)
+    {
+        $passport = $reservation->passport;
+
+        return $this->item($passport, new PassportTransformer);
+    }
+
+    public function includeVisa(Reservation $reservation)
+    {
+        $visa = $reservation->visa;
+
+        return $this->item($visa, new VisaTransformer);
     }
 
     private function validateParams($params)

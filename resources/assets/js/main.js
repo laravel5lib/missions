@@ -29,6 +29,8 @@ import adminUserCreate from './components/users/admin-user-create.vue';
 import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
 import adminUploads from './components/uploads/admin-uploads-list.vue';
+import adminUploadCreate from './components/uploads/admin-upload-create.vue';
+import adminUploadEdit from './components/uploads/admin-upload-edit.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -36,6 +38,7 @@ window.moment = require('moment');
 window._ = require('underscore');
 require('jquery.cookie');
 require('bootstrap-sass');
+
 
 $( document ).ready(function() {
     console.log($.fn.tooltip.Constructor.VERSION);
@@ -120,6 +123,57 @@ Vue.filter('moment', function (val, format) {
     return moment(val).format(format||'LL');
 });
 
+var VueCropOptions = {
+    setSelect: [10, 10, 100, 100],
+    aspectRatio: 1,
+    bgColor: 'red',
+    minSize: [100, 100]
+};
+var VueCropEvents = [
+    'create',
+    'start',
+    'move',
+    'end',
+    'focus',
+    'blur',
+    'remove'
+];
+
+Vue.directive('crop', {
+
+    acceptStatement: true,
+
+    bind: function() {
+        var event = this.arg;
+
+        if ($.inArray(event, VueCropEvents) == -1) {
+            console.warn('Invalid v-crop event: ' + event);
+            return;
+        }
+
+        if (this.vm.jcrop) return;
+
+        var $wrapper = $(this.el).wrap('<div/>').parent();
+        $wrapper.width(this.el.width).height(this.el.height);
+        this.vm.jcrop = $.Jcrop.attach($wrapper, VueCropOptions);
+        // send api to active componant
+        this.vm.$dispatch('vueCrop-api', this.vm.jcrop);
+    },
+
+    update: function(callback) {
+        this.vm.jcrop.container.on('crop' + this.arg, callback)
+    },
+
+    unbind: function() {
+        this.vm.jcrop.container.off('crop' + this.arg);
+
+        if (this._watcher.id != 1) return;
+
+        this.vm.jcrop.destroy();
+        this.vm.jcrop = null
+    }
+});
+
 new Vue({
     el: '#app',
     data: {
@@ -160,6 +214,8 @@ new Vue({
         adminUserEdit,
         adminUserDelete,
         adminUploads,
+        adminUploadCreate,
+        adminUploadEdit,
     ],
     http: {
         headers: {

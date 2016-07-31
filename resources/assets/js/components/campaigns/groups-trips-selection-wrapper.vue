@@ -1,4 +1,8 @@
 <template>
+	<div>
+		<div class="container">
+			<h5>{{ campaignName }}</h5>
+		</div>
 		<div class="gray-light-bg">
 			<div class="container">
 				<div class="row">
@@ -11,6 +15,8 @@
 		<component :is="currentView" transition="fade" transition-mode="out-in">>
 			<!-- component changes when vm.currentview changes! -->
 		</component>
+	</div>
+
 </template>
 <style>
 	.fade-transition {
@@ -26,7 +32,7 @@
 	import groupTrips from './group-trips.vue';
 	export default{
 		name: 'group-trip-wrapper',
-		props: ["campaignId"],
+		props: ["campaignId", "campaignName"],
 		data(){
 			return {
 				currentView: 'groupSelection',

@@ -12,7 +12,7 @@
                         Filters
                         <span class="caret"></span>
                         </button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width:300px;">
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
 							<li>
 								<select class="form-control" v-model="filters.type" style="width:100%;">
 									<option value="">Any Type</option>

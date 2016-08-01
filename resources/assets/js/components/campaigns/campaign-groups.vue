@@ -4,7 +4,7 @@
 		<div class="container">
 			<hr class="divider inv xlg">
 			<div class="row">
-				<div class="col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-1">
+				<div class="col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-0">
 					<hr class="divider inv">
 					<h6 class="text-center text-uppercase">Which group would you like to travel with?</h6>
 					<input type="text" class="form-control" v-model="searchText" debounce="500" placeholder="Search for a group">

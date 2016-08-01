@@ -24,16 +24,28 @@
             </div>
 
             <div class="row col-sm-offset-2">
+                <div class="col-sm-12">
+                    <div class="form-group">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" v-model="constrained">
+								Lock Proportions
+							</label>
+						</div>
+					</div>
+                </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="width">Width (px)</label>
-                        <input type="number" number class="form-control" v-model="width" id="width" placeholder="300">
+                        <label for="height">Height (px)</label>
+                        <input type="number" number class="form-control" v-model="height" id="height" min="100"
+							   placeholder="300" @change="adjustSelect('width')|debounce 250">
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="height">Height (px)</label>
-                        <input type="number" number class="form-control" v-model="height" id="height" placeholder="300">
+                        <input type="number" number class="form-control" v-model="height" id="height" min="100"
+							   placeholder="300" @change="adjustSelect('height')|debounce 250">
                     </div>
                 </div>
             </div>
@@ -49,8 +61,10 @@
 			<div class="form-group">
 				<label for="file" class="col-sm-2 control-label">Crop Image</label>
 				<div id="crop-wrapper" class="col-sm-10">
-					<img v-if="file" :src="file" :width="imageWidth" :height="imageHeight"
+					<img v-if="file" :src="file" :width="imageWidth" :height="imageHeight" style="max-width:{{imageMaxWidth}}px;max-height:{{imageMaxHeight}}px;"
 							 v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>
+				<!--<hr>-->
+					<!--<img :src="resultImage" v-if="resultImage">-->
 				</div>
 			</div>
 
@@ -77,37 +91,49 @@
                 file: null,
                 x_axis: null,
                 y_axis: null,
-                width: null,
-                height: null,
+                width: 100,
+                height: 100,
 
 				// logic variables
 				attemptSubmit: false,
 				coords: 'Try to move/resize the selection',
+				constrained: true,
 				vueCropApi: null,
+				imageMaxWidth: 600,
+				imageMaxHeight: 600,
 				imageWidth: 600,
-				imageHeight: null,
-				aspectRatio: null,
+				imageHeight: 600,
+				imageAspectRatio: null,
+				aspectRatio: this.width/this.height,
 				fileA: null,
+				resultImage: null
 			}
         },
 		events:{
 			'vueCrop-api':function (api) {
 				// make api available on scope
-				this.vueCropApi = api;
+				window.vueCropApi = this.vueCropApi = api;
 			}
 		},
-		watch:{
-			'width':function (val) {
-				this.width = val;
-//				this.vueCropApi.setSelect([(this.coords.x/2)-50, (this.coords.y/2)-50, val, val]);
-
-			},
-			'height':function (val) {
-				this.height = val;
-//				this.vueCropApi.setSelect([(this.coords.x/2)-50, (this.coords.y/2)-50, val, val]);
-			},
-		},
         methods: {
+			adjustSelect(changed){
+				var w = this.width;
+				var h = this.height;
+
+				switch (changed) {
+					case 'width':
+						h = this.constrained ?  (this.height = this.width) : this.height;
+						break;
+					case 'height':
+						w = this.constrained ?  (this.width = this.height) : this.width;
+						break;
+				}
+
+				if (!this.constrained) {
+					this.vueCropApi.setOptions({aspectRatio: (w/h)});
+				}
+				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
+			},
 			prevent(e){
 				e.preventDefault();
 			},
@@ -125,12 +151,14 @@
                         path: this.name + '_' + moment().valueOf(),
                         //path: this.path,
                         file: this.file,
-                        x_axis: this.x_axis,
-                        y_axis: this.y_axis,
-                        width: this.width,
-                        height: this.height,
+                        x_axis: parseInt(this.x_axis / this.imageAspectRatio),
+                        y_axis: parseInt(this.y_axis / this.imageAspectRatio),
+                        width: parseInt(this.width / this.imageAspectRatio),
+                        height: parseInt(this.height / this.imageAspectRatio),
                     }).then(function (resp) {
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+						console.log(resp);
+                    	this.resultImage = resp.data;
+//                        window.location.href = '/admin' + resp.data.data.links[0].uri;
                     }, function (error) {
                         console.log(error);
                     });
@@ -146,8 +174,9 @@
 				reader.onload = function(event){
 					var img = new Image();
 					img.onload = function(){
-						self.aspectRatio = img.height/img.width;
-						self.imageHeight = self.aspectRatio * self.imageWidth;
+						self.imageAspectRatio = Math.min(self.imageMaxWidth / img.width, self.imageMaxHeight / img.height);
+						self.imageWidth = img.width*self.imageAspectRatio;
+						self.imageHeight = img.height*self.imageAspectRatio;
 
 						// adjust container
 						self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);

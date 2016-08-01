@@ -1,31 +1,33 @@
 <template>
-	<div class="row">
-		<h4>{{ group.name }}</h4>
-		<table class="table table-hover">
-			<thead>
-			<tr>
-				<th>Trip Type</th>
-				<th>Trip Starting Cost</th>
-				<th>Spots Available</th>
-				<th>Ideal For</th>
-				<th></th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr v-for="trip in trips">
-				<td style="text-transform: capitalize;">{{ trip.type }}</td>
-				<td>{{ trip.lowest | currency }}</td>
-				<td>{{ trip.spots }}</td>
-				<td>
-					<span v-for="prospect in trip.prospects">
-						{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
-					</span>
-				</td>
-				<td><a href="/trips/{{ trip.id }}" class="btn btn-primary btn-sm">Select</a></td>
-			</tr>
-			</tbody>
-		</table>
-	</div>
+	<div class="container">
+		<div class="row">
+			<h4>{{ group.name }}</h4>
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>Trip Type</th>
+					<th>Trip Starting Cost</th>
+					<th>Spots Available</th>
+					<th>Ideal For</th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr v-for="trip in trips" style="border-bottom: 1px solid #e6e6e6">
+					<td style="text-transform: capitalize;vertical-align:middle;">{{ trip.type }}</td>
+					<td style="vertical-align:middle;">{{ trip.lowest | currency }}</td>
+					<td style="vertical-align:middle;">{{ trip.spots }}</td>
+					<td style="vertical-align:middle;">
+						<span v-for="prospect in trip.prospects">
+							{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
+						</span>
+					</td>
+					<td><a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a></td>
+				</tr>
+				</tbody>
+			</table>
+		</div><!-- end row -->
+	</div><!-- end container -->
 </template>
 <script>
 	export default{

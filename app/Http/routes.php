@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 $dispatcher = app('Dingo\Api\Dispatcher');
 
-Route::get('/admin/users', function () use ($dispatcher) {
+/*Route::get('/admin/users', function () use ($dispatcher) {
     Auth::loginUsingId('fc4b1442-3a03-4339-86e2-6ecbfc0e3e30');
     try {
         $users = $dispatcher->be(auth()->user())->get('users');
@@ -27,10 +27,14 @@ Route::get('/admin/users', function () use ($dispatcher) {
     }
 
     return View::make('admin.users')->with('users', $users);
-});
+});*/
 
 Route::get('/dashboard', function () {
     return view('dashboard.index');
+});
+
+Route::get('dashboard/records', function () {
+   return view('dashboard.records.index');
 });
 
 Route::get('/dashboard/reservations', function () use ($dispatcher) {

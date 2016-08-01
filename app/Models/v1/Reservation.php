@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use Carbon\Carbon;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -96,6 +97,15 @@ class Reservation extends Model
         return $this->belongsToMany(Cost::class, 'reservation_costs')
                     ->withPivot('grace_period', 'locked')
                     ->withTimestamps();
+    }
+
+    public function activeCosts()
+    {
+        return $this->belongsToMany(Cost::class, 'reservation_costs')
+            ->whereDate('active_at', '<=', Carbon::now())
+            ->orderBy('active_at', 'desc')
+            ->withPivot('grace_period', 'locked')
+            ->withTimestamps();
     }
 
     /**

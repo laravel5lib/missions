@@ -56,7 +56,7 @@ $api->version('v1', [
     $api->get('fundraisers.donations', 'DonationsController@index');
     $api->resource('fundraisers', 'FundraisersController');
     $api->resource('donations', 'DonationsController');
-    $api->post('donations/authorize', 'DonationsController@authorize');
+    $api->post('donations/authorize', 'DonationsController@authorizeCard');
     $api->resource('passports', 'PassportsController');
     $api->resource('visas', 'VisasController');
     $api->resource('referrals', 'ReferralsController');
@@ -79,5 +79,11 @@ $api->version('v1', [
         $api->resource('exams', 'Interaction\ExamsController');
         $api->resource('sites', 'Interaction\SitesController');
         $api->resource('stats', 'Interaction\StatsController');
+    });
+
+    $api->group(['prefix' => 'utilities'], function ($api) {
+        $api->get('countries', 'UtilitiesController@getCountries');
+        $api->get('countries/{$code}', 'UtilitiesController@getCountry');
+        $api->get('timezones', 'UtilitiesController@getTimezones');
     });
 });

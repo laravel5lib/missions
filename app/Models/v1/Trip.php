@@ -4,13 +4,14 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use Carbon\Carbon;
+use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trip extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey;
+    use SoftDeletes, Filterable, UuidForKey, Taggable;
 
     /**
      * The table associated with the model.
@@ -253,9 +254,9 @@ class Trip extends Model
      *
      * @param $user_ids
      */
-    public function syncFacilitators($user_ids)
+    public function syncFacilitators($user_ids = null)
     {
-        if ( ! $user_ids) return;
+        if ( is_null($user_ids)) return;
 
         $this->facilitators()->sync($user_ids);
     }

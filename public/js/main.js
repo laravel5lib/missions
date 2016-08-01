@@ -1,4 +1,52 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/json/stringify"), __esModule: true };
+},{"core-js/library/fn/json/stringify":16}],2:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/create"), __esModule: true };
+},{"core-js/library/fn/object/create":17}],3:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/define-properties"), __esModule: true };
+},{"core-js/library/fn/object/define-properties":18}],4:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
+},{"core-js/library/fn/object/define-property":19}],5:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/get-own-property-descriptor"), __esModule: true };
+},{"core-js/library/fn/object/get-own-property-descriptor":20}],6:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/get-own-property-names"), __esModule: true };
+},{"core-js/library/fn/object/get-own-property-names":21}],7:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/get-own-property-symbols"), __esModule: true };
+},{"core-js/library/fn/object/get-own-property-symbols":22}],8:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/get-prototype-of"), __esModule: true };
+},{"core-js/library/fn/object/get-prototype-of":23}],9:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/is-extensible"), __esModule: true };
+},{"core-js/library/fn/object/is-extensible":24}],10:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/keys"), __esModule: true };
+},{"core-js/library/fn/object/keys":25}],11:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/prevent-extensions"), __esModule: true };
+},{"core-js/library/fn/object/prevent-extensions":26}],12:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/symbol"), __esModule: true };
+},{"core-js/library/fn/symbol":27}],13:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/symbol/iterator"), __esModule: true };
+},{"core-js/library/fn/symbol/iterator":28}],14:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+var _iterator = require("../core-js/symbol/iterator");
+
+var _iterator2 = _interopRequireDefault(_iterator);
+
+var _symbol = require("../core-js/symbol");
+
+var _symbol2 = _interopRequireDefault(_symbol);
+
+var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj; };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
+  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
+} : function (obj) {
+  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+};
+},{"../core-js/symbol":12,"../core-js/symbol/iterator":13}],15:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.6 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -2363,7 +2411,1118 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],2:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
+var core  = require('../../modules/_core')
+  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+  return $JSON.stringify.apply($JSON, arguments);
+};
+},{"../../modules/_core":34}],17:[function(require,module,exports){
+require('../../modules/es6.object.create');
+var $Object = require('../../modules/_core').Object;
+module.exports = function create(P, D){
+  return $Object.create(P, D);
+};
+},{"../../modules/_core":34,"../../modules/es6.object.create":87}],18:[function(require,module,exports){
+require('../../modules/es6.object.define-properties');
+var $Object = require('../../modules/_core').Object;
+module.exports = function defineProperties(T, D){
+  return $Object.defineProperties(T, D);
+};
+},{"../../modules/_core":34,"../../modules/es6.object.define-properties":88}],19:[function(require,module,exports){
+require('../../modules/es6.object.define-property');
+var $Object = require('../../modules/_core').Object;
+module.exports = function defineProperty(it, key, desc){
+  return $Object.defineProperty(it, key, desc);
+};
+},{"../../modules/_core":34,"../../modules/es6.object.define-property":89}],20:[function(require,module,exports){
+require('../../modules/es6.object.get-own-property-descriptor');
+var $Object = require('../../modules/_core').Object;
+module.exports = function getOwnPropertyDescriptor(it, key){
+  return $Object.getOwnPropertyDescriptor(it, key);
+};
+},{"../../modules/_core":34,"../../modules/es6.object.get-own-property-descriptor":90}],21:[function(require,module,exports){
+require('../../modules/es6.object.get-own-property-names');
+var $Object = require('../../modules/_core').Object;
+module.exports = function getOwnPropertyNames(it){
+  return $Object.getOwnPropertyNames(it);
+};
+},{"../../modules/_core":34,"../../modules/es6.object.get-own-property-names":91}],22:[function(require,module,exports){
+require('../../modules/es6.symbol');
+module.exports = require('../../modules/_core').Object.getOwnPropertySymbols;
+},{"../../modules/_core":34,"../../modules/es6.symbol":98}],23:[function(require,module,exports){
+require('../../modules/es6.object.get-prototype-of');
+module.exports = require('../../modules/_core').Object.getPrototypeOf;
+},{"../../modules/_core":34,"../../modules/es6.object.get-prototype-of":92}],24:[function(require,module,exports){
+require('../../modules/es6.object.is-extensible');
+module.exports = require('../../modules/_core').Object.isExtensible;
+},{"../../modules/_core":34,"../../modules/es6.object.is-extensible":93}],25:[function(require,module,exports){
+require('../../modules/es6.object.keys');
+module.exports = require('../../modules/_core').Object.keys;
+},{"../../modules/_core":34,"../../modules/es6.object.keys":94}],26:[function(require,module,exports){
+require('../../modules/es6.object.prevent-extensions');
+module.exports = require('../../modules/_core').Object.preventExtensions;
+},{"../../modules/_core":34,"../../modules/es6.object.prevent-extensions":95}],27:[function(require,module,exports){
+require('../../modules/es6.symbol');
+require('../../modules/es6.object.to-string');
+require('../../modules/es7.symbol.async-iterator');
+require('../../modules/es7.symbol.observable');
+module.exports = require('../../modules/_core').Symbol;
+},{"../../modules/_core":34,"../../modules/es6.object.to-string":96,"../../modules/es6.symbol":98,"../../modules/es7.symbol.async-iterator":99,"../../modules/es7.symbol.observable":100}],28:[function(require,module,exports){
+require('../../modules/es6.string.iterator');
+require('../../modules/web.dom.iterable');
+module.exports = require('../../modules/_wks-ext').f('iterator');
+},{"../../modules/_wks-ext":84,"../../modules/es6.string.iterator":97,"../../modules/web.dom.iterable":101}],29:[function(require,module,exports){
+module.exports = function(it){
+  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+  return it;
+};
+},{}],30:[function(require,module,exports){
+module.exports = function(){ /* empty */ };
+},{}],31:[function(require,module,exports){
+var isObject = require('./_is-object');
+module.exports = function(it){
+  if(!isObject(it))throw TypeError(it + ' is not an object!');
+  return it;
+};
+},{"./_is-object":50}],32:[function(require,module,exports){
+// false -> Array#indexOf
+// true  -> Array#includes
+var toIObject = require('./_to-iobject')
+  , toLength  = require('./_to-length')
+  , toIndex   = require('./_to-index');
+module.exports = function(IS_INCLUDES){
+  return function($this, el, fromIndex){
+    var O      = toIObject($this)
+      , length = toLength(O.length)
+      , index  = toIndex(fromIndex, length)
+      , value;
+    // Array#includes uses SameValueZero equality algorithm
+    if(IS_INCLUDES && el != el)while(length > index){
+      value = O[index++];
+      if(value != value)return true;
+    // Array#toIndex ignores holes, Array#includes - not
+    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
+      if(O[index] === el)return IS_INCLUDES || index || 0;
+    } return !IS_INCLUDES && -1;
+  };
+};
+},{"./_to-index":76,"./_to-iobject":78,"./_to-length":79}],33:[function(require,module,exports){
+var toString = {}.toString;
+
+module.exports = function(it){
+  return toString.call(it).slice(8, -1);
+};
+},{}],34:[function(require,module,exports){
+var core = module.exports = {version: '2.4.0'};
+if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+},{}],35:[function(require,module,exports){
+// optional / simple context binding
+var aFunction = require('./_a-function');
+module.exports = function(fn, that, length){
+  aFunction(fn);
+  if(that === undefined)return fn;
+  switch(length){
+    case 1: return function(a){
+      return fn.call(that, a);
+    };
+    case 2: return function(a, b){
+      return fn.call(that, a, b);
+    };
+    case 3: return function(a, b, c){
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function(/* ...args */){
+    return fn.apply(that, arguments);
+  };
+};
+},{"./_a-function":29}],36:[function(require,module,exports){
+// 7.2.1 RequireObjectCoercible(argument)
+module.exports = function(it){
+  if(it == undefined)throw TypeError("Can't call method on  " + it);
+  return it;
+};
+},{}],37:[function(require,module,exports){
+// Thank's IE8 for his funny defineProperty
+module.exports = !require('./_fails')(function(){
+  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_fails":42}],38:[function(require,module,exports){
+var isObject = require('./_is-object')
+  , document = require('./_global').document
+  // in old IE typeof document.createElement is 'object'
+  , is = isObject(document) && isObject(document.createElement);
+module.exports = function(it){
+  return is ? document.createElement(it) : {};
+};
+},{"./_global":43,"./_is-object":50}],39:[function(require,module,exports){
+// IE 8- don't enum bug keys
+module.exports = (
+  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+).split(',');
+},{}],40:[function(require,module,exports){
+// all enumerable object keys, includes symbols
+var getKeys = require('./_object-keys')
+  , gOPS    = require('./_object-gops')
+  , pIE     = require('./_object-pie');
+module.exports = function(it){
+  var result     = getKeys(it)
+    , getSymbols = gOPS.f;
+  if(getSymbols){
+    var symbols = getSymbols(it)
+      , isEnum  = pIE.f
+      , i       = 0
+      , key;
+    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
+  } return result;
+};
+},{"./_object-gops":64,"./_object-keys":67,"./_object-pie":68}],41:[function(require,module,exports){
+var global    = require('./_global')
+  , core      = require('./_core')
+  , ctx       = require('./_ctx')
+  , hide      = require('./_hide')
+  , PROTOTYPE = 'prototype';
+
+var $export = function(type, name, source){
+  var IS_FORCED = type & $export.F
+    , IS_GLOBAL = type & $export.G
+    , IS_STATIC = type & $export.S
+    , IS_PROTO  = type & $export.P
+    , IS_BIND   = type & $export.B
+    , IS_WRAP   = type & $export.W
+    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+    , expProto  = exports[PROTOTYPE]
+    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+    , key, own, out;
+  if(IS_GLOBAL)source = name;
+  for(key in source){
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    if(own && key in exports)continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function(C){
+      var F = function(a, b, c){
+        if(this instanceof C){
+          switch(arguments.length){
+            case 0: return new C;
+            case 1: return new C(a);
+            case 2: return new C(a, b);
+          } return new C(a, b, c);
+        } return C.apply(this, arguments);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+    if(IS_PROTO){
+      (exports.virtual || (exports.virtual = {}))[key] = out;
+      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
+    }
+  }
+};
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library` 
+module.exports = $export;
+},{"./_core":34,"./_ctx":35,"./_global":43,"./_hide":45}],42:[function(require,module,exports){
+module.exports = function(exec){
+  try {
+    return !!exec();
+  } catch(e){
+    return true;
+  }
+};
+},{}],43:[function(require,module,exports){
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+},{}],44:[function(require,module,exports){
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function(it, key){
+  return hasOwnProperty.call(it, key);
+};
+},{}],45:[function(require,module,exports){
+var dP         = require('./_object-dp')
+  , createDesc = require('./_property-desc');
+module.exports = require('./_descriptors') ? function(object, key, value){
+  return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+},{"./_descriptors":37,"./_object-dp":59,"./_property-desc":70}],46:[function(require,module,exports){
+module.exports = require('./_global').document && document.documentElement;
+},{"./_global":43}],47:[function(require,module,exports){
+module.exports = !require('./_descriptors') && !require('./_fails')(function(){
+  return Object.defineProperty(require('./_dom-create')('div'), 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_descriptors":37,"./_dom-create":38,"./_fails":42}],48:[function(require,module,exports){
+// fallback for non-array-like ES3 and non-enumerable old V8 strings
+var cof = require('./_cof');
+module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+  return cof(it) == 'String' ? it.split('') : Object(it);
+};
+},{"./_cof":33}],49:[function(require,module,exports){
+// 7.2.2 IsArray(argument)
+var cof = require('./_cof');
+module.exports = Array.isArray || function isArray(arg){
+  return cof(arg) == 'Array';
+};
+},{"./_cof":33}],50:[function(require,module,exports){
+module.exports = function(it){
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+},{}],51:[function(require,module,exports){
+'use strict';
+var create         = require('./_object-create')
+  , descriptor     = require('./_property-desc')
+  , setToStringTag = require('./_set-to-string-tag')
+  , IteratorPrototype = {};
+
+// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+require('./_hide')(IteratorPrototype, require('./_wks')('iterator'), function(){ return this; });
+
+module.exports = function(Constructor, NAME, next){
+  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
+  setToStringTag(Constructor, NAME + ' Iterator');
+};
+},{"./_hide":45,"./_object-create":58,"./_property-desc":70,"./_set-to-string-tag":72,"./_wks":85}],52:[function(require,module,exports){
+'use strict';
+var LIBRARY        = require('./_library')
+  , $export        = require('./_export')
+  , redefine       = require('./_redefine')
+  , hide           = require('./_hide')
+  , has            = require('./_has')
+  , Iterators      = require('./_iterators')
+  , $iterCreate    = require('./_iter-create')
+  , setToStringTag = require('./_set-to-string-tag')
+  , getPrototypeOf = require('./_object-gpo')
+  , ITERATOR       = require('./_wks')('iterator')
+  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
+  , FF_ITERATOR    = '@@iterator'
+  , KEYS           = 'keys'
+  , VALUES         = 'values';
+
+var returnThis = function(){ return this; };
+
+module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+  $iterCreate(Constructor, NAME, next);
+  var getMethod = function(kind){
+    if(!BUGGY && kind in proto)return proto[kind];
+    switch(kind){
+      case KEYS: return function keys(){ return new Constructor(this, kind); };
+      case VALUES: return function values(){ return new Constructor(this, kind); };
+    } return function entries(){ return new Constructor(this, kind); };
+  };
+  var TAG        = NAME + ' Iterator'
+    , DEF_VALUES = DEFAULT == VALUES
+    , VALUES_BUG = false
+    , proto      = Base.prototype
+    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
+    , $default   = $native || getMethod(DEFAULT)
+    , $entries   = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined
+    , $anyNative = NAME == 'Array' ? proto.entries || $native : $native
+    , methods, key, IteratorPrototype;
+  // Fix native
+  if($anyNative){
+    IteratorPrototype = getPrototypeOf($anyNative.call(new Base));
+    if(IteratorPrototype !== Object.prototype){
+      // Set @@toStringTag to native iterators
+      setToStringTag(IteratorPrototype, TAG, true);
+      // fix for some old engines
+      if(!LIBRARY && !has(IteratorPrototype, ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
+    }
+  }
+  // fix Array#{values, @@iterator}.name in V8 / FF
+  if(DEF_VALUES && $native && $native.name !== VALUES){
+    VALUES_BUG = true;
+    $default = function values(){ return $native.call(this); };
+  }
+  // Define iterator
+  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+    hide(proto, ITERATOR, $default);
+  }
+  // Plug for library
+  Iterators[NAME] = $default;
+  Iterators[TAG]  = returnThis;
+  if(DEFAULT){
+    methods = {
+      values:  DEF_VALUES ? $default : getMethod(VALUES),
+      keys:    IS_SET     ? $default : getMethod(KEYS),
+      entries: $entries
+    };
+    if(FORCED)for(key in methods){
+      if(!(key in proto))redefine(proto, key, methods[key]);
+    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+  }
+  return methods;
+};
+},{"./_export":41,"./_has":44,"./_hide":45,"./_iter-create":51,"./_iterators":54,"./_library":56,"./_object-gpo":65,"./_redefine":71,"./_set-to-string-tag":72,"./_wks":85}],53:[function(require,module,exports){
+module.exports = function(done, value){
+  return {value: value, done: !!done};
+};
+},{}],54:[function(require,module,exports){
+module.exports = {};
+},{}],55:[function(require,module,exports){
+var getKeys   = require('./_object-keys')
+  , toIObject = require('./_to-iobject');
+module.exports = function(object, el){
+  var O      = toIObject(object)
+    , keys   = getKeys(O)
+    , length = keys.length
+    , index  = 0
+    , key;
+  while(length > index)if(O[key = keys[index++]] === el)return key;
+};
+},{"./_object-keys":67,"./_to-iobject":78}],56:[function(require,module,exports){
+module.exports = true;
+},{}],57:[function(require,module,exports){
+var META     = require('./_uid')('meta')
+  , isObject = require('./_is-object')
+  , has      = require('./_has')
+  , setDesc  = require('./_object-dp').f
+  , id       = 0;
+var isExtensible = Object.isExtensible || function(){
+  return true;
+};
+var FREEZE = !require('./_fails')(function(){
+  return isExtensible(Object.preventExtensions({}));
+});
+var setMeta = function(it){
+  setDesc(it, META, {value: {
+    i: 'O' + ++id, // object ID
+    w: {}          // weak collections IDs
+  }});
+};
+var fastKey = function(it, create){
+  // return primitive with prefix
+  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+  if(!has(it, META)){
+    // can't set metadata to uncaught frozen object
+    if(!isExtensible(it))return 'F';
+    // not necessary to add metadata
+    if(!create)return 'E';
+    // add missing metadata
+    setMeta(it);
+  // return object ID
+  } return it[META].i;
+};
+var getWeak = function(it, create){
+  if(!has(it, META)){
+    // can't set metadata to uncaught frozen object
+    if(!isExtensible(it))return true;
+    // not necessary to add metadata
+    if(!create)return false;
+    // add missing metadata
+    setMeta(it);
+  // return hash weak collections IDs
+  } return it[META].w;
+};
+// add metadata on freeze-family methods calling
+var onFreeze = function(it){
+  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
+  return it;
+};
+var meta = module.exports = {
+  KEY:      META,
+  NEED:     false,
+  fastKey:  fastKey,
+  getWeak:  getWeak,
+  onFreeze: onFreeze
+};
+},{"./_fails":42,"./_has":44,"./_is-object":50,"./_object-dp":59,"./_uid":82}],58:[function(require,module,exports){
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+var anObject    = require('./_an-object')
+  , dPs         = require('./_object-dps')
+  , enumBugKeys = require('./_enum-bug-keys')
+  , IE_PROTO    = require('./_shared-key')('IE_PROTO')
+  , Empty       = function(){ /* empty */ }
+  , PROTOTYPE   = 'prototype';
+
+// Create object with fake `null` prototype: use iframe Object with cleared prototype
+var createDict = function(){
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = require('./_dom-create')('iframe')
+    , i      = enumBugKeys.length
+    , gt     = '>'
+    , iframeDocument;
+  iframe.style.display = 'none';
+  require('./_html').appendChild(iframe);
+  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+  // createDict = iframe.contentWindow.Object;
+  // html.removeChild(iframe);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write('<script>document.F=Object</script' + gt);
+  iframeDocument.close();
+  createDict = iframeDocument.F;
+  while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
+  return createDict();
+};
+
+module.exports = Object.create || function create(O, Properties){
+  var result;
+  if(O !== null){
+    Empty[PROTOTYPE] = anObject(O);
+    result = new Empty;
+    Empty[PROTOTYPE] = null;
+    // add "__proto__" for Object.getPrototypeOf polyfill
+    result[IE_PROTO] = O;
+  } else result = createDict();
+  return Properties === undefined ? result : dPs(result, Properties);
+};
+},{"./_an-object":31,"./_dom-create":38,"./_enum-bug-keys":39,"./_html":46,"./_object-dps":60,"./_shared-key":73}],59:[function(require,module,exports){
+var anObject       = require('./_an-object')
+  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
+  , toPrimitive    = require('./_to-primitive')
+  , dP             = Object.defineProperty;
+
+exports.f = require('./_descriptors') ? Object.defineProperty : function defineProperty(O, P, Attributes){
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if(IE8_DOM_DEFINE)try {
+    return dP(O, P, Attributes);
+  } catch(e){ /* empty */ }
+  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
+  if('value' in Attributes)O[P] = Attributes.value;
+  return O;
+};
+},{"./_an-object":31,"./_descriptors":37,"./_ie8-dom-define":47,"./_to-primitive":81}],60:[function(require,module,exports){
+var dP       = require('./_object-dp')
+  , anObject = require('./_an-object')
+  , getKeys  = require('./_object-keys');
+
+module.exports = require('./_descriptors') ? Object.defineProperties : function defineProperties(O, Properties){
+  anObject(O);
+  var keys   = getKeys(Properties)
+    , length = keys.length
+    , i = 0
+    , P;
+  while(length > i)dP.f(O, P = keys[i++], Properties[P]);
+  return O;
+};
+},{"./_an-object":31,"./_descriptors":37,"./_object-dp":59,"./_object-keys":67}],61:[function(require,module,exports){
+var pIE            = require('./_object-pie')
+  , createDesc     = require('./_property-desc')
+  , toIObject      = require('./_to-iobject')
+  , toPrimitive    = require('./_to-primitive')
+  , has            = require('./_has')
+  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
+  , gOPD           = Object.getOwnPropertyDescriptor;
+
+exports.f = require('./_descriptors') ? gOPD : function getOwnPropertyDescriptor(O, P){
+  O = toIObject(O);
+  P = toPrimitive(P, true);
+  if(IE8_DOM_DEFINE)try {
+    return gOPD(O, P);
+  } catch(e){ /* empty */ }
+  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
+};
+},{"./_descriptors":37,"./_has":44,"./_ie8-dom-define":47,"./_object-pie":68,"./_property-desc":70,"./_to-iobject":78,"./_to-primitive":81}],62:[function(require,module,exports){
+// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+var toIObject = require('./_to-iobject')
+  , gOPN      = require('./_object-gopn').f
+  , toString  = {}.toString;
+
+var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
+  ? Object.getOwnPropertyNames(window) : [];
+
+var getWindowNames = function(it){
+  try {
+    return gOPN(it);
+  } catch(e){
+    return windowNames.slice();
+  }
+};
+
+module.exports.f = function getOwnPropertyNames(it){
+  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
+};
+
+},{"./_object-gopn":63,"./_to-iobject":78}],63:[function(require,module,exports){
+// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+var $keys      = require('./_object-keys-internal')
+  , hiddenKeys = require('./_enum-bug-keys').concat('length', 'prototype');
+
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
+  return $keys(O, hiddenKeys);
+};
+},{"./_enum-bug-keys":39,"./_object-keys-internal":66}],64:[function(require,module,exports){
+exports.f = Object.getOwnPropertySymbols;
+},{}],65:[function(require,module,exports){
+// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+var has         = require('./_has')
+  , toObject    = require('./_to-object')
+  , IE_PROTO    = require('./_shared-key')('IE_PROTO')
+  , ObjectProto = Object.prototype;
+
+module.exports = Object.getPrototypeOf || function(O){
+  O = toObject(O);
+  if(has(O, IE_PROTO))return O[IE_PROTO];
+  if(typeof O.constructor == 'function' && O instanceof O.constructor){
+    return O.constructor.prototype;
+  } return O instanceof Object ? ObjectProto : null;
+};
+},{"./_has":44,"./_shared-key":73,"./_to-object":80}],66:[function(require,module,exports){
+var has          = require('./_has')
+  , toIObject    = require('./_to-iobject')
+  , arrayIndexOf = require('./_array-includes')(false)
+  , IE_PROTO     = require('./_shared-key')('IE_PROTO');
+
+module.exports = function(object, names){
+  var O      = toIObject(object)
+    , i      = 0
+    , result = []
+    , key;
+  for(key in O)if(key != IE_PROTO)has(O, key) && result.push(key);
+  // Don't enum bug & hidden keys
+  while(names.length > i)if(has(O, key = names[i++])){
+    ~arrayIndexOf(result, key) || result.push(key);
+  }
+  return result;
+};
+},{"./_array-includes":32,"./_has":44,"./_shared-key":73,"./_to-iobject":78}],67:[function(require,module,exports){
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys       = require('./_object-keys-internal')
+  , enumBugKeys = require('./_enum-bug-keys');
+
+module.exports = Object.keys || function keys(O){
+  return $keys(O, enumBugKeys);
+};
+},{"./_enum-bug-keys":39,"./_object-keys-internal":66}],68:[function(require,module,exports){
+exports.f = {}.propertyIsEnumerable;
+},{}],69:[function(require,module,exports){
+// most Object methods by ES6 should accept primitives
+var $export = require('./_export')
+  , core    = require('./_core')
+  , fails   = require('./_fails');
+module.exports = function(KEY, exec){
+  var fn  = (core.Object || {})[KEY] || Object[KEY]
+    , exp = {};
+  exp[KEY] = exec(fn);
+  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+};
+},{"./_core":34,"./_export":41,"./_fails":42}],70:[function(require,module,exports){
+module.exports = function(bitmap, value){
+  return {
+    enumerable  : !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable    : !(bitmap & 4),
+    value       : value
+  };
+};
+},{}],71:[function(require,module,exports){
+module.exports = require('./_hide');
+},{"./_hide":45}],72:[function(require,module,exports){
+var def = require('./_object-dp').f
+  , has = require('./_has')
+  , TAG = require('./_wks')('toStringTag');
+
+module.exports = function(it, tag, stat){
+  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
+};
+},{"./_has":44,"./_object-dp":59,"./_wks":85}],73:[function(require,module,exports){
+var shared = require('./_shared')('keys')
+  , uid    = require('./_uid');
+module.exports = function(key){
+  return shared[key] || (shared[key] = uid(key));
+};
+},{"./_shared":74,"./_uid":82}],74:[function(require,module,exports){
+var global = require('./_global')
+  , SHARED = '__core-js_shared__'
+  , store  = global[SHARED] || (global[SHARED] = {});
+module.exports = function(key){
+  return store[key] || (store[key] = {});
+};
+},{"./_global":43}],75:[function(require,module,exports){
+var toInteger = require('./_to-integer')
+  , defined   = require('./_defined');
+// true  -> String#at
+// false -> String#codePointAt
+module.exports = function(TO_STRING){
+  return function(that, pos){
+    var s = String(defined(that))
+      , i = toInteger(pos)
+      , l = s.length
+      , a, b;
+    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+    a = s.charCodeAt(i);
+    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+      ? TO_STRING ? s.charAt(i) : a
+      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+  };
+};
+},{"./_defined":36,"./_to-integer":77}],76:[function(require,module,exports){
+var toInteger = require('./_to-integer')
+  , max       = Math.max
+  , min       = Math.min;
+module.exports = function(index, length){
+  index = toInteger(index);
+  return index < 0 ? max(index + length, 0) : min(index, length);
+};
+},{"./_to-integer":77}],77:[function(require,module,exports){
+// 7.1.4 ToInteger
+var ceil  = Math.ceil
+  , floor = Math.floor;
+module.exports = function(it){
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+},{}],78:[function(require,module,exports){
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+var IObject = require('./_iobject')
+  , defined = require('./_defined');
+module.exports = function(it){
+  return IObject(defined(it));
+};
+},{"./_defined":36,"./_iobject":48}],79:[function(require,module,exports){
+// 7.1.15 ToLength
+var toInteger = require('./_to-integer')
+  , min       = Math.min;
+module.exports = function(it){
+  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+};
+},{"./_to-integer":77}],80:[function(require,module,exports){
+// 7.1.13 ToObject(argument)
+var defined = require('./_defined');
+module.exports = function(it){
+  return Object(defined(it));
+};
+},{"./_defined":36}],81:[function(require,module,exports){
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = require('./_is-object');
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function(it, S){
+  if(!isObject(it))return it;
+  var fn, val;
+  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+},{"./_is-object":50}],82:[function(require,module,exports){
+var id = 0
+  , px = Math.random();
+module.exports = function(key){
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+},{}],83:[function(require,module,exports){
+var global         = require('./_global')
+  , core           = require('./_core')
+  , LIBRARY        = require('./_library')
+  , wksExt         = require('./_wks-ext')
+  , defineProperty = require('./_object-dp').f;
+module.exports = function(name){
+  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
+  if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
+};
+},{"./_core":34,"./_global":43,"./_library":56,"./_object-dp":59,"./_wks-ext":84}],84:[function(require,module,exports){
+exports.f = require('./_wks');
+},{"./_wks":85}],85:[function(require,module,exports){
+var store      = require('./_shared')('wks')
+  , uid        = require('./_uid')
+  , Symbol     = require('./_global').Symbol
+  , USE_SYMBOL = typeof Symbol == 'function';
+
+var $exports = module.exports = function(name){
+  return store[name] || (store[name] =
+    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
+};
+
+$exports.store = store;
+},{"./_global":43,"./_shared":74,"./_uid":82}],86:[function(require,module,exports){
+'use strict';
+var addToUnscopables = require('./_add-to-unscopables')
+  , step             = require('./_iter-step')
+  , Iterators        = require('./_iterators')
+  , toIObject        = require('./_to-iobject');
+
+// 22.1.3.4 Array.prototype.entries()
+// 22.1.3.13 Array.prototype.keys()
+// 22.1.3.29 Array.prototype.values()
+// 22.1.3.30 Array.prototype[@@iterator]()
+module.exports = require('./_iter-define')(Array, 'Array', function(iterated, kind){
+  this._t = toIObject(iterated); // target
+  this._i = 0;                   // next index
+  this._k = kind;                // kind
+// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+}, function(){
+  var O     = this._t
+    , kind  = this._k
+    , index = this._i++;
+  if(!O || index >= O.length){
+    this._t = undefined;
+    return step(1);
+  }
+  if(kind == 'keys'  )return step(0, index);
+  if(kind == 'values')return step(0, O[index]);
+  return step(0, [index, O[index]]);
+}, 'values');
+
+// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+Iterators.Arguments = Iterators.Array;
+
+addToUnscopables('keys');
+addToUnscopables('values');
+addToUnscopables('entries');
+},{"./_add-to-unscopables":30,"./_iter-define":52,"./_iter-step":53,"./_iterators":54,"./_to-iobject":78}],87:[function(require,module,exports){
+var $export = require('./_export')
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+$export($export.S, 'Object', {create: require('./_object-create')});
+},{"./_export":41,"./_object-create":58}],88:[function(require,module,exports){
+var $export = require('./_export');
+// 19.1.2.3 / 15.2.3.7 Object.defineProperties(O, Properties)
+$export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperties: require('./_object-dps')});
+},{"./_descriptors":37,"./_export":41,"./_object-dps":60}],89:[function(require,module,exports){
+var $export = require('./_export');
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
+},{"./_descriptors":37,"./_export":41,"./_object-dp":59}],90:[function(require,module,exports){
+// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+var toIObject                 = require('./_to-iobject')
+  , $getOwnPropertyDescriptor = require('./_object-gopd').f;
+
+require('./_object-sap')('getOwnPropertyDescriptor', function(){
+  return function getOwnPropertyDescriptor(it, key){
+    return $getOwnPropertyDescriptor(toIObject(it), key);
+  };
+});
+},{"./_object-gopd":61,"./_object-sap":69,"./_to-iobject":78}],91:[function(require,module,exports){
+// 19.1.2.7 Object.getOwnPropertyNames(O)
+require('./_object-sap')('getOwnPropertyNames', function(){
+  return require('./_object-gopn-ext').f;
+});
+},{"./_object-gopn-ext":62,"./_object-sap":69}],92:[function(require,module,exports){
+// 19.1.2.9 Object.getPrototypeOf(O)
+var toObject        = require('./_to-object')
+  , $getPrototypeOf = require('./_object-gpo');
+
+require('./_object-sap')('getPrototypeOf', function(){
+  return function getPrototypeOf(it){
+    return $getPrototypeOf(toObject(it));
+  };
+});
+},{"./_object-gpo":65,"./_object-sap":69,"./_to-object":80}],93:[function(require,module,exports){
+// 19.1.2.11 Object.isExtensible(O)
+var isObject = require('./_is-object');
+
+require('./_object-sap')('isExtensible', function($isExtensible){
+  return function isExtensible(it){
+    return isObject(it) ? $isExtensible ? $isExtensible(it) : true : false;
+  };
+});
+},{"./_is-object":50,"./_object-sap":69}],94:[function(require,module,exports){
+// 19.1.2.14 Object.keys(O)
+var toObject = require('./_to-object')
+  , $keys    = require('./_object-keys');
+
+require('./_object-sap')('keys', function(){
+  return function keys(it){
+    return $keys(toObject(it));
+  };
+});
+},{"./_object-keys":67,"./_object-sap":69,"./_to-object":80}],95:[function(require,module,exports){
+// 19.1.2.15 Object.preventExtensions(O)
+var isObject = require('./_is-object')
+  , meta     = require('./_meta').onFreeze;
+
+require('./_object-sap')('preventExtensions', function($preventExtensions){
+  return function preventExtensions(it){
+    return $preventExtensions && isObject(it) ? $preventExtensions(meta(it)) : it;
+  };
+});
+},{"./_is-object":50,"./_meta":57,"./_object-sap":69}],96:[function(require,module,exports){
+
+},{}],97:[function(require,module,exports){
+'use strict';
+var $at  = require('./_string-at')(true);
+
+// 21.1.3.27 String.prototype[@@iterator]()
+require('./_iter-define')(String, 'String', function(iterated){
+  this._t = String(iterated); // target
+  this._i = 0;                // next index
+// 21.1.5.2.1 %StringIteratorPrototype%.next()
+}, function(){
+  var O     = this._t
+    , index = this._i
+    , point;
+  if(index >= O.length)return {value: undefined, done: true};
+  point = $at(O, index);
+  this._i += point.length;
+  return {value: point, done: false};
+});
+},{"./_iter-define":52,"./_string-at":75}],98:[function(require,module,exports){
+'use strict';
+// ECMAScript 6 symbols shim
+var global         = require('./_global')
+  , has            = require('./_has')
+  , DESCRIPTORS    = require('./_descriptors')
+  , $export        = require('./_export')
+  , redefine       = require('./_redefine')
+  , META           = require('./_meta').KEY
+  , $fails         = require('./_fails')
+  , shared         = require('./_shared')
+  , setToStringTag = require('./_set-to-string-tag')
+  , uid            = require('./_uid')
+  , wks            = require('./_wks')
+  , wksExt         = require('./_wks-ext')
+  , wksDefine      = require('./_wks-define')
+  , keyOf          = require('./_keyof')
+  , enumKeys       = require('./_enum-keys')
+  , isArray        = require('./_is-array')
+  , anObject       = require('./_an-object')
+  , toIObject      = require('./_to-iobject')
+  , toPrimitive    = require('./_to-primitive')
+  , createDesc     = require('./_property-desc')
+  , _create        = require('./_object-create')
+  , gOPNExt        = require('./_object-gopn-ext')
+  , $GOPD          = require('./_object-gopd')
+  , $DP            = require('./_object-dp')
+  , $keys          = require('./_object-keys')
+  , gOPD           = $GOPD.f
+  , dP             = $DP.f
+  , gOPN           = gOPNExt.f
+  , $Symbol        = global.Symbol
+  , $JSON          = global.JSON
+  , _stringify     = $JSON && $JSON.stringify
+  , PROTOTYPE      = 'prototype'
+  , HIDDEN         = wks('_hidden')
+  , TO_PRIMITIVE   = wks('toPrimitive')
+  , isEnum         = {}.propertyIsEnumerable
+  , SymbolRegistry = shared('symbol-registry')
+  , AllSymbols     = shared('symbols')
+  , OPSymbols      = shared('op-symbols')
+  , ObjectProto    = Object[PROTOTYPE]
+  , USE_NATIVE     = typeof $Symbol == 'function'
+  , QObject        = global.QObject;
+// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
+var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
+
+// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
+var setSymbolDesc = DESCRIPTORS && $fails(function(){
+  return _create(dP({}, 'a', {
+    get: function(){ return dP(this, 'a', {value: 7}).a; }
+  })).a != 7;
+}) ? function(it, key, D){
+  var protoDesc = gOPD(ObjectProto, key);
+  if(protoDesc)delete ObjectProto[key];
+  dP(it, key, D);
+  if(protoDesc && it !== ObjectProto)dP(ObjectProto, key, protoDesc);
+} : dP;
+
+var wrap = function(tag){
+  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
+  sym._k = tag;
+  return sym;
+};
+
+var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it){
+  return typeof it == 'symbol';
+} : function(it){
+  return it instanceof $Symbol;
+};
+
+var $defineProperty = function defineProperty(it, key, D){
+  if(it === ObjectProto)$defineProperty(OPSymbols, key, D);
+  anObject(it);
+  key = toPrimitive(key, true);
+  anObject(D);
+  if(has(AllSymbols, key)){
+    if(!D.enumerable){
+      if(!has(it, HIDDEN))dP(it, HIDDEN, createDesc(1, {}));
+      it[HIDDEN][key] = true;
+    } else {
+      if(has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
+      D = _create(D, {enumerable: createDesc(0, false)});
+    } return setSymbolDesc(it, key, D);
+  } return dP(it, key, D);
+};
+var $defineProperties = function defineProperties(it, P){
+  anObject(it);
+  var keys = enumKeys(P = toIObject(P))
+    , i    = 0
+    , l = keys.length
+    , key;
+  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
+  return it;
+};
+var $create = function create(it, P){
+  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
+};
+var $propertyIsEnumerable = function propertyIsEnumerable(key){
+  var E = isEnum.call(this, key = toPrimitive(key, true));
+  if(this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return false;
+  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
+};
+var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
+  it  = toIObject(it);
+  key = toPrimitive(key, true);
+  if(it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return;
+  var D = gOPD(it, key);
+  if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
+  return D;
+};
+var $getOwnPropertyNames = function getOwnPropertyNames(it){
+  var names  = gOPN(toIObject(it))
+    , result = []
+    , i      = 0
+    , key;
+  while(names.length > i){
+    if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
+  } return result;
+};
+var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
+  var IS_OP  = it === ObjectProto
+    , names  = gOPN(IS_OP ? OPSymbols : toIObject(it))
+    , result = []
+    , i      = 0
+    , key;
+  while(names.length > i){
+    if(has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true))result.push(AllSymbols[key]);
+  } return result;
+};
+
+// 19.4.1.1 Symbol([description])
+if(!USE_NATIVE){
+  $Symbol = function Symbol(){
+    if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');
+    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
+    var $set = function(value){
+      if(this === ObjectProto)$set.call(OPSymbols, value);
+      if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
+      setSymbolDesc(this, tag, createDesc(1, value));
+    };
+    if(DESCRIPTORS && setter)setSymbolDesc(ObjectProto, tag, {configurable: true, set: $set});
+    return wrap(tag);
+  };
+  redefine($Symbol[PROTOTYPE], 'toString', function toString(){
+    return this._k;
+  });
+
+  $GOPD.f = $getOwnPropertyDescriptor;
+  $DP.f   = $defineProperty;
+  require('./_object-gopn').f = gOPNExt.f = $getOwnPropertyNames;
+  require('./_object-pie').f  = $propertyIsEnumerable;
+  require('./_object-gops').f = $getOwnPropertySymbols;
+
+  if(DESCRIPTORS && !require('./_library')){
+    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
+  }
+
+  wksExt.f = function(name){
+    return wrap(wks(name));
+  }
+}
+
+$export($export.G + $export.W + $export.F * !USE_NATIVE, {Symbol: $Symbol});
+
+for(var symbols = (
+  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
+  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
+).split(','), i = 0; symbols.length > i; )wks(symbols[i++]);
+
+for(var symbols = $keys(wks.store), i = 0; symbols.length > i; )wksDefine(symbols[i++]);
+
+$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
+  // 19.4.2.1 Symbol.for(key)
+  'for': function(key){
+    return has(SymbolRegistry, key += '')
+      ? SymbolRegistry[key]
+      : SymbolRegistry[key] = $Symbol(key);
+  },
+  // 19.4.2.5 Symbol.keyFor(sym)
+  keyFor: function keyFor(key){
+    if(isSymbol(key))return keyOf(SymbolRegistry, key);
+    throw TypeError(key + ' is not a symbol!');
+  },
+  useSetter: function(){ setter = true; },
+  useSimple: function(){ setter = false; }
+});
+
+$export($export.S + $export.F * !USE_NATIVE, 'Object', {
+  // 19.1.2.2 Object.create(O [, Properties])
+  create: $create,
+  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
+  defineProperty: $defineProperty,
+  // 19.1.2.3 Object.defineProperties(O, Properties)
+  defineProperties: $defineProperties,
+  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
+  // 19.1.2.7 Object.getOwnPropertyNames(O)
+  getOwnPropertyNames: $getOwnPropertyNames,
+  // 19.1.2.8 Object.getOwnPropertySymbols(O)
+  getOwnPropertySymbols: $getOwnPropertySymbols
+});
+
+// 24.3.2 JSON.stringify(value [, replacer [, space]])
+$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
+  var S = $Symbol();
+  // MS Edge converts symbol values to JSON as {}
+  // WebKit converts symbol values to JSON as null
+  // V8 throws on boxed symbols
+  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
+})), 'JSON', {
+  stringify: function stringify(it){
+    if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
+    var args = [it]
+      , i    = 1
+      , replacer, $replacer;
+    while(arguments.length > i)args.push(arguments[i++]);
+    replacer = args[1];
+    if(typeof replacer == 'function')$replacer = replacer;
+    if($replacer || !isArray(replacer))replacer = function(key, value){
+      if($replacer)value = $replacer.call(this, key, value);
+      if(!isSymbol(value))return value;
+    };
+    args[1] = replacer;
+    return _stringify.apply($JSON, args);
+  }
+});
+
+// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
+$Symbol[PROTOTYPE][TO_PRIMITIVE] || require('./_hide')($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+// 19.4.3.5 Symbol.prototype[@@toStringTag]
+setToStringTag($Symbol, 'Symbol');
+// 20.2.1.9 Math[@@toStringTag]
+setToStringTag(Math, 'Math', true);
+// 24.3.3 JSON[@@toStringTag]
+setToStringTag(global.JSON, 'JSON', true);
+},{"./_an-object":31,"./_descriptors":37,"./_enum-keys":40,"./_export":41,"./_fails":42,"./_global":43,"./_has":44,"./_hide":45,"./_is-array":49,"./_keyof":55,"./_library":56,"./_meta":57,"./_object-create":58,"./_object-dp":59,"./_object-gopd":61,"./_object-gopn":63,"./_object-gopn-ext":62,"./_object-gops":64,"./_object-keys":67,"./_object-pie":68,"./_property-desc":70,"./_redefine":71,"./_set-to-string-tag":72,"./_shared":74,"./_to-iobject":78,"./_to-primitive":81,"./_uid":82,"./_wks":85,"./_wks-define":83,"./_wks-ext":84}],99:[function(require,module,exports){
+require('./_wks-define')('asyncIterator');
+},{"./_wks-define":83}],100:[function(require,module,exports){
+require('./_wks-define')('observable');
+},{"./_wks-define":83}],101:[function(require,module,exports){
+require('./es6.array.iterator');
+var global        = require('./_global')
+  , hide          = require('./_hide')
+  , Iterators     = require('./_iterators')
+  , TO_STRING_TAG = require('./_wks')('toStringTag');
+
+for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
+  var NAME       = collections[i]
+    , Collection = global[NAME]
+    , proto      = Collection && Collection.prototype;
+  if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
+  Iterators[NAME] = Iterators.Array;
+}
+},{"./_global":43,"./_hide":45,"./_iterators":54,"./_wks":85,"./es6.array.iterator":86}],102:[function(require,module,exports){
 /*!
  * jQuery Cookie Plugin v1.4.1
  * https://github.com/carhartl/jquery-cookie
@@ -2482,7 +3641,7 @@ if (typeof jQuery === 'undefined') {
 
 }));
 
-},{"jquery":3}],3:[function(require,module,exports){
+},{"jquery":103}],103:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.2.4
  * http://jquery.com/
@@ -12298,15 +13457,4231 @@ if ( !noGlobal ) {
 return jQuery;
 }));
 
-},{}],4:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
+//! moment.js
+//! version : 2.14.1
+//! authors : Tim Wood, Iskren Chernev, Moment.js contributors
+//! license : MIT
+//! momentjs.com
+
+;(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    global.moment = factory()
+}(this, function () { 'use strict';
+
+    var hookCallback;
+
+    function utils_hooks__hooks () {
+        return hookCallback.apply(null, arguments);
+    }
+
+    // This is done to register the method called with moment()
+    // without creating circular dependencies.
+    function setHookCallback (callback) {
+        hookCallback = callback;
+    }
+
+    function isArray(input) {
+        return input instanceof Array || Object.prototype.toString.call(input) === '[object Array]';
+    }
+
+    function isObject(input) {
+        return Object.prototype.toString.call(input) === '[object Object]';
+    }
+
+    function isObjectEmpty(obj) {
+        var k;
+        for (k in obj) {
+            // even if its not own property I'd still call it non-empty
+            return false;
+        }
+        return true;
+    }
+
+    function isDate(input) {
+        return input instanceof Date || Object.prototype.toString.call(input) === '[object Date]';
+    }
+
+    function map(arr, fn) {
+        var res = [], i;
+        for (i = 0; i < arr.length; ++i) {
+            res.push(fn(arr[i], i));
+        }
+        return res;
+    }
+
+    function hasOwnProp(a, b) {
+        return Object.prototype.hasOwnProperty.call(a, b);
+    }
+
+    function extend(a, b) {
+        for (var i in b) {
+            if (hasOwnProp(b, i)) {
+                a[i] = b[i];
+            }
+        }
+
+        if (hasOwnProp(b, 'toString')) {
+            a.toString = b.toString;
+        }
+
+        if (hasOwnProp(b, 'valueOf')) {
+            a.valueOf = b.valueOf;
+        }
+
+        return a;
+    }
+
+    function create_utc__createUTC (input, format, locale, strict) {
+        return createLocalOrUTC(input, format, locale, strict, true).utc();
+    }
+
+    function defaultParsingFlags() {
+        // We need to deep clone this object.
+        return {
+            empty           : false,
+            unusedTokens    : [],
+            unusedInput     : [],
+            overflow        : -2,
+            charsLeftOver   : 0,
+            nullInput       : false,
+            invalidMonth    : null,
+            invalidFormat   : false,
+            userInvalidated : false,
+            iso             : false,
+            parsedDateParts : [],
+            meridiem        : null
+        };
+    }
+
+    function getParsingFlags(m) {
+        if (m._pf == null) {
+            m._pf = defaultParsingFlags();
+        }
+        return m._pf;
+    }
+
+    var some;
+    if (Array.prototype.some) {
+        some = Array.prototype.some;
+    } else {
+        some = function (fun) {
+            var t = Object(this);
+            var len = t.length >>> 0;
+
+            for (var i = 0; i < len; i++) {
+                if (i in t && fun.call(this, t[i], i, t)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+    }
+
+    function valid__isValid(m) {
+        if (m._isValid == null) {
+            var flags = getParsingFlags(m);
+            var parsedParts = some.call(flags.parsedDateParts, function (i) {
+                return i != null;
+            });
+            m._isValid = !isNaN(m._d.getTime()) &&
+                flags.overflow < 0 &&
+                !flags.empty &&
+                !flags.invalidMonth &&
+                !flags.invalidWeekday &&
+                !flags.nullInput &&
+                !flags.invalidFormat &&
+                !flags.userInvalidated &&
+                (!flags.meridiem || (flags.meridiem && parsedParts));
+
+            if (m._strict) {
+                m._isValid = m._isValid &&
+                    flags.charsLeftOver === 0 &&
+                    flags.unusedTokens.length === 0 &&
+                    flags.bigHour === undefined;
+            }
+        }
+        return m._isValid;
+    }
+
+    function valid__createInvalid (flags) {
+        var m = create_utc__createUTC(NaN);
+        if (flags != null) {
+            extend(getParsingFlags(m), flags);
+        }
+        else {
+            getParsingFlags(m).userInvalidated = true;
+        }
+
+        return m;
+    }
+
+    function isUndefined(input) {
+        return input === void 0;
+    }
+
+    // Plugins that add properties should also add the key here (null value),
+    // so we can properly clone ourselves.
+    var momentProperties = utils_hooks__hooks.momentProperties = [];
+
+    function copyConfig(to, from) {
+        var i, prop, val;
+
+        if (!isUndefined(from._isAMomentObject)) {
+            to._isAMomentObject = from._isAMomentObject;
+        }
+        if (!isUndefined(from._i)) {
+            to._i = from._i;
+        }
+        if (!isUndefined(from._f)) {
+            to._f = from._f;
+        }
+        if (!isUndefined(from._l)) {
+            to._l = from._l;
+        }
+        if (!isUndefined(from._strict)) {
+            to._strict = from._strict;
+        }
+        if (!isUndefined(from._tzm)) {
+            to._tzm = from._tzm;
+        }
+        if (!isUndefined(from._isUTC)) {
+            to._isUTC = from._isUTC;
+        }
+        if (!isUndefined(from._offset)) {
+            to._offset = from._offset;
+        }
+        if (!isUndefined(from._pf)) {
+            to._pf = getParsingFlags(from);
+        }
+        if (!isUndefined(from._locale)) {
+            to._locale = from._locale;
+        }
+
+        if (momentProperties.length > 0) {
+            for (i in momentProperties) {
+                prop = momentProperties[i];
+                val = from[prop];
+                if (!isUndefined(val)) {
+                    to[prop] = val;
+                }
+            }
+        }
+
+        return to;
+    }
+
+    var updateInProgress = false;
+
+    // Moment prototype object
+    function Moment(config) {
+        copyConfig(this, config);
+        this._d = new Date(config._d != null ? config._d.getTime() : NaN);
+        // Prevent infinite loop in case updateOffset creates new moment
+        // objects.
+        if (updateInProgress === false) {
+            updateInProgress = true;
+            utils_hooks__hooks.updateOffset(this);
+            updateInProgress = false;
+        }
+    }
+
+    function isMoment (obj) {
+        return obj instanceof Moment || (obj != null && obj._isAMomentObject != null);
+    }
+
+    function absFloor (number) {
+        if (number < 0) {
+            // -0 -> 0
+            return Math.ceil(number) || 0;
+        } else {
+            return Math.floor(number);
+        }
+    }
+
+    function toInt(argumentForCoercion) {
+        var coercedNumber = +argumentForCoercion,
+            value = 0;
+
+        if (coercedNumber !== 0 && isFinite(coercedNumber)) {
+            value = absFloor(coercedNumber);
+        }
+
+        return value;
+    }
+
+    // compare two arrays, return the number of differences
+    function compareArrays(array1, array2, dontConvert) {
+        var len = Math.min(array1.length, array2.length),
+            lengthDiff = Math.abs(array1.length - array2.length),
+            diffs = 0,
+            i;
+        for (i = 0; i < len; i++) {
+            if ((dontConvert && array1[i] !== array2[i]) ||
+                (!dontConvert && toInt(array1[i]) !== toInt(array2[i]))) {
+                diffs++;
+            }
+        }
+        return diffs + lengthDiff;
+    }
+
+    function warn(msg) {
+        if (utils_hooks__hooks.suppressDeprecationWarnings === false &&
+                (typeof console !==  'undefined') && console.warn) {
+            console.warn('Deprecation warning: ' + msg);
+        }
+    }
+
+    function deprecate(msg, fn) {
+        var firstTime = true;
+
+        return extend(function () {
+            if (utils_hooks__hooks.deprecationHandler != null) {
+                utils_hooks__hooks.deprecationHandler(null, msg);
+            }
+            if (firstTime) {
+                warn(msg + '\nArguments: ' + Array.prototype.slice.call(arguments).join(', ') + '\n' + (new Error()).stack);
+                firstTime = false;
+            }
+            return fn.apply(this, arguments);
+        }, fn);
+    }
+
+    var deprecations = {};
+
+    function deprecateSimple(name, msg) {
+        if (utils_hooks__hooks.deprecationHandler != null) {
+            utils_hooks__hooks.deprecationHandler(name, msg);
+        }
+        if (!deprecations[name]) {
+            warn(msg);
+            deprecations[name] = true;
+        }
+    }
+
+    utils_hooks__hooks.suppressDeprecationWarnings = false;
+    utils_hooks__hooks.deprecationHandler = null;
+
+    function isFunction(input) {
+        return input instanceof Function || Object.prototype.toString.call(input) === '[object Function]';
+    }
+
+    function locale_set__set (config) {
+        var prop, i;
+        for (i in config) {
+            prop = config[i];
+            if (isFunction(prop)) {
+                this[i] = prop;
+            } else {
+                this['_' + i] = prop;
+            }
+        }
+        this._config = config;
+        // Lenient ordinal parsing accepts just a number in addition to
+        // number + (possibly) stuff coming from _ordinalParseLenient.
+        this._ordinalParseLenient = new RegExp(this._ordinalParse.source + '|' + (/\d{1,2}/).source);
+    }
+
+    function mergeConfigs(parentConfig, childConfig) {
+        var res = extend({}, parentConfig), prop;
+        for (prop in childConfig) {
+            if (hasOwnProp(childConfig, prop)) {
+                if (isObject(parentConfig[prop]) && isObject(childConfig[prop])) {
+                    res[prop] = {};
+                    extend(res[prop], parentConfig[prop]);
+                    extend(res[prop], childConfig[prop]);
+                } else if (childConfig[prop] != null) {
+                    res[prop] = childConfig[prop];
+                } else {
+                    delete res[prop];
+                }
+            }
+        }
+        for (prop in parentConfig) {
+            if (hasOwnProp(parentConfig, prop) &&
+                    !hasOwnProp(childConfig, prop) &&
+                    isObject(parentConfig[prop])) {
+                // make sure changes to properties don't modify parent config
+                res[prop] = extend({}, res[prop]);
+            }
+        }
+        return res;
+    }
+
+    function Locale(config) {
+        if (config != null) {
+            this.set(config);
+        }
+    }
+
+    var keys;
+
+    if (Object.keys) {
+        keys = Object.keys;
+    } else {
+        keys = function (obj) {
+            var i, res = [];
+            for (i in obj) {
+                if (hasOwnProp(obj, i)) {
+                    res.push(i);
+                }
+            }
+            return res;
+        };
+    }
+
+    var defaultCalendar = {
+        sameDay : '[Today at] LT',
+        nextDay : '[Tomorrow at] LT',
+        nextWeek : 'dddd [at] LT',
+        lastDay : '[Yesterday at] LT',
+        lastWeek : '[Last] dddd [at] LT',
+        sameElse : 'L'
+    };
+
+    function locale_calendar__calendar (key, mom, now) {
+        var output = this._calendar[key] || this._calendar['sameElse'];
+        return isFunction(output) ? output.call(mom, now) : output;
+    }
+
+    var defaultLongDateFormat = {
+        LTS  : 'h:mm:ss A',
+        LT   : 'h:mm A',
+        L    : 'MM/DD/YYYY',
+        LL   : 'MMMM D, YYYY',
+        LLL  : 'MMMM D, YYYY h:mm A',
+        LLLL : 'dddd, MMMM D, YYYY h:mm A'
+    };
+
+    function longDateFormat (key) {
+        var format = this._longDateFormat[key],
+            formatUpper = this._longDateFormat[key.toUpperCase()];
+
+        if (format || !formatUpper) {
+            return format;
+        }
+
+        this._longDateFormat[key] = formatUpper.replace(/MMMM|MM|DD|dddd/g, function (val) {
+            return val.slice(1);
+        });
+
+        return this._longDateFormat[key];
+    }
+
+    var defaultInvalidDate = 'Invalid date';
+
+    function invalidDate () {
+        return this._invalidDate;
+    }
+
+    var defaultOrdinal = '%d';
+    var defaultOrdinalParse = /\d{1,2}/;
+
+    function ordinal (number) {
+        return this._ordinal.replace('%d', number);
+    }
+
+    var defaultRelativeTime = {
+        future : 'in %s',
+        past   : '%s ago',
+        s  : 'a few seconds',
+        m  : 'a minute',
+        mm : '%d minutes',
+        h  : 'an hour',
+        hh : '%d hours',
+        d  : 'a day',
+        dd : '%d days',
+        M  : 'a month',
+        MM : '%d months',
+        y  : 'a year',
+        yy : '%d years'
+    };
+
+    function relative__relativeTime (number, withoutSuffix, string, isFuture) {
+        var output = this._relativeTime[string];
+        return (isFunction(output)) ?
+            output(number, withoutSuffix, string, isFuture) :
+            output.replace(/%d/i, number);
+    }
+
+    function pastFuture (diff, output) {
+        var format = this._relativeTime[diff > 0 ? 'future' : 'past'];
+        return isFunction(format) ? format(output) : format.replace(/%s/i, output);
+    }
+
+    var aliases = {};
+
+    function addUnitAlias (unit, shorthand) {
+        var lowerCase = unit.toLowerCase();
+        aliases[lowerCase] = aliases[lowerCase + 's'] = aliases[shorthand] = unit;
+    }
+
+    function normalizeUnits(units) {
+        return typeof units === 'string' ? aliases[units] || aliases[units.toLowerCase()] : undefined;
+    }
+
+    function normalizeObjectUnits(inputObject) {
+        var normalizedInput = {},
+            normalizedProp,
+            prop;
+
+        for (prop in inputObject) {
+            if (hasOwnProp(inputObject, prop)) {
+                normalizedProp = normalizeUnits(prop);
+                if (normalizedProp) {
+                    normalizedInput[normalizedProp] = inputObject[prop];
+                }
+            }
+        }
+
+        return normalizedInput;
+    }
+
+    var priorities = {};
+
+    function addUnitPriority(unit, priority) {
+        priorities[unit] = priority;
+    }
+
+    function getPrioritizedUnits(unitsObj) {
+        var units = [];
+        for (var u in unitsObj) {
+            units.push({unit: u, priority: priorities[u]});
+        }
+        units.sort(function (a, b) {
+            return a.priority - b.priority;
+        });
+        return units;
+    }
+
+    function makeGetSet (unit, keepTime) {
+        return function (value) {
+            if (value != null) {
+                get_set__set(this, unit, value);
+                utils_hooks__hooks.updateOffset(this, keepTime);
+                return this;
+            } else {
+                return get_set__get(this, unit);
+            }
+        };
+    }
+
+    function get_set__get (mom, unit) {
+        return mom.isValid() ?
+            mom._d['get' + (mom._isUTC ? 'UTC' : '') + unit]() : NaN;
+    }
+
+    function get_set__set (mom, unit, value) {
+        if (mom.isValid()) {
+            mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
+        }
+    }
+
+    // MOMENTS
+
+    function stringGet (units) {
+        units = normalizeUnits(units);
+        if (isFunction(this[units])) {
+            return this[units]();
+        }
+        return this;
+    }
+
+
+    function stringSet (units, value) {
+        if (typeof units === 'object') {
+            units = normalizeObjectUnits(units);
+            var prioritized = getPrioritizedUnits(units);
+            for (var i = 0; i < prioritized.length; i++) {
+                this[prioritized[i].unit](units[prioritized[i].unit]);
+            }
+        } else {
+            units = normalizeUnits(units);
+            if (isFunction(this[units])) {
+                return this[units](value);
+            }
+        }
+        return this;
+    }
+
+    function zeroFill(number, targetLength, forceSign) {
+        var absNumber = '' + Math.abs(number),
+            zerosToFill = targetLength - absNumber.length,
+            sign = number >= 0;
+        return (sign ? (forceSign ? '+' : '') : '-') +
+            Math.pow(10, Math.max(0, zerosToFill)).toString().substr(1) + absNumber;
+    }
+
+    var formattingTokens = /(\[[^\[]*\])|(\\)?([Hh]mm(ss)?|Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Qo?|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g;
+
+    var localFormattingTokens = /(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g;
+
+    var formatFunctions = {};
+
+    var formatTokenFunctions = {};
+
+    // token:    'M'
+    // padded:   ['MM', 2]
+    // ordinal:  'Mo'
+    // callback: function () { this.month() + 1 }
+    function addFormatToken (token, padded, ordinal, callback) {
+        var func = callback;
+        if (typeof callback === 'string') {
+            func = function () {
+                return this[callback]();
+            };
+        }
+        if (token) {
+            formatTokenFunctions[token] = func;
+        }
+        if (padded) {
+            formatTokenFunctions[padded[0]] = function () {
+                return zeroFill(func.apply(this, arguments), padded[1], padded[2]);
+            };
+        }
+        if (ordinal) {
+            formatTokenFunctions[ordinal] = function () {
+                return this.localeData().ordinal(func.apply(this, arguments), token);
+            };
+        }
+    }
+
+    function removeFormattingTokens(input) {
+        if (input.match(/\[[\s\S]/)) {
+            return input.replace(/^\[|\]$/g, '');
+        }
+        return input.replace(/\\/g, '');
+    }
+
+    function makeFormatFunction(format) {
+        var array = format.match(formattingTokens), i, length;
+
+        for (i = 0, length = array.length; i < length; i++) {
+            if (formatTokenFunctions[array[i]]) {
+                array[i] = formatTokenFunctions[array[i]];
+            } else {
+                array[i] = removeFormattingTokens(array[i]);
+            }
+        }
+
+        return function (mom) {
+            var output = '', i;
+            for (i = 0; i < length; i++) {
+                output += array[i] instanceof Function ? array[i].call(mom, format) : array[i];
+            }
+            return output;
+        };
+    }
+
+    // format date using native date object
+    function formatMoment(m, format) {
+        if (!m.isValid()) {
+            return m.localeData().invalidDate();
+        }
+
+        format = expandFormat(format, m.localeData());
+        formatFunctions[format] = formatFunctions[format] || makeFormatFunction(format);
+
+        return formatFunctions[format](m);
+    }
+
+    function expandFormat(format, locale) {
+        var i = 5;
+
+        function replaceLongDateFormatTokens(input) {
+            return locale.longDateFormat(input) || input;
+        }
+
+        localFormattingTokens.lastIndex = 0;
+        while (i >= 0 && localFormattingTokens.test(format)) {
+            format = format.replace(localFormattingTokens, replaceLongDateFormatTokens);
+            localFormattingTokens.lastIndex = 0;
+            i -= 1;
+        }
+
+        return format;
+    }
+
+    var match1         = /\d/;            //       0 - 9
+    var match2         = /\d\d/;          //      00 - 99
+    var match3         = /\d{3}/;         //     000 - 999
+    var match4         = /\d{4}/;         //    0000 - 9999
+    var match6         = /[+-]?\d{6}/;    // -999999 - 999999
+    var match1to2      = /\d\d?/;         //       0 - 99
+    var match3to4      = /\d\d\d\d?/;     //     999 - 9999
+    var match5to6      = /\d\d\d\d\d\d?/; //   99999 - 999999
+    var match1to3      = /\d{1,3}/;       //       0 - 999
+    var match1to4      = /\d{1,4}/;       //       0 - 9999
+    var match1to6      = /[+-]?\d{1,6}/;  // -999999 - 999999
+
+    var matchUnsigned  = /\d+/;           //       0 - inf
+    var matchSigned    = /[+-]?\d+/;      //    -inf - inf
+
+    var matchOffset    = /Z|[+-]\d\d:?\d\d/gi; // +00:00 -00:00 +0000 -0000 or Z
+    var matchShortOffset = /Z|[+-]\d\d(?::?\d\d)?/gi; // +00 -00 +00:00 -00:00 +0000 -0000 or Z
+
+    var matchTimestamp = /[+-]?\d+(\.\d{1,3})?/; // 123456789 123456789.123
+
+    // any word (or two) characters or numbers including two/three word month in arabic.
+    // includes scottish gaelic two word and hyphenated months
+    var matchWord = /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i;
+
+
+    var regexes = {};
+
+    function addRegexToken (token, regex, strictRegex) {
+        regexes[token] = isFunction(regex) ? regex : function (isStrict, localeData) {
+            return (isStrict && strictRegex) ? strictRegex : regex;
+        };
+    }
+
+    function getParseRegexForToken (token, config) {
+        if (!hasOwnProp(regexes, token)) {
+            return new RegExp(unescapeFormat(token));
+        }
+
+        return regexes[token](config._strict, config._locale);
+    }
+
+    // Code from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
+    function unescapeFormat(s) {
+        return regexEscape(s.replace('\\', '').replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g, function (matched, p1, p2, p3, p4) {
+            return p1 || p2 || p3 || p4;
+        }));
+    }
+
+    function regexEscape(s) {
+        return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
+
+    var tokens = {};
+
+    function addParseToken (token, callback) {
+        var i, func = callback;
+        if (typeof token === 'string') {
+            token = [token];
+        }
+        if (typeof callback === 'number') {
+            func = function (input, array) {
+                array[callback] = toInt(input);
+            };
+        }
+        for (i = 0; i < token.length; i++) {
+            tokens[token[i]] = func;
+        }
+    }
+
+    function addWeekParseToken (token, callback) {
+        addParseToken(token, function (input, array, config, token) {
+            config._w = config._w || {};
+            callback(input, config._w, config, token);
+        });
+    }
+
+    function addTimeToArrayFromToken(token, input, config) {
+        if (input != null && hasOwnProp(tokens, token)) {
+            tokens[token](input, config._a, config, token);
+        }
+    }
+
+    var YEAR = 0;
+    var MONTH = 1;
+    var DATE = 2;
+    var HOUR = 3;
+    var MINUTE = 4;
+    var SECOND = 5;
+    var MILLISECOND = 6;
+    var WEEK = 7;
+    var WEEKDAY = 8;
+
+    var indexOf;
+
+    if (Array.prototype.indexOf) {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function (o) {
+            // I know
+            var i;
+            for (i = 0; i < this.length; ++i) {
+                if (this[i] === o) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+    }
+
+    function daysInMonth(year, month) {
+        return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+    }
+
+    // FORMATTING
+
+    addFormatToken('M', ['MM', 2], 'Mo', function () {
+        return this.month() + 1;
+    });
+
+    addFormatToken('MMM', 0, 0, function (format) {
+        return this.localeData().monthsShort(this, format);
+    });
+
+    addFormatToken('MMMM', 0, 0, function (format) {
+        return this.localeData().months(this, format);
+    });
+
+    // ALIASES
+
+    addUnitAlias('month', 'M');
+
+    // PRIORITY
+
+    addUnitPriority('month', 8);
+
+    // PARSING
+
+    addRegexToken('M',    match1to2);
+    addRegexToken('MM',   match1to2, match2);
+    addRegexToken('MMM',  function (isStrict, locale) {
+        return locale.monthsShortRegex(isStrict);
+    });
+    addRegexToken('MMMM', function (isStrict, locale) {
+        return locale.monthsRegex(isStrict);
+    });
+
+    addParseToken(['M', 'MM'], function (input, array) {
+        array[MONTH] = toInt(input) - 1;
+    });
+
+    addParseToken(['MMM', 'MMMM'], function (input, array, config, token) {
+        var month = config._locale.monthsParse(input, token, config._strict);
+        // if we didn't find a month name, mark the date as invalid.
+        if (month != null) {
+            array[MONTH] = month;
+        } else {
+            getParsingFlags(config).invalidMonth = input;
+        }
+    });
+
+    // LOCALES
+
+    var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/;
+    var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
+    function localeMonths (m, format) {
+        return isArray(this._months) ? this._months[m.month()] :
+            this._months[(this._months.isFormat || MONTHS_IN_FORMAT).test(format) ? 'format' : 'standalone'][m.month()];
+    }
+
+    var defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_');
+    function localeMonthsShort (m, format) {
+        return isArray(this._monthsShort) ? this._monthsShort[m.month()] :
+            this._monthsShort[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
+    }
+
+    function units_month__handleStrictParse(monthName, format, strict) {
+        var i, ii, mom, llc = monthName.toLocaleLowerCase();
+        if (!this._monthsParse) {
+            // this is not used
+            this._monthsParse = [];
+            this._longMonthsParse = [];
+            this._shortMonthsParse = [];
+            for (i = 0; i < 12; ++i) {
+                mom = create_utc__createUTC([2000, i]);
+                this._shortMonthsParse[i] = this.monthsShort(mom, '').toLocaleLowerCase();
+                this._longMonthsParse[i] = this.months(mom, '').toLocaleLowerCase();
+            }
+        }
+
+        if (strict) {
+            if (format === 'MMM') {
+                ii = indexOf.call(this._shortMonthsParse, llc);
+                return ii !== -1 ? ii : null;
+            } else {
+                ii = indexOf.call(this._longMonthsParse, llc);
+                return ii !== -1 ? ii : null;
+            }
+        } else {
+            if (format === 'MMM') {
+                ii = indexOf.call(this._shortMonthsParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._longMonthsParse, llc);
+                return ii !== -1 ? ii : null;
+            } else {
+                ii = indexOf.call(this._longMonthsParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._shortMonthsParse, llc);
+                return ii !== -1 ? ii : null;
+            }
+        }
+    }
+
+    function localeMonthsParse (monthName, format, strict) {
+        var i, mom, regex;
+
+        if (this._monthsParseExact) {
+            return units_month__handleStrictParse.call(this, monthName, format, strict);
+        }
+
+        if (!this._monthsParse) {
+            this._monthsParse = [];
+            this._longMonthsParse = [];
+            this._shortMonthsParse = [];
+        }
+
+        // TODO: add sorting
+        // Sorting makes sure if one month (or abbr) is a prefix of another
+        // see sorting in computeMonthsParse
+        for (i = 0; i < 12; i++) {
+            // make the regex if we don't have it already
+            mom = create_utc__createUTC([2000, i]);
+            if (strict && !this._longMonthsParse[i]) {
+                this._longMonthsParse[i] = new RegExp('^' + this.months(mom, '').replace('.', '') + '$', 'i');
+                this._shortMonthsParse[i] = new RegExp('^' + this.monthsShort(mom, '').replace('.', '') + '$', 'i');
+            }
+            if (!strict && !this._monthsParse[i]) {
+                regex = '^' + this.months(mom, '') + '|^' + this.monthsShort(mom, '');
+                this._monthsParse[i] = new RegExp(regex.replace('.', ''), 'i');
+            }
+            // test the regex
+            if (strict && format === 'MMMM' && this._longMonthsParse[i].test(monthName)) {
+                return i;
+            } else if (strict && format === 'MMM' && this._shortMonthsParse[i].test(monthName)) {
+                return i;
+            } else if (!strict && this._monthsParse[i].test(monthName)) {
+                return i;
+            }
+        }
+    }
+
+    // MOMENTS
+
+    function setMonth (mom, value) {
+        var dayOfMonth;
+
+        if (!mom.isValid()) {
+            // No op
+            return mom;
+        }
+
+        if (typeof value === 'string') {
+            if (/^\d+$/.test(value)) {
+                value = toInt(value);
+            } else {
+                value = mom.localeData().monthsParse(value);
+                // TODO: Another silent failure?
+                if (typeof value !== 'number') {
+                    return mom;
+                }
+            }
+        }
+
+        dayOfMonth = Math.min(mom.date(), daysInMonth(mom.year(), value));
+        mom._d['set' + (mom._isUTC ? 'UTC' : '') + 'Month'](value, dayOfMonth);
+        return mom;
+    }
+
+    function getSetMonth (value) {
+        if (value != null) {
+            setMonth(this, value);
+            utils_hooks__hooks.updateOffset(this, true);
+            return this;
+        } else {
+            return get_set__get(this, 'Month');
+        }
+    }
+
+    function getDaysInMonth () {
+        return daysInMonth(this.year(), this.month());
+    }
+
+    var defaultMonthsShortRegex = matchWord;
+    function monthsShortRegex (isStrict) {
+        if (this._monthsParseExact) {
+            if (!hasOwnProp(this, '_monthsRegex')) {
+                computeMonthsParse.call(this);
+            }
+            if (isStrict) {
+                return this._monthsShortStrictRegex;
+            } else {
+                return this._monthsShortRegex;
+            }
+        } else {
+            if (!hasOwnProp(this, '_monthsShortRegex')) {
+                this._monthsShortRegex = defaultMonthsShortRegex;
+            }
+            return this._monthsShortStrictRegex && isStrict ?
+                this._monthsShortStrictRegex : this._monthsShortRegex;
+        }
+    }
+
+    var defaultMonthsRegex = matchWord;
+    function monthsRegex (isStrict) {
+        if (this._monthsParseExact) {
+            if (!hasOwnProp(this, '_monthsRegex')) {
+                computeMonthsParse.call(this);
+            }
+            if (isStrict) {
+                return this._monthsStrictRegex;
+            } else {
+                return this._monthsRegex;
+            }
+        } else {
+            if (!hasOwnProp(this, '_monthsRegex')) {
+                this._monthsRegex = defaultMonthsRegex;
+            }
+            return this._monthsStrictRegex && isStrict ?
+                this._monthsStrictRegex : this._monthsRegex;
+        }
+    }
+
+    function computeMonthsParse () {
+        function cmpLenRev(a, b) {
+            return b.length - a.length;
+        }
+
+        var shortPieces = [], longPieces = [], mixedPieces = [],
+            i, mom;
+        for (i = 0; i < 12; i++) {
+            // make the regex if we don't have it already
+            mom = create_utc__createUTC([2000, i]);
+            shortPieces.push(this.monthsShort(mom, ''));
+            longPieces.push(this.months(mom, ''));
+            mixedPieces.push(this.months(mom, ''));
+            mixedPieces.push(this.monthsShort(mom, ''));
+        }
+        // Sorting makes sure if one month (or abbr) is a prefix of another it
+        // will match the longer piece.
+        shortPieces.sort(cmpLenRev);
+        longPieces.sort(cmpLenRev);
+        mixedPieces.sort(cmpLenRev);
+        for (i = 0; i < 12; i++) {
+            shortPieces[i] = regexEscape(shortPieces[i]);
+            longPieces[i] = regexEscape(longPieces[i]);
+        }
+        for (i = 0; i < 24; i++) {
+            mixedPieces[i] = regexEscape(mixedPieces[i]);
+        }
+
+        this._monthsRegex = new RegExp('^(' + mixedPieces.join('|') + ')', 'i');
+        this._monthsShortRegex = this._monthsRegex;
+        this._monthsStrictRegex = new RegExp('^(' + longPieces.join('|') + ')', 'i');
+        this._monthsShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')', 'i');
+    }
+
+    // FORMATTING
+
+    addFormatToken('Y', 0, 0, function () {
+        var y = this.year();
+        return y <= 9999 ? '' + y : '+' + y;
+    });
+
+    addFormatToken(0, ['YY', 2], 0, function () {
+        return this.year() % 100;
+    });
+
+    addFormatToken(0, ['YYYY',   4],       0, 'year');
+    addFormatToken(0, ['YYYYY',  5],       0, 'year');
+    addFormatToken(0, ['YYYYYY', 6, true], 0, 'year');
+
+    // ALIASES
+
+    addUnitAlias('year', 'y');
+
+    // PRIORITIES
+
+    addUnitPriority('year', 1);
+
+    // PARSING
+
+    addRegexToken('Y',      matchSigned);
+    addRegexToken('YY',     match1to2, match2);
+    addRegexToken('YYYY',   match1to4, match4);
+    addRegexToken('YYYYY',  match1to6, match6);
+    addRegexToken('YYYYYY', match1to6, match6);
+
+    addParseToken(['YYYYY', 'YYYYYY'], YEAR);
+    addParseToken('YYYY', function (input, array) {
+        array[YEAR] = input.length === 2 ? utils_hooks__hooks.parseTwoDigitYear(input) : toInt(input);
+    });
+    addParseToken('YY', function (input, array) {
+        array[YEAR] = utils_hooks__hooks.parseTwoDigitYear(input);
+    });
+    addParseToken('Y', function (input, array) {
+        array[YEAR] = parseInt(input, 10);
+    });
+
+    // HELPERS
+
+    function daysInYear(year) {
+        return isLeapYear(year) ? 366 : 365;
+    }
+
+    function isLeapYear(year) {
+        return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+    }
+
+    // HOOKS
+
+    utils_hooks__hooks.parseTwoDigitYear = function (input) {
+        return toInt(input) + (toInt(input) > 68 ? 1900 : 2000);
+    };
+
+    // MOMENTS
+
+    var getSetYear = makeGetSet('FullYear', true);
+
+    function getIsLeapYear () {
+        return isLeapYear(this.year());
+    }
+
+    function createDate (y, m, d, h, M, s, ms) {
+        //can't just apply() to create a date:
+        //http://stackoverflow.com/questions/181348/instantiating-a-javascript-object-by-calling-prototype-constructor-apply
+        var date = new Date(y, m, d, h, M, s, ms);
+
+        //the date constructor remaps years 0-99 to 1900-1999
+        if (y < 100 && y >= 0 && isFinite(date.getFullYear())) {
+            date.setFullYear(y);
+        }
+        return date;
+    }
+
+    function createUTCDate (y) {
+        var date = new Date(Date.UTC.apply(null, arguments));
+
+        //the Date.UTC function remaps years 0-99 to 1900-1999
+        if (y < 100 && y >= 0 && isFinite(date.getUTCFullYear())) {
+            date.setUTCFullYear(y);
+        }
+        return date;
+    }
+
+    // start-of-first-week - start-of-year
+    function firstWeekOffset(year, dow, doy) {
+        var // first-week day -- which january is always in the first week (4 for iso, 1 for other)
+            fwd = 7 + dow - doy,
+            // first-week day local weekday -- which local weekday is fwd
+            fwdlw = (7 + createUTCDate(year, 0, fwd).getUTCDay() - dow) % 7;
+
+        return -fwdlw + fwd - 1;
+    }
+
+    //http://en.wikipedia.org/wiki/ISO_week_date#Calculating_a_date_given_the_year.2C_week_number_and_weekday
+    function dayOfYearFromWeeks(year, week, weekday, dow, doy) {
+        var localWeekday = (7 + weekday - dow) % 7,
+            weekOffset = firstWeekOffset(year, dow, doy),
+            dayOfYear = 1 + 7 * (week - 1) + localWeekday + weekOffset,
+            resYear, resDayOfYear;
+
+        if (dayOfYear <= 0) {
+            resYear = year - 1;
+            resDayOfYear = daysInYear(resYear) + dayOfYear;
+        } else if (dayOfYear > daysInYear(year)) {
+            resYear = year + 1;
+            resDayOfYear = dayOfYear - daysInYear(year);
+        } else {
+            resYear = year;
+            resDayOfYear = dayOfYear;
+        }
+
+        return {
+            year: resYear,
+            dayOfYear: resDayOfYear
+        };
+    }
+
+    function weekOfYear(mom, dow, doy) {
+        var weekOffset = firstWeekOffset(mom.year(), dow, doy),
+            week = Math.floor((mom.dayOfYear() - weekOffset - 1) / 7) + 1,
+            resWeek, resYear;
+
+        if (week < 1) {
+            resYear = mom.year() - 1;
+            resWeek = week + weeksInYear(resYear, dow, doy);
+        } else if (week > weeksInYear(mom.year(), dow, doy)) {
+            resWeek = week - weeksInYear(mom.year(), dow, doy);
+            resYear = mom.year() + 1;
+        } else {
+            resYear = mom.year();
+            resWeek = week;
+        }
+
+        return {
+            week: resWeek,
+            year: resYear
+        };
+    }
+
+    function weeksInYear(year, dow, doy) {
+        var weekOffset = firstWeekOffset(year, dow, doy),
+            weekOffsetNext = firstWeekOffset(year + 1, dow, doy);
+        return (daysInYear(year) - weekOffset + weekOffsetNext) / 7;
+    }
+
+    // FORMATTING
+
+    addFormatToken('w', ['ww', 2], 'wo', 'week');
+    addFormatToken('W', ['WW', 2], 'Wo', 'isoWeek');
+
+    // ALIASES
+
+    addUnitAlias('week', 'w');
+    addUnitAlias('isoWeek', 'W');
+
+    // PRIORITIES
+
+    addUnitPriority('week', 5);
+    addUnitPriority('isoWeek', 5);
+
+    // PARSING
+
+    addRegexToken('w',  match1to2);
+    addRegexToken('ww', match1to2, match2);
+    addRegexToken('W',  match1to2);
+    addRegexToken('WW', match1to2, match2);
+
+    addWeekParseToken(['w', 'ww', 'W', 'WW'], function (input, week, config, token) {
+        week[token.substr(0, 1)] = toInt(input);
+    });
+
+    // HELPERS
+
+    // LOCALES
+
+    function localeWeek (mom) {
+        return weekOfYear(mom, this._week.dow, this._week.doy).week;
+    }
+
+    var defaultLocaleWeek = {
+        dow : 0, // Sunday is the first day of the week.
+        doy : 6  // The week that contains Jan 1st is the first week of the year.
+    };
+
+    function localeFirstDayOfWeek () {
+        return this._week.dow;
+    }
+
+    function localeFirstDayOfYear () {
+        return this._week.doy;
+    }
+
+    // MOMENTS
+
+    function getSetWeek (input) {
+        var week = this.localeData().week(this);
+        return input == null ? week : this.add((input - week) * 7, 'd');
+    }
+
+    function getSetISOWeek (input) {
+        var week = weekOfYear(this, 1, 4).week;
+        return input == null ? week : this.add((input - week) * 7, 'd');
+    }
+
+    // FORMATTING
+
+    addFormatToken('d', 0, 'do', 'day');
+
+    addFormatToken('dd', 0, 0, function (format) {
+        return this.localeData().weekdaysMin(this, format);
+    });
+
+    addFormatToken('ddd', 0, 0, function (format) {
+        return this.localeData().weekdaysShort(this, format);
+    });
+
+    addFormatToken('dddd', 0, 0, function (format) {
+        return this.localeData().weekdays(this, format);
+    });
+
+    addFormatToken('e', 0, 0, 'weekday');
+    addFormatToken('E', 0, 0, 'isoWeekday');
+
+    // ALIASES
+
+    addUnitAlias('day', 'd');
+    addUnitAlias('weekday', 'e');
+    addUnitAlias('isoWeekday', 'E');
+
+    // PRIORITY
+    addUnitPriority('day', 11);
+    addUnitPriority('weekday', 11);
+    addUnitPriority('isoWeekday', 11);
+
+    // PARSING
+
+    addRegexToken('d',    match1to2);
+    addRegexToken('e',    match1to2);
+    addRegexToken('E',    match1to2);
+    addRegexToken('dd',   function (isStrict, locale) {
+        return locale.weekdaysMinRegex(isStrict);
+    });
+    addRegexToken('ddd',   function (isStrict, locale) {
+        return locale.weekdaysShortRegex(isStrict);
+    });
+    addRegexToken('dddd',   function (isStrict, locale) {
+        return locale.weekdaysRegex(isStrict);
+    });
+
+    addWeekParseToken(['dd', 'ddd', 'dddd'], function (input, week, config, token) {
+        var weekday = config._locale.weekdaysParse(input, token, config._strict);
+        // if we didn't get a weekday name, mark the date as invalid
+        if (weekday != null) {
+            week.d = weekday;
+        } else {
+            getParsingFlags(config).invalidWeekday = input;
+        }
+    });
+
+    addWeekParseToken(['d', 'e', 'E'], function (input, week, config, token) {
+        week[token] = toInt(input);
+    });
+
+    // HELPERS
+
+    function parseWeekday(input, locale) {
+        if (typeof input !== 'string') {
+            return input;
+        }
+
+        if (!isNaN(input)) {
+            return parseInt(input, 10);
+        }
+
+        input = locale.weekdaysParse(input);
+        if (typeof input === 'number') {
+            return input;
+        }
+
+        return null;
+    }
+
+    function parseIsoWeekday(input, locale) {
+        if (typeof input === 'string') {
+            return locale.weekdaysParse(input) % 7 || 7;
+        }
+        return isNaN(input) ? null : input;
+    }
+
+    // LOCALES
+
+    var defaultLocaleWeekdays = 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_');
+    function localeWeekdays (m, format) {
+        return isArray(this._weekdays) ? this._weekdays[m.day()] :
+            this._weekdays[this._weekdays.isFormat.test(format) ? 'format' : 'standalone'][m.day()];
+    }
+
+    var defaultLocaleWeekdaysShort = 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_');
+    function localeWeekdaysShort (m) {
+        return this._weekdaysShort[m.day()];
+    }
+
+    var defaultLocaleWeekdaysMin = 'Su_Mo_Tu_We_Th_Fr_Sa'.split('_');
+    function localeWeekdaysMin (m) {
+        return this._weekdaysMin[m.day()];
+    }
+
+    function day_of_week__handleStrictParse(weekdayName, format, strict) {
+        var i, ii, mom, llc = weekdayName.toLocaleLowerCase();
+        if (!this._weekdaysParse) {
+            this._weekdaysParse = [];
+            this._shortWeekdaysParse = [];
+            this._minWeekdaysParse = [];
+
+            for (i = 0; i < 7; ++i) {
+                mom = create_utc__createUTC([2000, 1]).day(i);
+                this._minWeekdaysParse[i] = this.weekdaysMin(mom, '').toLocaleLowerCase();
+                this._shortWeekdaysParse[i] = this.weekdaysShort(mom, '').toLocaleLowerCase();
+                this._weekdaysParse[i] = this.weekdays(mom, '').toLocaleLowerCase();
+            }
+        }
+
+        if (strict) {
+            if (format === 'dddd') {
+                ii = indexOf.call(this._weekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            } else if (format === 'ddd') {
+                ii = indexOf.call(this._shortWeekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            } else {
+                ii = indexOf.call(this._minWeekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            }
+        } else {
+            if (format === 'dddd') {
+                ii = indexOf.call(this._weekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._shortWeekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._minWeekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            } else if (format === 'ddd') {
+                ii = indexOf.call(this._shortWeekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._weekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._minWeekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            } else {
+                ii = indexOf.call(this._minWeekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._weekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._shortWeekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            }
+        }
+    }
+
+    function localeWeekdaysParse (weekdayName, format, strict) {
+        var i, mom, regex;
+
+        if (this._weekdaysParseExact) {
+            return day_of_week__handleStrictParse.call(this, weekdayName, format, strict);
+        }
+
+        if (!this._weekdaysParse) {
+            this._weekdaysParse = [];
+            this._minWeekdaysParse = [];
+            this._shortWeekdaysParse = [];
+            this._fullWeekdaysParse = [];
+        }
+
+        for (i = 0; i < 7; i++) {
+            // make the regex if we don't have it already
+
+            mom = create_utc__createUTC([2000, 1]).day(i);
+            if (strict && !this._fullWeekdaysParse[i]) {
+                this._fullWeekdaysParse[i] = new RegExp('^' + this.weekdays(mom, '').replace('.', '\.?') + '$', 'i');
+                this._shortWeekdaysParse[i] = new RegExp('^' + this.weekdaysShort(mom, '').replace('.', '\.?') + '$', 'i');
+                this._minWeekdaysParse[i] = new RegExp('^' + this.weekdaysMin(mom, '').replace('.', '\.?') + '$', 'i');
+            }
+            if (!this._weekdaysParse[i]) {
+                regex = '^' + this.weekdays(mom, '') + '|^' + this.weekdaysShort(mom, '') + '|^' + this.weekdaysMin(mom, '');
+                this._weekdaysParse[i] = new RegExp(regex.replace('.', ''), 'i');
+            }
+            // test the regex
+            if (strict && format === 'dddd' && this._fullWeekdaysParse[i].test(weekdayName)) {
+                return i;
+            } else if (strict && format === 'ddd' && this._shortWeekdaysParse[i].test(weekdayName)) {
+                return i;
+            } else if (strict && format === 'dd' && this._minWeekdaysParse[i].test(weekdayName)) {
+                return i;
+            } else if (!strict && this._weekdaysParse[i].test(weekdayName)) {
+                return i;
+            }
+        }
+    }
+
+    // MOMENTS
+
+    function getSetDayOfWeek (input) {
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
+        var day = this._isUTC ? this._d.getUTCDay() : this._d.getDay();
+        if (input != null) {
+            input = parseWeekday(input, this.localeData());
+            return this.add(input - day, 'd');
+        } else {
+            return day;
+        }
+    }
+
+    function getSetLocaleDayOfWeek (input) {
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
+        var weekday = (this.day() + 7 - this.localeData()._week.dow) % 7;
+        return input == null ? weekday : this.add(input - weekday, 'd');
+    }
+
+    function getSetISODayOfWeek (input) {
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
+
+        // behaves the same as moment#day except
+        // as a getter, returns 7 instead of 0 (1-7 range instead of 0-6)
+        // as a setter, sunday should belong to the previous week.
+
+        if (input != null) {
+            var weekday = parseIsoWeekday(input, this.localeData());
+            return this.day(this.day() % 7 ? weekday : weekday - 7);
+        } else {
+            return this.day() || 7;
+        }
+    }
+
+    var defaultWeekdaysRegex = matchWord;
+    function weekdaysRegex (isStrict) {
+        if (this._weekdaysParseExact) {
+            if (!hasOwnProp(this, '_weekdaysRegex')) {
+                computeWeekdaysParse.call(this);
+            }
+            if (isStrict) {
+                return this._weekdaysStrictRegex;
+            } else {
+                return this._weekdaysRegex;
+            }
+        } else {
+            if (!hasOwnProp(this, '_weekdaysRegex')) {
+                this._weekdaysRegex = defaultWeekdaysRegex;
+            }
+            return this._weekdaysStrictRegex && isStrict ?
+                this._weekdaysStrictRegex : this._weekdaysRegex;
+        }
+    }
+
+    var defaultWeekdaysShortRegex = matchWord;
+    function weekdaysShortRegex (isStrict) {
+        if (this._weekdaysParseExact) {
+            if (!hasOwnProp(this, '_weekdaysRegex')) {
+                computeWeekdaysParse.call(this);
+            }
+            if (isStrict) {
+                return this._weekdaysShortStrictRegex;
+            } else {
+                return this._weekdaysShortRegex;
+            }
+        } else {
+            if (!hasOwnProp(this, '_weekdaysShortRegex')) {
+                this._weekdaysShortRegex = defaultWeekdaysShortRegex;
+            }
+            return this._weekdaysShortStrictRegex && isStrict ?
+                this._weekdaysShortStrictRegex : this._weekdaysShortRegex;
+        }
+    }
+
+    var defaultWeekdaysMinRegex = matchWord;
+    function weekdaysMinRegex (isStrict) {
+        if (this._weekdaysParseExact) {
+            if (!hasOwnProp(this, '_weekdaysRegex')) {
+                computeWeekdaysParse.call(this);
+            }
+            if (isStrict) {
+                return this._weekdaysMinStrictRegex;
+            } else {
+                return this._weekdaysMinRegex;
+            }
+        } else {
+            if (!hasOwnProp(this, '_weekdaysMinRegex')) {
+                this._weekdaysMinRegex = defaultWeekdaysMinRegex;
+            }
+            return this._weekdaysMinStrictRegex && isStrict ?
+                this._weekdaysMinStrictRegex : this._weekdaysMinRegex;
+        }
+    }
+
+
+    function computeWeekdaysParse () {
+        function cmpLenRev(a, b) {
+            return b.length - a.length;
+        }
+
+        var minPieces = [], shortPieces = [], longPieces = [], mixedPieces = [],
+            i, mom, minp, shortp, longp;
+        for (i = 0; i < 7; i++) {
+            // make the regex if we don't have it already
+            mom = create_utc__createUTC([2000, 1]).day(i);
+            minp = this.weekdaysMin(mom, '');
+            shortp = this.weekdaysShort(mom, '');
+            longp = this.weekdays(mom, '');
+            minPieces.push(minp);
+            shortPieces.push(shortp);
+            longPieces.push(longp);
+            mixedPieces.push(minp);
+            mixedPieces.push(shortp);
+            mixedPieces.push(longp);
+        }
+        // Sorting makes sure if one weekday (or abbr) is a prefix of another it
+        // will match the longer piece.
+        minPieces.sort(cmpLenRev);
+        shortPieces.sort(cmpLenRev);
+        longPieces.sort(cmpLenRev);
+        mixedPieces.sort(cmpLenRev);
+        for (i = 0; i < 7; i++) {
+            shortPieces[i] = regexEscape(shortPieces[i]);
+            longPieces[i] = regexEscape(longPieces[i]);
+            mixedPieces[i] = regexEscape(mixedPieces[i]);
+        }
+
+        this._weekdaysRegex = new RegExp('^(' + mixedPieces.join('|') + ')', 'i');
+        this._weekdaysShortRegex = this._weekdaysRegex;
+        this._weekdaysMinRegex = this._weekdaysRegex;
+
+        this._weekdaysStrictRegex = new RegExp('^(' + longPieces.join('|') + ')', 'i');
+        this._weekdaysShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')', 'i');
+        this._weekdaysMinStrictRegex = new RegExp('^(' + minPieces.join('|') + ')', 'i');
+    }
+
+    // FORMATTING
+
+    function hFormat() {
+        return this.hours() % 12 || 12;
+    }
+
+    function kFormat() {
+        return this.hours() || 24;
+    }
+
+    addFormatToken('H', ['HH', 2], 0, 'hour');
+    addFormatToken('h', ['hh', 2], 0, hFormat);
+    addFormatToken('k', ['kk', 2], 0, kFormat);
+
+    addFormatToken('hmm', 0, 0, function () {
+        return '' + hFormat.apply(this) + zeroFill(this.minutes(), 2);
+    });
+
+    addFormatToken('hmmss', 0, 0, function () {
+        return '' + hFormat.apply(this) + zeroFill(this.minutes(), 2) +
+            zeroFill(this.seconds(), 2);
+    });
+
+    addFormatToken('Hmm', 0, 0, function () {
+        return '' + this.hours() + zeroFill(this.minutes(), 2);
+    });
+
+    addFormatToken('Hmmss', 0, 0, function () {
+        return '' + this.hours() + zeroFill(this.minutes(), 2) +
+            zeroFill(this.seconds(), 2);
+    });
+
+    function meridiem (token, lowercase) {
+        addFormatToken(token, 0, 0, function () {
+            return this.localeData().meridiem(this.hours(), this.minutes(), lowercase);
+        });
+    }
+
+    meridiem('a', true);
+    meridiem('A', false);
+
+    // ALIASES
+
+    addUnitAlias('hour', 'h');
+
+    // PRIORITY
+    addUnitPriority('hour', 13);
+
+    // PARSING
+
+    function matchMeridiem (isStrict, locale) {
+        return locale._meridiemParse;
+    }
+
+    addRegexToken('a',  matchMeridiem);
+    addRegexToken('A',  matchMeridiem);
+    addRegexToken('H',  match1to2);
+    addRegexToken('h',  match1to2);
+    addRegexToken('HH', match1to2, match2);
+    addRegexToken('hh', match1to2, match2);
+
+    addRegexToken('hmm', match3to4);
+    addRegexToken('hmmss', match5to6);
+    addRegexToken('Hmm', match3to4);
+    addRegexToken('Hmmss', match5to6);
+
+    addParseToken(['H', 'HH'], HOUR);
+    addParseToken(['a', 'A'], function (input, array, config) {
+        config._isPm = config._locale.isPM(input);
+        config._meridiem = input;
+    });
+    addParseToken(['h', 'hh'], function (input, array, config) {
+        array[HOUR] = toInt(input);
+        getParsingFlags(config).bigHour = true;
+    });
+    addParseToken('hmm', function (input, array, config) {
+        var pos = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos));
+        array[MINUTE] = toInt(input.substr(pos));
+        getParsingFlags(config).bigHour = true;
+    });
+    addParseToken('hmmss', function (input, array, config) {
+        var pos1 = input.length - 4;
+        var pos2 = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos1));
+        array[MINUTE] = toInt(input.substr(pos1, 2));
+        array[SECOND] = toInt(input.substr(pos2));
+        getParsingFlags(config).bigHour = true;
+    });
+    addParseToken('Hmm', function (input, array, config) {
+        var pos = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos));
+        array[MINUTE] = toInt(input.substr(pos));
+    });
+    addParseToken('Hmmss', function (input, array, config) {
+        var pos1 = input.length - 4;
+        var pos2 = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos1));
+        array[MINUTE] = toInt(input.substr(pos1, 2));
+        array[SECOND] = toInt(input.substr(pos2));
+    });
+
+    // LOCALES
+
+    function localeIsPM (input) {
+        // IE8 Quirks Mode & IE7 Standards Mode do not allow accessing strings like arrays
+        // Using charAt should be more compatible.
+        return ((input + '').toLowerCase().charAt(0) === 'p');
+    }
+
+    var defaultLocaleMeridiemParse = /[ap]\.?m?\.?/i;
+    function localeMeridiem (hours, minutes, isLower) {
+        if (hours > 11) {
+            return isLower ? 'pm' : 'PM';
+        } else {
+            return isLower ? 'am' : 'AM';
+        }
+    }
+
+
+    // MOMENTS
+
+    // Setting the hour should keep the time, because the user explicitly
+    // specified which hour he wants. So trying to maintain the same hour (in
+    // a new timezone) makes sense. Adding/subtracting hours does not follow
+    // this rule.
+    var getSetHour = makeGetSet('Hours', true);
+
+    var baseConfig = {
+        calendar: defaultCalendar,
+        longDateFormat: defaultLongDateFormat,
+        invalidDate: defaultInvalidDate,
+        ordinal: defaultOrdinal,
+        ordinalParse: defaultOrdinalParse,
+        relativeTime: defaultRelativeTime,
+
+        months: defaultLocaleMonths,
+        monthsShort: defaultLocaleMonthsShort,
+
+        week: defaultLocaleWeek,
+
+        weekdays: defaultLocaleWeekdays,
+        weekdaysMin: defaultLocaleWeekdaysMin,
+        weekdaysShort: defaultLocaleWeekdaysShort,
+
+        meridiemParse: defaultLocaleMeridiemParse
+    };
+
+    // internal storage for locale config files
+    var locales = {};
+    var globalLocale;
+
+    function normalizeLocale(key) {
+        return key ? key.toLowerCase().replace('_', '-') : key;
+    }
+
+    // pick the locale from the array
+    // try ['en-au', 'en-gb'] as 'en-au', 'en-gb', 'en', as in move through the list trying each
+    // substring from most specific to least, but move to the next array item if it's a more specific variant than the current root
+    function chooseLocale(names) {
+        var i = 0, j, next, locale, split;
+
+        while (i < names.length) {
+            split = normalizeLocale(names[i]).split('-');
+            j = split.length;
+            next = normalizeLocale(names[i + 1]);
+            next = next ? next.split('-') : null;
+            while (j > 0) {
+                locale = loadLocale(split.slice(0, j).join('-'));
+                if (locale) {
+                    return locale;
+                }
+                if (next && next.length >= j && compareArrays(split, next, true) >= j - 1) {
+                    //the next array item is better than a shallower substring of this one
+                    break;
+                }
+                j--;
+            }
+            i++;
+        }
+        return null;
+    }
+
+    function loadLocale(name) {
+        var oldLocale = null;
+        // TODO: Find a better way to register and load all the locales in Node
+        if (!locales[name] && (typeof module !== 'undefined') &&
+                module && module.exports) {
+            try {
+                oldLocale = globalLocale._abbr;
+                require('./locale/' + name);
+                // because defineLocale currently also sets the global locale, we
+                // want to undo that for lazy loaded locales
+                locale_locales__getSetGlobalLocale(oldLocale);
+            } catch (e) { }
+        }
+        return locales[name];
+    }
+
+    // This function will load locale and then set the global locale.  If
+    // no arguments are passed in, it will simply return the current global
+    // locale key.
+    function locale_locales__getSetGlobalLocale (key, values) {
+        var data;
+        if (key) {
+            if (isUndefined(values)) {
+                data = locale_locales__getLocale(key);
+            }
+            else {
+                data = defineLocale(key, values);
+            }
+
+            if (data) {
+                // moment.duration._locale = moment._locale = data;
+                globalLocale = data;
+            }
+        }
+
+        return globalLocale._abbr;
+    }
+
+    function defineLocale (name, config) {
+        if (config !== null) {
+            var parentConfig = baseConfig;
+            config.abbr = name;
+            if (locales[name] != null) {
+                deprecateSimple('defineLocaleOverride',
+                        'use moment.updateLocale(localeName, config) to change ' +
+                        'an existing locale. moment.defineLocale(localeName, ' +
+                        'config) should only be used for creating a new locale ' +
+                        'See http://momentjs.com/guides/#/warnings/define-locale/ for more info.');
+                parentConfig = locales[name]._config;
+            } else if (config.parentLocale != null) {
+                if (locales[config.parentLocale] != null) {
+                    parentConfig = locales[config.parentLocale]._config;
+                } else {
+                    // treat as if there is no base config
+                    deprecateSimple('parentLocaleUndefined',
+                            'specified parentLocale is not defined yet. See http://momentjs.com/guides/#/warnings/parent-locale/');
+                }
+            }
+            locales[name] = new Locale(mergeConfigs(parentConfig, config));
+
+            // backwards compat for now: also set the locale
+            locale_locales__getSetGlobalLocale(name);
+
+            return locales[name];
+        } else {
+            // useful for testing
+            delete locales[name];
+            return null;
+        }
+    }
+
+    function updateLocale(name, config) {
+        if (config != null) {
+            var locale, parentConfig = baseConfig;
+            // MERGE
+            if (locales[name] != null) {
+                parentConfig = locales[name]._config;
+            }
+            config = mergeConfigs(parentConfig, config);
+            locale = new Locale(config);
+            locale.parentLocale = locales[name];
+            locales[name] = locale;
+
+            // backwards compat for now: also set the locale
+            locale_locales__getSetGlobalLocale(name);
+        } else {
+            // pass null for config to unupdate, useful for tests
+            if (locales[name] != null) {
+                if (locales[name].parentLocale != null) {
+                    locales[name] = locales[name].parentLocale;
+                } else if (locales[name] != null) {
+                    delete locales[name];
+                }
+            }
+        }
+        return locales[name];
+    }
+
+    // returns locale data
+    function locale_locales__getLocale (key) {
+        var locale;
+
+        if (key && key._locale && key._locale._abbr) {
+            key = key._locale._abbr;
+        }
+
+        if (!key) {
+            return globalLocale;
+        }
+
+        if (!isArray(key)) {
+            //short-circuit everything else
+            locale = loadLocale(key);
+            if (locale) {
+                return locale;
+            }
+            key = [key];
+        }
+
+        return chooseLocale(key);
+    }
+
+    function locale_locales__listLocales() {
+        return keys(locales);
+    }
+
+    function checkOverflow (m) {
+        var overflow;
+        var a = m._a;
+
+        if (a && getParsingFlags(m).overflow === -2) {
+            overflow =
+                a[MONTH]       < 0 || a[MONTH]       > 11  ? MONTH :
+                a[DATE]        < 1 || a[DATE]        > daysInMonth(a[YEAR], a[MONTH]) ? DATE :
+                a[HOUR]        < 0 || a[HOUR]        > 24 || (a[HOUR] === 24 && (a[MINUTE] !== 0 || a[SECOND] !== 0 || a[MILLISECOND] !== 0)) ? HOUR :
+                a[MINUTE]      < 0 || a[MINUTE]      > 59  ? MINUTE :
+                a[SECOND]      < 0 || a[SECOND]      > 59  ? SECOND :
+                a[MILLISECOND] < 0 || a[MILLISECOND] > 999 ? MILLISECOND :
+                -1;
+
+            if (getParsingFlags(m)._overflowDayOfYear && (overflow < YEAR || overflow > DATE)) {
+                overflow = DATE;
+            }
+            if (getParsingFlags(m)._overflowWeeks && overflow === -1) {
+                overflow = WEEK;
+            }
+            if (getParsingFlags(m)._overflowWeekday && overflow === -1) {
+                overflow = WEEKDAY;
+            }
+
+            getParsingFlags(m).overflow = overflow;
+        }
+
+        return m;
+    }
+
+    // iso 8601 regex
+    // 0000-00-00 0000-W00 or 0000-W00-0 + T + 00 or 00:00 or 00:00:00 or 00:00:00.000 + +00:00 or +0000 or +00)
+    var extendedIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})-(?:\d\d-\d\d|W\d\d-\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?::\d\d(?::\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?/;
+    var basicIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})(?:\d\d\d\d|W\d\d\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?:\d\d(?:\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?/;
+
+    var tzRegex = /Z|[+-]\d\d(?::?\d\d)?/;
+
+    var isoDates = [
+        ['YYYYYY-MM-DD', /[+-]\d{6}-\d\d-\d\d/],
+        ['YYYY-MM-DD', /\d{4}-\d\d-\d\d/],
+        ['GGGG-[W]WW-E', /\d{4}-W\d\d-\d/],
+        ['GGGG-[W]WW', /\d{4}-W\d\d/, false],
+        ['YYYY-DDD', /\d{4}-\d{3}/],
+        ['YYYY-MM', /\d{4}-\d\d/, false],
+        ['YYYYYYMMDD', /[+-]\d{10}/],
+        ['YYYYMMDD', /\d{8}/],
+        // YYYYMM is NOT allowed by the standard
+        ['GGGG[W]WWE', /\d{4}W\d{3}/],
+        ['GGGG[W]WW', /\d{4}W\d{2}/, false],
+        ['YYYYDDD', /\d{7}/]
+    ];
+
+    // iso time formats and regexes
+    var isoTimes = [
+        ['HH:mm:ss.SSSS', /\d\d:\d\d:\d\d\.\d+/],
+        ['HH:mm:ss,SSSS', /\d\d:\d\d:\d\d,\d+/],
+        ['HH:mm:ss', /\d\d:\d\d:\d\d/],
+        ['HH:mm', /\d\d:\d\d/],
+        ['HHmmss.SSSS', /\d\d\d\d\d\d\.\d+/],
+        ['HHmmss,SSSS', /\d\d\d\d\d\d,\d+/],
+        ['HHmmss', /\d\d\d\d\d\d/],
+        ['HHmm', /\d\d\d\d/],
+        ['HH', /\d\d/]
+    ];
+
+    var aspNetJsonRegex = /^\/?Date\((\-?\d+)/i;
+
+    // date from iso format
+    function configFromISO(config) {
+        var i, l,
+            string = config._i,
+            match = extendedIsoRegex.exec(string) || basicIsoRegex.exec(string),
+            allowTime, dateFormat, timeFormat, tzFormat;
+
+        if (match) {
+            getParsingFlags(config).iso = true;
+
+            for (i = 0, l = isoDates.length; i < l; i++) {
+                if (isoDates[i][1].exec(match[1])) {
+                    dateFormat = isoDates[i][0];
+                    allowTime = isoDates[i][2] !== false;
+                    break;
+                }
+            }
+            if (dateFormat == null) {
+                config._isValid = false;
+                return;
+            }
+            if (match[3]) {
+                for (i = 0, l = isoTimes.length; i < l; i++) {
+                    if (isoTimes[i][1].exec(match[3])) {
+                        // match[2] should be 'T' or space
+                        timeFormat = (match[2] || ' ') + isoTimes[i][0];
+                        break;
+                    }
+                }
+                if (timeFormat == null) {
+                    config._isValid = false;
+                    return;
+                }
+            }
+            if (!allowTime && timeFormat != null) {
+                config._isValid = false;
+                return;
+            }
+            if (match[4]) {
+                if (tzRegex.exec(match[4])) {
+                    tzFormat = 'Z';
+                } else {
+                    config._isValid = false;
+                    return;
+                }
+            }
+            config._f = dateFormat + (timeFormat || '') + (tzFormat || '');
+            configFromStringAndFormat(config);
+        } else {
+            config._isValid = false;
+        }
+    }
+
+    // date from iso format or fallback
+    function configFromString(config) {
+        var matched = aspNetJsonRegex.exec(config._i);
+
+        if (matched !== null) {
+            config._d = new Date(+matched[1]);
+            return;
+        }
+
+        configFromISO(config);
+        if (config._isValid === false) {
+            delete config._isValid;
+            utils_hooks__hooks.createFromInputFallback(config);
+        }
+    }
+
+    utils_hooks__hooks.createFromInputFallback = deprecate(
+        'moment construction falls back to js Date. This is ' +
+        'discouraged and will be removed in upcoming major ' +
+        'release. Please refer to ' +
+        'http://momentjs.com/guides/#/warnings/js-date/ for more info.',
+        function (config) {
+            config._d = new Date(config._i + (config._useUTC ? ' UTC' : ''));
+        }
+    );
+
+    // Pick the first defined of two or three arguments.
+    function defaults(a, b, c) {
+        if (a != null) {
+            return a;
+        }
+        if (b != null) {
+            return b;
+        }
+        return c;
+    }
+
+    function currentDateArray(config) {
+        // hooks is actually the exported moment object
+        var nowValue = new Date(utils_hooks__hooks.now());
+        if (config._useUTC) {
+            return [nowValue.getUTCFullYear(), nowValue.getUTCMonth(), nowValue.getUTCDate()];
+        }
+        return [nowValue.getFullYear(), nowValue.getMonth(), nowValue.getDate()];
+    }
+
+    // convert an array to a date.
+    // the array should mirror the parameters below
+    // note: all values past the year are optional and will default to the lowest possible value.
+    // [year, month, day , hour, minute, second, millisecond]
+    function configFromArray (config) {
+        var i, date, input = [], currentDate, yearToUse;
+
+        if (config._d) {
+            return;
+        }
+
+        currentDate = currentDateArray(config);
+
+        //compute day of the year from weeks and weekdays
+        if (config._w && config._a[DATE] == null && config._a[MONTH] == null) {
+            dayOfYearFromWeekInfo(config);
+        }
+
+        //if the day of the year is set, figure out what it is
+        if (config._dayOfYear) {
+            yearToUse = defaults(config._a[YEAR], currentDate[YEAR]);
+
+            if (config._dayOfYear > daysInYear(yearToUse)) {
+                getParsingFlags(config)._overflowDayOfYear = true;
+            }
+
+            date = createUTCDate(yearToUse, 0, config._dayOfYear);
+            config._a[MONTH] = date.getUTCMonth();
+            config._a[DATE] = date.getUTCDate();
+        }
+
+        // Default to current date.
+        // * if no year, month, day of month are given, default to today
+        // * if day of month is given, default month and year
+        // * if month is given, default only year
+        // * if year is given, don't default anything
+        for (i = 0; i < 3 && config._a[i] == null; ++i) {
+            config._a[i] = input[i] = currentDate[i];
+        }
+
+        // Zero out whatever was not defaulted, including time
+        for (; i < 7; i++) {
+            config._a[i] = input[i] = (config._a[i] == null) ? (i === 2 ? 1 : 0) : config._a[i];
+        }
+
+        // Check for 24:00:00.000
+        if (config._a[HOUR] === 24 &&
+                config._a[MINUTE] === 0 &&
+                config._a[SECOND] === 0 &&
+                config._a[MILLISECOND] === 0) {
+            config._nextDay = true;
+            config._a[HOUR] = 0;
+        }
+
+        config._d = (config._useUTC ? createUTCDate : createDate).apply(null, input);
+        // Apply timezone offset from input. The actual utcOffset can be changed
+        // with parseZone.
+        if (config._tzm != null) {
+            config._d.setUTCMinutes(config._d.getUTCMinutes() - config._tzm);
+        }
+
+        if (config._nextDay) {
+            config._a[HOUR] = 24;
+        }
+    }
+
+    function dayOfYearFromWeekInfo(config) {
+        var w, weekYear, week, weekday, dow, doy, temp, weekdayOverflow;
+
+        w = config._w;
+        if (w.GG != null || w.W != null || w.E != null) {
+            dow = 1;
+            doy = 4;
+
+            // TODO: We need to take the current isoWeekYear, but that depends on
+            // how we interpret now (local, utc, fixed offset). So create
+            // a now version of current config (take local/utc/offset flags, and
+            // create now).
+            weekYear = defaults(w.GG, config._a[YEAR], weekOfYear(local__createLocal(), 1, 4).year);
+            week = defaults(w.W, 1);
+            weekday = defaults(w.E, 1);
+            if (weekday < 1 || weekday > 7) {
+                weekdayOverflow = true;
+            }
+        } else {
+            dow = config._locale._week.dow;
+            doy = config._locale._week.doy;
+
+            weekYear = defaults(w.gg, config._a[YEAR], weekOfYear(local__createLocal(), dow, doy).year);
+            week = defaults(w.w, 1);
+
+            if (w.d != null) {
+                // weekday -- low day numbers are considered next week
+                weekday = w.d;
+                if (weekday < 0 || weekday > 6) {
+                    weekdayOverflow = true;
+                }
+            } else if (w.e != null) {
+                // local weekday -- counting starts from begining of week
+                weekday = w.e + dow;
+                if (w.e < 0 || w.e > 6) {
+                    weekdayOverflow = true;
+                }
+            } else {
+                // default to begining of week
+                weekday = dow;
+            }
+        }
+        if (week < 1 || week > weeksInYear(weekYear, dow, doy)) {
+            getParsingFlags(config)._overflowWeeks = true;
+        } else if (weekdayOverflow != null) {
+            getParsingFlags(config)._overflowWeekday = true;
+        } else {
+            temp = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy);
+            config._a[YEAR] = temp.year;
+            config._dayOfYear = temp.dayOfYear;
+        }
+    }
+
+    // constant that refers to the ISO standard
+    utils_hooks__hooks.ISO_8601 = function () {};
+
+    // date from string and format string
+    function configFromStringAndFormat(config) {
+        // TODO: Move this to another part of the creation flow to prevent circular deps
+        if (config._f === utils_hooks__hooks.ISO_8601) {
+            configFromISO(config);
+            return;
+        }
+
+        config._a = [];
+        getParsingFlags(config).empty = true;
+
+        // This array is used to make a Date, either with `new Date` or `Date.UTC`
+        var string = '' + config._i,
+            i, parsedInput, tokens, token, skipped,
+            stringLength = string.length,
+            totalParsedInputLength = 0;
+
+        tokens = expandFormat(config._f, config._locale).match(formattingTokens) || [];
+
+        for (i = 0; i < tokens.length; i++) {
+            token = tokens[i];
+            parsedInput = (string.match(getParseRegexForToken(token, config)) || [])[0];
+            // console.log('token', token, 'parsedInput', parsedInput,
+            //         'regex', getParseRegexForToken(token, config));
+            if (parsedInput) {
+                skipped = string.substr(0, string.indexOf(parsedInput));
+                if (skipped.length > 0) {
+                    getParsingFlags(config).unusedInput.push(skipped);
+                }
+                string = string.slice(string.indexOf(parsedInput) + parsedInput.length);
+                totalParsedInputLength += parsedInput.length;
+            }
+            // don't parse if it's not a known token
+            if (formatTokenFunctions[token]) {
+                if (parsedInput) {
+                    getParsingFlags(config).empty = false;
+                }
+                else {
+                    getParsingFlags(config).unusedTokens.push(token);
+                }
+                addTimeToArrayFromToken(token, parsedInput, config);
+            }
+            else if (config._strict && !parsedInput) {
+                getParsingFlags(config).unusedTokens.push(token);
+            }
+        }
+
+        // add remaining unparsed input length to the string
+        getParsingFlags(config).charsLeftOver = stringLength - totalParsedInputLength;
+        if (string.length > 0) {
+            getParsingFlags(config).unusedInput.push(string);
+        }
+
+        // clear _12h flag if hour is <= 12
+        if (config._a[HOUR] <= 12 &&
+            getParsingFlags(config).bigHour === true &&
+            config._a[HOUR] > 0) {
+            getParsingFlags(config).bigHour = undefined;
+        }
+
+        getParsingFlags(config).parsedDateParts = config._a.slice(0);
+        getParsingFlags(config).meridiem = config._meridiem;
+        // handle meridiem
+        config._a[HOUR] = meridiemFixWrap(config._locale, config._a[HOUR], config._meridiem);
+
+        configFromArray(config);
+        checkOverflow(config);
+    }
+
+
+    function meridiemFixWrap (locale, hour, meridiem) {
+        var isPm;
+
+        if (meridiem == null) {
+            // nothing to do
+            return hour;
+        }
+        if (locale.meridiemHour != null) {
+            return locale.meridiemHour(hour, meridiem);
+        } else if (locale.isPM != null) {
+            // Fallback
+            isPm = locale.isPM(meridiem);
+            if (isPm && hour < 12) {
+                hour += 12;
+            }
+            if (!isPm && hour === 12) {
+                hour = 0;
+            }
+            return hour;
+        } else {
+            // this is not supposed to happen
+            return hour;
+        }
+    }
+
+    // date from string and array of format strings
+    function configFromStringAndArray(config) {
+        var tempConfig,
+            bestMoment,
+
+            scoreToBeat,
+            i,
+            currentScore;
+
+        if (config._f.length === 0) {
+            getParsingFlags(config).invalidFormat = true;
+            config._d = new Date(NaN);
+            return;
+        }
+
+        for (i = 0; i < config._f.length; i++) {
+            currentScore = 0;
+            tempConfig = copyConfig({}, config);
+            if (config._useUTC != null) {
+                tempConfig._useUTC = config._useUTC;
+            }
+            tempConfig._f = config._f[i];
+            configFromStringAndFormat(tempConfig);
+
+            if (!valid__isValid(tempConfig)) {
+                continue;
+            }
+
+            // if there is any input that was not parsed add a penalty for that format
+            currentScore += getParsingFlags(tempConfig).charsLeftOver;
+
+            //or tokens
+            currentScore += getParsingFlags(tempConfig).unusedTokens.length * 10;
+
+            getParsingFlags(tempConfig).score = currentScore;
+
+            if (scoreToBeat == null || currentScore < scoreToBeat) {
+                scoreToBeat = currentScore;
+                bestMoment = tempConfig;
+            }
+        }
+
+        extend(config, bestMoment || tempConfig);
+    }
+
+    function configFromObject(config) {
+        if (config._d) {
+            return;
+        }
+
+        var i = normalizeObjectUnits(config._i);
+        config._a = map([i.year, i.month, i.day || i.date, i.hour, i.minute, i.second, i.millisecond], function (obj) {
+            return obj && parseInt(obj, 10);
+        });
+
+        configFromArray(config);
+    }
+
+    function createFromConfig (config) {
+        var res = new Moment(checkOverflow(prepareConfig(config)));
+        if (res._nextDay) {
+            // Adding is smart enough around DST
+            res.add(1, 'd');
+            res._nextDay = undefined;
+        }
+
+        return res;
+    }
+
+    function prepareConfig (config) {
+        var input = config._i,
+            format = config._f;
+
+        config._locale = config._locale || locale_locales__getLocale(config._l);
+
+        if (input === null || (format === undefined && input === '')) {
+            return valid__createInvalid({nullInput: true});
+        }
+
+        if (typeof input === 'string') {
+            config._i = input = config._locale.preparse(input);
+        }
+
+        if (isMoment(input)) {
+            return new Moment(checkOverflow(input));
+        } else if (isArray(format)) {
+            configFromStringAndArray(config);
+        } else if (isDate(input)) {
+            config._d = input;
+        } else if (format) {
+            configFromStringAndFormat(config);
+        }  else {
+            configFromInput(config);
+        }
+
+        if (!valid__isValid(config)) {
+            config._d = null;
+        }
+
+        return config;
+    }
+
+    function configFromInput(config) {
+        var input = config._i;
+        if (input === undefined) {
+            config._d = new Date(utils_hooks__hooks.now());
+        } else if (isDate(input)) {
+            config._d = new Date(input.valueOf());
+        } else if (typeof input === 'string') {
+            configFromString(config);
+        } else if (isArray(input)) {
+            config._a = map(input.slice(0), function (obj) {
+                return parseInt(obj, 10);
+            });
+            configFromArray(config);
+        } else if (typeof(input) === 'object') {
+            configFromObject(config);
+        } else if (typeof(input) === 'number') {
+            // from milliseconds
+            config._d = new Date(input);
+        } else {
+            utils_hooks__hooks.createFromInputFallback(config);
+        }
+    }
+
+    function createLocalOrUTC (input, format, locale, strict, isUTC) {
+        var c = {};
+
+        if (typeof(locale) === 'boolean') {
+            strict = locale;
+            locale = undefined;
+        }
+
+        if ((isObject(input) && isObjectEmpty(input)) ||
+                (isArray(input) && input.length === 0)) {
+            input = undefined;
+        }
+        // object construction must be done this way.
+        // https://github.com/moment/moment/issues/1423
+        c._isAMomentObject = true;
+        c._useUTC = c._isUTC = isUTC;
+        c._l = locale;
+        c._i = input;
+        c._f = format;
+        c._strict = strict;
+
+        return createFromConfig(c);
+    }
+
+    function local__createLocal (input, format, locale, strict) {
+        return createLocalOrUTC(input, format, locale, strict, false);
+    }
+
+    var prototypeMin = deprecate(
+        'moment().min is deprecated, use moment.max instead. http://momentjs.com/guides/#/warnings/min-max/',
+        function () {
+            var other = local__createLocal.apply(null, arguments);
+            if (this.isValid() && other.isValid()) {
+                return other < this ? this : other;
+            } else {
+                return valid__createInvalid();
+            }
+        }
+    );
+
+    var prototypeMax = deprecate(
+        'moment().max is deprecated, use moment.min instead. http://momentjs.com/guides/#/warnings/min-max/',
+        function () {
+            var other = local__createLocal.apply(null, arguments);
+            if (this.isValid() && other.isValid()) {
+                return other > this ? this : other;
+            } else {
+                return valid__createInvalid();
+            }
+        }
+    );
+
+    // Pick a moment m from moments so that m[fn](other) is true for all
+    // other. This relies on the function fn to be transitive.
+    //
+    // moments should either be an array of moment objects or an array, whose
+    // first element is an array of moment objects.
+    function pickBy(fn, moments) {
+        var res, i;
+        if (moments.length === 1 && isArray(moments[0])) {
+            moments = moments[0];
+        }
+        if (!moments.length) {
+            return local__createLocal();
+        }
+        res = moments[0];
+        for (i = 1; i < moments.length; ++i) {
+            if (!moments[i].isValid() || moments[i][fn](res)) {
+                res = moments[i];
+            }
+        }
+        return res;
+    }
+
+    // TODO: Use [].sort instead?
+    function min () {
+        var args = [].slice.call(arguments, 0);
+
+        return pickBy('isBefore', args);
+    }
+
+    function max () {
+        var args = [].slice.call(arguments, 0);
+
+        return pickBy('isAfter', args);
+    }
+
+    var now = function () {
+        return Date.now ? Date.now() : +(new Date());
+    };
+
+    function Duration (duration) {
+        var normalizedInput = normalizeObjectUnits(duration),
+            years = normalizedInput.year || 0,
+            quarters = normalizedInput.quarter || 0,
+            months = normalizedInput.month || 0,
+            weeks = normalizedInput.week || 0,
+            days = normalizedInput.day || 0,
+            hours = normalizedInput.hour || 0,
+            minutes = normalizedInput.minute || 0,
+            seconds = normalizedInput.second || 0,
+            milliseconds = normalizedInput.millisecond || 0;
+
+        // representation for dateAddRemove
+        this._milliseconds = +milliseconds +
+            seconds * 1e3 + // 1000
+            minutes * 6e4 + // 1000 * 60
+            hours * 1000 * 60 * 60; //using 1000 * 60 * 60 instead of 36e5 to avoid floating point rounding errors https://github.com/moment/moment/issues/2978
+        // Because of dateAddRemove treats 24 hours as different from a
+        // day when working around DST, we need to store them separately
+        this._days = +days +
+            weeks * 7;
+        // It is impossible translate months into days without knowing
+        // which months you are are talking about, so we have to store
+        // it separately.
+        this._months = +months +
+            quarters * 3 +
+            years * 12;
+
+        this._data = {};
+
+        this._locale = locale_locales__getLocale();
+
+        this._bubble();
+    }
+
+    function isDuration (obj) {
+        return obj instanceof Duration;
+    }
+
+    // FORMATTING
+
+    function offset (token, separator) {
+        addFormatToken(token, 0, 0, function () {
+            var offset = this.utcOffset();
+            var sign = '+';
+            if (offset < 0) {
+                offset = -offset;
+                sign = '-';
+            }
+            return sign + zeroFill(~~(offset / 60), 2) + separator + zeroFill(~~(offset) % 60, 2);
+        });
+    }
+
+    offset('Z', ':');
+    offset('ZZ', '');
+
+    // PARSING
+
+    addRegexToken('Z',  matchShortOffset);
+    addRegexToken('ZZ', matchShortOffset);
+    addParseToken(['Z', 'ZZ'], function (input, array, config) {
+        config._useUTC = true;
+        config._tzm = offsetFromString(matchShortOffset, input);
+    });
+
+    // HELPERS
+
+    // timezone chunker
+    // '+10:00' > ['10',  '00']
+    // '-1530'  > ['-15', '30']
+    var chunkOffset = /([\+\-]|\d\d)/gi;
+
+    function offsetFromString(matcher, string) {
+        var matches = ((string || '').match(matcher) || []);
+        var chunk   = matches[matches.length - 1] || [];
+        var parts   = (chunk + '').match(chunkOffset) || ['-', 0, 0];
+        var minutes = +(parts[1] * 60) + toInt(parts[2]);
+
+        return parts[0] === '+' ? minutes : -minutes;
+    }
+
+    // Return a moment from input, that is local/utc/zone equivalent to model.
+    function cloneWithOffset(input, model) {
+        var res, diff;
+        if (model._isUTC) {
+            res = model.clone();
+            diff = (isMoment(input) || isDate(input) ? input.valueOf() : local__createLocal(input).valueOf()) - res.valueOf();
+            // Use low-level api, because this fn is low-level api.
+            res._d.setTime(res._d.valueOf() + diff);
+            utils_hooks__hooks.updateOffset(res, false);
+            return res;
+        } else {
+            return local__createLocal(input).local();
+        }
+    }
+
+    function getDateOffset (m) {
+        // On Firefox.24 Date#getTimezoneOffset returns a floating point.
+        // https://github.com/moment/moment/pull/1871
+        return -Math.round(m._d.getTimezoneOffset() / 15) * 15;
+    }
+
+    // HOOKS
+
+    // This function will be called whenever a moment is mutated.
+    // It is intended to keep the offset in sync with the timezone.
+    utils_hooks__hooks.updateOffset = function () {};
+
+    // MOMENTS
+
+    // keepLocalTime = true means only change the timezone, without
+    // affecting the local hour. So 5:31:26 +0300 --[utcOffset(2, true)]-->
+    // 5:31:26 +0200 It is possible that 5:31:26 doesn't exist with offset
+    // +0200, so we adjust the time as needed, to be valid.
+    //
+    // Keeping the time actually adds/subtracts (one hour)
+    // from the actual represented time. That is why we call updateOffset
+    // a second time. In case it wants us to change the offset again
+    // _changeInProgress == true case, then we have to adjust, because
+    // there is no such time in the given timezone.
+    function getSetOffset (input, keepLocalTime) {
+        var offset = this._offset || 0,
+            localAdjust;
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
+        if (input != null) {
+            if (typeof input === 'string') {
+                input = offsetFromString(matchShortOffset, input);
+            } else if (Math.abs(input) < 16) {
+                input = input * 60;
+            }
+            if (!this._isUTC && keepLocalTime) {
+                localAdjust = getDateOffset(this);
+            }
+            this._offset = input;
+            this._isUTC = true;
+            if (localAdjust != null) {
+                this.add(localAdjust, 'm');
+            }
+            if (offset !== input) {
+                if (!keepLocalTime || this._changeInProgress) {
+                    add_subtract__addSubtract(this, create__createDuration(input - offset, 'm'), 1, false);
+                } else if (!this._changeInProgress) {
+                    this._changeInProgress = true;
+                    utils_hooks__hooks.updateOffset(this, true);
+                    this._changeInProgress = null;
+                }
+            }
+            return this;
+        } else {
+            return this._isUTC ? offset : getDateOffset(this);
+        }
+    }
+
+    function getSetZone (input, keepLocalTime) {
+        if (input != null) {
+            if (typeof input !== 'string') {
+                input = -input;
+            }
+
+            this.utcOffset(input, keepLocalTime);
+
+            return this;
+        } else {
+            return -this.utcOffset();
+        }
+    }
+
+    function setOffsetToUTC (keepLocalTime) {
+        return this.utcOffset(0, keepLocalTime);
+    }
+
+    function setOffsetToLocal (keepLocalTime) {
+        if (this._isUTC) {
+            this.utcOffset(0, keepLocalTime);
+            this._isUTC = false;
+
+            if (keepLocalTime) {
+                this.subtract(getDateOffset(this), 'm');
+            }
+        }
+        return this;
+    }
+
+    function setOffsetToParsedOffset () {
+        if (this._tzm) {
+            this.utcOffset(this._tzm);
+        } else if (typeof this._i === 'string') {
+            this.utcOffset(offsetFromString(matchOffset, this._i));
+        }
+        return this;
+    }
+
+    function hasAlignedHourOffset (input) {
+        if (!this.isValid()) {
+            return false;
+        }
+        input = input ? local__createLocal(input).utcOffset() : 0;
+
+        return (this.utcOffset() - input) % 60 === 0;
+    }
+
+    function isDaylightSavingTime () {
+        return (
+            this.utcOffset() > this.clone().month(0).utcOffset() ||
+            this.utcOffset() > this.clone().month(5).utcOffset()
+        );
+    }
+
+    function isDaylightSavingTimeShifted () {
+        if (!isUndefined(this._isDSTShifted)) {
+            return this._isDSTShifted;
+        }
+
+        var c = {};
+
+        copyConfig(c, this);
+        c = prepareConfig(c);
+
+        if (c._a) {
+            var other = c._isUTC ? create_utc__createUTC(c._a) : local__createLocal(c._a);
+            this._isDSTShifted = this.isValid() &&
+                compareArrays(c._a, other.toArray()) > 0;
+        } else {
+            this._isDSTShifted = false;
+        }
+
+        return this._isDSTShifted;
+    }
+
+    function isLocal () {
+        return this.isValid() ? !this._isUTC : false;
+    }
+
+    function isUtcOffset () {
+        return this.isValid() ? this._isUTC : false;
+    }
+
+    function isUtc () {
+        return this.isValid() ? this._isUTC && this._offset === 0 : false;
+    }
+
+    // ASP.NET json date format regex
+    var aspNetRegex = /^(\-)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)\.?(\d{3})?\d*)?$/;
+
+    // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
+    // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
+    // and further modified to allow for strings containing both week and day
+    var isoRegex = /^(-)?P(?:(-?[0-9,.]*)Y)?(?:(-?[0-9,.]*)M)?(?:(-?[0-9,.]*)W)?(?:(-?[0-9,.]*)D)?(?:T(?:(-?[0-9,.]*)H)?(?:(-?[0-9,.]*)M)?(?:(-?[0-9,.]*)S)?)?$/;
+
+    function create__createDuration (input, key) {
+        var duration = input,
+            // matching against regexp is expensive, do it on demand
+            match = null,
+            sign,
+            ret,
+            diffRes;
+
+        if (isDuration(input)) {
+            duration = {
+                ms : input._milliseconds,
+                d  : input._days,
+                M  : input._months
+            };
+        } else if (typeof input === 'number') {
+            duration = {};
+            if (key) {
+                duration[key] = input;
+            } else {
+                duration.milliseconds = input;
+            }
+        } else if (!!(match = aspNetRegex.exec(input))) {
+            sign = (match[1] === '-') ? -1 : 1;
+            duration = {
+                y  : 0,
+                d  : toInt(match[DATE])        * sign,
+                h  : toInt(match[HOUR])        * sign,
+                m  : toInt(match[MINUTE])      * sign,
+                s  : toInt(match[SECOND])      * sign,
+                ms : toInt(match[MILLISECOND]) * sign
+            };
+        } else if (!!(match = isoRegex.exec(input))) {
+            sign = (match[1] === '-') ? -1 : 1;
+            duration = {
+                y : parseIso(match[2], sign),
+                M : parseIso(match[3], sign),
+                w : parseIso(match[4], sign),
+                d : parseIso(match[5], sign),
+                h : parseIso(match[6], sign),
+                m : parseIso(match[7], sign),
+                s : parseIso(match[8], sign)
+            };
+        } else if (duration == null) {// checks for null or undefined
+            duration = {};
+        } else if (typeof duration === 'object' && ('from' in duration || 'to' in duration)) {
+            diffRes = momentsDifference(local__createLocal(duration.from), local__createLocal(duration.to));
+
+            duration = {};
+            duration.ms = diffRes.milliseconds;
+            duration.M = diffRes.months;
+        }
+
+        ret = new Duration(duration);
+
+        if (isDuration(input) && hasOwnProp(input, '_locale')) {
+            ret._locale = input._locale;
+        }
+
+        return ret;
+    }
+
+    create__createDuration.fn = Duration.prototype;
+
+    function parseIso (inp, sign) {
+        // We'd normally use ~~inp for this, but unfortunately it also
+        // converts floats to ints.
+        // inp may be undefined, so careful calling replace on it.
+        var res = inp && parseFloat(inp.replace(',', '.'));
+        // apply sign while we're at it
+        return (isNaN(res) ? 0 : res) * sign;
+    }
+
+    function positiveMomentsDifference(base, other) {
+        var res = {milliseconds: 0, months: 0};
+
+        res.months = other.month() - base.month() +
+            (other.year() - base.year()) * 12;
+        if (base.clone().add(res.months, 'M').isAfter(other)) {
+            --res.months;
+        }
+
+        res.milliseconds = +other - +(base.clone().add(res.months, 'M'));
+
+        return res;
+    }
+
+    function momentsDifference(base, other) {
+        var res;
+        if (!(base.isValid() && other.isValid())) {
+            return {milliseconds: 0, months: 0};
+        }
+
+        other = cloneWithOffset(other, base);
+        if (base.isBefore(other)) {
+            res = positiveMomentsDifference(base, other);
+        } else {
+            res = positiveMomentsDifference(other, base);
+            res.milliseconds = -res.milliseconds;
+            res.months = -res.months;
+        }
+
+        return res;
+    }
+
+    function absRound (number) {
+        if (number < 0) {
+            return Math.round(-1 * number) * -1;
+        } else {
+            return Math.round(number);
+        }
+    }
+
+    // TODO: remove 'name' arg after deprecation is removed
+    function createAdder(direction, name) {
+        return function (val, period) {
+            var dur, tmp;
+            //invert the arguments, but complain about it
+            if (period !== null && !isNaN(+period)) {
+                deprecateSimple(name, 'moment().' + name  + '(period, number) is deprecated. Please use moment().' + name + '(number, period). ' +
+                'See http://momentjs.com/guides/#/warnings/add-inverted-param/ for more info.');
+                tmp = val; val = period; period = tmp;
+            }
+
+            val = typeof val === 'string' ? +val : val;
+            dur = create__createDuration(val, period);
+            add_subtract__addSubtract(this, dur, direction);
+            return this;
+        };
+    }
+
+    function add_subtract__addSubtract (mom, duration, isAdding, updateOffset) {
+        var milliseconds = duration._milliseconds,
+            days = absRound(duration._days),
+            months = absRound(duration._months);
+
+        if (!mom.isValid()) {
+            // No op
+            return;
+        }
+
+        updateOffset = updateOffset == null ? true : updateOffset;
+
+        if (milliseconds) {
+            mom._d.setTime(mom._d.valueOf() + milliseconds * isAdding);
+        }
+        if (days) {
+            get_set__set(mom, 'Date', get_set__get(mom, 'Date') + days * isAdding);
+        }
+        if (months) {
+            setMonth(mom, get_set__get(mom, 'Month') + months * isAdding);
+        }
+        if (updateOffset) {
+            utils_hooks__hooks.updateOffset(mom, days || months);
+        }
+    }
+
+    var add_subtract__add      = createAdder(1, 'add');
+    var add_subtract__subtract = createAdder(-1, 'subtract');
+
+    function getCalendarFormat(myMoment, now) {
+        var diff = myMoment.diff(now, 'days', true);
+        return diff < -6 ? 'sameElse' :
+                diff < -1 ? 'lastWeek' :
+                diff < 0 ? 'lastDay' :
+                diff < 1 ? 'sameDay' :
+                diff < 2 ? 'nextDay' :
+                diff < 7 ? 'nextWeek' : 'sameElse';
+    }
+
+    function moment_calendar__calendar (time, formats) {
+        // We want to compare the start of today, vs this.
+        // Getting start-of-today depends on whether we're local/utc/offset or not.
+        var now = time || local__createLocal(),
+            sod = cloneWithOffset(now, this).startOf('day'),
+            format = utils_hooks__hooks.calendarFormat(this, sod) || 'sameElse';
+
+        var output = formats && (isFunction(formats[format]) ? formats[format].call(this, now) : formats[format]);
+
+        return this.format(output || this.localeData().calendar(format, this, local__createLocal(now)));
+    }
+
+    function clone () {
+        return new Moment(this);
+    }
+
+    function isAfter (input, units) {
+        var localInput = isMoment(input) ? input : local__createLocal(input);
+        if (!(this.isValid() && localInput.isValid())) {
+            return false;
+        }
+        units = normalizeUnits(!isUndefined(units) ? units : 'millisecond');
+        if (units === 'millisecond') {
+            return this.valueOf() > localInput.valueOf();
+        } else {
+            return localInput.valueOf() < this.clone().startOf(units).valueOf();
+        }
+    }
+
+    function isBefore (input, units) {
+        var localInput = isMoment(input) ? input : local__createLocal(input);
+        if (!(this.isValid() && localInput.isValid())) {
+            return false;
+        }
+        units = normalizeUnits(!isUndefined(units) ? units : 'millisecond');
+        if (units === 'millisecond') {
+            return this.valueOf() < localInput.valueOf();
+        } else {
+            return this.clone().endOf(units).valueOf() < localInput.valueOf();
+        }
+    }
+
+    function isBetween (from, to, units, inclusivity) {
+        inclusivity = inclusivity || '()';
+        return (inclusivity[0] === '(' ? this.isAfter(from, units) : !this.isBefore(from, units)) &&
+            (inclusivity[1] === ')' ? this.isBefore(to, units) : !this.isAfter(to, units));
+    }
+
+    function isSame (input, units) {
+        var localInput = isMoment(input) ? input : local__createLocal(input),
+            inputMs;
+        if (!(this.isValid() && localInput.isValid())) {
+            return false;
+        }
+        units = normalizeUnits(units || 'millisecond');
+        if (units === 'millisecond') {
+            return this.valueOf() === localInput.valueOf();
+        } else {
+            inputMs = localInput.valueOf();
+            return this.clone().startOf(units).valueOf() <= inputMs && inputMs <= this.clone().endOf(units).valueOf();
+        }
+    }
+
+    function isSameOrAfter (input, units) {
+        return this.isSame(input, units) || this.isAfter(input,units);
+    }
+
+    function isSameOrBefore (input, units) {
+        return this.isSame(input, units) || this.isBefore(input,units);
+    }
+
+    function diff (input, units, asFloat) {
+        var that,
+            zoneDelta,
+            delta, output;
+
+        if (!this.isValid()) {
+            return NaN;
+        }
+
+        that = cloneWithOffset(input, this);
+
+        if (!that.isValid()) {
+            return NaN;
+        }
+
+        zoneDelta = (that.utcOffset() - this.utcOffset()) * 6e4;
+
+        units = normalizeUnits(units);
+
+        if (units === 'year' || units === 'month' || units === 'quarter') {
+            output = monthDiff(this, that);
+            if (units === 'quarter') {
+                output = output / 3;
+            } else if (units === 'year') {
+                output = output / 12;
+            }
+        } else {
+            delta = this - that;
+            output = units === 'second' ? delta / 1e3 : // 1000
+                units === 'minute' ? delta / 6e4 : // 1000 * 60
+                units === 'hour' ? delta / 36e5 : // 1000 * 60 * 60
+                units === 'day' ? (delta - zoneDelta) / 864e5 : // 1000 * 60 * 60 * 24, negate dst
+                units === 'week' ? (delta - zoneDelta) / 6048e5 : // 1000 * 60 * 60 * 24 * 7, negate dst
+                delta;
+        }
+        return asFloat ? output : absFloor(output);
+    }
+
+    function monthDiff (a, b) {
+        // difference in months
+        var wholeMonthDiff = ((b.year() - a.year()) * 12) + (b.month() - a.month()),
+            // b is in (anchor - 1 month, anchor + 1 month)
+            anchor = a.clone().add(wholeMonthDiff, 'months'),
+            anchor2, adjust;
+
+        if (b - anchor < 0) {
+            anchor2 = a.clone().add(wholeMonthDiff - 1, 'months');
+            // linear across the month
+            adjust = (b - anchor) / (anchor - anchor2);
+        } else {
+            anchor2 = a.clone().add(wholeMonthDiff + 1, 'months');
+            // linear across the month
+            adjust = (b - anchor) / (anchor2 - anchor);
+        }
+
+        //check for negative zero, return zero if negative zero
+        return -(wholeMonthDiff + adjust) || 0;
+    }
+
+    utils_hooks__hooks.defaultFormat = 'YYYY-MM-DDTHH:mm:ssZ';
+    utils_hooks__hooks.defaultFormatUtc = 'YYYY-MM-DDTHH:mm:ss[Z]';
+
+    function toString () {
+        return this.clone().locale('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
+    }
+
+    function moment_format__toISOString () {
+        var m = this.clone().utc();
+        if (0 < m.year() && m.year() <= 9999) {
+            if (isFunction(Date.prototype.toISOString)) {
+                // native implementation is ~50x faster, use it when we can
+                return this.toDate().toISOString();
+            } else {
+                return formatMoment(m, 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
+            }
+        } else {
+            return formatMoment(m, 'YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
+        }
+    }
+
+    function format (inputString) {
+        if (!inputString) {
+            inputString = this.isUtc() ? utils_hooks__hooks.defaultFormatUtc : utils_hooks__hooks.defaultFormat;
+        }
+        var output = formatMoment(this, inputString);
+        return this.localeData().postformat(output);
+    }
+
+    function from (time, withoutSuffix) {
+        if (this.isValid() &&
+                ((isMoment(time) && time.isValid()) ||
+                 local__createLocal(time).isValid())) {
+            return create__createDuration({to: this, from: time}).locale(this.locale()).humanize(!withoutSuffix);
+        } else {
+            return this.localeData().invalidDate();
+        }
+    }
+
+    function fromNow (withoutSuffix) {
+        return this.from(local__createLocal(), withoutSuffix);
+    }
+
+    function to (time, withoutSuffix) {
+        if (this.isValid() &&
+                ((isMoment(time) && time.isValid()) ||
+                 local__createLocal(time).isValid())) {
+            return create__createDuration({from: this, to: time}).locale(this.locale()).humanize(!withoutSuffix);
+        } else {
+            return this.localeData().invalidDate();
+        }
+    }
+
+    function toNow (withoutSuffix) {
+        return this.to(local__createLocal(), withoutSuffix);
+    }
+
+    // If passed a locale key, it will set the locale for this
+    // instance.  Otherwise, it will return the locale configuration
+    // variables for this instance.
+    function locale (key) {
+        var newLocaleData;
+
+        if (key === undefined) {
+            return this._locale._abbr;
+        } else {
+            newLocaleData = locale_locales__getLocale(key);
+            if (newLocaleData != null) {
+                this._locale = newLocaleData;
+            }
+            return this;
+        }
+    }
+
+    var lang = deprecate(
+        'moment().lang() is deprecated. Instead, use moment().localeData() to get the language configuration. Use moment().locale() to change languages.',
+        function (key) {
+            if (key === undefined) {
+                return this.localeData();
+            } else {
+                return this.locale(key);
+            }
+        }
+    );
+
+    function localeData () {
+        return this._locale;
+    }
+
+    function startOf (units) {
+        units = normalizeUnits(units);
+        // the following switch intentionally omits break keywords
+        // to utilize falling through the cases.
+        switch (units) {
+            case 'year':
+                this.month(0);
+                /* falls through */
+            case 'quarter':
+            case 'month':
+                this.date(1);
+                /* falls through */
+            case 'week':
+            case 'isoWeek':
+            case 'day':
+            case 'date':
+                this.hours(0);
+                /* falls through */
+            case 'hour':
+                this.minutes(0);
+                /* falls through */
+            case 'minute':
+                this.seconds(0);
+                /* falls through */
+            case 'second':
+                this.milliseconds(0);
+        }
+
+        // weeks are a special case
+        if (units === 'week') {
+            this.weekday(0);
+        }
+        if (units === 'isoWeek') {
+            this.isoWeekday(1);
+        }
+
+        // quarters are also special
+        if (units === 'quarter') {
+            this.month(Math.floor(this.month() / 3) * 3);
+        }
+
+        return this;
+    }
+
+    function endOf (units) {
+        units = normalizeUnits(units);
+        if (units === undefined || units === 'millisecond') {
+            return this;
+        }
+
+        // 'date' is an alias for 'day', so it should be considered as such.
+        if (units === 'date') {
+            units = 'day';
+        }
+
+        return this.startOf(units).add(1, (units === 'isoWeek' ? 'week' : units)).subtract(1, 'ms');
+    }
+
+    function to_type__valueOf () {
+        return this._d.valueOf() - ((this._offset || 0) * 60000);
+    }
+
+    function unix () {
+        return Math.floor(this.valueOf() / 1000);
+    }
+
+    function toDate () {
+        return new Date(this.valueOf());
+    }
+
+    function toArray () {
+        var m = this;
+        return [m.year(), m.month(), m.date(), m.hour(), m.minute(), m.second(), m.millisecond()];
+    }
+
+    function toObject () {
+        var m = this;
+        return {
+            years: m.year(),
+            months: m.month(),
+            date: m.date(),
+            hours: m.hours(),
+            minutes: m.minutes(),
+            seconds: m.seconds(),
+            milliseconds: m.milliseconds()
+        };
+    }
+
+    function toJSON () {
+        // new Date(NaN).toJSON() === null
+        return this.isValid() ? this.toISOString() : null;
+    }
+
+    function moment_valid__isValid () {
+        return valid__isValid(this);
+    }
+
+    function parsingFlags () {
+        return extend({}, getParsingFlags(this));
+    }
+
+    function invalidAt () {
+        return getParsingFlags(this).overflow;
+    }
+
+    function creationData() {
+        return {
+            input: this._i,
+            format: this._f,
+            locale: this._locale,
+            isUTC: this._isUTC,
+            strict: this._strict
+        };
+    }
+
+    // FORMATTING
+
+    addFormatToken(0, ['gg', 2], 0, function () {
+        return this.weekYear() % 100;
+    });
+
+    addFormatToken(0, ['GG', 2], 0, function () {
+        return this.isoWeekYear() % 100;
+    });
+
+    function addWeekYearFormatToken (token, getter) {
+        addFormatToken(0, [token, token.length], 0, getter);
+    }
+
+    addWeekYearFormatToken('gggg',     'weekYear');
+    addWeekYearFormatToken('ggggg',    'weekYear');
+    addWeekYearFormatToken('GGGG',  'isoWeekYear');
+    addWeekYearFormatToken('GGGGG', 'isoWeekYear');
+
+    // ALIASES
+
+    addUnitAlias('weekYear', 'gg');
+    addUnitAlias('isoWeekYear', 'GG');
+
+    // PRIORITY
+
+    addUnitPriority('weekYear', 1);
+    addUnitPriority('isoWeekYear', 1);
+
+
+    // PARSING
+
+    addRegexToken('G',      matchSigned);
+    addRegexToken('g',      matchSigned);
+    addRegexToken('GG',     match1to2, match2);
+    addRegexToken('gg',     match1to2, match2);
+    addRegexToken('GGGG',   match1to4, match4);
+    addRegexToken('gggg',   match1to4, match4);
+    addRegexToken('GGGGG',  match1to6, match6);
+    addRegexToken('ggggg',  match1to6, match6);
+
+    addWeekParseToken(['gggg', 'ggggg', 'GGGG', 'GGGGG'], function (input, week, config, token) {
+        week[token.substr(0, 2)] = toInt(input);
+    });
+
+    addWeekParseToken(['gg', 'GG'], function (input, week, config, token) {
+        week[token] = utils_hooks__hooks.parseTwoDigitYear(input);
+    });
+
+    // MOMENTS
+
+    function getSetWeekYear (input) {
+        return getSetWeekYearHelper.call(this,
+                input,
+                this.week(),
+                this.weekday(),
+                this.localeData()._week.dow,
+                this.localeData()._week.doy);
+    }
+
+    function getSetISOWeekYear (input) {
+        return getSetWeekYearHelper.call(this,
+                input, this.isoWeek(), this.isoWeekday(), 1, 4);
+    }
+
+    function getISOWeeksInYear () {
+        return weeksInYear(this.year(), 1, 4);
+    }
+
+    function getWeeksInYear () {
+        var weekInfo = this.localeData()._week;
+        return weeksInYear(this.year(), weekInfo.dow, weekInfo.doy);
+    }
+
+    function getSetWeekYearHelper(input, week, weekday, dow, doy) {
+        var weeksTarget;
+        if (input == null) {
+            return weekOfYear(this, dow, doy).year;
+        } else {
+            weeksTarget = weeksInYear(input, dow, doy);
+            if (week > weeksTarget) {
+                week = weeksTarget;
+            }
+            return setWeekAll.call(this, input, week, weekday, dow, doy);
+        }
+    }
+
+    function setWeekAll(weekYear, week, weekday, dow, doy) {
+        var dayOfYearData = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy),
+            date = createUTCDate(dayOfYearData.year, 0, dayOfYearData.dayOfYear);
+
+        this.year(date.getUTCFullYear());
+        this.month(date.getUTCMonth());
+        this.date(date.getUTCDate());
+        return this;
+    }
+
+    // FORMATTING
+
+    addFormatToken('Q', 0, 'Qo', 'quarter');
+
+    // ALIASES
+
+    addUnitAlias('quarter', 'Q');
+
+    // PRIORITY
+
+    addUnitPriority('quarter', 7);
+
+    // PARSING
+
+    addRegexToken('Q', match1);
+    addParseToken('Q', function (input, array) {
+        array[MONTH] = (toInt(input) - 1) * 3;
+    });
+
+    // MOMENTS
+
+    function getSetQuarter (input) {
+        return input == null ? Math.ceil((this.month() + 1) / 3) : this.month((input - 1) * 3 + this.month() % 3);
+    }
+
+    // FORMATTING
+
+    addFormatToken('D', ['DD', 2], 'Do', 'date');
+
+    // ALIASES
+
+    addUnitAlias('date', 'D');
+
+    // PRIOROITY
+    addUnitPriority('date', 9);
+
+    // PARSING
+
+    addRegexToken('D',  match1to2);
+    addRegexToken('DD', match1to2, match2);
+    addRegexToken('Do', function (isStrict, locale) {
+        return isStrict ? locale._ordinalParse : locale._ordinalParseLenient;
+    });
+
+    addParseToken(['D', 'DD'], DATE);
+    addParseToken('Do', function (input, array) {
+        array[DATE] = toInt(input.match(match1to2)[0], 10);
+    });
+
+    // MOMENTS
+
+    var getSetDayOfMonth = makeGetSet('Date', true);
+
+    // FORMATTING
+
+    addFormatToken('DDD', ['DDDD', 3], 'DDDo', 'dayOfYear');
+
+    // ALIASES
+
+    addUnitAlias('dayOfYear', 'DDD');
+
+    // PRIORITY
+    addUnitPriority('dayOfYear', 4);
+
+    // PARSING
+
+    addRegexToken('DDD',  match1to3);
+    addRegexToken('DDDD', match3);
+    addParseToken(['DDD', 'DDDD'], function (input, array, config) {
+        config._dayOfYear = toInt(input);
+    });
+
+    // HELPERS
+
+    // MOMENTS
+
+    function getSetDayOfYear (input) {
+        var dayOfYear = Math.round((this.clone().startOf('day') - this.clone().startOf('year')) / 864e5) + 1;
+        return input == null ? dayOfYear : this.add((input - dayOfYear), 'd');
+    }
+
+    // FORMATTING
+
+    addFormatToken('m', ['mm', 2], 0, 'minute');
+
+    // ALIASES
+
+    addUnitAlias('minute', 'm');
+
+    // PRIORITY
+
+    addUnitPriority('minute', 14);
+
+    // PARSING
+
+    addRegexToken('m',  match1to2);
+    addRegexToken('mm', match1to2, match2);
+    addParseToken(['m', 'mm'], MINUTE);
+
+    // MOMENTS
+
+    var getSetMinute = makeGetSet('Minutes', false);
+
+    // FORMATTING
+
+    addFormatToken('s', ['ss', 2], 0, 'second');
+
+    // ALIASES
+
+    addUnitAlias('second', 's');
+
+    // PRIORITY
+
+    addUnitPriority('second', 15);
+
+    // PARSING
+
+    addRegexToken('s',  match1to2);
+    addRegexToken('ss', match1to2, match2);
+    addParseToken(['s', 'ss'], SECOND);
+
+    // MOMENTS
+
+    var getSetSecond = makeGetSet('Seconds', false);
+
+    // FORMATTING
+
+    addFormatToken('S', 0, 0, function () {
+        return ~~(this.millisecond() / 100);
+    });
+
+    addFormatToken(0, ['SS', 2], 0, function () {
+        return ~~(this.millisecond() / 10);
+    });
+
+    addFormatToken(0, ['SSS', 3], 0, 'millisecond');
+    addFormatToken(0, ['SSSS', 4], 0, function () {
+        return this.millisecond() * 10;
+    });
+    addFormatToken(0, ['SSSSS', 5], 0, function () {
+        return this.millisecond() * 100;
+    });
+    addFormatToken(0, ['SSSSSS', 6], 0, function () {
+        return this.millisecond() * 1000;
+    });
+    addFormatToken(0, ['SSSSSSS', 7], 0, function () {
+        return this.millisecond() * 10000;
+    });
+    addFormatToken(0, ['SSSSSSSS', 8], 0, function () {
+        return this.millisecond() * 100000;
+    });
+    addFormatToken(0, ['SSSSSSSSS', 9], 0, function () {
+        return this.millisecond() * 1000000;
+    });
+
+
+    // ALIASES
+
+    addUnitAlias('millisecond', 'ms');
+
+    // PRIORITY
+
+    addUnitPriority('millisecond', 16);
+
+    // PARSING
+
+    addRegexToken('S',    match1to3, match1);
+    addRegexToken('SS',   match1to3, match2);
+    addRegexToken('SSS',  match1to3, match3);
+
+    var token;
+    for (token = 'SSSS'; token.length <= 9; token += 'S') {
+        addRegexToken(token, matchUnsigned);
+    }
+
+    function parseMs(input, array) {
+        array[MILLISECOND] = toInt(('0.' + input) * 1000);
+    }
+
+    for (token = 'S'; token.length <= 9; token += 'S') {
+        addParseToken(token, parseMs);
+    }
+    // MOMENTS
+
+    var getSetMillisecond = makeGetSet('Milliseconds', false);
+
+    // FORMATTING
+
+    addFormatToken('z',  0, 0, 'zoneAbbr');
+    addFormatToken('zz', 0, 0, 'zoneName');
+
+    // MOMENTS
+
+    function getZoneAbbr () {
+        return this._isUTC ? 'UTC' : '';
+    }
+
+    function getZoneName () {
+        return this._isUTC ? 'Coordinated Universal Time' : '';
+    }
+
+    var momentPrototype__proto = Moment.prototype;
+
+    momentPrototype__proto.add               = add_subtract__add;
+    momentPrototype__proto.calendar          = moment_calendar__calendar;
+    momentPrototype__proto.clone             = clone;
+    momentPrototype__proto.diff              = diff;
+    momentPrototype__proto.endOf             = endOf;
+    momentPrototype__proto.format            = format;
+    momentPrototype__proto.from              = from;
+    momentPrototype__proto.fromNow           = fromNow;
+    momentPrototype__proto.to                = to;
+    momentPrototype__proto.toNow             = toNow;
+    momentPrototype__proto.get               = stringGet;
+    momentPrototype__proto.invalidAt         = invalidAt;
+    momentPrototype__proto.isAfter           = isAfter;
+    momentPrototype__proto.isBefore          = isBefore;
+    momentPrototype__proto.isBetween         = isBetween;
+    momentPrototype__proto.isSame            = isSame;
+    momentPrototype__proto.isSameOrAfter     = isSameOrAfter;
+    momentPrototype__proto.isSameOrBefore    = isSameOrBefore;
+    momentPrototype__proto.isValid           = moment_valid__isValid;
+    momentPrototype__proto.lang              = lang;
+    momentPrototype__proto.locale            = locale;
+    momentPrototype__proto.localeData        = localeData;
+    momentPrototype__proto.max               = prototypeMax;
+    momentPrototype__proto.min               = prototypeMin;
+    momentPrototype__proto.parsingFlags      = parsingFlags;
+    momentPrototype__proto.set               = stringSet;
+    momentPrototype__proto.startOf           = startOf;
+    momentPrototype__proto.subtract          = add_subtract__subtract;
+    momentPrototype__proto.toArray           = toArray;
+    momentPrototype__proto.toObject          = toObject;
+    momentPrototype__proto.toDate            = toDate;
+    momentPrototype__proto.toISOString       = moment_format__toISOString;
+    momentPrototype__proto.toJSON            = toJSON;
+    momentPrototype__proto.toString          = toString;
+    momentPrototype__proto.unix              = unix;
+    momentPrototype__proto.valueOf           = to_type__valueOf;
+    momentPrototype__proto.creationData      = creationData;
+
+    // Year
+    momentPrototype__proto.year       = getSetYear;
+    momentPrototype__proto.isLeapYear = getIsLeapYear;
+
+    // Week Year
+    momentPrototype__proto.weekYear    = getSetWeekYear;
+    momentPrototype__proto.isoWeekYear = getSetISOWeekYear;
+
+    // Quarter
+    momentPrototype__proto.quarter = momentPrototype__proto.quarters = getSetQuarter;
+
+    // Month
+    momentPrototype__proto.month       = getSetMonth;
+    momentPrototype__proto.daysInMonth = getDaysInMonth;
+
+    // Week
+    momentPrototype__proto.week           = momentPrototype__proto.weeks        = getSetWeek;
+    momentPrototype__proto.isoWeek        = momentPrototype__proto.isoWeeks     = getSetISOWeek;
+    momentPrototype__proto.weeksInYear    = getWeeksInYear;
+    momentPrototype__proto.isoWeeksInYear = getISOWeeksInYear;
+
+    // Day
+    momentPrototype__proto.date       = getSetDayOfMonth;
+    momentPrototype__proto.day        = momentPrototype__proto.days             = getSetDayOfWeek;
+    momentPrototype__proto.weekday    = getSetLocaleDayOfWeek;
+    momentPrototype__proto.isoWeekday = getSetISODayOfWeek;
+    momentPrototype__proto.dayOfYear  = getSetDayOfYear;
+
+    // Hour
+    momentPrototype__proto.hour = momentPrototype__proto.hours = getSetHour;
+
+    // Minute
+    momentPrototype__proto.minute = momentPrototype__proto.minutes = getSetMinute;
+
+    // Second
+    momentPrototype__proto.second = momentPrototype__proto.seconds = getSetSecond;
+
+    // Millisecond
+    momentPrototype__proto.millisecond = momentPrototype__proto.milliseconds = getSetMillisecond;
+
+    // Offset
+    momentPrototype__proto.utcOffset            = getSetOffset;
+    momentPrototype__proto.utc                  = setOffsetToUTC;
+    momentPrototype__proto.local                = setOffsetToLocal;
+    momentPrototype__proto.parseZone            = setOffsetToParsedOffset;
+    momentPrototype__proto.hasAlignedHourOffset = hasAlignedHourOffset;
+    momentPrototype__proto.isDST                = isDaylightSavingTime;
+    momentPrototype__proto.isLocal              = isLocal;
+    momentPrototype__proto.isUtcOffset          = isUtcOffset;
+    momentPrototype__proto.isUtc                = isUtc;
+    momentPrototype__proto.isUTC                = isUtc;
+
+    // Timezone
+    momentPrototype__proto.zoneAbbr = getZoneAbbr;
+    momentPrototype__proto.zoneName = getZoneName;
+
+    // Deprecations
+    momentPrototype__proto.dates  = deprecate('dates accessor is deprecated. Use date instead.', getSetDayOfMonth);
+    momentPrototype__proto.months = deprecate('months accessor is deprecated. Use month instead', getSetMonth);
+    momentPrototype__proto.years  = deprecate('years accessor is deprecated. Use year instead', getSetYear);
+    momentPrototype__proto.zone   = deprecate('moment().zone is deprecated, use moment().utcOffset instead. http://momentjs.com/guides/#/warnings/zone/', getSetZone);
+    momentPrototype__proto.isDSTShifted = deprecate('isDSTShifted is deprecated. See http://momentjs.com/guides/#/warnings/dst-shifted/ for more information', isDaylightSavingTimeShifted);
+
+    var momentPrototype = momentPrototype__proto;
+
+    function moment__createUnix (input) {
+        return local__createLocal(input * 1000);
+    }
+
+    function moment__createInZone () {
+        return local__createLocal.apply(null, arguments).parseZone();
+    }
+
+    function preParsePostFormat (string) {
+        return string;
+    }
+
+    var prototype__proto = Locale.prototype;
+
+    prototype__proto.calendar        = locale_calendar__calendar;
+    prototype__proto.longDateFormat  = longDateFormat;
+    prototype__proto.invalidDate     = invalidDate;
+    prototype__proto.ordinal         = ordinal;
+    prototype__proto.preparse        = preParsePostFormat;
+    prototype__proto.postformat      = preParsePostFormat;
+    prototype__proto.relativeTime    = relative__relativeTime;
+    prototype__proto.pastFuture      = pastFuture;
+    prototype__proto.set             = locale_set__set;
+
+    // Month
+    prototype__proto.months            =        localeMonths;
+    prototype__proto.monthsShort       =        localeMonthsShort;
+    prototype__proto.monthsParse       =        localeMonthsParse;
+    prototype__proto.monthsRegex       = monthsRegex;
+    prototype__proto.monthsShortRegex  = monthsShortRegex;
+
+    // Week
+    prototype__proto.week = localeWeek;
+    prototype__proto.firstDayOfYear = localeFirstDayOfYear;
+    prototype__proto.firstDayOfWeek = localeFirstDayOfWeek;
+
+    // Day of Week
+    prototype__proto.weekdays       =        localeWeekdays;
+    prototype__proto.weekdaysMin    =        localeWeekdaysMin;
+    prototype__proto.weekdaysShort  =        localeWeekdaysShort;
+    prototype__proto.weekdaysParse  =        localeWeekdaysParse;
+
+    prototype__proto.weekdaysRegex       =        weekdaysRegex;
+    prototype__proto.weekdaysShortRegex  =        weekdaysShortRegex;
+    prototype__proto.weekdaysMinRegex    =        weekdaysMinRegex;
+
+    // Hours
+    prototype__proto.isPM = localeIsPM;
+    prototype__proto.meridiem = localeMeridiem;
+
+    function lists__get (format, index, field, setter) {
+        var locale = locale_locales__getLocale();
+        var utc = create_utc__createUTC().set(setter, index);
+        return locale[field](utc, format);
+    }
+
+    function listMonthsImpl (format, index, field) {
+        if (typeof format === 'number') {
+            index = format;
+            format = undefined;
+        }
+
+        format = format || '';
+
+        if (index != null) {
+            return lists__get(format, index, field, 'month');
+        }
+
+        var i;
+        var out = [];
+        for (i = 0; i < 12; i++) {
+            out[i] = lists__get(format, i, field, 'month');
+        }
+        return out;
+    }
+
+    // ()
+    // (5)
+    // (fmt, 5)
+    // (fmt)
+    // (true)
+    // (true, 5)
+    // (true, fmt, 5)
+    // (true, fmt)
+    function listWeekdaysImpl (localeSorted, format, index, field) {
+        if (typeof localeSorted === 'boolean') {
+            if (typeof format === 'number') {
+                index = format;
+                format = undefined;
+            }
+
+            format = format || '';
+        } else {
+            format = localeSorted;
+            index = format;
+            localeSorted = false;
+
+            if (typeof format === 'number') {
+                index = format;
+                format = undefined;
+            }
+
+            format = format || '';
+        }
+
+        var locale = locale_locales__getLocale(),
+            shift = localeSorted ? locale._week.dow : 0;
+
+        if (index != null) {
+            return lists__get(format, (index + shift) % 7, field, 'day');
+        }
+
+        var i;
+        var out = [];
+        for (i = 0; i < 7; i++) {
+            out[i] = lists__get(format, (i + shift) % 7, field, 'day');
+        }
+        return out;
+    }
+
+    function lists__listMonths (format, index) {
+        return listMonthsImpl(format, index, 'months');
+    }
+
+    function lists__listMonthsShort (format, index) {
+        return listMonthsImpl(format, index, 'monthsShort');
+    }
+
+    function lists__listWeekdays (localeSorted, format, index) {
+        return listWeekdaysImpl(localeSorted, format, index, 'weekdays');
+    }
+
+    function lists__listWeekdaysShort (localeSorted, format, index) {
+        return listWeekdaysImpl(localeSorted, format, index, 'weekdaysShort');
+    }
+
+    function lists__listWeekdaysMin (localeSorted, format, index) {
+        return listWeekdaysImpl(localeSorted, format, index, 'weekdaysMin');
+    }
+
+    locale_locales__getSetGlobalLocale('en', {
+        ordinalParse: /\d{1,2}(th|st|nd|rd)/,
+        ordinal : function (number) {
+            var b = number % 10,
+                output = (toInt(number % 100 / 10) === 1) ? 'th' :
+                (b === 1) ? 'st' :
+                (b === 2) ? 'nd' :
+                (b === 3) ? 'rd' : 'th';
+            return number + output;
+        }
+    });
+
+    // Side effect imports
+    utils_hooks__hooks.lang = deprecate('moment.lang is deprecated. Use moment.locale instead.', locale_locales__getSetGlobalLocale);
+    utils_hooks__hooks.langData = deprecate('moment.langData is deprecated. Use moment.localeData instead.', locale_locales__getLocale);
+
+    var mathAbs = Math.abs;
+
+    function duration_abs__abs () {
+        var data           = this._data;
+
+        this._milliseconds = mathAbs(this._milliseconds);
+        this._days         = mathAbs(this._days);
+        this._months       = mathAbs(this._months);
+
+        data.milliseconds  = mathAbs(data.milliseconds);
+        data.seconds       = mathAbs(data.seconds);
+        data.minutes       = mathAbs(data.minutes);
+        data.hours         = mathAbs(data.hours);
+        data.months        = mathAbs(data.months);
+        data.years         = mathAbs(data.years);
+
+        return this;
+    }
+
+    function duration_add_subtract__addSubtract (duration, input, value, direction) {
+        var other = create__createDuration(input, value);
+
+        duration._milliseconds += direction * other._milliseconds;
+        duration._days         += direction * other._days;
+        duration._months       += direction * other._months;
+
+        return duration._bubble();
+    }
+
+    // supports only 2.0-style add(1, 's') or add(duration)
+    function duration_add_subtract__add (input, value) {
+        return duration_add_subtract__addSubtract(this, input, value, 1);
+    }
+
+    // supports only 2.0-style subtract(1, 's') or subtract(duration)
+    function duration_add_subtract__subtract (input, value) {
+        return duration_add_subtract__addSubtract(this, input, value, -1);
+    }
+
+    function absCeil (number) {
+        if (number < 0) {
+            return Math.floor(number);
+        } else {
+            return Math.ceil(number);
+        }
+    }
+
+    function bubble () {
+        var milliseconds = this._milliseconds;
+        var days         = this._days;
+        var months       = this._months;
+        var data         = this._data;
+        var seconds, minutes, hours, years, monthsFromDays;
+
+        // if we have a mix of positive and negative values, bubble down first
+        // check: https://github.com/moment/moment/issues/2166
+        if (!((milliseconds >= 0 && days >= 0 && months >= 0) ||
+                (milliseconds <= 0 && days <= 0 && months <= 0))) {
+            milliseconds += absCeil(monthsToDays(months) + days) * 864e5;
+            days = 0;
+            months = 0;
+        }
+
+        // The following code bubbles up values, see the tests for
+        // examples of what that means.
+        data.milliseconds = milliseconds % 1000;
+
+        seconds           = absFloor(milliseconds / 1000);
+        data.seconds      = seconds % 60;
+
+        minutes           = absFloor(seconds / 60);
+        data.minutes      = minutes % 60;
+
+        hours             = absFloor(minutes / 60);
+        data.hours        = hours % 24;
+
+        days += absFloor(hours / 24);
+
+        // convert days to months
+        monthsFromDays = absFloor(daysToMonths(days));
+        months += monthsFromDays;
+        days -= absCeil(monthsToDays(monthsFromDays));
+
+        // 12 months -> 1 year
+        years = absFloor(months / 12);
+        months %= 12;
+
+        data.days   = days;
+        data.months = months;
+        data.years  = years;
+
+        return this;
+    }
+
+    function daysToMonths (days) {
+        // 400 years have 146097 days (taking into account leap year rules)
+        // 400 years have 12 months === 4800
+        return days * 4800 / 146097;
+    }
+
+    function monthsToDays (months) {
+        // the reverse of daysToMonths
+        return months * 146097 / 4800;
+    }
+
+    function as (units) {
+        var days;
+        var months;
+        var milliseconds = this._milliseconds;
+
+        units = normalizeUnits(units);
+
+        if (units === 'month' || units === 'year') {
+            days   = this._days   + milliseconds / 864e5;
+            months = this._months + daysToMonths(days);
+            return units === 'month' ? months : months / 12;
+        } else {
+            // handle milliseconds separately because of floating point math errors (issue #1867)
+            days = this._days + Math.round(monthsToDays(this._months));
+            switch (units) {
+                case 'week'   : return days / 7     + milliseconds / 6048e5;
+                case 'day'    : return days         + milliseconds / 864e5;
+                case 'hour'   : return days * 24    + milliseconds / 36e5;
+                case 'minute' : return days * 1440  + milliseconds / 6e4;
+                case 'second' : return days * 86400 + milliseconds / 1000;
+                // Math.floor prevents floating point math errors here
+                case 'millisecond': return Math.floor(days * 864e5) + milliseconds;
+                default: throw new Error('Unknown unit ' + units);
+            }
+        }
+    }
+
+    // TODO: Use this.as('ms')?
+    function duration_as__valueOf () {
+        return (
+            this._milliseconds +
+            this._days * 864e5 +
+            (this._months % 12) * 2592e6 +
+            toInt(this._months / 12) * 31536e6
+        );
+    }
+
+    function makeAs (alias) {
+        return function () {
+            return this.as(alias);
+        };
+    }
+
+    var asMilliseconds = makeAs('ms');
+    var asSeconds      = makeAs('s');
+    var asMinutes      = makeAs('m');
+    var asHours        = makeAs('h');
+    var asDays         = makeAs('d');
+    var asWeeks        = makeAs('w');
+    var asMonths       = makeAs('M');
+    var asYears        = makeAs('y');
+
+    function duration_get__get (units) {
+        units = normalizeUnits(units);
+        return this[units + 's']();
+    }
+
+    function makeGetter(name) {
+        return function () {
+            return this._data[name];
+        };
+    }
+
+    var milliseconds = makeGetter('milliseconds');
+    var seconds      = makeGetter('seconds');
+    var minutes      = makeGetter('minutes');
+    var hours        = makeGetter('hours');
+    var days         = makeGetter('days');
+    var months       = makeGetter('months');
+    var years        = makeGetter('years');
+
+    function weeks () {
+        return absFloor(this.days() / 7);
+    }
+
+    var round = Math.round;
+    var thresholds = {
+        s: 45,  // seconds to minute
+        m: 45,  // minutes to hour
+        h: 22,  // hours to day
+        d: 26,  // days to month
+        M: 11   // months to year
+    };
+
+    // helper function for moment.fn.from, moment.fn.fromNow, and moment.duration.fn.humanize
+    function substituteTimeAgo(string, number, withoutSuffix, isFuture, locale) {
+        return locale.relativeTime(number || 1, !!withoutSuffix, string, isFuture);
+    }
+
+    function duration_humanize__relativeTime (posNegDuration, withoutSuffix, locale) {
+        var duration = create__createDuration(posNegDuration).abs();
+        var seconds  = round(duration.as('s'));
+        var minutes  = round(duration.as('m'));
+        var hours    = round(duration.as('h'));
+        var days     = round(duration.as('d'));
+        var months   = round(duration.as('M'));
+        var years    = round(duration.as('y'));
+
+        var a = seconds < thresholds.s && ['s', seconds]  ||
+                minutes <= 1           && ['m']           ||
+                minutes < thresholds.m && ['mm', minutes] ||
+                hours   <= 1           && ['h']           ||
+                hours   < thresholds.h && ['hh', hours]   ||
+                days    <= 1           && ['d']           ||
+                days    < thresholds.d && ['dd', days]    ||
+                months  <= 1           && ['M']           ||
+                months  < thresholds.M && ['MM', months]  ||
+                years   <= 1           && ['y']           || ['yy', years];
+
+        a[2] = withoutSuffix;
+        a[3] = +posNegDuration > 0;
+        a[4] = locale;
+        return substituteTimeAgo.apply(null, a);
+    }
+
+    // This function allows you to set the rounding function for relative time strings
+    function duration_humanize__getSetRelativeTimeRounding (roundingFunction) {
+        if (roundingFunction === undefined) {
+            return round;
+        }
+        if (typeof(roundingFunction) === 'function') {
+            round = roundingFunction;
+            return true;
+        }
+        return false;
+    }
+
+    // This function allows you to set a threshold for relative time strings
+    function duration_humanize__getSetRelativeTimeThreshold (threshold, limit) {
+        if (thresholds[threshold] === undefined) {
+            return false;
+        }
+        if (limit === undefined) {
+            return thresholds[threshold];
+        }
+        thresholds[threshold] = limit;
+        return true;
+    }
+
+    function humanize (withSuffix) {
+        var locale = this.localeData();
+        var output = duration_humanize__relativeTime(this, !withSuffix, locale);
+
+        if (withSuffix) {
+            output = locale.pastFuture(+this, output);
+        }
+
+        return locale.postformat(output);
+    }
+
+    var iso_string__abs = Math.abs;
+
+    function iso_string__toISOString() {
+        // for ISO strings we do not use the normal bubbling rules:
+        //  * milliseconds bubble up until they become hours
+        //  * days do not bubble at all
+        //  * months bubble up until they become years
+        // This is because there is no context-free conversion between hours and days
+        // (think of clock changes)
+        // and also not between days and months (28-31 days per month)
+        var seconds = iso_string__abs(this._milliseconds) / 1000;
+        var days         = iso_string__abs(this._days);
+        var months       = iso_string__abs(this._months);
+        var minutes, hours, years;
+
+        // 3600 seconds -> 60 minutes -> 1 hour
+        minutes           = absFloor(seconds / 60);
+        hours             = absFloor(minutes / 60);
+        seconds %= 60;
+        minutes %= 60;
+
+        // 12 months -> 1 year
+        years  = absFloor(months / 12);
+        months %= 12;
+
+
+        // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js
+        var Y = years;
+        var M = months;
+        var D = days;
+        var h = hours;
+        var m = minutes;
+        var s = seconds;
+        var total = this.asSeconds();
+
+        if (!total) {
+            // this is the same as C#'s (Noda) and python (isodate)...
+            // but not other JS (goog.date)
+            return 'P0D';
+        }
+
+        return (total < 0 ? '-' : '') +
+            'P' +
+            (Y ? Y + 'Y' : '') +
+            (M ? M + 'M' : '') +
+            (D ? D + 'D' : '') +
+            ((h || m || s) ? 'T' : '') +
+            (h ? h + 'H' : '') +
+            (m ? m + 'M' : '') +
+            (s ? s + 'S' : '');
+    }
+
+    var duration_prototype__proto = Duration.prototype;
+
+    duration_prototype__proto.abs            = duration_abs__abs;
+    duration_prototype__proto.add            = duration_add_subtract__add;
+    duration_prototype__proto.subtract       = duration_add_subtract__subtract;
+    duration_prototype__proto.as             = as;
+    duration_prototype__proto.asMilliseconds = asMilliseconds;
+    duration_prototype__proto.asSeconds      = asSeconds;
+    duration_prototype__proto.asMinutes      = asMinutes;
+    duration_prototype__proto.asHours        = asHours;
+    duration_prototype__proto.asDays         = asDays;
+    duration_prototype__proto.asWeeks        = asWeeks;
+    duration_prototype__proto.asMonths       = asMonths;
+    duration_prototype__proto.asYears        = asYears;
+    duration_prototype__proto.valueOf        = duration_as__valueOf;
+    duration_prototype__proto._bubble        = bubble;
+    duration_prototype__proto.get            = duration_get__get;
+    duration_prototype__proto.milliseconds   = milliseconds;
+    duration_prototype__proto.seconds        = seconds;
+    duration_prototype__proto.minutes        = minutes;
+    duration_prototype__proto.hours          = hours;
+    duration_prototype__proto.days           = days;
+    duration_prototype__proto.weeks          = weeks;
+    duration_prototype__proto.months         = months;
+    duration_prototype__proto.years          = years;
+    duration_prototype__proto.humanize       = humanize;
+    duration_prototype__proto.toISOString    = iso_string__toISOString;
+    duration_prototype__proto.toString       = iso_string__toISOString;
+    duration_prototype__proto.toJSON         = iso_string__toISOString;
+    duration_prototype__proto.locale         = locale;
+    duration_prototype__proto.localeData     = localeData;
+
+    // Deprecations
+    duration_prototype__proto.toIsoString = deprecate('toIsoString() is deprecated. Please use toISOString() instead (notice the capitals)', iso_string__toISOString);
+    duration_prototype__proto.lang = lang;
+
+    // Side effect imports
+
+    // FORMATTING
+
+    addFormatToken('X', 0, 0, 'unix');
+    addFormatToken('x', 0, 0, 'valueOf');
+
+    // PARSING
+
+    addRegexToken('x', matchSigned);
+    addRegexToken('X', matchTimestamp);
+    addParseToken('X', function (input, array, config) {
+        config._d = new Date(parseFloat(input, 10) * 1000);
+    });
+    addParseToken('x', function (input, array, config) {
+        config._d = new Date(toInt(input));
+    });
+
+    // Side effect imports
+
+
+    utils_hooks__hooks.version = '2.14.1';
+
+    setHookCallback(local__createLocal);
+
+    utils_hooks__hooks.fn                    = momentPrototype;
+    utils_hooks__hooks.min                   = min;
+    utils_hooks__hooks.max                   = max;
+    utils_hooks__hooks.now                   = now;
+    utils_hooks__hooks.utc                   = create_utc__createUTC;
+    utils_hooks__hooks.unix                  = moment__createUnix;
+    utils_hooks__hooks.months                = lists__listMonths;
+    utils_hooks__hooks.isDate                = isDate;
+    utils_hooks__hooks.locale                = locale_locales__getSetGlobalLocale;
+    utils_hooks__hooks.invalid               = valid__createInvalid;
+    utils_hooks__hooks.duration              = create__createDuration;
+    utils_hooks__hooks.isMoment              = isMoment;
+    utils_hooks__hooks.weekdays              = lists__listWeekdays;
+    utils_hooks__hooks.parseZone             = moment__createInZone;
+    utils_hooks__hooks.localeData            = locale_locales__getLocale;
+    utils_hooks__hooks.isDuration            = isDuration;
+    utils_hooks__hooks.monthsShort           = lists__listMonthsShort;
+    utils_hooks__hooks.weekdaysMin           = lists__listWeekdaysMin;
+    utils_hooks__hooks.defineLocale          = defineLocale;
+    utils_hooks__hooks.updateLocale          = updateLocale;
+    utils_hooks__hooks.locales               = locale_locales__listLocales;
+    utils_hooks__hooks.weekdaysShort         = lists__listWeekdaysShort;
+    utils_hooks__hooks.normalizeUnits        = normalizeUnits;
+    utils_hooks__hooks.relativeTimeRounding = duration_humanize__getSetRelativeTimeRounding;
+    utils_hooks__hooks.relativeTimeThreshold = duration_humanize__getSetRelativeTimeThreshold;
+    utils_hooks__hooks.calendarFormat        = getCalendarFormat;
+    utils_hooks__hooks.prototype             = momentPrototype;
+
+    var _moment = utils_hooks__hooks;
+
+    return _moment;
+
+}));
+},{}],105:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
 
-// cached from whatever global is present so that test runners that stub it don't break things.
-var cachedSetTimeout = setTimeout;
-var cachedClearTimeout = clearTimeout;
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
 
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+(function () {
+  try {
+    cachedSetTimeout = setTimeout;
+  } catch (e) {
+    cachedSetTimeout = function () {
+      throw new Error('setTimeout is not defined');
+    }
+  }
+  try {
+    cachedClearTimeout = clearTimeout;
+  } catch (e) {
+    cachedClearTimeout = function () {
+      throw new Error('clearTimeout is not defined');
+    }
+  }
+} ())
 var queue = [];
 var draining = false;
 var currentQueue;
@@ -12399,7 +17774,1557 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],5:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
+//     Underscore.js 1.8.3
+//     http://underscorejs.org
+//     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+//     Underscore may be freely distributed under the MIT license.
+
+(function() {
+
+  // Baseline setup
+  // --------------
+
+  // Establish the root object, `window` in the browser, or `exports` on the server.
+  var root = this;
+
+  // Save the previous value of the `_` variable.
+  var previousUnderscore = root._;
+
+  // Save bytes in the minified (but not gzipped) version:
+  var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
+
+  // Create quick reference variables for speed access to core prototypes.
+  var
+    push             = ArrayProto.push,
+    slice            = ArrayProto.slice,
+    toString         = ObjProto.toString,
+    hasOwnProperty   = ObjProto.hasOwnProperty;
+
+  // All **ECMAScript 5** native function implementations that we hope to use
+  // are declared here.
+  var
+    nativeIsArray      = Array.isArray,
+    nativeKeys         = Object.keys,
+    nativeBind         = FuncProto.bind,
+    nativeCreate       = Object.create;
+
+  // Naked function reference for surrogate-prototype-swapping.
+  var Ctor = function(){};
+
+  // Create a safe reference to the Underscore object for use below.
+  var _ = function(obj) {
+    if (obj instanceof _) return obj;
+    if (!(this instanceof _)) return new _(obj);
+    this._wrapped = obj;
+  };
+
+  // Export the Underscore object for **Node.js**, with
+  // backwards-compatibility for the old `require()` API. If we're in
+  // the browser, add `_` as a global object.
+  if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+      exports = module.exports = _;
+    }
+    exports._ = _;
+  } else {
+    root._ = _;
+  }
+
+  // Current version.
+  _.VERSION = '1.8.3';
+
+  // Internal function that returns an efficient (for current engines) version
+  // of the passed-in callback, to be repeatedly applied in other Underscore
+  // functions.
+  var optimizeCb = function(func, context, argCount) {
+    if (context === void 0) return func;
+    switch (argCount == null ? 3 : argCount) {
+      case 1: return function(value) {
+        return func.call(context, value);
+      };
+      case 2: return function(value, other) {
+        return func.call(context, value, other);
+      };
+      case 3: return function(value, index, collection) {
+        return func.call(context, value, index, collection);
+      };
+      case 4: return function(accumulator, value, index, collection) {
+        return func.call(context, accumulator, value, index, collection);
+      };
+    }
+    return function() {
+      return func.apply(context, arguments);
+    };
+  };
+
+  // A mostly-internal function to generate callbacks that can be applied
+  // to each element in a collection, returning the desired result — either
+  // identity, an arbitrary callback, a property matcher, or a property accessor.
+  var cb = function(value, context, argCount) {
+    if (value == null) return _.identity;
+    if (_.isFunction(value)) return optimizeCb(value, context, argCount);
+    if (_.isObject(value)) return _.matcher(value);
+    return _.property(value);
+  };
+  _.iteratee = function(value, context) {
+    return cb(value, context, Infinity);
+  };
+
+  // An internal function for creating assigner functions.
+  var createAssigner = function(keysFunc, undefinedOnly) {
+    return function(obj) {
+      var length = arguments.length;
+      if (length < 2 || obj == null) return obj;
+      for (var index = 1; index < length; index++) {
+        var source = arguments[index],
+            keys = keysFunc(source),
+            l = keys.length;
+        for (var i = 0; i < l; i++) {
+          var key = keys[i];
+          if (!undefinedOnly || obj[key] === void 0) obj[key] = source[key];
+        }
+      }
+      return obj;
+    };
+  };
+
+  // An internal function for creating a new object that inherits from another.
+  var baseCreate = function(prototype) {
+    if (!_.isObject(prototype)) return {};
+    if (nativeCreate) return nativeCreate(prototype);
+    Ctor.prototype = prototype;
+    var result = new Ctor;
+    Ctor.prototype = null;
+    return result;
+  };
+
+  var property = function(key) {
+    return function(obj) {
+      return obj == null ? void 0 : obj[key];
+    };
+  };
+
+  // Helper for collection methods to determine whether a collection
+  // should be iterated as an array or as an object
+  // Related: http://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength
+  // Avoids a very nasty iOS 8 JIT bug on ARM-64. #2094
+  var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
+  var getLength = property('length');
+  var isArrayLike = function(collection) {
+    var length = getLength(collection);
+    return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
+  };
+
+  // Collection Functions
+  // --------------------
+
+  // The cornerstone, an `each` implementation, aka `forEach`.
+  // Handles raw objects in addition to array-likes. Treats all
+  // sparse array-likes as if they were dense.
+  _.each = _.forEach = function(obj, iteratee, context) {
+    iteratee = optimizeCb(iteratee, context);
+    var i, length;
+    if (isArrayLike(obj)) {
+      for (i = 0, length = obj.length; i < length; i++) {
+        iteratee(obj[i], i, obj);
+      }
+    } else {
+      var keys = _.keys(obj);
+      for (i = 0, length = keys.length; i < length; i++) {
+        iteratee(obj[keys[i]], keys[i], obj);
+      }
+    }
+    return obj;
+  };
+
+  // Return the results of applying the iteratee to each element.
+  _.map = _.collect = function(obj, iteratee, context) {
+    iteratee = cb(iteratee, context);
+    var keys = !isArrayLike(obj) && _.keys(obj),
+        length = (keys || obj).length,
+        results = Array(length);
+    for (var index = 0; index < length; index++) {
+      var currentKey = keys ? keys[index] : index;
+      results[index] = iteratee(obj[currentKey], currentKey, obj);
+    }
+    return results;
+  };
+
+  // Create a reducing function iterating left or right.
+  function createReduce(dir) {
+    // Optimized iterator function as using arguments.length
+    // in the main function will deoptimize the, see #1991.
+    function iterator(obj, iteratee, memo, keys, index, length) {
+      for (; index >= 0 && index < length; index += dir) {
+        var currentKey = keys ? keys[index] : index;
+        memo = iteratee(memo, obj[currentKey], currentKey, obj);
+      }
+      return memo;
+    }
+
+    return function(obj, iteratee, memo, context) {
+      iteratee = optimizeCb(iteratee, context, 4);
+      var keys = !isArrayLike(obj) && _.keys(obj),
+          length = (keys || obj).length,
+          index = dir > 0 ? 0 : length - 1;
+      // Determine the initial value if none is provided.
+      if (arguments.length < 3) {
+        memo = obj[keys ? keys[index] : index];
+        index += dir;
+      }
+      return iterator(obj, iteratee, memo, keys, index, length);
+    };
+  }
+
+  // **Reduce** builds up a single result from a list of values, aka `inject`,
+  // or `foldl`.
+  _.reduce = _.foldl = _.inject = createReduce(1);
+
+  // The right-associative version of reduce, also known as `foldr`.
+  _.reduceRight = _.foldr = createReduce(-1);
+
+  // Return the first value which passes a truth test. Aliased as `detect`.
+  _.find = _.detect = function(obj, predicate, context) {
+    var key;
+    if (isArrayLike(obj)) {
+      key = _.findIndex(obj, predicate, context);
+    } else {
+      key = _.findKey(obj, predicate, context);
+    }
+    if (key !== void 0 && key !== -1) return obj[key];
+  };
+
+  // Return all the elements that pass a truth test.
+  // Aliased as `select`.
+  _.filter = _.select = function(obj, predicate, context) {
+    var results = [];
+    predicate = cb(predicate, context);
+    _.each(obj, function(value, index, list) {
+      if (predicate(value, index, list)) results.push(value);
+    });
+    return results;
+  };
+
+  // Return all the elements for which a truth test fails.
+  _.reject = function(obj, predicate, context) {
+    return _.filter(obj, _.negate(cb(predicate)), context);
+  };
+
+  // Determine whether all of the elements match a truth test.
+  // Aliased as `all`.
+  _.every = _.all = function(obj, predicate, context) {
+    predicate = cb(predicate, context);
+    var keys = !isArrayLike(obj) && _.keys(obj),
+        length = (keys || obj).length;
+    for (var index = 0; index < length; index++) {
+      var currentKey = keys ? keys[index] : index;
+      if (!predicate(obj[currentKey], currentKey, obj)) return false;
+    }
+    return true;
+  };
+
+  // Determine if at least one element in the object matches a truth test.
+  // Aliased as `any`.
+  _.some = _.any = function(obj, predicate, context) {
+    predicate = cb(predicate, context);
+    var keys = !isArrayLike(obj) && _.keys(obj),
+        length = (keys || obj).length;
+    for (var index = 0; index < length; index++) {
+      var currentKey = keys ? keys[index] : index;
+      if (predicate(obj[currentKey], currentKey, obj)) return true;
+    }
+    return false;
+  };
+
+  // Determine if the array or object contains a given item (using `===`).
+  // Aliased as `includes` and `include`.
+  _.contains = _.includes = _.include = function(obj, item, fromIndex, guard) {
+    if (!isArrayLike(obj)) obj = _.values(obj);
+    if (typeof fromIndex != 'number' || guard) fromIndex = 0;
+    return _.indexOf(obj, item, fromIndex) >= 0;
+  };
+
+  // Invoke a method (with arguments) on every item in a collection.
+  _.invoke = function(obj, method) {
+    var args = slice.call(arguments, 2);
+    var isFunc = _.isFunction(method);
+    return _.map(obj, function(value) {
+      var func = isFunc ? method : value[method];
+      return func == null ? func : func.apply(value, args);
+    });
+  };
+
+  // Convenience version of a common use case of `map`: fetching a property.
+  _.pluck = function(obj, key) {
+    return _.map(obj, _.property(key));
+  };
+
+  // Convenience version of a common use case of `filter`: selecting only objects
+  // containing specific `key:value` pairs.
+  _.where = function(obj, attrs) {
+    return _.filter(obj, _.matcher(attrs));
+  };
+
+  // Convenience version of a common use case of `find`: getting the first object
+  // containing specific `key:value` pairs.
+  _.findWhere = function(obj, attrs) {
+    return _.find(obj, _.matcher(attrs));
+  };
+
+  // Return the maximum element (or element-based computation).
+  _.max = function(obj, iteratee, context) {
+    var result = -Infinity, lastComputed = -Infinity,
+        value, computed;
+    if (iteratee == null && obj != null) {
+      obj = isArrayLike(obj) ? obj : _.values(obj);
+      for (var i = 0, length = obj.length; i < length; i++) {
+        value = obj[i];
+        if (value > result) {
+          result = value;
+        }
+      }
+    } else {
+      iteratee = cb(iteratee, context);
+      _.each(obj, function(value, index, list) {
+        computed = iteratee(value, index, list);
+        if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
+          result = value;
+          lastComputed = computed;
+        }
+      });
+    }
+    return result;
+  };
+
+  // Return the minimum element (or element-based computation).
+  _.min = function(obj, iteratee, context) {
+    var result = Infinity, lastComputed = Infinity,
+        value, computed;
+    if (iteratee == null && obj != null) {
+      obj = isArrayLike(obj) ? obj : _.values(obj);
+      for (var i = 0, length = obj.length; i < length; i++) {
+        value = obj[i];
+        if (value < result) {
+          result = value;
+        }
+      }
+    } else {
+      iteratee = cb(iteratee, context);
+      _.each(obj, function(value, index, list) {
+        computed = iteratee(value, index, list);
+        if (computed < lastComputed || computed === Infinity && result === Infinity) {
+          result = value;
+          lastComputed = computed;
+        }
+      });
+    }
+    return result;
+  };
+
+  // Shuffle a collection, using the modern version of the
+  // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
+  _.shuffle = function(obj) {
+    var set = isArrayLike(obj) ? obj : _.values(obj);
+    var length = set.length;
+    var shuffled = Array(length);
+    for (var index = 0, rand; index < length; index++) {
+      rand = _.random(0, index);
+      if (rand !== index) shuffled[index] = shuffled[rand];
+      shuffled[rand] = set[index];
+    }
+    return shuffled;
+  };
+
+  // Sample **n** random values from a collection.
+  // If **n** is not specified, returns a single random element.
+  // The internal `guard` argument allows it to work with `map`.
+  _.sample = function(obj, n, guard) {
+    if (n == null || guard) {
+      if (!isArrayLike(obj)) obj = _.values(obj);
+      return obj[_.random(obj.length - 1)];
+    }
+    return _.shuffle(obj).slice(0, Math.max(0, n));
+  };
+
+  // Sort the object's values by a criterion produced by an iteratee.
+  _.sortBy = function(obj, iteratee, context) {
+    iteratee = cb(iteratee, context);
+    return _.pluck(_.map(obj, function(value, index, list) {
+      return {
+        value: value,
+        index: index,
+        criteria: iteratee(value, index, list)
+      };
+    }).sort(function(left, right) {
+      var a = left.criteria;
+      var b = right.criteria;
+      if (a !== b) {
+        if (a > b || a === void 0) return 1;
+        if (a < b || b === void 0) return -1;
+      }
+      return left.index - right.index;
+    }), 'value');
+  };
+
+  // An internal function used for aggregate "group by" operations.
+  var group = function(behavior) {
+    return function(obj, iteratee, context) {
+      var result = {};
+      iteratee = cb(iteratee, context);
+      _.each(obj, function(value, index) {
+        var key = iteratee(value, index, obj);
+        behavior(result, value, key);
+      });
+      return result;
+    };
+  };
+
+  // Groups the object's values by a criterion. Pass either a string attribute
+  // to group by, or a function that returns the criterion.
+  _.groupBy = group(function(result, value, key) {
+    if (_.has(result, key)) result[key].push(value); else result[key] = [value];
+  });
+
+  // Indexes the object's values by a criterion, similar to `groupBy`, but for
+  // when you know that your index values will be unique.
+  _.indexBy = group(function(result, value, key) {
+    result[key] = value;
+  });
+
+  // Counts instances of an object that group by a certain criterion. Pass
+  // either a string attribute to count by, or a function that returns the
+  // criterion.
+  _.countBy = group(function(result, value, key) {
+    if (_.has(result, key)) result[key]++; else result[key] = 1;
+  });
+
+  // Safely create a real, live array from anything iterable.
+  _.toArray = function(obj) {
+    if (!obj) return [];
+    if (_.isArray(obj)) return slice.call(obj);
+    if (isArrayLike(obj)) return _.map(obj, _.identity);
+    return _.values(obj);
+  };
+
+  // Return the number of elements in an object.
+  _.size = function(obj) {
+    if (obj == null) return 0;
+    return isArrayLike(obj) ? obj.length : _.keys(obj).length;
+  };
+
+  // Split a collection into two arrays: one whose elements all satisfy the given
+  // predicate, and one whose elements all do not satisfy the predicate.
+  _.partition = function(obj, predicate, context) {
+    predicate = cb(predicate, context);
+    var pass = [], fail = [];
+    _.each(obj, function(value, key, obj) {
+      (predicate(value, key, obj) ? pass : fail).push(value);
+    });
+    return [pass, fail];
+  };
+
+  // Array Functions
+  // ---------------
+
+  // Get the first element of an array. Passing **n** will return the first N
+  // values in the array. Aliased as `head` and `take`. The **guard** check
+  // allows it to work with `_.map`.
+  _.first = _.head = _.take = function(array, n, guard) {
+    if (array == null) return void 0;
+    if (n == null || guard) return array[0];
+    return _.initial(array, array.length - n);
+  };
+
+  // Returns everything but the last entry of the array. Especially useful on
+  // the arguments object. Passing **n** will return all the values in
+  // the array, excluding the last N.
+  _.initial = function(array, n, guard) {
+    return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
+  };
+
+  // Get the last element of an array. Passing **n** will return the last N
+  // values in the array.
+  _.last = function(array, n, guard) {
+    if (array == null) return void 0;
+    if (n == null || guard) return array[array.length - 1];
+    return _.rest(array, Math.max(0, array.length - n));
+  };
+
+  // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
+  // Especially useful on the arguments object. Passing an **n** will return
+  // the rest N values in the array.
+  _.rest = _.tail = _.drop = function(array, n, guard) {
+    return slice.call(array, n == null || guard ? 1 : n);
+  };
+
+  // Trim out all falsy values from an array.
+  _.compact = function(array) {
+    return _.filter(array, _.identity);
+  };
+
+  // Internal implementation of a recursive `flatten` function.
+  var flatten = function(input, shallow, strict, startIndex) {
+    var output = [], idx = 0;
+    for (var i = startIndex || 0, length = getLength(input); i < length; i++) {
+      var value = input[i];
+      if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
+        //flatten current level of array or arguments object
+        if (!shallow) value = flatten(value, shallow, strict);
+        var j = 0, len = value.length;
+        output.length += len;
+        while (j < len) {
+          output[idx++] = value[j++];
+        }
+      } else if (!strict) {
+        output[idx++] = value;
+      }
+    }
+    return output;
+  };
+
+  // Flatten out an array, either recursively (by default), or just one level.
+  _.flatten = function(array, shallow) {
+    return flatten(array, shallow, false);
+  };
+
+  // Return a version of the array that does not contain the specified value(s).
+  _.without = function(array) {
+    return _.difference(array, slice.call(arguments, 1));
+  };
+
+  // Produce a duplicate-free version of the array. If the array has already
+  // been sorted, you have the option of using a faster algorithm.
+  // Aliased as `unique`.
+  _.uniq = _.unique = function(array, isSorted, iteratee, context) {
+    if (!_.isBoolean(isSorted)) {
+      context = iteratee;
+      iteratee = isSorted;
+      isSorted = false;
+    }
+    if (iteratee != null) iteratee = cb(iteratee, context);
+    var result = [];
+    var seen = [];
+    for (var i = 0, length = getLength(array); i < length; i++) {
+      var value = array[i],
+          computed = iteratee ? iteratee(value, i, array) : value;
+      if (isSorted) {
+        if (!i || seen !== computed) result.push(value);
+        seen = computed;
+      } else if (iteratee) {
+        if (!_.contains(seen, computed)) {
+          seen.push(computed);
+          result.push(value);
+        }
+      } else if (!_.contains(result, value)) {
+        result.push(value);
+      }
+    }
+    return result;
+  };
+
+  // Produce an array that contains the union: each distinct element from all of
+  // the passed-in arrays.
+  _.union = function() {
+    return _.uniq(flatten(arguments, true, true));
+  };
+
+  // Produce an array that contains every item shared between all the
+  // passed-in arrays.
+  _.intersection = function(array) {
+    var result = [];
+    var argsLength = arguments.length;
+    for (var i = 0, length = getLength(array); i < length; i++) {
+      var item = array[i];
+      if (_.contains(result, item)) continue;
+      for (var j = 1; j < argsLength; j++) {
+        if (!_.contains(arguments[j], item)) break;
+      }
+      if (j === argsLength) result.push(item);
+    }
+    return result;
+  };
+
+  // Take the difference between one array and a number of other arrays.
+  // Only the elements present in just the first array will remain.
+  _.difference = function(array) {
+    var rest = flatten(arguments, true, true, 1);
+    return _.filter(array, function(value){
+      return !_.contains(rest, value);
+    });
+  };
+
+  // Zip together multiple lists into a single array -- elements that share
+  // an index go together.
+  _.zip = function() {
+    return _.unzip(arguments);
+  };
+
+  // Complement of _.zip. Unzip accepts an array of arrays and groups
+  // each array's elements on shared indices
+  _.unzip = function(array) {
+    var length = array && _.max(array, getLength).length || 0;
+    var result = Array(length);
+
+    for (var index = 0; index < length; index++) {
+      result[index] = _.pluck(array, index);
+    }
+    return result;
+  };
+
+  // Converts lists into objects. Pass either a single array of `[key, value]`
+  // pairs, or two parallel arrays of the same length -- one of keys, and one of
+  // the corresponding values.
+  _.object = function(list, values) {
+    var result = {};
+    for (var i = 0, length = getLength(list); i < length; i++) {
+      if (values) {
+        result[list[i]] = values[i];
+      } else {
+        result[list[i][0]] = list[i][1];
+      }
+    }
+    return result;
+  };
+
+  // Generator function to create the findIndex and findLastIndex functions
+  function createPredicateIndexFinder(dir) {
+    return function(array, predicate, context) {
+      predicate = cb(predicate, context);
+      var length = getLength(array);
+      var index = dir > 0 ? 0 : length - 1;
+      for (; index >= 0 && index < length; index += dir) {
+        if (predicate(array[index], index, array)) return index;
+      }
+      return -1;
+    };
+  }
+
+  // Returns the first index on an array-like that passes a predicate test
+  _.findIndex = createPredicateIndexFinder(1);
+  _.findLastIndex = createPredicateIndexFinder(-1);
+
+  // Use a comparator function to figure out the smallest index at which
+  // an object should be inserted so as to maintain order. Uses binary search.
+  _.sortedIndex = function(array, obj, iteratee, context) {
+    iteratee = cb(iteratee, context, 1);
+    var value = iteratee(obj);
+    var low = 0, high = getLength(array);
+    while (low < high) {
+      var mid = Math.floor((low + high) / 2);
+      if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
+    }
+    return low;
+  };
+
+  // Generator function to create the indexOf and lastIndexOf functions
+  function createIndexFinder(dir, predicateFind, sortedIndex) {
+    return function(array, item, idx) {
+      var i = 0, length = getLength(array);
+      if (typeof idx == 'number') {
+        if (dir > 0) {
+            i = idx >= 0 ? idx : Math.max(idx + length, i);
+        } else {
+            length = idx >= 0 ? Math.min(idx + 1, length) : idx + length + 1;
+        }
+      } else if (sortedIndex && idx && length) {
+        idx = sortedIndex(array, item);
+        return array[idx] === item ? idx : -1;
+      }
+      if (item !== item) {
+        idx = predicateFind(slice.call(array, i, length), _.isNaN);
+        return idx >= 0 ? idx + i : -1;
+      }
+      for (idx = dir > 0 ? i : length - 1; idx >= 0 && idx < length; idx += dir) {
+        if (array[idx] === item) return idx;
+      }
+      return -1;
+    };
+  }
+
+  // Return the position of the first occurrence of an item in an array,
+  // or -1 if the item is not included in the array.
+  // If the array is large and already in sort order, pass `true`
+  // for **isSorted** to use binary search.
+  _.indexOf = createIndexFinder(1, _.findIndex, _.sortedIndex);
+  _.lastIndexOf = createIndexFinder(-1, _.findLastIndex);
+
+  // Generate an integer Array containing an arithmetic progression. A port of
+  // the native Python `range()` function. See
+  // [the Python documentation](http://docs.python.org/library/functions.html#range).
+  _.range = function(start, stop, step) {
+    if (stop == null) {
+      stop = start || 0;
+      start = 0;
+    }
+    step = step || 1;
+
+    var length = Math.max(Math.ceil((stop - start) / step), 0);
+    var range = Array(length);
+
+    for (var idx = 0; idx < length; idx++, start += step) {
+      range[idx] = start;
+    }
+
+    return range;
+  };
+
+  // Function (ahem) Functions
+  // ------------------
+
+  // Determines whether to execute a function as a constructor
+  // or a normal function with the provided arguments
+  var executeBound = function(sourceFunc, boundFunc, context, callingContext, args) {
+    if (!(callingContext instanceof boundFunc)) return sourceFunc.apply(context, args);
+    var self = baseCreate(sourceFunc.prototype);
+    var result = sourceFunc.apply(self, args);
+    if (_.isObject(result)) return result;
+    return self;
+  };
+
+  // Create a function bound to a given object (assigning `this`, and arguments,
+  // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
+  // available.
+  _.bind = function(func, context) {
+    if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
+    if (!_.isFunction(func)) throw new TypeError('Bind must be called on a function');
+    var args = slice.call(arguments, 2);
+    var bound = function() {
+      return executeBound(func, bound, context, this, args.concat(slice.call(arguments)));
+    };
+    return bound;
+  };
+
+  // Partially apply a function by creating a version that has had some of its
+  // arguments pre-filled, without changing its dynamic `this` context. _ acts
+  // as a placeholder, allowing any combination of arguments to be pre-filled.
+  _.partial = function(func) {
+    var boundArgs = slice.call(arguments, 1);
+    var bound = function() {
+      var position = 0, length = boundArgs.length;
+      var args = Array(length);
+      for (var i = 0; i < length; i++) {
+        args[i] = boundArgs[i] === _ ? arguments[position++] : boundArgs[i];
+      }
+      while (position < arguments.length) args.push(arguments[position++]);
+      return executeBound(func, bound, this, this, args);
+    };
+    return bound;
+  };
+
+  // Bind a number of an object's methods to that object. Remaining arguments
+  // are the method names to be bound. Useful for ensuring that all callbacks
+  // defined on an object belong to it.
+  _.bindAll = function(obj) {
+    var i, length = arguments.length, key;
+    if (length <= 1) throw new Error('bindAll must be passed function names');
+    for (i = 1; i < length; i++) {
+      key = arguments[i];
+      obj[key] = _.bind(obj[key], obj);
+    }
+    return obj;
+  };
+
+  // Memoize an expensive function by storing its results.
+  _.memoize = function(func, hasher) {
+    var memoize = function(key) {
+      var cache = memoize.cache;
+      var address = '' + (hasher ? hasher.apply(this, arguments) : key);
+      if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
+      return cache[address];
+    };
+    memoize.cache = {};
+    return memoize;
+  };
+
+  // Delays a function for the given number of milliseconds, and then calls
+  // it with the arguments supplied.
+  _.delay = function(func, wait) {
+    var args = slice.call(arguments, 2);
+    return setTimeout(function(){
+      return func.apply(null, args);
+    }, wait);
+  };
+
+  // Defers a function, scheduling it to run after the current call stack has
+  // cleared.
+  _.defer = _.partial(_.delay, _, 1);
+
+  // Returns a function, that, when invoked, will only be triggered at most once
+  // during a given window of time. Normally, the throttled function will run
+  // as much as it can, without ever going more than once per `wait` duration;
+  // but if you'd like to disable the execution on the leading edge, pass
+  // `{leading: false}`. To disable execution on the trailing edge, ditto.
+  _.throttle = function(func, wait, options) {
+    var context, args, result;
+    var timeout = null;
+    var previous = 0;
+    if (!options) options = {};
+    var later = function() {
+      previous = options.leading === false ? 0 : _.now();
+      timeout = null;
+      result = func.apply(context, args);
+      if (!timeout) context = args = null;
+    };
+    return function() {
+      var now = _.now();
+      if (!previous && options.leading === false) previous = now;
+      var remaining = wait - (now - previous);
+      context = this;
+      args = arguments;
+      if (remaining <= 0 || remaining > wait) {
+        if (timeout) {
+          clearTimeout(timeout);
+          timeout = null;
+        }
+        previous = now;
+        result = func.apply(context, args);
+        if (!timeout) context = args = null;
+      } else if (!timeout && options.trailing !== false) {
+        timeout = setTimeout(later, remaining);
+      }
+      return result;
+    };
+  };
+
+  // Returns a function, that, as long as it continues to be invoked, will not
+  // be triggered. The function will be called after it stops being called for
+  // N milliseconds. If `immediate` is passed, trigger the function on the
+  // leading edge, instead of the trailing.
+  _.debounce = function(func, wait, immediate) {
+    var timeout, args, context, timestamp, result;
+
+    var later = function() {
+      var last = _.now() - timestamp;
+
+      if (last < wait && last >= 0) {
+        timeout = setTimeout(later, wait - last);
+      } else {
+        timeout = null;
+        if (!immediate) {
+          result = func.apply(context, args);
+          if (!timeout) context = args = null;
+        }
+      }
+    };
+
+    return function() {
+      context = this;
+      args = arguments;
+      timestamp = _.now();
+      var callNow = immediate && !timeout;
+      if (!timeout) timeout = setTimeout(later, wait);
+      if (callNow) {
+        result = func.apply(context, args);
+        context = args = null;
+      }
+
+      return result;
+    };
+  };
+
+  // Returns the first function passed as an argument to the second,
+  // allowing you to adjust arguments, run code before and after, and
+  // conditionally execute the original function.
+  _.wrap = function(func, wrapper) {
+    return _.partial(wrapper, func);
+  };
+
+  // Returns a negated version of the passed-in predicate.
+  _.negate = function(predicate) {
+    return function() {
+      return !predicate.apply(this, arguments);
+    };
+  };
+
+  // Returns a function that is the composition of a list of functions, each
+  // consuming the return value of the function that follows.
+  _.compose = function() {
+    var args = arguments;
+    var start = args.length - 1;
+    return function() {
+      var i = start;
+      var result = args[start].apply(this, arguments);
+      while (i--) result = args[i].call(this, result);
+      return result;
+    };
+  };
+
+  // Returns a function that will only be executed on and after the Nth call.
+  _.after = function(times, func) {
+    return function() {
+      if (--times < 1) {
+        return func.apply(this, arguments);
+      }
+    };
+  };
+
+  // Returns a function that will only be executed up to (but not including) the Nth call.
+  _.before = function(times, func) {
+    var memo;
+    return function() {
+      if (--times > 0) {
+        memo = func.apply(this, arguments);
+      }
+      if (times <= 1) func = null;
+      return memo;
+    };
+  };
+
+  // Returns a function that will be executed at most one time, no matter how
+  // often you call it. Useful for lazy initialization.
+  _.once = _.partial(_.before, 2);
+
+  // Object Functions
+  // ----------------
+
+  // Keys in IE < 9 that won't be iterated by `for key in ...` and thus missed.
+  var hasEnumBug = !{toString: null}.propertyIsEnumerable('toString');
+  var nonEnumerableProps = ['valueOf', 'isPrototypeOf', 'toString',
+                      'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
+
+  function collectNonEnumProps(obj, keys) {
+    var nonEnumIdx = nonEnumerableProps.length;
+    var constructor = obj.constructor;
+    var proto = (_.isFunction(constructor) && constructor.prototype) || ObjProto;
+
+    // Constructor is a special case.
+    var prop = 'constructor';
+    if (_.has(obj, prop) && !_.contains(keys, prop)) keys.push(prop);
+
+    while (nonEnumIdx--) {
+      prop = nonEnumerableProps[nonEnumIdx];
+      if (prop in obj && obj[prop] !== proto[prop] && !_.contains(keys, prop)) {
+        keys.push(prop);
+      }
+    }
+  }
+
+  // Retrieve the names of an object's own properties.
+  // Delegates to **ECMAScript 5**'s native `Object.keys`
+  _.keys = function(obj) {
+    if (!_.isObject(obj)) return [];
+    if (nativeKeys) return nativeKeys(obj);
+    var keys = [];
+    for (var key in obj) if (_.has(obj, key)) keys.push(key);
+    // Ahem, IE < 9.
+    if (hasEnumBug) collectNonEnumProps(obj, keys);
+    return keys;
+  };
+
+  // Retrieve all the property names of an object.
+  _.allKeys = function(obj) {
+    if (!_.isObject(obj)) return [];
+    var keys = [];
+    for (var key in obj) keys.push(key);
+    // Ahem, IE < 9.
+    if (hasEnumBug) collectNonEnumProps(obj, keys);
+    return keys;
+  };
+
+  // Retrieve the values of an object's properties.
+  _.values = function(obj) {
+    var keys = _.keys(obj);
+    var length = keys.length;
+    var values = Array(length);
+    for (var i = 0; i < length; i++) {
+      values[i] = obj[keys[i]];
+    }
+    return values;
+  };
+
+  // Returns the results of applying the iteratee to each element of the object
+  // In contrast to _.map it returns an object
+  _.mapObject = function(obj, iteratee, context) {
+    iteratee = cb(iteratee, context);
+    var keys =  _.keys(obj),
+          length = keys.length,
+          results = {},
+          currentKey;
+      for (var index = 0; index < length; index++) {
+        currentKey = keys[index];
+        results[currentKey] = iteratee(obj[currentKey], currentKey, obj);
+      }
+      return results;
+  };
+
+  // Convert an object into a list of `[key, value]` pairs.
+  _.pairs = function(obj) {
+    var keys = _.keys(obj);
+    var length = keys.length;
+    var pairs = Array(length);
+    for (var i = 0; i < length; i++) {
+      pairs[i] = [keys[i], obj[keys[i]]];
+    }
+    return pairs;
+  };
+
+  // Invert the keys and values of an object. The values must be serializable.
+  _.invert = function(obj) {
+    var result = {};
+    var keys = _.keys(obj);
+    for (var i = 0, length = keys.length; i < length; i++) {
+      result[obj[keys[i]]] = keys[i];
+    }
+    return result;
+  };
+
+  // Return a sorted list of the function names available on the object.
+  // Aliased as `methods`
+  _.functions = _.methods = function(obj) {
+    var names = [];
+    for (var key in obj) {
+      if (_.isFunction(obj[key])) names.push(key);
+    }
+    return names.sort();
+  };
+
+  // Extend a given object with all the properties in passed-in object(s).
+  _.extend = createAssigner(_.allKeys);
+
+  // Assigns a given object with all the own properties in the passed-in object(s)
+  // (https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+  _.extendOwn = _.assign = createAssigner(_.keys);
+
+  // Returns the first key on an object that passes a predicate test
+  _.findKey = function(obj, predicate, context) {
+    predicate = cb(predicate, context);
+    var keys = _.keys(obj), key;
+    for (var i = 0, length = keys.length; i < length; i++) {
+      key = keys[i];
+      if (predicate(obj[key], key, obj)) return key;
+    }
+  };
+
+  // Return a copy of the object only containing the whitelisted properties.
+  _.pick = function(object, oiteratee, context) {
+    var result = {}, obj = object, iteratee, keys;
+    if (obj == null) return result;
+    if (_.isFunction(oiteratee)) {
+      keys = _.allKeys(obj);
+      iteratee = optimizeCb(oiteratee, context);
+    } else {
+      keys = flatten(arguments, false, false, 1);
+      iteratee = function(value, key, obj) { return key in obj; };
+      obj = Object(obj);
+    }
+    for (var i = 0, length = keys.length; i < length; i++) {
+      var key = keys[i];
+      var value = obj[key];
+      if (iteratee(value, key, obj)) result[key] = value;
+    }
+    return result;
+  };
+
+   // Return a copy of the object without the blacklisted properties.
+  _.omit = function(obj, iteratee, context) {
+    if (_.isFunction(iteratee)) {
+      iteratee = _.negate(iteratee);
+    } else {
+      var keys = _.map(flatten(arguments, false, false, 1), String);
+      iteratee = function(value, key) {
+        return !_.contains(keys, key);
+      };
+    }
+    return _.pick(obj, iteratee, context);
+  };
+
+  // Fill in a given object with default properties.
+  _.defaults = createAssigner(_.allKeys, true);
+
+  // Creates an object that inherits from the given prototype object.
+  // If additional properties are provided then they will be added to the
+  // created object.
+  _.create = function(prototype, props) {
+    var result = baseCreate(prototype);
+    if (props) _.extendOwn(result, props);
+    return result;
+  };
+
+  // Create a (shallow-cloned) duplicate of an object.
+  _.clone = function(obj) {
+    if (!_.isObject(obj)) return obj;
+    return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
+  };
+
+  // Invokes interceptor with the obj, and then returns obj.
+  // The primary purpose of this method is to "tap into" a method chain, in
+  // order to perform operations on intermediate results within the chain.
+  _.tap = function(obj, interceptor) {
+    interceptor(obj);
+    return obj;
+  };
+
+  // Returns whether an object has a given set of `key:value` pairs.
+  _.isMatch = function(object, attrs) {
+    var keys = _.keys(attrs), length = keys.length;
+    if (object == null) return !length;
+    var obj = Object(object);
+    for (var i = 0; i < length; i++) {
+      var key = keys[i];
+      if (attrs[key] !== obj[key] || !(key in obj)) return false;
+    }
+    return true;
+  };
+
+
+  // Internal recursive comparison function for `isEqual`.
+  var eq = function(a, b, aStack, bStack) {
+    // Identical objects are equal. `0 === -0`, but they aren't identical.
+    // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
+    if (a === b) return a !== 0 || 1 / a === 1 / b;
+    // A strict comparison is necessary because `null == undefined`.
+    if (a == null || b == null) return a === b;
+    // Unwrap any wrapped objects.
+    if (a instanceof _) a = a._wrapped;
+    if (b instanceof _) b = b._wrapped;
+    // Compare `[[Class]]` names.
+    var className = toString.call(a);
+    if (className !== toString.call(b)) return false;
+    switch (className) {
+      // Strings, numbers, regular expressions, dates, and booleans are compared by value.
+      case '[object RegExp]':
+      // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
+      case '[object String]':
+        // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+        // equivalent to `new String("5")`.
+        return '' + a === '' + b;
+      case '[object Number]':
+        // `NaN`s are equivalent, but non-reflexive.
+        // Object(NaN) is equivalent to NaN
+        if (+a !== +a) return +b !== +b;
+        // An `egal` comparison is performed for other numeric values.
+        return +a === 0 ? 1 / +a === 1 / b : +a === +b;
+      case '[object Date]':
+      case '[object Boolean]':
+        // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+        // millisecond representations. Note that invalid dates with millisecond representations
+        // of `NaN` are not equivalent.
+        return +a === +b;
+    }
+
+    var areArrays = className === '[object Array]';
+    if (!areArrays) {
+      if (typeof a != 'object' || typeof b != 'object') return false;
+
+      // Objects with different constructors are not equivalent, but `Object`s or `Array`s
+      // from different frames are.
+      var aCtor = a.constructor, bCtor = b.constructor;
+      if (aCtor !== bCtor && !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
+                               _.isFunction(bCtor) && bCtor instanceof bCtor)
+                          && ('constructor' in a && 'constructor' in b)) {
+        return false;
+      }
+    }
+    // Assume equality for cyclic structures. The algorithm for detecting cyclic
+    // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+
+    // Initializing stack of traversed objects.
+    // It's done here since we only need them for objects and arrays comparison.
+    aStack = aStack || [];
+    bStack = bStack || [];
+    var length = aStack.length;
+    while (length--) {
+      // Linear search. Performance is inversely proportional to the number of
+      // unique nested structures.
+      if (aStack[length] === a) return bStack[length] === b;
+    }
+
+    // Add the first object to the stack of traversed objects.
+    aStack.push(a);
+    bStack.push(b);
+
+    // Recursively compare objects and arrays.
+    if (areArrays) {
+      // Compare array lengths to determine if a deep comparison is necessary.
+      length = a.length;
+      if (length !== b.length) return false;
+      // Deep compare the contents, ignoring non-numeric properties.
+      while (length--) {
+        if (!eq(a[length], b[length], aStack, bStack)) return false;
+      }
+    } else {
+      // Deep compare objects.
+      var keys = _.keys(a), key;
+      length = keys.length;
+      // Ensure that both objects contain the same number of properties before comparing deep equality.
+      if (_.keys(b).length !== length) return false;
+      while (length--) {
+        // Deep compare each member
+        key = keys[length];
+        if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
+      }
+    }
+    // Remove the first object from the stack of traversed objects.
+    aStack.pop();
+    bStack.pop();
+    return true;
+  };
+
+  // Perform a deep comparison to check if two objects are equal.
+  _.isEqual = function(a, b) {
+    return eq(a, b);
+  };
+
+  // Is a given array, string, or object empty?
+  // An "empty" object has no enumerable own-properties.
+  _.isEmpty = function(obj) {
+    if (obj == null) return true;
+    if (isArrayLike(obj) && (_.isArray(obj) || _.isString(obj) || _.isArguments(obj))) return obj.length === 0;
+    return _.keys(obj).length === 0;
+  };
+
+  // Is a given value a DOM element?
+  _.isElement = function(obj) {
+    return !!(obj && obj.nodeType === 1);
+  };
+
+  // Is a given value an array?
+  // Delegates to ECMA5's native Array.isArray
+  _.isArray = nativeIsArray || function(obj) {
+    return toString.call(obj) === '[object Array]';
+  };
+
+  // Is a given variable an object?
+  _.isObject = function(obj) {
+    var type = typeof obj;
+    return type === 'function' || type === 'object' && !!obj;
+  };
+
+  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp, isError.
+  _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'], function(name) {
+    _['is' + name] = function(obj) {
+      return toString.call(obj) === '[object ' + name + ']';
+    };
+  });
+
+  // Define a fallback version of the method in browsers (ahem, IE < 9), where
+  // there isn't any inspectable "Arguments" type.
+  if (!_.isArguments(arguments)) {
+    _.isArguments = function(obj) {
+      return _.has(obj, 'callee');
+    };
+  }
+
+  // Optimize `isFunction` if appropriate. Work around some typeof bugs in old v8,
+  // IE 11 (#1621), and in Safari 8 (#1929).
+  if (typeof /./ != 'function' && typeof Int8Array != 'object') {
+    _.isFunction = function(obj) {
+      return typeof obj == 'function' || false;
+    };
+  }
+
+  // Is a given object a finite number?
+  _.isFinite = function(obj) {
+    return isFinite(obj) && !isNaN(parseFloat(obj));
+  };
+
+  // Is the given value `NaN`? (NaN is the only number which does not equal itself).
+  _.isNaN = function(obj) {
+    return _.isNumber(obj) && obj !== +obj;
+  };
+
+  // Is a given value a boolean?
+  _.isBoolean = function(obj) {
+    return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
+  };
+
+  // Is a given value equal to null?
+  _.isNull = function(obj) {
+    return obj === null;
+  };
+
+  // Is a given variable undefined?
+  _.isUndefined = function(obj) {
+    return obj === void 0;
+  };
+
+  // Shortcut function for checking if an object has a given property directly
+  // on itself (in other words, not on a prototype).
+  _.has = function(obj, key) {
+    return obj != null && hasOwnProperty.call(obj, key);
+  };
+
+  // Utility Functions
+  // -----------------
+
+  // Run Underscore.js in *noConflict* mode, returning the `_` variable to its
+  // previous owner. Returns a reference to the Underscore object.
+  _.noConflict = function() {
+    root._ = previousUnderscore;
+    return this;
+  };
+
+  // Keep the identity function around for default iteratees.
+  _.identity = function(value) {
+    return value;
+  };
+
+  // Predicate-generating functions. Often useful outside of Underscore.
+  _.constant = function(value) {
+    return function() {
+      return value;
+    };
+  };
+
+  _.noop = function(){};
+
+  _.property = property;
+
+  // Generates a function for a given object that returns a given property.
+  _.propertyOf = function(obj) {
+    return obj == null ? function(){} : function(key) {
+      return obj[key];
+    };
+  };
+
+  // Returns a predicate for checking whether an object has a given set of
+  // `key:value` pairs.
+  _.matcher = _.matches = function(attrs) {
+    attrs = _.extendOwn({}, attrs);
+    return function(obj) {
+      return _.isMatch(obj, attrs);
+    };
+  };
+
+  // Run a function **n** times.
+  _.times = function(n, iteratee, context) {
+    var accum = Array(Math.max(0, n));
+    iteratee = optimizeCb(iteratee, context, 1);
+    for (var i = 0; i < n; i++) accum[i] = iteratee(i);
+    return accum;
+  };
+
+  // Return a random integer between min and max (inclusive).
+  _.random = function(min, max) {
+    if (max == null) {
+      max = min;
+      min = 0;
+    }
+    return min + Math.floor(Math.random() * (max - min + 1));
+  };
+
+  // A (possibly faster) way to get the current timestamp as an integer.
+  _.now = Date.now || function() {
+    return new Date().getTime();
+  };
+
+   // List of HTML entities for escaping.
+  var escapeMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '`': '&#x60;'
+  };
+  var unescapeMap = _.invert(escapeMap);
+
+  // Functions for escaping and unescaping strings to/from HTML interpolation.
+  var createEscaper = function(map) {
+    var escaper = function(match) {
+      return map[match];
+    };
+    // Regexes for identifying a key that needs to be escaped
+    var source = '(?:' + _.keys(map).join('|') + ')';
+    var testRegexp = RegExp(source);
+    var replaceRegexp = RegExp(source, 'g');
+    return function(string) {
+      string = string == null ? '' : '' + string;
+      return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+    };
+  };
+  _.escape = createEscaper(escapeMap);
+  _.unescape = createEscaper(unescapeMap);
+
+  // If the value of the named `property` is a function then invoke it with the
+  // `object` as context; otherwise, return it.
+  _.result = function(object, property, fallback) {
+    var value = object == null ? void 0 : object[property];
+    if (value === void 0) {
+      value = fallback;
+    }
+    return _.isFunction(value) ? value.call(object) : value;
+  };
+
+  // Generate a unique integer id (unique within the entire client session).
+  // Useful for temporary DOM ids.
+  var idCounter = 0;
+  _.uniqueId = function(prefix) {
+    var id = ++idCounter + '';
+    return prefix ? prefix + id : id;
+  };
+
+  // By default, Underscore uses ERB-style template delimiters, change the
+  // following template settings to use alternative delimiters.
+  _.templateSettings = {
+    evaluate    : /<%([\s\S]+?)%>/g,
+    interpolate : /<%=([\s\S]+?)%>/g,
+    escape      : /<%-([\s\S]+?)%>/g
+  };
+
+  // When customizing `templateSettings`, if you don't want to define an
+  // interpolation, evaluation or escaping regex, we need one that is
+  // guaranteed not to match.
+  var noMatch = /(.)^/;
+
+  // Certain characters need to be escaped so that they can be put into a
+  // string literal.
+  var escapes = {
+    "'":      "'",
+    '\\':     '\\',
+    '\r':     'r',
+    '\n':     'n',
+    '\u2028': 'u2028',
+    '\u2029': 'u2029'
+  };
+
+  var escaper = /\\|'|\r|\n|\u2028|\u2029/g;
+
+  var escapeChar = function(match) {
+    return '\\' + escapes[match];
+  };
+
+  // JavaScript micro-templating, similar to John Resig's implementation.
+  // Underscore templating handles arbitrary delimiters, preserves whitespace,
+  // and correctly escapes quotes within interpolated code.
+  // NB: `oldSettings` only exists for backwards compatibility.
+  _.template = function(text, settings, oldSettings) {
+    if (!settings && oldSettings) settings = oldSettings;
+    settings = _.defaults({}, settings, _.templateSettings);
+
+    // Combine delimiters into one regular expression via alternation.
+    var matcher = RegExp([
+      (settings.escape || noMatch).source,
+      (settings.interpolate || noMatch).source,
+      (settings.evaluate || noMatch).source
+    ].join('|') + '|$', 'g');
+
+    // Compile the template source, escaping string literals appropriately.
+    var index = 0;
+    var source = "__p+='";
+    text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
+      source += text.slice(index, offset).replace(escaper, escapeChar);
+      index = offset + match.length;
+
+      if (escape) {
+        source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
+      } else if (interpolate) {
+        source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
+      } else if (evaluate) {
+        source += "';\n" + evaluate + "\n__p+='";
+      }
+
+      // Adobe VMs need the match returned to produce the correct offest.
+      return match;
+    });
+    source += "';\n";
+
+    // If a variable is not specified, place data values in local scope.
+    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
+
+    source = "var __t,__p='',__j=Array.prototype.join," +
+      "print=function(){__p+=__j.call(arguments,'');};\n" +
+      source + 'return __p;\n';
+
+    try {
+      var render = new Function(settings.variable || 'obj', '_', source);
+    } catch (e) {
+      e.source = source;
+      throw e;
+    }
+
+    var template = function(data) {
+      return render.call(this, data, _);
+    };
+
+    // Provide the compiled source as a convenience for precompilation.
+    var argument = settings.variable || 'obj';
+    template.source = 'function(' + argument + '){\n' + source + '}';
+
+    return template;
+  };
+
+  // Add a "chain" function. Start chaining a wrapped Underscore object.
+  _.chain = function(obj) {
+    var instance = _(obj);
+    instance._chain = true;
+    return instance;
+  };
+
+  // OOP
+  // ---------------
+  // If Underscore is called as a function, it returns a wrapped object that
+  // can be used OO-style. This wrapper holds altered versions of all the
+  // underscore functions. Wrapped objects may be chained.
+
+  // Helper function to continue chaining intermediate results.
+  var result = function(instance, obj) {
+    return instance._chain ? _(obj).chain() : obj;
+  };
+
+  // Add your own custom functions to the Underscore object.
+  _.mixin = function(obj) {
+    _.each(_.functions(obj), function(name) {
+      var func = _[name] = obj[name];
+      _.prototype[name] = function() {
+        var args = [this._wrapped];
+        push.apply(args, arguments);
+        return result(this, func.apply(_, args));
+      };
+    });
+  };
+
+  // Add all of the Underscore functions to the wrapper object.
+  _.mixin(_);
+
+  // Add all mutator Array functions to the wrapper.
+  _.each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      var obj = this._wrapped;
+      method.apply(obj, arguments);
+      if ((name === 'shift' || name === 'splice') && obj.length === 0) delete obj[0];
+      return result(this, obj);
+    };
+  });
+
+  // Add all accessor Array functions to the wrapper.
+  _.each(['concat', 'join', 'slice'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      return result(this, method.apply(this._wrapped, arguments));
+    };
+  });
+
+  // Extracts the result from a wrapped and chained object.
+  _.prototype.value = function() {
+    return this._wrapped;
+  };
+
+  // Provide unwrapping proxy for some methods used in engine operations
+  // such as arithmetic and JSON stringification.
+  _.prototype.valueOf = _.prototype.toJSON = _.prototype.value;
+
+  _.prototype.toString = function() {
+    return '' + this._wrapped;
+  };
+
+  // AMD registration happens at the end for compatibility with AMD loaders
+  // that may not enforce next-turn semantics on modules. Even though general
+  // practice for AMD registration is to be anonymous, underscore registers
+  // as a named module because, like jQuery, it is a base library that is
+  // popular enough to be bundled in a third party lib, but not be part of
+  // an AMD load request. Those cases could generate an error when an
+  // anonymous define() is called outside of a loader request.
+  if (typeof define === 'function' && define.amd) {
+    define('underscore', [], function() {
+      return _;
+    });
+  }
+}.call(this));
+
+},{}],107:[function(require,module,exports){
 var Vue // late bind
 var map = Object.create(null)
 var shimmed = false
@@ -12696,10 +19621,11 @@ function restoreState (vm, state, isRoot) {
 }
 
 function format (id) {
-  return id.match(/[^\/]+\.vue$/)[0]
+  var match = id.match(/[^\/]+\.vue$/)
+  return match ? match[0] : id
 }
 
-},{}],6:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 /*!
  * vue-resource v0.7.4
  * https://github.com/vuejs/vue-resource
@@ -14076,10 +21002,3547 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 module.exports = plugin;
-},{}],7:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
+"use strict";
+
+var _stringify = require("babel-runtime/core-js/json/stringify");
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _getPrototypeOf = require("babel-runtime/core-js/object/get-prototype-of");
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _getOwnPropertyDescriptor = require("babel-runtime/core-js/object/get-own-property-descriptor");
+
+var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
+
+var _defineProperties = require("babel-runtime/core-js/object/define-properties");
+
+var _defineProperties2 = _interopRequireDefault(_defineProperties);
+
+var _preventExtensions = require("babel-runtime/core-js/object/prevent-extensions");
+
+var _preventExtensions2 = _interopRequireDefault(_preventExtensions);
+
+var _isExtensible = require("babel-runtime/core-js/object/is-extensible");
+
+var _isExtensible2 = _interopRequireDefault(_isExtensible);
+
+var _getOwnPropertySymbols = require("babel-runtime/core-js/object/get-own-property-symbols");
+
+var _getOwnPropertySymbols2 = _interopRequireDefault(_getOwnPropertySymbols);
+
+var _getOwnPropertyNames = require("babel-runtime/core-js/object/get-own-property-names");
+
+var _getOwnPropertyNames2 = _interopRequireDefault(_getOwnPropertyNames);
+
+var _create = require("babel-runtime/core-js/object/create");
+
+var _create2 = _interopRequireDefault(_create);
+
+var _keys = require("babel-runtime/core-js/object/keys");
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _defineProperty = require("babel-runtime/core-js/object/define-property");
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+var _typeof2 = require("babel-runtime/helpers/typeof");
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+!function (t, e) {
+  "object" == (typeof exports === "undefined" ? "undefined" : (0, _typeof3.default)(exports)) && "object" == (typeof module === "undefined" ? "undefined" : (0, _typeof3.default)(module)) ? module.exports = e() : "function" == typeof define && define.amd ? define([], e) : "object" == (typeof exports === "undefined" ? "undefined" : (0, _typeof3.default)(exports)) ? exports.VueSelect = e() : t.VueSelect = e();
+}(undefined, function () {
+  return function (t) {
+    function e(r) {
+      if (n[r]) return n[r].exports;var o = n[r] = { exports: {}, id: r, loaded: !1 };return t[r].call(o.exports, o, o.exports, e), o.loaded = !0, o.exports;
+    }var n = {};return e.m = t, e.c = n, e.p = "/", e(0);
+  }([function (t, e, n) {
+    "use strict";
+    function r(t) {
+      return t && t.__esModule ? t : { "default": t };
+    }Object.defineProperty(e, "__esModule", { value: !0 }), e.mixins = e.VueSelect = void 0;var o = n(85),
+        i = r(o),
+        s = n(41),
+        u = r(s);e["default"] = i["default"], e.VueSelect = i["default"], e.mixins = u["default"];
+  }, function (t, e) {
+    var n = t.exports = "undefined" != typeof window && window.Math == Math ? window : "undefined" != typeof self && self.Math == Math ? self : Function("return this")();"number" == typeof __g && (__g = n);
+  }, function (t, e, n) {
+    t.exports = !n(9)(function () {
+      return 7 != Object.defineProperty({}, "a", { get: function get() {
+          return 7;
+        } }).a;
+    });
+  }, function (t, e) {
+    var n = {}.hasOwnProperty;t.exports = function (t, e) {
+      return n.call(t, e);
+    };
+  }, function (t, e, n) {
+    var r = n(11),
+        o = n(33),
+        i = n(25),
+        s = _defineProperty2.default;e.f = n(2) ? _defineProperty2.default : function (t, e, n) {
+      if (r(t), e = i(e, !0), r(n), o) try {
+        return s(t, e, n);
+      } catch (u) {}if ("get" in n || "set" in n) throw TypeError("Accessors not supported!");return "value" in n && (t[e] = n.value), t;
+    };
+  }, function (t, e, n) {
+    var r = n(59),
+        o = n(16);t.exports = function (t) {
+      return r(o(t));
+    };
+  }, function (t, e) {
+    var n = t.exports = { version: "2.4.0" };"number" == typeof __e && (__e = n);
+  }, function (t, e, n) {
+    var r = n(4),
+        o = n(14);t.exports = n(2) ? function (t, e, n) {
+      return r.f(t, e, o(1, n));
+    } : function (t, e, n) {
+      return t[e] = n, t;
+    };
+  }, function (t, e, n) {
+    var r = n(23)("wks"),
+        o = n(15),
+        i = n(1).Symbol,
+        s = "function" == typeof i,
+        u = t.exports = function (t) {
+      return r[t] || (r[t] = s && i[t] || (s ? i : o)("Symbol." + t));
+    };u.store = r;
+  }, function (t, e) {
+    t.exports = function (t) {
+      try {
+        return !!t();
+      } catch (e) {
+        return !0;
+      }
+    };
+  }, function (t, e, n) {
+    var r = n(38),
+        o = n(17);t.exports = _keys2.default || function (t) {
+      return r(t, o);
+    };
+  }, function (t, e, n) {
+    var r = n(13);t.exports = function (t) {
+      if (!r(t)) throw TypeError(t + " is not an object!");return t;
+    };
+  }, function (t, e, n) {
+    var r = n(1),
+        o = n(6),
+        i = n(56),
+        s = n(7),
+        u = "prototype",
+        a = function a(t, e, n) {
+      var c,
+          l,
+          f,
+          p = t & a.F,
+          d = t & a.G,
+          h = t & a.S,
+          v = t & a.P,
+          y = t & a.B,
+          b = t & a.W,
+          g = d ? o : o[e] || (o[e] = {}),
+          m = g[u],
+          x = d ? r : h ? r[e] : (r[e] || {})[u];d && (n = e);for (c in n) {
+        l = !p && x && void 0 !== x[c], l && c in g || (f = l ? x[c] : n[c], g[c] = d && "function" != typeof x[c] ? n[c] : y && l ? i(f, r) : b && x[c] == f ? function (t) {
+          var e = function e(_e, n, r) {
+            if (this instanceof t) {
+              switch (arguments.length) {case 0:
+                  return new t();case 1:
+                  return new t(_e);case 2:
+                  return new t(_e, n);}return new t(_e, n, r);
+            }return t.apply(this, arguments);
+          };return e[u] = t[u], e;
+        }(f) : v && "function" == typeof f ? i(Function.call, f) : f, v && ((g.virtual || (g.virtual = {}))[c] = f, t & a.R && m && !m[c] && s(m, c, f)));
+      }
+    };a.F = 1, a.G = 2, a.S = 4, a.P = 8, a.B = 16, a.W = 32, a.U = 64, a.R = 128, t.exports = a;
+  }, function (t, e) {
+    t.exports = function (t) {
+      return "object" == (typeof t === "undefined" ? "undefined" : (0, _typeof3.default)(t)) ? null !== t : "function" == typeof t;
+    };
+  }, function (t, e) {
+    t.exports = function (t, e) {
+      return { enumerable: !(1 & t), configurable: !(2 & t), writable: !(4 & t), value: e };
+    };
+  }, function (t, e) {
+    var n = 0,
+        r = Math.random();t.exports = function (t) {
+      return "Symbol(".concat(void 0 === t ? "" : t, ")_", (++n + r).toString(36));
+    };
+  }, function (t, e) {
+    t.exports = function (t) {
+      if (void 0 == t) throw TypeError("Can't call method on  " + t);return t;
+    };
+  }, function (t, e) {
+    t.exports = "constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");
+  }, function (t, e) {
+    t.exports = {};
+  }, function (t, e) {
+    t.exports = !0;
+  }, function (t, e) {
+    e.f = {}.propertyIsEnumerable;
+  }, function (t, e, n) {
+    var r = n(4).f,
+        o = n(3),
+        i = n(8)("toStringTag");t.exports = function (t, e, n) {
+      t && !o(t = n ? t : t.prototype, i) && r(t, i, { configurable: !0, value: e });
+    };
+  }, function (t, e, n) {
+    var r = n(23)("keys"),
+        o = n(15);t.exports = function (t) {
+      return r[t] || (r[t] = o(t));
+    };
+  }, function (t, e, n) {
+    var r = n(1),
+        o = "__core-js_shared__",
+        i = r[o] || (r[o] = {});t.exports = function (t) {
+      return i[t] || (i[t] = {});
+    };
+  }, function (t, e) {
+    var n = Math.ceil,
+        r = Math.floor;t.exports = function (t) {
+      return isNaN(t = +t) ? 0 : (t > 0 ? r : n)(t);
+    };
+  }, function (t, e, n) {
+    var r = n(13);t.exports = function (t, e) {
+      if (!r(t)) return t;var n, o;if (e && "function" == typeof (n = t.toString) && !r(o = n.call(t))) return o;if ("function" == typeof (n = t.valueOf) && !r(o = n.call(t))) return o;if (!e && "function" == typeof (n = t.toString) && !r(o = n.call(t))) return o;throw TypeError("Can't convert object to primitive value");
+    };
+  }, function (t, e, n) {
+    var r = n(1),
+        o = n(6),
+        i = n(19),
+        s = n(27),
+        u = n(4).f;t.exports = function (t) {
+      var e = o.Symbol || (o.Symbol = i ? {} : r.Symbol || {});"_" == t.charAt(0) || t in e || u(e, t, { value: s.f(t) });
+    };
+  }, function (t, e, n) {
+    e.f = n(8);
+  }, function (t, e) {
+    "use strict";
+    t.exports = { props: { loading: { type: Boolean, "default": !1 }, onSearch: { type: Function, "default": !1 }, debounce: { type: Number, "default": 0 } }, watch: { search: function search() {
+          this.search.length > 0 && this.onSearch && this.onSearch(this.search, this.toggleLoading);
+        } }, methods: { toggleLoading: function toggleLoading() {
+          var t = arguments.length <= 0 || void 0 === arguments[0] ? null : arguments[0];return null == t ? this.loading = !this.loading : this.loading = t;
+        } } };
+  }, function (t, e) {
+    "use strict";
+    t.exports = { watch: { typeAheadPointer: function typeAheadPointer() {
+          this.maybeAdjustScroll();
+        } }, methods: { maybeAdjustScroll: function maybeAdjustScroll() {
+          var t = this.pixelsToPointerTop(),
+              e = this.pixelsToPointerBottom();return t <= this.viewport().top ? this.scrollTo(t) : e >= this.viewport().bottom ? this.scrollTo(this.viewport().top + this.pointerHeight()) : void 0;
+        }, pixelsToPointerTop: function n() {
+          for (var n = 0, t = 0; t < this.typeAheadPointer; t++) {
+            n += this.$els.dropdownMenu.children[t].offsetHeight;
+          }return n;
+        }, pixelsToPointerBottom: function pixelsToPointerBottom() {
+          return this.pixelsToPointerTop() + this.pointerHeight();
+        }, pointerHeight: function pointerHeight() {
+          var t = this.$els.dropdownMenu.children[this.typeAheadPointer];return t ? t.offsetHeight : 0;
+        }, viewport: function viewport() {
+          return { top: this.$els.dropdownMenu.scrollTop, bottom: this.$els.dropdownMenu.offsetHeight + this.$els.dropdownMenu.scrollTop };
+        }, scrollTo: function scrollTo(t) {
+          return this.$els.dropdownMenu.scrollTop = t;
+        } } };
+  }, function (t, e) {
+    "use strict";
+    t.exports = { data: function data() {
+        return { typeAheadPointer: -1 };
+      }, watch: { filteredOptions: function filteredOptions() {
+          this.typeAheadPointer = 0;
+        } }, methods: { typeAheadUp: function typeAheadUp() {
+          this.typeAheadPointer > 0 && (this.typeAheadPointer--, this.maybeAdjustScroll && this.maybeAdjustScroll());
+        }, typeAheadDown: function typeAheadDown() {
+          this.typeAheadPointer < this.filteredOptions.length - 1 && (this.typeAheadPointer++, this.maybeAdjustScroll && this.maybeAdjustScroll());
+        }, typeAheadSelect: function typeAheadSelect() {
+          this.filteredOptions[this.typeAheadPointer] ? this.select(this.filteredOptions[this.typeAheadPointer]) : this.taggable && this.search.length && this.select(this.search), this.clearSearchOnSelect && (this.search = "");
+        } } };
+  }, function (t, e) {
+    var n = {}.toString;t.exports = function (t) {
+      return n.call(t).slice(8, -1);
+    };
+  }, function (t, e, n) {
+    var r = n(13),
+        o = n(1).document,
+        i = r(o) && r(o.createElement);t.exports = function (t) {
+      return i ? o.createElement(t) : {};
+    };
+  }, function (t, e, n) {
+    t.exports = !n(2) && !n(9)(function () {
+      return 7 != Object.defineProperty(n(32)("div"), "a", { get: function get() {
+          return 7;
+        } }).a;
+    });
+  }, function (t, e, n) {
+    "use strict";
+    var r = n(19),
+        o = n(12),
+        i = n(39),
+        s = n(7),
+        u = n(3),
+        a = n(18),
+        c = n(61),
+        l = n(21),
+        f = n(68),
+        p = n(8)("iterator"),
+        d = !([].keys && "next" in [].keys()),
+        h = "@@iterator",
+        v = "keys",
+        y = "values",
+        b = function b() {
+      return this;
+    };t.exports = function (t, e, n, g, m, x, w) {
+      c(n, e, g);var S,
+          O,
+          _,
+          j = function j(t) {
+        if (!d && t in E) return E[t];switch (t) {case v:
+            return function () {
+              return new n(this, t);
+            };case y:
+            return function () {
+              return new n(this, t);
+            };}return function () {
+          return new n(this, t);
+        };
+      },
+          A = e + " Iterator",
+          P = m == y,
+          k = !1,
+          E = t.prototype,
+          M = E[p] || E[h] || m && E[m],
+          T = M || j(m),
+          C = m ? P ? j("entries") : T : void 0,
+          $ = "Array" == e ? E.entries || M : M;if ($ && (_ = f($.call(new t())), _ !== Object.prototype && (l(_, A, !0), r || u(_, p) || s(_, p, b))), P && M && M.name !== y && (k = !0, T = function T() {
+        return M.call(this);
+      }), r && !w || !d && !k && E[p] || s(E, p, T), a[e] = T, a[A] = b, m) if (S = { values: P ? T : j(y), keys: x ? T : j(v), entries: C }, w) for (O in S) {
+        O in E || i(E, O, S[O]);
+      } else o(o.P + o.F * (d || k), e, S);return S;
+    };
+  }, function (t, e, n) {
+    var r = n(11),
+        o = n(65),
+        i = n(17),
+        s = n(22)("IE_PROTO"),
+        u = function u() {},
+        a = "prototype",
+        _c = function c() {
+      var t,
+          e = n(32)("iframe"),
+          r = i.length,
+          o = ">";for (e.style.display = "none", n(58).appendChild(e), e.src = "javascript:", t = e.contentWindow.document, t.open(), t.write("<script>document.F=Object</script" + o), t.close(), _c = t.F; r--;) {
+        delete _c[a][i[r]];
+      }return _c();
+    };t.exports = _create2.default || function (t, e) {
+      var n;return null !== t ? (u[a] = r(t), n = new u(), u[a] = null, n[s] = t) : n = _c(), void 0 === e ? n : o(n, e);
+    };
+  }, function (t, e, n) {
+    var r = n(38),
+        o = n(17).concat("length", "prototype");e.f = _getOwnPropertyNames2.default || function (t) {
+      return r(t, o);
+    };
+  }, function (t, e) {
+    e.f = _getOwnPropertySymbols2.default;
+  }, function (t, e, n) {
+    var r = n(3),
+        o = n(5),
+        i = n(55)(!1),
+        s = n(22)("IE_PROTO");t.exports = function (t, e) {
+      var n,
+          u = o(t),
+          a = 0,
+          c = [];for (n in u) {
+        n != s && r(u, n) && c.push(n);
+      }for (; e.length > a;) {
+        r(u, n = e[a++]) && (~i(c, n) || c.push(n));
+      }return c;
+    };
+  }, function (t, e, n) {
+    t.exports = n(7);
+  }, function (t, e, n) {
+    var r = n(16);t.exports = function (t) {
+      return Object(r(t));
+    };
+  }, function (t, e, n) {
+    "use strict";
+    function r(t) {
+      return t && t.__esModule ? t : { "default": t };
+    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(28),
+        i = r(o),
+        s = n(30),
+        u = r(s),
+        a = n(29),
+        c = r(a);e["default"] = { ajax: i["default"], pointer: u["default"], pointerScroll: c["default"] };
+  }, function (t, e, n) {
+    "use strict";
+    function r(t) {
+      return t && t.__esModule ? t : { "default": t };
+    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(44),
+        i = r(o),
+        s = n(47),
+        u = r(s),
+        a = n(48),
+        c = r(a),
+        l = n(29),
+        f = r(l),
+        p = n(30),
+        d = r(p),
+        h = n(28),
+        v = r(h);e["default"] = { mixins: [f["default"], d["default"], v["default"]], props: { value: { "default": null }, options: { type: Array, "default": function _default() {
+            return [];
+          } }, maxHeight: { type: String, "default": "400px" }, searchable: { type: Boolean, "default": !0 }, multiple: { type: Boolean, "default": !1 }, placeholder: { type: String, "default": "" }, transition: { type: String, "default": "expand" }, clearSearchOnSelect: { type: Boolean, "default": !0 }, label: { type: String, "default": "label" }, getOptionLabel: { type: Function, "default": function _default(t) {
+            return "object" === ("undefined" == typeof t ? "undefined" : (0, c["default"])(t)) && this.label && t[this.label] ? t[this.label] : t;
+          } }, onChange: Function, taggable: { type: Boolean, "default": !1 }, pushTags: { type: Boolean, "default": !1 }, createOption: { type: Function, "default": function _default(t) {
+            return "object" === (0, c["default"])(this.options[0]) ? (0, u["default"])({}, this.label, t) : t;
+          } } }, data: function data() {
+        return { search: "", open: !1 };
+      }, watch: { value: function value(t, e) {
+          this.multiple ? this.onChange ? this.onChange(t) : null : this.onChange && t !== e ? this.onChange(t) : null;
+        }, options: function options() {
+          this.taggable || this.$set("value", this.multiple ? [] : null);
+        }, multiple: function multiple(t) {
+          this.$set("value", t ? [] : null);
+        } }, methods: { select: function select(t) {
+          this.isOptionSelected(t) ? this.multiple && this.value.$remove(t) : (this.taggable && !this.optionExists(t) && (t = this.createOption(t), this.pushTags && this.options.push(t)), this.multiple ? this.value ? this.value.push(t) : this.$set("value", [t]) : this.value = t), this.onAfterSelect(t);
+        }, onAfterSelect: function onAfterSelect(t) {
+          this.multiple || (this.open = !this.open, this.$els.search.blur()), this.clearSearchOnSelect && (this.search = "");
+        }, toggleDropdown: function toggleDropdown(t) {
+          t.target !== this.$els.openIndicator && t.target !== this.$els.search && t.target !== this.$els.toggle && t.target !== this.$el || (this.open ? this.$els.search.blur() : (this.open = !0, this.$els.search.focus()));
+        }, isOptionSelected: function isOptionSelected(t) {
+          var e = this;if (this.multiple && this.value) {
+            var n = !1;return this.value.forEach(function (r) {
+              "object" === ("undefined" == typeof r ? "undefined" : (0, c["default"])(r)) && r[e.label] === t ? n = !0 : r === t && (n = !0);
+            }), n;
+          }return this.value === t;
+        }, onEscape: function onEscape() {
+          this.search.length ? this.search = "" : this.$els.search.blur();
+        }, maybeDeleteValue: function maybeDeleteValue() {
+          return !this.$els.search.value.length && this.value ? this.multiple ? this.value.pop() : this.$set("value", null) : void 0;
+        }, optionExists: function optionExists(t) {
+          var e = this,
+              n = !1;return this.options.forEach(function (r) {
+            "object" === ("undefined" == typeof r ? "undefined" : (0, c["default"])(r)) && r[e.label] === t ? n = !0 : r === t && (n = !0);
+          }), n;
+        } }, computed: { dropdownClasses: function dropdownClasses() {
+          return { open: this.open, searchable: this.searchable, loading: this.loading };
+        }, searchPlaceholder: function searchPlaceholder() {
+          return this.isValueEmpty && this.placeholder ? this.placeholder : void 0;
+        }, filteredOptions: function filteredOptions() {
+          var t = this.$options.filters.filterBy(this.options, this.search);return this.taggable && this.search.length && !this.optionExists(this.search) && t.unshift(this.search), t;
+        }, isValueEmpty: function isValueEmpty() {
+          return this.value ? "object" === (0, c["default"])(this.value) ? !(0, i["default"])(this.value).length : !this.value.length : !0;
+        }, valueAsArray: function valueAsArray() {
+          return this.multiple ? this.value : this.value ? [this.value] : [];
+        } } };
+  }, function (t, e, n) {
+    t.exports = { "default": n(49), __esModule: !0 };
+  }, function (t, e, n) {
+    t.exports = { "default": n(50), __esModule: !0 };
+  }, function (t, e, n) {
+    t.exports = { "default": n(51), __esModule: !0 };
+  }, function (t, e, n) {
+    t.exports = { "default": n(52), __esModule: !0 };
+  }, function (t, e, n) {
+    "use strict";
+    function r(t) {
+      return t && t.__esModule ? t : { "default": t };
+    }e.__esModule = !0;var o = n(43),
+        i = r(o);e["default"] = function (t, e, n) {
+      return e in t ? (0, i["default"])(t, e, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : t[e] = n, t;
+    };
+  }, function (t, e, n) {
+    "use strict";
+    function r(t) {
+      return t && t.__esModule ? t : { "default": t };
+    }e.__esModule = !0;var o = n(46),
+        i = r(o),
+        s = n(45),
+        u = r(s),
+        a = "function" == typeof u["default"] && "symbol" == (0, _typeof3.default)(i["default"]) ? function (t) {
+      return typeof t === "undefined" ? "undefined" : (0, _typeof3.default)(t);
+    } : function (t) {
+      return t && "function" == typeof u["default"] && t.constructor === u["default"] ? "symbol" : typeof t === "undefined" ? "undefined" : (0, _typeof3.default)(t);
+    };e["default"] = "function" == typeof u["default"] && "symbol" === a(i["default"]) ? function (t) {
+      return "undefined" == typeof t ? "undefined" : a(t);
+    } : function (t) {
+      return t && "function" == typeof u["default"] && t.constructor === u["default"] ? "symbol" : "undefined" == typeof t ? "undefined" : a(t);
+    };
+  }, function (t, e, n) {
+    n(74);var r = n(6).Object;t.exports = function (t, e, n) {
+      return r.defineProperty(t, e, n);
+    };
+  }, function (t, e, n) {
+    n(75), t.exports = n(6).Object.keys;
+  }, function (t, e, n) {
+    n(78), n(76), n(79), n(80), t.exports = n(6).Symbol;
+  }, function (t, e, n) {
+    n(77), n(81), t.exports = n(27).f("iterator");
+  }, function (t, e) {
+    t.exports = function (t) {
+      if ("function" != typeof t) throw TypeError(t + " is not a function!");return t;
+    };
+  }, function (t, e) {
+    t.exports = function () {};
+  }, function (t, e, n) {
+    var r = n(5),
+        o = n(72),
+        i = n(71);t.exports = function (t) {
+      return function (e, n, s) {
+        var u,
+            a = r(e),
+            c = o(a.length),
+            l = i(s, c);if (t && n != n) {
+          for (; c > l;) {
+            if (u = a[l++], u != u) return !0;
+          }
+        } else for (; c > l; l++) {
+          if ((t || l in a) && a[l] === n) return t || l || 0;
+        }return !t && -1;
+      };
+    };
+  }, function (t, e, n) {
+    var r = n(53);t.exports = function (t, e, n) {
+      if (r(t), void 0 === e) return t;switch (n) {case 1:
+          return function (n) {
+            return t.call(e, n);
+          };case 2:
+          return function (n, r) {
+            return t.call(e, n, r);
+          };case 3:
+          return function (n, r, o) {
+            return t.call(e, n, r, o);
+          };}return function () {
+        return t.apply(e, arguments);
+      };
+    };
+  }, function (t, e, n) {
+    var r = n(10),
+        o = n(37),
+        i = n(20);t.exports = function (t) {
+      var e = r(t),
+          n = o.f;if (n) for (var s, u = n(t), a = i.f, c = 0; u.length > c;) {
+        a.call(t, s = u[c++]) && e.push(s);
+      }return e;
+    };
+  }, function (t, e, n) {
+    t.exports = n(1).document && document.documentElement;
+  }, function (t, e, n) {
+    var r = n(31);t.exports = Object("z").propertyIsEnumerable(0) ? Object : function (t) {
+      return "String" == r(t) ? t.split("") : Object(t);
+    };
+  }, function (t, e, n) {
+    var r = n(31);t.exports = Array.isArray || function (t) {
+      return "Array" == r(t);
+    };
+  }, function (t, e, n) {
+    "use strict";
+    var r = n(35),
+        o = n(14),
+        i = n(21),
+        s = {};n(7)(s, n(8)("iterator"), function () {
+      return this;
+    }), t.exports = function (t, e, n) {
+      t.prototype = r(s, { next: o(1, n) }), i(t, e + " Iterator");
+    };
+  }, function (t, e) {
+    t.exports = function (t, e) {
+      return { value: e, done: !!t };
+    };
+  }, function (t, e, n) {
+    var r = n(10),
+        o = n(5);t.exports = function (t, e) {
+      for (var n, i = o(t), s = r(i), u = s.length, a = 0; u > a;) {
+        if (i[n = s[a++]] === e) return n;
+      }
+    };
+  }, function (t, e, n) {
+    var r = n(15)("meta"),
+        o = n(13),
+        i = n(3),
+        s = n(4).f,
+        u = 0,
+        a = _isExtensible2.default || function () {
+      return !0;
+    },
+        c = !n(9)(function () {
+      return a((0, _preventExtensions2.default)({}));
+    }),
+        l = function l(t) {
+      s(t, r, { value: { i: "O" + ++u, w: {} } });
+    },
+        f = function f(t, e) {
+      if (!o(t)) return "symbol" == (typeof t === "undefined" ? "undefined" : (0, _typeof3.default)(t)) ? t : ("string" == typeof t ? "S" : "P") + t;if (!i(t, r)) {
+        if (!a(t)) return "F";if (!e) return "E";l(t);
+      }return t[r].i;
+    },
+        p = function p(t, e) {
+      if (!i(t, r)) {
+        if (!a(t)) return !0;if (!e) return !1;l(t);
+      }return t[r].w;
+    },
+        d = function d(t) {
+      return c && h.NEED && a(t) && !i(t, r) && l(t), t;
+    },
+        h = t.exports = { KEY: r, NEED: !1, fastKey: f, getWeak: p, onFreeze: d };
+  }, function (t, e, n) {
+    var r = n(4),
+        o = n(11),
+        i = n(10);t.exports = n(2) ? _defineProperties2.default : function (t, e) {
+      o(t);for (var n, s = i(e), u = s.length, a = 0; u > a;) {
+        r.f(t, n = s[a++], e[n]);
+      }return t;
+    };
+  }, function (t, e, n) {
+    var r = n(20),
+        o = n(14),
+        i = n(5),
+        s = n(25),
+        u = n(3),
+        a = n(33),
+        c = _getOwnPropertyDescriptor2.default;e.f = n(2) ? c : function (t, e) {
+      if (t = i(t), e = s(e, !0), a) try {
+        return c(t, e);
+      } catch (n) {}return u(t, e) ? o(!r.f.call(t, e), t[e]) : void 0;
+    };
+  }, function (t, e, n) {
+    var r = n(5),
+        o = n(36).f,
+        i = {}.toString,
+        s = "object" == (typeof window === "undefined" ? "undefined" : (0, _typeof3.default)(window)) && window && _getOwnPropertyNames2.default ? (0, _getOwnPropertyNames2.default)(window) : [],
+        u = function u(t) {
+      try {
+        return o(t);
+      } catch (e) {
+        return s.slice();
+      }
+    };t.exports.f = function (t) {
+      return s && "[object Window]" == i.call(t) ? u(t) : o(r(t));
+    };
+  }, function (t, e, n) {
+    var r = n(3),
+        o = n(40),
+        i = n(22)("IE_PROTO"),
+        s = Object.prototype;t.exports = _getPrototypeOf2.default || function (t) {
+      return t = o(t), r(t, i) ? t[i] : "function" == typeof t.constructor && t instanceof t.constructor ? t.constructor.prototype : t instanceof Object ? s : null;
+    };
+  }, function (t, e, n) {
+    var r = n(12),
+        o = n(6),
+        i = n(9);t.exports = function (t, e) {
+      var n = (o.Object || {})[t] || Object[t],
+          s = {};s[t] = e(n), r(r.S + r.F * i(function () {
+        n(1);
+      }), "Object", s);
+    };
+  }, function (t, e, n) {
+    var r = n(24),
+        o = n(16);t.exports = function (t) {
+      return function (e, n) {
+        var i,
+            s,
+            u = String(o(e)),
+            a = r(n),
+            c = u.length;return 0 > a || a >= c ? t ? "" : void 0 : (i = u.charCodeAt(a), 55296 > i || i > 56319 || a + 1 === c || (s = u.charCodeAt(a + 1)) < 56320 || s > 57343 ? t ? u.charAt(a) : i : t ? u.slice(a, a + 2) : (i - 55296 << 10) + (s - 56320) + 65536);
+      };
+    };
+  }, function (t, e, n) {
+    var r = n(24),
+        o = Math.max,
+        i = Math.min;t.exports = function (t, e) {
+      return t = r(t), 0 > t ? o(t + e, 0) : i(t, e);
+    };
+  }, function (t, e, n) {
+    var r = n(24),
+        o = Math.min;t.exports = function (t) {
+      return t > 0 ? o(r(t), 9007199254740991) : 0;
+    };
+  }, function (t, e, n) {
+    "use strict";
+    var r = n(54),
+        o = n(62),
+        i = n(18),
+        s = n(5);t.exports = n(34)(Array, "Array", function (t, e) {
+      this._t = s(t), this._i = 0, this._k = e;
+    }, function () {
+      var t = this._t,
+          e = this._k,
+          n = this._i++;return !t || n >= t.length ? (this._t = void 0, o(1)) : "keys" == e ? o(0, n) : "values" == e ? o(0, t[n]) : o(0, [n, t[n]]);
+    }, "values"), i.Arguments = i.Array, r("keys"), r("values"), r("entries");
+  }, function (t, e, n) {
+    var r = n(12);r(r.S + r.F * !n(2), "Object", { defineProperty: n(4).f });
+  }, function (t, e, n) {
+    var r = n(40),
+        o = n(10);n(69)("keys", function () {
+      return function (t) {
+        return o(r(t));
+      };
+    });
+  }, function (t, e) {}, function (t, e, n) {
+    "use strict";
+    var r = n(70)(!0);n(34)(String, "String", function (t) {
+      this._t = String(t), this._i = 0;
+    }, function () {
+      var t,
+          e = this._t,
+          n = this._i;return n >= e.length ? { value: void 0, done: !0 } : (t = r(e, n), this._i += t.length, { value: t, done: !1 });
+    });
+  }, function (t, e, n) {
+    "use strict";
+    var r = n(1),
+        o = n(3),
+        i = n(2),
+        s = n(12),
+        u = n(39),
+        a = n(64).KEY,
+        c = n(9),
+        l = n(23),
+        f = n(21),
+        p = n(15),
+        d = n(8),
+        h = n(27),
+        v = n(26),
+        y = n(63),
+        b = n(57),
+        g = n(60),
+        m = n(11),
+        x = n(5),
+        w = n(25),
+        S = n(14),
+        O = n(35),
+        _ = n(67),
+        j = n(66),
+        A = n(4),
+        P = n(10),
+        k = j.f,
+        E = A.f,
+        M = _.f,
+        _T = r.Symbol,
+        C = r.JSON,
+        $ = C && C.stringify,
+        F = "prototype",
+        N = d("_hidden"),
+        B = d("toPrimitive"),
+        I = {}.propertyIsEnumerable,
+        L = l("symbol-registry"),
+        z = l("symbols"),
+        D = l("op-symbols"),
+        V = Object[F],
+        R = "function" == typeof _T,
+        H = r.QObject,
+        U = !H || !H[F] || !H[F].findChild,
+        W = i && c(function () {
+      return 7 != O(E({}, "a", { get: function get() {
+          return E(this, "a", { value: 7 }).a;
+        } })).a;
+    }) ? function (t, e, n) {
+      var r = k(V, e);r && delete V[e], E(t, e, n), r && t !== V && E(V, e, r);
+    } : E,
+        J = function J(t) {
+      var e = z[t] = O(_T[F]);return e._k = t, e;
+    },
+        G = R && "symbol" == (0, _typeof3.default)(_T.iterator) ? function (t) {
+      return "symbol" == (typeof t === "undefined" ? "undefined" : (0, _typeof3.default)(t));
+    } : function (t) {
+      return t instanceof _T;
+    },
+        K = function K(t, e, n) {
+      return t === V && K(D, e, n), m(t), e = w(e, !0), m(n), o(z, e) ? (n.enumerable ? (o(t, N) && t[N][e] && (t[N][e] = !1), n = O(n, { enumerable: S(0, !1) })) : (o(t, N) || E(t, N, S(1, {})), t[N][e] = !0), W(t, e, n)) : E(t, e, n);
+    },
+        Y = function Y(t, e) {
+      m(t);for (var n, r = b(e = x(e)), o = 0, i = r.length; i > o;) {
+        K(t, n = r[o++], e[n]);
+      }return t;
+    },
+        Z = function Z(t, e) {
+      return void 0 === e ? O(t) : Y(O(t), e);
+    },
+        Q = function Q(t) {
+      var e = I.call(this, t = w(t, !0));return this === V && o(z, t) && !o(D, t) ? !1 : e || !o(this, t) || !o(z, t) || o(this, N) && this[N][t] ? e : !0;
+    },
+        q = function q(t, e) {
+      if (t = x(t), e = w(e, !0), t !== V || !o(z, e) || o(D, e)) {
+        var n = k(t, e);return !n || !o(z, e) || o(t, N) && t[N][e] || (n.enumerable = !0), n;
+      }
+    },
+        X = function X(t) {
+      for (var e, n = M(x(t)), r = [], i = 0; n.length > i;) {
+        o(z, e = n[i++]) || e == N || e == a || r.push(e);
+      }return r;
+    },
+        tt = function tt(t) {
+      for (var e, n = t === V, r = M(n ? D : x(t)), i = [], s = 0; r.length > s;) {
+        o(z, e = r[s++]) && (n ? o(V, e) : !0) && i.push(z[e]);
+      }return i;
+    };R || (_T = function T() {
+      if (this instanceof _T) throw TypeError("Symbol is not a constructor!");var t = p(arguments.length > 0 ? arguments[0] : void 0),
+          e = function e(n) {
+        this === V && e.call(D, n), o(this, N) && o(this[N], t) && (this[N][t] = !1), W(this, t, S(1, n));
+      };return i && U && W(V, t, { configurable: !0, set: e }), J(t);
+    }, u(_T[F], "toString", function () {
+      return this._k;
+    }), j.f = q, A.f = K, n(36).f = _.f = X, n(20).f = Q, n(37).f = tt, i && !n(19) && u(V, "propertyIsEnumerable", Q, !0), h.f = function (t) {
+      return J(d(t));
+    }), s(s.G + s.W + s.F * !R, { Symbol: _T });for (var et = "hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","), nt = 0; et.length > nt;) {
+      d(et[nt++]);
+    }for (var et = P(d.store), nt = 0; et.length > nt;) {
+      v(et[nt++]);
+    }s(s.S + s.F * !R, "Symbol", { "for": function _for(t) {
+        return o(L, t += "") ? L[t] : L[t] = _T(t);
+      }, keyFor: function keyFor(t) {
+        if (G(t)) return y(L, t);throw TypeError(t + " is not a symbol!");
+      }, useSetter: function useSetter() {
+        U = !0;
+      }, useSimple: function useSimple() {
+        U = !1;
+      } }), s(s.S + s.F * !R, "Object", { create: Z, defineProperty: K, defineProperties: Y, getOwnPropertyDescriptor: q, getOwnPropertyNames: X, getOwnPropertySymbols: tt }), C && s(s.S + s.F * (!R || c(function () {
+      var t = _T();return "[null]" != $([t]) || "{}" != $({ a: t }) || "{}" != $(Object(t));
+    })), "JSON", { stringify: function stringify(t) {
+        if (void 0 !== t && !G(t)) {
+          for (var e, n, r = [t], o = 1; arguments.length > o;) {
+            r.push(arguments[o++]);
+          }return e = r[1], "function" == typeof e && (n = e), !n && g(e) || (e = function e(t, _e2) {
+            return n && (_e2 = n.call(this, t, _e2)), G(_e2) ? void 0 : _e2;
+          }), r[1] = e, $.apply(C, r);
+        }
+      } }), _T[F][B] || n(7)(_T[F], B, _T[F].valueOf), f(_T, "Symbol"), f(Math, "Math", !0), f(r.JSON, "JSON", !0);
+  }, function (t, e, n) {
+    n(26)("asyncIterator");
+  }, function (t, e, n) {
+    n(26)("observable");
+  }, function (t, e, n) {
+    n(73);for (var r = n(1), o = n(7), i = n(18), s = n(8)("toStringTag"), u = ["NodeList", "DOMTokenList", "MediaList", "StyleSheetList", "CSSRuleList"], a = 0; 5 > a; a++) {
+      var c = u[a],
+          l = r[c],
+          f = l && l.prototype;f && !f[s] && o(f, s, c), i[c] = i.Array;
+    }
+  }, function (t, e, n) {
+    e = t.exports = n(83)(), e.push([t.id, ".v-select{position:relative}.v-select .open-indicator{position:absolute;bottom:6px;right:10px;display:inline-block;cursor:pointer;pointer-events:all;-webkit-transition:all .15s cubic-bezier(1,-.115,.975,.855);transition:all .15s cubic-bezier(1,-.115,.975,.855);-webkit-transition-timing-function:cubic-bezier(1,-.115,.975,.855);transition-timing-function:cubic-bezier(1,-.115,.975,.855);opacity:1;-webkit-transition:opacity .1s;transition:opacity .1s}.v-select.loading .open-indicator{opacity:0}.v-select .open-indicator:before{border-color:rgba(60,60,60,.5);border-style:solid;border-width:.25em .25em 0 0;content:'';display:inline-block;height:10px;width:10px;vertical-align:top;-webkit-transform:rotate(133deg);transform:rotate(133deg);-webkit-transition:all .15s cubic-bezier(1,-.115,.975,.855);transition:all .15s cubic-bezier(1,-.115,.975,.855);-webkit-transition-timing-function:cubic-bezier(1,-.115,.975,.855);transition-timing-function:cubic-bezier(1,-.115,.975,.855)}.v-select.open .open-indicator{bottom:1px}.v-select.open .open-indicator:before{-webkit-transform:rotate(315deg);transform:rotate(315deg)}.v-select .dropdown-toggle{display:block;padding:0;background:none;border:1px solid rgba(60,60,60,.26);border-radius:4px;white-space:normal}.v-select.searchable .dropdown-toggle{cursor:text}.v-select.open .dropdown-toggle{border-bottom:none;border-bottom-left-radius:0;border-bottom-right-radius:0}.v-select>.dropdown-menu{margin:0;width:100%;overflow-y:scroll;border-top:none;border-top-left-radius:0;border-top-right-radius:0}.v-select .selected-tag{color:#333;background-color:#f0f0f0;border:1px solid #ccc;border-radius:4px;height:26px;margin:4px 1px 0 3px;padding:0 .25em;float:left;line-height:1.7em}.v-select .selected-tag .close{float:none;margin-right:0;font-size:20px}.v-select input[type=search],.v-select input[type=search]:focus{display:inline-block;border:none;outline:none;margin:0;padding:0 .5em;width:10em;max-width:100%;background:none;position:relative;box-shadow:none;float:left;clear:none}.v-select input[type=search]:disabled,.v-select li a{cursor:pointer}.v-select .active a{background:rgba(50,50,50,.1);color:#333}.v-select .highlight a,.v-select li:hover>a{background:#f0f0f0;color:#333}.v-select .spinner{opacity:0;position:absolute;top:5px;right:10px;font-size:5px;text-indent:-9999em;overflow:hidden;border-top:.9em solid hsla(0,0%,39%,.1);border-right:.9em solid hsla(0,0%,39%,.1);border-bottom:.9em solid hsla(0,0%,39%,.1);border-left:.9em solid rgba(60,60,60,.45);-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-animation:vSelectSpinner 1.1s infinite linear;animation:vSelectSpinner 1.1s infinite linear;-webkit-transition:opacity .1s;transition:opacity .1s}.v-select.loading .spinner{opacity:1}.v-select .spinner,.v-select .spinner:after{border-radius:50%;width:5em;height:5em}@-webkit-keyframes vSelectSpinner{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}@keyframes vSelectSpinner{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}", ""]);
+  }, function (t, e) {
+    t.exports = function () {
+      var t = [];return t.toString = function () {
+        for (var t = [], e = 0; e < this.length; e++) {
+          var n = this[e];n[2] ? t.push("@media " + n[2] + "{" + n[1] + "}") : t.push(n[1]);
+        }return t.join("");
+      }, t.i = function (e, n) {
+        "string" == typeof e && (e = [[null, e, ""]]);for (var r = {}, o = 0; o < this.length; o++) {
+          var i = this[o][0];"number" == typeof i && (r[i] = !0);
+        }for (o = 0; o < e.length; o++) {
+          var s = e[o];"number" == typeof s[0] && r[s[0]] || (n && !s[2] ? s[2] = n : n && (s[2] = "(" + s[2] + ") and (" + n + ")"), t.push(s));
+        }
+      }, t;
+    };
+  }, function (t, e) {
+    t.exports = '<div class="dropdown v-select" :class=dropdownClasses> <div v-el:toggle @mousedown.prevent=toggleDropdown class="dropdown-toggle clearfix" type=button> <span class=form-control v-if="!searchable && isValueEmpty"> {{ placeholder }} </span> <span class=selected-tag v-for="option in valueAsArray" track-by=$index> {{ getOptionLabel(option) }} <button v-if=multiple @click=select(option) type=button class=close> <span aria-hidden=true>&times;</span> </button> </span> <input v-el:search :debounce=debounce v-model=search v-show=searchable @keydown.delete=maybeDeleteValue @keyup.esc=onEscape @keydown.up.prevent=typeAheadUp @keydown.down.prevent=typeAheadDown @keyup.enter.prevent=typeAheadSelect @blur="open = false" @focus="open = true" type=search class=form-control :placeholder=searchPlaceholder :style="{ width: isValueEmpty ? \'100%\' : \'auto\' }"> <i v-el:open-indicator role=presentation class=open-indicator></i> <slot name=spinner> <div class=spinner v-show="onSearch && loading">Loading...</div> </slot> </div> <ul v-el:dropdown-menu v-show=open :transition=transition class=dropdown-menu :style="{ \'max-height\': maxHeight }"> <li v-for="option in filteredOptions" track-by=$index :class="{ active: isOptionSelected(option), highlight: $index === typeAheadPointer }" @mouseover="typeAheadPointer = $index"> <a @mousedown.prevent=select(option)> {{ getOptionLabel(option) }} </a> </li> <li transition=fade v-if=!filteredOptions.length class=divider></li> <li transition=fade v-if=!filteredOptions.length class=text-center> <slot name=no-options>Sorry, no matching options.</slot> </li> </ul> </div>';
+  }, function (t, e, n) {
+    var r, o;n(87), r = n(42), o = n(84), t.exports = r || {}, t.exports.__esModule && (t.exports = t.exports["default"]), o && (("function" == typeof t.exports ? t.exports.options || (t.exports.options = {}) : t.exports).template = o);
+  }, function (t, e, n) {
+    function r(t, e) {
+      for (var n = 0; n < t.length; n++) {
+        var r = t[n],
+            o = f[r.id];if (o) {
+          o.refs++;for (var i = 0; i < o.parts.length; i++) {
+            o.parts[i](r.parts[i]);
+          }for (; i < r.parts.length; i++) {
+            o.parts.push(a(r.parts[i], e));
+          }
+        } else {
+          for (var s = [], i = 0; i < r.parts.length; i++) {
+            s.push(a(r.parts[i], e));
+          }f[r.id] = { id: r.id, refs: 1, parts: s };
+        }
+      }
+    }function o(t) {
+      for (var e = [], n = {}, r = 0; r < t.length; r++) {
+        var o = t[r],
+            i = o[0],
+            s = o[1],
+            u = o[2],
+            a = o[3],
+            c = { css: s, media: u, sourceMap: a };n[i] ? n[i].parts.push(c) : e.push(n[i] = { id: i, parts: [c] });
+      }return e;
+    }function i(t, e) {
+      var n = h(),
+          r = b[b.length - 1];if ("top" === t.insertAt) r ? r.nextSibling ? n.insertBefore(e, r.nextSibling) : n.appendChild(e) : n.insertBefore(e, n.firstChild), b.push(e);else {
+        if ("bottom" !== t.insertAt) throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");n.appendChild(e);
+      }
+    }function s(t) {
+      t.parentNode.removeChild(t);var e = b.indexOf(t);e >= 0 && b.splice(e, 1);
+    }function u(t) {
+      var e = document.createElement("style");return e.type = "text/css", i(t, e), e;
+    }function a(t, e) {
+      var n, r, o;if (e.singleton) {
+        var i = y++;n = v || (v = u(e)), r = c.bind(null, n, i, !1), o = c.bind(null, n, i, !0);
+      } else n = u(e), r = l.bind(null, n), o = function o() {
+        s(n);
+      };return r(t), function (e) {
+        if (e) {
+          if (e.css === t.css && e.media === t.media && e.sourceMap === t.sourceMap) return;r(t = e);
+        } else o();
+      };
+    }function c(t, e, n, r) {
+      var o = n ? "" : r.css;if (t.styleSheet) t.styleSheet.cssText = g(e, o);else {
+        var i = document.createTextNode(o),
+            s = t.childNodes;s[e] && t.removeChild(s[e]), s.length ? t.insertBefore(i, s[e]) : t.appendChild(i);
+      }
+    }function l(t, e) {
+      var n = e.css,
+          r = e.media,
+          o = e.sourceMap;if (r && t.setAttribute("media", r), o && (n += "\n/*# sourceURL=" + o.sources[0] + " */", n += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent((0, _stringify2.default)(o)))) + " */"), t.styleSheet) t.styleSheet.cssText = n;else {
+        for (; t.firstChild;) {
+          t.removeChild(t.firstChild);
+        }t.appendChild(document.createTextNode(n));
+      }
+    }var f = {},
+        p = function p(t) {
+      var e;return function () {
+        return "undefined" == typeof e && (e = t.apply(this, arguments)), e;
+      };
+    },
+        d = p(function () {
+      return (/msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase())
+      );
+    }),
+        h = p(function () {
+      return document.head || document.getElementsByTagName("head")[0];
+    }),
+        v = null,
+        y = 0,
+        b = [];t.exports = function (t, e) {
+      e = e || {}, "undefined" == typeof e.singleton && (e.singleton = d()), "undefined" == typeof e.insertAt && (e.insertAt = "bottom");var n = o(t);return r(n, e), function (t) {
+        for (var i = [], s = 0; s < n.length; s++) {
+          var u = n[s],
+              a = f[u.id];a.refs--, i.push(a);
+        }if (t) {
+          var c = o(t);r(c, e);
+        }for (var s = 0; s < i.length; s++) {
+          var a = i[s];if (0 === a.refs) {
+            for (var l = 0; l < a.parts.length; l++) {
+              a.parts[l]();
+            }delete f[a.id];
+          }
+        }
+      };
+    };var g = function () {
+      var t = [];return function (e, n) {
+        return t[e] = n, t.filter(Boolean).join("\n");
+      };
+    }();
+  }, function (t, e, n) {
+    var r = n(82);"string" == typeof r && (r = [[t.id, r, ""]]);n(86)(r, {});r.locals && (t.exports = r.locals);
+  }]);
+});
+
+},{"babel-runtime/core-js/json/stringify":1,"babel-runtime/core-js/object/create":2,"babel-runtime/core-js/object/define-properties":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/core-js/object/get-own-property-descriptor":5,"babel-runtime/core-js/object/get-own-property-names":6,"babel-runtime/core-js/object/get-own-property-symbols":7,"babel-runtime/core-js/object/get-prototype-of":8,"babel-runtime/core-js/object/is-extensible":9,"babel-runtime/core-js/object/keys":10,"babel-runtime/core-js/object/prevent-extensions":11,"babel-runtime/helpers/typeof":14}],110:[function(require,module,exports){
+(function (process){
+/*!
+ * vue-validator v2.1.3
+ * (c) 2016 kazuya kawaguchi
+ * Released under the MIT License.
+ */
+'use strict';
+
+var babelHelpers = {};
+babelHelpers.typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+};
+
+babelHelpers.classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+babelHelpers.createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+babelHelpers.inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+babelHelpers.possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
+
+babelHelpers;
+
+/**
+ * Utilties
+ */
+
+// export default for holding the Vue reference
+var exports$1 = {};
+/**
+ * warn
+ *
+ * @param {String} msg
+ * @param {Error} [err]
+ *
+ */
+
+function warn(msg, err) {
+  if (window.console) {
+    console.warn('[vue-validator] ' + msg);
+    if (err) {
+      console.warn(err.stack);
+    }
+  }
+}
+
+/**
+ * empty
+ *
+ * @param {Array|Object} target
+ * @return {Boolean}
+ */
+
+function empty(target) {
+  if (target === null || target === undefined) {
+    return true;
+  }
+
+  if (Array.isArray(target)) {
+    if (target.length > 0) {
+      return false;
+    }
+    if (target.length === 0) {
+      return true;
+    }
+  } else if (exports$1.Vue.util.isPlainObject(target)) {
+    for (var key in target) {
+      if (exports$1.Vue.util.hasOwn(target, key)) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+/**
+ * each
+ *
+ * @param {Array|Object} target
+ * @param {Function} iterator
+ * @param {Object} [context]
+ */
+
+function each(target, iterator, context) {
+  if (Array.isArray(target)) {
+    for (var i = 0; i < target.length; i++) {
+      iterator.call(context || target[i], target[i], i);
+    }
+  } else if (exports$1.Vue.util.isPlainObject(target)) {
+    var hasOwn = exports$1.Vue.util.hasOwn;
+    for (var key in target) {
+      if (hasOwn(target, key)) {
+        iterator.call(context || target[key], target[key], key);
+      }
+    }
+  }
+}
+
+/**
+ * pull
+ *
+ * @param {Array} arr
+ * @param {Object} item
+ * @return {Object|null}
+ */
+
+function pull(arr, item) {
+  var index = exports$1.Vue.util.indexOf(arr, item);
+  return ~index ? arr.splice(index, 1) : null;
+}
+
+/**
+ * trigger
+ *
+ * @param {Element} el
+ * @param {String} event
+ * @param {Object} [args]
+ */
+
+function trigger(el, event, args) {
+  var e = document.createEvent('HTMLEvents');
+  e.initEvent(event, true, false);
+
+  if (args) {
+    for (var prop in args) {
+      e[prop] = args[prop];
+    }
+  }
+
+  // Due to Firefox bug, events fired on disabled
+  // non-attached form controls can throw errors
+  try {
+    el.dispatchEvent(e);
+  } catch (e) {}
+}
+
+/**
+ * Forgiving check for a promise
+ *
+ * @param {Object} p
+ * @return {Boolean}
+ */
+
+function isPromise(p) {
+  return p && typeof p.then === 'function';
+}
+
+/**
+ * Togging classes
+ *
+ * @param {Element} el
+ * @param {String} key
+ * @param {Function} fn
+ */
+
+function toggleClasses(el, key, fn) {
+  key = key.trim();
+  if (key.indexOf(' ') === -1) {
+    fn(el, key);
+    return;
+  }
+
+  var keys = key.split(/\s+/);
+  for (var i = 0, l = keys.length; i < l; i++) {
+    fn(el, keys[i]);
+  }
+}
+
+/**
+ * Fundamental validate functions
+ */
+
+/**
+ * required
+ *
+ * This function validate whether the value has been filled out.
+ *
+ * @param {*} val
+ * @return {Boolean}
+ */
+
+function required(val) {
+  if (Array.isArray(val)) {
+    if (val.length !== 0) {
+      var valid = true;
+      for (var i = 0, l = val.length; i < l; i++) {
+        valid = required(val[i]);
+        if (!valid) {
+          break;
+        }
+      }
+      return valid;
+    } else {
+      return false;
+    }
+  } else if (typeof val === 'number' || typeof val === 'function') {
+    return true;
+  } else if (typeof val === 'boolean') {
+    return val;
+  } else if (typeof val === 'string') {
+    return val.length > 0;
+  } else if (val !== null && (typeof val === 'undefined' ? 'undefined' : babelHelpers.typeof(val)) === 'object') {
+    return Object.keys(val).length > 0;
+  } else if (val === null || val === undefined) {
+    return false;
+  }
+}
+
+/**
+ * pattern
+ *
+ * This function validate whether the value matches the regex pattern
+ *
+ * @param val
+ * @param {String} pat
+ * @return {Boolean}
+ */
+
+function pattern(val, pat) {
+  if (typeof pat !== 'string') {
+    return false;
+  }
+
+  var match = pat.match(new RegExp('^/(.*?)/([gimy]*)$'));
+  if (!match) {
+    return false;
+  }
+
+  return new RegExp(match[1], match[2]).test(val);
+}
+
+/**
+ * minlength
+ *
+ * This function validate whether the minimum length.
+ *
+ * @param {String|Array} val
+ * @param {String|Number} min
+ * @return {Boolean}
+ */
+
+function minlength(val, min) {
+  if (typeof val === 'string') {
+    return isInteger(min, 10) && val.length >= parseInt(min, 10);
+  } else if (Array.isArray(val)) {
+    return val.length >= parseInt(min, 10);
+  } else {
+    return false;
+  }
+}
+
+/**
+ * maxlength
+ *
+ * This function validate whether the maximum length.
+ *
+ * @param {String|Array} val
+ * @param {String|Number} max
+ * @return {Boolean}
+ */
+
+function maxlength(val, max) {
+  if (typeof val === 'string') {
+    return isInteger(max, 10) && val.length <= parseInt(max, 10);
+  } else if (Array.isArray(val)) {
+    return val.length <= parseInt(max, 10);
+  } else {
+    return false;
+  }
+}
+
+/**
+ * min
+ *
+ * This function validate whether the minimum value of the numberable value.
+ *
+ * @param {*} val
+ * @param {*} arg minimum
+ * @return {Boolean}
+ */
+
+function min(val, arg) {
+  return !isNaN(+val) && !isNaN(+arg) && +val >= +arg;
+}
+
+/**
+ * max
+ *
+ * This function validate whether the maximum value of the numberable value.
+ *
+ * @param {*} val
+ * @param {*} arg maximum
+ * @return {Boolean}
+ */
+
+function max(val, arg) {
+  return !isNaN(+val) && !isNaN(+arg) && +val <= +arg;
+}
+
+/**
+ * isInteger
+ *
+ * This function check whether the value of the string is integer.
+ *
+ * @param {String} val
+ * @return {Boolean}
+ * @private
+ */
+
+function isInteger(val) {
+  return (/^(-?[1-9]\d*|0)$/.test(val)
+  );
+}
+
+var validators = Object.freeze({
+  required: required,
+  pattern: pattern,
+  minlength: minlength,
+  maxlength: maxlength,
+  min: min,
+  max: max
+});
+
+function Asset (Vue) {
+  var extend = Vue.util.extend;
+
+  // set global validators asset
+  var assets = Object.create(null);
+  extend(assets, validators);
+  Vue.options.validators = assets;
+
+  // set option merge strategy
+  var strats = Vue.config.optionMergeStrategies;
+  if (strats) {
+    strats.validators = function (parent, child) {
+      if (!child) {
+        return parent;
+      }
+      if (!parent) {
+        return child;
+      }
+      var ret = Object.create(null);
+      extend(ret, parent);
+      for (var key in child) {
+        ret[key] = child[key];
+      }
+      return ret;
+    };
+  }
+
+  /**
+   * Register or retrieve a global validator definition.
+   *
+   * @param {String} id
+   * @param {Function} definition
+   */
+
+  Vue.validator = function (id, definition) {
+    if (!definition) {
+      return Vue.options['validators'][id];
+    } else {
+      Vue.options['validators'][id] = definition;
+    }
+  };
+}
+
+function Override (Vue) {
+  // override _init
+  var init = Vue.prototype._init;
+  Vue.prototype._init = function (options) {
+    if (!this._validatorMaps) {
+      this._validatorMaps = Object.create(null);
+    }
+    init.call(this, options);
+  };
+
+  // override _destroy
+  var destroy = Vue.prototype._destroy;
+  Vue.prototype._destroy = function () {
+    destroy.apply(this, arguments);
+    this._validatorMaps = null;
+  };
+}
+
+var VALIDATE_UPDATE = '__vue-validator-validate-update__';
+var PRIORITY_VALIDATE = 16;
+var PRIORITY_VALIDATE_CLASS = 32;
+var REGEX_FILTER = /[^|]\|[^|]/;
+var REGEX_VALIDATE_DIRECTIVE = /^v-validate(?:$|:(.*)$)/;
+var REGEX_EVENT = /^v-on:|^@/;
+
+var classId = 0; // ID for validation class
+
+function ValidateClass (Vue) {
+  var vIf = Vue.directive('if');
+  var FragmentFactory = Vue.FragmentFactory;
+  var _Vue$util = Vue.util;
+  var toArray = _Vue$util.toArray;
+  var replace = _Vue$util.replace;
+  var createAnchor = _Vue$util.createAnchor;
+
+  /**
+   * `v-validate-class` directive
+   */
+
+  Vue.directive('validate-class', {
+    terminal: true,
+    priority: vIf.priority + PRIORITY_VALIDATE_CLASS,
+
+    bind: function bind() {
+      var _this = this;
+
+      var id = String(classId++);
+      this.setClassIds(this.el, id);
+
+      this.vm.$on(VALIDATE_UPDATE, this.cb = function (classIds, validation, results) {
+        if (classIds.indexOf(id) > -1) {
+          validation.updateClasses(results, _this.frag.node);
+        }
+      });
+
+      this.setupFragment();
+    },
+    unbind: function unbind() {
+      this.vm.$off(VALIDATE_UPDATE, this.cb);
+      this.teardownFragment();
+    },
+    setClassIds: function setClassIds(el, id) {
+      var childNodes = toArray(el.childNodes);
+      for (var i = 0, l = childNodes.length; i < l; i++) {
+        var element = childNodes[i];
+        if (element.nodeType === 1) {
+          var hasAttrs = element.hasAttributes();
+          var attrs = hasAttrs && toArray(element.attributes);
+          for (var k = 0, _l = attrs.length; k < _l; k++) {
+            var attr = attrs[k];
+            if (attr.name.match(REGEX_VALIDATE_DIRECTIVE)) {
+              var existingId = element.getAttribute(VALIDATE_UPDATE);
+              var value = existingId ? existingId + ',' + id : id;
+              element.setAttribute(VALIDATE_UPDATE, value);
+            }
+          }
+        }
+
+        if (element.hasChildNodes()) {
+          this.setClassIds(element, id);
+        }
+      }
+    },
+    setupFragment: function setupFragment() {
+      this.anchor = createAnchor('v-validate-class');
+      replace(this.el, this.anchor);
+
+      this.factory = new FragmentFactory(this.vm, this.el);
+      this.frag = this.factory.create(this._host, this._scope, this._frag);
+      this.frag.before(this.anchor);
+    },
+    teardownFragment: function teardownFragment() {
+      if (this.frag) {
+        this.frag.remove();
+        this.frag = null;
+        this.factory = null;
+      }
+
+      replace(this.anchor, this.el);
+      this.anchor = null;
+    }
+  });
+}
+
+function Validate (Vue) {
+  var vIf = Vue.directive('if');
+  var FragmentFactory = Vue.FragmentFactory;
+  var parseDirective = Vue.parsers.directive.parseDirective;
+  var _Vue$util = Vue.util;
+  var inBrowser = _Vue$util.inBrowser;
+  var bind = _Vue$util.bind;
+  var on = _Vue$util.on;
+  var off = _Vue$util.off;
+  var createAnchor = _Vue$util.createAnchor;
+  var replace = _Vue$util.replace;
+  var camelize = _Vue$util.camelize;
+  var isPlainObject = _Vue$util.isPlainObject;
+
+  // Test for IE10/11 textarea placeholder clone bug
+
+  function checkTextareaCloneBug() {
+    if (inBrowser) {
+      var t = document.createElement('textarea');
+      t.placeholder = 't';
+      return t.cloneNode(true).value === 't';
+    } else {
+      return false;
+    }
+  }
+  var hasTextareaCloneBug = checkTextareaCloneBug();
+
+  /**
+   * `v-validate` directive
+   */
+
+  Vue.directive('validate', {
+    terminal: true,
+    priority: vIf.priority + PRIORITY_VALIDATE,
+    params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
+
+    paramWatchers: {
+      detectBlur: function detectBlur(val, old) {
+        if (this._invalid) {
+          return;
+        }
+        this.validation.detectBlur = this.isDetectBlur(val);
+        this.validator.validate(this.field);
+      },
+      detectChange: function detectChange(val, old) {
+        if (this._invalid) {
+          return;
+        }
+        this.validation.detectChange = this.isDetectChange(val);
+        this.validator.validate(this.field);
+      }
+    },
+
+    bind: function bind() {
+      var el = this.el;
+
+      if (process.env.NODE_ENV !== 'production' && el.__vue__) {
+        warn('v-validate="' + this.expression + '" cannot be used on an instance root element.');
+        this._invalid = true;
+        return;
+      }
+
+      if (process.env.NODE_ENV !== 'production' && (el.hasAttribute('v-if') || el.hasAttribute('v-for'))) {
+        warn('v-validate cannot be used `v-if` or `v-for` build-in terminal directive ' + 'on an element. these is wrapped with `<template>` or other tags: ' + '(e.g. <validator name="validator">' + '<template v-if="hidden">' + '<input type="text" v-validate:field1="[\'required\']">' + '</template>' + '</validator>).');
+        this._invalid = true;
+        return;
+      }
+
+      if (process.env.NODE_ENV !== 'production' && !(this.arg || this.params.field)) {
+        warn('you need specify field name for v-validate directive.');
+        this._invalid = true;
+        return;
+      }
+
+      var validatorName = this.vm.$options._validator;
+      if (process.env.NODE_ENV !== 'production' && !validatorName) {
+        warn('you need to wrap the elements to be validated in a <validator> element: ' + '(e.g. <validator name="validator">' + '<input type="text" v-validate:field1="[\'required\']">' + '</validator>).');
+        this._invalid = true;
+        return;
+      }
+
+      var raw = el.getAttribute('v-model');
+
+      var _parseModelRaw = this.parseModelRaw(raw);
+
+      var model = _parseModelRaw.model;
+      var filters = _parseModelRaw.filters;
+
+      this.model = model;
+
+      this.setupFragment();
+      this.setupValidate(validatorName, model, filters);
+      this.listen();
+    },
+    update: function update(value, old) {
+      if (!value || this._invalid) {
+        return;
+      }
+
+      if (isPlainObject(value)) {
+        this.handleObject(value);
+      } else if (Array.isArray(value)) {
+        this.handleArray(value);
+      }
+
+      var options = { field: this.field, noopable: this._initialNoopValidation };
+      if (this.frag) {
+        options.el = this.frag.node;
+      }
+      this.validator.validate(options);
+
+      if (this._initialNoopValidation) {
+        this._initialNoopValidation = null;
+      }
+    },
+    unbind: function unbind() {
+      if (this._invalid) {
+        return;
+      }
+
+      this.unlisten();
+      this.teardownValidate();
+      this.teardownFragment();
+
+      this.model = null;
+    },
+    parseModelRaw: function parseModelRaw(raw) {
+      if (REGEX_FILTER.test(raw)) {
+        var parsed = parseDirective(raw);
+        return { model: parsed.expression, filters: parsed.filters };
+      } else {
+        return { model: raw };
+      }
+    },
+    setupValidate: function setupValidate(name, model, filters) {
+      var params = this.params;
+      var validator = this.validator = this.vm._validatorMaps[name];
+
+      this.field = camelize(this.arg ? this.arg : params.field);
+
+      this.validation = validator.manageValidation(this.field, model, this.vm, this.getElementFrom(this.frag), this._scope, filters, params.initial, this.isDetectBlur(params.detectBlur), this.isDetectChange(params.detectChange));
+
+      isPlainObject(params.classes) && this.validation.setValidationClasses(params.classes);
+
+      params.group && validator.addGroupValidation(params.group, this.field);
+
+      this._initialNoopValidation = this.isInitialNoopValidation(params.initial);
+    },
+    listen: function listen() {
+      var model = this.model;
+      var validation = this.validation;
+      var el = this.getElementFrom(this.frag);
+
+      this.onBlur = bind(validation.listener, validation);
+      on(el, 'blur', this.onBlur);
+      if ((el.type === 'radio' || el.tagName === 'SELECT') && !model) {
+        this.onChange = bind(validation.listener, validation);
+        on(el, 'change', this.onChange);
+      } else if (el.type === 'checkbox') {
+        if (!model) {
+          this.onChange = bind(validation.listener, validation);
+          on(el, 'change', this.onChange);
+        } else {
+          this.onClick = bind(validation.listener, validation);
+          on(el, 'click', this.onClick);
+        }
+      } else {
+        if (!model) {
+          this.onInput = bind(validation.listener, validation);
+          on(el, 'input', this.onInput);
+        }
+      }
+    },
+    unlisten: function unlisten() {
+      var el = this.getElementFrom(this.frag);
+
+      if (this.onInput) {
+        off(el, 'input', this.onInput);
+        this.onInput = null;
+      }
+
+      if (this.onClick) {
+        off(el, 'click', this.onClick);
+        this.onClick = null;
+      }
+
+      if (this.onChange) {
+        off(el, 'change', this.onChange);
+        this.onChange = null;
+      }
+
+      if (this.onBlur) {
+        off(el, 'blur', this.onBlur);
+        this.onBlur = null;
+      }
+    },
+    teardownValidate: function teardownValidate() {
+      if (this.validator && this.validation) {
+        var el = this.getElementFrom(this.frag);
+
+        this.params.group && this.validator.removeGroupValidation(this.params.group, this.field);
+
+        this.validator.unmanageValidation(this.field, el);
+
+        this.validator = null;
+        this.validation = null;
+        this.field = null;
+      }
+    },
+    setupFragment: function setupFragment() {
+      this.anchor = createAnchor('v-validate');
+      replace(this.el, this.anchor);
+
+      this.factory = new FragmentFactory(this.vm, this.shimNode(this.el));
+      this.frag = this.factory.create(this._host, this._scope, this._frag);
+      this.frag.before(this.anchor);
+    },
+    teardownFragment: function teardownFragment() {
+      if (this.frag) {
+        this.frag.remove();
+        this.frag = null;
+        this.factory = null;
+      }
+
+      replace(this.anchor, this.el);
+      this.anchor = null;
+    },
+    handleArray: function handleArray(value) {
+      var _this = this;
+
+      each(value, function (val) {
+        _this.validation.setValidation(val);
+      });
+    },
+    handleObject: function handleObject(value) {
+      var _this2 = this;
+
+      each(value, function (val, key) {
+        if (isPlainObject(val)) {
+          if ('rule' in val) {
+            var msg = 'message' in val ? val.message : null;
+            var initial = 'initial' in val ? val.initial : null;
+            _this2.validation.setValidation(key, val.rule, msg, initial);
+          }
+        } else {
+          _this2.validation.setValidation(key, val);
+        }
+      });
+    },
+    isDetectBlur: function isDetectBlur(detectBlur) {
+      return detectBlur === undefined || detectBlur === 'on' || detectBlur === true;
+    },
+    isDetectChange: function isDetectChange(detectChange) {
+      return detectChange === undefined || detectChange === 'on' || detectChange === true;
+    },
+    isInitialNoopValidation: function isInitialNoopValidation(initial) {
+      return initial === 'off' || initial === false;
+    },
+    shimNode: function shimNode(node) {
+      var ret = node;
+      if (hasTextareaCloneBug) {
+        if (node.tagName === 'TEXTAREA') {
+          ret = node.cloneNode(true);
+          ret.value = node.value;
+          var i = ret.childNodes.length;
+          while (i--) {
+            ret.removeChild(ret.childNodes[i]);
+          }
+        }
+      }
+      return ret;
+    },
+    getElementFrom: function getElementFrom(frag) {
+      return frag.single ? frag.node : frag.node.nextSibling;
+    }
+  });
+}
+
+/**
+ * BaseValidation class
+ */
+
+var BaseValidation = function () {
+  function BaseValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
+    babelHelpers.classCallCheck(this, BaseValidation);
+
+    this.field = field;
+    this.touched = false;
+    this.dirty = false;
+    this.modified = false;
+
+    this._modified = false;
+    this._model = model;
+    this._filters = filters;
+    this._validator = validator;
+    this._vm = vm;
+    this._el = el;
+    this._forScope = scope;
+    this._init = this._getValue(el);
+    this._validators = {};
+    this._detectBlur = detectBlur;
+    this._detectChange = detectChange;
+    this._classes = {};
+  }
+
+  BaseValidation.prototype.manageElement = function manageElement(el, initial) {
+    var _this = this;
+
+    var scope = this._getScope();
+    var model = this._model;
+
+    this._initial = initial;
+
+    var classIds = el.getAttribute(VALIDATE_UPDATE);
+    if (classIds) {
+      el.removeAttribute(VALIDATE_UPDATE);
+      this._classIds = classIds.split(',');
+    }
+
+    if (model) {
+      el.value = this._evalModel(model, this._filters);
+      this._unwatch = scope.$watch(model, function (val, old) {
+        if (val !== old) {
+          if (_this.guardValidate(el, 'input')) {
+            return;
+          }
+
+          _this.handleValidate(el, { noopable: _this._initial });
+          if (_this._initial) {
+            _this._initial = null;
+          }
+        }
+      }, { deep: true });
+    }
+  };
+
+  BaseValidation.prototype.unmanageElement = function unmanageElement(el) {
+    this._unwatch && this._unwatch();
+  };
+
+  BaseValidation.prototype.setValidation = function setValidation(name, arg, msg, initial) {
+    var validator = this._validators[name];
+    if (!validator) {
+      validator = this._validators[name] = {};
+      validator.name = name;
+    }
+
+    validator.arg = arg;
+    if (msg) {
+      validator.msg = msg;
+    }
+
+    if (initial) {
+      validator.initial = initial;
+      validator._isNoopable = true;
+    }
+  };
+
+  BaseValidation.prototype.setValidationClasses = function setValidationClasses(classes) {
+    var _this2 = this;
+
+    each(classes, function (value, key) {
+      _this2._classes[key] = value;
+    });
+  };
+
+  BaseValidation.prototype.willUpdateFlags = function willUpdateFlags() {
+    var touched = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
+    touched && this.willUpdateTouched(this._el, 'blur');
+    this.willUpdateDirty(this._el);
+    this.willUpdateModified(this._el);
+  };
+
+  BaseValidation.prototype.willUpdateTouched = function willUpdateTouched(el, type) {
+    if (type && type === 'blur') {
+      this.touched = true;
+      this._fireEvent(el, 'touched');
+    }
+  };
+
+  BaseValidation.prototype.willUpdateDirty = function willUpdateDirty(el) {
+    if (!this.dirty && this._checkModified(el)) {
+      this.dirty = true;
+      this._fireEvent(el, 'dirty');
+    }
+  };
+
+  BaseValidation.prototype.willUpdateModified = function willUpdateModified(el) {
+    this.modified = this._checkModified(el);
+    if (this._modified !== this.modified) {
+      this._fireEvent(el, 'modified', { modified: this.modified });
+      this._modified = this.modified;
+    }
+  };
+
+  BaseValidation.prototype.listener = function listener(e) {
+    if (this.guardValidate(e.target, e.type)) {
+      return;
+    }
+
+    this.handleValidate(e.target, { type: e.type });
+  };
+
+  BaseValidation.prototype.handleValidate = function handleValidate(el) {
+    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+    var _ref$type = _ref.type;
+    var type = _ref$type === undefined ? null : _ref$type;
+    var _ref$noopable = _ref.noopable;
+    var noopable = _ref$noopable === undefined ? false : _ref$noopable;
+
+    this.willUpdateTouched(el, type);
+    this.willUpdateDirty(el);
+    this.willUpdateModified(el);
+
+    this._validator.validate({ field: this.field, el: el, noopable: noopable });
+  };
+
+  BaseValidation.prototype.validate = function validate(cb) {
+    var _this3 = this;
+
+    var noopable = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+    var el = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+
+    var _ = exports$1.Vue.util;
+
+    var results = {};
+    var errors = [];
+    var valid = true;
+
+    this._runValidators(function (descriptor, name, done) {
+      var asset = _this3._resolveValidator(name);
+      var validator = null;
+      var msg = null;
+
+      if (_.isPlainObject(asset)) {
+        if (asset.check && typeof asset.check === 'function') {
+          validator = asset.check;
+        }
+        if (asset.message) {
+          msg = asset.message;
+        }
+      } else if (typeof asset === 'function') {
+        validator = asset;
+      }
+
+      if (descriptor.msg) {
+        msg = descriptor.msg;
+      }
+
+      if (noopable) {
+        results[name] = false;
+        return done();
+      }
+
+      if (descriptor._isNoopable) {
+        results[name] = false;
+        descriptor._isNoopable = null;
+        return done();
+      }
+
+      if (validator) {
+        var value = _this3._getValue(_this3._el);
+        _this3._invokeValidator(_this3._vm, validator, value, descriptor.arg, function (ret, err) {
+          if (!ret) {
+            valid = false;
+            if (err) {
+              // async error message
+              errors.push({ validator: name, message: err });
+              results[name] = err;
+            } else if (msg) {
+              var error = { validator: name };
+              error.message = typeof msg === 'function' ? msg.call(_this3._vm, _this3.field, descriptor.arg) : msg;
+              errors.push(error);
+              results[name] = error.message;
+            } else {
+              results[name] = !ret;
+            }
+          } else {
+            results[name] = !ret;
+          }
+
+          done();
+        });
+      } else {
+        done();
+      }
+    }, function () {
+      // finished
+      _this3._fireEvent(_this3._el, valid ? 'valid' : 'invalid');
+
+      var props = {
+        valid: valid,
+        invalid: !valid,
+        touched: _this3.touched,
+        untouched: !_this3.touched,
+        dirty: _this3.dirty,
+        pristine: !_this3.dirty,
+        modified: _this3.modified
+      };
+      if (!empty(errors)) {
+        props.errors = errors;
+      }
+      _.extend(results, props);
+
+      _this3.willUpdateClasses(results, el);
+
+      cb(results);
+    });
+  };
+
+  BaseValidation.prototype.resetFlags = function resetFlags() {
+    this.touched = false;
+    this.dirty = false;
+    this.modified = false;
+    this._modified = false;
+  };
+
+  BaseValidation.prototype.reset = function reset() {
+    each(this._validators, function (descriptor, key) {
+      if (descriptor.initial && !descriptor._isNoopable) {
+        descriptor._isNoopable = true;
+      }
+    });
+    this.resetFlags();
+    this._init = this._getValue(this._el);
+  };
+
+  BaseValidation.prototype.willUpdateClasses = function willUpdateClasses(results) {
+    var _this4 = this;
+
+    var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+    if (this._checkClassIds(el)) {
+      (function () {
+        var classIds = _this4._getClassIds(el);
+        _this4.vm.$nextTick(function () {
+          _this4.vm.$emit(VALIDATE_UPDATE, classIds, _this4, results);
+        });
+      })();
+    } else {
+      this.updateClasses(results);
+    }
+  };
+
+  BaseValidation.prototype.updateClasses = function updateClasses(results) {
+    var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+    this._updateClasses(el || this._el, results);
+  };
+
+  BaseValidation.prototype.guardValidate = function guardValidate(el, type) {
+    if (type && type === 'blur' && !this.detectBlur) {
+      return true;
+    }
+
+    if (type && type === 'input' && !this.detectChange) {
+      return true;
+    }
+
+    if (type && type === 'change' && !this.detectChange) {
+      return true;
+    }
+
+    if (type && type === 'click' && !this.detectChange) {
+      return true;
+    }
+
+    return false;
+  };
+
+  BaseValidation.prototype._getValue = function _getValue(el) {
+    return el.value;
+  };
+
+  BaseValidation.prototype._getScope = function _getScope() {
+    return this._forScope || this._vm;
+  };
+
+  BaseValidation.prototype._getClassIds = function _getClassIds(el) {
+    return this._classIds;
+  };
+
+  BaseValidation.prototype._checkModified = function _checkModified(target) {
+    return this._init !== this._getValue(target);
+  };
+
+  BaseValidation.prototype._checkClassIds = function _checkClassIds(el) {
+    return this._getClassIds(el);
+  };
+
+  BaseValidation.prototype._fireEvent = function _fireEvent(el, type, args) {
+    trigger(el, type, args);
+  };
+
+  BaseValidation.prototype._evalModel = function _evalModel(model, filters) {
+    var scope = this._getScope();
+
+    var val = null;
+    if (filters) {
+      val = scope.$get(model);
+      return filters ? this._applyFilters(val, null, filters) : val;
+    } else {
+      val = scope.$get(model);
+      return val === undefined || val === null ? '' : val;
+    }
+  };
+
+  BaseValidation.prototype._updateClasses = function _updateClasses(el, results) {
+    this._toggleValid(el, results.valid);
+    this._toggleTouched(el, results.touched);
+    this._togglePristine(el, results.pristine);
+    this._toggleModfied(el, results.modified);
+  };
+
+  BaseValidation.prototype._toggleValid = function _toggleValid(el, valid) {
+    var _util$Vue$util = exports$1.Vue.util;
+    var addClass = _util$Vue$util.addClass;
+    var removeClass = _util$Vue$util.removeClass;
+
+    var validClass = this._classes.valid || 'valid';
+    var invalidClass = this._classes.invalid || 'invalid';
+
+    if (valid) {
+      toggleClasses(el, validClass, addClass);
+      toggleClasses(el, invalidClass, removeClass);
+    } else {
+      toggleClasses(el, validClass, removeClass);
+      toggleClasses(el, invalidClass, addClass);
+    }
+  };
+
+  BaseValidation.prototype._toggleTouched = function _toggleTouched(el, touched) {
+    var _util$Vue$util2 = exports$1.Vue.util;
+    var addClass = _util$Vue$util2.addClass;
+    var removeClass = _util$Vue$util2.removeClass;
+
+    var touchedClass = this._classes.touched || 'touched';
+    var untouchedClass = this._classes.untouched || 'untouched';
+
+    if (touched) {
+      toggleClasses(el, touchedClass, addClass);
+      toggleClasses(el, untouchedClass, removeClass);
+    } else {
+      toggleClasses(el, touchedClass, removeClass);
+      toggleClasses(el, untouchedClass, addClass);
+    }
+  };
+
+  BaseValidation.prototype._togglePristine = function _togglePristine(el, pristine) {
+    var _util$Vue$util3 = exports$1.Vue.util;
+    var addClass = _util$Vue$util3.addClass;
+    var removeClass = _util$Vue$util3.removeClass;
+
+    var pristineClass = this._classes.pristine || 'pristine';
+    var dirtyClass = this._classes.dirty || 'dirty';
+
+    if (pristine) {
+      toggleClasses(el, pristineClass, addClass);
+      toggleClasses(el, dirtyClass, removeClass);
+    } else {
+      toggleClasses(el, pristineClass, removeClass);
+      toggleClasses(el, dirtyClass, addClass);
+    }
+  };
+
+  BaseValidation.prototype._toggleModfied = function _toggleModfied(el, modified) {
+    var _util$Vue$util4 = exports$1.Vue.util;
+    var addClass = _util$Vue$util4.addClass;
+    var removeClass = _util$Vue$util4.removeClass;
+
+    var modifiedClass = this._classes.modified || 'modified';
+
+    if (modified) {
+      toggleClasses(el, modifiedClass, addClass);
+    } else {
+      toggleClasses(el, modifiedClass, removeClass);
+    }
+  };
+
+  BaseValidation.prototype._applyFilters = function _applyFilters(value, oldValue, filters, write) {
+    var resolveAsset = exports$1.Vue.util.resolveAsset;
+    var scope = this._getScope();
+
+    var filter = void 0,
+        fn = void 0,
+        args = void 0,
+        arg = void 0,
+        offset = void 0,
+        i = void 0,
+        l = void 0,
+        j = void 0,
+        k = void 0;
+    for (i = 0, l = filters.length; i < l; i++) {
+      filter = filters[i];
+      fn = resolveAsset(this._vm.$options, 'filters', filter.name);
+      if (!fn) {
+        continue;
+      }
+
+      fn = write ? fn.write : fn.read || fn;
+      if (typeof fn !== 'function') {
+        continue;
+      }
+
+      args = write ? [value, oldValue] : [value];
+      offset = write ? 2 : 1;
+      if (filter.args) {
+        for (j = 0, k = filter.args.length; j < k; j++) {
+          arg = filter.args[j];
+          args[j + offset] = arg.dynamic ? scope.$get(arg.value) : arg.value;
+        }
+      }
+
+      value = fn.apply(this._vm, args);
+    }
+
+    return value;
+  };
+
+  BaseValidation.prototype._runValidators = function _runValidators(fn, cb) {
+    var validators = this._validators;
+    var length = Object.keys(validators).length;
+
+    var count = 0;
+    each(validators, function (descriptor, name) {
+      fn(descriptor, name, function () {
+        ++count;
+        count >= length && cb();
+      });
+    });
+  };
+
+  BaseValidation.prototype._invokeValidator = function _invokeValidator(vm, validator, val, arg, cb) {
+    var future = validator.call(this, val, arg);
+    if (typeof future === 'function') {
+      // function
+      future(function () {
+        // resolve
+        cb(true);
+      }, function (msg) {
+        // reject
+        cb(false, msg);
+      });
+    } else if (isPromise(future)) {
+      // promise
+      future.then(function () {
+        // resolve
+        cb(true);
+      }, function (msg) {
+        // reject
+        cb(false, msg);
+      }).catch(function (err) {
+        cb(false, err.message);
+      });
+    } else {
+      // sync
+      cb(future);
+    }
+  };
+
+  BaseValidation.prototype._resolveValidator = function _resolveValidator(name) {
+    var resolveAsset = exports$1.Vue.util.resolveAsset;
+    return resolveAsset(this._vm.$options, 'validators', name);
+  };
+
+  babelHelpers.createClass(BaseValidation, [{
+    key: 'vm',
+    get: function get() {
+      return this._vm;
+    }
+  }, {
+    key: 'el',
+    get: function get() {
+      return this._el;
+    }
+  }, {
+    key: 'detectChange',
+    get: function get() {
+      return this._detectChange;
+    },
+    set: function set(val) {
+      this._detectChange = val;
+    }
+  }, {
+    key: 'detectBlur',
+    get: function get() {
+      return this._detectBlur;
+    },
+    set: function set(val) {
+      this._detectBlur = val;
+    }
+  }]);
+  return BaseValidation;
+}();
+
+/**
+ * CheckboxValidation class
+ */
+
+var CheckboxValidation = function (_BaseValidation) {
+  babelHelpers.inherits(CheckboxValidation, _BaseValidation);
+
+  function CheckboxValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
+    babelHelpers.classCallCheck(this, CheckboxValidation);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+
+    _this._inits = [];
+    return _this;
+  }
+
+  CheckboxValidation.prototype.manageElement = function manageElement(el, initial) {
+    var _this2 = this;
+
+    var scope = this._getScope();
+    var item = this._addItem(el, initial);
+
+    var model = item.model = this._model;
+    if (model) {
+      var value = this._evalModel(model, this._filters);
+      if (Array.isArray(value)) {
+        this._setChecked(value, item.el);
+        item.unwatch = scope.$watch(model, function (val, old) {
+          if (val !== old) {
+            if (_this2.guardValidate(item.el, 'change')) {
+              return;
+            }
+
+            _this2.handleValidate(item.el, { noopable: item.initial });
+            if (item.initial) {
+              item.initial = null;
+            }
+          }
+        });
+      } else {
+        el.checked = value || false;
+        this._init = el.checked;
+        item.init = el.checked;
+        item.value = el.value;
+        item.unwatch = scope.$watch(model, function (val, old) {
+          if (val !== old) {
+            if (_this2.guardValidate(el, 'change')) {
+              return;
+            }
+
+            _this2.handleValidate(el, { noopable: item.initial });
+            if (item.initial) {
+              item.initial = null;
+            }
+          }
+        });
+      }
+    } else {
+      var options = { field: this.field, noopable: initial };
+      if (this._checkClassIds(el)) {
+        options.el = el;
+      }
+      this._validator.validate(options);
+    }
+  };
+
+  CheckboxValidation.prototype.unmanageElement = function unmanageElement(el) {
+    var found = -1;
+    each(this._inits, function (item, index) {
+      if (item.el === el) {
+        found = index;
+        if (item.unwatch && item.model) {
+          item.unwatch();
+          item.unwatch = null;
+          item.model = null;
+        }
+      }
+    });
+    if (found === -1) {
+      return;
+    }
+
+    this._inits.splice(found, 1);
+    this._validator.validate({ field: this.field });
+  };
+
+  CheckboxValidation.prototype.willUpdateFlags = function willUpdateFlags() {
+    var _this3 = this;
+
+    var touched = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
+    each(this._inits, function (item, index) {
+      touched && _this3.willUpdateTouched(item.el, 'blur');
+      _this3.willUpdateDirty(item.el);
+      _this3.willUpdateModified(item.el);
+    });
+  };
+
+  CheckboxValidation.prototype.reset = function reset() {
+    this.resetFlags();
+    each(this._inits, function (item, index) {
+      item.init = item.el.checked;
+      item.value = item.el.value;
+    });
+  };
+
+  CheckboxValidation.prototype.updateClasses = function updateClasses(results) {
+    var _this4 = this;
+
+    var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+    if (el) {
+      // for another element
+      this._updateClasses(el, results);
+    } else {
+      each(this._inits, function (item, index) {
+        _this4._updateClasses(item.el, results);
+      });
+    }
+  };
+
+  CheckboxValidation.prototype._addItem = function _addItem(el, initial) {
+    var item = {
+      el: el,
+      init: el.checked,
+      value: el.value,
+      initial: initial
+    };
+
+    var classIds = el.getAttribute(VALIDATE_UPDATE);
+    if (classIds) {
+      el.removeAttribute(VALIDATE_UPDATE);
+      item.classIds = classIds.split(',');
+    }
+
+    this._inits.push(item);
+    return item;
+  };
+
+  CheckboxValidation.prototype._setChecked = function _setChecked(values, el) {
+    for (var i = 0, l = values.length; i < l; i++) {
+      var value = values[i];
+      if (!el.disabled && el.value === value && !el.checked) {
+        el.checked = true;
+      }
+    }
+  };
+
+  CheckboxValidation.prototype._getValue = function _getValue(el) {
+    var _this5 = this;
+
+    if (!this._inits || this._inits.length === 0) {
+      return el.checked;
+    } else {
+      var _ret = function () {
+        var vals = [];
+        each(_this5._inits, function (item, index) {
+          item.el.checked && vals.push(item.el.value);
+        });
+        return {
+          v: vals
+        };
+      }();
+
+      if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret)) === "object") return _ret.v;
+    }
+  };
+
+  CheckboxValidation.prototype._getClassIds = function _getClassIds(el) {
+    var classIds = void 0;
+    each(this._inits, function (item, index) {
+      if (item.el === el) {
+        classIds = item.classIds;
+      }
+    });
+    return classIds;
+  };
+
+  CheckboxValidation.prototype._checkModified = function _checkModified(target) {
+    var _this6 = this;
+
+    if (this._inits.length === 0) {
+      return this._init !== target.checked;
+    } else {
+      var _ret2 = function () {
+        var modified = false;
+        each(_this6._inits, function (item, index) {
+          if (!modified) {
+            modified = item.init !== item.el.checked;
+          }
+        });
+        return {
+          v: modified
+        };
+      }();
+
+      if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret2)) === "object") return _ret2.v;
+    }
+  };
+
+  return CheckboxValidation;
+}(BaseValidation);
+
+/**
+ * RadioValidation class
+ */
+
+var RadioValidation = function (_BaseValidation) {
+  babelHelpers.inherits(RadioValidation, _BaseValidation);
+
+  function RadioValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
+    babelHelpers.classCallCheck(this, RadioValidation);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+
+    _this._inits = [];
+    return _this;
+  }
+
+  RadioValidation.prototype.manageElement = function manageElement(el, initial) {
+    var _this2 = this;
+
+    var scope = this._getScope();
+    var item = this._addItem(el, initial);
+
+    var model = item.model = this._model;
+    if (model) {
+      var value = this._evalModel(model, this._filters);
+      this._setChecked(value, el, item);
+      item.unwatch = scope.$watch(model, function (val, old) {
+        if (val !== old) {
+          if (_this2.guardValidate(item.el, 'change')) {
+            return;
+          }
+
+          _this2.handleValidate(el, { noopable: item.initial });
+          if (item.initial) {
+            item.initial = null;
+          }
+        }
+      });
+    } else {
+      var options = { field: this.field, noopable: initial };
+      if (this._checkClassIds(el)) {
+        options.el = el;
+      }
+      this._validator.validate(options);
+    }
+  };
+
+  RadioValidation.prototype.unmanageElement = function unmanageElement(el) {
+    var found = -1;
+    each(this._inits, function (item, index) {
+      if (item.el === el) {
+        found = index;
+      }
+    });
+    if (found === -1) {
+      return;
+    }
+
+    this._inits.splice(found, 1);
+    this._validator.validate({ field: this.field });
+  };
+
+  RadioValidation.prototype.willUpdateFlags = function willUpdateFlags() {
+    var _this3 = this;
+
+    var touched = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
+    each(this._inits, function (item, index) {
+      touched && _this3.willUpdateTouched(item.el, 'blur');
+      _this3.willUpdateDirty(item.el);
+      _this3.willUpdateModified(item.el);
+    });
+  };
+
+  RadioValidation.prototype.reset = function reset() {
+    this.resetFlags();
+    each(this._inits, function (item, index) {
+      item.init = item.el.checked;
+      item.value = item.el.value;
+    });
+  };
+
+  RadioValidation.prototype.updateClasses = function updateClasses(results) {
+    var _this4 = this;
+
+    var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+    if (el) {
+      // for another element
+      this._updateClasses(el, results);
+    } else {
+      each(this._inits, function (item, index) {
+        _this4._updateClasses(item.el, results);
+      });
+    }
+  };
+
+  RadioValidation.prototype._addItem = function _addItem(el, initial) {
+    var item = {
+      el: el,
+      init: el.checked,
+      value: el.value,
+      initial: initial
+    };
+
+    var classIds = el.getAttribute(VALIDATE_UPDATE);
+    if (classIds) {
+      el.removeAttribute(VALIDATE_UPDATE);
+      item.classIds = classIds.split(',');
+    }
+
+    this._inits.push(item);
+    return item;
+  };
+
+  RadioValidation.prototype._setChecked = function _setChecked(value, el, item) {
+    if (el.value === value) {
+      el.checked = true;
+      this._init = el.checked;
+      item.init = el.checked;
+      item.value = value;
+    }
+  };
+
+  RadioValidation.prototype._getValue = function _getValue(el) {
+    var _this5 = this;
+
+    if (!this._inits || this._inits.length === 0) {
+      return el.checked;
+    } else {
+      var _ret = function () {
+        var vals = [];
+        each(_this5._inits, function (item, index) {
+          item.el.checked && vals.push(item.el.value);
+        });
+        return {
+          v: vals
+        };
+      }();
+
+      if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret)) === "object") return _ret.v;
+    }
+  };
+
+  RadioValidation.prototype._getClassIds = function _getClassIds(el) {
+    var classIds = void 0;
+    each(this._inits, function (item, index) {
+      if (item.el === el) {
+        classIds = item.classIds;
+      }
+    });
+    return classIds;
+  };
+
+  RadioValidation.prototype._checkModified = function _checkModified(target) {
+    var _this6 = this;
+
+    if (this._inits.length === 0) {
+      return this._init !== target.checked;
+    } else {
+      var _ret2 = function () {
+        var modified = false;
+        each(_this6._inits, function (item, index) {
+          if (!modified) {
+            modified = item.init !== item.el.checked;
+          }
+        });
+        return {
+          v: modified
+        };
+      }();
+
+      if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret2)) === "object") return _ret2.v;
+    }
+  };
+
+  return RadioValidation;
+}(BaseValidation);
+
+/**
+ * SelectValidation class
+ */
+
+var SelectValidation = function (_BaseValidation) {
+  babelHelpers.inherits(SelectValidation, _BaseValidation);
+
+  function SelectValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
+    babelHelpers.classCallCheck(this, SelectValidation);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+
+    _this._multiple = _this._el.hasAttribute('multiple');
+    return _this;
+  }
+
+  SelectValidation.prototype.manageElement = function manageElement(el, initial) {
+    var _this2 = this;
+
+    var scope = this._getScope();
+    var model = this._model;
+
+    this._initial = initial;
+
+    var classIds = el.getAttribute(VALIDATE_UPDATE);
+    if (classIds) {
+      el.removeAttribute(VALIDATE_UPDATE);
+      this._classIds = classIds.split(',');
+    }
+
+    if (model) {
+      var value = this._evalModel(model, this._filters);
+      var values = !Array.isArray(value) ? [value] : value;
+      this._setOption(values, el);
+      this._unwatch = scope.$watch(model, function (val, old) {
+        var values1 = !Array.isArray(val) ? [val] : val;
+        var values2 = !Array.isArray(old) ? [old] : old;
+        if (values1.slice().sort().toString() !== values2.slice().sort().toString()) {
+          if (_this2.guardValidate(el, 'change')) {
+            return;
+          }
+
+          _this2.handleValidate(el, { noopable: _this2._initial });
+          if (_this2._initial) {
+            _this2._initial = null;
+          }
+        }
+      });
+    }
+  };
+
+  SelectValidation.prototype.unmanageElement = function unmanageElement(el) {
+    this._unwatch && this._unwatch();
+  };
+
+  SelectValidation.prototype.reset = function reset() {
+    this.resetFlags();
+  };
+
+  SelectValidation.prototype._getValue = function _getValue(el) {
+    var ret = [];
+
+    for (var i = 0, l = el.options.length; i < l; i++) {
+      var option = el.options[i];
+      if (!option.disabled && option.selected) {
+        ret.push(option.value);
+      }
+    }
+
+    return ret;
+  };
+
+  SelectValidation.prototype._setOption = function _setOption(values, el) {
+    for (var i = 0, l = values.length; i < l; i++) {
+      var value = values[i];
+      for (var j = 0, m = el.options.length; j < m; j++) {
+        var option = el.options[j];
+        if (!option.disabled && option.value === value && (!option.hasAttribute('selected') || !option.selected)) {
+          option.selected = true;
+        }
+      }
+    }
+  };
+
+  SelectValidation.prototype._checkModified = function _checkModified(target) {
+    var values = this._getValue(target).slice().sort();
+    if (this._init.length !== values.length) {
+      return true;
+    } else {
+      var inits = this._init.slice().sort();
+      return inits.toString() !== values.toString();
+    }
+  };
+
+  return SelectValidation;
+}(BaseValidation);
+
+/**
+ * Validator class
+ */
+
+var Validator$1 = function () {
+  function Validator(name, dir, groups, classes) {
+    var _this = this;
+
+    babelHelpers.classCallCheck(this, Validator);
+
+    this.name = name;
+
+    this._scope = {};
+    this._dir = dir;
+    this._validations = {};
+    this._checkboxValidations = {};
+    this._radioValidations = {};
+    this._groups = groups;
+    this._groupValidations = {};
+    this._events = {};
+    this._modified = false;
+    this._classes = classes;
+
+    each(groups, function (group) {
+      _this._groupValidations[group] = [];
+    });
+  }
+
+  Validator.prototype.enableReactive = function enableReactive() {
+    var vm = this._dir.vm;
+
+    // define the validation scope
+    exports$1.Vue.util.defineReactive(vm, this.name, this._scope);
+    vm._validatorMaps[this.name] = this;
+
+    // define the validation resetting meta method to vue instance
+    this._defineResetValidation();
+
+    // define the validate manually meta method to vue instance
+    this._defineValidate();
+
+    // define manually the validation errors
+    this._defineSetValidationErrors();
+  };
+
+  Validator.prototype.disableReactive = function disableReactive() {
+    var vm = this._dir.vm;
+    vm.$setValidationErrors = null;
+    delete vm['$setValidationErrors'];
+    vm.$validate = null;
+    delete vm['$validate'];
+    vm.$validatorReset = null;
+    delete vm['$validatorReset'];
+    vm._validatorMaps[this.name] = null;
+    delete vm._validatorMaps[this.name];
+    vm[this.name] = null;
+    delete vm[this.name];
+  };
+
+  Validator.prototype.registerEvents = function registerEvents() {
+    var isSimplePath = exports$1.Vue.parsers.expression.isSimplePath;
+
+    var attrs = this._dir.el.attributes;
+    for (var i = 0, l = attrs.length; i < l; i++) {
+      var event = attrs[i].name;
+      if (REGEX_EVENT.test(event)) {
+        var value = attrs[i].value;
+        if (isSimplePath(value)) {
+          value += '.apply(this, $arguments)';
+        }
+        event = event.replace(REGEX_EVENT, '');
+        this._events[this._getEventName(event)] = this._dir.vm.$eval(value, true);
+      }
+    }
+  };
+
+  Validator.prototype.unregisterEvents = function unregisterEvents() {
+    var _this2 = this;
+
+    each(this._events, function (handler, event) {
+      _this2._events[event] = null;
+      delete _this2._events[event];
+    });
+  };
+
+  Validator.prototype.manageValidation = function manageValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
+    var validation = null;
+
+    if (el.tagName === 'SELECT') {
+      validation = this._manageSelectValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange);
+    } else if (el.type === 'checkbox') {
+      validation = this._manageCheckboxValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange);
+    } else if (el.type === 'radio') {
+      validation = this._manageRadioValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange);
+    } else {
+      validation = this._manageBaseValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange);
+    }
+
+    validation.setValidationClasses(this._classes);
+
+    return validation;
+  };
+
+  Validator.prototype.unmanageValidation = function unmanageValidation(field, el) {
+    if (el.type === 'checkbox') {
+      this._unmanageCheckboxValidation(field, el);
+    } else if (el.type === 'radio') {
+      this._unmanageRadioValidation(field, el);
+    } else if (el.tagName === 'SELECT') {
+      this._unmanageSelectValidation(field, el);
+    } else {
+      this._unmanageBaseValidation(field, el);
+    }
+  };
+
+  Validator.prototype.addGroupValidation = function addGroupValidation(group, field) {
+    var indexOf = exports$1.Vue.util.indexOf;
+
+    var validation = this._getValidationFrom(field);
+    var validations = this._groupValidations[group];
+
+    validations && ! ~indexOf(validations, validation) && validations.push(validation);
+  };
+
+  Validator.prototype.removeGroupValidation = function removeGroupValidation(group, field) {
+    var validation = this._getValidationFrom(field);
+    var validations = this._groupValidations[group];
+
+    validations && pull(validations, validation);
+  };
+
+  Validator.prototype.validate = function validate() {
+    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+    var _ref$el = _ref.el;
+    var el = _ref$el === undefined ? null : _ref$el;
+    var _ref$field = _ref.field;
+    var field = _ref$field === undefined ? null : _ref$field;
+    var _ref$touched = _ref.touched;
+    var touched = _ref$touched === undefined ? false : _ref$touched;
+    var _ref$noopable = _ref.noopable;
+    var noopable = _ref$noopable === undefined ? false : _ref$noopable;
+    var _ref$cb = _ref.cb;
+    var cb = _ref$cb === undefined ? null : _ref$cb;
+
+    if (!field) {
+      // all
+      each(this.validations, function (validation, key) {
+        validation.willUpdateFlags(touched);
+      });
+      this._validates(cb);
+    } else {
+      // each field
+      this._validate(field, touched, noopable, el, cb);
+    }
+  };
+
+  Validator.prototype.setupScope = function setupScope() {
+    var _this3 = this;
+
+    this._defineProperties(function () {
+      return _this3.validations;
+    }, function () {
+      return _this3._scope;
+    });
+
+    each(this._groups, function (name) {
+      var validations = _this3._groupValidations[name];
+      var group = {};
+      exports$1.Vue.set(_this3._scope, name, group);
+      _this3._defineProperties(function () {
+        return validations;
+      }, function () {
+        return group;
+      });
+    });
+  };
+
+  Validator.prototype.waitFor = function waitFor(cb) {
+    var method = '$activateValidator';
+    var vm = this._dir.vm;
+
+    vm[method] = function () {
+      cb();
+      vm[method] = null;
+    };
+  };
+
+  Validator.prototype._defineResetValidation = function _defineResetValidation() {
+    var _this4 = this;
+
+    this._dir.vm.$resetValidation = function (cb) {
+      _this4._resetValidation(cb);
+    };
+  };
+
+  Validator.prototype._defineValidate = function _defineValidate() {
+    var _this5 = this;
+
+    this._dir.vm.$validate = function () {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var field = null;
+      var touched = false;
+      var cb = null;
+
+      each(args, function (arg, index) {
+        if (typeof arg === 'string') {
+          field = arg;
+        } else if (typeof arg === 'boolean') {
+          touched = arg;
+        } else if (typeof arg === 'function') {
+          cb = arg;
+        }
+      });
+
+      _this5.validate({ field: field, touched: touched, cb: cb });
+    };
+  };
+
+  Validator.prototype._defineSetValidationErrors = function _defineSetValidationErrors() {
+    var _this6 = this;
+
+    this._dir.vm.$setValidationErrors = function (errors) {
+      _this6._setValidationErrors(errors);
+    };
+  };
+
+  Validator.prototype._validate = function _validate(field) {
+    var touched = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+    var noopable = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+    var _this7 = this;
+
+    var el = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+    var cb = arguments.length <= 4 || arguments[4] === undefined ? null : arguments[4];
+
+    var scope = this._scope;
+
+    var validation = this._getValidationFrom(field);
+    if (validation) {
+      validation.willUpdateFlags(touched);
+      validation.validate(function (results) {
+        exports$1.Vue.set(scope, field, results);
+        _this7._fireEvents();
+        cb && cb();
+      }, noopable, el);
+    }
+  };
+
+  Validator.prototype._validates = function _validates(cb) {
+    var _this8 = this;
+
+    var scope = this._scope;
+
+    this._runValidates(function (validation, key, done) {
+      validation.validate(function (results) {
+        exports$1.Vue.set(scope, key, results);
+        done();
+      });
+    }, function () {
+      // finished
+      _this8._fireEvents();
+      cb && cb();
+    });
+  };
+
+  Validator.prototype._getValidationFrom = function _getValidationFrom(field) {
+    return this._validations[field] || this._checkboxValidations[field] && this._checkboxValidations[field].validation || this._radioValidations[field] && this._radioValidations[field].validation;
+  };
+
+  Validator.prototype._resetValidation = function _resetValidation(cb) {
+    each(this.validations, function (validation, key) {
+      validation.reset();
+    });
+    this._validates(cb);
+  };
+
+  Validator.prototype._setValidationErrors = function _setValidationErrors(errors) {
+    var _this9 = this;
+
+    var extend = exports$1.Vue.util.extend;
+
+    // make tempolaly errors
+
+    var temp = {};
+    each(errors, function (error, index) {
+      if (!temp[error.field]) {
+        temp[error.field] = [];
+      }
+      temp[error.field].push(error);
+    });
+
+    // set errors
+    each(temp, function (values, field) {
+      var results = _this9._scope[field];
+      var newResults = {};
+
+      each(values, function (error) {
+        if (error.validator) {
+          results[error.validator] = error.message;
+        }
+      });
+
+      results.valid = false;
+      results.invalid = true;
+      results.errors = values;
+      extend(newResults, results);
+
+      var validation = _this9._getValidationFrom(field);
+      validation.willUpdateClasses(newResults, validation.el);
+
+      exports$1.Vue.set(_this9._scope, field, newResults);
+    });
+  };
+
+  Validator.prototype._manageBaseValidation = function _manageBaseValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
+    var validation = this._validations[field] = new BaseValidation(field, model, vm, el, scope, this, filters, detectBlur, detectChange);
+    validation.manageElement(el, initial);
+    return validation;
+  };
+
+  Validator.prototype._unmanageBaseValidation = function _unmanageBaseValidation(field, el) {
+    var validation = this._validations[field];
+    if (validation) {
+      validation.unmanageElement(el);
+      exports$1.Vue.delete(this._scope, field);
+      this._validations[field] = null;
+      delete this._validations[field];
+    }
+  };
+
+  Validator.prototype._manageCheckboxValidation = function _manageCheckboxValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
+    var validationSet = this._checkboxValidations[field];
+    if (!validationSet) {
+      var validation = new CheckboxValidation(field, model, vm, el, scope, this, filters, detectBlur, detectChange);
+      validationSet = { validation: validation, elements: 0 };
+      this._checkboxValidations[field] = validationSet;
+    }
+
+    validationSet.elements++;
+    validationSet.validation.manageElement(el, initial);
+    return validationSet.validation;
+  };
+
+  Validator.prototype._unmanageCheckboxValidation = function _unmanageCheckboxValidation(field, el) {
+    var validationSet = this._checkboxValidations[field];
+    if (validationSet) {
+      validationSet.elements--;
+      validationSet.validation.unmanageElement(el);
+      if (validationSet.elements === 0) {
+        exports$1.Vue.delete(this._scope, field);
+        this._checkboxValidations[field] = null;
+        delete this._checkboxValidations[field];
+      }
+    }
+  };
+
+  Validator.prototype._manageRadioValidation = function _manageRadioValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
+    var validationSet = this._radioValidations[field];
+    if (!validationSet) {
+      var validation = new RadioValidation(field, model, vm, el, scope, this, filters, detectBlur, detectChange);
+      validationSet = { validation: validation, elements: 0 };
+      this._radioValidations[field] = validationSet;
+    }
+
+    validationSet.elements++;
+    validationSet.validation.manageElement(el, initial);
+    return validationSet.validation;
+  };
+
+  Validator.prototype._unmanageRadioValidation = function _unmanageRadioValidation(field, el) {
+    var validationSet = this._radioValidations[field];
+    if (validationSet) {
+      validationSet.elements--;
+      validationSet.validation.unmanageElement(el);
+      if (validationSet.elements === 0) {
+        exports$1.Vue.delete(this._scope, field);
+        this._radioValidations[field] = null;
+        delete this._radioValidations[field];
+      }
+    }
+  };
+
+  Validator.prototype._manageSelectValidation = function _manageSelectValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
+    var validation = this._validations[field] = new SelectValidation(field, model, vm, el, scope, this, filters, detectBlur, detectChange);
+    validation.manageElement(el, initial);
+    return validation;
+  };
+
+  Validator.prototype._unmanageSelectValidation = function _unmanageSelectValidation(field, el) {
+    var validation = this._validations[field];
+    if (validation) {
+      validation.unmanageElement(el);
+      exports$1.Vue.delete(this._scope, field);
+      this._validations[field] = null;
+      delete this._validations[field];
+    }
+  };
+
+  Validator.prototype._fireEvent = function _fireEvent(type) {
+    for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+      args[_key2 - 1] = arguments[_key2];
+    }
+
+    var handler = this._events[this._getEventName(type)];
+    handler && this._dir.vm.$nextTick(function () {
+      handler.apply(null, args);
+    });
+  };
+
+  Validator.prototype._fireEvents = function _fireEvents() {
+    var scope = this._scope;
+
+    scope.touched && this._fireEvent('touched');
+    scope.dirty && this._fireEvent('dirty');
+
+    if (this._modified !== scope.modified) {
+      this._fireEvent('modified', scope.modified);
+      this._modified = scope.modified;
+    }
+
+    var valid = scope.valid;
+    this._fireEvent(valid ? 'valid' : 'invalid');
+  };
+
+  Validator.prototype._getEventName = function _getEventName(type) {
+    return this.name + ':' + type;
+  };
+
+  Validator.prototype._defineProperties = function _defineProperties(validationsGetter, targetGetter) {
+    var _this10 = this;
+
+    var bind = exports$1.Vue.util.bind;
+
+    each({
+      valid: { fn: this._defineValid, arg: validationsGetter },
+      invalid: { fn: this._defineInvalid, arg: targetGetter },
+      touched: { fn: this._defineTouched, arg: validationsGetter },
+      untouched: { fn: this._defineUntouched, arg: targetGetter },
+      modified: { fn: this._defineModified, arg: validationsGetter },
+      dirty: { fn: this._defineDirty, arg: validationsGetter },
+      pristine: { fn: this._definePristine, arg: targetGetter },
+      errors: { fn: this._defineErrors, arg: validationsGetter }
+    }, function (descriptor, name) {
+      Object.defineProperty(targetGetter(), name, {
+        enumerable: true,
+        configurable: true,
+        get: function get() {
+          return bind(descriptor.fn, _this10)(descriptor.arg);
+        }
+      });
+    });
+  };
+
+  Validator.prototype._runValidates = function _runValidates(fn, cb) {
+    var length = Object.keys(this.validations).length;
+
+    var count = 0;
+    each(this.validations, function (validation, key) {
+      fn(validation, key, function () {
+        ++count;
+        count >= length && cb();
+      });
+    });
+  };
+
+  Validator.prototype._walkValidations = function _walkValidations(validations, property, condition) {
+    var _this11 = this;
+
+    var hasOwn = exports$1.Vue.util.hasOwn;
+    var ret = condition;
+
+    each(validations, function (validation, key) {
+      if (ret === !condition) {
+        return;
+      }
+      if (hasOwn(_this11._scope, validation.field)) {
+        var target = _this11._scope[validation.field];
+        if (target && target[property] === !condition) {
+          ret = !condition;
+        }
+      }
+    });
+
+    return ret;
+  };
+
+  Validator.prototype._defineValid = function _defineValid(validationsGetter) {
+    return this._walkValidations(validationsGetter(), 'valid', true);
+  };
+
+  Validator.prototype._defineInvalid = function _defineInvalid(scopeGetter) {
+    return !scopeGetter().valid;
+  };
+
+  Validator.prototype._defineTouched = function _defineTouched(validationsGetter) {
+    return this._walkValidations(validationsGetter(), 'touched', false);
+  };
+
+  Validator.prototype._defineUntouched = function _defineUntouched(scopeGetter) {
+    return !scopeGetter().touched;
+  };
+
+  Validator.prototype._defineModified = function _defineModified(validationsGetter) {
+    return this._walkValidations(validationsGetter(), 'modified', false);
+  };
+
+  Validator.prototype._defineDirty = function _defineDirty(validationsGetter) {
+    return this._walkValidations(validationsGetter(), 'dirty', false);
+  };
+
+  Validator.prototype._definePristine = function _definePristine(scopeGetter) {
+    return !scopeGetter().dirty;
+  };
+
+  Validator.prototype._defineErrors = function _defineErrors(validationsGetter) {
+    var _this12 = this;
+
+    var hasOwn = exports$1.Vue.util.hasOwn;
+    var isPlainObject = exports$1.Vue.util.isPlainObject;
+    var errors = [];
+
+    each(validationsGetter(), function (validation, key) {
+      if (hasOwn(_this12._scope, validation.field)) {
+        var target = _this12._scope[validation.field];
+        if (target && !empty(target.errors)) {
+          each(target.errors, function (err, index) {
+            var error = { field: validation.field };
+            if (isPlainObject(err)) {
+              if (err.validator) {
+                error.validator = err.validator;
+              }
+              error.message = err.message;
+            } else if (typeof err === 'string') {
+              error.message = err;
+            }
+            errors.push(error);
+          });
+        }
+      }
+    });
+
+    return empty(errors) ? undefined : errors.sort(function (a, b) {
+      return a.field < b.field ? -1 : 1;
+    });
+  };
+
+  babelHelpers.createClass(Validator, [{
+    key: 'validations',
+    get: function get() {
+      var extend = exports$1.Vue.util.extend;
+
+      var ret = {};
+      extend(ret, this._validations);
+
+      each(this._checkboxValidations, function (dataset, key) {
+        ret[key] = dataset.validation;
+      });
+
+      each(this._radioValidations, function (dataset, key) {
+        ret[key] = dataset.validation;
+      });
+
+      return ret;
+    }
+  }]);
+  return Validator;
+}();
+
+function Validator (Vue) {
+  var FragmentFactory = Vue.FragmentFactory;
+  var vIf = Vue.directive('if');
+  var _Vue$util = Vue.util;
+  var isArray = _Vue$util.isArray;
+  var isPlainObject = _Vue$util.isPlainObject;
+  var createAnchor = _Vue$util.createAnchor;
+  var replace = _Vue$util.replace;
+  var extend = _Vue$util.extend;
+  var camelize = _Vue$util.camelize;
+
+  /**
+   * `validator` element directive
+   */
+
+  Vue.elementDirective('validator', {
+    params: ['name', 'groups', 'lazy', 'classes'],
+
+    bind: function bind() {
+      var params = this.params;
+
+      if (process.env.NODE_ENV !== 'production' && !params.name) {
+        warn('validator element requires a \'name\' attribute: ' + '(e.g. <validator name="validator1">...</validator>)');
+        return;
+      }
+
+      this.validatorName = '$' + camelize(params.name);
+      if (!this.vm._validatorMaps) {
+        throw new Error('Invalid validator management error');
+      }
+
+      var classes = {};
+      if (isPlainObject(this.params.classes)) {
+        classes = this.params.classes;
+      }
+
+      this.setupValidator(classes);
+      this.setupFragment(params.lazy);
+    },
+    unbind: function unbind() {
+      this.teardownFragment();
+      this.teardownValidator();
+    },
+    getGroups: function getGroups() {
+      var params = this.params;
+      var groups = [];
+
+      if (params.groups) {
+        if (isArray(params.groups)) {
+          groups = params.groups;
+        } else if (!isPlainObject(params.groups) && typeof params.groups === 'string') {
+          groups.push(params.groups);
+        }
+      }
+
+      return groups;
+    },
+    setupValidator: function setupValidator(classes) {
+      var validator = this.validator = new Validator$1(this.validatorName, this, this.getGroups(), classes);
+      validator.enableReactive();
+      validator.setupScope();
+      validator.registerEvents();
+    },
+    teardownValidator: function teardownValidator() {
+      this.validator.unregisterEvents();
+      this.validator.disableReactive();
+
+      if (this.validatorName) {
+        this.validatorName = null;
+        this.validator = null;
+      }
+    },
+    setupFragment: function setupFragment(lazy) {
+      var _this = this;
+
+      var vm = this.vm;
+
+      this.validator.waitFor(function () {
+        _this.anchor = createAnchor('vue-validator');
+        replace(_this.el, _this.anchor);
+        extend(vm.$options, { _validator: _this.validatorName });
+        _this.factory = new FragmentFactory(vm, _this.el.innerHTML);
+        vIf.insert.call(_this);
+      });
+
+      !lazy && vm.$activateValidator();
+    },
+    teardownFragment: function teardownFragment() {
+      vIf.unbind.call(this);
+    }
+  });
+}
+
+function ValidatorError (Vue) {
+  /**
+   * ValidatorError component
+   */
+
+  var error = {
+    name: 'validator-error',
+
+    props: {
+      field: {
+        type: String,
+        required: true
+      },
+      validator: {
+        type: String
+      },
+      message: {
+        type: String,
+        required: true
+      },
+      partial: {
+        type: String,
+        default: 'validator-error-default'
+      }
+    },
+
+    template: '<div><partial :name="partial"></partial></div>',
+
+    partials: {}
+  };
+
+  // only use ValidatorError component
+  error.partials['validator-error-default'] = '<p>{{field}}: {{message}}</p>';
+
+  return error;
+}
+
+function Errors (Vue) {
+  var _ = Vue.util;
+  var error = ValidatorError(Vue); // import ValidatorError component
+
+  /**
+   * ValidatorErrors component
+   */
+
+  var errors = {
+    name: 'validator-errors',
+
+    props: {
+      validation: {
+        type: Object,
+        required: true
+      },
+      group: {
+        type: String,
+        default: null
+      },
+      field: {
+        type: String,
+        default: null
+      },
+      component: {
+        type: String,
+        default: 'validator-error'
+      }
+    },
+
+    computed: {
+      errors: function errors() {
+        var _this = this;
+
+        if (this.group !== null) {
+          return this.validation[this.group].errors;
+        } else if (this.field !== null) {
+          var target = this.validation[this.field];
+          if (!target.errors) {
+            return;
+          }
+
+          return target.errors.map(function (error) {
+            var err = { field: _this.field };
+            if (_.isPlainObject(error)) {
+              if (error.validator) {
+                err.validator = error.validator;
+              }
+              err.message = error.message;
+            } else if (typeof error === 'string') {
+              err.message = error;
+            }
+            return err;
+          });
+        } else {
+          return this.validation.errors;
+        }
+      }
+    },
+
+    template: '<template v-for="error in errors">' + '<component :is="component" :partial="partial" :field="error.field" :validator="error.validator" :message="error.message">' + '</component>' + '</template>',
+
+    components: {}
+  };
+
+  // define 'partial' prop
+  errors.props['partial'] = error.props['partial'];
+
+  // only use ValidatorErrors component
+  errors.components[error.name] = error;
+
+  // install ValidatorErrors component
+  Vue.component(errors.name, errors);
+
+  return errors;
+}
+
+/**
+ * plugin
+ *
+ * @param {Function} Vue
+ * @param {Object} options
+ */
+
+function plugin(Vue) {
+  var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+  if (plugin.installed) {
+    warn('already installed.');
+    return;
+  }
+
+  exports$1.Vue = Vue;
+  Asset(Vue);
+  Errors(Vue);
+
+  Override(Vue);
+  Validator(Vue);
+  ValidateClass(Vue);
+  Validate(Vue);
+}
+
+plugin.version = '2.1.3';
+
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(plugin);
+}
+
+module.exports = plugin;
+}).call(this,require('_process'))
+},{"_process":105}],111:[function(require,module,exports){
 (function (process,global){
 /*!
- * Vue.js v1.0.24
+ * Vue.js v1.0.26
  * (c) 2016 Evan You
  * Released under the MIT License.
  */
@@ -14478,10 +24941,15 @@ var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
 // UA sniffing for working around browser-specific quirks
 var UA = inBrowser && window.navigator.userAgent.toLowerCase();
+var isIE = UA && UA.indexOf('trident') > 0;
 var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
 var isAndroid = UA && UA.indexOf('android') > 0;
 var isIos = UA && /(iphone|ipad|ipod|ios)/i.test(UA);
-var isWechat = UA && UA.indexOf('micromessenger') > 0;
+var iosVersionMatch = isIos && UA.match(/os ([\d_]+)/);
+var iosVersion = iosVersionMatch && iosVersionMatch[1].split('_');
+
+// detecting iOS UIWebView by indexedDB
+var hasMutationObserverBug = iosVersion && Number(iosVersion[0]) >= 9 && Number(iosVersion[1]) >= 3 && !window.indexedDB;
 
 var transitionProp = undefined;
 var transitionEndEvent = undefined;
@@ -14522,7 +24990,7 @@ var nextTick = (function () {
   }
 
   /* istanbul ignore if */
-  if (typeof MutationObserver !== 'undefined' && !(isWechat && isIos)) {
+  if (typeof MutationObserver !== 'undefined' && !hasMutationObserverBug) {
     var counter = 1;
     var observer = new MutationObserver(nextTickHandler);
     var textNode = document.createTextNode(counter);
@@ -14594,12 +25062,12 @@ var p = Cache.prototype;
 
 p.put = function (key, value) {
   var removed;
-  if (this.size === this.limit) {
-    removed = this.shift();
-  }
 
   var entry = this.get(key, true);
   if (!entry) {
+    if (this.size === this.limit) {
+      removed = this.shift();
+    }
     entry = {
       key: key
     };
@@ -14844,7 +25312,7 @@ function compileRegex() {
   var unsafeOpen = escapeRegex(config.unsafeDelimiters[0]);
   var unsafeClose = escapeRegex(config.unsafeDelimiters[1]);
   tagRE = new RegExp(unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '|' + open + '((?:.|\\n)+?)' + close, 'g');
-  htmlRE = new RegExp('^' + unsafeOpen + '.*' + unsafeClose + '$');
+  htmlRE = new RegExp('^' + unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '$');
   // reset cache
   cache = new Cache(1000);
 }
@@ -15631,7 +26099,8 @@ if (process.env.NODE_ENV !== 'production') {
       return (/HTMLUnknownElement/.test(el.toString()) &&
         // Chrome returns unknown for several HTML5 elements.
         // https://code.google.com/p/chromium/issues/detail?id=540526
-        !/^(data|time|rtc|rb)$/.test(tag)
+        // Firefox returns unknown for some "Interactive elements."
+        !/^(data|time|rtc|rb|details|dialog|summary)$/.test(tag)
       );
     }
   };
@@ -15967,7 +26436,9 @@ function mergeOptions(parent, child, vm) {
   }
   if (child.mixins) {
     for (var i = 0, l = child.mixins.length; i < l; i++) {
-      parent = mergeOptions(parent, child.mixins[i], vm);
+      var mixin = child.mixins[i];
+      var mixinOptions = mixin.prototype instanceof Vue ? mixin.options : mixin;
+      parent = mergeOptions(parent, mixinOptions, vm);
     }
   }
   for (key in parent) {
@@ -16395,10 +26866,13 @@ var util = Object.freeze({
 	hasProto: hasProto,
 	inBrowser: inBrowser,
 	devtools: devtools,
+	isIE: isIE,
 	isIE9: isIE9,
 	isAndroid: isAndroid,
 	isIos: isIos,
-	isWechat: isWechat,
+	iosVersionMatch: iosVersionMatch,
+	iosVersion: iosVersion,
+	hasMutationObserverBug: hasMutationObserverBug,
 	get transitionProp () { return transitionProp; },
 	get transitionEndEvent () { return transitionEndEvent; },
 	get animationProp () { return animationProp; },
@@ -16886,7 +27360,9 @@ var saveRE = /[\{,]\s*[\w\$_]+\s*:|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\
 var restoreRE = /"(\d+)"/g;
 var pathTestRE = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/;
 var identRE = /[^\w$\.](?:[A-Za-z_$][\w$]*)/g;
-var booleanLiteralRE = /^(?:true|false)$/;
+var literalValueRE$1 = /^(?:true|false|null|undefined|Infinity|NaN)$/;
+
+function noop() {}
 
 /**
  * Save / Rewrite / Restore
@@ -16968,7 +27444,7 @@ function compileGetter(exp) {
   // save strings and object literal keys
   var body = exp.replace(saveRE, save).replace(wsRE, '');
   // rewrite all paths
-  // pad 1 space here becaue the regex matches 1 extra char
+  // pad 1 space here because the regex matches 1 extra char
   body = (' ' + body).replace(identRE, rewrite).replace(restoreRE, restore);
   return makeGetterFn(body);
 }
@@ -16989,7 +27465,15 @@ function makeGetterFn(body) {
     return new Function('scope', 'return ' + body + ';');
     /* eslint-enable no-new-func */
   } catch (e) {
-    process.env.NODE_ENV !== 'production' && warn('Invalid expression. ' + 'Generated function body: ' + body);
+    if (process.env.NODE_ENV !== 'production') {
+      /* istanbul ignore if */
+      if (e.toString().match(/unsafe-eval|CSP/)) {
+        warn('It seems you are using the default build of Vue.js in an environment ' + 'with Content Security Policy that prohibits unsafe-eval. ' + 'Use the CSP-compliant build instead: ' + 'http://vuejs.org/guide/installation.html#CSP-compliant-build');
+      } else {
+        warn('Invalid expression. ' + 'Generated function body: ' + body);
+      }
+    }
+    return noop;
   }
 }
 
@@ -17051,8 +27535,8 @@ function parseExpression(exp, needSet) {
 
 function isSimplePath(exp) {
   return pathTestRE.test(exp) &&
-  // don't treat true/false as paths
-  !booleanLiteralRE.test(exp) &&
+  // don't treat literal values as paths
+  !literalValueRE$1.test(exp) &&
   // Math constants e.g. Math.PI, Math.E etc.
   exp.slice(0, 5) !== 'Math.';
 }
@@ -17468,7 +27952,7 @@ function traverse(val, seen) {
   }
   var isA = isArray(val);
   var isO = isObject(val);
-  if (isA || isO) {
+  if ((isA || isO) && Object.isExtensible(val)) {
     if (val.__ob__) {
       var depId = val.__ob__.dep.id;
       if (seen.has(depId)) {
@@ -17531,6 +28015,7 @@ function isRealTemplate(node) {
 
 var tagRE$1 = /<([\w:-]+)/;
 var entityRE = /&#?\w+?;/;
+var commentRE = /<!--/;
 
 /**
  * Convert a string template to a DocumentFragment.
@@ -17553,8 +28038,9 @@ function stringToFragment(templateString, raw) {
   var frag = document.createDocumentFragment();
   var tagMatch = templateString.match(tagRE$1);
   var entityMatch = entityRE.test(templateString);
+  var commentMatch = commentRE.test(templateString);
 
-  if (!tagMatch && !entityMatch) {
+  if (!tagMatch && !entityMatch && !commentMatch) {
     // text only, return a single text node.
     frag.appendChild(document.createTextNode(templateString));
   } else {
@@ -18521,7 +29007,7 @@ var vFor = {
    * the filters. This is passed to and called by the watcher.
    *
    * It is necessary for this to be called during the
-   * wathcer's dependency collection phase because we want
+   * watcher's dependency collection phase because we want
    * the v-for to update when the source Object is mutated.
    */
 
@@ -18864,7 +29350,10 @@ var text$2 = {
   },
 
   update: function update(value) {
-    this.el.value = _toString(value);
+    // #3029 only update when the value changes. This prevent
+    // browsers from overwriting values like selectionStart
+    value = _toString(value);
+    if (value !== this.el.value) this.el.value = value;
   },
 
   unbind: function unbind() {
@@ -18913,6 +29402,8 @@ var radio = {
 var select = {
 
   bind: function bind() {
+    var _this = this;
+
     var self = this;
     var el = this.el;
 
@@ -18944,7 +29435,12 @@ var select = {
     // selectedIndex with value -1 to 0 when the element
     // is appended to a new parent, therefore we have to
     // force a DOM update whenever that happens...
-    this.vm.$on('hook:attached', this.forceUpdate);
+    this.vm.$on('hook:attached', function () {
+      nextTick(_this.forceUpdate);
+    });
+    if (!inDoc(el)) {
+      nextTick(this.forceUpdate);
+    }
   },
 
   update: function update(value) {
@@ -20214,7 +30710,7 @@ function processPropValue(vm, prop, rawValue, fn) {
   if (value === undefined) {
     value = getPropDefaultValue(vm, prop);
   }
-  value = coerceProp(prop, value);
+  value = coerceProp(prop, value, vm);
   var coerced = value !== rawValue;
   if (!assertProp(prop, value, vm)) {
     value = undefined;
@@ -20333,13 +30829,17 @@ function assertProp(prop, value, vm) {
  * @return {*}
  */
 
-function coerceProp(prop, value) {
+function coerceProp(prop, value, vm) {
   var coerce = prop.options.coerce;
   if (!coerce) {
     return value;
   }
-  // coerce is a function
-  return coerce(value);
+  if (typeof coerce === 'function') {
+    return coerce(value);
+  } else {
+    process.env.NODE_ENV !== 'production' && warn('Invalid coerce for prop "' + prop.name + '": expected function, got ' + typeof coerce + '.', vm);
+    return value;
+  }
 }
 
 /**
@@ -20871,10 +31371,9 @@ var transition$1 = {
     // resolve on owner vm
     var hooks = resolveAsset(this.vm.$options, 'transitions', id);
     id = id || 'v';
+    oldId = oldId || 'v';
     el.__v_trans = new Transition(el, id, hooks, this.vm);
-    if (oldId) {
-      removeClass(el, oldId + '-transition');
-    }
+    removeClass(el, oldId + '-transition');
     addClass(el, id + '-transition');
   }
 };
@@ -21299,7 +31798,7 @@ function makeTextNodeLinkFn(tokens, frag) {
           if (token.html) {
             replace(node, parseTemplate(value, true));
           } else {
-            node.data = value;
+            node.data = _toString(value);
           }
         } else {
           vm._bindDir(token.descriptor, node, host, scope);
@@ -22283,7 +32782,7 @@ function eventsMixin (Vue) {
   };
 }
 
-function noop() {}
+function noop$1() {}
 
 /**
  * A directive links a DOM element with a piece of data,
@@ -22382,7 +32881,7 @@ Directive.prototype._bind = function () {
         }
       };
     } else {
-      this._update = noop;
+      this._update = noop$1;
     }
     var preProcess = this._preProcess ? bind(this._preProcess, this) : null;
     var postProcess = this._postProcess ? bind(this._postProcess, this) : null;
@@ -23820,7 +34319,7 @@ var filters = {
 
   json: {
     read: function read(value, indent) {
-      return typeof value === 'string' ? value : JSON.stringify(value, null, Number(indent) || 2);
+      return typeof value === 'string' ? value : JSON.stringify(value, null, arguments.length > 1 ? indent : 2);
     },
     write: function write(value) {
       try {
@@ -23893,7 +34392,13 @@ var filters = {
 
   pluralize: function pluralize(value) {
     var args = toArray(arguments, 1);
-    return args.length > 1 ? args[value % 10 - 1] || args[args.length - 1] : args[0] + (value === 1 ? '' : 's');
+    var length = args.length;
+    if (length > 1) {
+      var index = value % 10 - 1;
+      return index in args ? args[index] : args[length - 1];
+    } else {
+      return args[0] + (value === 1 ? '' : 's');
+    }
   },
 
   /**
@@ -24078,7 +34583,9 @@ function installGlobalAPI (Vue) {
           }
         }
         if (type === 'component' && isPlainObject(definition)) {
-          definition.name = id;
+          if (!definition.name) {
+            definition.name = id;
+          }
           definition = Vue.extend(definition);
         }
         this.options[type + 's'][id] = definition;
@@ -24093,7 +34600,7 @@ function installGlobalAPI (Vue) {
 
 installGlobalAPI(Vue);
 
-Vue.version = '1.0.24';
+Vue.version = '1.0.26';
 
 // devtools global hook
 /* istanbul ignore next */
@@ -24109,7 +34616,7 @@ setTimeout(function () {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":4}],8:[function(require,module,exports){
+},{"_process":105}],112:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 exports.insert = function (css) {
@@ -24129,7 +34636,270 @@ exports.insert = function (css) {
   return elem
 }
 
-},{}],9:[function(require,module,exports){
+},{}],113:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'campaign-create',
+	components: { vSelect: _vueSelect2.default },
+	data: function data() {
+		return {
+			countries: [],
+			countryCodeObj: null,
+
+			name: null,
+			country: null,
+			country_code: null,
+			short_desc: null,
+			started_at: null,
+			ended_at: null,
+			published_at: null,
+			page_url: null,
+			attemptSubmit: false
+		};
+	},
+
+	computed: {
+		country_code: function country_code() {
+			return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+		}
+	},
+	methods: {
+		checkForError: function checkForError(field) {
+			// if user clicked submit button while the field is invalid trigger error styles
+
+			return this.$CreateCampaign[field].invalid && this.attemptSubmit;
+		},
+		submit: function submit() {
+			this.attemptSubmit = true;
+			if (this.$CreateCampaign.valid) {
+				var resource = this.$resource('campaigns');
+				resource.save(null, {
+					name: this.name,
+					country_code: this.country_code,
+					short_desc: this.short_desc,
+					started_at: this.started_at,
+					ended_at: this.ended_at,
+					published_at: this.published_at,
+					page_url: this.page_url
+
+				}).then(function (resp) {
+					window.location.href = '/admin' + resp.data.data.links[0].uri;
+				}, function (error) {
+					debugger;
+				});
+			}
+		}
+	},
+	ready: function ready() {
+		this.$http.get('utilities/countries').then(function (response) {
+			this.countries = response.data.countries;
+		});
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateCampaign\">\n\t<form id=\"CreateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<v-select class=\"form-controls\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:120 }\" maxlength=\"120\" minlength=\"1\"></textarea>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Published Date</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">Published</span>\n\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Url</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false,  }\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<a href=\"/admin/campaigns\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t<a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n</validator>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-402a95aa", module.exports)
+  } else {
+    hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],114:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _details = require('./details/details.vue');
+
+var _details2 = _interopRequireDefault(_details);
+
+var _trips = require('./details/trips.vue');
+
+var _trips2 = _interopRequireDefault(_trips);
+
+var _regions = require('./details/regions.vue');
+
+var _regions2 = _interopRequireDefault(_regions);
+
+var _transports = require('./details/transports.vue');
+
+var _transports2 = _interopRequireDefault(_transports);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'admin-campaign-details',
+	props: ['campaignId'],
+	data: function data() {
+		return {
+			currentView: null,
+			campaign: {}
+		};
+	},
+
+	methods: {
+		toView: function toView(view) {
+			this.currentView = view;
+		}
+	},
+	created: function created() {
+		this.currentView = 'details';
+
+		// get campaign data
+		var resource = this.$resource('campaigns{/id}', { 'include': 'trips.group' });
+		resource.get({ id: this.campaignId }).then(function (response) {
+			this.campaign = response.data.data;
+		});
+	},
+
+	components: {
+		'details': _details2.default,
+		'trips': _trips2.default,
+		'regions': _regions2.default,
+		'transports': _transports2.default
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-3\">\n\t\t<div class=\"panel panel-default\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<h5><i class=\"fa fa-cog\"></i> Manage</h5>\n\t\t\t</div>\n\t\t\t<div class=\"list-group\">\n\t\t\t\t<a @click=\"toView('details')\" class=\"list-group-item\" :class=\"{'active': currentView === 'details'}\">Details</a>\n\t\t\t\t<a @click=\"toView('trips')\" class=\"list-group-item\" :class=\"{'active': currentView === 'trips'}\">Trips</a>\n\t\t\t\t<a @click=\"toView('regions')\" class=\"list-group-item\" :class=\"{'active': currentView === 'regions'}\">Regions</a>\n\t\t\t\t<a @click=\"toView('transports')\" class=\"list-group-item\" :class=\"{'active': currentView === 'transports'}\">Transports</a>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"panel panel-default\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<h5><i class=\"fa fa-line-chart\"></i> Statistics</h5>\n\t\t\t</div>\n\t\t\t<div class=\"list-group\">\n\t\t\t\t<a @click=\"toView('overview')\" class=\"list-group-item\" :class=\"{'active': currentView === 'overview'}\">Overview</a>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"panel panel-default\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<h5><i class=\"fa fa-file\"></i> Interactions</h5>\n\t\t\t</div>\n\t\t\t<div class=\"list-group\">\n\t\t\t\t<a @click=\"toView('sites')\" class=\"list-group-item\" :class=\"{'active': currentView === 'sites'}\">Sites</a>\n\t\t\t\t<a @click=\"toView('decisions')\" class=\"list-group-item\" :class=\"{'active': currentView === 'decisions'}\">Decisions</a>\n\t\t\t\t<a @click=\"toView('exams')\" class=\"list-group-item\" :class=\"{'active': currentView === 'exams'}\">Exams</a>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"col-sm-9\">\n\t\t<h4>\n\t\t\t{{campaign.name}} <small>Campaign</small>\n\n\t\t\t<div class=\"pull-right\">\n\t\t\t\t<a class=\"btn btn-default btn-xs\"><i class=\"fa fa-chevron-left\"></i></a>\n\t\t\t\t<a class=\"btn btn-info btn-xs\" href=\"/admin/campaigns/{{campaignId}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n\t\t\t</div>\n\n\t\t</h4>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<hr>\n\t\t\t\t<component :is=\"currentView\" transition=\"fade\" transition-mode=\"out-in\">\n\n\t\t\t\t</component>\n\t\t\t</div>\n\t\t</div>\n\n\t</div>\n\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-6c0d9684", module.exports)
+  } else {
+    hotAPI.update("_v-6c0d9684", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./details/details.vue":118,"./details/regions.vue":119,"./details/transports.vue":120,"./details/trips.vue":121,"vue":111,"vue-hot-reload-api":107,"vueify/lib/insert-css":112}],115:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'campaign-edit',
+	components: { vSelect: _vueSelect2.default },
+	props: ['campaignId'],
+	data: function data() {
+		return {
+			countries: [],
+			countryCodeObj: null,
+
+			name: null,
+			country_code: null,
+			short_desc: null,
+			started_at: null,
+			ended_at: null,
+			published_at: null,
+			page_url: null,
+			attemptSubmit: false,
+			resource: this.$resource('campaigns{/id}')
+		};
+	},
+
+	computed: {
+		country_code: function country_code() {
+			return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+		}
+	},
+	methods: {
+		checkForError: function checkForError(field) {
+			// if user clicked submit button while the field is invalid trigger error styles
+
+			return this.$UpdateCampaign[field].invalid && this.attemptSubmit;
+		},
+		update: function update() {
+			// Touch fields for proper validation
+			if (_.isFunction(this.$validate)) this.$validate(true);
+
+			this.attemptSubmit = true;
+			if (this.$UpdateCampaign.valid) {
+				this.resource.update({ id: this.campaignId }, {
+					name: this.name,
+					country_code: this.country_code,
+					short_desc: this.short_desc,
+					started_at: this.started_at,
+					ended_at: this.ended_at,
+					published_at: this.published_at,
+					page_url: this.page_url
+
+				}).then(function (resp) {
+					$.extend(this, resp.data.data);
+				}, function (error) {
+					debugger;
+				});
+			}
+		},
+		deleteCampaign: function deleteCampaign() {
+			// delete campaign
+			this.resource.delete({ id: this.campaignId }).then(function (response) {
+				window.location.href = '/admin/campaigns/';
+			});
+		}
+	},
+	created: function created() {
+		this.$http.get('utilities/countries').then(function (response) {
+			this.countries = response.data.countries;
+		});
+
+		// get campaign data
+		this.resource.get({ id: this.campaignId }).then(function (response) {
+			var campaign = response.data.data;
+			this.name = campaign.name;
+			this.short_desc = campaign.description;
+			this.started_at = campaign.started_at;
+			this.ended_at = campaign.ended_at;
+			this.published_at = campaign.published_at;
+			this.page_url = campaign.page_url;
+			this.countryCodeObj = _.findWhere(this.countries, { name: campaign.country });
+			this.country_code = this.countryCodeObj.code;
+		});
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateCampaign\">\n\t<form id=\"UpdateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<v-select class=\"form-controls\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:120 }\" maxlength=\"120\" minlength=\"1\"></textarea>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Published Date</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">Published</span>\n\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Url</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false,  }\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<a href=\"/admin/campaigns/{{campaignId}}\" class=\"btn btn-default btn-sm\">Cancel</a>\n\t\t\t\t<a @click=\"update()\" class=\"btn btn-primary btn-sm\">Update</a>\n\t\t\t\t<a class=\"btn btn-danger btn-sm pull-right\" data-toggle=\"modal\" data-target=\"#deleteConfirmationModal\">Delete</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\n\t<div class=\"modal fade\" id=\"deleteConfirmationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"deleteConfirmationModal\">\n\t\t<div class=\"modal-dialog modal-sm\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t\t\t<h4 class=\"modal-title\" id=\"myModalLabel\">Delete Campaign</h4>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<p>Are you sure you want to delete this campaign?</p>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\"><a class=\"btn btn-sm btn-block btn-default\" data-dismiss=\"modal\">No</a></div>\n\t\t\t\t\t\t<div class=\"col-xs-6\"><a @click=\"deleteCampaign()\" class=\"btn btn-sm btn-block btn-primary\">Yes</a></div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n</validator>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-3a603938", module.exports)
+  } else {
+    hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],116:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24191,18 +34961,18 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<input type=\"text\" class=\"form-control\" v-model=\"searchText\" debounce=\"500\" placeholder=\"Search for a group\">\n\t\t<br>\n\t</div>\n\n\t<div class=\"col-sm-4 col-md-3\" v-for=\"group in groups\">\n\t\t<div class=\"thumbnail\">\n\t\t\t<img :src=\"'http://lorempixel.com/242/200/people/' + $index\" :alt=\"group.name\">\n\t\t\t<div class=\"caption\">\n\t\t\t\t<h4>{{group.name}}</h4>\n\t\t\t\t<p>\n\t\t\t\t\t<a class=\"btn btn-primary btn-block\" role=\"button\" @click=\"selectGroup(group)\">Select</a>\n\t\t\t\t</p>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n\t<div class=\"col-sm-12 text-center\">\n\t\t<nav>\n\t\t\t<ul class=\"pagination\">\n\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t</a>\n\t\t\t\t</li>\n\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t</a>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</nav>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dark-bg-primary\">\n\t<div class=\"container\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-1\">\n\t\t\t\t<hr class=\"divider inv\">\n\t\t\t\t<h6 class=\"text-center text-uppercase\">Which group are you traveling with?</h6>\n\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"searchText\" debounce=\"500\" placeholder=\"Search for a group\">\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<p class=\"small text-center\">Don't See Your Group?</p>\n\t\t\t\t<hr class=\"divider inv\">\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n<hr class=\"divider inv xlg\">\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\t\t<div class=\"col-xs-6 col-sm-4 col-md-3\" v-for=\"group in groups\" style=\"display:flex\">\n\t\t\t<div class=\"panel panel-default\">\n\t\t\t\t<a role=\"button\" @click=\"selectGroup(group)\">\n\t\t\t\t\t<img :src=\"'http://lorempixel.com/242/200/people/' + $index\" :alt=\"group.name\" class=\"img-responsive\">\n\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t<h5 class=\"text-center\">{{group.name}}</h5>\n\t\t\t\t</div>\n\t\t\t\t</a>\n\t\t\t</div>\n\t\t</div>\n</div>\n<div class=\"container\">\n\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t<nav>\n\t\t\t\t<ul class=\"pagination\">\n\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t</nav>\n\t\t</div>\n</div><!-- end container -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-71409450", module.exports)
+    hotAPI.createRecord("_v-12a47980", module.exports)
   } else {
-    hotAPI.update("_v-71409450", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-12a47980", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":7,"vue-hot-reload-api":5}],10:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],117:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24220,22 +34990,206 @@ exports.default = {
 
         resource.query().then(function (campaigns) {
             this.campaigns = campaigns.data.data;
-        });
+        }).then(function () {});
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n    <div class=\"col-sm-6 col-md-4\" v-for=\"campaign in campaigns\" style=\"display:flex\">\n        <div class=\"panel panel-default\">\n            <img :src=\"campaign.thumb_src\" :alt=\"campaign.name\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h4>{{campaign.name}}</h4>\n                <h6>{{campaign.country}}</h6>\n                <p>{{campaign.description}}</p>\n            </div><!-- end panel-body -->\n            <div class=\"panel-footer\">\n                <p>\n                    <a :href=\"'/campaigns/' + campaign.page_url\" class=\"btn btn-primary btn-block\" role=\"button\">Details</a>\n                </p>\n            </div>\n        </div><!-- end panel -->\n    </div><!-- end col -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"carousel-example-generic\" class=\"carousel slide\" data-ride=\"carousel\">\n      <!-- Indicators -->\n      <ol class=\"carousel-indicators\">\n        <!--<li data-target=\"#carousel-example-generic\" data-slide-to=\"0\" class=\"active\"></li>-->\n        <li data-target=\"#carousel-example-generic\" class=\"{{ $index == 0 ? 'active' : '' }}\" :data-slide-to=\"$index\" v-for=\"campaign in campaigns\"></li>\n      </ol>\n      <!-- Wrapper for slides -->\n      <div class=\"carousel-inner\" role=\"listbox\">\n        <div class=\"item {{ $index == 0 ? 'active' : '' }}\" v-for=\"campaign in campaigns\">\n          <img :src=\"campaign.thumb_src\">\n          <div class=\"carousel-caption\">\n            <h6 class=\"text-uppercase\">{{campaign.country}}</h6>\n            <h3>{{campaign.name}}</h3>\n            <p>{{campaign.description}}</p>\n          </div>\n        </div>\n      </div>\n      <!-- Controls -->\n      <a class=\"left carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"prev\">\n        <span class=\"fa fa-angle-left\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Previous</span>\n      </a>\n      <a class=\"right carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"next\">\n        <span class=\"fa fa-angle-right\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Next</span>\n      </a>\n</div><!-- end carousel -->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <h4>Recent Campaigns</h4>\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <a href=\"#\" class=\"btn btn-primary btn-sm\">See All</a>\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n        <div class=\"col-sm-6 col-md-4\" v-for=\"campaign in campaigns\" style=\"display:flex\">\n            <div class=\"panel panel-default\">\n                <a :href=\"'/campaigns/' + campaign.page_url\" role=\"button\">\n                    <img :src=\"campaign.thumb_src\" :alt=\"campaign.name\" class=\"img-responsive\">\n                </a>\n                    <div style=\"min-height:220px;\" class=\"panel-body\">\n                        <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{campaign.country}}</h6>\n                        <a :href=\"'/campaigns/' + campaign.page_url\" role=\"button\">\n                            <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">{{campaign.name}}</h5>\n                        </a>\n                        <hr class=\"divider lg\">\n                        <p class=\"small\">{{campaign.description}}</p>\n                    </div><!-- end panel-body -->\n            </div><!-- end panel -->\n        </div><!-- end col -->\n</div>\n<hr class=\"divider inv xlg\">\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center\">\n        <h2 class=\"text-primary\">Missions.Me plans trips around you. We create experiences that will maximize your specific abilities and desires.</h2>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage1.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage3.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage4.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage5.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage8.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage9.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage10.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage12.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage13.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage14.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage15.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage18.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-xs-10 col-xs-offset-1\">\n        <div class=\"row\">\n          <div class=\"col-xs-10 col-xs-offset-1\">\n            <h6 class=\"text-uppercase text-center\">A Trip For Everyone</h6>\n            <h1 class=\"text-center\">Choose A Role</h1>\n            <hr class=\"divider red-small lg\">\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"missionary.html\"><h4 class=\"text-primary\">Missionary</h4></a>\n                <p class=\"small\">Anyone age 13+ can be an M.M missionary. Set out on the journey with your friend or family to bring a message of love and hope along with an unforgettable cultural experience.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"medical-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/medical-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"medical-missionary.html\"><h4>Medical Missionary</h4></a>\n                <p class=\"small\">Treat, diagnose, prescribe, and share the love of Jesus. Anyone in a medical field can serve, including students currently enrolled in school. Physicians, Dentists, Nurses, and all assistants needed.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"group-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/group-leader.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"group-leader.html\"><h4>Group Leader</h4></a>\n                <p class=\"small\">M.M specializes in organizing and creating turn-key group missions experiences for youth groups, college groups, and business groups. You bring passion; we take care of the rest.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"pastor-speaker.html\"><img class=\"img-responsive\" src=\"images/why-mm/speaker.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"pastor-speaker.html\"><h4>Pastor/Speaker</h4></a>\n                <p class=\"small\">Share your gift of leadership with the team by leading a morning devo then impart spiritual wisdom into local church leadership. Let us create a custom schedule that makes the most of your valuable time.</p>\n              </div><!-- end panel-body -->\n            </div><!-- end panel -->\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"business-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/business-person.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"business-leader.html\"><h4>Business Leader</h4></a>\n                <p class=\"small\">A shortened “Business Class” trip is available on select trips. You will experience conferences, stadium outreaches, street ministry, and connect with God in a whole new way. All trips will have you back on Sunday night, ready for Monday.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"media-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/media-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"media-missionary.html\"><h4>Media Missionary</h4></a>\n                <p class=\"small\">Tell the story of life change! M.M needs you to film, shoot, interview, edit, export, and be creative! Experience a whole new world through the lens of a camera while capturing the most exciting moments of the trip.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end gray-lighter-bg -->\n<div class=\"bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h6 class=\"text-uppercase text-primary-darker\">It's So Easy</h6>\n        <h1 class=\"text-primary-darker\">We've Got You</h1>\n        <p>Logistics, we got it covered. Missions.Me makes missions simple by taking care of all of your transportation, hotel, food, training, translators and ministry schedule needs.</p>\n        <hr class=\"divider inv\">\n        <a class=\"btn btn-primary-darker\" href=\"#\">Speak to a rep</a>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"http://placehold.it/600x300\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section-->\n  </div><!-- end container -->\n</div><!-- end red-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-lawn.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-lawn2.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-conf.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-conf2.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary-darker\">Level Of Impact</h1>\n        <p>We are interested in changing nations, communities, and individuals. Every outreach we organize deems to do just that. In just one week's time you and your team will be face to face with entire schools, neighborhoods, and churches. We believe a short-term team must serve a long-term and sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted.</p>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"http://placehold.it/600x300\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-6 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary\">Safety and Security</h1>\n        <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our leadership provides in depth training to create a safe experience for every missionary. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe. Multiple leaders care for each missionary and guidelines are faceted so that no person is ever alone. We also do background checks on all potential leaders. Missions.Me has a proven track record of safety and security that keeps our teams coming back.</p>\n        <blockquote>\"I have traveled with Missions.Me in many countries and have witnessed first-hand their organization and safety measures. I am completely confident sending my teens on a Missions.Me missions trip.\"\n          <footer>Sue, Mother from Lancaster, PA</footer></blockquote>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-light-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-center\">Trip Difficulty Ratings</h1>\n        <hr class=\"divider red-small lg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n    <div class=\"row text-center\">\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level1.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>These trips are great for those just getting started in the world-changing business. First timers of all ages area welcome.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level2.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>If Level 1 proved to be a piece of cake, you’re ready for a Level 2 adventure. A little tougher, a little sweatier, but much more sweeter.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level3.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>Chuck Norris. Mr. T. Annie Oakley. Yep, they’re all level 3 missionaries. It may not be physically tough, but it’ll be a challenge.</p>\n      </div>\n    </div>\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-483b544a", module.exports)
+    hotAPI.createRecord("_v-58d98fb2", module.exports)
   } else {
-    hotAPI.update("_v-483b544a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-58d98fb2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":7,"vue-hot-reload-api":5}],11:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],118:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'details',
+    data: function data() {
+        return {
+            campaignId: this.$parent.campaignId,
+            editMode: false
+        };
+    },
+
+    computed: {
+        campaign: function campaign() {
+            return this.$parent.campaign;
+        }
+    },
+    methods: {
+        toDate: function toDate(date, format) {
+            return moment(date).format(format || 'LL');
+        }
+    },
+    activate: function activate(done) {
+        done();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <h4><i class=\"fa fa-info-circle\"></i> Details</h4>\n    </div>\n    <table class=\"table table-hover\">\n        <tbody>\n        <tr>\n            <td>Name</td>\n            <td v-if=\"!editMode\">{{campaign.name}}</td>\n        </tr>\n        <tr>\n            <td>Description</td>\n            <td v-if=\"!editMode\">{{campaign.description}}</td>\n        </tr>\n        <tr>\n            <td>Country</td>\n            <td>{{campaign.country}}</td>\n            <!--<td><a class=\"btn btn-xs btn-primary\"><i class=\"fa fa-pencil\"></i></a></td>-->\n        </tr>\n        <tr>\n            <td>Thumbnail</td>\n            <td>{{campaign.thumb_src}}</td>\n            <!--<td><a class=\"btn btn-xs btn-primary\"><i class=\"fa fa-pencil\"></i></a></td>-->\n        </tr>\n        <tr>\n            <td>Start Date</td>\n            <td>{{toDate(campaign.started_at)}}</td>\n            <!--<td><a class=\"btn btn-xs btn-primary\"><i class=\"fa fa-pencil\"></i></a></td>-->\n        </tr>\n        <tr>\n            <td>End Date</td>\n            <td>{{toDate(campaign.ended_at)}}</td>\n            <!--<td><a class=\"btn btn-xs btn-primary\"><i class=\"fa fa-pencil\"></i></a></td>-->\n        </tr>\n        <tr>\n            <td>Created At</td>\n            <td>{{toDate(campaign.updated_at, 'LLL')}}</td>\n            <!--<td><a class=\"btn btn-xs btn-primary\"><i class=\"fa fa-pencil\"></i></a></td>-->\n        </tr>\n        <tr>\n            <td>Updated At</td>\n            <td>{{toDate(campaign.created_at, 'LLL')}}</td>\n            <!--<td><a class=\"btn btn-xs btn-primary\"><i class=\"fa fa-pencil\"></i></a></td>-->\n        </tr>\n        <tr>\n            <td>Published At</td>\n            <td>{{toDate(campaign.published_at, 'LLL')}}</td>\n            <!--<td><a class=\"btn btn-xs btn-primary\"><i class=\"fa fa-pencil\"></i></a></td>-->\n        </tr>\n        </tbody>\n    </table>\n    <!--<div class=\"panel-body\">\n        <ul class=\"list-group\">\n            <li class=\"list-group-item\" v-for=\"(key, value) in campaign\">\n                {{key}}: {{value}}\n            </li>\n        </ul>\n    </div>-->\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-c27860f8", module.exports)
+  } else {
+    hotAPI.update("_v-c27860f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],119:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'regions',
+    data: function data() {
+        return {
+            regions: []
+        };
+    },
+    activate: function activate(done) {
+        // get transport data
+        var resource = this.$resource('regions{/id}', { 'campaign_id': this.$parent.campaignId });
+        resource.get().then(function (response) {
+            this.regions = response.data.data;
+        });
+
+        done();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <h4>Campaign Regions</h4>\n    </div>\n    <div class=\"panel-body\">\n        ...\n    </div>\n    <table class=\"table table-hover\">\n        <tbody>\n        <tr v-for=\"region in regions\">\n            <td>{{region.name|capitalize}}</td>\n            <td>{{region.country_name}}</td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-88b7227e", module.exports)
+  } else {
+    hotAPI.update("_v-88b7227e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],120:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'transports',
+    data: function data() {
+        return {
+            transports: []
+        };
+    },
+    activate: function activate(done) {
+        // get transport data
+        var resource = this.$resource('transports', { 'campaign_id': this.$parent.campaignId });
+        resource.get().then(function (response) {
+            this.transports = response.data.data;
+        });
+        done();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <h4>Campaign Transports</h4>\n    </div>\n    <div class=\"panel-body\">\n        ...\n    </div>\n    <table class=\"table table-hover\">\n        <tbody>\n        <tr v-for=\"transport in transports\">\n            <td>{{transport.name}}</td>\n            <td>{{transport.type|capitalize}}</td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-2299a818", module.exports)
+  } else {
+    hotAPI.update("_v-2299a818", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],121:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-trips',
+    data: function data() {
+        return {
+            campaignId: this.$parent.campaignId,
+            trips: [],
+            orderByField: 'group.data.name',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {},
+            search: ''
+        };
+    },
+
+    watch: {
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchTrips();
+        },
+        'page': function page(val, oldVal) {
+            this.searchTrips();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchTrips();
+        }
+    },
+    computed: {},
+    methods: {
+        setOrderByField: function setOrderByField(field) {
+            return this.orderByField = field, this.direction = 1;
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'group.data.name';
+            this.direction = 1;
+            this.search = null;
+        },
+        searchTrips: function searchTrips() {
+            this.$http.get('trips', {
+                campaign_id: this.campaignId,
+                include: 'campaign,group',
+                search: this.searchText,
+                per_page: this.per_page,
+                page: this.page
+            }).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.trips = response.data.data;
+            });
+        }
+    },
+    activate: function activate(done) {
+        this.searchTrips();
+        done();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <span class=\"input-group-addon\">Show</span>\n                    <select class=\"form-control\" v-model=\"per_page\">\n                        <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                    </select>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n                | <a class=\"btn btn-primary btn-sm\" href=\"{{campaignId}}/trips/create\"><i class=\"fa fa-plus\"></i> New</a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'group.data.name'}\">\n                Group\n                <i @click=\"setOrderByField('group.data.name')\" v-if=\"orderByField !== 'group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'status'}\">\n                Published\n                <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th>\n                Start &amp; End\n            </th>\n            <th><i class=\"fa fa-plane\"></i></th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"trip in trips|filterBy search|orderBy orderByField direction\">\n            <td>{{trip.group.data.name}}</td>\n            <td>{{trip.type|capitalize}}</td>\n            <td>{{trip.status}}</td>\n            <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>\n            <td>{{trip.reservations}}</td>\n            <td>\n                <a href=\"/admin/campaigns/{{campaignId + trip.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <a href=\"/admin/campaigns/{{campaignId + trip.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-19c29ab0", module.exports)
+  } else {
+    hotAPI.update("_v-19c29ab0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],122:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24300,18 +35254,18 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<h4>{{ group.name }}</h4>\n\t<table class=\"table table-hover\">\n\t\t<thead>\n\t\t<tr>\n\t\t\t<th>Trip Type</th>\n\t\t\t<th>Trip Starting Cost</th>\n\t\t\t<th>Spots Available</th>\n\t\t\t<th>Ideal For</th>\n\t\t\t<th></th>\n\t\t</tr>\n\t\t</thead>\n\t\t<tbody>\n\t\t<tr v-for=\"trip in trips\">\n\t\t\t<td style=\"text-transform: capitalize;\">{{ trip.type }}</td>\n\t\t\t<td>{{ trip.lowest | currency }}</td>\n\t\t\t<td>{{ trip.spots }}</td>\n\t\t\t<td>{ list of prospects }</td>\n\t\t\t<td><a class=\"btn btn-primary btn-sm\">Join Group</a></td>\n\t\t</tr>\n\t\t</tbody>\n\t</table>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"container\">\n\t<div class=\"row\">\n\t\t<h4>{{ group.name }}</h4>\n\t\t<table class=\"table table-hover\">\n\t\t\t<thead>\n\t\t\t<tr>\n\t\t\t\t<th>Trip Type</th>\n\t\t\t\t<th>Trip Starting Cost</th>\n\t\t\t\t<th>Spots Available</th>\n\t\t\t\t<th>Ideal For</th>\n\t\t\t\t<th></th>\n\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t<tr v-for=\"trip in trips\" style=\"border-bottom: 1px solid #e6e6e6\">\n\t\t\t\t<td style=\"text-transform: capitalize;vertical-align:middle;\">{{ trip.type }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.lowest | currency }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.spots }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">\n\t\t\t\t\t<span v-for=\"prospect in trip.prospects\">\n\t\t\t\t\t\t{{ prospect | capitalize }}<span v-show=\"$index + 1 != trip.prospects.length\">, </span> \n\t\t\t\t\t</span>\n\t\t\t\t</td>\n\t\t\t\t<td><a href=\"/trips/{{ trip.id }}\" class=\"btn btn-primary-hollow btn-sm\">Select</a></td>\n\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t</div><!-- end row -->\n</div><!-- end container -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-e0395672", module.exports)
+    hotAPI.createRecord("_v-1c3f53a2", module.exports)
   } else {
-    hotAPI.update("_v-e0395672", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1c3f53a2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":7,"vue-hot-reload-api":5}],12:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107}],123:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -24354,7 +35308,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<a v-show=\"currentView!='groupSelection'\" @click=\"restartView()\" class=\"btn btn-default btn-sm\">Start Over</a>\n\t\t<hr>\n\t</div>\n\n\t<component :is=\"currentView\" transition=\"fade\" transition-mode=\"out-in\">&gt;\n\t\t<!-- component changes when vm.currentview changes! -->\n\t</component>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"gray-light-bg\">\n\t<div class=\"container\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<a v-show=\"currentView!='groupSelection'\" @click=\"restartView()\" class=\"btn btn-default btn-sm\">Start Over</a>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n<component :is=\"currentView\" transition=\"fade\" transition-mode=\"out-in\">&gt;\n\t<!-- component changes when vm.currentview changes! -->\n</component>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -24364,74 +35318,3712 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1f091c63", module.exports)
+    hotAPI.createRecord("_v-94fcdc0a", module.exports)
   } else {
-    hotAPI.update("_v-1f091c63", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-94fcdc0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./campaign-groups.vue":9,"./group-trips.vue":11,"vue":7,"vue-hot-reload-api":5,"vueify/lib/insert-css":8}],13:[function(require,module,exports){
+},{"./campaign-groups.vue":116,"./group-trips.vue":122,"vue":111,"vue-hot-reload-api":107,"vueify/lib/insert-css":112}],124:[function(require,module,exports){
 'use strict';
 
-module.exports = {
-  name: 'login',
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-  data: function data() {
-    return {
-      user: {
-        email: null,
-        password: null
-      },
-      messages: []
-    };
-  },
+var _vueSelect = require('vue-select');
 
-  methods: {
-    attempt: function attempt(e) {
-      e.preventDefault();
-      var that = this;
-      that.$http.post('login', this.user).then(function (response) {
-        // that.$dispatch('userHasFetchedToken', response.token)
-        that.getUserData();
-      }, function (response) {
-        that.messages = [];
-        if (response.status && response.status === 401) that.messages.push({
-          type: 'danger',
-          message: 'Sorry, we couldn\'t find an account that matches the email and password you provided.'
-        });
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
 
-        if (response.status && response.status === 422) {
-          that.messages = [{
-            type: 'danger',
-            message: 'Please enter a valid email and password.'
-          }];
-        }
-      });
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'group-create',
+    components: { vSelect: _vueSelect2.default },
+    data: function data() {
+        return {
+            name: '',
+            description: '',
+            type: '',
+            country_code: null,
+            timezone: null,
+            phone_one: '',
+            phone_two: '',
+            address_one: '',
+            address_two: '',
+            city: '',
+            state: '',
+            zip: '',
+            public: false,
+            url: '',
+            email: '',
+
+            // logic variables
+            typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
+            attemptSubmit: false,
+            countries: [],
+            countryCodeObj: null,
+            timezones: []
+        };
     },
 
-    getUserData: function getUserData() {
-      var that = this;
-      that.$http.get('/users/me').then(function (response) {
-        that.$dispatch('userHasLoggedIn', response.data.data);
-        // that.$route.router.go('/dashboard/settings/account')
-      }, function (response) {
-        console.log(response);
-      });
+    computed: {
+        country_code: function country_code() {
+            return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+        }
+    },
+    methods: {
+        checkForError: function checkForError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+
+            return this.$CreateGroup[field].invalid && this.attemptSubmit;
+        },
+        submit: function submit() {
+            this.attemptSubmit = true;
+            if (this.$CreateGroup.valid) {
+                var resource = this.$resource('groups');
+
+                var formData = this.data;
+                resource.save(null, {
+                    name: this.name,
+                    description: this.description,
+                    type: this.type,
+                    country_code: this.country_code,
+                    timezone: this.timezone,
+                    phone_one: this.phone_one,
+                    phone_two: this.phone_two,
+                    address_one: this.address_one,
+                    address_two: this.address_two,
+                    city: this.city,
+                    state: this.state,
+                    zip: this.zip,
+                    public: this.public,
+                    url: this.url,
+                    email: this.email
+                }).then(function (resp) {
+                    window.location.href = '/admin' + resp.data.data.links[0].uri;
+                }, function (error) {
+                    console.log(error);
+                    debugger;
+                });
+            }
+        }
+    },
+    ready: function ready() {
+        this.$http.get('utilities/countries').then(function (response) {
+            this.countries = response.data.countries;
+        });
+
+        this.$http.get('utilities/timezones').then(function (response) {
+            this.timezones = response.data.timezones;
+        });
     }
-  }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"container\">\n  <div class=\"row\">\n    <hr class=\"divider inv lg\">\n    <div class=\"col-md-6 col-md-offset-3\">\n      <h5 class=\"text-uppercase text-center\">Welcome Back To Missions.Me</h5>\n      <hr class=\"divider inv\">\n      <div class=\"panel panel-default\">\n        <div class=\"panel-body\">\n          <form class=\"form-horizontal\" role=\"form\">\n            <div id=\"alerts\" v-if=\"messages.length > 0\">\n              <div v-for=\"message in messages\" class=\"alert alert-{{ message.type }} alert-dismissible\" role=\"alert\">\n                {{ message.message }}\n              </div>\n            </div><!-- end alert -->\n            <div class=\"form-group\">\n              <div class=\"col-xs-10  col-xs-offset-1\">\n                <label class=\"control-label\">E-Mail Address</label>\n                <input type=\"email\" class=\"form-control\" v-model=\"user.email\">\n              </div><!-- end col -->\n            </div><!-- end form-group -->\n            <div class=\"form-group\">\n              <div class=\"col-xs-10  col-xs-offset-1\">\n                <label class=\"control-label\">Password</label>\n                <input type=\"password\" class=\"form-control\" v-model=\"user.password\">\n              </div><!-- end col -->\n            </div><!-- end form-group -->\n            <div class=\"form-group\">\n              <div class=\"col-xs-10  col-xs-offset-1\">\n                <button type=\"submit\" class=\"btn btn-primary btn-block\" v-on:click=\"attempt\">\n                  Login\n                </button>\n                <a class=\"btn btn-block btn-link\" href=\"#\">Forgot Your Password?</a>\n              </div><!-- end col -->\n            </div><!-- end form-group -->\n          </form><!-- end form -->\n        </div><!-- end panel-body -->\n      </div>\n    </div><!-- end col -->\n  </div><!-- end row -->\n</div><!-- end container -->"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateGroup\">\n    <form id=\"CreateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"description\">Description</label>\n            <div class=\"col-sm-10\">\n                <textarea class=\"form-control\" v-model=\"description\" id=\"description\" placeholder=\"Description of Group\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress\">Address 1</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress2\">Address 2</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                <div class=\"form-group\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                </div>\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-controls\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n            <label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n            <div class=\"col-sm-10\">\n                <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                    <option value=\"\">-- please select --</option>\n                    <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <label for=\"timezone\" class=\"col-sm-2 control-label\">Timezone</label>\n\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-controls\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <div class=\"form-group\" v-if=\"!!public\">\n            <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n            <div class=\"col-sm-10\">\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon\">www.missions.me/groups/</span>\n                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:=\"{ required: !!public }\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/admin/groups\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-d1dcd388", module.exports)
+    hotAPI.createRecord("_v-0f6c0d9e", module.exports)
   } else {
-    hotAPI.update("_v-d1dcd388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0f6c0d9e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":7,"vue-hot-reload-api":5}],14:[function(require,module,exports){
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],125:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'group-edit',
+    components: { vSelect: _vueSelect2.default },
+    props: ['groupId'],
+    data: function data() {
+        return {
+            name: '',
+            description: '',
+            type: '',
+            country_code: '',
+            timezone: '',
+            phone_one: '',
+            phone_two: '',
+            address_one: '',
+            address_two: '',
+            city: '',
+            state: '',
+            zip: '',
+            public: false,
+            url: '',
+            email: '',
+
+            // logic variables
+            typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
+            attemptSubmit: false,
+            resource: this.$resource('groups{/id}'),
+            countries: [],
+            countryCodeObj: null,
+            timezones: []
+        };
+    },
+
+    computed: {
+        country_code: function country_code() {
+            if (_.isObject(this.countryCodeObj)) {
+                return this.countryCodeObj.code;
+            }
+        }
+    },
+    methods: {
+        checkForError: function checkForError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+
+            return this.$UpdateGroup[field].invalid && this.attemptSubmit;
+        },
+        submit: function submit() {
+            this.attemptSubmit = true;
+            if (this.$UpdateGroup.valid) {
+                var formData = this.data;
+                this.resource.update({ id: this.groupId }, {
+                    name: this.name,
+                    description: this.description,
+                    type: this.type,
+                    country_code: this.country_code,
+                    timezone: this.timezone,
+                    phone_one: this.phone_one,
+                    phone_two: this.phone_two,
+                    address_one: this.address_one,
+                    address_two: this.address_two,
+                    city: this.city,
+                    state: this.state,
+                    zip: this.zip,
+                    public: this.public,
+                    url: this.url,
+                    email: this.email
+                }).then(function (resp) {
+                    window.location.href = '/admin' + resp.data.data.links[0].uri;
+                }, function (error) {
+                    console.log(error);
+                    debugger;
+                });
+            }
+        }
+    },
+    ready: function ready() {
+        this.$http.get('utilities/countries').then(function (response) {
+            this.countries = response.data.countries;
+        });
+
+        this.$http.get('utilities/timezones').then(function (response) {
+            this.timezones = response.data.timezones;
+        });
+
+        this.resource.get({ id: this.groupId }).then(function (response) {
+            var group = response.data.data;
+            this.name = group.name;
+            this.description = group.description;
+            this.type = group.type;
+            this.countryCodeObj = _.findWhere(this.countries, { code: group.country_code });
+            this.country_code = group.country_code;
+            this.timezone = group.timezone;
+            this.phone_one = group.phone_one;
+            this.phone_two = group.phone_two;
+            this.address_one = group.address_one;
+            this.address_two = group.address_two;
+            this.city = group.city;
+            this.state = group.state;
+            this.zip = group.zip;
+            this.public = group.public;
+            this.url = group.url;
+            this.email = group.email;
+        }, function (response) {
+            console.log('Update Failed! :(');
+            console.log(response);
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateGroup\">\n    <form id=\"UpdateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"description\">Description</label>\n            <div class=\"col-sm-10\">\n                <textarea class=\"form-control\" v-model=\"description\" id=\"description\" placeholder=\"Description of Group\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress\">Address 1</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress2\">Address 2</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                <div class=\"form-group\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                </div>\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-controls\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n            <label for=\"country\" class=\"col-sm-2 control-label\">Type</label>\n            <div class=\"col-sm-10\">\n                <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                    <option value=\"\">-- please select --</option>\n                    <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <label for=\"country\" class=\"col-sm-2 control-label\">Timezone</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-controls\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <template v-if=\"!!public\">\n            <div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\">\n                <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n                <div class=\"col-sm-10\">\n                    <div class=\"input-group\">\n                        <span class=\"input-group-addon\">www.missions.me/groups/</span>\n                        <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" v-validate:url=\"{ required: !!public }\">\n                    </div>\n                </div>\n            </div>\n        </template>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/admin/groups\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-7071c3a8", module.exports)
+  } else {
+    hotAPI.update("_v-7071c3a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],126:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'admin-group-managers',
+	components: { vSelect: _vueSelect2.default },
+	props: ['groupId'],
+	data: function data() {
+		return {
+			user_id: null,
+			managers: [],
+			users: [],
+			group: null,
+			userObj: null,
+			resource: this.$resource('groups{/id}'),
+			attemptSubmit: false
+		};
+	},
+
+	computed: {
+		user_id: function user_id() {
+			return _.isObject(this.userObj) ? this.userObj.id : null;
+		}
+	},
+	methods: {
+		checkForError: function checkForError(field) {
+			// if user clicked submit button while the field is invalid trigger error styles
+
+			return this.$AddManager[field].invalid && this.attemptSubmit;
+		},
+		getUsers: function getUsers(search, loading) {
+			loading(true);
+			this.$http.get('users', { search: search }).then(function (response) {
+				this.users = response.data.data;
+				loading(false);
+			});
+		},
+		addManager: function addManager() {
+			// Add Manager
+			this.attemptSubmit = true;
+			if (this.$AddManager.valid) {
+				var managersArr = this.managers;
+				managersArr.push({ group_id: this.groupId, user_id: this.user_id });
+				this.group.managers = _.pluck(managersArr, 'user_id');
+				//this.group.managers = this.managers;
+				this.updateGroup();
+			}
+		},
+		removeManager: function removeManager(manager) {
+			// Remove Manager
+			this.managers.$remove(manager);
+			this.group.managers = this.managers;
+			this.updateGroup();
+		},
+		updateGroup: function updateGroup() {
+			// Update Group
+			this.resource.update({ id: this.groupId }, this.group).then(function (response) {
+				this.group = response.data.data;
+				this.managers = this.group.managers.data;
+				this.user_id = null;
+				this.userObj = null;
+				this.attemptSubmit = false;
+				$('#AddManagerModal').modal('hide');
+			}, function (response) {
+				console.log(response);
+			});
+		}
+	},
+	ready: function ready() {
+		this.resource.get({ id: this.groupId }, { include: 'managers.user' }).then(function (response) {
+			this.group = response.data.data;
+			this.managers = this.group.managers.data;
+			//                $.extend(this.$data, response.data.data);
+		}, function (response) {
+			console.log('Update Failed! :(');
+			console.log(response);
+		});
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h3 class=\"panel-title\"> Managers\n\t\t\t<button class=\"btn btn-primary btn-xs\" data-toggle=\"modal\" data-target=\"#AddManagerModal\"><span class=\"fa fa-plus\"></span> New\n\t\t\t</button>\n\t\t</h3>\n\t</div>\n\t<div>\n\t\t<div class=\"col-xs-3 col-sm-3 col-md-3 col-lg-3\" v-for=\"manager in managers\" track-by=\"id\">\n\t\t\t<div class=\"thumbnail\">\n\t\t\t\t<img src=\"http://lorempixel.com/300/300\" alt=\"\">\n\t\t\t\t<div class=\"caption\">\n\t\t\t\t\t<h5 v-text=\"manager.name\"></h5>\n\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<a class=\"btn btn-xs btn-danger\" @click=\"removeManager(manager)\">\n\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Remove\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</p>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"modal fade\" id=\"AddManagerModal\">\n\t\t<div class=\"modal-dialog\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n\t\t\t\t\t<h4 class=\"modal-title\">Modal title</h4></div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<validator name=\"AddManager\">\n\t\t\t\t\t\t<form class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('user') }\"><label class=\"col-sm-2 control-label\">User</label>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"user\" :value.sync=\"userObj\" :options=\"users\" :on-search=\"getUsers\" label=\"name\"></v-select>\n\t\t\t\t\t\t\t\t\t<select hidden=\"\" v-model=\"user_id\" v-validate:user=\"{ required: true}\">\n\t\t\t\t\t\t\t\t\t\t<option :value=\"user.id\" v-for=\"user in users\">{{user.name}}</option>\n\t\t\t\t\t\t\t\t\t</select></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</form>\n\t\t\t\t\t</validator>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-footer\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-default btn-sm\" data-dismiss=\"modal\">Close</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addManager()\">Save</button>\n\t\t\t\t</div>\n\t\t\t</div><!-- /.modal-content -->\n\t\t</div><!-- /.modal-dialog -->\n\t</div><!-- /.modal --></div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-1244b388", module.exports)
+  } else {
+    hotAPI.update("_v-1244b388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],127:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-groups',
+    data: function data() {
+        return {
+            groups: [],
+            orderByField: 'name',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {},
+            search: '',
+            status: '',
+            type: ''
+        };
+    },
+
+    watch: {
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchGroups();
+        },
+        'page': function page(val, oldVal) {
+            this.searchGroups();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchGroups();
+        }
+    },
+
+    methods: {
+        setOrderByField: function setOrderByField(field) {
+            return this.orderByField = field, this.direction = 1;
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'name';
+            this.direction = 1;
+            this.search = '';
+            this.status = '';
+            this.type = '';
+        },
+        searchGroups: function searchGroups() {
+            this.$http.get('groups', {
+                include: 'trips:onlyPublished',
+                search: this.searchText,
+                per_page: this.per_page,
+                page: this.page
+            }).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.groups = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchGroups();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Filters\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"status\" value=\"\"> Any Status\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"status\" value=\"true\"> Public Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"status\" value=\"false\"> Private only\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"\"> Any Type\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"church\"> Church Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"business\"> Business only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"nonprofit\"> Non-Profit Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"youth\"> Private only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"padding: 3px 20px;\">\n                                <input type=\"radio\" v-model=\"type\" value=\"other\"> Other only\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <span class=\"input-group-addon\">Show</span>\n                    <select class=\"form-control\" v-model=\"per_page\">\n                        <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                    </select>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n                | <a class=\"btn btn-primary btn-sm\" href=\"groups/create\"><i class=\"fa fa-plus\"></i> New</a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'name'}\">\n                Group\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                Location\n                <!--<i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>-->\n                <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'public'}\">\n                Status\n                <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th>Active Trips</th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"group in groups|filterBy search|orderBy orderByField direction|filterBy status in 'public'|filterBy type in 'type'\">\n            <td>{{group.name}}</td>\n            <td>{{group.type|capitalize}}</td>\n            <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n            <td>{{group.public ? 'Public' : 'Private'}}</td>\n            <td>{{group.trips.data.length}}</td>\n            <td>\n                <a href=\"/admin{{group.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <a href=\"/admin{{group.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-6170d6da", module.exports)
+  } else {
+    hotAPI.update("_v-6170d6da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],128:[function(require,module,exports){
+'use strict';
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = {
+	name: 'login',
+	components: { vSelect: _vueSelect2.default },
+	data: function data() {
+		return {
+			currentState: 'login',
+			user: {
+				email: null,
+				password: null,
+				_token: $('meta[name="csrf-token"]').attr('content')
+			},
+			newUser: {
+				name: null,
+				email: null,
+				password: null,
+				password_confirmation: null,
+				dobMonth: null,
+				dobDay: null,
+				dobYear: null,
+				dob: null,
+				gender: null,
+				country_code: null,
+				timezone: null
+			},
+			reset: {
+				email: null
+			},
+			messages: [],
+
+			// component vars
+			isChildComponent: false,
+			userData: null,
+			timezones: [],
+			countries: [],
+			countryCodeObj: null
+		};
+	},
+
+	watch: {
+		'countryCodeObj': function countryCodeObj(val) {
+			this.newUser.country_code = _.isObject(val) ? val.code : null;
+		}
+	},
+	computed: {},
+
+	methods: {
+		attempt: function attempt(e) {
+			e.preventDefault();
+			var that = this;
+			that.$http.post('/login', this.user).then(function (response) {
+				// reload to set cookie
+				if (this.isChildComponent) {
+					window.location.reload();
+				}
+				that.getUserData(response.data.redirect_to);
+			}, function (response) {
+				that.messages = [];
+				if (response.status && response.status === 401) that.messages.push({
+					type: 'danger',
+					message: 'Sorry, we couldn\'t find an account that matches the email and password you provided.'
+				});
+
+				if (response.status && response.status === 422) {
+					that.messages = [{
+						type: 'danger',
+						message: 'Please enter a valid email and password.'
+					}];
+				}
+			});
+		},
+
+		getUserData: function getUserData(redirectTo) {
+			var that = this;
+			var deferred = $.Deferred();
+			that.$http.get('/api/users/me').then(function (response) {
+				that.$dispatch('userHasLoggedIn', response.data.data);
+
+				if (that.isChildComponent) {
+					that.userData = response.data.data;
+					deferred.resolve(response.data.data);
+				} else {
+					location.href = redirectTo;
+				}
+			}, function (response) {
+				console.log(response);
+				deferred.resolve(response.data.data);
+			});
+			return deferred.promise();
+		},
+
+		registerUser: function registerUser(e) {
+			e.preventDefault();
+			$.extend(this.newUser, {
+				dob: moment().set({ year: this.newUser.dobYear, month: this.newUser.dobMonth, day: this.newUser.dobDay }).format('LL')
+			});
+
+			this.$http.post('/api/register', this.newUser).then(function (response) {
+				console.log(response.data.token);
+				// reload to set cookie
+				if (this.isChildComponent) {
+					window.location.reload();
+				}
+				this.getUserData();
+			}, function (response) {
+				console.log(response);
+				var messages = [];
+				_.each(response.data.errors, function (error) {
+					messages.push({
+						type: 'danger',
+						message: _.values(error)[0]
+					});
+				});
+				this.messages = messages;
+			});
+		},
+
+		requestReset: function requestReset(e) {}
+	},
+	activate: function activate(done) {
+		// Enable child component behavior
+		if (this.$parent != this.$root) {
+			this.isChildComponent = true;
+		}
+		done();
+	},
+	ready: function ready() {
+		this.$http.get('utilities/countries').then(function (response) {
+			this.countries = response.data.countries;
+		});
+
+		this.$http.get('utilities/timezones').then(function (response) {
+			this.timezones = response.data.timezones;
+		});
+
+		if (this.isChildComponent) {
+			// After reload from login / registratration
+			// Check if user is logged in
+			this.getUserData(false);
+		}
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-body\">\n\t\t<form class=\"form-horizontal\" role=\"form\" v-if=\"currentState==='login'\">\n\t\t\t<div id=\"alerts\" v-if=\"messages.length > 0\">\n\t\t\t\t<div v-for=\"message in messages\" class=\"alert alert-{{ message.type }} alert-dismissible\" role=\"alert\">\n\t\t\t\t\t{{ message.message }}\n\t\t\t\t</div>\n\t\t\t</div><!-- end alert -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">E-Mail Address</label>\n\t\t\t\t\t<input type=\"email\" class=\"form-control\" v-model=\"user.email\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">Password</label>\n\t\t\t\t\t<input type=\"password\" class=\"form-control\" v-model=\"user.password\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<button type=\"submit\" class=\"btn btn-primary btn-block\" @click=\"attempt\">\n\t\t\t\t\t\tLogin\n\t\t\t\t\t</button>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t</form><!-- end form -->\n\t\t<form class=\"form-horizontal\" role=\"form\" v-if=\"currentState==='reset'\">\n\t\t\t<div id=\"alerts\" v-if=\"messages.length > 0\">\n\t\t\t\t<div v-for=\"message in messages\" class=\"alert alert-{{ message.type }} alert-dismissible\" role=\"alert\">\n\t\t\t\t\t{{ message.message }}\n\t\t\t\t</div>\n\t\t\t</div><!-- end alert -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">E-Mail Address</label>\n\t\t\t\t\t<input type=\"email\" class=\"form-control\" v-model=\"user.email\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">Password</label>\n\t\t\t\t\t<input type=\"password\" class=\"form-control\" v-model=\"user.password\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<button type=\"submit\" class=\"btn btn-primary btn-block\" @click=\"requestReset\">\n\t\t\t\t\t\tRequest Password Reset\n\t\t\t\t\t</button>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t</form><!-- end form -->\n\t\t<form class=\"form-horizontal\" role=\"form\" v-if=\"currentState==='create'\">\n\t\t\t<div id=\"alerts\" v-if=\"messages.length > 0\">\n\t\t\t\t<div v-for=\"message in messages\" class=\"alert alert-{{ message.type }} alert-dismissible\" role=\"alert\">\n\t\t\t\t\t{{ message.message }}\n\t\t\t\t</div>\n\t\t\t</div><!-- end alert -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">First And Last Name</label>\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"newUser.name\" placeholder=\"John Doe\" required=\"\" maxlength=\"100\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">E-Mail Address</label>\n\t\t\t\t\t<input type=\"email\" class=\"form-control\" v-model=\"newUser.email\" placeholder=\"example@gmail.com\" required=\"\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">Password</label>\n\t\t\t\t\t<input type=\"password\" class=\"form-control\" v-model=\"newUser.password\" required=\"\" minlength=\"8\">\n\t\t\t\t\t<div class=\"help-block\">Password must be at least 8 characters long</div>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">Password Again</label>\n\t\t\t\t\t<input type=\"password\" class=\"form-control\" v-model=\"newUser.password_confirmation\" required=\"\" minlength=\"8\">\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-label\">Date of Birth</label>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-5\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"dob_month\" v-model=\"newUser.dobMonth\" required=\"\">\n\t\t\t\t\t\t\t\t<option value=\"01\">January</option>\n\t\t\t\t\t\t\t\t<option value=\"02\">February</option>\n\t\t\t\t\t\t\t\t<option value=\"03\">March</option>\n\t\t\t\t\t\t\t\t<option value=\"04\">April</option>\n\t\t\t\t\t\t\t\t<option value=\"05\">May</option>\n\t\t\t\t\t\t\t\t<option value=\"06\">June</option>\n\t\t\t\t\t\t\t\t<option value=\"07\">July</option>\n\t\t\t\t\t\t\t\t<option value=\"08\">August</option>\n\t\t\t\t\t\t\t\t<option value=\"09\">September</option>\n\t\t\t\t\t\t\t\t<option value=\"10\">October</option>\n\t\t\t\t\t\t\t\t<option value=\"11\">November</option>\n\t\t\t\t\t\t\t\t<option value=\"12\">December</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t<h6 class=\"help-block lightcolor\">Month</h6>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-3\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"dob_day\" v-model=\"newUser.dobDay\" required=\"\">\n\t\t\t\t\t\t\t\t<option value=\"01\">1</option>\n\t\t\t\t\t\t\t\t<option value=\"02\">2</option>\n\t\t\t\t\t\t\t\t<option value=\"03\">3</option>\n\t\t\t\t\t\t\t\t<option value=\"04\">4</option>\n\t\t\t\t\t\t\t\t<option value=\"05\">5</option>\n\t\t\t\t\t\t\t\t<option value=\"06\">6</option>\n\t\t\t\t\t\t\t\t<option value=\"07\">7</option>\n\t\t\t\t\t\t\t\t<option value=\"08\">8</option>\n\t\t\t\t\t\t\t\t<option value=\"09\">9</option>\n\t\t\t\t\t\t\t\t<option value=\"10\">10</option>\n\t\t\t\t\t\t\t\t<option value=\"11\">11</option>\n\t\t\t\t\t\t\t\t<option value=\"12\">12</option>\n\t\t\t\t\t\t\t\t<option value=\"13\">13</option>\n\t\t\t\t\t\t\t\t<option value=\"14\">14</option>\n\t\t\t\t\t\t\t\t<option value=\"15\">15</option>\n\t\t\t\t\t\t\t\t<option value=\"16\">16</option>\n\t\t\t\t\t\t\t\t<option value=\"17\">17</option>\n\t\t\t\t\t\t\t\t<option value=\"18\">18</option>\n\t\t\t\t\t\t\t\t<option value=\"19\">19</option>\n\t\t\t\t\t\t\t\t<option value=\"20\">20</option>\n\t\t\t\t\t\t\t\t<option value=\"21\">21</option>\n\t\t\t\t\t\t\t\t<option value=\"22\">22</option>\n\t\t\t\t\t\t\t\t<option value=\"23\">23</option>\n\t\t\t\t\t\t\t\t<option value=\"24\">24</option>\n\t\t\t\t\t\t\t\t<option value=\"25\">25</option>\n\t\t\t\t\t\t\t\t<option value=\"26\">26</option>\n\t\t\t\t\t\t\t\t<option value=\"27\">27</option>\n\t\t\t\t\t\t\t\t<option value=\"28\">28</option>\n\t\t\t\t\t\t\t\t<option value=\"29\">29</option>\n\t\t\t\t\t\t\t\t<option value=\"30\">30</option>\n\t\t\t\t\t\t\t\t<option value=\"31\">31</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t<h6 class=\"help-block lightcolor\">Day</h6>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-4\">\n\t\t\t\t\t\t\t<select class=\"form-control\" name=\"dob_year\" v-model=\"newUser.dobYear\">\n\t\t\t\t\t\t\t\t<option value=\"1930\">1930</option>\n\t\t\t\t\t\t\t\t<option value=\"1931\">1931</option>\n\t\t\t\t\t\t\t\t<option value=\"1932\">1932</option>\n\t\t\t\t\t\t\t\t<option value=\"1933\">1933</option>\n\t\t\t\t\t\t\t\t<option value=\"1934\">1934</option>\n\t\t\t\t\t\t\t\t<option value=\"1935\">1935</option>\n\t\t\t\t\t\t\t\t<option value=\"1936\">1936</option>\n\t\t\t\t\t\t\t\t<option value=\"1937\">1937</option>\n\t\t\t\t\t\t\t\t<option value=\"1938\">1938</option>\n\t\t\t\t\t\t\t\t<option value=\"1939\">1939</option>\n\t\t\t\t\t\t\t\t<option value=\"1940\">1940</option>\n\t\t\t\t\t\t\t\t<option value=\"1941\">1941</option>\n\t\t\t\t\t\t\t\t<option value=\"1942\">1942</option>\n\t\t\t\t\t\t\t\t<option value=\"1943\">1943</option>\n\t\t\t\t\t\t\t\t<option value=\"1944\">1944</option>\n\t\t\t\t\t\t\t\t<option value=\"1945\">1945</option>\n\t\t\t\t\t\t\t\t<option value=\"1946\">1946</option>\n\t\t\t\t\t\t\t\t<option value=\"1947\">1947</option>\n\t\t\t\t\t\t\t\t<option value=\"1948\">1948</option>\n\t\t\t\t\t\t\t\t<option value=\"1949\">1949</option>\n\t\t\t\t\t\t\t\t<option value=\"1950\">1950</option>\n\t\t\t\t\t\t\t\t<option value=\"1951\">1951</option>\n\t\t\t\t\t\t\t\t<option value=\"1952\">1952</option>\n\t\t\t\t\t\t\t\t<option value=\"1953\">1953</option>\n\t\t\t\t\t\t\t\t<option value=\"1954\">1954</option>\n\t\t\t\t\t\t\t\t<option value=\"1955\">1955</option>\n\t\t\t\t\t\t\t\t<option value=\"1956\">1956</option>\n\t\t\t\t\t\t\t\t<option value=\"1957\">1957</option>\n\t\t\t\t\t\t\t\t<option value=\"1958\">1958</option>\n\t\t\t\t\t\t\t\t<option value=\"1959\">1959</option>\n\t\t\t\t\t\t\t\t<option value=\"1960\">1960</option>\n\t\t\t\t\t\t\t\t<option value=\"1961\">1961</option>\n\t\t\t\t\t\t\t\t<option value=\"1962\">1962</option>\n\t\t\t\t\t\t\t\t<option value=\"1963\">1963</option>\n\t\t\t\t\t\t\t\t<option value=\"1964\">1964</option>\n\t\t\t\t\t\t\t\t<option value=\"1965\">1965</option>\n\t\t\t\t\t\t\t\t<option value=\"1966\">1966</option>\n\t\t\t\t\t\t\t\t<option value=\"1967\">1967</option>\n\t\t\t\t\t\t\t\t<option value=\"1968\">1968</option>\n\t\t\t\t\t\t\t\t<option value=\"1969\">1969</option>\n\t\t\t\t\t\t\t\t<option value=\"1970\">1970</option>\n\t\t\t\t\t\t\t\t<option value=\"1971\">1971</option>\n\t\t\t\t\t\t\t\t<option value=\"1972\">1972</option>\n\t\t\t\t\t\t\t\t<option value=\"1973\">1973</option>\n\t\t\t\t\t\t\t\t<option value=\"1974\">1974</option>\n\t\t\t\t\t\t\t\t<option value=\"1975\">1975</option>\n\t\t\t\t\t\t\t\t<option value=\"1976\">1976</option>\n\t\t\t\t\t\t\t\t<option value=\"1977\">1977</option>\n\t\t\t\t\t\t\t\t<option value=\"1978\">1978</option>\n\t\t\t\t\t\t\t\t<option value=\"1979\">1979</option>\n\t\t\t\t\t\t\t\t<option value=\"1980\">1980</option>\n\t\t\t\t\t\t\t\t<option value=\"1981\">1981</option>\n\t\t\t\t\t\t\t\t<option value=\"1982\">1982</option>\n\t\t\t\t\t\t\t\t<option value=\"1983\">1983</option>\n\t\t\t\t\t\t\t\t<option value=\"1984\">1984</option>\n\t\t\t\t\t\t\t\t<option value=\"1985\">1985</option>\n\t\t\t\t\t\t\t\t<option value=\"1986\">1986</option>\n\t\t\t\t\t\t\t\t<option value=\"1987\">1987</option>\n\t\t\t\t\t\t\t\t<option value=\"1988\">1988</option>\n\t\t\t\t\t\t\t\t<option value=\"1989\">1989</option>\n\t\t\t\t\t\t\t\t<option value=\"1990\" selected=\"selected\">1990</option>\n\t\t\t\t\t\t\t\t<option value=\"1991\">1991</option>\n\t\t\t\t\t\t\t\t<option value=\"1992\">1992</option>\n\t\t\t\t\t\t\t\t<option value=\"1993\">1993</option>\n\t\t\t\t\t\t\t\t<option value=\"1994\">1994</option>\n\t\t\t\t\t\t\t\t<option value=\"1995\">1995</option>\n\t\t\t\t\t\t\t\t<option value=\"1996\">1996</option>\n\t\t\t\t\t\t\t\t<option value=\"1997\">1997</option>\n\t\t\t\t\t\t\t\t<option value=\"1998\">1998</option>\n\t\t\t\t\t\t\t\t<option value=\"1999\">1999</option>\n\t\t\t\t\t\t\t\t<option value=\"2000\">2000</option>\n\t\t\t\t\t\t\t\t<option value=\"2001\">2001</option>\n\t\t\t\t\t\t\t\t<option value=\"2002\">2002</option>\n\t\t\t\t\t\t\t\t<option value=\"2003\">2003</option>\n\t\t\t\t\t\t\t\t<option value=\"2004\">2004</option>\n\t\t\t\t\t\t\t\t<option value=\"2005\">2005</option>\n\t\t\t\t\t\t\t\t<option value=\"2006\">2006</option>\n\t\t\t\t\t\t\t\t<option value=\"2007\">2007</option>\n\t\t\t\t\t\t\t\t<option value=\"2008\">2008</option>\n\t\t\t\t\t\t\t\t<option value=\"2009\">2009</option>\n\t\t\t\t\t\t\t\t<option value=\"2010\">2010</option>\n\t\t\t\t\t\t\t\t<option value=\"2011\">2011</option>\n\t\t\t\t\t\t\t\t<option value=\"2012\">2012</option>\n\t\t\t\t\t\t\t\t<option value=\"2013\">2013</option>\n\t\t\t\t\t\t\t\t<option value=\"2014\">2014</option>\n\t\t\t\t\t\t\t\t<option value=\"2015\">2015</option>\n\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t<h6 class=\"help-block lightcolor\">Year</h6>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<label class=\"control-labal\">Gender</label>\n\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t<label class=\"radio-inline lightcolor\">\n\t\t\t\t\t\t\t<input name=\"gender\" type=\"radio\" value=\"Male\" id=\"gender\" v-model=\"newUser.gender\"> Male</label>\n\t\t\t\t\t\t<label class=\"radio-inline lightcolor\">\n\t\t\t\t\t\t\t<input name=\"gender\" type=\"radio\" value=\"Female\" id=\"gender\" v-model=\"newUser.gender\"> Female</label>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10 col-xs-offset-1\">\n\t\t\t\t\t<label for=\"country\" class=\"control-label\">Country</label>\n\t\t\t\t\t<v-select class=\"form-controls\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"newUser.country_code\" required=\"\">\n\t\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10 col-xs-offset-1\">\n\t\t\t\t\t<label for=\"timezone\" class=\"control-label\">Timezone</label>\n\t\t\t\t\t<v-select class=\"form-controls\" id=\"timezone\" :value.sync=\"newUser.timezone\" :options=\"timezones\"></v-select>\n\t\t\t\t\t<select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"newUser.timezone\" required=\"\">\n\t\t\t\t\t\t<option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-xs-10  col-xs-offset-1\">\n\t\t\t\t\t<button type=\"submit\" class=\"btn btn-primary btn-block\" @click=\"registerUser\">\n\t\t\t\t\t\tCreate Account\n\t\t\t\t\t</button>\n\t\t\t\t</div><!-- end col -->\n\t\t\t</div><!-- end form-group -->\n\t\t</form><!-- end form -->\n\t\t<!--<a v-if=\"currentState === 'login' || currentState === 'create'\" class=\"btn btn-block btn-link\" @click=\"currentState='reset'\">Forgot Your Password?</a>-->\n\t\t<a v-if=\"currentState === 'reset' || currentState === 'create'\" class=\"btn btn-block btn-link\" @click=\"currentState='login'\">I Have An Account</a>\n\t\t<a v-if=\"currentState === 'login' || currentState === 'reset'\" class=\"btn btn-block btn-link\" @click=\"currentState='create'\">Create A New Account</a>\n\t</div>\n</div><!-- end panel-body -->\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-7dce67a4", module.exports)
+  } else {
+    hotAPI.update("_v-7dce67a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],129:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'admin-reservations-list',
+	components: { vSelect: _vueSelect2.default },
+	data: function data() {
+		return {
+			reservations: [],
+			orderByField: 'surname',
+			direction: 1,
+			page: 1,
+			per_page: 10,
+			perPageOptions: [5, 10, 25, 50, 100],
+			pagination: {},
+			search: '',
+			activeFields: ['given_names', 'surname', 'group', 'campaign', 'type', 'registered'],
+			maxActiveFields: 6,
+			maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
+			groupsArr: [],
+			groupsOptions: [],
+			usersArr: [],
+			tagsArr: [],
+			tagsString: '',
+			usersOptions: [],
+			campaignObj: null,
+			campaignOptions: [],
+			shirtSizeArr: [],
+			shirtSizeOptions: [{ id: 'XS', name: 'Extra Small' }, { id: 'S', name: 'Small' }, { id: 'M', name: 'Medium' }, { id: 'L', name: 'Large' }, { id: 'XL', name: 'Extra Large' }, { id: 'XXL', name: 'Extra Large X2' }],
+			ageMin: 0,
+			ageMax: 120,
+
+			// filter vars
+			filters: {
+				//tags:[],
+				user: [],
+				groups: [],
+				campaign: '',
+				gender: '',
+				status: '',
+				shirtSize: [],
+				hasCompanions: null,
+				hasPassport: null
+			}
+		};
+	},
+
+	computed: {},
+	watch: {
+		// watch filters obj
+		'filters': {
+			handler: function handler(val) {
+				// console.log(val);
+				this.searchReservations();
+			},
+			deep: true
+		},
+		'campaignObj': function campaignObj(val) {
+			this.filters.campaign = val ? val.id : '';
+		},
+		'shirtSizeArr': function shirtSizeArr(val) {
+			this.filters.shirtSize = _.pluck(val, 'id') || '';
+		},
+		'groupsArr': function groupsArr(val) {
+			this.filters.groups = _.pluck(val, 'id') || '';
+			this.searchReservations();
+		},
+		'usersArr': function usersArr(val) {
+			this.filters.user = _.pluck(val, 'id') || '';
+			this.searchReservations();
+		},
+		'tagsString': function tagsString(val) {
+			//this.filters.tags = val.split(/[\s,]+/)||'';
+			this.searchReservations();
+		},
+		'ageMin': function ageMin(val) {
+			this.searchReservations();
+		},
+		'ageMax': function ageMax(val) {
+			this.searchReservations();
+		},
+		'activeFields': function activeFields(val, oldVal) {
+			// if the orderBy field is removed from view
+			if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
+				// default to first visible field
+				this.orderByField = val[0];
+			}
+			this.updateConfig();
+		},
+		'search': function search(val, oldVal) {
+			this.updateConfig();
+			this.page = 1;
+			this.searchReservations();
+		},
+		'page': function page(val, oldVal) {
+			this.updateConfig();
+			this.searchReservations();
+		},
+		'per_page': function per_page(val, oldVal) {
+			this.updateConfig();
+			this.searchReservations();
+		},
+		'groups': function groups() {
+			this.searchReservations();
+		}
+	},
+	methods: {
+		consoleCallback: function consoleCallback(val) {
+			console.dir((0, _stringify2.default)(val));
+		},
+		updateConfig: function updateConfig() {
+			localStorage.AdminReservationsListConfig = (0, _stringify2.default)({
+				activeFields: this.activeFields,
+				maxActiveFields: this.maxActiveFields,
+				per_page: this.per_page,
+				ageMin: this.ageMin,
+				ageMax: this.ageMax,
+				groupsArr: this.groupsArr,
+				tagsArr: this.tagsArr,
+				usersArr: this.usersArr,
+				campaignObj: this.campaignObj,
+				filters: {
+					tags: this.filters.tags,
+					user: this.filters.user,
+					groups: this.filters.groups,
+					campaign: this.filters.campaign,
+					gender: this.filters.gender,
+					status: this.filters.status,
+					shirtSize: this.filters.shirtSize,
+					hasCompanions: this.filters.hasCompanions,
+					hasPassport: this.filters.hasPassport
+				}
+			});
+		},
+		isActive: function isActive(field) {
+			return _.contains(this.activeFields, field);
+		},
+		maxCheck: function maxCheck(field) {
+			return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields;
+		},
+		setOrderByField: function setOrderByField(field) {
+			return this.orderByField = field, this.direction = 1;
+		},
+		resetFilter: function resetFilter() {
+			this.orderByField = 'surname';
+			this.direction = 1;
+			this.search = null;
+			this.ageMin = 0;
+			this.ageMax = 120;
+			this.groupsArr = [];
+			this.usersArr = [];
+			this.campaignObj = null;
+			this.filters = {
+				tags: [],
+				user: [],
+				groups: [],
+				campaign: '',
+				gender: '',
+				status: '',
+				shirtSize: [],
+				hasCompanions: null,
+				hasPassport: null
+			};
+		},
+		country: function country(code) {
+			return code;
+		},
+		totalAmountRaised: function totalAmountRaised(reservation) {
+			var total = 0;
+			_.each(reservation.fundraisers.data, function (fundraiser) {
+				total += fundraiser.raised_amount;
+			});
+			return total;
+		},
+		totalPercentRaised: function totalPercentRaised(reservation) {
+			var totalDue = 0;
+			_.each(reservation.costs.data, function (cost) {
+				totalDue += cost.amount;
+			});
+			return this.totalAmountRaised(reservation) / totalDue * 100;
+		},
+		age: function age(birthday) {
+			return moment().diff(birthday, 'years');
+		},
+		searchReservations: function searchReservations() {
+			var params = {
+				include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
+				search: this.search,
+				per_page: this.per_page,
+				page: this.page
+			};
+
+			$.extend(params, this.filters);
+			$.extend(params, {
+				age: [this.ageMin, this.ageMax]
+			});
+			this.$http.get('reservations', params).then(function (response) {
+				var self = this;
+				_.each(response.data.data, function (reservation) {
+					reservation.amount_raised = this.totalAmountRaised(reservation);
+					reservation.percent_raised = this.totalPercentRaised(reservation);
+				}, this);
+				this.reservations = response.data.data;
+				this.pagination = response.data.meta.pagination;
+			});
+		},
+		getGroups: function getGroups(search, loading) {
+			loading ? loading(true) : void 0;
+			this.$http.get('groups', { search: search }).then(function (response) {
+				this.groupsOptions = response.data.data;
+				loading ? loading(false) : void 0;
+			});
+		},
+		getCampaigns: function getCampaigns(search, loading) {
+			loading ? loading(true) : void 0;
+			this.$http.get('campaigns', { search: search }).then(function (response) {
+				this.campaignOptions = response.data.data;
+				loading ? loading(false) : void 0;
+			});
+		},
+		getUsers: function getUsers(search, loading) {
+			loading ? loading(true) : void 0;
+			this.$http.get('users', { search: search }).then(function (response) {
+				this.usersOptions = response.data.data;
+				loading ? loading(false) : void 0;
+			});
+		}
+	},
+	ready: function ready() {
+		// load view state
+		if (localStorage.AdminReservationsListConfig) {
+			var config = JSON.parse(localStorage.AdminReservationsListConfig);
+			this.activeFields = config.activeFields;
+			this.maxActiveFields = config.maxActiveFields;
+		}
+		// populate
+		this.getGroups();
+		this.getCampaigns();
+		this.searchReservations();
+
+		//Manually handle dropdown functionality to keep dropdown open until finished
+		$('.form-toggle-menu .dropdown-menu').on('click', function (event) {
+			var events = $._data(document, 'events') || {};
+			events = events.click || [];
+			for (var i = 0; i < events.length; i++) {
+				if (events[i].selector) {
+
+					//Check if the clicked element matches the event selector
+					if ($(event.target).is(events[i].selector)) {
+						events[i].handler.call(event.target, event);
+					}
+
+					// Check if any of the clicked element parents matches the
+					// delegated event selector (Emulating propagation)
+					$(event.target).parents(events[i].selector).each(function () {
+						events[i].handler.call(this, event);
+					});
+				}
+			}
+			event.stopPropagation(); //Always stop propagation
+		});
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"amount_raised\" :disabled=\"maxCheck('amount_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max Visible Fields</span>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n                    <div id=\"toggleFilters\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Filters\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu2\" style=\"min-width:300px;\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"groupFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getGroups()\" :value.sync=\"groupsArr\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers()\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns()\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Filter Sizes\"></v-select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t<label class=\"control-label\">Travel Companions</label>\n\t\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t<label class=\"control-label\">Passport</label>\n\t\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t\t\t\t</ul>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <span class=\"input-group-addon\">Show</span>\n                        <select class=\"form-control\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                    | <a class=\"btn btn-primary btn-sm\" href=\"reservations/create\"><i class=\"fa fa-plus\"></i> New</a>\n                </form>\n            </div>\n        </div>\n        <hr>\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('amount_raised')\" :class=\"{'text-primary': orderByField === 'amount_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('amount_raised')\" v-if=\"orderByField !== 'amount_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'amount_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('amount_raised')\" v-text=\"reservation.amount_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <!--<td>\n                    <a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                    <a href=\"/admin{{campaignId + reservation.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n                </td>-->\n\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <nav>\n                            <ul class=\"pagination pagination-sm\">\n                                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                        <span aria-hidden=\"true\">«</span>\n                                    </a>\n                                </li>\n                                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                        <span aria-hidden=\"true\">»</span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </nav>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-0ff77a9a", module.exports)
+  } else {
+    hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"babel-runtime/core-js/json/stringify":1,"vue":111,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":112}],130:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'donations-list',
+    props: {
+        fundraiserId: String,
+        donations: {
+            default: [],
+            coerce: function coerce(val) {
+                return JSON.parse(val);
+            }
+        }
+    },
+    data: function data() {
+        return {
+            search: '',
+            orderByField: 'name',
+            direction: 1
+        };
+    },
+
+    watch: {
+        'donations': function donations() {}
+    },
+    methods: {
+        getDonations: function getDonations() {
+            this.$http.get('fundraisers.donations', {}).then(function (response) {
+                this.donations = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        //this.getDonations();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n\t\t\t<form class=\"form-inline text-right\" novalidate=\"\">\n\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search (name, amount)\">\n\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t<span class=\"input-group-addon\">Sort:</span>\n\t\t\t\t\t<select class=\"form-control\" v-model=\"orderByField\">\n\t\t\t\t\t\t<option value=\"name\">Name</option>\n\t\t\t\t\t\t<option value=\"amount\">Amount</option>\n\t\t\t\t\t\t<option value=\"date\">Date</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t<span class=\"input-group-addon\">Order</span>\n\t\t\t\t\t<select class=\"form-control\" v-model=\"direction\">\n\t\t\t\t\t\t<option :value=\"1\">Desc.</option>\n\t\t\t\t\t\t<option :value=\"-1\">Asc.</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t\t<hr>\n        </div>\n\t\t<div class=\"col-sm-12\">\n\t\t\t<div class=\"media\" v-for=\"donation in donations|filterBy search|orderBy orderByField direction\">\n                <a class=\"media-left\" href=\"#\">\n                    <img src=\"http://placehold.it/64x64\" style=\"width: 64px; height: 64px;\">\n                </a>\n                <div class=\"media-body\">\n                    <h4 class=\"media-heading\">{{ donation.name }} <small>donated</small> {{ donation.amount|currency }} <small class=\"pull-right\">{{ donation.created_at|moment }}</small></h4>\n                    <p><b>Message</b>: {{ donation.message }}</p>\n                </div>\n            </div>\n        </div>\n\n    </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-5e12a7a6", module.exports)
+  } else {
+    hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],131:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'reservations-list',
+    props: {
+        reservations: {
+            default: [],
+            coerce: function coerce(val) {
+                return JSON.parse(val);
+            }
+        }
+    },
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        country: function country(code) {
+            return code;
+        },
+        getReservations: function getReservations() {
+            this.$http.get('reservations', {
+                include: 'trip.campaign,trip.group'
+                //                    , user: array(Auth::user()->id)
+            }).then(function (response) {
+                this.reservations = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        //this.getReservations();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\" v-for=\"reservation in reservations\">\n    <div class=\"panel-heading\">\n        <h2 class=\"panel-title\">\n            {{ reservation.trip.campaign.name }}\n            <small>{{ reservation.country }}</small>\n        </h2>\n    </div>\n    <div class=\"panel-body\">\n\n        <h5>\n            {{ reservation.surname }}, {{ reservation.given_names }}\n            <small>{{ reservation.trip.group.name }}</small>\n        </h5>\n        <p>{{ reservation.trip.type }} Missionary</p>\n        <a class=\"btn btn-sm btn-primary\" href=\"/dashboard/reservations/{{ reservation.id }}\">View Reservation</a>\n        <br>\n    </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-01de7a71", module.exports)
+  } else {
+    hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],132:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _details = require('./create/details.vue');
+
+var _details2 = _interopRequireDefault(_details);
+
+var _settings = require('./create/settings.vue');
+
+var _settings2 = _interopRequireDefault(_settings);
+
+var _pricing = require('./create/pricing.vue');
+
+var _pricing2 = _interopRequireDefault(_pricing);
+
+var _requirements = require('./create/requirements.vue');
+
+var _requirements2 = _interopRequireDefault(_requirements);
+
+var _deadlines = require('./create/deadlines.vue');
+
+var _deadlines2 = _interopRequireDefault(_deadlines);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'campaign-trip-create-wizard',
+	props: ['campaignId', 'countryCode'],
+	data: function data() {
+		return {
+			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }, { name: 'Pricing', view: 'step3', form: '$TripPricing', valid: null, complete: false }, { name: 'Requirements', view: 'step4', form: '$TripReqs', valid: null, complete: false }, { name: 'Other Deadlines', view: 'step5', form: '$TripDeadlines', valid: null, complete: false }],
+			currentStep: null,
+			canContinue: false,
+			wizardComplete: false,
+			campaign: {},
+
+			// admin generated data
+			wizardData: {
+				campaign_id: this.campaignId,
+				country_code: [this.countryCode]
+			}
+		};
+	},
+
+	computed: {
+		canContinue: function canContinue() {
+			return this.currentStep.complete;
+		}
+	},
+	components: {
+		'step1': _details2.default,
+		'step2': _settings2.default,
+		'step3': _pricing2.default,
+		'step4': _requirements2.default,
+		'step5': _deadlines2.default
+	},
+	methods: {
+		back: function back() {
+			window.location.href = window.location.href.split('/create')[0];
+		},
+		childValidationTrigger: function childValidationTrigger() {
+			var self = this;
+			// find child
+			var thisChild = _.find(this.$children, function (child) {
+				return child.hasOwnProperty(self.currentStep.form);
+			});
+
+			// if form is invalid mark as invalid step, but continue anyway
+			this.currentStep.valid = !thisChild[this.currentStep.form].invalid;
+			thisChild.attemptedContinue = true;
+			thisChild.populateWizardData();
+		},
+		toStep: function toStep(step) {
+			this.childValidationTrigger();
+			this.currentStep = step;
+		},
+		backStep: function backStep() {
+			this.childValidationTrigger();
+			this.stepList.some(function (step, i, list) {
+				if (this.currentStep.view === step.view) {
+					return this.currentStep = list[i - 1];
+				}
+			}, this);
+		},
+		nextStep: function nextStep() {
+			this.childValidationTrigger();
+			this.nextStepCallback();
+		},
+		nextStepCallback: function nextStepCallback() {
+			this.stepList.some(function (step, i, list) {
+				if (this.currentStep.view === step.view) {
+					return this.currentStep = list[i + 1];
+				}
+			}, this);
+		},
+		finish: function finish() {
+			// if details form is incomplete
+			if (!this.stepList[0].valid) {
+				// show error and discontinue
+				return false;
+			}
+
+			var resource = this.$resource('trips');
+			resource.save(null, this.wizardData).then(function (resp) {
+				window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
+			}, function (error) {
+				console.log(error);
+			});
+		}
+	},
+	created: function created() {
+		this.currentStep = this.stepList[0];
+
+		this.$http.get('campaigns/' + this.campaignId).then(function (response) {
+			this.campaign = response.data.data;
+		});
+	},
+
+	events: {
+		'details': function details(val) {
+			this.currentStep.complete = val;
+		},
+		'settings': function settings(val) {
+			this.currentStep.complete = val;
+		},
+		'pricing': function pricing(val) {
+			this.currentStep.complete = val;
+		},
+		'reqs': function reqs(val) {
+			this.currentStep.complete = val;
+		},
+		'deadlines': function deadlines(val) {
+			this.currentStep.complete = this.wizardComplete = val;
+		}
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-4 col-md-3\">\n\t\t<ul class=\"lizt-group\">\n\t\t\t\t<a @click=\"toStep(step)\" role=\"step\" v-for=\"step in stepList\" class=\"list-group-item\" :class=\"{'active': currentStep.view === step.view, 'list-group-item-danger' : step.valid === false}\">\n\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete &amp;&amp; step.valid === null, 'fa-check': step.complete, 'fa-exclamation-triangle' : step.valid === false}\"></span>\n\t\t\t\t\t{{step.name}}\n\t\t\t\t</a>\n\t\t</ul>\n\t</div>\n\t<div class=\"col-sm-8 col-md-9 {{currentStep.view}}\">\n\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t</component>\n\t\t<div class=\"alert alert-danger alert-dismissible\" role=\"alert\" v-if=\"!stepList[0].valid &amp;&amp; !!$children[0].attemptedContinue\">\n\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them before saving.\n\t\t</div>\n\t\t<hr>\n\t\t<div class=\"btn-group btn-group-sm pull-right\" role=\"group\" aria-label=\"...\">\n\t\t\t<a class=\"btn btn-link\" @click=\"back()\">Cancel</a>\n\t\t\t<a class=\"btn btn-default\" v-if=\"currentStep.view !== 'step1'\" @click=\"backStep()\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n\t<hr>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-4eaab280", module.exports)
+  } else {
+    hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./create/deadlines.vue":139,"./create/details.vue":140,"./create/pricing.vue":141,"./create/requirements.vue":142,"./create/settings.vue":143,"vue":111,"vue-hot-reload-api":107,"vueify/lib/insert-css":112}],133:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-trip-delete',
+    props: ['tripId'],
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        deleteTrip: function deleteTrip() {
+            this.$http.delete('trips/' + this.tripId).then(function (response) {
+                console.log(response);
+                window.location.href = window.location.href.split('/trips/b41ba11e-71a8-4683-9fdf-a49f5e70a92b')[0];
+            }, function (error) {
+                console.log(error);
+            });
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" id=\"deleteConfirmationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"deleteConfirmationModal\">\n    <div class=\"modal-dialog modal-sm\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n                <h4 class=\"modal-title\" id=\"myModalLabel\">Delete Trip</h4>\n            </div>\n            <div class=\"modal-body\">\n                <p>Are you sure you want to delete this Trip?</p>\n                <div class=\"row\">\n                    <div class=\"col-xs-6\"><a class=\"btn btn-sm btn-block btn-default\" data-dismiss=\"modal\">No</a></div>\n                    <div class=\"col-xs-6\"><a @click=\"deleteTrip()\" class=\"btn btn-sm btn-block btn-primary\">Yes</a></div>\n                </div>\n            </div>\n\n        </div>\n    </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-1f88c822", module.exports)
+  } else {
+    hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],134:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'admin-trip-duplicate',
+    props: ['tripId'],
+    components: { vSelect: _vueSelect2.default },
+    data: function data() {
+        return {
+            attemptedContinue: false,
+            groups: [],
+            groupObj: null,
+            group_id: null,
+            type: '',
+            trip: null
+        };
+    },
+
+    computed: {
+        group_id: function group_id() {
+            return _.isObject(this.groupObj) ? this.groupObj.id : null;
+        }
+    },
+    methods: {
+        getGroups: function getGroups(search, loading) {
+            loading(true);
+            this.$http.get('groups', { search: search }).then(function (response) {
+                this.groups = response.data.data;
+                loading(false);
+            });
+        },
+        checkForError: function checkForError(field) {
+            // if user clicked continue button while the field is invalid trigger error styles
+            return this.$TripDuplication[field.toLowerCase()].invalid && this.attemptedContinue;
+        },
+        duplicateTrip: function duplicateTrip() {
+            this.$validate('group', true);
+            this.attemptedContinue = true;
+            if (this.$TripDuplication.valid) {
+                this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines' }).then(function (trip) {
+                    this.trip = trip.data.data;
+                    $.extend(this.trip, {
+                        type: this.type,
+                        group_id: this.group_id
+                    });
+                    // trim costs
+                    _.each(this.trip.costs.data, function (cost) {
+                        cost.payments = cost.payments.data;
+                    });
+                    this.trip.costs = this.trip.costs.data;
+                    // trim deadlines
+                    this.trip.deadlines = this.trip.deadlines.data;
+                    // trim requirements
+                    this.trip.requirements = this.trip.requirements.data;
+                    // trim notes
+                    this.trip.notes = this.trip.notes.data;
+
+                    // for now remove rep_id
+                    delete this.trip.rep_id;
+
+                    this.$http.post('trips', this.trip).then(function (response) {
+                        console.log(response);
+                        window.location.href = window.location.href.split('/trips')[0] + response.data.data.links[0].uri;
+                    }, function (error) {
+                        console.log(error);
+                    });
+                });
+            }
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" id=\"duplicationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"duplicationModal\">\n    <div class=\"modal-dialog\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n                <h4 class=\"modal-title\" id=\"myModalLabel\">Duplicate Trip</h4>\n            </div>\n            <div class=\"modal-body\">\n                <p>Are you sure you want to duplicate this trip?</p>\n                <hr>\n                <validator name=\"TripDuplication\">\n                    <form class=\"form-horizontal\" novalidate=\"\">\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n                            <label class=\"col-sm-2 control-label\">Group</label>\n                            <div class=\"col-sm-10\">\n                                <v-select class=\"form-controls\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n                                <select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n                                    <option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n                                </select>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n                            <label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n                            <div class=\"col-sm-10\">\n                                <select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                                    <option value=\"\">-- select --</option>\n                                    <option value=\"full\">Full</option>\n                                    <option value=\"media\">Media</option>\n                                    <option value=\"medical\">Medical</option>\n                                    <option value=\"short\">Short</option>\n                                </select>\n                            </div>\n                        </div>\n                    </form>\n                </validator>\n                <div class=\"row\">\n                    <div class=\"col-xs-6\"><a class=\"btn btn-sm btn-block btn-default\" data-dismiss=\"modal\">No</a></div>\n                    <div class=\"col-xs-6\"><a @click=\"duplicateTrip()\" class=\"btn btn-sm btn-block btn-primary\">Yes</a></div>\n                </div>\n            </div>\n\n        </div>\n    </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-07829d12", module.exports)
+  } else {
+    hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],135:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _details = require('./edit/details.vue');
+
+var _details2 = _interopRequireDefault(_details);
+
+var _settings = require('./edit/settings.vue');
+
+var _settings2 = _interopRequireDefault(_settings);
+
+var _pricing = require('./edit/pricing.vue');
+
+var _pricing2 = _interopRequireDefault(_pricing);
+
+var _requirements = require('./edit/requirements.vue');
+
+var _requirements2 = _interopRequireDefault(_requirements);
+
+var _deadlines = require('./edit/deadlines.vue');
+
+var _deadlines2 = _interopRequireDefault(_deadlines);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'campaign-trip-edit-wizard',
+	props: ['tripId'],
+	data: function data() {
+		return {
+			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }, { name: 'Pricing', view: 'step3', form: '$TripPricing', valid: null, complete: false }, { name: 'Requirements', view: 'step4', form: '$TripReqs', valid: null, complete: false }, { name: 'Other Deadlines', view: 'step5', form: '$TripDeadlines', valid: null, complete: false }],
+			currentStep: null,
+			canContinue: false,
+			wizardComplete: false,
+			trip: {},
+
+			// admin generated data
+			wizardData: {}
+		};
+	},
+
+	computed: {
+		canContinue: function canContinue() {
+			return this.currentStep.complete;
+		}
+	},
+	components: {
+		'step1': _details2.default,
+		'step2': _settings2.default,
+		'step3': _pricing2.default,
+		'step4': _requirements2.default,
+		'step5': _deadlines2.default
+	},
+	methods: {
+		back: function back() {
+			window.location.href = window.location.href.split('/create')[0];
+		},
+		childValidationTrigger: function childValidationTrigger() {
+			var self = this;
+			// find child
+			var thisChild = _.find(this.$children, function (child) {
+				return child.hasOwnProperty(self.currentStep.form);
+			});
+
+			// if form is invalid mark as invalid step, but continue anyway
+			this.currentStep.valid = !thisChild[this.currentStep.form].invalid;
+			thisChild.attemptedContinue = true;
+			thisChild.populateWizardData();
+		},
+		toStep: function toStep(step) {
+			this.childValidationTrigger();
+			this.currentStep = step;
+		},
+		backStep: function backStep() {
+			this.childValidationTrigger();
+			this.stepList.some(function (step, i, list) {
+				if (this.currentStep.view === step.view) {
+					return this.currentStep = list[i - 1];
+				}
+			}, this);
+		},
+		nextStep: function nextStep() {
+			this.childValidationTrigger();
+			this.nextStepCallback();
+		},
+		nextStepCallback: function nextStepCallback() {
+			this.stepList.some(function (step, i, list) {
+				if (this.currentStep.view === step.view) {
+					return this.currentStep = list[i + 1];
+				}
+			}, this);
+		},
+		finish: function finish() {
+			// if details form is incomplete
+			if (!this.stepList[0].valid) {
+				// show error and discontinue
+				return false;
+			}
+
+			var resource = this.$resource('trips{/id}');
+			resource.update({ id: this.tripId }, this.wizardData).then(function (resp) {
+				window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
+			}, function (error) {
+				console.log(error);
+			});
+		}
+	},
+	created: function created() {
+		this.currentStep = this.stepList[0];
+
+		this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines' }).then(function (trip) {
+			var trip = trip.data.data;
+			$.extend(trip, {
+				type: this.type,
+				group_id: this.group_id
+			});
+			// trim costs
+			_.each(trip.costs.data, function (cost) {
+				cost.payments = cost.payments.data;
+			});
+			trip.costs = trip.costs.data;
+			// trim campaign
+			trip.campaign = trip.campaign.data;
+			// trim deadlines
+			trip.deadlines = trip.deadlines.data;
+			// trim requirements
+			trip.requirements = trip.requirements.data;
+			// trim notes
+			trip.notes = trip.notes.data;
+			// for now remove rep_id
+			delete trip.rep_id;
+			console.log(trip);
+			this.trip = trip;
+			this.wizardData.campaign_id = this.trip.campaign_id;
+			this.wizardData.country_code = this.trip.country_code;
+
+			this.$broadcast('trip', this.trip);
+		});
+	},
+
+	events: {
+		'details': function details(val) {
+			this.currentStep.complete = val;
+		},
+		'settings': function settings(val) {
+			this.currentStep.complete = val;
+		},
+		'pricing': function pricing(val) {
+			this.currentStep.complete = val;
+		},
+		'reqs': function reqs(val) {
+			this.currentStep.complete = val;
+		},
+		'deadlines': function deadlines(val) {
+			this.currentStep.complete = this.wizardComplete = val;
+		}
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-4 col-md-3\">\n\t\t<ul class=\"lizt-group\">\n\t\t\t\t<a @click=\"toStep(step)\" role=\"step\" v-for=\"step in stepList\" class=\"list-group-item\" :class=\"{'active': currentStep.view === step.view, 'list-group-item-danger' : step.valid === false}\">\n\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete &amp;&amp; step.valid === null, 'fa-check': step.complete, 'fa-exclamation-triangle' : step.valid === false}\"></span>\n\t\t\t\t\t{{step.name}}\n\t\t\t\t</a>\n\t\t</ul>\n\t</div>\n\t<div class=\"col-sm-8 col-md-9 {{currentStep.view}}\">\n\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t</component>\n\t\t<div class=\"alert alert-danger alert-dismissible\" role=\"alert\" v-if=\"!stepList[0].valid &amp;&amp; !!$children[0].attemptedContinue\">\n\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them before updating.\n\t\t</div>\n\t\t<hr>\n\t\t<div class=\"btn-group btn-group-sm pull-right\" role=\"group\" aria-label=\"...\">\n\t\t\t<a class=\"btn btn-link\" @click=\"back()\">Cancel</a>\n\t\t\t<a class=\"btn btn-default\" v-if=\"currentStep.view !== 'step1'\" @click=\"backStep()\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-1684d064", module.exports)
+  } else {
+    hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./edit/deadlines.vue":144,"./edit/details.vue":145,"./edit/pricing.vue":146,"./edit/requirements.vue":147,"./edit/settings.vue":148,"vue":111,"vue-hot-reload-api":107,"vueify/lib/insert-css":112}],136:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'admin-trip-facilitators',
+	components: { vSelect: _vueSelect2.default },
+	props: ['tripId'],
+	data: function data() {
+		return {
+			user_id: null,
+			facilitators: [],
+			users: [],
+			trip: null,
+			userObj: null,
+			resource: this.$resource('trips{/id}', { include: 'facilitators.user' }),
+			attemptSubmit: false
+		};
+	},
+
+	computed: {
+		user_id: function user_id() {
+			return _.isObject(this.userObj) ? this.userObj.id : null;
+		}
+	},
+	methods: {
+		checkForError: function checkForError(field) {
+			// if user clicked submit button while the field is invalid trigger error styles
+
+			return this.$AddFacilitator[field].invalid && this.attemptSubmit;
+		},
+		getUsers: function getUsers(search, loading) {
+			loading(true);
+			this.$http.get('users', { search: search }).then(function (response) {
+				this.users = response.data.data;
+				loading(false);
+			});
+		},
+		addFacilitator: function addFacilitator() {
+			// Add Facilitator
+			this.attemptSubmit = true;
+			if (this.$AddFacilitator.valid) {
+				var facilitatorsArr = this.facilitators;
+				facilitatorsArr.push({ trip_id: this.tripId, user_id: this.user_id });
+				this.trip.facilitators = _.pluck(facilitatorsArr, 'user_id');
+				//this.trip.facilitators = this.facilitators;
+				this.updateTrip();
+			}
+		},
+		removeFacilitator: function removeFacilitator(facilitator) {
+			// Remove Facilitator
+			this.facilitators.$remove(facilitator);
+			this.trip.facilitators = this.facilitators;
+			this.updateTrip();
+		},
+		updateTrip: function updateTrip() {
+			delete this.trip.rep_id;
+			// Update Trip
+			this.resource.update({ id: this.tripId }, this.trip).then(function (response) {
+				this.trip = response.data.data;
+				this.facilitators = this.trip.facilitators.data;
+
+				this.user_id = null;
+				this.userObj = null;
+				this.attemptSubmit = false;
+				$('#AddFacilitatorModal').modal('hide');
+			}, function (response) {
+				console.log(response);
+			});
+		}
+	},
+	ready: function ready() {
+		this.resource.get({ id: this.tripId }).then(function (response) {
+			this.trip = response.data.data;
+			this.facilitators = this.trip.facilitators.data;
+			//                $.extend(this.$data, response.data.data);
+		}, function (response) {
+			console.log('Update Failed! :(');
+			console.log(response);
+		});
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h3 class=\"panel-title\"> Facilitators\n\t\t\t<button class=\"btn btn-primary btn-xs\" data-toggle=\"modal\" data-target=\"#AddFacilitatorModal\"><span class=\"fa fa-plus\"></span> New\n\t\t\t</button>\n\t\t</h3>\n\t</div>\n\t<div>\n\t\t<div class=\"col-xs-3 col-sm-3 col-md-3 col-lg-3\" v-for=\"facilitator in facilitators\" track-by=\"id\">\n\t\t\t<div class=\"thumbnail\">\n\t\t\t\t<img src=\"http://lorempixel.com/300/300\" alt=\"\">\n\t\t\t\t<div class=\"caption\">\n\t\t\t\t\t<h5 v-text=\"facilitator.name\"></h5>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<a class=\"btn btn-xs btn-danger\" @click=\"removeFacilitator(facilitator)\">\n\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Remove\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</p>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"modal fade\" id=\"AddFacilitatorModal\">\n\t\t<div class=\"modal-dialog\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n\t\t\t\t\t<h4 class=\"modal-title\">Select A Facilitator</h4></div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<validator name=\"AddFacilitator\">\n\t\t\t\t\t\t<form class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t\t\t\t<div class=\"form-trip\" :class=\"{ 'has-error': checkForError('user') }\"><label class=\"col-sm-2 control-label\">User</label>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"user\" :value.sync=\"userObj\" :options=\"users\" :on-search=\"getUsers\" label=\"name\"></v-select>\n\t\t\t\t\t\t\t\t\t<select hidden=\"\" v-model=\"user_id\" v-validate:user=\"{ required: true}\">\n\t\t\t\t\t\t\t\t\t\t<option :value=\"user.id\" v-for=\"user in users\">{{user.name}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</form>\n\t\t\t\t\t</validator>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-footer\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-default btn-sm\" data-dismiss=\"modal\">Close</button>\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addFacilitator()\">Save</button>\n\t\t\t\t</div>\n\t\t\t</div><!-- /.modal-content -->\n\t\t</div><!-- /.modal-dialog -->\n\t</div><!-- /.modal -->\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-9f5ddb6a", module.exports)
+  } else {
+    hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],137:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-trip-reservations',
+    props: ['tripId'],
+    data: function data() {
+        return {
+            reservations: [],
+            orderByField: 'surname',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {},
+            search: ''
+        };
+    },
+
+    watch: {
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchReservations();
+        },
+        'page': function page(val, oldVal) {
+            this.searchReservations();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchReservations();
+        }
+    },
+
+    methods: {
+        setOrderByField: function setOrderByField(field) {
+            return this.orderByField = field, this.direction = 1;
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'surname';
+            this.direction = 1;
+            this.search = null;
+        },
+        searchReservations: function searchReservations() {
+            this.$http.get('reservations', {
+                trip_id: new Array(this.tripId),
+                include: 'user',
+                search: this.searchText,
+                per_page: this.per_page,
+                page: this.page
+            }).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.reservations = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchReservations();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <span class=\"input-group-addon\">Show</span>\n                    <select class=\"form-control\" v-model=\"per_page\">\n                        <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                    </select>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n                <!--| <a class=\"btn btn-primary btn-sm\" href=\"reservations/create\"><i class=\"fa fa-plus\"></i> New</a>-->\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'user.data.name'}\">\n                User\n                <i @click=\"setOrderByField('user.data.name')\" v-if=\"orderByField !== 'user.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'user.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Email\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'campaign.data.name'}\">\n                Phone\n                <i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'status'}\">\n                Status\n                <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th>\n                Start &amp; End\n            </th>\n            <th><i class=\"fa fa-plane\"></i></th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n            <td>{{reservation.given_names|capitalize}} {{reservation.surname|capitalize}}</td>\n            <td>{{reservation.user.data.email}}</td>\n            <td>{{reservation.user.data.phone_one}}</td>\n            <td>{{reservation.status}}</td>\n            <td>{{reservation.created_at|moment 'll'}}</td>\n            <td>View</td>\n            <td>\n                <a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <!--<a href=\"/admin{{campaignId + reservation.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>-->\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-25146f20", module.exports)
+  } else {
+    hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],138:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-trips',
+    data: function data() {
+        return {
+            trips: [],
+            orderByField: 'group.data.name',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {},
+            search: ''
+        };
+    },
+
+    watch: {
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchTrips();
+        },
+        'page': function page(val, oldVal) {
+            this.searchTrips();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchTrips();
+        }
+    },
+
+    methods: {
+        setOrderByField: function setOrderByField(field) {
+            return this.orderByField = field, this.direction = 1;
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'group.data.name';
+            this.direction = 1;
+            this.search = null;
+        },
+        searchTrips: function searchTrips() {
+            this.$http.get('trips', {
+                include: 'campaign,group',
+                search: this.searchText,
+                per_page: this.per_page,
+                page: this.page
+            }).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.trips = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchTrips();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <span class=\"input-group-addon\">Show</span>\n                    <select class=\"form-control\" v-model=\"per_page\">\n                        <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                    </select>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n                | <a class=\"btn btn-primary btn-sm\" href=\"trips/create\"><i class=\"fa fa-plus\"></i> New</a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'group.data.name'}\">\n                Group\n                <i @click=\"setOrderByField('group.data.name')\" v-if=\"orderByField !== 'group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'campaign.data.name'}\">\n                Campaign\n                <i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'status'}\">\n                Status\n                <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th>\n                Start &amp; End\n            </th>\n            <th><i class=\"fa fa-plane\"></i></th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"trip in trips|filterBy search|orderBy orderByField direction\">\n            <td>{{trip.group.data.name}}</td>\n            <td>{{trip.type|capitalize}}</td>\n            <td>{{trip.campaign.data.name|capitalize}}</td>\n            <td>{{trip.status}}</td>\n            <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>\n            <td>{{trip.reservations}}</td>\n            <td>\n                <a href=\"/admin{{trip.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <a href=\"/admin{{campaignId + trip.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-41204f31", module.exports)
+  } else {
+    hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],139:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-deadlines',
+	data: function data() {
+		return {
+			toggleNewDeadline: false,
+			attemptedAddDeadline: false,
+			attemptedContinue: false,
+
+			// deadlines data
+			todos: [],
+			deadlines: [],
+			newDeadline: {
+				name: '',
+				date: null,
+				grace_period: 0,
+				enforced: false
+			}
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				todos: this.todos,
+				deadlines: this.deadlines
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('deadlines', true);
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
+		},
+		resetDeadline: function resetDeadline() {
+			this.newDeadline = {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0,
+				enforced: false
+			};
+		},
+		addDeadline: function addDeadline() {
+			this.attemptedAddDeadline = true;
+			if (this.$TripDeadlinesCreate.valid) {
+				this.deadlines.push(this.newDeadline);
+				this.resetDeadline();
+				this.toggleNewDeadline = false;
+				this.attemptedAddDeadline = false;
+			}
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		this.$dispatch('deadlines', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDeadlines\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDeadlines\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Deadlines</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewDeadline=!toggleNewDeadline\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Deadline\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewDeadline\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Deadline\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripDeadlinesCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewDeadline=false\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addDeadline()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Deadline\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"deadline in deadlines|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{deadline.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.due_at|moment}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"deadlines.$remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-8ed335c4", module.exports)
+  } else {
+    hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],140:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vueSelect = require("vue-select");
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'trip-details',
+	components: { vSelect: _vueSelect2.default },
+	data: function data() {
+		return {
+			reps: [],
+			//campaigns: [],
+			groups: [],
+			prospectsList: [{ value: "adults", name: "Adults" }, { value: "young adults", name: "Young Adults (18-29)" }, { value: "teens", name: "Teens (13+)" }, { value: "families", name: "Families" }, { value: "men", name: "Men" }, { value: "women", name: "Women" }, { value: "media professionals", name: "Media Professionals" }, { value: "pastors", name: "Pastors" }, { value: "business leaders", name: "Business Leaders" }, { value: "medical professionals", name: "Medical Professionals" }, { value: "physicians", name: "Physicians" }, { value: "surgeons", name: "Surgeons" }, { value: "registered nurses", name: "Registered Nurses" }, { value: "dentists", name: "Dentists" }, { value: "hygienists", name: "Hygienists" }, { value: "dental assistants", name: "Dental Assistants" }, { value: "physician assistants", name: "Physician Assistants" }, { value: "nurse practitioners", name: "Nurse Practitioners" }, { value: "pharmacists", name: "Pharmacists" }, { value: "physical therapists", name: "Physical Therapists" }, { value: "chiropractors", name: "Chiropractors" }, { value: "medical students", name: "Medical Students" }, { value: "dental students", name: "Dental Students" }, { value: "nursing students", name: "Nursing Students" }],
+			attemptedContinue: false,
+
+			// details data
+			groupObj: null,
+			group_id: '',
+			description: '',
+			type: '',
+			difficulty: '',
+			companion_limit: 0,
+			prospectsObj: null,
+			prospects: [],
+			started_at: null,
+			ended_at: null,
+			repObj: null,
+			rep_id: ''
+		};
+	},
+
+	computed: {
+		group_id: function group_id() {
+			return _.isObject(this.groupObj) ? this.groupObj.id : null;
+		},
+		rep_id: function rep_id() {
+			return _.isObject(this.repObj) ? this.repObj.id : null;
+		},
+		prospects: function prospects() {
+			return _.pluck(this.prospectsObj, 'value');
+		}
+	},
+	methods: {
+		populateWizardData: function populateWizardData(onValid) {
+			if (!onValid) this.$validate(true);
+			$.extend(this.$parent.wizardData, {
+				group_id: this.group_id,
+				description: this.description,
+				type: this.type,
+				difficulty: this.difficulty,
+				companion_limit: this.companion_limit,
+				prospects: this.prospects,
+				started_at: this.started_at,
+				ended_at: this.ended_at
+			});
+		},
+		getGroups: function getGroups(search, loading) {
+			loading(true);
+			this.$http.get('groups', { search: search }).then(function (response) {
+				this.groups = response.data.data;
+				loading(false);
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData(true);
+			this.$dispatch('details', true);
+		},
+		checkForError: function checkForError(field) {
+			// if user clicked continue button while the field is invalid trigger error styles
+			return this.$TripDetails[field.toLowerCase()].invalid && this.attemptedContinue;
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+
+		// get some groups
+		this.$http.get('groups').then(function (response) {
+			this.groups = response.data.data;
+		});
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDetails\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDetailsForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Campaign</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<p>{{$parent.campaign.name|capitalize}}</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Group</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<textarea name=\"description\" id=\"description\" rows=\"2\" v-model=\"description\" class=\"form-control\" v-validate:description=\"{ required: true}\"></textarea>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"full\">Full</option>\n\t\t\t\t\t\t\t<option value=\"media\">Media</option>\n\t\t\t\t\t\t\t<option value=\"medical\">Medical</option>\n\t\t\t\t\t\t\t<option value=\"short\">Short</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('prospects') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Perfect For</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-controls\" id=\"group\" :value.sync=\"prospectsObj\" :options=\"prospectsList\" label=\"name\" placeholder=\"Select Prospects\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" multiple=\"\" v-model=\"prospects\" v-validate:prospects=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"prospect.value\" v-for=\"prospect in prospectsList\">{{prospect.name}}\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('difficulty') }\">\n\t\t\t\t\t<label for=\"difficulty\" class=\"col-sm-2 control-label\">Difficulty</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"difficulty\" class=\"form-control input-sm\" v-model=\"difficulty\" v-validate:difficulty=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"level_1\">Level 1</option>\n\t\t\t\t\t\t\t<option value=\"level_2\">Level 2</option>\n\t\t\t\t\t\t\t<option value=\"level_3\">Level 3</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n\t\t\t\t\t<label for=\"companion_limit\" class=\"col-sm-2 control-label\">Companion Limit</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"companion_limit\" v-model=\"companion_limit\" class=\"form-control\" v-validate:companions=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('rep') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Trip Rep.</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-controls\" id=\"rep\" :value.sync=\"repObj\" :options=\"reps\" label=\"name\"></v-select>\n\t\t\t\t\t\t<!--v-validate:rep=\"{ required: false}\"-->\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"rep_id\">\n\t\t\t\t\t\t\t<option v-for=\"rep in reps\" :value=\"rep\">{{rep}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-087e8cf6", module.exports)
+  } else {
+    hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":112}],141:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-pricing',
+	data: function data() {
+		return {
+			attemptedContinue: false,
+			attemptedAddCost: false,
+			attemptedAddPayment: false,
+			toggleNewCost: false,
+			toggleNewPayment: false,
+			selectedCost: null,
+			editCostMode: false,
+			editPaymentMode: false,
+			costsErrors: [],
+
+			// pricing data
+			costs: [],
+			newCost: {
+				name: '',
+				description: '',
+				active_at: null,
+				amount: 0,
+				type: '',
+				payments: [],
+				toggleNewPayment: false
+			},
+			newPayment: {
+				amount_owed: 0,
+				percent_owed: 0,
+				due_at: null,
+				upfront: false,
+				grace_period: 0
+			}
+		};
+	},
+
+	/*validators:{
+ 	costs
+ },*/
+	watch: {
+		'newPayment.amount_owed': function newPaymentAmount_owed(val, oldVal) {
+			var max = this.calculateMaxAmount(this.selectedCost);
+			if (val > max) this.newPayment.amount_owed = this.selectedCost.amount;
+			this.newPayment.percent_owed = val / this.selectedCost.amount * 100;
+			if (_.isFunction(this.$validate)) this.$validate('percent', true);
+		},
+		'newPayment.percent_owed': function newPaymentPercent_owed(val, oldVal) {
+			var max = this.calculateMaxPercent(this.selectedCost);
+			if (val > max) this.newPayment.percent_owed = max;
+			this.newPayment.amount_owed = val / 100 * this.selectedCost.amount;
+			if (_.isFunction(this.$validate)) this.$validate('amount', true);
+		},
+		'costs': function costs(val, oldVal) {
+			this.checkCostsErrors();
+		}
+	},
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				costs: this.costs
+			});
+		},
+		onValid: function onValid() {
+
+			this.$dispatch('pricing', true);
+			//this.$parent.details = this.details;
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripPricing[field.toLowerCase()].invalid && this.attemptedContinue;
+		},
+		checkForErrorCost: function checkForErrorCost(field) {
+			return this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
+		},
+		checkForErrorPayment: function checkForErrorPayment(field) {
+			return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
+		},
+		checkCostsErrors: function checkCostsErrors() {
+			var errors = [];
+			this.costs.forEach(function (cost, index) {
+				// cost must have at least 1 payment
+				if (!cost.payments.length) {
+					errors.push('empty');
+				} else {
+					// cost payments must total full amount owed and percent owed
+					var amount = 0;
+					cost.payments.forEach(function (payment, index) {
+						amount += payment.amount_owed;
+					}, this);
+					// evaluate difference
+					if (amount != cost.amount) {
+						errors.push('incomplete');
+					}
+				}
+
+				// no errors
+				errors.push(false);
+			}, this);
+			this.costsErrors = errors;
+		},
+		resetCost: function resetCost() {
+			this.newCost = {
+				name: '',
+				description: '',
+				active_at: null,
+				amount: 0,
+				type: '',
+				payments: [],
+				toggleNewPayment: false
+			};
+		},
+		resetPayment: function resetPayment() {
+			this.newPayment = {
+				amount_owed: 0,
+				percent_owed: 0,
+				due_at: null,
+				upfront: false,
+				grace_period: 0
+			};
+		},
+		calculateMaxAmount: function calculateMaxAmount(cost) {
+			var max = cost.amount;
+			if (cost.payments.length) {
+				cost.payments.forEach(function (payment) {
+					// must ignore current payment in editMode
+					if (this.newPayment !== payment) {
+						max -= payment.amount_owed;
+					}
+				}, this);
+			}
+			return max;
+		},
+		calculateMaxPercent: function calculateMaxPercent(cost) {
+			var max = 100;
+			if (cost.payments.length) {
+				cost.payments.forEach(function (payment) {
+					// must ignore current payment in editMode
+					if (this.newPayment !== payment) {
+						max -= payment.percent_owed;
+					}
+				}, this);
+			}
+			return max;
+		},
+		editCost: function editCost(cost) {
+			this.editCostMode = true;
+			this.toggleNewCost = true;
+			this.newCost = cost;
+		},
+		cancelEditPayment: function cancelEditPayment() {
+			this.editPaymentMode = false;
+			this.resetCost();
+		},
+		editPayment: function editPayment(payment, cost) {
+			this.editPaymentMode = true;
+			this.toggleNewPaymentForm(cost, true);
+			this.newPayment = payment;
+		},
+		toggleNewPaymentForm: function toggleNewPaymentForm(cost, updateMode) {
+			this.selectedCost = cost;
+			this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
+		},
+		addCost: function addCost() {
+			this.attemptedAddCost = true;
+			if (this.$TripPricingCost.valid) {
+				this.costs.push(this.newCost);
+				this.resetCost();
+				this.toggleNewCost = false;
+				this.attemptedAddCost = false;
+			}
+			this.checkCostsErrors();
+		},
+		updateCost: function updateCost() {
+			this.attemptedAddCost = true;
+			if (this.$TripPricingCost.valid) {
+				this.resetCost();
+				this.toggleNewCost = false;
+				this.attemptedAddCost = false;
+				this.editCostMode = false;
+			}
+			this.checkCostsErrors();
+		},
+		addPayment: function addPayment(cost) {
+			this.attemptedAddPayment = true;
+			if (this.$TripPricingCostPayment.valid) {
+				cost.payments.push(this.newPayment);
+				this.resetPayment();
+				this.selectedCost.toggleNewPayment = false;
+				this.attemptedAddPayment = false;
+			}
+			this.checkCostsErrors();
+		},
+		updatePayment: function updatePayment(cost) {
+			this.attemptedAddPayment = true;
+			if (this.$TripPricingCostPayment.valid) {
+				this.resetPayment();
+				this.selectedCost.toggleNewPayment = false;
+				this.attemptedAddPayment = false;
+				this.editPaymentMode = false;
+			}
+			this.checkCostsErrors();
+		},
+		generateUUID: function generateUUID() {
+			return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		this.$dispatch('pricing', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripPricing\" @valid=\"onValid\">\n\t\t\t<form id=\"TripPricing\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewCost=!toggleNewCost\">\n\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Cost\n\t\t\t\t\t</button>\n\n\t\t\t\t</div>\n\t\t\t\t<hr>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Pricing</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewCost\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Cost\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripPricingCost\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_description\">Description</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<textarea class=\"form-control input-sm\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_type\">Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"cost_type\" class=\"form-control input-sm\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"static\">Static</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"incremental\">Incremental</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"optional\">Optional</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_active_at\">Active</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"newCost_active_at\" class=\"form-control input-sm\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_amount\">Amount</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewCost=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addCost()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Cost\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-for=\"cost in costs\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">{{cost.name}}</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t{{cost.description}}\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t<ul class=\"list-unstyled\">\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.type|capitalize}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.active_at|moment}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.amount|currency}}</li>\n\t\t\t\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t\t<th>Amount</th>\n\t\t\t\t\t\t\t\t\t<th>Percent</th>\n\t\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"payment in cost.payments|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t\t<td>{{payment.amount_owed|currency}}</td>\n\t\t\t\t\t\t\t\t\t<td>{{payment.percent_owed|number 2}}%</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">Upfront</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.due_at\">{{payment.due_at|moment}}</span>\n\t\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">None</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">N/A</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"cost.payments.$remove(payment)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t<tr v-if=\"costsErrors[$index] != false\" class=\"danger\">\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-if=\"costsErrors[$index] === 'empty'\">\n\t\t\t\t\t\t\t\t\t\t<b>At least 1 payment is required!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t<b>Payments must total the cost amount!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t\t</table>\n\t\t\t\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t\t\t\t<li class=\"list-group-item\" v-if=\"cost.toggleNewPayment\">\n\t\t\t\t\t\t\t\t\t<validator name=\"TripPricingCostPayment\">\n\t\t\t\t\t\t\t\t\t\t<form class=\"form-inline\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"amountOwed\">Owed</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('amount') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(cost)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('percent') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t\tDue upfront?\n\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\" v-if=\"!newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"dueAt\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"!editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cost.toggleNewPayment=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-success\" @click=\"addPayment(cost)\"><i class=\"fa fa-plus\"></i> Add Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cancelEditPayment(cost)\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-info\" @click=\"updatePayment(cost)\"><i class=\"fa fa-plus\"></i> Update Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\" v-if=\"calculateMaxAmount(cost) > 0\">\n\t\t\t\t\t\t\t\t<a @click=\"toggleNewPaymentForm(cost)\" class=\"btn btn-xs btn-primary\"><i class=\"fa fa-plus\"></i> New Payment</a>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-5c73f5ee", module.exports)
+  } else {
+    hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],142:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-requirement',
+	data: function data() {
+		return {
+			resources: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Itinerary'],
+			toggleNewRequirement: false,
+			attemptedAddRequirement: false,
+			attemptedContinue: false,
+
+			// requirements data
+			requirements: [],
+			newReq: {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0,
+				enforced: false
+			}
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				requirements: this.requirements
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('reqs', true);
+			//this.$parent.details = this.details;
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripReqsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
+		},
+		resetRequirement: function resetRequirement() {
+			this.newReq = {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0,
+				enforced: false
+			};
+		},
+		addRequirement: function addRequirement() {
+			this.attemptedAddRequirement = true;
+			if (this.$TripReqsCreate.valid) {
+				this.requirements.push(this.newReq);
+				this.resetRequirement();
+				this.toggleNewRequirement = false;
+				this.attemptedAddRequirement = false;
+			}
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		this.$dispatch('reqs', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripReqs\" @valid=\"onValid\">\n\t\t\t<form id=\"TripReqs\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Requirements</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewRequirement=!toggleNewRequirement\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Requirement\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewRequirement\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Requirement\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripReqsCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"item\">Item</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"item\" class=\"form-control input-sm\" v-model=\"newReq.item\" v-validate:item=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option :value=\"option\" v-for=\"option in resources\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"type\">Item Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"newReq.item_type\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newReq.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newReq.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newReq.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewRequirement=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addRequirement()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Requirement\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Item</th>\n\t\t\t\t\t\t\t\t<th>Type</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"requirement in requirements|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{requirement.item}}</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.item_type}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.due_at|moment}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"requirements.$remove(requirement)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-af5f3746", module.exports)
+  } else {
+    hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],143:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-settings',
+	data: function data() {
+		return {
+			roles: [],
+			attemptedContinue: false,
+
+			// details data
+			spots: null,
+			closed_at: moment().toDate(),
+			published_at: null
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				spots: this.spots,
+				closed_at: this.closed_at,
+				published_at: this.published_at
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('settings', true);
+		},
+		checkForError: function checkForError(field) {
+			// if user clicked continue button while the field is invalid trigger error styles
+			return this.$TripSettings[field.toLowerCase()].invalid && this.attemptedContinue;
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripSettings\" @valid=\"onValid\">\n\t\t\t<form id=\"TripSettings\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('spots') }\">\n\t\t\t\t\t<label for=\"spots\" class=\"col-sm-2 control-label\">Spots Available</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"spots\" v-model=\"spots\" class=\"form-control\" v-validate:spots=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('closed') }\">\n\t\t\t\t\t<label for=\"closed_at\" class=\"col-sm-2 control-label\">Registration Closes</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<input type=\"date\" class=\"form-control input-sm\" v-model=\"closed_at\" v-validate:closed=\"{ required: true }\" id=\"closed_at\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Publish</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<input type=\"date\" class=\"form-control input-sm\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-49d154f0", module.exports)
+  } else {
+    hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],144:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-deadlines',
+	data: function data() {
+		return {
+			toggleNewDeadline: false,
+			attemptedAddDeadline: false,
+			attemptedContinue: false,
+
+			// deadlines data
+			todos: [],
+			deadlines: [],
+			newDeadline: {
+				name: '',
+				date: null,
+				grace_period: 0,
+				enforced: false
+			}
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				todos: this.todos,
+				deadlines: this.deadlines
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('deadlines', true);
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
+		},
+		resetDeadline: function resetDeadline() {
+			this.newDeadline = {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0,
+				enforced: false
+			};
+		},
+		addDeadline: function addDeadline() {
+			this.attemptedAddDeadline = true;
+			if (this.$TripDeadlinesCreate.valid) {
+				this.deadlines.push(this.newDeadline);
+				this.resetDeadline();
+				this.toggleNewDeadline = false;
+				this.attemptedAddDeadline = false;
+			}
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		$.extend(this, {
+			todos: this.$parent.trip.todos,
+			deadlines: this.$parent.trip.deadlines
+		});
+		this.$dispatch('deadlines', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDeadlines\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDeadlines\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Deadlines</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewDeadline=!toggleNewDeadline\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Deadline\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewDeadline\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Deadline\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripDeadlinesCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewDeadline=false\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addDeadline()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Deadline\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"deadline in deadlines|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{deadline.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.due_at|moment}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"deadlines.$remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-03d4d92c", module.exports)
+  } else {
+    hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],145:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vueSelect = require("vue-select");
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'trip-details',
+	components: { vSelect: _vueSelect2.default },
+	data: function data() {
+		return {
+			reps: [],
+			//campaigns: [],
+			groups: [],
+			prospectsList: [{ value: "adults", name: "Adults" }, { value: "young adults", name: "Young Adults (18-29)" }, { value: "teens", name: "Teens (13+)" }, { value: "families", name: "Families" }, { value: "men", name: "Men" }, { value: "women", name: "Women" }, { value: "media professionals", name: "Media Professionals" }, { value: "pastors", name: "Pastors" }, { value: "business leaders", name: "Business Leaders" }, { value: "medical professionals", name: "Medical Professionals" }, { value: "physicians", name: "Physicians" }, { value: "surgeons", name: "Surgeons" }, { value: "registered nurses", name: "Registered Nurses" }, { value: "dentists", name: "Dentists" }, { value: "hygienists", name: "Hygienists" }, { value: "dental assistants", name: "Dental Assistants" }, { value: "physician assistants", name: "Physician Assistants" }, { value: "nurse practitioners", name: "Nurse Practitioners" }, { value: "pharmacists", name: "Pharmacists" }, { value: "physical therapists", name: "Physical Therapists" }, { value: "chiropractors", name: "Chiropractors" }, { value: "medical students", name: "Medical Students" }, { value: "dental students", name: "Dental Students" }, { value: "nursing students", name: "Nursing Students" }],
+			attemptedContinue: false,
+
+			// details data
+			groupObj: null,
+			group_id: '',
+			description: '',
+			type: '',
+			difficulty: '',
+			companion_limit: 0,
+			prospectsObj: null,
+			prospects: [],
+			started_at: null,
+			ended_at: null,
+			repObj: null,
+			rep_id: ''
+		};
+	},
+
+	computed: {
+		group_id: function group_id() {
+			return _.isObject(this.groupObj) ? this.groupObj.id : null;
+		},
+		rep_id: function rep_id() {
+			return _.isObject(this.repObj) ? this.repObj.id : null;
+		},
+		prospects: function prospects() {
+			return _.pluck(this.prospectsObj, 'value');
+		}
+	},
+	methods: {
+		populateWizardData: function populateWizardData(onValid) {
+			if (!onValid) this.$validate(true);
+			$.extend(this.$parent.wizardData, {
+				group_id: this.group_id,
+				description: this.description,
+				type: this.type,
+				difficulty: this.difficulty,
+				companion_limit: this.companion_limit,
+				prospects: this.prospects,
+				started_at: this.started_at,
+				ended_at: this.ended_at,
+				rep_id: this.rep_id
+
+			});
+		},
+		getGroups: function getGroups(search, loading) {
+			loading(true);
+			this.$http.get('groups', { search: search }).then(function (response) {
+				this.groups = response.data.data;
+				loading(false);
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData(true);
+			this.$dispatch('details', true);
+		},
+		checkForError: function checkForError(field) {
+			// if user clicked continue button while the field is invalid trigger error styles
+			return this.$TripDetails[field.toLowerCase()].invalid && this.attemptedContinue;
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+
+		// get some groups
+		this.$http.get('groups').then(function (response) {
+			this.groups = response.data.data;
+		});
+		done();
+	},
+
+	events: {
+		'trip': function trip(val) {
+			this.$http.get('groups/' + val.group_id).then(function (response) {
+				this.groupObj = response.data.data;
+			});
+			var arr = [];
+			_.forEach(this.prospectsList, function (prospect) {
+				if (_.contains(val.prospects, prospect.value)) arr.push(prospect);
+			});
+			this.prospectsObj = arr;
+			$.extend(this, {
+				group_id: val.group_id,
+				description: val.description,
+				type: val.type,
+				difficulty: val.difficulty,
+				companion_limit: val.companion_limit,
+				prospects: val.prospects,
+				started_at: val.started_at,
+				ended_at: val.ended_at,
+				rep_id: val.rep_id
+
+			});
+		}
+	}
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDetails\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDetailsForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Campaign</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<p>{{$parent.trip.campaign.name|capitalize}}</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Group</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<textarea name=\"description\" id=\"description\" rows=\"2\" v-model=\"description\" class=\"form-control\" v-validate:description=\"{ required: true}\"></textarea>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"full\">Full</option>\n\t\t\t\t\t\t\t<option value=\"media\">Media</option>\n\t\t\t\t\t\t\t<option value=\"medical\">Medical</option>\n\t\t\t\t\t\t\t<option value=\"short\">Short</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('prospects') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Perfect For</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-controls\" id=\"group\" :value.sync=\"prospectsObj\" :options=\"prospectsList\" label=\"name\" placeholder=\"Select Prospects\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" multiple=\"\" v-model=\"prospects\" v-validate:prospects=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"prospect.value\" v-for=\"prospect in prospectsList\">{{prospect.name}}\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('difficulty') }\">\n\t\t\t\t\t<label for=\"difficulty\" class=\"col-sm-2 control-label\">Difficulty</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"difficulty\" class=\"form-control input-sm\" v-model=\"difficulty\" v-validate:difficulty=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"level_1\">Level 1</option>\n\t\t\t\t\t\t\t<option value=\"level_2\">Level 2</option>\n\t\t\t\t\t\t\t<option value=\"level_3\">Level 3</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n\t\t\t\t\t<label for=\"companion_limit\" class=\"col-sm-2 control-label\">Companion Limit</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"companion_limit\" v-model=\"companion_limit\" class=\"form-control\" v-validate:companions=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('rep') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Trip Rep.</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-controls\" id=\"rep\" :value.sync=\"repObj\" :options=\"reps\" label=\"name\"></v-select>\n\t\t\t\t\t\t<!--v-validate:rep=\"{ required: false}\"-->\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"rep_id\">\n\t\t\t\t\t\t\t<option v-for=\"rep in reps\" :value=\"rep\">{{rep}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-5888d913", module.exports)
+  } else {
+    hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],146:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-pricing',
+	data: function data() {
+		return {
+			attemptedContinue: false,
+			attemptedAddCost: false,
+			attemptedAddPayment: false,
+			toggleNewCost: false,
+			toggleNewPayment: false,
+			selectedCost: null,
+			editCostMode: false,
+			editPaymentMode: false,
+			costsErrors: [],
+
+			// pricing data
+			costs: [],
+			newCost: {
+				name: '',
+				description: '',
+				active_at: null,
+				amount: 0,
+				type: '',
+				payments: [],
+				toggleNewPayment: false
+			},
+			newPayment: {
+				amount_owed: 0,
+				percent_owed: 0,
+				due_at: null,
+				upfront: false,
+				grace_period: 0
+			}
+		};
+	},
+
+	/*validators:{
+  costs
+  },*/
+	watch: {
+		'newPayment.amount_owed': function newPaymentAmount_owed(val, oldVal) {
+			var max = this.calculateMaxAmount(this.selectedCost);
+			if (val > max) this.newPayment.amount_owed = this.selectedCost.amount;
+			this.newPayment.percent_owed = val / this.selectedCost.amount * 100;
+			if (_.isFunction(this.$validate)) this.$validate('percent', true);
+		},
+		'newPayment.percent_owed': function newPaymentPercent_owed(val, oldVal) {
+			var max = this.calculateMaxPercent(this.selectedCost);
+			if (val > max) this.newPayment.percent_owed = max;
+			this.newPayment.amount_owed = val / 100 * this.selectedCost.amount;
+			if (_.isFunction(this.$validate)) this.$validate('amount', true);
+		},
+		'costs': function costs(val, oldVal) {
+			this.checkCostsErrors();
+		}
+	},
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				costs: this.costs
+			});
+		},
+		onValid: function onValid() {
+
+			this.$dispatch('pricing', true);
+			//this.$parent.details = this.details;
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripPricing[field.toLowerCase()].invalid && this.attemptedContinue;
+		},
+		checkForErrorCost: function checkForErrorCost(field) {
+			return this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
+		},
+		checkForErrorPayment: function checkForErrorPayment(field) {
+			return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
+		},
+		checkCostsErrors: function checkCostsErrors() {
+			var errors = [];
+			this.costs.forEach(function (cost, index) {
+				// cost must have at least 1 payment
+				if (!cost.payments.length) {
+					errors.push('empty');
+				} else {
+					// cost payments must total full amount owed and percent owed
+					var amount = 0;
+					cost.payments.forEach(function (payment, index) {
+						amount += payment.amount_owed;
+					}, this);
+					// evaluate difference
+					if (amount != cost.amount) {
+						errors.push('incomplete');
+					}
+				}
+
+				// no errors
+				errors.push(false);
+			}, this);
+			this.costsErrors = errors;
+		},
+		resetCost: function resetCost() {
+			this.newCost = {
+				name: '',
+				description: '',
+				active_at: null,
+				amount: 0,
+				type: '',
+				payments: [],
+				toggleNewPayment: false
+			};
+		},
+		resetPayment: function resetPayment() {
+			this.newPayment = {
+				amount_owed: 0,
+				percent_owed: 0,
+				due_at: null,
+				upfront: false,
+				grace_period: 0
+			};
+		},
+		calculateMaxAmount: function calculateMaxAmount(cost) {
+			var max = cost.amount;
+			if (cost.payments.length) {
+				cost.payments.forEach(function (payment) {
+					// must ignore current payment in editMode
+					if (this.newPayment !== payment) {
+						max -= payment.amount_owed;
+					}
+				}, this);
+			}
+			return max;
+		},
+		calculateMaxPercent: function calculateMaxPercent(cost) {
+			var max = 100;
+			if (cost.payments.length) {
+				cost.payments.forEach(function (payment) {
+					// must ignore current payment in editMode
+					if (this.newPayment !== payment) {
+						max -= payment.percent_owed;
+					}
+				}, this);
+			}
+			return max;
+		},
+		editCost: function editCost(cost) {
+			this.editCostMode = true;
+			this.toggleNewCost = true;
+			this.newCost = cost;
+		},
+		cancelEditPayment: function cancelEditPayment() {
+			this.editPaymentMode = false;
+			this.resetCost();
+		},
+		editPayment: function editPayment(payment, cost) {
+			this.editPaymentMode = true;
+			this.toggleNewPaymentForm(cost, true);
+			this.newPayment = payment;
+		},
+		toggleNewPaymentForm: function toggleNewPaymentForm(cost, updateMode) {
+			this.selectedCost = cost;
+			this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
+		},
+		addCost: function addCost() {
+			this.attemptedAddCost = true;
+			if (this.$TripPricingCost.valid) {
+				this.costs.push(this.newCost);
+				this.resetCost();
+				this.toggleNewCost = false;
+				this.attemptedAddCost = false;
+			}
+			this.checkCostsErrors();
+		},
+		updateCost: function updateCost() {
+			this.attemptedAddCost = true;
+			if (this.$TripPricingCost.valid) {
+				this.resetCost();
+				this.toggleNewCost = false;
+				this.attemptedAddCost = false;
+				this.editCostMode = false;
+			}
+			this.checkCostsErrors();
+		},
+		addPayment: function addPayment(cost) {
+			this.attemptedAddPayment = true;
+			if (this.$TripPricingCostPayment.valid) {
+				cost.payments.push(this.newPayment);
+				this.resetPayment();
+				this.selectedCost.toggleNewPayment = false;
+				this.attemptedAddPayment = false;
+			}
+			this.checkCostsErrors();
+		},
+		updatePayment: function updatePayment(cost) {
+			this.attemptedAddPayment = true;
+			if (this.$TripPricingCostPayment.valid) {
+				this.resetPayment();
+				this.selectedCost.toggleNewPayment = false;
+				this.attemptedAddPayment = false;
+				this.editPaymentMode = false;
+			}
+			this.checkCostsErrors();
+		},
+		generateUUID: function generateUUID() {
+			return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
+		}
+	},
+	ready: function ready() {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		this.$set('costs', this.$parent.trip.costs);
+		// add toggle data
+		_.each(this.costs, function (cost) {
+			cost.toggleNewPayment = false;
+		});
+		this.$dispatch('pricing', true);
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripPricing\" @valid=\"onValid\">\n\t\t\t<form id=\"TripPricing\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewCost=!toggleNewCost\">\n\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Cost\n\t\t\t\t\t</button>\n\n\t\t\t\t</div>\n\t\t\t\t<hr>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Pricing</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewCost\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Cost\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripPricingCost\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_description\">Description</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<textarea class=\"form-control input-sm\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_type\">Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"cost_type\" class=\"form-control input-sm\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"static\">Static</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"incremental\">Incremental</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"optional\">Optional</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_active_at\">Active</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"newCost_active_at\" class=\"form-control input-sm\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_amount\">Amount</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewCost=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addCost()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Cost\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-for=\"cost in costs\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">{{cost.name}}</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t{{cost.description}}\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t<ul class=\"list-unstyled\">\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.type|capitalize}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.active_at|moment}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.amount|currency}}</li>\n\t\t\t\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t\t<th>Amount</th>\n\t\t\t\t\t\t\t\t\t<th>Percent</th>\n\t\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"payment in cost.payments|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t\t<td>{{payment.amount_owed|currency}}</td>\n\t\t\t\t\t\t\t\t\t<td>{{payment.percent_owed|number 2}}%</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">Upfront</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.due_at\">{{payment.due_at|moment}}</span>\n\t\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">None</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">N/A</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"cost.payments.$remove(payment)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t<tr v-if=\"costsErrors[$index] != false\" class=\"danger\">\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-if=\"costsErrors[$index] === 'empty'\">\n\t\t\t\t\t\t\t\t\t\t<b>At least 1 payment is required!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t<b>Payments must total the cost amount!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t\t</table>\n\t\t\t\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t\t\t\t<li class=\"list-group-item\" v-if=\"cost.toggleNewPayment\">\n\t\t\t\t\t\t\t\t\t<validator name=\"TripPricingCostPayment\">\n\t\t\t\t\t\t\t\t\t\t<form class=\"form-inline\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"amountOwed\">Owed</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('amount') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(cost)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('percent') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t\tDue upfront?\n\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\" v-if=\"!newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"dueAt\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"!editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cost.toggleNewPayment=false\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-success\" @click=\"addPayment(cost)\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Payment\n\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cancelEditPayment(cost)\"><i class=\"fa fa-times\"></i>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tCancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-info\" @click=\"updatePayment(cost)\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Update Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\" v-if=\"calculateMaxAmount(cost) > 0\">\n\t\t\t\t\t\t\t\t<a @click=\"toggleNewPaymentForm(cost)\" class=\"btn btn-xs btn-primary\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Payment</a>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-2e8e2497", module.exports)
+  } else {
+    hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],147:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-requirement',
+	data: function data() {
+		return {
+			resources: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Itinerary'],
+			toggleNewRequirement: false,
+			attemptedAddRequirement: false,
+			attemptedContinue: false,
+
+			// requirements data
+			requirements: [],
+			newReq: {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0,
+				enforced: false
+			}
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				requirements: this.requirements
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('reqs', true);
+			//this.$parent.details = this.details;
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripReqsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
+		},
+		resetRequirement: function resetRequirement() {
+			this.newReq = {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0,
+				enforced: false
+			};
+		},
+		addRequirement: function addRequirement() {
+			this.attemptedAddRequirement = true;
+			if (this.$TripReqsCreate.valid) {
+				this.requirements.push(this.newReq);
+				this.resetRequirement();
+				this.toggleNewRequirement = false;
+				this.attemptedAddRequirement = false;
+			}
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		$.extend(this, {
+			requirements: this.$parent.trip.requirements
+		});
+		this.$dispatch('reqs', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripReqs\" @valid=\"onValid\">\n\t\t\t<form id=\"TripReqs\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Requirements</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewRequirement=!toggleNewRequirement\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Requirement\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewRequirement\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Requirement\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripReqsCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"item\">Item</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"item\" class=\"form-control input-sm\" v-model=\"newReq.item\" v-validate:item=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option :value=\"option\" v-for=\"option in resources\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"type\">Item Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"newReq.item_type\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newReq.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newReq.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newReq.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewRequirement=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addRequirement()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Requirement\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Item</th>\n\t\t\t\t\t\t\t\t<th>Type</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"requirement in requirements|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{requirement.item}}</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.item_type}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.due_at|moment}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"requirements.$remove(requirement)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-3dd864e2", module.exports)
+  } else {
+    hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],148:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-settings',
+	data: function data() {
+		return {
+			roles: [],
+			attemptedContinue: false,
+
+			// details data
+			spots: null,
+			closed_at: moment().toDate(),
+			published_at: null
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				spots: this.spots,
+				closed_at: this.closed_at,
+				published_at: this.published_at
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('settings', true);
+		},
+		checkForError: function checkForError(field) {
+			// if user clicked continue button while the field is invalid trigger error styles
+			return this.$TripSettings[field.toLowerCase()].invalid && this.attemptedContinue;
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		$.extend(this, {
+			spots: this.$parent.trip.spots,
+			closed_at: moment(this.$parent.trip.closed_at).format('Y-MM-DD'),
+			published_at: moment(this.$parent.trip.published_at).format('Y-MM-DD')
+		});
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripSettings\" @valid=\"onValid\">\n\t\t\t<form id=\"TripSettings\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('spots') }\">\n\t\t\t\t\t<label for=\"spots\" class=\"col-sm-2 control-label\">Spots Available</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"spots\" v-model=\"spots\" class=\"form-control\" v-validate:spots=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('closed') }\">\n\t\t\t\t\t<label for=\"closed_at\" class=\"col-sm-2 control-label\">Registration Closes</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<input type=\"date\" class=\"form-control input-sm\" v-model=\"closed_at\" v-validate:closed=\"{ required: true }\" id=\"closed_at\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Publish</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<input type=\"date\" class=\"form-control input-sm\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-f3e5b1bc", module.exports)
+  } else {
+    hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],149:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'additional-trip-options',
+	data: function data() {
+		return {
+			title: 'Additional Trip Options',
+			atoComplete: true,
+			optionalCosts: [],
+			selectedOptions: []
+		};
+	},
+
+	computed: {
+		optionalCosts: function optionalCosts() {
+			return this.$parent.tripCosts.optional;
+		}
+	},
+	watch: {
+		'atoComplete': function atoComplete(val, oldVal) {
+			this.$dispatch('ato-complete', val);
+		},
+		'selectedOptions': function selectedOptions(val, oldVal) {
+			this.$parent.selectedOptions = val;
+		}
+	},
+	ready: function ready() {
+		this.$dispatch('ato-complete', true);
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div class=\"row\">\n        <div class=\"col-sm-12\" style=\"max-height: 500px;overflow-y: auto;\">\n            <h4>Additional Trip Options</h4>\n            <hr class=\"divider\">\n            <hr class=\"divider inv sm\">\n\t\t\t<validator name=\"AdditionalOptions\">\n\t\t\t\t<form>\n\t\t\t\t\t<div class=\"checkbox\" v-for=\"option in optionalCosts | orderBy 'name'\">\n\t\t\t\t\t\t<label style=\"display:block\" for=\"option{{$index}}\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" id=\"option{{$index}}\" v-model=\"selectedOptions\" :value=\"option\">\n\t\t\t\t\t\t\t{{option.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{option.amount | currency}}</span>\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t\t<h5 v-if=\"optionalCosts.length==0\">\n\t\t\t\t\t\tNo additional options available\n\t\t\t\t\t</h5>\n\t\t\t\t</form>\n\t\t\t</validator>\n        </div>\n    </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-424f54dc", module.exports)
+  } else {
+    hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],150:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'basic-info',
+	components: { vSelect: _vueSelect2.default },
+	data: function data() {
+		return {
+			title: 'Basic Traveler Information',
+			currentYear: new Date().getFullYear(),
+			dobYearCalc: '',
+			attemptedContinue: false,
+			countries: [],
+			countryCodeObj: null,
+
+			// basic info data
+			address: null,
+			city: null,
+			state: null,
+			zipCode: null,
+			country: 'us',
+			phone: '',
+			mobile: '',
+			firstName: null,
+			middleName: null,
+			lastName: null,
+			email: null,
+			dobDay: '',
+			dobMonth: '',
+			dobYear: null,
+			gender: null,
+			relationshipStatus: 'single',
+			size: null,
+			height: null,
+			heightA: null,
+			heightB: null,
+			weight: null,
+			userInfo: {}
+		};
+	},
+
+	computed: {
+		country: function country() {
+			return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+		},
+		dobYear: function dobYear() {
+			return this.currentYear - 100 + this.dobYearCalc;
+		},
+		height: function height() {
+			return this.heightA + ' ft. ' + this.heightB + ' in.';
+		},
+		userInfo: function userInfo() {
+			return {
+				address: this.address,
+				city: this.city,
+				state: this.state,
+				zipCode: this.zipCode,
+				country: this.country,
+				phone: this.phone,
+				mobile: this.mobile,
+				firstName: this.firstName,
+				middleName: this.middleName,
+				lastName: this.lastName,
+				email: this.email,
+				dobDay: this.dobDay,
+				dobMonth: this.dobMonth,
+				dobYear: this.dobYear,
+				dob: moment().set({ year: this.dobYear, month: this.dobMonth, day: this.dobDay }).format('LL'),
+				gender: this.gender,
+				relationshipStatus: this.relationshipStatus,
+				size: this.size,
+				height: this.height,
+				heightA: this.heightA,
+				heightB: this.heightB,
+				weight: this.weight
+			};
+		}
+	},
+	methods: {
+		onValid: function onValid() {
+			this.$parent.userInfo = this.userInfo;
+		},
+		checkForError: function checkForError(field) {
+			// if user clicked continue button while the field is invalid trigger error styles
+			return this.$BasicInfo[field.toLowerCase()].invalid && this.attemptedContinue;
+		}
+	},
+	activate: function activate(done) {
+		this.$http.get('utilities/countries').then(function (response) {
+			this.countries = response.data.countries;
+		});
+
+		this.$dispatch('basic-info', true);
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"BasicInfo\" @valid=\"onValid\">\n\t\t\t<form novalidate=\"\" name=\"BasicInfoForm\" id=\"BasicInfoForm\">\n\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t<label>Full Legal Name</label>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('firstName') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoFirstName\">First</label>-->\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"firstName\" v-validate:firstname=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" placeholder=\"First\" id=\"infoFirstName\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('middleName') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoMiddleName\">Middle</label>-->\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"middleName\" v-validate:middlename=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" placeholder=\"Middle\" id=\"infoMiddleName\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('lastName') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoLastName\">Last</label>-->\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"lastName\" v-validate:lastname=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" placeholder=\"Last\" id=\"infoLastName\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('email')) || ($BasicInfo.email.email &amp;&amp; $BasicInfo.email.dirty) }\">\n\t\t\t\t\t\t<label for=\"infoEmailAddress\">Email Address</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"email\" id=\"infoEmailAddress\" :classes=\"{ invalid: 'has-error' }\" v-validate:email=\"['required', 'email']\">\n\t\t\t\t\t\t<span class=\"help-block\" v-show=\"$BasicInfo.email.email &amp;&amp; $BasicInfo.email.dirty\">Invalid email address</span>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<label>Date of Birth</label>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('dobMonth') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoDobMonth\">Month</label>-->\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"dobMonth\" v-validate:dobmonth=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoDobMonth\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Month</option>\n\t\t\t\t\t\t\t\t\t<option value=\"01\">January</option>\n\t\t\t\t\t\t\t\t\t<option value=\"02\">February</option>\n\t\t\t\t\t\t\t\t\t<option value=\"03\">March</option>\n\t\t\t\t\t\t\t\t\t<option value=\"04\">April</option>\n\t\t\t\t\t\t\t\t\t<option value=\"05\">May</option>\n\t\t\t\t\t\t\t\t\t<option value=\"06\">June</option>\n\t\t\t\t\t\t\t\t\t<option value=\"07\">July</option>\n\t\t\t\t\t\t\t\t\t<option value=\"08\">August</option>\n\t\t\t\t\t\t\t\t\t<option value=\"09\">September</option>\n\t\t\t\t\t\t\t\t\t<option value=\"10\">October</option>\n\t\t\t\t\t\t\t\t\t<option value=\"11\">November</option>\n\t\t\t\t\t\t\t\t\t<option value=\"12\">December</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('dobDay') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoDobDay\">Day</label>-->\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"dobDay\" v-validate:dobday=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoDobDay\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Day</option>\n\t\t\t\t\t\t\t\t\t<option value=\"01\">01</option>\n\t\t\t\t\t\t\t\t\t<option value=\"02\">02</option>\n\t\t\t\t\t\t\t\t\t<option value=\"03\">03</option>\n\t\t\t\t\t\t\t\t\t<option value=\"04\">04</option>\n\t\t\t\t\t\t\t\t\t<option value=\"05\">05</option>\n\t\t\t\t\t\t\t\t\t<option value=\"06\">06</option>\n\t\t\t\t\t\t\t\t\t<option value=\"07\">07</option>\n\t\t\t\t\t\t\t\t\t<option value=\"08\">08</option>\n\t\t\t\t\t\t\t\t\t<option value=\"09\">09</option>\n\t\t\t\t\t\t\t\t\t<option value=\"10\">10</option>\n\t\t\t\t\t\t\t\t\t<option value=\"11\">11</option>\n\t\t\t\t\t\t\t\t\t<option value=\"12\">12</option>\n\t\t\t\t\t\t\t\t\t<option value=\"13\">13</option>\n\t\t\t\t\t\t\t\t\t<option value=\"14\">14</option>\n\t\t\t\t\t\t\t\t\t<option value=\"15\">15</option>\n\t\t\t\t\t\t\t\t\t<option value=\"16\">16</option>\n\t\t\t\t\t\t\t\t\t<option value=\"17\">17</option>\n\t\t\t\t\t\t\t\t\t<option value=\"18\">18</option>\n\t\t\t\t\t\t\t\t\t<option value=\"19\">19</option>\n\t\t\t\t\t\t\t\t\t<option value=\"20\">20</option>\n\t\t\t\t\t\t\t\t\t<option value=\"21\">21</option>\n\t\t\t\t\t\t\t\t\t<option value=\"22\">22</option>\n\t\t\t\t\t\t\t\t\t<option value=\"23\">23</option>\n\t\t\t\t\t\t\t\t\t<option value=\"24\">24</option>\n\t\t\t\t\t\t\t\t\t<option value=\"25\">25</option>\n\t\t\t\t\t\t\t\t\t<option value=\"26\">26</option>\n\t\t\t\t\t\t\t\t\t<option value=\"27\">27</option>\n\t\t\t\t\t\t\t\t\t<option value=\"28\">28</option>\n\t\t\t\t\t\t\t\t\t<option value=\"29\">29</option>\n\t\t\t\t\t\t\t\t\t<option value=\"30\">30</option>\n\t\t\t\t\t\t\t\t\t<option value=\"31\">31</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('dobYear') }\">\n\t\t\t\t\t\t\t\t<!--<label for=\"infoDobYear\">Year</label>-->\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"dobYearCalc\" v-validate:dobyear=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoDobYear\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Year</option>\n\t\t\t\t\t\t\t\t\t<option v-for=\"n in 100 | orderBy true -1\" :value=\"n\">\n\t\t\t\t\t\t\t\t\t\t{{ currentYear - 100 + n }}\n\t\t\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<label>Gender</label>\n\t\t\t\t\t\t\t<div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"radio\" v-model=\"gender\" v-validate:gender=\"{ required: { rule: true} }\" value=\"male\"> Male\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"radio\" v-model=\"gender\" v-validate:gender=\"\" value=\"female\"> Female\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<span class=\"help-block\" v-show=\"checkForError('gender')\">Select a gender</span>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('relationshipStatus') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoRelStatus\">Relationship Status</label>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"relationshipStatus\" v-validate:relationshipstatus=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoRelStatus\">\n\t\t\t\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t\t\t\t\t<option value=\"divorced\">Divorced</option>\n\t\t\t\t\t\t\t\t\t<option value=\"widowed\">Widowed</option>\n\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t<label for=\"infoHeightA\">Height</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('heightA') }\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" id=\"infoHeightA\" v-model=\"heightA\" number=\"\" min=\"0\" max=\"10\" v-validate:heighta=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group-addon\">ft.</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('heightB') }\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" v-model=\"heightB\" number=\"\" min=\"0\" max=\"11.99\" v-validate:heightb=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group-addon\">in.</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('weight') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoWeight\">Weight</label>\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" id=\"infoWeight\" v-model=\"weight\" number=\"\" min=\"0\" v-validate:weight=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\">\n\t\t\t\t\t\t\t\t\t<div class=\"input-group-addon\">lbs.</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('size') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoShirtSize\">Shirt Sizes</label>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"size\" v-validate:size=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoShirtSize\">\n\t\t\t\t\t\t\t\t\t<option value=\"S\">S (Small)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"M\">M (Medium)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"L\">L (Large)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"XL\">XL (Extra Large)</option>\n\t\t\t\t\t\t\t\t\t<option value=\"XXL\">XXL (2 Extra Large)</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-md-6\">\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('address') }\">\n\t\t\t\t\t\t<label for=\"infoAddress\">Address</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"address\" v-validate:address=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoAddress\" placeholder=\"Street Address\">\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('city') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoCity\">City</label>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"city\" v-validate:city=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoCity\" placeholder=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('state') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoState\">State/Prov.</label>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"state\" v-validate:state=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoState\" placeholder=\"\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('zip') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoZip\">Zip Code</label>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"zipCode\" v-validate:zip=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoZip\" placeholder=\"12345\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t\t\t\t\t\t<label for=\"infoCountry\">Country</label>\n\t\t\t\t\t\t\t\t<v-select class=\"form-controls\" id=\"infoCountry\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t\t\t\t\t<select hidden=\"\" name=\"country\" id=\"infoCountry\" class=\"hidden\" v-model=\"country\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('phone') }\">\n\t\t\t\t\t\t<label for=\"infoPhone\">Home Phone</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"phone | phone\" v-validate:phone=\"{ required: true, minlength:10 }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n\t\t\t\t\t</div>\n\n\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('mobile') }\">\n\t\t\t\t\t\t<label for=\"infoMobile\">Cell Phone</label>\n\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"mobile | phone\" v-validate:mobile=\"{ required: true, minlength:10 }\" :classes=\"{ invalid: 'has-error'}\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-3935869d", module.exports)
+  } else {
+    hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107,"vue-select":109}],151:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'deadline-agreement',
+	data: function data() {
+		return {
+			title: 'Deadline Agreement',
+			deadlineAgree: false,
+			deadlines: [],
+			costs: [],
+			selectedOptionalCosts: []
+
+		};
+	},
+
+	computed: {
+		deadlines: function deadlines() {
+			return this.$parent.deadlines;
+		},
+		requirements: function requirements() {
+			return this.$parent.requirements;
+		},
+		costs: function costs() {
+			return this.$parent.tripCosts;
+		},
+		selectedOptionalCosts: function selectedOptionalCosts() {
+			return this.$parent.selectedOptions;
+		}
+	},
+	methods: {
+		toDate: function toDate(date) {
+			return moment(date).format('LL');
+		}
+	},
+	watch: {
+		'deadlineAgree': function deadlineAgree(val, oldVal) {
+			this.$dispatch('deadline-agree', val);
+		}
+	}
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\" style=\"max-height: 500px;overflow-y: auto;\">\n\t\t<h4>Requirements</h4>\n\t\t<div class=\"list-group\">\n\t\t\t<a href=\"#\" class=\"list-group-item\" v-for=\"requirement in requirements\">\n\t\t\t\t<h4 class=\"list-group-item-heading\">\n\t\t\t\t\t{{requirement.item}}\n\t\t\t\t</h4>\n\t\t\t\t<p class=\"list-group-item-text\">\n\t\t\t\t\tThis {{requirement.enforced ? 'must' : 'should'}} be completed by {{ toDate(requirement.date) }}.\n\t\t\t\t</p>\n\t\t\t</a>\n\t\t</div>\n\t\t<hr>\n\t\t<h4>Cost Deadlines</h4>\n\t\t<div class=\"panel panel-default\" v-for=\"cost in costs.static\">\n\t\t\t<!-- Default panel contents -->\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t{{cost.name}}\n\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<p>This cost is applied to registrants after {{ toDate(cost.activate_at) }}</p>\n\t\t\t\t<div class=\"list-group\">\n\t\t\t\t\t<a href=\"#\" class=\"list-group-item\" v-for=\"payment in cost.payments.data\">\n\t\t\t\t\t\t<h4 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\tDeadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}\n\t\t\t\t\t\t</h4>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\t\t\t\t\t\t\tThe amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}% of the total amount, is due.\n\t\t\t\t\t\t\tIf this amount is not received by deadline, the next is applied.\n\t\t\t\t\t\t</p>\n\t\t\t\t\t</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"panel panel-default\" v-for=\"cost in costs.incremental\">\n\t\t\t<!-- Default panel contents -->\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t{{cost.name}}\n\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<p>This cost is applied to registrants after {{ toDate(cost.activate_at) }}</p>\n\t\t\t\t<div class=\"list-group\">\n\t\t\t\t\t<a href=\"#\" class=\"list-group-item\" v-for=\"payment in cost.payments.data\">\n\t\t\t\t\t\t<h4 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\tDeadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}\n\t\t\t\t\t\t</h4>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\t\t\t\t\t\t\tThe amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}% of the total amount is due.\n\t\t\t\t\t\t\tIf this amount is not received by the deadline, the next is applied.\n\t\t\t\t\t\t</p>\n\t\t\t\t\t</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"panel panel-default\" v-for=\"cost in selectedOptionalCosts\">\n\t\t\t<!-- Default panel contents -->\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t{{cost.name}}\n\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<p>This cost is applied to registrants after {{ toDate(cost.activate_at) }}</p>\n\t\t\t\t<div class=\"list-group\">\n\t\t\t\t\t<a href=\"#\" class=\"list-group-item\" v-for=\"payment in cost.payments.data\">\n\t\t\t\t\t\t<h4 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\tDeadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}\n\t\t\t\t\t\t</h4>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\t\t\t\t\t\t\tThe amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}% of the total amount is due.\n\t\t\t\t\t\t\tIf this amount is not received by the deadline, the next is applied.\n\t\t\t\t\t\t</p>\n\t\t\t\t\t</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr>\n\t\t<h4>Other Deadlines</h4>\n\t\t<div class=\"list-group\">\n\t\t\t<a href=\"#\" class=\"list-group-item\" v-for=\"deadline in deadlines\">\n\t\t\t\t<h4 class=\"list-group-item-heading\">\n\t\t\t\t\t{{deadline.name}}\n\t\t\t\t</h4>\n\t\t\t\t<p class=\"list-group-item-text\">\n\t\t\t\t\tThis {{deadline.enforced ? 'must' : 'should'}} be completed by {{ toDate(deadline.date) }}.\n\t\t\t\t</p>\n\t\t\t</a>\n\t\t</div>\n\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<div class=\"checkbox\">\n\t\t\t<label>\n\t\t\t\t<input type=\"checkbox\" v-model=\"deadlineAgree\">\n\t\t\t\tI have read and agree to the Deadlines listed.\n\t\t\t</label>\n\t\t</div>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-ca5dc6f6", module.exports)
+  } else {
+    hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],152:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'payment-details',
+	data: function data() {
+		return {
+			title: 'Payment Details',
+			paymentComplete: false,
+			staticCosts: [],
+			incrementalCosts: [],
+			selectedOptions: [],
+			upfrontTotal: 0,
+			totalCosts: 0,
+			attemptedCreateToken: false,
+
+			//card vars
+			card: null,
+			cardHolderName: null,
+			cardNumber: '',
+			cardMonth: '',
+			cardYear: '',
+			cardCVC: '',
+			cardEmail: null,
+			cardZip: null,
+			cardSave: false,
+
+			// stripe vars
+			stripeKey: null,
+			stripeError: null,
+			monthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+			placeholders: {
+				year: 'Year',
+				month: 'Month',
+				cvc: 'CVC',
+				number: 'Card Number'
+			},
+			validationErrors: {
+				cardNumber: '',
+				cardCVC: '',
+				cardYear: '',
+				cardMonth: ''
+			},
+			// deferred variable used for card validation
+			// needs to be on `this` scope to access in response callback
+			stripeDeferred: {}
+		};
+	},
+
+	watch: {
+		'paymentComplete': function paymentComplete(val, oldVal) {
+			this.$dispatch('payment-complete', val);
+		}
+	},
+	events: {
+		'VueStripe::create-card-token': function VueStripeCreateCardToken() {
+			return this.createToken();
+		},
+		'VueStripe::reset-form': function VueStripeResetForm() {
+			return this.resetCaching();
+		}
+	},
+	ready: function ready() {
+		this.$dispatch('payment-complete', true);
+		if (this.devMode) {
+			this.cardNumber = '4242424242424242';
+			this.cardCVC = '123';
+			this.cardYear = '19';
+			return this.cardMonth = '1';
+		}
+	},
+	props: {
+		showButton: {
+			'default': true
+		},
+		callback: {
+			required: false
+		},
+		showLabels: {
+			'default': false
+		},
+		devMode: {
+			'default': true
+		}
+	},
+	computed: {
+		stripeKey: function stripeKey() {
+			return this.$parent.stripeKey;
+		},
+		fundraisingGoal: function fundraisingGoal() {
+			return this.totalCosts - this.upfrontTotal;
+		},
+		staticCosts: function staticCosts() {
+			return this.$parent.tripCosts.static;
+		},
+		incrementalCosts: function incrementalCosts() {
+			return this.$parent.tripCosts.incremental;
+		},
+		selectedOptions: function selectedOptions() {
+			return this.$parent.selectedOptions;
+		},
+		totalCosts: function totalCosts() {
+			var amount = 0;
+			// add static costs if they exists
+			if (this.staticCosts && this.staticCosts.constructor === Array) {
+				this.staticCosts.forEach(function (cost) {
+					amount += cost.amount;
+				});
+			}
+			// add optional costs if they exists
+			if (this.selectedOptions && this.selectedOptions.constructor === Array) {
+				this.selectedOptions.forEach(function (cost) {
+					amount += cost.amount;
+				});
+			}
+
+			// add incremental costs if they exists
+			if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
+				this.incrementalCosts.forEach(function (cost) {
+					amount += cost.amount;
+				});
+			}
+
+			return amount;
+		},
+		upfrontTotal: function upfrontTotal() {
+			var amount = 0;
+			// add static costs if they exists
+			if (this.staticCosts && this.staticCosts.constructor === Array) {
+				this.staticCosts.forEach(function (cost) {
+					cost.payments.data.forEach(function (payment) {
+						if (payment.upfront) {
+							amount += payment.amount_owed;
+						}
+					});
+				});
+			}
+			// add optional costs if they exists
+			if (this.selectedOptions && this.selectedOptions.constructor === Array) {
+				this.selectedOptions.forEach(function (cost) {
+					cost.payments.data.forEach(function (payment) {
+						if (payment.upfront) {
+							amount += payment.amount_owed;
+						}
+					});
+				});
+			}
+
+			// add incremental costs if they exists
+			if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
+				this.incrementalCosts.forEach(function (cost) {
+					cost.payments.data.forEach(function (payment) {
+						if (payment.upfront) {
+							amount += payment.amount_owed;
+						}
+					});
+				});
+			}
+
+			return amount;
+		},
+		yearList: function yearList() {
+			var num, today, years, yyyy;
+			today = new Date();
+			yyyy = today.getFullYear();
+			years = function () {
+				var i, ref, ref1, results;
+				results = [];
+				for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
+					results.push(num.toString().substr(2, 2));
+				}
+				return results;
+			}();
+			return years;
+		},
+		cardParams: function cardParams() {
+			return {
+				name: this.cardHolderName,
+				number: this.cardNumber,
+				expMonth: this.cardMonth,
+				expYear: this.cardYear,
+				cvc: this.cardCVC,
+				address_zip: this.cardZip
+			};
+		}
+	},
+	methods: {
+		onValid: function onValid() {
+			//this.$dispatch('payment-complete', true)
+		},
+		onInvalid: function onInvalid() {
+			// for now allow to continue
+			//this.$dispatch('payment-complete', true)
+		},
+		toDate: function toDate(date) {
+			return moment(date).format('LL');
+		},
+		resetCaching: function resetCaching() {
+			console.log('resetting');
+			this.cardMonth = '';
+			this.cardCVC = '';
+			this.cardYear = '';
+			this.cardNumber = '';
+			return this.card = null;
+		},
+		formatCard: function formatCard(event) {
+			var output;
+			output = this.cardNumber.split('-').join('');
+			if (output.length > 0) {
+				output = output.replace(/[^\d]+/g, '');
+				output = output.match(new RegExp('.{1,4}', 'g'));
+				if (output) {
+					return this.cardNumber = output.join('-');
+				} else {
+					return this.cardNumber = '';
+				}
+			}
+		},
+		checkForError: function checkForError(field) {
+			return this.$PaymentDetails[field.toLowerCase()].invalid && this.attemptedCreateToken;
+		},
+		createToken: function createToken() {
+			this.stripeDeferred = $.Deferred();
+
+			if (this.$PaymentDetails.invalid) {
+				this.attemptedCreateToken = true;
+				this.stripeDeferred.reject(false);
+			} else {
+				Stripe.setPublishableKey(this.stripeKey);
+				Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+			}
+			return this.stripeDeferred.promise();
+		},
+		createTokenCallback: function createTokenCallback(status, resp) {
+			console.log(status);
+			console.log(resp);
+			this.validationErrors = {
+				cardNumber: '',
+				cardCVC: '',
+				cardYear: '',
+				cardMonth: ''
+			};
+			this.stripeError = resp.error;
+			if (this.stripeError) {
+				if (this.stripeError.param === 'number') {
+					this.validationErrors.cardNumber = 'error';
+				}
+				if (this.stripeError.param === 'exp_year') {
+					this.validationErrors.cardYear = 'error';
+				}
+				if (this.stripeError.param === 'exp_month') {
+					this.validationErrors.cardMonth = 'error';
+				}
+				if (this.stripeError.param === 'cvc') {
+					this.validationErrors.cardCVC = 'error';
+				}
+				this.stripeDeferred.reject(false);
+			}
+			if (status === 200) {
+				this.card = resp;
+				// send payment data to parent
+				this.$parent.paymentInfo = {
+					token: resp,
+					save: this.cardSave,
+					email: this.cardEmail
+				};
+				this.$parent.upfrontTotal = this.upfrontTotal;
+				this.$parent.fundraisingGoal = this.fundraisingGoal;
+				this.stripeDeferred.resolve(true);
+			}
+		}
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<h4>Payment Details</h4>\n\t\t<hr>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-md-12\">\n\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t<li class=\"list-group-item\">\n\t\t\t\t\t\tItem\n\t\t\t\t\t\t<span class=\"pull-right\">Cost</span>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class=\"list-group-item\" v-for=\"cost in staticCosts\">\n\t\t\t\t\t\t<h5 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\t{{cost.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t\t\t\t</h5>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\n\t\t\t\t\t\t</p>\n\t\t\t\t\t\t<table class=\"table\">\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"p in cost.payments.data\" :class=\"{'text-danger': p.upfront}\">\n\t\t\t\t\t\t\t\t\t<td>{{toDate(p.due_at)}}</td>\n\t\t\t\t\t\t\t\t\t<td class=\"text-right\">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class=\"list-group-item\" v-for=\"cost in incrementalCosts\">\n\t\t\t\t\t\t<h5 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\t{{cost.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t\t\t\t</h5>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\n\t\t\t\t\t\t</p>\n\t\t\t\t\t\t<table class=\"table\">\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"p in cost.payments.data\" :class=\"{'text-danger': p.upfront}\">\n\t\t\t\t\t\t\t\t\t<td>{{toDate(p.due_at)}}</td>\n\t\t\t\t\t\t\t\t\t<td class=\"text-right\">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li class=\"list-group-item\" v-for=\"cost in selectedOptions\">\n\t\t\t\t\t\t<h5 class=\"list-group-item-heading\">\n\t\t\t\t\t\t\t{{cost.name}}\n\t\t\t\t\t\t\t<span class=\"pull-right\">{{cost.amount | currency}}</span>\n\t\t\t\t\t\t</h5>\n\t\t\t\t\t\t<p class=\"list-group-item-text\">\n\n\t\t\t\t\t\t</p>\n\t\t\t\t\t\t<table class=\"table\">\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"p in cost.payments.data\" :class=\"{'text-danger': p.upfront}\">\n\t\t\t\t\t\t\t\t\t<td>{{toDate(p.due_at)}}</td>\n\t\t\t\t\t\t\t\t\t<td class=\"text-right\">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\n\t\t\t\t<table class=\"table table-hover\">\n\t\t\t\t\t<tfoot>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\">Fundraising Goal</td>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\" class=\"text-right\">{{totalCosts | currency}}</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<td>Up-front Charges</td>\n\t\t\t\t\t\t\t<td class=\"text-danger text-right\">{{-upfrontTotal | currency}}</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\"><h5 class=\"text-right\">Total to Raise</h5></td>\n\t\t\t\t\t\t\t<td style=\"border-top:2px solid #000000;\"><h5 class=\"text-success text-right\">{{fundraisingGoal | currency}}</h5></td>\n\t\t\t\t\t\t</tr>\n\n\t\t\t\t\t</tfoot>\n\t\t\t\t</table>\n\t\t\t</div>\n\t\t\t<hr class=\"divider\">\n\t\t\t<div class=\"col-md-12\">\n\t\t\t\t<div class=\"well\">\n\t\t\t\t\t<validator name=\"PaymentDetails\">\n\t\t\t\t\t\t<form novalidate=\"\" role=\"form\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-12 col-md-6\">\n\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('cardholdername') }\">\n\t\t\t\t\t\t\t\t\t<label for=\"cardHolderName\">Card Holder's Name</label>\n\t\t\t\t\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon input-sm\"><span class=\"fa fa-user\"></span></span>\n\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cardHolderName\" placeholder=\"Name on card\" v-model=\"cardHolderName\" v-validate:cardholdername=\"{ required: true }\" autofocus=\"\">\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-12 col-md-6\">\n\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }\">\n\t\t\t\t\t\t\t\t\t<label for=\"cardNumber\">Card Number</label>\n\t\t\t\t\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon input-sm\"><span class=\"fa fa-lock\"></span></span>\n\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cardNumber\" placeholder=\"Valid Card Number\" v-model=\"cardNumber\" v-validate:cardnumber=\"{ required: true, maxlength: 19 }\" @keyup=\"formatCard($event)\" maxlength=\"19\">\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<span class=\"help-block\" v-if=\"validationErrors.cardNumber=='error'\">{{stripeError.message}}</span>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t<div class=\"col-xs-7 col-md-7\">\n\t\t\t\t\t\t\t\t\t<label for=\"expiryMonth\">EXPIRY DATE</label>\n\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6 col-lg-6\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('month') || validationErrors.cardMonth }\">\n\t\t\t\t\t\t\t\t\t\t\t\t<select v-model=\"cardMonth\" class=\"form-control input-sm\" id=\"expiryMonth\" v-validate:month=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<option v-for=\"month in monthList\" value=\"{{month}}\">{{month}}</option>\n\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6 col-lg-6\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('year') || validationErrors.cardYear }\">\n\t\t\t\t\t\t\t\t\t\t\t\t<select v-model=\"cardYear\" class=\"form-control input-sm\" id=\"expiryYear\" v-validate:year=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<option v-for=\"year in yearList\" value=\"{{year}}\">{{year}}</option>\n\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"col-xs-5 col-md-5 pull-right\">\n\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('code') || validationErrors.cardCVC }\">\n\t\t\t\t\t\t\t\t\t\t<label for=\"cvCode\">\n\t\t\t\t\t\t\t\t\t\t\tCV CODE</label>\n\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cvCode\" maxlength=\"3\" v-model=\"cardCVC\" placeholder=\"CV\" v-validate:code=\"{ required: true, minlength: 3, maxlength: 3 }\">\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t<div class=\"col-sm-7\">\n\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n\t\t\t\t\t\t\t\t\t\t<label for=\"infoEmailAddress\">Billing Email Address</label>\n\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"cardEmail\" v-validate:email=\"['email']\" id=\"infoEmailAddress\">\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-5\">\n\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('zip') }\">\n\t\t\t\t\t\t\t\t\t\t<label for=\"infoZip\">Billing ZIP/Postal Code</label>\n\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"cardZip\" v-validate:zip=\"{ required: true }\" id=\"infoZip\" placeholder=\"12345\">\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"cardSave\">Save payment details for next time.\n\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t<p class=\"help-block text-success\">Your card will be charged for the upfront fees\n\t\t\t\t\t\t\t\timmediately after your trip registration process is complete to secure your spot on this trip.</p>\n\t\t\t\t\t\t</form>\n\t\t\t\t\t</validator>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-40feac0a", module.exports)
+  } else {
+    hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],153:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'review',
+	data: function data() {
+		return {
+			title: 'Review',
+			review: false
+		};
+	},
+
+	computed: {
+		userInfo: function userInfo() {
+			return this.$parent.userInfo;
+		},
+		paymentInfo: function paymentInfo() {
+			return this.$parent.paymentInfo;
+		},
+		upfrontTotal: function upfrontTotal() {
+			return this.$parent.upfrontTotal;
+		}
+	},
+	watch: {
+		'review': function review(val, oldVal) {
+			this.$dispatch('review', val);
+		}
+	}
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<h4>Review</h4>\n\t\t<div class=\"panel panel-primary\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<div class=\"panel-title\">\n\t\t\t\t\tBasic Traveler Information\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<address>\n\t\t\t\t\t<strong>{{userInfo.firstName}} {{userInfo.middleName}} {{userInfo.lastName}}</strong><br>\n\t\t\t\t\t{{userInfo.address}}<br>\n\t\t\t\t\t{{userInfo.city}}, {{userInfo.state}} {{userInfo.zipCode}}<br>\n\t\t\t\t\t{{userInfo.country | uppercase}}<br>\n\t\t\t\t\t<br>\n\t\t\t\t\tDate of Birth: {{userInfo.dob}}<br>\n\t\t\t\t\tGender: {{userInfo.gender|capitalize}}<br>\n\t\t\t\t\tRelationship Status: {{userInfo.relationshipStatus|capitalize}}<br>\n\t\t\t\t\tHeight: {{userInfo.height}}<br>\n\t\t\t\t\tWeight: {{userInfo.weight}} lbs.<br>\n\t\t\t\t\t<br>\n\t\t\t\t\t<abbr title=\"Phone\"><span class=\"fa fa-phone\"></span></abbr> {{userInfo.phone}}<br>\n\t\t\t\t\t<abbr title=\"Mobile\"><span class=\"fa fa-mobile\"></span></abbr> {{userInfo.mobile}}<br>\n\t\t\t\t\t<abbr title=\"Email\"><span class=\"fa fa-envelope\"></span></abbr> {{userInfo.email}}<br>\n\t\t\t\t</address>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"panel panel-primary\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<div class=\"panel-title\">\n\t\t\t\t\tPayment Details\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<dl class=\"dl-horizontal\" v-if=\"paymentInfo\">\n\t\t\t\t\t<dt>Card Holder Name</dt>\n\t\t\t\t\t<dd>{{paymentInfo.token.card.name}}</dd>\n\t\t\t\t\t<dt>Card Number</dt>\n\t\t\t\t\t<dd>···· ···· ···· {{paymentInfo.token.card.last4}}</dd>\n\t\t\t\t\t<dt>Card Expiration</dt>\n\t\t\t\t\t<dd>{{paymentInfo.token.card.exp_month}}/{{paymentInfo.token.card.exp_year}}</dd>\n\t\t\t\t\t<dt>Billing Email</dt>\n\t\t\t\t\t<dd>{{paymentInfo.email}}</dd>\n\t\t\t\t\t<dt>Billing Zip</dt>\n\t\t\t\t\t<dd>{{paymentInfo.token.card.address_zip}}</dd>\n\t\t\t\t\t<dt>Save Payment Method</dt>\n\t\t\t\t\t<dd>{{paymentInfo.save ? 'Yes' : 'No'}}</dd>\n\t\t\t\t</dl>\n\t\t\t\t<hr>\n\t\t\t\t<p class=\"list-group-item-text\">Amount to be charged immediately: {{upfrontTotal|currency}}</p>\n\t\t\t</div>\n\t\t</div>\n\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<hr>\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<div class=\"checkbox\">\n\t\t\t<label>\n\t\t\t\t<input type=\"checkbox\" v-model=\"review\">\n\t\t\t\tI have reviewed and verified that all information provided is correct.\n\t\t\t</label>\n\t\t</div>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-9d0c84f0", module.exports)
+  } else {
+    hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],154:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'roca',
+	data: function data() {
+		return {
+			title: 'Rules of Conduct Agreement',
+			rocaAgree: false
+		};
+	},
+
+	watch: {
+		'rocaAgree': function rocaAgree(val, oldVal) {
+			this.$dispatch('roca-agree', val);
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\" style=\"max-height: 500px;overflow-y: auto;\">\n\t\t<h4>Rules of Conduct Agreement</h4>\n\t\t<p class=\"small\"><a href=\"http://MISSIONS.ME\" target=\"_blank\" rel=\"noreferrer\">MISSIONS.ME</a> TEAM CULTURE</p>\n\t\t<p class=\"small\">AS A <a href=\"http://MISSIONS.ME\" target=\"_blank\" rel=\"noreferrer\">MISSIONS.ME</a> TEAM MEMBER, I PROMISE TO DO MY BEST TO CONTRIBUTE TO THE FOLLOWING TEAM CULTURE POINTS WHILE ON THIS TRIP.</p>\n\t\t<p class=\"small\"><strong>HONOR</strong> - I will honor my leaders, fellow team members, and those I am ministering to.</p>\n\t\t<p class=\"small\"><strong>SAFETY</strong> - I will put the safety of myself and others above all else.</p>\n\t\t<p class=\"small\"><strong>FUN</strong> - I will strive to create life-long memories and experiences that are both impacting and fun.</p>\n\t\t<p class=\"small\"><strong>FAITH</strong> - I will keep an attitude of faith in myself and my fellow team members.</p>\n\t\t<p class=\"small\"><strong>UNITY</strong> - I will do my best to bring unity and camaraderie to my team.</p>\n\t\t<p class=\"small\">RULES &amp; GUIDELINES</p>\n\t\t<p class=\"small\">BREAKING ANY OF THE FOLLOWING RULES ARE GROUNDS FOR IMMEDIATE DISMISSAL FROM THIS <a href=\"http://MISSIONS.ME\" target=\"_blank\" rel=\"noreferrer\">MISSIONS.ME</a> TRIP:</p>\n\t\t<ol>\n\t\t\t<li class=\"small\">Illegal acts of any kind including assault, possession of illegal drugs or weapons.</li>\n\t\t\t<li class=\"small\">Consumption or possession of alcoholic beverages or tobacco products of any kind.</li>\n\t\t\t<li class=\"small\">Departing the designated team housing area alone or unsupervised without the consent of a Team Leader.</li>\n\t\t\t<li class=\"small\">Departing your team or assigned group at any time without the consent of a Team Leader.</li>\n\t\t</ol>\n\t\t<p class=\"small\">BREAKING ANY OF THE FOLLOWING RULES ARE GROUNDS FOR IMMEDIATE DISCIPLINARY ACTION AND POSSIBLE DISMISSAL FROM THIS <a href=\"http://MISSIONS.ME\" target=\"_blank\" rel=\"noreferrer\">MISSIONS.ME</a> TRIP:</p>\n\t\t<ol>\n\t\t\t<li class=\"small\">Fighting with fellow team members.</li>\n\t\t\t<li class=\"small\">Romantic displays of affection with a member of the opposite sex that is not your spouse.</li>\n\t\t\t<li class=\"small\">Disorderly or deliberately disobedient conduct.</li>\n\t\t\t<li class=\"small\">Profanity or temperamental outbursts.</li>\n\t\t\t<li class=\"small\">Disrespectful attitude towards locals or international team members.</li>\n\t\t\t<li class=\"small\">Disrespectful attitude towards team leadership.</li>\n\t\t</ol>\n\t\t<p class=\"small\">As a participant of a <a href=\"http://Missions.Me\" target=\"_blank\">Missions.Me</a> trip, I have read and fully understand the rules and regulations above. I also understand that I must comply with all <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> rules and regulations in order to make my missions experience the best it can be. If I choose not to comply with these rules, I understand that I am subject to the consequences and even dismissal from the mission field AT MY OWN EXPENSE.</p>\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<div class=\"checkbox\">\n\t\t\t<label>\n\t\t\t\t<input type=\"checkbox\" v-model=\"rocaAgree\">\n\t\t\t\tI have read and agree to the Rules of Conduct Agreement.\n\t\t\t</label>\n\t\t</div>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-5f91920b", module.exports)
+  } else {
+    hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],155:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'legal-tos',
+	data: function data() {
+		return {
+			title: 'Legal (Terms of Service)',
+			tosAgree: false
+		};
+	},
+
+	watch: {
+		'tosAgree': function tosAgree(val, oldVal) {
+			this.$dispatch('tos-agree', val);
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\" style=\"max-height: 500px;overflow-y: auto;\">\n\t\t\t<h4>Terms of Service</h4>\n\t\t\t<p class=\"small\"><a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> WAIVER AND RELEASE FROM LIABILITY, AND AUTHORIZATION TO PARTICIPATE IN TRIP, AND STATEMENT OF RESPONSIBILITY (“Agreement”).</p>\n\t\t\t<p class=\"small\">The agreement must be signed and returned to <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a>. If the Participant (as shown below) is not 18 years of age or older on the date of execution of this Agreement , this Agreement also must be signed and notarized by the parent or guardian. Failure to accept and/or abide by the terms and conditions of this Agreement as provided may result in the Participants’ inability to participate in the trip.</p>\n\t\t\t<p class=\"small\">I (missionary), have agreed to be a Participant in the mission trip sponsored in whole or in part by <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a>. In consideration of being allowed to participate in this trip, I hereby state and agree as follows:</p>\n\t\t\t<h5>1. STANDARDS OF CONDUCT</h5>\n\t\t\t<p class=\"small\">A. I agree to abide by <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a>'s conduct regulations and the directions of the group sponsor and his or her designees. I understand that the group sponsor has the right to enforce appropriate standards of behavior and that I may be dismissed from the trip at any time for failure to comply with such standards. <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> reserves the right to physically remove me from the trip at any time should my actions or general behavior impede the trip, or the rights and welfare of any person, including but not limited to my own welfare. Similarly, if my conduct violates any policy or procedure of <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a>, I understand that I may be required to leave the trip at the sole discretion of <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a>'s agents and representatives. I understand that if my participation in the trip is terminated by the group sponsor, I will be sent home with no refund of fees. If I am sent home before completion of the trip, I understand that I will be responsible for any and all costs and expenses associated with my return home.</p>\n\t\t\t<p class=\"small\">B. I acknowledge and understand that, while I am a participant, I am responsible for my own behavior and any legal or financial consequences just as I would be if I were not a Participant on the <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> trip.</p>\n\t\t\t<h5>2. INSTITUTIONAL ARRANGEMENTS</h5>\n\t\t\t<p class=\"small\">I understand that <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> does not represent or act as an agent for, and can not control the acts of omissions of, any host institution, host family, transportation carrier, hotel, tour organizer, or other provider of goods or services involved in the trip. I understand that <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> is not responsible for matters that are beyond its control. I hereby release <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> from any injury, loss, damage, accident, delay, or expense arising out of any such matters.</p>\n\t\t\t<h5>3. PROGRAM CHANGES</h5>\n\t\t\t<p class=\"small\">I understand that <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> reserves the right to make cancellations, substitutions, or changes to the trip in its sole discretion, with or without notice, and that <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> shall not be liable for any loss to the Participants by reason of any such cancellation or change. <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> is not responsible for penalties assessed by air carriers that may result due to operational and/or itinerary changes, regardless of whether the Participant or <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> makes a flight arrangement. Any additional expense resulting from the above will be paid by the Participant. <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> reserves the right to substitute hotels or accommodations or housing or a similar category at any time. If I become detached from the group, fail to meet a departure vehicle, airplane, boat, or train, I will at my own expense seek out, contact, and reach the group at its next available destination.</p>\n\t\t\t<h5>4. INDEPENDENT ACTIVITY</h5>\n\t\t\t<p class=\"small\">I understand that, if I choose to travel independently before, after or during my free time in the trip, such travel will be unsupervised by <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a>’s agents or employees. I agree that <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> and its agents and employees shall have no responsibility or liability for injury, damage or loss suffered by me during such periods of independent travel.</p>\n\t\t\t<h5>5. HEALTH AND SAFETY</h5>\n\t\t\t<p class=\"small\">A. I release and absolve <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> of all responsibility and liability for any injuries, illnesses (including death), claims, damages, charges, bills and/or expenses I may incur while abroad, including all times before, during, and after the duration of the trip. For the avoidance of doubt, I am fully releasing <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> of any liability that may result for any aspect relating to a <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> trip.</p>\n\t\t\t<p class=\"small\">B. I understand that I am responsible for ensuring that I am adequately covered by health and accident insurance including periods before, during, and after the duration of the trip. I have provided evidence of emergency contact information and any information I want <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> to have on me regarding coverage for accident, illness, hospitalization, accidental death and dismemberment, and emergency medical evacuation as an attachment to this agreement.</p>\n\t\t\t<p class=\"small\">C. I agree that <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a>, through its agent and employees, may take whatever action is deemed necessary in their sole discretion with respect to my health and safety, I authorize <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> and its agents and employees to place me, at their discretion and without my further consent, in a hospital or in the care of a local doctor for medical services and treatment. If necessary or desirable, I also authorize them to transport me back to the United States for medical treatment. I agree that I, along with my parents or guardian, will be fully responsible for any and all expenses, including transportation costs, associated with or in any way related to my medical care.</p>\n\t\t\t<p>D. I agree to report to the group sponsor, as soon as I become aware of such, any physical or mental condition I have which may require special medical attention or accommodation while traveling.</p>\n\t\t\t<p class=\"small\">E. I am aware of all applicable personal medical needs. I have arranged, through insurance or otherwise, to meet any and all needs for payment of medical costs while I participate in the trip. I recognize that <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> is not obligated to attend to any of my medical or medication needs, and I assume all risk and responsibility therefore. If I require medical treatment or hospital care, before, after, or during the trip, <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> is not responsible for the cost or quality of such treatment or care.</p>\n\t\t\t<h5>6. ASSUMPTION OF RISK AND RELEASE OF CLAIMS</h5>\n\t\t\t<p class=\"small\">A. I hereby acknowledge my awareness that my participation in the trip may expose me to risk of property damage and bodily or personal injury, including death. I understand that the risks I may encounter include by way of example: airplane crashes, motor vehicle accidents, terrorist incidents, cuts, bruises, broken bones, political unrest, strikes, acts of God, criminal acts, sickness including but not limited to zika fever and its long-term effects, malaria, dengue fever, dehydration, as well as other risks that may or may not be foreseeable. I HEREBY ASSUME ANY AND ALL SUCH RISKS, AND I ACKNOWLEDGE THAT I AM RESPONSIBLE TO ACT REASONABLY AND PRUDENTLY WITH RESPECT TO MATERS OF PERSONAL HEATH AND SAFETY.</p>\n\t\t\t<p class=\"small\">I understand and acknowledge that <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> assumes no responsibility or liability, in whole or in part, for any delays, delayed or changed departure or arrival times, fare changes, dishonors of hotel, airline or vehicle rental reservations, missed carrier connections, sickness, disease, injuries (including death), losses, damages, weather, strikes, acts of God, war, quarantine, civil unrest, public health risks, criminal activity, terrorism, expense, inconveniences, cessation of operations, mechanical defects, failure or negligence of any nature howsoever caused in connection with any accommodation, restaurant, transportation, or other services or any substitution of hotels or of common carrier or other circumstances, whether or not beyond <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a>’s control, with or without notice, or for any additional expenses occasioned by any of the foregoing. If I am required to spend additional nights in the trip country, the airport, back in the US, or any reason whatsoever, <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> will not be responsible for my hotel transfers, meal costs, or other expenses. My baggage and personal property is at my risk entirely. The right is reserved by <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a>, in its sole discretion, to cancel the trip or any aspect thereof after departure, requiring that all participants return home, if <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> determines or believes that any person is or will be in danger if the trip or any aspect thereof is continued.</p>\n\t\t\t<p class=\"small\">KNOWING THE RISKS DESCRIBED ABOVE, and in consideration of <a href=\"http://Missions.Me\" target=\"_blank\" rel=\"noreferrer\">Missions.Me</a> allowing my participation in the trip, individually and on behalf of any family, heirs, assigns, and legal and personal representative(s) (and if applicable, on behalf of my minor child/ward), to the maximum extent permitted by law, I HEREBY ASSUME ALL THESE RISKS AND RELEASE, WAIVE, AND FOREVER DISCHARGE MISSIONS. ME, ITS BOARD OF TRUSTEES, ITS OFFICERS, DIRECTORS, AGENTS, EMPLOYEES, VOLUNTEERS (WHETHER OFFICIAL OR UNOFFICIAL) , SUBSIDIARIES, AFFILIATES, SUCCESSORS, (THE “RELEASEES”) FROM LIABILITY FOR ANY AND ALL HARM, INJURY, CLAIMS, DEMANDS, RIGHTS, CAUSES OF ACTION, COSTS AND EXPENSES OF WHATEVER KIND, ARISING FROM OR BY REASON OF ANY LOSS, DAMAGE, OR INJURY SUSTAINED (WHETHER PHYSICAL OR FINANCIAL) BY ME OR CAUSED TO MY PROPERTY, OR THE CONSEQUENCES, WHETHER KNOWN OR UNKNOWN, BOTH NOW AND FOREVER IN THE FUTURE, RESULTING FROM, OR IN ANY WAY CONNECTED WITH, MY PARTICIPATION IN THE MISSION TRIP OR ANY PRELIMINARY OR FOLLOW UP ACTIVIITY RELATED THERETO.</p>\n\t\t\t<p class=\"small\">B. The terms of this agreement shall be severable, such that if a court holds any term to be illegal, unenforceable, or in conflict with any law governing this agreement, the validity of the remaining portions shall not be affected thereby.</p>\n\t\t\t<h5>6. ACKNOWLEGDMENT</h5>\n\t\t\t<p class=\"small\">I hereby acknowledge that I have read, understand and will abide by each of the terms and conditions of this agreement.</p>\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<div class=\"checkbox\">\n\t\t\t<label>\n\t\t\t\t<input type=\"checkbox\" v-model=\"tosAgree\">\n\t\t\t\tI have read and agree to the Terms of Service.\n\t\t\t</label>\n\t\t</div>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-235a6f58", module.exports)
+  } else {
+    hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":111,"vue-hot-reload-api":107}],156:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _login = require('../login.vue');
+
+var _login2 = _interopRequireDefault(_login);
+
+var _tos = require('./registration/tos.vue');
+
+var _tos2 = _interopRequireDefault(_tos);
+
+var _roca = require('./registration/roca.vue');
+
+var _roca2 = _interopRequireDefault(_roca);
+
+var _basicInfo = require('./registration/basic-info.vue');
+
+var _basicInfo2 = _interopRequireDefault(_basicInfo);
+
+var _additionalTripOptions = require('./registration/additional-trip-options.vue');
+
+var _additionalTripOptions2 = _interopRequireDefault(_additionalTripOptions);
+
+var _paymentDetails = require('./registration/payment-details.vue');
+
+var _paymentDetails2 = _interopRequireDefault(_paymentDetails);
+
+var _deadlineAgreement = require('./registration/deadline-agreement.vue');
+
+var _deadlineAgreement2 = _interopRequireDefault(_deadlineAgreement);
+
+var _review = require('./registration/review.vue');
+
+var _review2 = _interopRequireDefault(_review);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	name: 'trip-registration-wizard',
+	props: ['tripId', 'stripeKey'],
+	data: function data() {
+		return {
+			stepList: [{ name: 'Login/Register', view: 'step1', complete: false }, // login component skipped for now
+			{ name: 'Legal (Terms of Service)', view: 'step2', complete: false }, { name: 'Rules of Conduct Agreement', view: 'step3', complete: false }, { name: 'Basic Traveler Information', view: 'step4', complete: false }, { name: 'Additional Trip Options', view: 'step5', complete: false }, { name: 'Payment Details', view: 'step6', complete: false }, { name: 'Deadline Agreements', view: 'step7', complete: false }, { name: 'Review', view: 'step8', complete: false }],
+			currentStep: null,
+			canContinue: false,
+			trip: {},
+			tripCosts: {},
+			deadlines: [],
+			requirements: [],
+			wizardComplete: false,
+
+			// user generated data
+			userData: null,
+			selectedOptions: [],
+			userInfo: {},
+			paymentInfo: {},
+			upfrontTotal: 0,
+			fundraisingGoal: 0
+		};
+	},
+
+	computed: {
+		canContinue: function canContinue() {
+			return this.currentStep.complete;
+		}
+	},
+	methods: {
+		toStep: function toStep(step) {
+			if (step.complete) {
+				this.currentStep = step;
+			}
+		},
+		backStep: function backStep() {
+			this.stepList.some(function (step, i, list) {
+				if (this.currentStep.view === step.view) {
+					return this.currentStep = list[i - 1];
+				}
+			}, this);
+		},
+		nextStep: function nextStep() {
+			var thisChild;
+			switch (this.currentStep.view) {
+				case 'step4':
+
+					// find child
+					this.$children.forEach(function (child) {
+						if (child.hasOwnProperty('$BasicInfo')) thisChild = child;
+					});
+
+					// if form is invalid do not continue
+					if (thisChild.$BasicInfo.invalid) {
+						thisChild.attemptedContinue = true;
+						return false;
+					}
+					this.nextStepCallback();
+					break;
+				case 'step6':
+					// find child
+					this.$children.forEach(function (child) {
+						if (child.hasOwnProperty('$PaymentDetails')) thisChild = child;
+					});
+					var self = this;
+					// promise needed to wait for async response from stripe
+					$.when(thisChild.createToken()).done(function (success) {
+						self.nextStepCallback();
+					});
+					break;
+				default:
+					this.nextStepCallback();
+			}
+		},
+		nextStepCallback: function nextStepCallback() {
+			this.stepList.some(function (step, i, list) {
+				if (this.currentStep.view === step.view) {
+					list[i].complete = this.currentStep.complete;
+					return this.currentStep = list[i + 1];
+				}
+			}, this);
+		},
+		finish: function finish() {
+			// 1. Create customer with stripe
+			// 2. if they chose to save data, save card to customer
+			// 3. charge card
+			// 4. update user account with customer id
+			// 5. create reservation
+			this.$http.post('reservations', {
+				given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
+				surname: this.userInfo.lastName,
+				gender: this.userInfo.gender,
+				status: this.userInfo.relationshipStatus,
+				shirt_size: this.userInfo.size,
+				birthday: moment().set({ year: this.userInfo.dobYear, month: this.userInfo.dobMonth, day: this.userInfo.dobDay }).format('YYYY-MM-DD'),
+				amount: this.fundraisingGoal,
+				user_id: this.userData.id,
+				trip_id: this.tripId,
+				companion_limit: this.companion_limit
+			}).then(function (response) {
+				window.location.href = '/dashboard' + response.data.data.links[0].uri;
+			}, function (response) {
+				console.log(response);
+			});
+		}
+	},
+	components: {
+		'step1': _login2.default,
+		'step2': _tos2.default,
+		'step3': _roca2.default,
+		'step4': _basicInfo2.default,
+		'step5': _additionalTripOptions2.default,
+		'step6': _paymentDetails2.default,
+		'step7': _deadlineAgreement2.default,
+		'step8': _review2.default
+
+	},
+	created: function created() {
+		// login component skipped for now
+		this.currentStep = this.stepList[0];
+	},
+	ready: function ready() {
+		//get trip costs
+		var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
+		resource.query({ id: this.tripId }).then(function (trip) {
+			this.trip = trip.data.data;
+			// deadlines, requirements, and companion_limit
+			this.deadlines = trip.data.data.deadlines.data;
+			this.requirements = trip.data.data.requirements.data;
+			this.companion_limit = trip.data.data.companion_limit;
+
+			// filter costs by type
+			var optionalArr = [],
+			    staticArr = [],
+			    incrementalArr = [];
+			trip.data.data.costs.data.forEach(function (cost) {
+				switch (cost.type) {
+					case 'static':
+						staticArr.push(cost);
+						break;
+					case 'incremental':
+						incrementalArr.push(cost);
+						break;
+					case 'optional':
+						optionalArr.push(cost);
+						break;
+				}
+			});
+			this.tripCosts = {
+				static: staticArr,
+				incremental: incrementalArr,
+				optional: optionalArr
+			};
+		});
+	},
+
+	events: {
+		'userHasLoggedIn': function userHasLoggedIn(val) {
+			// expecting userData object
+			this.userData = val;
+			this.currentStep.complete = !!val;
+			// force next step
+			this.nextStep();
+		},
+		'tos-agree': function tosAgree(val) {
+			this.currentStep.complete = val;
+		},
+		'roca-agree': function rocaAgree(val) {
+			this.currentStep.complete = val;
+		},
+		'basic-info': function basicInfo(val) {
+			this.currentStep.complete = val;
+		},
+		'ato-complete': function atoComplete(val) {
+			this.currentStep.complete = val;
+		},
+		'payment-complete': function paymentComplete(val) {
+			this.currentStep.complete = val;
+		},
+		'deadline-agree': function deadlineAgree(val) {
+			this.currentStep.complete = val;
+		},
+		'review': function review(val) {
+			this.currentStep.complete = this.wizardComplete = val;
+		}
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h5>{{ trip.country_name }} Trip Registration</h5>\n\t</div>\n\t<div class=\"panel-body\">\n\t\t<div class=\"row visible-xs-block\">\n\t\t\t<div class=\"col-xs-12\">\n\t\t\t\t<div class=\"btn-group btn-group-justified btn-group-xs\" style=\"display:block;\" role=\"group\" aria-label=\"...\">\n\t\t\t\t\t<a @click=\"backStep()\" class=\"btn btn-default\" :class=\"{'disabled': currentStep.view === 'step1' }\" role=\"button\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-left\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<div class=\"btn-group\" role=\"group\">\n\t\t\t\t\t\t<a class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t\t\t\t{{ currentStep.name }} <span class=\"caret\"></span>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<ul class=\"dropdown-menu dropdown-menu-right\">\n\t\t\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n\t\t\t\t\t</div>\n\t\t\t\t\t<!--<a class=\"btn btn-default\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-right\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">\n\t\t\t\t\t\t<i class=\"fa fa-check\"></i>\n\t\t\t\t\t</a>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-5 col-md-4 hidden-xs\">\n\t\t\t\t<ul class=\"nav nav-pills nav-stacked\">\n\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</li>\n\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t\t<div class=\"col-sm-7 col-md-8 {{currentStep.view}}\">\n\t\t\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t\t\t</component>\n\t\t\t</div>\n\n\t\t</div>\n\t</div>\n\t<div class=\"panel-footer text-right\">\n\t\t<div class=\"btn-group btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<!--<a class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</a>-->\n\t\t\t<a class=\"btn btn-default\" @click=\"backStep()\" :class=\"{'disabled': currentStep.view === 'step1' }\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-6fb76f2d", module.exports)
+  } else {
+    hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../login.vue":128,"./registration/additional-trip-options.vue":149,"./registration/basic-info.vue":150,"./registration/deadline-agreement.vue":151,"./registration/payment-details.vue":152,"./registration/review.vue":153,"./registration/roca.vue":154,"./registration/tos.vue":155,"vue":111,"vue-hot-reload-api":107,"vueify/lib/insert-css":112}],157:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -24458,10 +39050,87 @@ var _groupsTripsSelectionWrapper = require('./components/campaigns/groups-trips-
 
 var _groupsTripsSelectionWrapper2 = _interopRequireDefault(_groupsTripsSelectionWrapper);
 
+var _tripRegistrationWizard = require('./components/trips/trip-registration-wizard.vue');
+
+var _tripRegistrationWizard2 = _interopRequireDefault(_tripRegistrationWizard);
+
+var _reservationsList = require('./components/reservations/reservations-list.vue');
+
+var _reservationsList2 = _interopRequireDefault(_reservationsList);
+
+var _donationsList = require('./components/reservations/donations-list.vue');
+
+var _donationsList2 = _interopRequireDefault(_donationsList);
+
+var _adminCampaignCreate = require('./components/campaigns/admin-campaign-create.vue');
+
+var _adminCampaignCreate2 = _interopRequireDefault(_adminCampaignCreate);
+
+var _adminCampaignEdit = require('./components/campaigns/admin-campaign-edit.vue');
+
+var _adminCampaignEdit2 = _interopRequireDefault(_adminCampaignEdit);
+
+var _adminCampaignDetails = require('./components/campaigns/admin-campaign-details.vue');
+
+var _adminCampaignDetails2 = _interopRequireDefault(_adminCampaignDetails);
+
+var _adminTripCreate = require('./components/trips/admin-trip-create.vue');
+
+var _adminTripCreate2 = _interopRequireDefault(_adminTripCreate);
+
+var _adminTripEdit = require('./components/trips/admin-trip-edit.vue');
+
+var _adminTripEdit2 = _interopRequireDefault(_adminTripEdit);
+
+var _adminTripsList = require('./components/trips/admin-trips-list.vue');
+
+var _adminTripsList2 = _interopRequireDefault(_adminTripsList);
+
+var _adminTripReservationsList = require('./components/trips/admin-trip-reservations-list.vue');
+
+var _adminTripReservationsList2 = _interopRequireDefault(_adminTripReservationsList);
+
+var _adminTripFacilitators = require('./components/trips/admin-trip-facilitators.vue');
+
+var _adminTripFacilitators2 = _interopRequireDefault(_adminTripFacilitators);
+
+var _adminTripDuplicate = require('./components/trips/admin-trip-duplicate.vue');
+
+var _adminTripDuplicate2 = _interopRequireDefault(_adminTripDuplicate);
+
+var _adminTripDelete = require('./components/trips/admin-trip-delete.vue');
+
+var _adminTripDelete2 = _interopRequireDefault(_adminTripDelete);
+
+var _adminGroupsList = require('./components/groups/admin-groups-list.vue');
+
+var _adminGroupsList2 = _interopRequireDefault(_adminGroupsList);
+
+var _adminGroupCreate = require('./components/groups/admin-group-create.vue');
+
+var _adminGroupCreate2 = _interopRequireDefault(_adminGroupCreate);
+
+var _adminGroupEdit = require('./components/groups/admin-group-edit.vue');
+
+var _adminGroupEdit2 = _interopRequireDefault(_adminGroupEdit);
+
+var _adminGroupManagers = require('./components/groups/admin-group-managers.vue');
+
+var _adminGroupManagers2 = _interopRequireDefault(_adminGroupManagers);
+
+var _adminReservationsList = require('./components/reservations/admin-reservations-list.vue');
+
+var _adminReservationsList2 = _interopRequireDefault(_adminReservationsList);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
+
+// admin components
+
+window.moment = require('moment');
+window._ = require('underscore');
 require('jquery.cookie');
 require('bootstrap-sass');
 
@@ -24471,6 +39140,8 @@ $(document).ready(function () {
 
 // Vue Resource
 _vue2.default.use(require('vue-resource'));
+// Vue Validator
+_vue2.default.use(require('vue-validator'));
 
 _vue2.default.http.options.root = '/api';
 _vue2.default.http.interceptors.push({
@@ -24478,10 +39149,8 @@ _vue2.default.http.interceptors.push({
     request: function request(_request) {
         var token, headers;
 
-        // swap local storage to cookie
-        // token = window.localStorage.getItem('jwt-token')
-        token = 'Bearer ' + $.cookie('jwt_token');
-        console.log(token);
+        token = 'Bearer ' + $.cookie('api_token');
+
         headers = _request.headers || (_request.headers = {});
 
         if (token !== null && token !== 'undefined') {
@@ -24492,39 +39161,91 @@ _vue2.default.http.interceptors.push({
     },
 
     response: function response(_response) {
-        // if (response.status && response.status === 401) {
-        //     // swap local storage to cookie
-        //     window.localStorage.removeItem('jwt-token')
-        // }
-        // if (response.headers && response.headers('Authorization')) {
-        //     console.log('found authorization header')
-        //     // swap local storage to cookie
-        //     document.cookie = 'jwt_token=' + response.headers('Authorization')
-        //     // window.localStorage.setItem('jwt-token', response.headers('Authorization'))
-        // }
-        // if (response.data && response.data.token && response.data.token.length > 10) {
-        //     // swap local storage to cookie
-        //     document.cookie = 'jwt_token=' + response.data.token
-        //     // window.localStorage.setItem('jwt-token', 'Bearer ' + response.data.token)
-        // }
+        if (_response.status && _response.status === 401) {
+            $.removeCookie('api_token');
+        }
+        if (_response.headers && _response.headers('Authorization')) {
+            $.cookie('api_token', _response.headers('Authorization'));
+        }
+        if (_response.data && _response.data.token && _response.data.token.length > 10) {
+            $.cookie('api_token', _response.data.token);
+        }
 
         return _response;
     }
 });
 
+// Register email validator function.
+_vue2.default.validator('email', function (val) {
+    return (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
+    );
+});
+
+_vue2.default.filter('phone', {
+    read: function read(phone) {
+        phone = phone || '';
+        return phone.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+    },
+    write: function write(phone, phoneVal) {
+        phone = phone || '';
+        return phone.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+    }
+});
+
+_vue2.default.filter('number', {
+    read: function read(number, decimals) {
+        return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
+    },
+    write: function write(number, numberVal, decimals) {
+        return number;
+    }
+});
+_vue2.default.filter('percentage', {
+    read: function read(number, decimals) {
+        return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
+    },
+    write: function write(number, numberVal, decimals) {
+        return number + '%';
+    }
+});
+
+_vue2.default.filter('moment', function (val, format) {
+    return moment(val).format(format || 'LL');
+});
+
 new _vue2.default({
     el: '#app',
-    components: [_login2.default, _campaigns2.default, _campaignGroups2.default, _groupTrips2.default, _groupsTripsSelectionWrapper2.default],
+    data: {
+        user: {
+            name: '',
+            email: '',
+            public: false
+        }
+    },
+    components: [_login2.default, _campaigns2.default, _campaignGroups2.default, _groupTrips2.default, _groupsTripsSelectionWrapper2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default,
+
+    // admin components
+    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default],
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     },
     ready: function ready() {
-        console.log('vue is ready');
+        // console.log('vue is ready'),
+        this.$on('userHasLoggedIn', function (user) {
+            this.setUser(user);
+        });
+    },
+    methods: {
+        setUser: function setUser(user) {
+            // Save user info
+            this.user = user;
+            this.authenticated = true;
+        }
     }
 });
 
-},{"./components/campaigns/campaign-groups.vue":9,"./components/campaigns/campaigns.vue":10,"./components/campaigns/group-trips.vue":11,"./components/campaigns/groups-trips-selection-wrapper.vue":12,"./components/login.vue":13,"bootstrap-sass":1,"jquery":3,"jquery.cookie":2,"vue":7,"vue-resource":6}]},{},[14]);
+},{"./components/campaigns/admin-campaign-create.vue":113,"./components/campaigns/admin-campaign-details.vue":114,"./components/campaigns/admin-campaign-edit.vue":115,"./components/campaigns/campaign-groups.vue":116,"./components/campaigns/campaigns.vue":117,"./components/campaigns/group-trips.vue":122,"./components/campaigns/groups-trips-selection-wrapper.vue":123,"./components/groups/admin-group-create.vue":124,"./components/groups/admin-group-edit.vue":125,"./components/groups/admin-group-managers.vue":126,"./components/groups/admin-groups-list.vue":127,"./components/login.vue":128,"./components/reservations/admin-reservations-list.vue":129,"./components/reservations/donations-list.vue":130,"./components/reservations/reservations-list.vue":131,"./components/trips/admin-trip-create.vue":132,"./components/trips/admin-trip-delete.vue":133,"./components/trips/admin-trip-duplicate.vue":134,"./components/trips/admin-trip-edit.vue":135,"./components/trips/admin-trip-facilitators.vue":136,"./components/trips/admin-trip-reservations-list.vue":137,"./components/trips/admin-trips-list.vue":138,"./components/trips/trip-registration-wizard.vue":156,"bootstrap-sass":15,"jquery":103,"jquery.cookie":102,"moment":104,"underscore":106,"vue":111,"vue-resource":108,"vue-validator":110}]},{},[157]);
 
 //# sourceMappingURL=main.js.map

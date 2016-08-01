@@ -13,7 +13,7 @@ class UserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'reservations', 'notes', 'managing', 'facilitating'
+        'reservations', 'notes', 'managing', 'facilitating', 'passports', 'visas'
     ];
 
     /**
@@ -39,8 +39,8 @@ class UserTransformer extends TransformerAbstract
             'city'         => $user->city,
             'state'        => $user->state,
             'zip'          => $user->zip,
-            'country_code' => $user->country,
-            'country_name' => country($user->country),
+            'country_code' => $user->country_code,
+            'country_name' => country($user->country_code),
             'timezone'     => $user->timezone,
             'bio'          => $user->bio,
             'url'          => $user->url,
@@ -67,6 +67,20 @@ class UserTransformer extends TransformerAbstract
         $reservations = $user->reservations;
 
         return $this->collection($reservations, new ReservationTransformer);
+    }
+
+    public function includePassports(User $user)
+    {
+        $passports = $user->passports;
+
+        return $this->collection($passports, new PassportTransformer);
+    }
+
+    public function includeVisas(User $user)
+    {
+        $visas = $user->visas;
+
+        return $this->collection($visas, new VisaTransformer);
     }
 
     /**

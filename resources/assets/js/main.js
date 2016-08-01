@@ -16,9 +16,21 @@ import adminCampaignTripCreate from './components/trips/admin-trip-create.vue';
 import adminCampaignTripEdit from './components/trips/admin-trip-edit.vue';
 import adminTrips from './components/trips/admin-trips-list.vue';
 import adminTripsReservations from './components/trips/admin-trip-reservations-list.vue';
+import adminTripsFacilitators from './components/trips/admin-trip-facilitators.vue';
 import adminTripsDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripsDelete from './components/trips/admin-trip-delete.vue';
 import adminGoups from './components/groups/admin-groups-list.vue';
+import adminGroupCreate from './components/groups/admin-group-create.vue';
+import adminGroupEdit from './components/groups/admin-group-edit.vue';
+import adminGroupManagers from './components/groups/admin-group-managers.vue';
+import adminReservations from './components/reservations/admin-reservations-list.vue';
+import adminUsers from './components/users/admin-users-list.vue';
+import adminUserCreate from './components/users/admin-user-create.vue';
+import adminUserEdit from './components/users/admin-user-edit.vue';
+import adminUserDelete from './components/users/admin-user-delete.vue';
+import adminUploads from './components/uploads/admin-uploads-list.vue';
+import adminUploadCreate from './components/uploads/admin-upload-create.vue';
+import adminUploadEdit from './components/uploads/admin-upload-edit.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -27,8 +39,12 @@ window._ = require('underscore');
 require('jquery.cookie');
 require('bootstrap-sass');
 
+
 $( document ).ready(function() {
     console.log($.fn.tooltip.Constructor.VERSION);
+    $('[data-toggle="offcanvas"]').click(function () {
+        $('.row-offcanvas').toggleClass('active')
+    });
 });
 
 // Vue Resource
@@ -75,10 +91,12 @@ Vue.validator('email', function (val) {
 
 Vue.filter('phone', {
     read:function (phone) {
+        phone = phone||'';
         return phone.replace(/[^0-9]/g, '')
             .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
     },
     write: function(phone, phoneVal) {
+        phone = phone||'';
         return phone.replace(/[^0-9]/g, '')
             .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
     }
@@ -92,9 +110,68 @@ Vue.filter('number', {
         return number;
     }
 });
+Vue.filter('percentage', {
+    read:function (number, decimals) {
+        return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
+    },
+    write: function(number, numberVal, decimals) {
+        return number + '%';
+    }
+});
 
 Vue.filter('moment', function (val, format) {
     return moment(val).format(format||'LL');
+});
+
+var VueCropOptions = {
+    setSelect: [10, 10, 100, 100],
+    aspectRatio: 1,
+    bgColor: 'red',
+    minSize: [100, 100]
+};
+var VueCropEvents = [
+    'create',
+    'start',
+    'move',
+    'end',
+    'focus',
+    'blur',
+    'remove'
+];
+
+Vue.directive('crop', {
+
+    acceptStatement: true,
+
+    bind: function() {
+        var event = this.arg;
+
+        if ($.inArray(event, VueCropEvents) == -1) {
+            console.warn('Invalid v-crop event: ' + event);
+            return;
+        }
+
+        if (this.vm.jcrop) return;
+
+        var $wrapper = $(this.el).wrap('<div/>').parent();
+        $wrapper.width(this.el.width).height(this.el.height);
+        this.vm.jcrop = $.Jcrop.attach($wrapper, VueCropOptions);
+        // send api to active componant
+        this.vm.$dispatch('vueCrop-api', this.vm.jcrop);
+    },
+
+    update: function(callback) {
+        this.vm.jcrop.container.on('crop' + this.arg, callback)
+    },
+
+    unbind: function() {
+        this.vm.jcrop.container.off('crop' + this.arg);
+
+        if (this._watcher.id != 1) return;
+
+        this.vm.jcrop.destroy();
+        this.vm.jcrop = null
+    }
 });
 
 new Vue({
@@ -124,9 +201,21 @@ new Vue({
         adminCampaignTripEdit,
         adminTrips,
         adminTripsReservations,
+        adminTripsFacilitators,
         adminTripsDuplicate,
         adminTripsDelete,
         adminGoups,
+        adminGroupCreate,
+        adminGroupEdit,
+        adminGroupManagers,
+        adminReservations,
+        adminUsers,
+        adminUserCreate,
+        adminUserEdit,
+        adminUserDelete,
+        adminUploads,
+        adminUploadCreate,
+        adminUploadEdit,
     ],
     http: {
         headers: {

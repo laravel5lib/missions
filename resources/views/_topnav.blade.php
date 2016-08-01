@@ -14,14 +14,26 @@
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="nav navbar-nav navbar-right dropdown">
-      <li id="userMenu" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left"src="/images/nelson-prof-pic.jpg" alt="Zech Nelson"> Zech Nelson <i class="fa fa-angle-down"></i></a></li>
+
+      @if(auth()->check())
+      <li><a class="btn btn-primary" href="#">Donate</a></li>
+      <li id="userMenu" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left"src="/images/nelson-prof-pic.jpg" alt="Zech Nelson"> {{ auth()->user()->name }} <i class="fa fa-angle-down"></i></a></li>
       <ul class="dropdown-menu" aria-labelledby="userMenu">
-        <li><a href="profile.html">My Profile</a></li>
-        <li><a href="group-profile.html">My Group</a></li>
-        <li><a href="Settings.html">Dashboard</a></li>
+        <li><a href="#">My Profile</a></li>
+        <li><a href="#">My Group</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
         <li role="separator" class="divider"></li>
-        <li><a href="#">Sign Out</a></li>
+        <li><a href="/logout">Sign Out</a></li>
       </ul>
+      @else
+      <li>
+        <div class="btn-group">
+          <a class="btn btn-link" href="/login">Login</a>
+          <a class="btn btn-primary" href="/login">Sign Up</a>
+        </div>
+      </li>
+      @endif
+
     </div><!-- /.navbar-right -->
   </div><!-- end container -->
 </div><!-- end navbar -->

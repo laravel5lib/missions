@@ -24,11 +24,27 @@ class RegionRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $required = [
             'name'         => 'required|string|max:100',
             'country_code' => 'required|in:' . Country::codes(),
             'call_sign'    => 'required|string|max:50',
             'campaign_id'  => 'required|exists:campaigns,id'
         ];
+
+        if ($this->isMethod('put'))
+        {
+            $required = [
+                'name'         => 'sometimes|required|string|max:100',
+                'country_code' => 'sometimes|required|in:' . Country::codes(),
+                'call_sign'    => 'sometimes|required|string|max:50',
+                'campaign_id'  => 'sometimes|required|exists:campaigns,id'
+            ];
+        }
+
+        $optional = [
+            'tags' => 'array'
+        ];
+
+        return $rules = $required + $optional;
     }
 }

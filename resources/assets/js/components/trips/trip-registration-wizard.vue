@@ -1,11 +1,40 @@
 <template>
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">{{ $trip->country_name }} Trip Registration</h3>
+			<h5>{{ trip.country_name }} Trip Registration</h5>
 		</div>
 		<div class="panel-body">
+			<div class="row visible-xs-block">
+				<div class="col-xs-12">
+					<div class="btn-group btn-group-justified btn-group-xs" style="display:block;" role="group" aria-label="...">
+						<a @click="backStep()" class="btn btn-default" :class="{'disabled': currentStep.view === 'step1' }" role="button">
+							<i class="fa fa-chevron-left"></i>
+						</a>
+						<div class="btn-group" role="group">
+							<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button"
+							   aria-haspopup="true" aria-expanded="false">
+								{{ currentStep.name }} <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu dropdown-menu-right">
+								<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
+									<a @click="toStep(step)">
+										<span class="fa" :class="{'fa-chevron-right':!step.complete, 'fa-check': step.complete}"></span>
+										{{step.name}}
+									</a>
+								</li>
+							</ul>
+						</div>
+						<!--<a class="btn btn-default" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep()">
+							<i class="fa fa-chevron-right"></i>
+						</a>
+						<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">
+							<i class="fa fa-check"></i>
+						</a>-->
+					</div>
+				</div>
+			</div>
 			<div class="row">
-				<div class="col-sm-4 col-md-3">
+				<div class="col-sm-5 col-md-4 hidden-xs">
 					<ul class="nav nav-pills nav-stacked">
 						<li role="step" v-for="step in stepList" :class="{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view && !step.complete}">
 							<a @click="toStep(step)">
@@ -16,7 +45,7 @@
 
 					</ul>
 				</div>
-				<div class="col-sm-8 col-md-9 {{currentStep.view}}">
+				<div class="col-sm-7 col-md-8 {{currentStep.view}}">
 					<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 					</component>
@@ -25,9 +54,9 @@
 			</div>
 		</div>
 		<div class="panel-footer text-right">
-			<div class="btn-group btn-group-sm" role="group" aria-label="...">
+			<div class="btn-group btn-group" role="group" aria-label="...">
 				<!--<a class="btn btn-link" data-dismiss="modal">Cancel</a>-->
-				<a class="btn btn-default" @click="backStep()">Back</a>
+				<a class="btn btn-default" @click="backStep()" :class="{'disabled': currentStep.view === 'step1' }">Back</a>
 				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep()">Continue</a>
 				<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">Finish</a>
 			</div>
@@ -71,6 +100,7 @@
 				],
 				currentStep: null,
 				canContinue: false,
+				trip: {},
 				tripCosts: {},
 				deadlines:[],
 				requirements:[],
@@ -164,7 +194,7 @@
 					trip_id: this.tripId,
 					companion_limit: this.companion_limit
 				}).then(function (response) {
-					window.location.href = response.data.data.links[0].uri;
+					window.location.href = '/dashboard' + response.data.data.links[0].uri;
 				}, function (response) {
 					console.log(response);
 				});
@@ -191,6 +221,7 @@
 			//get trip costs
 			var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
 			resource.query({id: this.tripId}).then(function (trip) {
+				this.trip = trip.data.data;
 				// deadlines, requirements, and companion_limit
 				this.deadlines =  trip.data.data.deadlines.data;
 				this.requirements =  trip.data.data.requirements.data;

@@ -97,7 +97,7 @@ class DonationsController extends Controller
      * @param CardRequest $request
      * @return mixed
      */
-    public function authorize(CardRequest $request)
+    public function authorizeCard(CardRequest $request)
     {
         $token = $this->payment->createCardToken($request->all());
 

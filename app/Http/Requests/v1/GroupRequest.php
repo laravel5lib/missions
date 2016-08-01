@@ -16,17 +16,7 @@ class GroupRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($this->isMethod('put'))
-        {
-            $groupId = $this->route('groups');
-
-            return Gate::allows('update', Group::findOrFail($groupId));
-        }
-
-        if ($this->isMethod('post'))
-        {
-            return $this->user()->isAdmin();
-        }
+        return true;
     }
 
     /**
@@ -36,23 +26,40 @@ class GroupRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $required = [
             'name'         => 'required|max:100',
-            'description'  => 'string|max:120',
             'url'          => 'required_if:public,true',
             'type'         => 'required|in:church,business,nonprofit,youth,other',
             'timezone'     => 'required|timezone',
-            'address_one'  => 'string',
-            'address_two'  => 'string',
-            'city'         => 'string',
-            'state'        => 'string',
-            'zip'          => 'string',
-            'phone_one'    => 'string',
-            'phone_two'    => 'string',
-            'email'        => 'email',
-            'country_code' => 'required|in:' . Country::codes(),
-            'public'       => 'boolean',
-            'managers'     => 'array'
+            'country_code' => 'required|in:' . Country::codes()
         ];
+
+        if ($this->isMethod('put'))
+        {
+            $required = [
+                'name'         => 'sometimes|required|max:100',
+                'url'          => 'sometimes|required_if:public,true',
+                'type'         => 'sometimes|required|in:church,business,nonprofit,youth,other',
+                'timezone'     => 'sometimes|required|timezone',
+                'country_code' => 'sometimes|required|in:' . Country::codes()
+            ];
+        }
+
+        $optional = [
+            'description' => 'string|max:120',
+            'address_one' => 'string',
+            'address_two' => 'string',
+            'city'        => 'string',
+            'state'       => 'string',
+            'zip'         => 'string',
+            'phone_one'   => 'string',
+            'phone_two'   => 'string',
+            'email'       => 'email',
+            'public'      => 'boolean',
+            'managers'    => 'array',
+            'tags'        => 'array'
+        ];
+
+        return $rules = $required + $optional;
     }
 }

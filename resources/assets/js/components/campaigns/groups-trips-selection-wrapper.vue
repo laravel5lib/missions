@@ -1,15 +1,20 @@
 <template>
 	<div>
-		<div class="container">
-			<h5>{{ campaignName }}</h5>
-		</div>
-		<div class="gray-light-bg">
+		<div class="white-bg">
 			<div class="container">
+				<hr class="divider inv sm">
 				<div class="row">
 					<div class="col-sm-6">
+						<h6 class="small text-uppercase">Campaign Chosen</h6>
+						<h4 class="text-capitalize">{{ campaignName }}</h4>
+					</div>
+					<div class="col-sm-6 text-right">
+						<hr class="divider inv sm">
+						<hr class="divider inv sm">
 						<a v-show="currentView!='groupSelection'" @click="restartView()" class="btn btn-default btn-sm">Start Over</a>
 					</div>
 				</div>
+				<hr class="divider inv sm">
 			</div>
 		</div>
 		<component :is="currentView" transition="fade" transition-mode="out-in">>

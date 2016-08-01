@@ -2,16 +2,18 @@
 <div>
 	<div class="dark-bg-primary">
 		<div class="container">
+			<hr class="divider inv xlg">
 			<div class="row">
 				<div class="col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-1">
 					<hr class="divider inv">
-					<h6 class="text-center text-uppercase">Which group are you traveling with?</h6>
+					<h6 class="text-center text-uppercase">Which group would you like to travel with?</h6>
 					<input type="text" class="form-control" v-model="searchText" debounce="500" placeholder="Search for a group">
 					<hr class="divider inv sm">
 					<p class="small text-center">Don't See Your Group?</p>
 					<hr class="divider inv">
 				</div>
 			</div>
+			<hr class="divider inv xlg">
 		</div>
 	</div>
 	<hr class="divider inv xlg">

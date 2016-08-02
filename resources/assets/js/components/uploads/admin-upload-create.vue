@@ -15,7 +15,7 @@
                     <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }">
                         <option value="">-- select type --</option>
                         <option value="avatar">Image (Avatar) - 600 x 600</option>
-                        <option value="banner">Image (Banner) - 1200 x 320</option>
+						<option value="banner">Image (Banner) - 1200 x 320</option>
 						<option value="other">Image (other) - no set dimensions</option>
 						<option value="file">File</option>
                     </select>

@@ -7,6 +7,7 @@ import groupTripWrapper from './components/campaigns/groups-trips-selection-wrap
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
+import recordsList from './components/records/records-list.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -196,6 +197,7 @@ new Vue({
         tripRegWizard,
         reservationsList,
         donationsList,
+        recordsList,
 
         // admin components
         adminCampaignCreate,

@@ -40,6 +40,7 @@ $api->version('v1', [
     });
 
     $api->resource('uploads', 'UploadsController');
+    $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
     $api->post('/login', 'AuthenticationController@authenticate');
     $api->post('/register', 'AuthenticationController@register');
     $api->delete('/logout', 'AuthenticationController@deauthenticate');

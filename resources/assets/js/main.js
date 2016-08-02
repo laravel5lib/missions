@@ -7,6 +7,9 @@ import groupTripWrapper from './components/campaigns/groups-trips-selection-wrap
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
+import recordsList from './components/records/records-list.vue';
+import visasList from './components/visas/visas-list.vue';
+import passportsList from './components/passports/passports-list.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -36,9 +39,12 @@ import adminUploadEdit from './components/uploads/admin-upload-edit.vue';
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 window._ = require('underscore');
+// require('vue-strap/src/index.js');
+// window.VueStrap = require('vue-strap/dist/vue-strap.min');
+import VueStrap from 'vue-strap/dist/vue-strap.min';
+
 require('jquery.cookie');
 require('bootstrap-sass');
-
 
 $( document ).ready(function() {
     console.log($.fn.tooltip.Constructor.VERSION);
@@ -56,7 +62,7 @@ Vue.http.options.root = '/api';
 Vue.http.interceptors.push({
 
     request: function (request) {
-        var token, headers
+        var token, headers;
 
         token = 'Bearer ' + $.cookie('api_token');
 
@@ -110,6 +116,7 @@ Vue.filter('number', {
         return number;
     }
 });
+
 Vue.filter('percentage', {
     read:function (number, decimals) {
         return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
@@ -192,6 +199,11 @@ new Vue({
         tripRegWizard,
         reservationsList,
         donationsList,
+
+        //dashboard components
+        recordsList,
+        passportsList,
+        visasList,
 
         // admin components
         adminCampaignCreate,

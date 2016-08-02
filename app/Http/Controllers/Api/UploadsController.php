@@ -9,6 +9,7 @@ use App\Models\v1\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use League\Glide\Server;
 
 class UploadsController extends Controller
 {
@@ -17,16 +18,22 @@ class UploadsController extends Controller
      * @var Upload
      */
     private $upload;
+    /**
+     * @var Server
+     */
+    private $server;
 
     /**
      * UploadsController constructor.
      * @param Upload $upload
+     * @param Server $server
      */
-    public function __construct(Upload $upload)
+    public function __construct(Upload $upload, Server $server)
     {
         $this->upload = $upload;
 //        $this->middleware('api.auth', ['except' => ['show']]);
 //        $this->middleware('jwt.refresh', ['except' => ['show']]);
+        $this->server = $server;
     }
 
     /**
@@ -55,7 +62,7 @@ class UploadsController extends Controller
 
         $source = $this->upload($stream, $request->only('path', 'name', 'file'));
 
-        $upload = $this->save($source, $request->get('type'));
+        $upload = $this->save($source, $request->all());
 
         $this->response->item($upload, new UploadTransformer);
     }
@@ -74,6 +81,19 @@ class UploadsController extends Controller
     }
 
     /**
+     * Display an image
+     *
+     * @param $path
+     * @param Request $request
+     * @return mixed
+     * @internal param $source
+     */
+    public function display($path, Request $request)
+    {
+        $this->server->outputImage($path, $request->all());
+    }
+
+    /**
      * Update the specified upload.
      *
      * @param UploadRequest $request
@@ -81,13 +101,16 @@ class UploadsController extends Controller
      */
     public function update(UploadRequest $request, $id)
     {
-        $stream = $this->process($request);
+        if ($request->has('file'))
+        {
+            $stream = $this->process($request);
 
-        $source = $this->upload($stream, $request->only('path', 'name', 'file'));
+            $source = $this->upload($stream, $request->only('path', 'name', 'file'));
+        }
 
         $upload = $this->upload->findOrFail($id);
         $upload->update([
-            'source' => $source['source'],
+            'source' => isset($source['source']) ? $source['source'] : $upload->source,
             'name' => $request->get('name'),
             'type' => $request->get('type')
         ]);
@@ -153,29 +176,37 @@ class UploadsController extends Controller
         $source = $path.'/'.$filename.'.jpg';
 
         // store image on s3 server
-        Storage::disk('s3')->put(
+        $storage = Storage::disk('s3')->put(
             $source,
             $stream->__toString()
         );
 
-        return ['source' => $source, 'filename' => $filename];
+        $size = $storage->size;
+
+        return ['source' => $source, 'filename' => $filename, 'size' => $size];
     }
 
     /**
      * Save the upload record in storage.
      *
      * @param $source
-     * @param $type
+     * @param Request $request
      * @return Upload
+     * @internal param $type
      */
-    private function save($source, $type)
+    private function save($source, Request $request)
     {
         // create new upload record
         $upload = new Upload;
         $upload->updateOrCreate([
-            'source' => $source['source'],
             'name' => $source['filename'],
-            'type' => $type
+            'type' => $request->get('type'),
+            'source' => $source['source'],
+            'meta' => [
+                'width' => $request->get('width'),
+                'height' => $request->get('height'),
+                'size' => $source['size']
+            ]
         ]);
 
         return $upload;

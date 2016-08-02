@@ -165,7 +165,8 @@
         },
         methods: {
             checkSource(link){
-                return decodeURIComponent(link.indexOf('/http') ? 'http' + link.split('/http')[1]: link);
+//                return decodeURIComponent(link.indexOf('/http') ? 'http' + link.split('/http')[1]: link);
+                return link + '?w=100&q=25';
             },
             setOrderByField(field){
                 return this.orderByField = field, this.direction = 1;

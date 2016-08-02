@@ -617,8 +617,8 @@ $factory->define(App\Models\v1\Occupant::class, function (Faker\Generator $faker
 $factory->define(App\Models\v1\Upload::class, function (Faker\Generator $faker)
 {
     return [
-        'name' => $faker->userName,
-        'source' => $faker->imageUrl(),
-        'type' => $faker->randomElement(['photo', 'thumbnail', 'avatar', 'banner', 'file'])
+        'name' => $faker->word,
+        'source' => 'images/placeholders/doc-placeholder.png',
+        'type' => $faker->randomElement(['avatar', 'banner', 'other'])
     ];
 });

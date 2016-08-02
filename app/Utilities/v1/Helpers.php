@@ -24,5 +24,5 @@ function carbon($date)
 
 function image($source)
 {
-    return url('api/images/'.$source);
+    return url('api/'.$source);
 }

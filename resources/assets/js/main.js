@@ -1,6 +1,4 @@
 import Vue from 'vue';
-import userSidebar from './components/sidebar.vue';
-import adminSidebar from './components/admin-sidebar.vue';
 import login from './components/login.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
@@ -190,8 +188,6 @@ new Vue({
       }
     },
     components: [
-        userSidebar,
-        adminSidebar,
         login,
         campaigns,
         campaignGroups,

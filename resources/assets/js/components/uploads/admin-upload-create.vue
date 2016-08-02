@@ -181,12 +181,13 @@
 						file: this.file,
                         x_axis: parseInt(this.x_axis / this.imageAspectRatio),
                         y_axis: parseInt(this.y_axis / this.imageAspectRatio),
-                        width: parseInt(this.scaledWidth),
-                        height: parseInt(this.scaledHeight),
+                        width: parseInt(this.coords.w / this.imageAspectRatio),
+                        height: parseInt(this.coords.h / this.imageAspectRatio),
                     }).then(function (resp) {
 						console.log(resp);
 //                    	this.resultImage = resp.data;
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+                        window.location.href = '/admin/uploads';
+//                        window.location.href = '/admin' + resp.data.data.links[0].uri;
                     }, function (error) {
                         console.log(error);
                     });

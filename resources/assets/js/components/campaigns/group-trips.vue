@@ -12,8 +12,13 @@
 	</div>
 	</div>
 	<div class="container">
-		<hr class="divider inv xlg">
+		<hr class="divider inv lg">
 		<div class="row">
+			<div class="col-xs-12 text-center">
+				<h2>Choose A Trip</h2>
+				<hr class="divider red-small lg">
+			</div>
+			<div class="col-xs-12">
 			<table class="table table-hover">
 				<thead>
 				<tr>
@@ -38,6 +43,7 @@
 				</tr>
 				</tbody>
 			</table>
+			</div>
 		</div><!-- end row -->
 		<hr class="divider inv xlg">
 	</div><!-- end container -->

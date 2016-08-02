@@ -24,18 +24,11 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        $id = null;
-
-        if ($this->isMethod('put'))
-        {
-            $this->id ? $id = $this->id : $id = app('Dingo\Api\Auth\Auth')->user()->id;
-        }
-
         $rules = [
             'name'         => 'required|max:100',
-            'email'        => 'required|email|unique:users,email,' . $id,
+            'email'        => 'required|email|unique:users,email',
             'password'     => 'required|confirmed|min:8',
-            'alt_email'    => 'email|unique:users,alt_email,' . $id,
+            'alt_email'    => 'email|unique:users,alt_email',
             'gender'       => 'in:Male,Female',
             'status'       => 'in:Single,Married',
             'birthday'     => 'date',
@@ -44,14 +37,19 @@ class UserRequest extends FormRequest
             'zip'          => 'string|max:10',
             'country_code' => 'required|in:' . Country::codes(),
             'timezone'     => 'required|max:25',
-            'url'          => 'string|unique:users,url,' . $id,
+            'url'          => 'string|unique:users,url,',
             'public'       => 'boolean',
             'bio'          => 'string|max:120'
         ];
 
-        if ($this->isMethod('post'))
+        if ($this->isMethod('put'))
         {
-            $rules['password'] = 'required|confirmed|min:8';
+            $rules['password'] = 'sometimes|required|confirmed|min:8';
+            $rules['alt_email'] = 'email|unique:users,alt_email,id';
+            $rules['email'] = 'sometimes|required|email|unique:users,email,id';
+            $rules['url'] = 'string|unique:users,url,id';
+            $rules['country_code'] = 'sometimes|required|in:' . Country::codes();
+            $rules['timezone'] = 'sometimes|required|max:25';
         }
 
         return $rules;

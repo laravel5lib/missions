@@ -3,7 +3,6 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Upload;
-use Illuminate\Support\Facades\Storage;
 use League\Fractal\TransformerAbstract;
 
 class UploadTransformer extends TransformerAbstract
@@ -18,10 +17,10 @@ class UploadTransformer extends TransformerAbstract
     {
         return [
             'id'         => $upload->id,
-            'source'     => Storage::disk('s3')->url($upload->source),
+            'source'     => image($upload->source),
             'name'       => $upload->name,
             'type'       => $upload->type,
-            'size'       => Storage::disk('s3')->size($upload->source),
+            'meta'       => $upload->meta,
             'created_at' => $upload->created_at->toDateTimeString(),
             'updated_at' => $upload->updated_at->toDateTimeString(),
             'links'      => [

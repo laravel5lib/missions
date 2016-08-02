@@ -13,7 +13,7 @@
                 <label for="type" class="col-sm-2 control-label">Type</label>
                 <div class="col-sm-10">
                     <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }">
-                        <option value="">-- select type --</option>
+                        <option :value="">-- select type --</option>
                         <option value="avatar">Image (Avatar) - 600 x 600</option>
 						<option value="banner">Image (Banner) - 1200 x 320</option>
 						<option value="other">Image (other) - no set dimensions</option>
@@ -58,10 +58,10 @@
 				</div>
 			</div>
 
-			<div class="form-group" v-show="type !== 'file'">
+			<div class="form-group" v-if="file" v-show="type !== 'file'">
 				<label for="file" class="col-sm-2 control-label">Crop Image</label>
 				<div id="crop-wrapper" class="col-sm-10">
-					<img v-if="file" :src="file" :width="imageWidth" :height="imageHeight" style="max-width:{{imageMaxWidth}}px;max-height:{{imageMaxHeight}}px;"
+					<img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"
 							 v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>
 				<!--<hr>-->
 					<!--<img :src="resultImage" v-if="resultImage">-->

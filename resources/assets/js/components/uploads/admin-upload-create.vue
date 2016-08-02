@@ -58,6 +58,13 @@
 				</div>
 			</div>
 
+			<div class="row col-sm-offset-2" v-if="type && type !== 'file' && file && isSmall()">
+				<div class="alert alert-warning" role="alert">
+					The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
+					The current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.
+				</div>
+			</div>
+
 			<div class="form-group" v-if="file" v-show="type !== 'file'">
 				<label for="file" class="col-sm-2 control-label">Crop Image</label>
 				<div id="crop-wrapper" class="col-sm-10">
@@ -115,8 +122,8 @@
 				resultImage: null,
 				typeObj: null,
 				typePaths: [
-					{type: 'avatar', path: 'images/avatars', width: 600, height: 600},
-					{type: 'banner', path: 'images/banners', width: 1200, height: 320},
+					{type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
+					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
 					{type: 'other', path: 'images/other'},
 					{type: 'file', path: 'resources/documents'},
 				]
@@ -137,6 +144,9 @@
 			}
 		},
         methods: {
+			isSmall(){
+				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
+			},
 			adjustSelectByType(){
 				if (this.vueCropApi && _.contains(['banner', 'avatar'], this.typeObj.type)) {
 					// update dimensions

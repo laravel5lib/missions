@@ -7,8 +7,6 @@ use App\Http\Requests\v1\UploadRequest;
 use App\Http\Transformers\v1\UploadTransformer;
 use App\Models\v1\Upload;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
@@ -75,6 +73,12 @@ class UploadsController extends Controller
         return $this->response->item($upload, new UploadTransformer);
     }
 
+    /**
+     * Update the specified upload.
+     *
+     * @param UploadRequest $request
+     * @param $id
+     */
     public function update(UploadRequest $request, $id)
     {
         $stream = $this->process($request);
@@ -84,7 +88,7 @@ class UploadsController extends Controller
         $upload = $this->upload->findOrFail($id);
         $upload->update([
             'source' => $source['source'],
-            'name' => $source['filename'],
+            'name' => $request->get('name'),
             'type' => $request->get('type')
         ]);
 
@@ -116,7 +120,7 @@ class UploadsController extends Controller
     private function process($request)
     {
         // resize or crop and stream image
-        $img = Image::make($request->file('file'));
+        $img = Image::make($request->get('file'));
 
         if($request->has('x_axis') and $request->has('y_axis')) {
             $img->crop(
@@ -127,6 +131,8 @@ class UploadsController extends Controller
         elseif ($request->has('height') and $request->has('width')) {
             $img->resize($request->get('width'), $request->get('height'));
         }
+
+        $img->encode($request->get('extension', 'jpg'), '100');
 
         $stream = $img->stream();
 
@@ -143,9 +149,8 @@ class UploadsController extends Controller
     private function upload($stream, $request)
     {
         $path = $request['path'];
-        $filename = isset($request['name']) ? $request['name'] : time();
-        $file = $request['file'];
-        $source = $path.'/'.$filename.'.'.$file->getClientOriginalExtension();
+        $filename = isset($request['name']) ? snake_case(trim($request['name'])).'_'.time() : time();
+        $source = $path.'/'.$filename.'.jpg';
 
         // store image on s3 server
         Storage::disk('s3')->put(

@@ -424,7 +424,7 @@
                         status: this.status,
                         gender: this.gender,
                         public: this.public,
-                        url: this.url,
+                        url: this.public ? this.url : undefined,
                     }).then(function (resp) {
                         window.location.href = '/admin' + resp.data.data.links[0].uri;
                     }, function (error) {

@@ -1,7 +1,24 @@
 <template>
+	<div class="dark-bg-primary">
 	<div class="container">
+		<hr class="divider inv xlg">
 		<div class="row">
-			<h4>{{ group.name }}</h4>
+			<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center">
+				<img class="img-circle img-lg" src="http://lorempixel.com/500/500/">
+				<h3>{{ group.name }}</h3>
+			</div>
+		</div>
+		<hr class="divider inv lg">
+	</div>
+	</div>
+	<div class="container">
+		<hr class="divider inv lg">
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<h2>Choose A Trip</h2>
+				<hr class="divider red-small lg">
+			</div>
+			<div class="col-xs-12">
 			<table class="table table-hover">
 				<thead>
 				<tr>
@@ -22,11 +39,13 @@
 							{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
 						</span>
 					</td>
-					<td><a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a></td>
+					<td class="text-right"><a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a></td>
 				</tr>
 				</tbody>
 			</table>
+			</div>
 		</div><!-- end row -->
+		<hr class="divider inv xlg">
 	</div><!-- end container -->
 </template>
 <script>

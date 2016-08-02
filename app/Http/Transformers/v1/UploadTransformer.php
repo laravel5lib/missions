@@ -20,7 +20,7 @@ class UploadTransformer extends TransformerAbstract
             'source'     => image($upload->source),
             'name'       => $upload->name,
             'type'       => $upload->type,
-            'size'       => $upload->size,
+            'meta'       => $upload->meta,
             'created_at' => $upload->created_at->toDateTimeString(),
             'updated_at' => $upload->updated_at->toDateTimeString(),
             'links'      => [

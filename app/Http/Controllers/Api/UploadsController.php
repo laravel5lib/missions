@@ -55,6 +55,7 @@ class UploadsController extends Controller
      * Create and upload a new upload.
      *
      * @param UploadRequest $request
+     * @return \Dingo\Api\Http\Response
      */
     public function store(UploadRequest $request)
     {
@@ -62,9 +63,9 @@ class UploadsController extends Controller
 
         $source = $this->upload($stream, $request->only('path', 'name', 'file'));
 
-        $upload = $this->save($source, $request->all());
+        $upload = $this->save($source, $request);
 
-        $this->response->item($upload, new UploadTransformer);
+        return $this->response->item($upload, new UploadTransformer);
     }
 
     /**
@@ -176,14 +177,12 @@ class UploadsController extends Controller
         $source = $path.'/'.$filename.'.jpg';
 
         // store image on s3 server
-        $storage = Storage::disk('s3')->put(
+        Storage::disk('s3')->put(
             $source,
             $stream->__toString()
         );
 
-        $size = $storage->size;
-
-        return ['source' => $source, 'filename' => $filename, 'size' => $size];
+        return ['source' => $source, 'filename' => $filename];
     }
 
     /**
@@ -197,18 +196,17 @@ class UploadsController extends Controller
     private function save($source, Request $request)
     {
         // create new upload record
-        $upload = new Upload;
-        $upload->updateOrCreate([
-            'name' => $source['filename'],
+        $new = $this->upload->create([
+            'name' => $request->get('name'),
             'type' => $request->get('type'),
             'source' => $source['source'],
             'meta' => [
                 'width' => $request->get('width'),
                 'height' => $request->get('height'),
-                'size' => $source['size']
+                'size' => null
             ]
         ]);
 
-        return $upload;
+        return $new;
     }
 }

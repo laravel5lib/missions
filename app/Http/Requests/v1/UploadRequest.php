@@ -23,7 +23,7 @@ class UploadRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'file'   => 'required',
             'path'   => 'required|string',
             'name'   => 'string',
@@ -34,5 +34,22 @@ class UploadRequest extends FormRequest
             'width'  => 'numeric',
             'height' => 'numeric'
         ];
+
+        if($this->method('put'))
+        {
+            $rules = [
+                'file'   => 'sometimes|required',
+                'path'   => 'sometimes|required|string',
+                'name'   => 'string',
+                'meta'   => 'array',
+                'type'   => 'required|in:other,banner,file,avatar',
+                'x_axis' => 'numeric',
+                'y_axis' => 'numeric',
+                'width'  => 'numeric',
+                'height' => 'numeric'
+            ];
+        }
+
+        return $rules;
     }
 }

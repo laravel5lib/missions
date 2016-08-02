@@ -99,24 +99,31 @@ class UploadsController extends Controller
      *
      * @param UploadRequest $request
      * @param $id
+     * @return \Dingo\Api\Http\Response
      */
     public function update(UploadRequest $request, $id)
     {
+        $upload = $this->upload->findOrFail($id);
+
         if ($request->has('file'))
         {
             $stream = $this->process($request);
 
             $source = $this->upload($stream, $request->only('path', 'name', 'file'));
+
+            if($source) {
+                // delete old file
+                Storage::disk('s3')->delete($upload->source);
+            }
         }
 
-        $upload = $this->upload->findOrFail($id);
         $upload->update([
             'source' => isset($source['source']) ? $source['source'] : $upload->source,
             'name' => $request->get('name'),
             'type' => $request->get('type')
         ]);
 
-        $this->response->item($upload, new UploadTransformer);
+        return $this->response->item($upload, new UploadTransformer);
     }
 
     /**

@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUser">
+    <validator name="CreateUser" :groups="['passwordGroup']">
         <form id="CreateUserForm" class="form-horizontal" novalidate>
             <div class="form-group" :class="{ 'has-error': checkForError('name') }">
                 <label for="name" class="col-sm-2 control-label">Name</label>
@@ -30,7 +30,8 @@
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('password') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
-                                       v-validate:password="{ required: true, minlength:8 }" placeholder="Enter password">
+                                       v-validate:password="{ required: true, minlength:8 }" placeholder="Enter password"
+                                       group="passwordGroup">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -42,7 +43,8 @@
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('passwordconfirmation') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
-                                       v-validate:passwordconfirmation="{ required: true, minlength:8 }" placeholder="Enter password again">
+                                       v-validate:passwordconfirmation="{ required: true, minlength:8 }" placeholder="Enter password again"
+                                       group="passwordGroup">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -52,6 +54,7 @@
                             </div>
                         </div>
                     </div>
+                    <div class="help-block" v-if="$CreateUser.passwordGroup.invalid && attemptSubmit">Passwords do not match!</div>
                     <div class="help-block">Password must be at least 8 characters long</div>
                 </div>
             </div>

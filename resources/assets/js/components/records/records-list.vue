@@ -2,6 +2,10 @@
     <div class="row">
         <h3>Passports <a href="/dashboard/passports" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View All</a></h3>
         <div class="row">
+            <div class="col-sm-12" v-if="loaded && !passports.length">
+                <div class="alert alert-info" role="alert">No records found</div>
+            </div>
+
             <div class="col-sm-4" v-for="passport in passports">
                 <div class="panel panel-default">
                     <div style="min-height:220px;" class="panel-body">
@@ -29,6 +33,10 @@
         <hr>
         <h3>Visas <a href="/dashboard/visas" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View All</a></h3>
         <div class="row">
+            <div class="col-sm-12" v-if="loaded && !visas.length">
+                <div class="alert alert-info" role="alert">No records found</div>
+            </div>
+
             <div class="col-sm-4" v-for="visa in visas">
                 <div class="panel panel-default">
                     <div style="min-height:220px;" class="panel-body">
@@ -61,12 +69,16 @@
             return{
                 visas: [],
                 passports: [],
+
+                //logic vars
+                loaded: false,
             }
         },
         ready(){
             this.$http('users/me?include=passports,visas').then(function (response) {
                 this.visas = response.data.data.visas.data;
                 this.passports = response.data.data.passports.data;
+                this.loaded = true;
             });
         }
     }

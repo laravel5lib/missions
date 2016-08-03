@@ -95,17 +95,17 @@
 									   :debounce="250" placeholder="Tag, tag2, tag3...">
 							</li>
 							<li>
-								<v-select class="form-controls" id="groupFilter" multiple :debounce="250" :on-search="getGroups()"
+								<v-select class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups()"
 										  :value.sync="groupsArr" :options="groupsOptions" label="name"
 										  placeholder="Filter Groups"></v-select>
 							</li>
 							<li>
-								<v-select class="form-controls" id="userFilter" multiple :debounce="250" :on-search="getUsers()"
+								<v-select class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers()"
 										  :value.sync="usersArr" :options="usersOptions" label="name"
 										  placeholder="Filter Users"></v-select>
 							</li>
 							<li>
-								<v-select class="form-controls" id="campaignFilter" :debounce="250" :on-search="getCampaigns()"
+								<v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns()"
 										  :value.sync="campaignObj" :options="campaignOptions" label="name"
 										  placeholder="Filter by Campaign"></v-select>
 							</li>
@@ -126,7 +126,7 @@
 							</li>
 
 							<li>
-								<v-select class="form-controls" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+								<v-select class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
 										  :options="shirtSizeOptions" label="name" placeholder="Filter Sizes"></v-select>
 							</li>
 

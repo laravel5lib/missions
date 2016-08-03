@@ -14,7 +14,7 @@
                                 <div class="form-group" :class="{ 'has-error': checkForError('group') }">
                                     <label class="col-sm-2 control-label">Group</label>
                                     <div class="col-sm-10">
-                                        <v-select class="form-controls" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
+                                        <v-select class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
                                                   label="name"></v-select>
                                         <select hidden v-model="group_id" v-validate:group="{ required: true}">
                                             <option :value="group.id" v-for="group in groups">{{group.name}}</option>

@@ -12,7 +12,7 @@
 			<div class="form-group" :class="{ 'has-error': checkForError('country') }">
 				<label for="country" class="col-sm-2 control-label">Country</label>
 				<div class="col-sm-10">
-					<v-select class="form-controls" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+					<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
 					<select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
 						<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 					</select>

@@ -30,7 +30,7 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function transform(Reservation $reservation)
     {
-        $reservation->load('tagged');
+        $reservation->load('tagged', 'avatar');
 
         return [
             'id'              => $reservation->id,
@@ -42,6 +42,7 @@ class ReservationTransformer extends TransformerAbstract
             'shirt_size_name' => implode(array_values(ShirtSize::get($reservation->shirt_size)), ''),
             'birthday'        => $reservation->birthday->toDateString(),
             'companion_limit' => (int) $reservation->companions_limit,
+            'avatar'          => $reservation->avatar ? image($reservation->avatar->source) : null,
             'created_at'      => $reservation->created_at->toDateTimeString(),
             'updated_at'      => $reservation->updated_at->toDateTimeString(),
             'tags'            => $reservation->tagNames(),

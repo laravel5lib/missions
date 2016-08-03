@@ -6,8 +6,7 @@
         <hr class="divider inv xlg">
         <div class="row">
             <div class="col-xs-12">
-                <h1 class="hidden-xs">Trip Name</h1>
-                <h5><img class="img-circle img-xs av-left" src="http://lorempixel.com/500/500/">Group Name</h5>
+                <h1 class="text-capitalize"><img class="img-circle img-sm av-left" src="http://lorempixel.com/500/500/">Group Name <span class="hidden-xs small text-white text-capitalize">&middot; Full-week Missionary</span></h1>
             </div>
         </div>
         <hr class="divider inv xlg">

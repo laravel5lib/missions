@@ -281,9 +281,9 @@
 					</div><!-- end col -->
 				</div><!-- end form-group -->
 			</form><!-- end form -->
-			<!--<a v-if="currentState === 'login' || currentState === 'create'" class="btn btn-block btn-link" @click="currentState='reset'">Forgot Your Password?</a>-->
-			<a v-if="currentState === 'reset' || currentState === 'create'" class="btn btn-block btn-link" @click="currentState='login'">I Have An Account</a>
-			<a v-if="currentState === 'login' || currentState === 'reset'" class="btn btn-block btn-link" @click="currentState='create'">Create A New Account</a>
+			<!--<a v-if="currentState === 'login' || currentState === 'create'" @click="currentState='reset'">Forgot Your Password?</a>-->
+			<p class="text-center"><a v-if="currentState === 'reset' || currentState === 'create'" @click="currentState='login'">I Have An Account</a></p>
+			<p class="text-center"><a v-if="currentState === 'login' || currentState === 'reset'" @click="currentState='create'">Create A New Account</a></p>
 		</div>
 	</div><!-- end panel-body -->
 </template>

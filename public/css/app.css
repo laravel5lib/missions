@@ -5965,6 +5965,9 @@ mark,
 .text-primary-lighter {
   color: #fcc5c8; }
 
+.text-white {
+  color: #fff !important; }
+
 .text-primary {
   color: #f6323e; }
 
@@ -13480,6 +13483,13 @@ button.close {
  */
 /*$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "~font-awesome/fonts/";*/
+/* Vue Elements */
+.v-select.form-control {
+  padding: 6px 12px; }
+
+.v-select .dropdown-toggle {
+  border: none; }
+
 /**
  * Elements
  */
@@ -13859,6 +13869,31 @@ li.av-nav > a {
 .max-panel-height {
   max-height: 390px;
   overflow: scroll; }
+
+.vid-bg {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: -100; }
+
+.vid-bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  height: auto;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%); }
+
+@media (max-width: 767px) {
+  .vid-bg {
+    background: url("images/video/video-placeholder.png") center center/cover no-repeat; }
+  .vid-bg-video {
+    display: none; } }
 
 .trip-rep {
   z-index: 1;

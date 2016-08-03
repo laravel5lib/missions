@@ -6,7 +6,7 @@
 					<div class="col-md-6">
 						<label>Full Legal Name</label>
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('firstName') }">
 									<!--<label for="infoFirstName">First</label>-->
 									<input type="text" class="form-control input-sm" v-model="firstName"
@@ -14,7 +14,7 @@
 										   id="infoFirstName">
 								</div>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('middleName') }">
 									<!--<label for="infoMiddleName">Middle</label>-->
 									<input type="text" class="form-control input-sm" v-model="middleName"
@@ -22,7 +22,7 @@
 										   id="infoMiddleName">
 								</div>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('lastName') }">
 									<!--<label for="infoLastName">Last</label>-->
 									<input type="text" class="form-control input-sm" v-model="lastName"
@@ -208,14 +208,14 @@
 						</div>
 
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('city') }">
 									<label for="infoCity">City</label>
 									<input type="text" class="form-control input-sm" v-model="city"
 										   v-validate:city="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoCity" placeholder="">
 								</div>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('state') }">
 									<label for="infoState">State/Prov.</label>
 									<input type="text" class="form-control input-sm" v-model="state"
@@ -232,7 +232,7 @@
 										   v-validate:zip="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoZip" placeholder="12345">
 								</div>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('country') }">
 									<label for="infoCountry">Country</label>
 									<v-select class="form-controls" id="infoCountry" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>

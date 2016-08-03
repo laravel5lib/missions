@@ -23,14 +23,20 @@
                 </div>
             </div>
 
-            <!--<div class="form-group" :class="{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }">
+            <div class="form-group" :class="{ 'has-error': !!changePassword && (checkForError('password')||checkForError('passwordconfirmation')) }">
                 <label for="name" class="col-sm-2 control-label">Password</label>
                 <div class="col-sm-10">
-                    <div class="row">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" v-model="changePassword">
+                            Change Password
+                        </label>
+                    </div>
+                    <div v-if="changePassword" class="row">
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('password') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
-                                       v-validate:password="{ required: true, minlength:8 }" placeholder="Enter password">
+                                       v-validate:password="{ minlength:8 }" placeholder="Enter password">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -42,7 +48,7 @@
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('passwordconfirmation') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
-                                       v-validate:passwordconfirmation="{ required: true, minlength:8 }" placeholder="Enter password again">
+                                       v-validate:passwordconfirmation="{ minlength:8 }" placeholder="Enter password again">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -52,9 +58,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="help-block">Password must be at least 8 characters long</div>
+                    <div v-if="changePassword" class="help-block">Password must be at least 8 characters long</div>
                 </div>
-            </div>-->
+            </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">Date of Birth</label>
@@ -352,6 +358,8 @@
                 name: '',
                 email: '',
                 alt_email: '',
+                password: null,
+                password_confirmation: null,
                 bio: '',
                 status: '',
                 birthday: null,
@@ -375,6 +383,7 @@
                 countries: [],
                 countryCodeObj: null,
                 timezones: [],
+                changePassword: false,
                 showPassword: false,
                 timezoneObj: null,
                 dobMonth: null,
@@ -405,6 +414,8 @@
                         name: this.name,
                         email: this.email,
                         alt_email: this.alt_email,
+                        password: this.changePassword ? this.password : undefined,
+                        password_confirmation: this.changePassword ? this.password_confirmation : undefined,
                         bio: this.bio,
                         type: this.type,
                         country_code: this.country_code,

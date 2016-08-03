@@ -121,7 +121,7 @@
             }
         },
         ready(){
-            this.$http('users/me?include=passports,visas').then(function (response) {
+            this.$http('users/me?include=visas').then(function (response) {
                 this.visas = response.data.data.visas.data;
                 this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
                 this.loaded = true;

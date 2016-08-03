@@ -45,9 +45,9 @@ class UserRequest extends FormRequest
         if ($this->isMethod('put'))
         {
             $rules['password'] = 'sometimes|required|confirmed|min:8';
-            $rules['alt_email'] = 'email|unique:users,alt_email,id';
-            $rules['email'] = 'sometimes|required|email|unique:users,email,id';
-            $rules['url'] = 'string|unique:users,url,id';
+            $rules['alt_email'] = 'email|unique:users,alt_email,' . $this->route('users');
+            $rules['email'] = 'sometimes|required|email|unique:users,email,' . $this->route('users');
+            $rules['url'] = 'string|unique:users,url,' . $this->route('users');
             $rules['country_code'] = 'sometimes|required|in:' . Country::codes();
             $rules['timezone'] = 'sometimes|required|max:25';
         }

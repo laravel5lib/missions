@@ -14,8 +14,8 @@
                 <div class="col-sm-10">
                     <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }">
                         <option :value="">-- select type --</option>
-                        <option value="avatar">Image (Avatar) - 600 x 600</option>
-						<option value="banner">Image (Banner) - 1200 x 320</option>
+                        <option value="avatar">Image (Avatar) - 1280 x 1280</option>
+						<option value="banner">Image (Banner) - 1300 x 500</option>
 						<option value="other">Image (other) - no set dimensions</option>
 						<option value="file">File</option>
                     </select>
@@ -55,6 +55,13 @@
 				<div class="col-sm-10">
 					<input type="file" id="file" v-model="fileA" @change="handleImage" class="form-control">
 					 <!--<h5>Coords: {{coords|json}}</h5>-->
+				</div>
+			</div>
+
+			<div class="row col-sm-offset-2" v-if="type && type !== 'file' && file && isSmall()">
+				<div class="alert alert-warning" role="alert">
+					The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
+					The current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.
 				</div>
 			</div>
 
@@ -115,8 +122,8 @@
 				resultImage: null,
 				typeObj: null,
 				typePaths: [
-					{type: 'avatar', path: 'images/avatars', width: 600, height: 600},
-					{type: 'banner', path: 'images/banners', width: 1200, height: 320},
+					{type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
+					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
 					{type: 'other', path: 'images/other'},
 					{type: 'file', path: 'resources/documents'},
 				]
@@ -137,6 +144,9 @@
 			}
 		},
         methods: {
+			isSmall(){
+				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
+			},
 			adjustSelectByType(){
 				if (this.vueCropApi && _.contains(['banner', 'avatar'], this.typeObj.type)) {
 					// update dimensions
@@ -181,12 +191,13 @@
 						file: this.file,
                         x_axis: parseInt(this.x_axis / this.imageAspectRatio),
                         y_axis: parseInt(this.y_axis / this.imageAspectRatio),
-                        width: parseInt(this.scaledWidth),
-                        height: parseInt(this.scaledHeight),
+                        width: parseInt(this.coords.w / this.imageAspectRatio),
+                        height: parseInt(this.coords.h / this.imageAspectRatio),
                     }).then(function (resp) {
 						console.log(resp);
 //                    	this.resultImage = resp.data;
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+                        window.location.href = '/admin/uploads';
+//                        window.location.href = '/admin' + resp.data.data.links[0].uri;
                     }, function (error) {
                         console.log(error);
                     });

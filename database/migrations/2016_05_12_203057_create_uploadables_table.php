@@ -13,10 +13,9 @@ class CreateUploadablesTable extends Migration
     public function up()
     {
         Schema::create('uploadables', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('upload_id')->unsigned()->index();
-            $table->integer('uploadable_id')->unsigned()->index();
-            $table->integer('uploadable_type')->unsigned()->index();
+            $table->uuid('upload_id')->index();
+            $table->uuid('uploadable_id')->index();
+            $table->uuid('uploadable_type')->index();
         });
     }
 

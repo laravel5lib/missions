@@ -34,7 +34,7 @@
 								<div class="form-trip" :class="{ 'has-error': checkForError('user') }"><label
 										class="col-sm-2 control-label">User</label>
 									<div class="col-sm-10">
-										<v-select class="form-controls" id="user" :value.sync="userObj" :options="users"
+										<v-select class="form-control" id="user" :value.sync="userObj" :options="users"
 												  :on-search="getUsers" label="name"></v-select>
 										<select hidden="" v-model="user_id" v-validate:user="{ required: true}">
 											<option :value="user.id" v-for="user in users">{{user.name}}</option>

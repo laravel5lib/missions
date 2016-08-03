@@ -7,8 +7,8 @@ use App\Utilities\v1\Country;
 use Dingo\Api\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class GroupRequest extends FormRequest
-{
+class GroupRequest extends FormRequest {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -46,18 +46,20 @@ class GroupRequest extends FormRequest
         }
 
         $optional = [
-            'description' => 'string|max:120',
-            'address_one' => 'string',
-            'address_two' => 'string',
-            'city'        => 'string',
-            'state'       => 'string',
-            'zip'         => 'string',
-            'phone_one'   => 'string',
-            'phone_two'   => 'string',
-            'email'       => 'email',
-            'public'      => 'boolean',
-            'managers'    => 'array',
-            'tags'        => 'array'
+            'description'      => 'string|max:120',
+            'address_one'      => 'string',
+            'address_two'      => 'string',
+            'city'             => 'string',
+            'state'            => 'string',
+            'zip'              => 'string',
+            'phone_one'        => 'string',
+            'phone_two'        => 'string',
+            'email'            => 'email',
+            'public'           => 'boolean',
+            'managers'         => 'array',
+            'tags'             => 'array',
+            'avatar_upload_id' => 'string|exists:uploads',
+            'banner_upload_id' => 'string|exists:uploads'
         ];
 
         return $rules = $required + $optional;

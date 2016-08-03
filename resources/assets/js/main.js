@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import login from './components/login.vue';
+import topNav from './components/top-nav.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
@@ -199,6 +200,7 @@ new Vue({
         tripRegWizard,
         reservationsList,
         donationsList,
+        topNav,
 
         //dashboard components
         recordsList,

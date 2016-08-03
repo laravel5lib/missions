@@ -43,9 +43,10 @@ class CampaignRequest extends FormRequest
         }
 
         $optional = [
-            'description'  => 'string|max:120',
-            'published_at' => 'date',
-            'tags'         => 'array'
+            'avatar_upload_id' => 'string|exists:uploads',
+            'description'      => 'string|max:120',
+            'published_at'     => 'date',
+            'tags'             => 'array'
         ];
 
         return $rules = $required + $optional;

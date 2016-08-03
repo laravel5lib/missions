@@ -203,6 +203,16 @@ class Reservation extends Model
     }
 
     /**
+     * Get the reservation's avatar.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function avatar()
+    {
+        return $this->belongsTo(Upload::class, 'avatar_upload_id');
+    }
+
+    /**
      * Get the name on the reservation.
      *
      * @return string

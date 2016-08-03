@@ -83,4 +83,14 @@ class Fundraiser extends Model
     {
         return $this->donations()->sum('amount');
     }
+
+    /**
+     * Get the fundraiser's page banner.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function banner()
+    {
+        return $this->belongsTo(Upload::class, 'banner_upload_id');
+    }
 }

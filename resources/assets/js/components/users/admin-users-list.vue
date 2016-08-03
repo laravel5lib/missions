@@ -111,7 +111,7 @@
                         </button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width:300px;">
 							<li>
-								<v-select class="form-controls" id="countryFilter" multiple :debounce="250" :on-search="getCountries()"
+								<v-select class="form-control" id="countryFilter" multiple :debounce="250" :on-search="getCountries()"
 										  :value.sync="countriesArr" :options="countriesOptions" label="name"
 										  placeholder="Filter Countries"></v-select>
 							</li>

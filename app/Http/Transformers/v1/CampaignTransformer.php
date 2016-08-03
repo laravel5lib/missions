@@ -25,13 +25,15 @@ class CampaignTransformer extends TransformerAbstract
      */
     public function transform(Campaign $campaign)
     {
+        $campaign->load('avatar');
+
         $array = [
             'id'           => $campaign->id,
             'name'         => $campaign->name,
             'country'      => country($campaign->country_code),
             'description'  => $campaign->short_desc,
             'page_url'     => $campaign->page_url,
-            'thumb_src'    => $campaign->thumb_src,
+            'avatar'       => $campaign->avatar ? image($campaign->avatar->source) : null,
             'started_at'   => $campaign->started_at->toDateString(),
             'ended_at'     => $campaign->ended_at->toDateString(),
             'published_at' => $campaign->published_at ? $campaign->published_at->toDateTimeString() : null,

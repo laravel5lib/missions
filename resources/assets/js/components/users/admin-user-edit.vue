@@ -352,8 +352,6 @@
                 name: '',
                 email: '',
                 alt_email: '',
-                password: '',
-                password_confirmation: '',
                 bio: '',
                 status: '',
                 birthday: null,
@@ -383,7 +381,6 @@
                 dobDay: null,
                 dobYear: null,
                 resource: this.$resource('users{/id}')
-
             }
         },
         computed: {
@@ -408,8 +405,6 @@
                         name: this.name,
                         email: this.email,
                         alt_email: this.alt_email,
-                        password: this.password,
-                        password_confirmation: this.password_confirmation,
                         bio: this.bio,
                         type: this.type,
                         country_code: this.country_code,

@@ -25,7 +25,7 @@ class CampaignTransformer extends TransformerAbstract
      */
     public function transform(Campaign $campaign)
     {
-        $campaign->load('avatar');
+        $campaign->load('avatar', 'banner');
 
         $array = [
             'id'           => $campaign->id,
@@ -34,6 +34,7 @@ class CampaignTransformer extends TransformerAbstract
             'description'  => $campaign->short_desc,
             'page_url'     => $campaign->page_url,
             'avatar'       => $campaign->avatar ? image($campaign->avatar->source) : null,
+            'banner'       => $campaign->banner ? image($campaign->banner->source) : null,
             'started_at'   => $campaign->started_at->toDateString(),
             'ended_at'     => $campaign->ended_at->toDateString(),
             'published_at' => $campaign->published_at ? $campaign->published_at->toDateTimeString() : null,

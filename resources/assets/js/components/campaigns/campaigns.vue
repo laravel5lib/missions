@@ -8,7 +8,7 @@
           <!-- Wrapper for slides -->
           <div class="carousel-inner" role="listbox">
             <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="campaign in campaigns">
-              <img :src="campaign.thumb_src">
+              <img :src="campaign.banner">
               <div class="carousel-caption">
                 <h6 class="text-uppercase">{{campaign.country}}</h6>
                 <h3>{{campaign.name}}</h3>
@@ -39,7 +39,7 @@
             <div class="col-sm-6 col-md-4" v-for="campaign in campaigns" style="display:flex">
                 <div class="panel panel-default">
                     <a :href="'/campaigns/' + campaign.page_url" role="button">
-                        <img :src="campaign.thumb_src" :alt="campaign.name" class="img-responsive">
+                        <img :src="campaign.avatar" :alt="campaign.name" class="img-responsive">
                     </a>
                         <div style="min-height:220px;" class="panel-body">
                             <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{campaign.country}}</h6>

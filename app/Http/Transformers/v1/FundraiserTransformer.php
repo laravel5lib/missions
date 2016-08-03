@@ -24,11 +24,14 @@ class FundraiserTransformer extends TransformerAbstract
      */
     public function transform(Fundraiser $fundraiser)
     {
+        $fundraiser->load('banner');
+
         $array = [
             'id'            => $fundraiser->id,
             'name'          => $fundraiser->name,
             'goal_amount'   => $fundraiser->goal_amount,
             'raised_amount' => (int) $fundraiser->raised() / 100,
+            'banner'        => $fundraiser->banner ? image($fundraiser->banner->source) : null,
             'description'   => $fundraiser->description,
             'expires_at'    => $fundraiser->expires_at ? $fundraiser->expires_at->toDateTimeString() : null,
             'created_at'    => $fundraiser->created_at->toDateTimeString(),

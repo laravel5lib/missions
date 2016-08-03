@@ -436,6 +436,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get the user's uploads.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function uploads()
+    {
+        return $this->morphToMany(Upload::class, 'uploadable');
+    }
+
+    /**
      * Check if user is an admin.
      *
      * @return bool

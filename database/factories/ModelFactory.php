@@ -24,8 +24,8 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'url'              => $faker->randomElement([$faker->userName, str_random(10)]),
         'public'           => $faker->boolean(50),
         'remember_token'   => str_random(10),
-        'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::lists('id')->toArray()),
-        'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::lists('id')->toArray())
+        'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
+        'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];
 });
 
@@ -61,7 +61,7 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         'companion_limit'  => random_int(0, 3),
         'passport_id'      => $faker->randomElement(App\Models\v1\Passport::lists('id')->toArray()),
         'visa_id'          => $faker->randomElement(App\Models\v1\Visa::lists('id')->toArray()),
-        'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::lists('id')->toArray())
+        'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray())
     ];
 });
 
@@ -125,7 +125,8 @@ $factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker
         'started_at'       => $faker->dateTimeThisYear,
         'ended_at'         => $faker->dateTimeThisYear,
         'published_at'     => $faker->dateTimeThisYear,
-        'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::lists('id')->toArray())
+        'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
+        'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];
 });
 
@@ -150,8 +151,8 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
         'email'            => $faker->optional(0.5)->companyEmail,
         'public'           => $faker->boolean(50),
         'url'              => $faker->userName,
-        'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::lists('id')->toArray()),
-        'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::lists('id')->toArray())
+        'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
+        'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];
 });
 
@@ -622,11 +623,30 @@ $factory->define(App\Models\v1\Occupant::class, function (Faker\Generator $faker
 /**
  * Upload Factory
  */
-$factory->define(App\Models\v1\Upload::class, function (Faker\Generator $faker)
+$factory->defineAs(App\Models\v1\Upload::class, 'avatar', function (Faker\Generator $faker)
 {
     return [
         'name' => $faker->word,
-        'source' => 'images/placeholders/doc-placeholder.png',
-        'type' => $faker->randomElement(['avatar', 'banner', 'other'])
+        'source' => $faker->randomElement([
+            'images/avatars/avatar1.jpg',
+            'images/avatars/avatar2.jpg',
+            'images/avatars/avatar3.jpg',
+            'images/avatars/avatar4.jpg'
+        ]),
+        'type' => 'avatar'
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Upload::class, 'banner', function (Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->word,
+        'source' => $faker->randomElement([
+            'images/banners/banner1.jpg',
+            'images/banners/banner2.jpg',
+            'images/banners/banner3.jpg',
+            'images/banners/banner4.jpg'
+        ]),
+        'type' => 'banner'
     ];
 });

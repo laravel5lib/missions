@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(UploadSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(PassportTableSeeder::class);
         $this->call(VisaTableSeeder::class);
@@ -30,6 +31,5 @@ class DatabaseSeeder extends Seeder
         $this->call(SiteTableSeeder::class);
         $this->call(TransportSeeder::class);
         $this->call(AccommodationSeeder::class);
-        $this->call(UploadSeeder::class);
     }
 }

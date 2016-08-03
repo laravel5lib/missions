@@ -13,7 +13,7 @@ class GroupTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'trips', 'managers', 'facilitators', 'fundraisers'
+        'trips', 'managers', 'facilitators', 'fundraisers', 'uploads'
     ];
 
     /**
@@ -107,6 +107,19 @@ class GroupTransformer extends TransformerAbstract
         $fundraisers = $group->fundraisers;
 
         return $this->collection($fundraisers, new FundraiserTransformer);
+    }
+
+    /**
+     * Include Uploads
+     *
+     * @param Group $group
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeUploads(Group $group)
+    {
+        $uploads = $group->uploads;
+
+        return $this->collection($uploads, new UploadTransformer);
     }
 
 }

@@ -381,7 +381,6 @@
                 dobDay: null,
                 dobYear: null,
                 resource: this.$resource('users{/id}')
-
             }
         },
         computed: {

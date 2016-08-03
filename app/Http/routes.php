@@ -37,6 +37,41 @@ Route::get('dashboard/records', function () {
    return view('dashboard.records.index');
 });
 
+// Passports
+Route::get('dashboard/passports', function () {
+    return view('dashboard.passports.index');
+});
+
+Route::get('dashboard/passports/create', function () {
+    return view('dashboard.passports.create');
+});
+
+Route::get('dashboard/passports/{id}', function () {
+    return view('dashboard.passports.index');
+});
+
+Route::get('dashboard/passports/{id}/edit', function () {
+    return view('dashboard.passports.edit');
+});
+
+// Visas
+Route::get('dashboard/visas', function () {
+    return view('dashboard.visas.index');
+});
+
+Route::get('dashboard/visas/create', function () {
+    return view('dashboard.visas.create');
+});
+
+Route::get('dashboard/visas/{id}', function () {
+    return view('dashboard.visas.index');
+});
+
+Route::get('dashboard/visas/{id}/edit', function () {
+    return view('dashboard.visas.edit');
+});
+
+
 Route::get('/dashboard/reservations', function () use ($dispatcher) {
     //Auth::loginUsingId(Auth::user()->id);
 //    Auth::loginUsingId('39edac0c-51dc-48af-a631-983659a6a630');

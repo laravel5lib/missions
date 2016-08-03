@@ -416,6 +416,26 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get the user's avatar.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function avatar()
+    {
+        return $this->belongsTo(Upload::class, 'avatar_upload_id');
+    }
+
+    /**
+     * Get the user's page banner.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function banner()
+    {
+        return $this->belongsTo(Upload::class, 'banner_upload_id');
+    }
+
+    /**
      * Check if user is an admin.
      *
      * @return bool

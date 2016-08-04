@@ -71,6 +71,16 @@
 				</div>
 			</div>
 
+			<accordion :one-at-atime="true">
+				<panel header="Avatar" :is-open.sync="avatarPanelOpen">
+					<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
+				</panel>
+				<panel header="Banner" :is-open.sync="bannerPanelOpen">
+					<upload-create-update type="banner" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
+				</panel>
+			</accordion>
+
+
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<a href="/admin/campaigns/{{campaignId}}" class="btn btn-default btn-sm">Cancel</a>
@@ -103,9 +113,11 @@
 </template>
 <script>
 	import vSelect from "vue-select";
+	import VueStrap from 'vue-strap/dist/vue-strap.min';
+	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
 	export default{
 		name: 'campaign-edit',
-		components: {vSelect},
+		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel},
 		props: ['campaignId'],
 		data(){
 			return {
@@ -120,6 +132,10 @@
 				published_at: null,
 				page_url: null,
 				attemptSubmit: false,
+				avatarPanelOpen:false,
+				bannerPanelOpen:false,
+				avatar_upload_id: null,
+				banner_upload_id: null,
 				resource: this.$resource('campaigns{/id}')
 			}
 		},
@@ -147,7 +163,9 @@
 						started_at: this.started_at,
 						ended_at: this.ended_at,
 						published_at: this.published_at,
-						page_url: this.page_url
+						page_url: this.page_url,
+						avatar_upload_id: this.avatar_upload_id,
+						banner_upload_id: this.banner_upload_id,
 
 					}).then(function (resp) {
 						$.extend(this, resp.data.data);
@@ -161,6 +179,20 @@
 				this.resource.delete({id: this.campaignId}).then(function(response) {
 					window.location.href = '/admin/campaigns/'
 				});
+			}
+		},
+		events:{
+			'uploads-complete'(data){
+				switch(data.type){
+					case 'avatar':
+						this.avatar_upload_id = data.id;
+						this.avatarPanelOpen = false;
+						break;
+					case 'banner':
+						this.banner_upload_id = data.id;
+						this.bannerPanelOpen = false;
+						break;
+				}
 			}
 		},
 		created(){

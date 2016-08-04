@@ -72,14 +72,11 @@
 			</div>
 
 			<accordion :one-at-atime="true">
-				<panel header="Avatar" :is-open="true">
-					<upload-create-update type="avatar" :lock-type="true"></upload-create-update>
+				<panel header="Avatar" :is-open="false">
+					<upload-create-update type="avatar" :lock-type="true" :is-child="true"></upload-create-update>
 				</panel>
-			</accordion>
-
-			<accordion :one-at-atime="true">
-				<panel header="Banner" :is-open="true">
-					<upload-create-update type="banner" :lock-type="true"></upload-create-update>
+				<panel header="Banner" :is-open="false">
+					<upload-create-update type="banner" :lock-type="true" :is-child="true"></upload-create-update>
 				</panel>
 			</accordion>
 

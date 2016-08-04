@@ -9,6 +9,12 @@
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="tags" class="col-sm-2 control-label">Tags</label>
+                <div class="col-sm-10">
+					<v-select class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+				</div>
+            </div>
             <div class="form-group" :class="{ 'has-error': checkForError('type') }">
                 <label for="type" class="col-sm-2 control-label">Type</label>
                 <div class="col-sm-10">
@@ -88,10 +94,10 @@
     </validator>
 </template>
 <script>
-//	import VueStrap from 'vue-strap/dist/vue-strap.min';
+	import vSelect from 'vue-select'
 	export default{
         name: 'upload-create',
-//		components: {'alert': VueStrap.alert},
+		components: {vSelect},
         data(){
             return {
 //				showRight: false,
@@ -104,6 +110,7 @@
                 y_axis: null,
                 width: 100,
 				height: 100,
+				tags: [],
 
 				// logic variables
 				attemptSubmit: false,
@@ -126,7 +133,8 @@
 					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
 					{type: 'other', path: 'images/other'},
 					{type: 'file', path: 'resources/documents'},
-				]
+				],
+				tagOptions: ['Campaign', 'User', 'Group', 'Fundraiser']
 			}
         },
 		watch:{
@@ -186,7 +194,8 @@
                     var resource = this.$resource('uploads');
                     resource.save(null, {
                         name: this.name,
-                        type: this.type,
+						tags: this.tags,
+						type: this.type,
                         path: this.path,
 						file: this.file,
                         x_axis: parseInt(this.x_axis / this.imageAspectRatio),

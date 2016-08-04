@@ -33,8 +33,7 @@ import adminUserCreate from './components/users/admin-user-create.vue';
 import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
 import adminUploads from './components/uploads/admin-uploads-list.vue';
-import adminUploadCreate from './components/uploads/admin-upload-create.vue';
-import adminUploadEdit from './components/uploads/admin-upload-edit.vue';
+import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -240,8 +239,7 @@ new Vue({
         adminUserEdit,
         adminUserDelete,
         adminUploads,
-        adminUploadCreate,
-        adminUploadEdit,
+        adminUploadCreateUpdate,
     ],
     http: {
         headers: {

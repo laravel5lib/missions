@@ -9,10 +9,13 @@
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" :class="{ 'has-error': checkForError('tags') }">
                 <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
-                    <v-select class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+                    <v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+                    <select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
+                        <option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('type') }">
@@ -145,6 +148,9 @@
                 this.path = this.typeObj.path;
                 if (this.file)
                     this.adjustSelectByType();
+            },
+            'tags': function (val) {
+                this.$validate('tags', true);
             }
         },
         events:{

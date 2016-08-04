@@ -9,16 +9,19 @@
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" :class="{ 'has-error': checkForError('tags') }">
                 <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
-					<v-select class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+					<v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+					<select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
+						<option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
+					</select>
 				</div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('type') }">
                 <label for="type" class="col-sm-2 control-label">Type</label>
                 <div class="col-sm-10">
-                    <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }">
+                    <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
                         <option :value="">-- select type --</option>
                         <option value="avatar">Image (Avatar) - 1280 x 1280</option>
 						<option value="banner">Image (Banner) - 1300 x 500</option>
@@ -86,7 +89,8 @@
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<a href="/admin/uploads" class="btn btn-default">Cancel</a>
-					<a @click="submit()" class="btn btn-primary">Create</a>
+					<a @click="submit()" v-if="!update" class="btn btn-primary">Create</a>
+					<a @click="update()" v-if="update" class="btn btn-primary">Update</a>
 				</div>
 			</div>
 
@@ -96,8 +100,43 @@
 <script>
 	import vSelect from 'vue-select'
 	export default{
-        name: 'upload-create',
+        name: 'upload-create-update',
 		components: {vSelect},
+		props:{
+			uploadId: {
+				type: String,
+				default: null
+			},
+			typePaths: {
+				type: Array,
+				default() { return [
+					{type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
+					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
+					{type: 'other', path: 'images/other'},
+					{type: 'file', path: 'resources/documents'},
+				] }
+			},
+			tagOptions: {
+				type: Array,
+				default() { return ['campaign', 'user', 'group', 'fundraiser'] }
+			},
+			tags: {
+				type: Array,
+				default() { return []}
+			},
+			lockType: {
+				type: Boolean,
+				default: false
+			},
+			update: {
+				type: Boolean,
+				default: false
+			},
+			isChild: {
+				type: Boolean,
+				default: false
+			}
+		},
         data(){
             return {
 //				showRight: false,
@@ -110,7 +149,6 @@
                 y_axis: null,
                 width: 100,
 				height: 100,
-				tags: [],
 
 				// logic variables
 				attemptSubmit: false,
@@ -128,21 +166,20 @@
 				fileA: null,
 				resultImage: null,
 				typeObj: null,
-				typePaths: [
-					{type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
-					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
-					{type: 'other', path: 'images/other'},
-					{type: 'file', path: 'resources/documents'},
-				],
-				tagOptions: ['Campaign', 'User', 'Group', 'Fundraiser']
-			}
+				resource: this.$resource('uploads{/id}'),
+            }
         },
 		watch:{
         	'type': function (val, oldVal) {
         		this.typeObj = _.findWhere(this.typePaths, {type: val});
-				this.path = this.typeObj.path;
-				if (this.file)
-					this.adjustSelectByType();
+				if (this.typeObj) {
+					this.path = this.typeObj.path;
+					if (this.file)
+						this.adjustSelectByType();
+				}
+			},
+			'tags': function (val) {
+				this.$validate('tags', true);
 			}
 		},
 		events:{
@@ -191,8 +228,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpload.valid) {
-                    var resource = this.$resource('uploads');
-                    resource.save(null, {
+                    this.resource.save(null, {
                         name: this.name,
 						tags: this.tags,
 						type: this.type,
@@ -204,14 +240,43 @@
                         height: parseInt(this.coords.h / this.imageAspectRatio),
                     }).then(function (resp) {
 						console.log(resp);
-//                    	this.resultImage = resp.data;
-                        window.location.href = '/admin/uploads';
-//                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+						this.handleSuccess(resp)
                     }, function (error) {
                         console.log(error);
                     });
                 }
             },
+            update(){
+				this.attemptSubmit = true;
+				if (this.$CreateUpload.valid) {
+					this.resource.update({id:this.uploadId}, {
+						name: this.name,
+						tags: this.tags,
+						type: this.type,
+						path: this.path,
+						file: this.file||undefined,
+						x_axis: parseInt(this.x_axis / this.imageAspectRatio)||undefined,
+						y_axis: parseInt(this.y_axis / this.imageAspectRatio)||undefined,
+						width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
+						height: parseInt(this.coords.h / this.imageAspectRatio)||undefined,
+					}).then(function (resp) {
+						console.log(resp);
+						this.handleSuccess(resp)
+					}, function (error) {
+						console.log(error);
+					});
+				}
+            },
+			handleSuccess(response){
+				if(this.isChild) {
+					// send data to parent componant
+					this.vm.$dispatch('uploads-complete', response.data.data);
+
+				} else {
+					window.location.href = '/admin/uploads';
+					// window.location.href = '/admin' + response.data.data.links[0].uri;
+				}
+			},
 			handleImage(e){
 				var self = this;
 				var reader = new FileReader();
@@ -245,7 +310,14 @@
 			}
         },
 		ready(){
-
+			if (this.update) {
+				this.resource.get({id: this.uploadId}).then(function (response) {
+					var upload = response.data.data;
+					this.name = upload.name;
+					this.tags = upload.tags;
+					this.type = upload.type;
+				});
+			}
         }
     }
 </script> 

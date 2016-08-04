@@ -34,7 +34,7 @@ class UploadRequest extends FormRequest
             'width'  => 'numeric',
             'height' => 'numeric',
             'tags'   => 'required|array',
-            'tags.*' => 'in:Campaign,User,Group,Fundraiser'
+            'tags.*' => 'in:campaign,user,group,fundraiser'
         ];
 
         if($this->method('put'))
@@ -50,7 +50,7 @@ class UploadRequest extends FormRequest
                 'width'  => 'numeric',
                 'height' => 'numeric',
                 'tags'   => 'required|array',
-                'tags.*' => 'in:Campaign,User,Group,Fundraiser'
+                'tags.*' => 'in:campaign,user,group,fundraiser'
             ];
         }
 

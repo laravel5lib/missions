@@ -12,9 +12,7 @@
             <div class="form-group">
                 <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
-					<input type="text" class="form-control" v-model="tagsString" id="tags"
-						   :debounce="250" placeholder="Tag, tag2, tag3...">
-
+					<v-select class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
 				</div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('type') }">
@@ -96,10 +94,10 @@
     </validator>
 </template>
 <script>
-//	import VueStrap from 'vue-strap/dist/vue-strap.min';
+	import vSelect from 'vue-select'
 	export default{
         name: 'upload-create',
-//		components: {'alert': VueStrap.alert},
+		components: {vSelect},
         data(){
             return {
 //				showRight: false,
@@ -112,7 +110,7 @@
                 y_axis: null,
                 width: 100,
 				height: 100,
-				tags: null,
+				tags: [],
 
 				// logic variables
 				attemptSubmit: false,
@@ -136,7 +134,7 @@
 					{type: 'other', path: 'images/other'},
 					{type: 'file', path: 'resources/documents'},
 				],
-				tagsString: ''
+				tagOptions: ['Campaign', 'User', 'Group', 'Fundraiser']
 			}
         },
 		watch:{
@@ -145,11 +143,7 @@
 				this.path = this.typeObj.path;
 				if (this.file)
 					this.adjustSelectByType();
-			},
-			'tagsString': function (val) {
-				var tags = val.split(/[\s,]+/);
-				this.tags = tags[0] !== '' ? tags : '';
-			},
+			}
 		},
 		events:{
 			'vueCrop-api':function (api) {

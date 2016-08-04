@@ -12,9 +12,7 @@
             <div class="form-group">
                 <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="tagsString" id="tags"
-                           :debounce="250" placeholder="Tag, tag2, tag3...">
-
+                    <v-select class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
                 </div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('type') }">
@@ -88,7 +86,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <a href="/admin/uploads" class="btn btn-default">Cancel</a>
-                    <a @click="submit()" class="btn btn-primary">Create</a>
+                    <a @click="submit()" class="btn btn-primary">Update</a>
                 </div>
             </div>
 
@@ -96,11 +94,11 @@
     </validator>
 </template>
 <script>
-    //	import VueStrap from 'vue-strap/dist/vue-strap.min';
+    import vSelect from 'vue-select'
     export default{
         name: 'upload-edit',
         props:['uploadId'],
-//		components: {'alert': VueStrap.alert},
+        components: {vSelect},
         data(){
             return {
 //				showRight: false,
@@ -113,7 +111,7 @@
                 y_axis: null,
                 width: 100,
                 height: 100,
-                tags: null,
+                tags: [],
 
                 // logic variables
                 attemptSubmit: false,
@@ -138,7 +136,7 @@
                     {type: 'file', path: 'resources/documents'},
                 ],
                 resource: this.$resource('uploads{/id}'),
-                tagsString: ''
+                tagOptions: ['Campaign', 'User', 'Group', 'Fundraiser']
             }
         },
         watch: {
@@ -147,11 +145,7 @@
                 this.path = this.typeObj.path;
                 if (this.file)
                     this.adjustSelectByType();
-            },
-            'tagsString': function (val) {
-                var tags = val.split(/[\s,]+/);
-                this.tags = tags[0] !== '' ? tags : '';
-            },
+            }
         },
         events:{
             'vueCrop-api':function (api) {
@@ -199,16 +193,16 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpload.valid) {
-                    this.resource.save(null, {
+                    this.resource.update({id:this.uploadId}, {
                         name: this.name,
                         tags: this.tags,
                         type: this.type,
                         path: this.path,
-                        file: this.file,
-                        x_axis: parseInt(this.x_axis / this.imageAspectRatio),
-                        y_axis: parseInt(this.y_axis / this.imageAspectRatio),
-                        width: parseInt(this.coords.w / this.imageAspectRatio),
-                        height: parseInt(this.coords.h / this.imageAspectRatio),
+                        file: this.file||undefined,
+                        x_axis: parseInt(this.x_axis / this.imageAspectRatio)||undefined,
+                        y_axis: parseInt(this.y_axis / this.imageAspectRatio)||undefined,
+                        width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
+                        height: parseInt(this.coords.h / this.imageAspectRatio)||undefined,
                     }).then(function (resp) {
                         console.log(resp);
 //                    	this.resultImage = resp.data;
@@ -253,7 +247,10 @@
         },
         ready(){
             this.resource.get({id:this.uploadId}).then(function (response) {
-                debugger;
+                var upload = response.data.data;
+                this.name = upload.name;
+                this.tags = upload.tags;
+                this.type = upload.type;
             })
         }
     }

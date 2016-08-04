@@ -89,8 +89,8 @@
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<a href="/admin/uploads" class="btn btn-default">Cancel</a>
-					<a @click="submit()" v-if="!update" class="btn btn-primary">Create</a>
-					<a @click="update()" v-if="update" class="btn btn-primary">Update</a>
+					<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Create</a>
+					<a @click="update()" v-if="isUpdate" class="btn btn-primary">Update</a>
 				</div>
 			</div>
 
@@ -107,14 +107,9 @@
 				type: String,
 				default: null
 			},
-			typePaths: {
-				type: Array,
-				default() { return [
-					{type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
-					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
-					{type: 'other', path: 'images/other'},
-					{type: 'file', path: 'resources/documents'},
-				] }
+			type: {
+				type: String,
+				default: null
 			},
 			tagOptions: {
 				type: Array,
@@ -128,7 +123,7 @@
 				type: Boolean,
 				default: false
 			},
-			update: {
+			isUpdate: {
 				type: Boolean,
 				default: false
 			},
@@ -142,7 +137,7 @@
 //				showRight: false,
 
                 name: '',
-                type: null,
+//                type: null,
                 path: '',
                 file: null,
                 x_axis: null,
@@ -165,6 +160,12 @@
 				aspectRatio: this.width/this.height,
 				fileA: null,
 				resultImage: null,
+				typePaths: [
+					{type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
+					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
+					{type: 'other', path: 'images/other'},
+					{type: 'file', path: 'resources/documents'},
+				],
 				typeObj: null,
 				resource: this.$resource('uploads{/id}'),
             }
@@ -310,7 +311,7 @@
 			}
         },
 		ready(){
-			if (this.update) {
+			if (this.isUpdate) {
 				this.resource.get({id: this.uploadId}).then(function (response) {
 					var upload = response.data.data;
 					this.name = upload.name;

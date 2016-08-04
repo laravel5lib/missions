@@ -13,7 +13,7 @@
             <div class="col-sm-12">
                 <h3>Upload <small>Edit</small></h3>
                 <hr>
-                <upload-create-update :update="true" upload-id="{{ $id }}"></upload-create-update>
+                <upload-create-update :update="true" :lock-type="true" upload-id="{{ $id }}"></upload-create-update>
             </div>
         </div>
     </div>

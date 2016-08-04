@@ -21,7 +21,7 @@
             <div class="form-group" :class="{ 'has-error': checkForError('type') }">
                 <label for="type" class="col-sm-2 control-label">Type</label>
                 <div class="col-sm-10">
-                    <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="type">
+                    <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
                         <option :value="">-- select type --</option>
                         <option value="avatar">Image (Avatar) - 1280 x 1280</option>
 						<option value="banner">Image (Banner) - 1300 x 500</option>
@@ -123,6 +123,10 @@
 			tags: {
 				type: Array,
 				default() { return []}
+			},
+			lockType: {
+				type: Boolean,
+				default: false
 			},
 			update: {
 				type: Boolean,
@@ -310,7 +314,6 @@
 				this.resource.get({id: this.uploadId}).then(function (response) {
 					var upload = response.data.data;
 					this.name = upload.name;
-					debugger;
 					this.tags = upload.tags;
 					this.type = upload.type;
 				});

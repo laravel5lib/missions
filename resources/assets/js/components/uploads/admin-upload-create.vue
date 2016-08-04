@@ -9,6 +9,14 @@
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="tags" class="col-sm-2 control-label">Tags</label>
+                <div class="col-sm-10">
+					<input type="text" class="form-control" v-model="tagsString" id="tags"
+						   :debounce="250" placeholder="Tag, tag2, tag3...">
+
+				</div>
+            </div>
             <div class="form-group" :class="{ 'has-error': checkForError('type') }">
                 <label for="type" class="col-sm-2 control-label">Type</label>
                 <div class="col-sm-10">
@@ -104,6 +112,7 @@
                 y_axis: null,
                 width: 100,
 				height: 100,
+				tags: null,
 
 				// logic variables
 				attemptSubmit: false,
@@ -126,7 +135,8 @@
 					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
 					{type: 'other', path: 'images/other'},
 					{type: 'file', path: 'resources/documents'},
-				]
+				],
+				tagsString: ''
 			}
         },
 		watch:{
@@ -135,7 +145,11 @@
 				this.path = this.typeObj.path;
 				if (this.file)
 					this.adjustSelectByType();
-			}
+			},
+			'tagsString': function (val) {
+				var tags = val.split(/[\s,]+/);
+				this.tags = tags[0] !== '' ? tags : '';
+			},
 		},
 		events:{
 			'vueCrop-api':function (api) {
@@ -186,7 +200,8 @@
                     var resource = this.$resource('uploads');
                     resource.save(null, {
                         name: this.name,
-                        type: this.type,
+						tags: this.tags,
+						type: this.type,
                         path: this.path,
 						file: this.file,
                         x_axis: parseInt(this.x_axis / this.imageAspectRatio),

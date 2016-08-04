@@ -43,7 +43,8 @@ class CampaignRequest extends FormRequest
         }
 
         $optional = [
-            'avatar_upload_id' => 'string|exists:uploads',
+            'avatar_upload_id' => 'string|exists:uploads,id,type,avatar',
+            'banner_upload_id' => 'string|exists:uploads,id,type,banner',
             'description'      => 'string|max:120',
             'published_at'     => 'date',
             'tags'             => 'array'

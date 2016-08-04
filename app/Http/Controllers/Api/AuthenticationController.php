@@ -64,4 +64,11 @@ class AuthenticationController extends Controller
 
         return response()->json(compact('token'));
     }
+
+    public function refresh()
+    {
+        $token = JWTAuth::parseToken()->refresh();
+
+        return response()->json(compact('token'));
+    }
 }

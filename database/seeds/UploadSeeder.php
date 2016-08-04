@@ -12,10 +12,10 @@ class UploadSeeder extends Seeder
     public function run()
     {
         factory(App\Models\v1\Upload::class, 'avatar', config('seeders.uploads'))->create()->each(function($u) {
-            $u->tag(['campaigns']);
+            $u->tag(['Campaign']);
         });
         factory(App\Models\v1\Upload::class, 'banner', config('seeders.uploads'))->create()->each(function($u) {
-            $u->tag(['fundraisers', 'users', 'groups', 'campaigns']);
+            $u->tag(['Fundraiser', 'User', 'Group', 'Campaign']);
         });
     }
 }

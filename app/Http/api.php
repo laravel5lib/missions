@@ -44,6 +44,7 @@ $api->version('v1', [
     $api->post('/login', 'AuthenticationController@authenticate');
     $api->post('/register', 'AuthenticationController@register');
     $api->delete('/logout', 'AuthenticationController@deauthenticate');
+    $api->post('/refresh', 'AuthenticationController@refresh');
     $api->get('/users/me', 'UsersController@show');
     $api->put('/users/me', 'UsersController@update');
     $api->resource('users', 'UsersController');

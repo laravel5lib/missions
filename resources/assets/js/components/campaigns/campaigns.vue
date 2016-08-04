@@ -29,10 +29,10 @@
     <hr class="divider inv xlg">
     <div class="container">
         <div class="col-xs-6">
-            <h4>Recent Campaigns</h4>
+            <h4>Current Campaigns</h4>
         </div>
         <div class="col-xs-6 text-right">
-            <a href="#" class="btn btn-primary btn-sm">See All</a>
+            <!--<a href="#" class="btn btn-primary btn-sm">See All</a>-->
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">

@@ -76,8 +76,20 @@ Vue.http.interceptors.push({
     },
 
     response: function (response) {
-        if (response.status && response.status === 401) {
-            $.removeCookie('api_token');
+        if (response.status && response.status == 401) {
+            Vue.http.post('/api/refresh').then(
+                function (response) {
+                    $.cookie('api_token', response.data.token);
+                    window.location.reload();
+                },
+                function (response) {
+                    if (response.status && response.status === 401) {
+                        $.removeCookie('api_token');
+                        window.location.replace('/logout');
+                    };
+                }
+            )
+
         }
         if (response.headers && response.headers('Authorization')) {
             $.cookie('api_token', response.headers('Authorization'));

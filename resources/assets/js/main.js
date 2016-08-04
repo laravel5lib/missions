@@ -77,8 +77,9 @@ Vue.http.interceptors.push({
     },
 
     response: function (response) {
-        if (response.status && response.status === 401) {
+        if (response.status && response.status == 401) {
             $.removeCookie('api_token');
+            window.location.replace('/logout');
         }
         if (response.headers && response.headers('Authorization')) {
             $.cookie('api_token', response.headers('Authorization'));

@@ -33,6 +33,7 @@
         </div>
       </li>
       @endif
+      <top-nav></top-nav>
 
     </div><!-- /.navbar-right -->
   </div><!-- end container -->

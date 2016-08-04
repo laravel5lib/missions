@@ -30,5 +30,15 @@ class Upload extends Model
     {
         $this->attributes['meta'] = json_encode($value);
     }
+
+    /**
+     * Get the upload's users.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function users()
+    {
+        return $this->morphedByMany(User::class, 'uploadable');
+    }
 }
 

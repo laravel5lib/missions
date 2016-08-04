@@ -123,6 +123,9 @@ class UploadsController extends Controller
             'type' => $request->get('type')
         ]);
 
+        if ($request->has('tags'))
+            $upload->retag($request->get('tags'));
+
         return $this->response->item($upload, new UploadTransformer);
     }
 
@@ -213,6 +216,9 @@ class UploadsController extends Controller
                 'size' => null
             ]
         ]);
+
+        if ($request->has('tags'))
+            $new->tag($request->get('tags'));
 
         return $new;
     }

@@ -53,7 +53,7 @@
                 <div class="col-sm-8">
                     <div class="form-group" :class="{ 'has-error': checkForError('country') }">
                         <label for="country">Country</label>
-                        <v-select class="form-controls" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                        <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="" v-model="country_code" v-validate:country="{ required: true }" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
@@ -74,7 +74,7 @@
             <div class="form-group" :class="{ 'has-error': checkForError('timezone') }">
                 <label for="country" class="col-sm-2 control-label">Timezone</label>
                 <div class="col-sm-10">
-                    <v-select class="form-controls" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                    <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                     <select hidden name="timezone" id="timezone" class="" v-model="timezone" v-validate:timezone="{ required: true }">
                         <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                     </select>

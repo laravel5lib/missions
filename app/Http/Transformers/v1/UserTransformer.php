@@ -13,7 +13,7 @@ class UserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'reservations', 'notes', 'managing', 'facilitating', 'passports', 'visas'
+        'reservations', 'notes', 'managing', 'facilitating', 'passports', 'visas', 'uploads'
     ];
 
     /**
@@ -24,6 +24,8 @@ class UserTransformer extends TransformerAbstract
      */
     public function transform(User $user)
     {
+        $user->load('banner', 'avatar');
+
         return [
             'id'           => $user->id,
             'name'         => $user->name,
@@ -44,6 +46,8 @@ class UserTransformer extends TransformerAbstract
             'timezone'     => $user->timezone,
             'bio'          => $user->bio,
             'url'          => $user->url,
+            'avatar'       => $user->avatar ? image($user->avatar->source) : null,
+            'banner'       => $user->banner ? image($user->banner->source) : null,
             'public'       => (bool) $user->public,
             'created_at'   => $user->created_at->toDateTimeString(),
             'updated_at'   => $user->updated_at->toDateTimeString(),
@@ -54,6 +58,13 @@ class UserTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    public function includeUploads(User $user)
+    {
+        $uploads = $user->uploads;
+
+        return $this->collection($uploads, new UploadTransformer);
     }
 
     /**

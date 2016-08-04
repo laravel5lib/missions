@@ -9,10 +9,13 @@
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" :class="{ 'has-error': checkForError('tags') }">
                 <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
-					<v-select class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+					<v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+					<select id="tags" v-model="tags" multiple v-validate:tags="{required:true}" hidden>
+						<option v-for="tag in tagOptions" :value="tag"></option>
+					</select>
 				</div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('type') }">
@@ -98,6 +101,9 @@
 	export default{
         name: 'upload-create',
 		components: {vSelect},
+		props:{
+
+		},
         data(){
             return {
 //				showRight: false,

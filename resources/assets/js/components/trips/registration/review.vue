@@ -5,7 +5,7 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<div class="panel-title">
-						Basic Traveler Information
+						<h5>Basic Traveler Information</h5>
 					</div>
 				</div>
 				<div class="panel-body">
@@ -31,7 +31,7 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<div class="panel-title">
-						Payment Details
+						<h5>Payment Details</h5>
 					</div>
 				</div>
 				<div class="panel-body">

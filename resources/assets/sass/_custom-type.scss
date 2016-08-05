@@ -115,6 +115,9 @@ mark,
 .text-primary-lighter {
   color: $text-primary-lighter;
 }
+.text-white {
+  color: #fff !important;
+}
 
 @include text-emphasis-variant('.text-primary', $brand-primary);
 

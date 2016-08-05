@@ -167,6 +167,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
         Conner\Tagging\Providers\TaggingServiceProvider::class,
+        Silber\Bouncer\BouncerServiceProvider::class,
 
     ],
 
@@ -215,6 +216,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
+        'Bouncer' => Silber\Bouncer\BouncerFacade::class,
 
     ],
 

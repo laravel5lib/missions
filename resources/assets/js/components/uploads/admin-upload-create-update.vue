@@ -1,101 +1,140 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUpload">
-        <form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent">
-            <div class="form-group" :class="{ 'has-error': checkForError('name') }">
-                <label for="name" class="col-sm-2 control-label">Name</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
-                           maxlength="100" minlength="1" required>
-                </div>
-            </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('tags') }">
-                <label for="tags" class="col-sm-2 control-label">Tags</label>
-                <div class="col-sm-10">
-					<v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
-					<select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
-						<option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
-					</select>
-				</div>
-            </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('type') }">
-                <label for="type" class="col-sm-2 control-label">Type</label>
-                <div class="col-sm-10">
-                    <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
-                        <option :value="">-- select type --</option>
-                        <option value="avatar">Image (Avatar) - 1280 x 1280</option>
-						<option value="banner">Image (Banner) - 1300 x 500</option>
-						<option value="other">Image (other) - no set dimensions</option>
-						<option value="file">File</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row col-sm-offset-2" v-if="type && type === 'other'">
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" v-model="constrained">
-						Lock Proportions
+	<div>
+		<form class="form-inline" v-if="isChild" novalidate>
+			<div class="row">
+				<div class="col-sm-offset-2 col-sm-10">
+					<label class="radio-inline">
+						<input type="radio" name="uiSelector" id="uiSelector1" v-model="uiSelector" :value="1"> Select file
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="uiSelector" id="uiSelector2" v-model="uiSelector" :value="2"> Upload file
 					</label>
 				</div>
-                <div class="" :class="{'col-sm-4': !constrained, 'col-sm-8': constrained}">
-                    <div class="input-group">
-						<span class="input-group-addon" v-if="!constrained" id="basic-addon3">Width(px)</span>
-						<span class="input-group-addon" v-if="constrained" id="basic-addon3">Width/Height(px)</span>
-                        <input type="number" number class="form-control" v-model="scaledWidth" id="height" min="100" aria-describedby="basic-addon3"
-							   placeholder="300">
-                    </div>
-					<br>
+			</div>
+			<hr v-if="uiSelector!==0">
+		</form>
+		<div v-if="isChild && uiSelector==1">
+			<form class="form-inline text-right" novalidate>
+				<div class="input-group input-group-sm">
+					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
-				<div class="col-sm-4" v-if="!constrained">
-					<div class="input-group">
-						<span class="input-group-addon" id="basic-addon1">Height(px)</span>
-						<input type="number" number class="form-control" v-model="scaledHeight" id="width" min="100" aria-describedby="basic-addon1"
-							   placeholder="300">
+			</form>
+			<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+				<div class="col-sm-4 col-md-3" v-for="upload in uploads" style="display:flex">
+					<div class="panel panel-default">
+						<a href="#" role="button">
+							<img :src="upload.source + '?w=100&q=25'" :alt="campaign.name" class="img-responsive">
+						</a>
+						<div style="min-height:220px;" class="panel-body">
+							<h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{upload.name}}</h6>
+						</div><!-- end panel-body -->
+						<div class="panel-footer">
+							<button type="button" class="btn btn-xs btn-block btn-primary" @click="">Select</button>
+						</div>
+					</div><!-- end panel -->
+				</div><!-- end col -->
+			</div>
+		</div>
+		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
+			<form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent">
+				<div class="form-group" :class="{ 'has-error': checkForError('name') }">
+					<label for="name" class="col-sm-2 control-label">Name</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" name="name" id="name" v-model="name"
+							   placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+							   maxlength="100" minlength="1" required>
 					</div>
 				</div>
-				<div class="col-sm-4">
-					<button class="btn btn-default" type="button" @click="adjustSelect">Set</button>
+				<div class="form-group" :class="{ 'has-error': checkForError('tags') }">
+					<label for="tags" class="col-sm-2 control-label">Tags</label>
+					<div class="col-sm-10">
+						<v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+						<select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
+							<option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
+						</select>
+					</div>
 				</div>
-            </div>
-
-			<div class="form-group">
-				<label for="file" class="col-sm-2 control-label">File</label>
-				<div class="col-sm-10">
-					<input type="file" id="file" v-model="fileA" @change="handleImage" class="form-control">
-					 <!--<h5>Coords: {{coords|json}}</h5>-->
+				<div class="form-group" :class="{ 'has-error': checkForError('type') }">
+					<label for="type" class="col-sm-2 control-label">Type</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
+							<option :value="">-- select type --</option>
+							<option value="avatar">Image (Avatar) - 1280 x 1280</option>
+							<option value="banner">Image (Banner) - 1300 x 500</option>
+							<option value="other">Image (other) - no set dimensions</option>
+							<option value="file">File</option>
+						</select>
+					</div>
 				</div>
-			</div>
 
-			<div class="row col-sm-offset-2" v-if="type && type !== 'file' && file && isSmall()">
-				<div class="alert alert-warning" role="alert">
-					The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
-					The current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.
+				<div class="row col-sm-offset-2" v-if="type && type === 'other'">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" v-model="constrained">
+							Lock Proportions
+						</label>
+					</div>
+					<div class="" :class="{'col-sm-4': !constrained, 'col-sm-8': constrained}">
+						<div class="input-group">
+							<span class="input-group-addon" v-if="!constrained" id="basic-addon3">Width(px)</span>
+							<span class="input-group-addon" v-if="constrained" id="basic-addon3">Width/Height(px)</span>
+							<input type="number" number class="form-control" v-model="scaledWidth" id="height" min="100" aria-describedby="basic-addon3"
+								   placeholder="300">
+						</div>
+						<br>
+					</div>
+					<div class="col-sm-4" v-if="!constrained">
+						<div class="input-group">
+							<span class="input-group-addon" id="basic-addon1">Height(px)</span>
+							<input type="number" number class="form-control" v-model="scaledHeight" id="width" min="100" aria-describedby="basic-addon1"
+								   placeholder="300">
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<button class="btn btn-default" type="button" @click="adjustSelect">Set</button>
+					</div>
 				</div>
-			</div>
 
-			<div class="form-group" v-if="file" v-show="type !== 'file'">
-				<label for="file" class="col-sm-2 control-label">Crop Image</label>
-				<div id="crop-wrapper" class="col-sm-10">
-					<img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"
+				<div class="form-group">
+					<label for="file" class="col-sm-2 control-label">File</label>
+					<div class="col-sm-10">
+						<input type="file" id="file" v-model="fileA" @change="handleImage" class="form-control">
+						<!--<h5>Coords: {{coords|json}}</h5>-->
+					</div>
+				</div>
+
+				<div class="row col-sm-offset-2" v-if="type && type !== 'file' && file && isSmall()">
+					<div class="alert alert-warning" role="alert">
+						The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
+						The current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.
+					</div>
+				</div>
+
+				<div class="form-group" v-if="file" v-show="type !== 'file'">
+					<label for="file" class="col-sm-2 control-label">Crop Image</label>
+					<div id="crop-wrapper" class="col-sm-10">
+						<img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"
 							 v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>
-				<!--<hr>-->
-					<!--<img :src="resultImage" v-if="resultImage">-->
+						<!--<hr>-->
+						<!--<img :src="resultImage" v-if="resultImage">-->
+					</div>
 				</div>
-			</div>
 
-			<br>
+				<br>
 
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<a href="/admin/uploads" class="btn btn-default">Cancel</a>
-					<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Create</a>
-					<a @click="update()" v-if="isUpdate" class="btn btn-primary">Update</a>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<a href="/admin/uploads" class="btn btn-default">Cancel</a>
+						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Create</a>
+						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Update</a>
+					</div>
 				</div>
-			</div>
 
-		</form>
-    </validator>
+			</form>
+		</validator>
+
+	</div>
 </template>
 <script>
 	import vSelect from 'vue-select'
@@ -168,6 +207,12 @@
 				],
 				typeObj: null,
 				resource: this.$resource('uploads{/id}'),
+				uiSelector: 0,
+				uploads: [],
+				page: 1,
+				per_page: 4,
+				search: '',
+				pagination: {},
             }
         },
 		watch:{
@@ -181,7 +226,32 @@
 			},
 			'tags': function (val) {
 				this.$validate('tags', true);
-			}
+			},
+			// Toggle ui states
+			'uiSelector': function (val) {
+				if (val === 1) {
+
+				}
+			},
+			// Search Functionality
+			'search': function (val, oldVal) {
+				this.page = 1;
+				this.searchUploads();
+			},
+			'orderByField': function (val, oldVal) {
+				this.searchUploads();
+			},
+			'direction': function (val, oldVal) {
+				this.searchUploads();
+			},
+			'page': function (val, oldVal) {
+				this.searchUploads();
+			},
+			'per_page': function (val, oldVal) {
+				this.searchUploads();
+			},
+
+
 		},
 		events:{
 			'vueCrop-api':function (api) {
@@ -308,7 +378,23 @@
 					this.width = coordinates.w;
 					this.height = coordinates.h;
 				}
-			}
+			},
+			searchUploads(){
+				var params = {
+					include: '',
+					search: this.search,
+					per_page: this.per_page,
+					page: this.page,
+					sort: this.orderByField + '|' + (this.direction?'asc':'desc'),
+					type: this.type,
+					tags: this.tags
+				};
+
+				this.$http.get('uploads', params).then(function (response) {
+					this.uploads = response.data.data;
+					this.pagination = response.data.meta.pagination;
+				})
+			},
         },
 		ready(){
 			if (this.isUpdate) {

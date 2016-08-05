@@ -45,6 +45,21 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
 });
 
 /**
+ * Joe User Factory
+ */
+$factory->defineAs(App\Models\v1\User::class, 'joe', function (Faker\Generator $faker) use ($factory)
+{
+    $user = $factory->raw(App\Models\v1\User::class);
+
+    return array_merge($user, [
+        'name'     => 'Joe',
+        'email'    => 'joe@example.com',
+        'password' => 'secret',
+        'admin'    => true
+    ]);
+});
+
+/**
  * Reservation Factory
  */
 $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $faker)

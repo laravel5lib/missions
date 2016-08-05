@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Bouncer::seed();
+        $this->call(BouncerSeeder::class);
         $this->call(UploadSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(PassportTableSeeder::class);

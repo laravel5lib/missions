@@ -175,7 +175,7 @@
 			},
 			tagOptions: {
 				type: Array,
-				default() { return ['campaign', 'user', 'group', 'fundraiser'] }
+				default() { return ['Campaign', 'User', 'Group', 'Fundraiser'] }
 			},
 			tags: {
 				type: Array,

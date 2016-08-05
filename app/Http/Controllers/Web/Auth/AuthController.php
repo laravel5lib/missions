@@ -148,7 +148,7 @@ class AuthController extends Controller
     {
         Auth::logout();
 
-        return redirect('/')->withCookie(Cookie::forget('api_token'));
+        return redirect('/login')->withCookie(Cookie::forget('api_token'));
     }
 
     /**

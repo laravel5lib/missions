@@ -1,400 +1,197 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
     <validator name="CreateUpload">
-        <form id="CreateUploadForm" class="form-horizontal" novalidate>
+        <form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent">
             <div class="form-group" :class="{ 'has-error': checkForError('name') }">
                 <label for="name" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="Upload Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('email') }">
-                <label for="name" class="col-sm-2 control-label">Email</label>
+            <div class="form-group" :class="{ 'has-error': checkForError('tags') }">
+                <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
-                    <input type="email" class="form-control" name="email" id="email" v-model="email"
-                           v-validate:email="{ required: true, minlength:1, maxlength:100 }">
+                    <v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+                    <select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
+                        <option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">Alt. Email</label>
+            <div class="form-group" :class="{ 'has-error': checkForError('type') }">
+                <label for="type" class="col-sm-2 control-label">Type</label>
                 <div class="col-sm-10">
-                    <input type="email" class="form-control" name="alt_email" id="alt_email" v-model="alt_email">
-                </div>
-            </div>
-
-            <div class="form-group" :class="{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }">
-                <label for="name" class="col-sm-2 control-label">Password</label>
-                <div class="col-sm-10">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="input-group" :class="{ 'has-error': checkForError('password') }">
-                                <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
-                                       v-validate:password="{ required: true, minlength:8 }" placeholder="Enter password">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
-                                        <i class="fa fa-eye" v-if="!showPassword"></i>
-                                        <i class="fa fa-eye-slash" v-if="showPassword"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="input-group" :class="{ 'has-error': checkForError('passwordconfirmation') }">
-                                <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
-                                       v-validate:passwordconfirmation="{ required: true, minlength:8 }" placeholder="Enter password again">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
-                                        <i class="fa fa-eye" v-if="!showPassword"></i>
-                                        <i class="fa fa-eye-slash" v-if="showPassword"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="help-block">Password must be at least 8 characters long</div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Date of Birth</label>
-
-                <div class="col-sm-10">
-                    <div class="row">
-                        <div class="col-xs-5">
-                            <select class="form-control" name="dob_month" v-model="dobMonth" required>
-                                <option value="01">January</option>
-                                <option value="02">February</option>
-                                <option value="03">March</option>
-                                <option value="04">April</option>
-                                <option value="05">May</option>
-                                <option value="06">June</option>
-                                <option value="07">July</option>
-                                <option value="08">August</option>
-                                <option value="09">September</option>
-                                <option value="10">October</option>
-                                <option value="11">November</option>
-                                <option value="12">December</option>
-                            </select>
-                            <h6 class="help-block lightcolor">Month</h6>
-                        </div>
-                        <div class="col-xs-3">
-                            <select class="form-control" name="dob_day" v-model="dobDay" required>
-                                <option value="01">1</option>
-                                <option value="02">2</option>
-                                <option value="03">3</option>
-                                <option value="04">4</option>
-                                <option value="05">5</option>
-                                <option value="06">6</option>
-                                <option value="07">7</option>
-                                <option value="08">8</option>
-                                <option value="09">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                                <option value="13">13</option>
-                                <option value="14">14</option>
-                                <option value="15">15</option>
-                                <option value="16">16</option>
-                                <option value="17">17</option>
-                                <option value="18">18</option>
-                                <option value="19">19</option>
-                                <option value="20">20</option>
-                                <option value="21">21</option>
-                                <option value="22">22</option>
-                                <option value="23">23</option>
-                                <option value="24">24</option>
-                                <option value="25">25</option>
-                                <option value="26">26</option>
-                                <option value="27">27</option>
-                                <option value="28">28</option>
-                                <option value="29">29</option>
-                                <option value="30">30</option>
-                                <option value="31">31</option>
-                            </select>
-                            <h6 class="help-block lightcolor">Day</h6>
-                        </div>
-                        <div class="col-xs-4">
-                            <select class="form-control" name="dob_year" v-model="dobYear">
-                                <option value="1930">1930</option>
-                                <option value="1931">1931</option>
-                                <option value="1932">1932</option>
-                                <option value="1933">1933</option>
-                                <option value="1934">1934</option>
-                                <option value="1935">1935</option>
-                                <option value="1936">1936</option>
-                                <option value="1937">1937</option>
-                                <option value="1938">1938</option>
-                                <option value="1939">1939</option>
-                                <option value="1940">1940</option>
-                                <option value="1941">1941</option>
-                                <option value="1942">1942</option>
-                                <option value="1943">1943</option>
-                                <option value="1944">1944</option>
-                                <option value="1945">1945</option>
-                                <option value="1946">1946</option>
-                                <option value="1947">1947</option>
-                                <option value="1948">1948</option>
-                                <option value="1949">1949</option>
-                                <option value="1950">1950</option>
-                                <option value="1951">1951</option>
-                                <option value="1952">1952</option>
-                                <option value="1953">1953</option>
-                                <option value="1954">1954</option>
-                                <option value="1955">1955</option>
-                                <option value="1956">1956</option>
-                                <option value="1957">1957</option>
-                                <option value="1958">1958</option>
-                                <option value="1959">1959</option>
-                                <option value="1960">1960</option>
-                                <option value="1961">1961</option>
-                                <option value="1962">1962</option>
-                                <option value="1963">1963</option>
-                                <option value="1964">1964</option>
-                                <option value="1965">1965</option>
-                                <option value="1966">1966</option>
-                                <option value="1967">1967</option>
-                                <option value="1968">1968</option>
-                                <option value="1969">1969</option>
-                                <option value="1970">1970</option>
-                                <option value="1971">1971</option>
-                                <option value="1972">1972</option>
-                                <option value="1973">1973</option>
-                                <option value="1974">1974</option>
-                                <option value="1975">1975</option>
-                                <option value="1976">1976</option>
-                                <option value="1977">1977</option>
-                                <option value="1978">1978</option>
-                                <option value="1979">1979</option>
-                                <option value="1980">1980</option>
-                                <option value="1981">1981</option>
-                                <option value="1982">1982</option>
-                                <option value="1983">1983</option>
-                                <option value="1984">1984</option>
-                                <option value="1985">1985</option>
-                                <option value="1986">1986</option>
-                                <option value="1987">1987</option>
-                                <option value="1988">1988</option>
-                                <option value="1989">1989</option>
-                                <option value="1990" selected="selected">1990</option>
-                                <option value="1991">1991</option>
-                                <option value="1992">1992</option>
-                                <option value="1993">1993</option>
-                                <option value="1994">1994</option>
-                                <option value="1995">1995</option>
-                                <option value="1996">1996</option>
-                                <option value="1997">1997</option>
-                                <option value="1998">1998</option>
-                                <option value="1999">1999</option>
-                                <option value="2000">2000</option>
-                                <option value="2001">2001</option>
-                                <option value="2002">2002</option>
-                                <option value="2003">2003</option>
-                                <option value="2004">2004</option>
-                                <option value="2005">2005</option>
-                                <option value="2006">2006</option>
-                                <option value="2007">2007</option>
-                                <option value="2008">2008</option>
-                                <option value="2009">2009</option>
-                                <option value="2010">2010</option>
-                                <option value="2011">2011</option>
-                                <option value="2012">2012</option>
-                                <option value="2013">2013</option>
-                                <option value="2014">2014</option>
-                                <option value="2015">2015</option>
-                            </select>
-                            <h6 class="help-block lightcolor">Year</h6>
-                        </div>
-                    </div>
-                </div><!-- end col -->
-            </div><!-- end form-group -->
-
-            <div class="form-group" :class="{ 'has-error': checkForError('gender') }">
-                <label for="gender" class="col-sm-2 control-label">Gender</label>
-                <div class="col-sm-10">
-                    <label class="radio-inline">
-                        <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="gender2" id="gender2" value="Female" v-model="gender" v-validate:gender> Female
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-group" :class="{ 'has-error': checkForError('status') }">
-                <label for="status" class="col-sm-2 control-label">Status</label>
-                <div class="col-sm-10">
-                    <label class="radio-inline">
-                        <input type="radio" name="status" id="status" value="Single" v-model="status" v-validate:status="{required: {rule: true}}"> Single
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="status2" id="status2" value="Married" v-model="status" v-validate:status> Married
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="bio">Bio</label>
-                <div class="col-sm-10">
-                    <textarea class="form-control" v-model="bio" id="bio" placeholder="Upload Bio" maxlength="120"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="infoAddress">Address 1</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="infoAddress2">Address 2</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
-                </div>
-            </div>
-
-            <div class="row col-sm-offset-2">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label for="infoCity">City</label>
-                        <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label for="infoState">State/Prov.</label>
-                        <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row col-sm-offset-2">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label for="infoZip">ZIP/Postal Code</label>
-                        <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="form-group" :class="{ 'has-error': checkForError('country') }">
-
-                        <label for="country">Country</label>
-                        <v-select class="form-controls" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-                        <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
-                            <option :value="country.code" v-for="country in countries">{{country.name}}</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group" :class="{ 'has-error': checkForError('timezone') }">
-                <label for="timezone" class="col-sm-2 control-label">Timezone</label>
-
-                <div class="col-sm-10">
-                    <v-select class="form-controls" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
-                    <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
-                        <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
+                    <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" disabled>
+                        <option :value="">-- select type --</option>
+                        <option value="avatar">Image (Avatar) - 1280 x 1280</option>
+                        <option value="banner">Image (Banner) - 1300 x 500</option>
+                        <option value="other">Image (other) - no set dimensions</option>
+                        <option value="file">File</option>
                     </select>
                 </div>
             </div>
 
-            <div class="row col-sm-offset-2">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label for="infoPhone">Phone 1</label>
-                        <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
+            <div class="row col-sm-offset-2" v-if="type && type === 'other'">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" v-model="constrained">
+                        Lock Proportions
+                    </label>
+                </div>
+                <div class="" :class="{'col-sm-4': !constrained, 'col-sm-8': constrained}">
+                    <div class="input-group">
+                        <span class="input-group-addon" v-if="!constrained" id="basic-addon3">Width(px)</span>
+                        <span class="input-group-addon" v-if="constrained" id="basic-addon3">Width/Height(px)</span>
+                        <input type="number" number class="form-control" v-model="scaledWidth" id="height" min="100" aria-describedby="basic-addon3"
+                               placeholder="300">
+                    </div>
+                    <br>
+                </div>
+                <div class="col-sm-4" v-if="!constrained">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Height(px)</span>
+                        <input type="number" number class="form-control" v-model="scaledHeight" id="width" min="100" aria-describedby="basic-addon1"
+                               placeholder="300">
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label for="infoMobile">Phone 2</label>
-                        <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
-                    </div>
+                <div class="col-sm-4">
+                    <button class="btn btn-default" type="button" @click="adjustSelect">Set</button>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="public" class="col-sm-2 control-label">Public</label>
+                <label for="file" class="col-sm-2 control-label">File</label>
                 <div class="col-sm-10">
-                    <label class="radio-inline">
-                        <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="public2" id="public2" :value="false" v-model="public"> Private
-                    </label>
+                    <input type="file" id="file" v-model="fileA" @change="handleImage" class="form-control">
+                    <!--<h5>Coords: {{coords|json}}</h5>-->
                 </div>
             </div>
-            <div class="form-group" v-if="!!public">
-                <label for="url" class="col-sm-2 control-label">Url Slug</label>
-                <div class="col-sm-10">
-                    <div class="input-group">
-                        <span class="input-group-addon">www.missions.me/uploads/</span>
-                        <input type="text" id="url" v-model="url" class="form-control" required v-validate:url="{ required: !!public }"/>
-                    </div>
+
+            <div class="row col-sm-offset-2" v-if="type && type !== 'file' && file && isSmall()">
+                <div class="alert alert-warning" role="alert">
+                    The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
+                    The current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.
                 </div>
             </div>
+
+            <div class="form-group" v-if="file" v-show="type !== 'file'">
+                <label for="file" class="col-sm-2 control-label">Crop Image</label>
+                <div id="crop-wrapper" class="col-sm-10">
+                    <img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"
+                         v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>
+                    <!--<hr>-->
+                    <!--<img :src="resultImage" v-if="resultImage">-->
+                </div>
+            </div>
+
+            <br>
+
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <a href="/admin/uploads" class="btn btn-default">Cancel</a>
-                    <a @click="submit()" class="btn btn-primary">Create</a>
+                    <a @click="submit()" class="btn btn-primary">Update</a>
                 </div>
             </div>
+
         </form>
     </validator>
 </template>
 <script>
-    import vSelect from "vue-select";
+    import vSelect from 'vue-select'
     export default{
         name: 'upload-edit',
+        props:['uploadId'],
         components: {vSelect},
         data(){
             return {
+//				showRight: false,
+
                 name: '',
-                email: '',
-                alt_email: '',
-                password: '',
-                password_confirmation: '',
-                bio: '',
-                status: '',
-                birthday: null,
-                country_code: null,
-                timezone: null,
-                phone_one: '',
-                phone_two: '',
-                address_one: '',
-                address_two: '',
-                city: '',
-                state: '',
-                zip: '',
-                public: false,
-                url: '',
-                gender: false,
-                admin: false,
+                type: null,
+                path: '',
+                file: null,
+                x_axis: null,
+                y_axis: null,
+                width: 100,
+                height: 100,
+                tags: [],
 
                 // logic variables
-//                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
                 attemptSubmit: false,
-                countries: [],
-                countryCodeObj: null,
-                timezones: [],
-                showPassword: false,
-                timezoneObj: null,
-                dobMonth: null,
-                dobDay: null,
-                dobYear: null,
-
+                coords: 'Try to move/resize the selection',
+                constrained: true,
+                vueCropApi: null,
+                scaledWidth: 600,
+                scaledHeight: 600,
+                imageMaxWidth: 600,
+                imageMaxHeight: 600,
+                imageWidth: 600,
+                imageHeight: 600,
+                imageAspectRatio: null,
+                aspectRatio: this.width / this.height,
+                fileA: null,
+                resultImage: null,
+                typeObj: null,
+                typePaths: [
+                    {type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
+                    {type: 'banner', path: 'images/banners', width: 1300, height: 500},
+                    {type: 'other', path: 'images/other'},
+                    {type: 'file', path: 'resources/documents'},
+                ],
+                resource: this.$resource('uploads{/id}'),
+                tagOptions: ['Campaign', 'User', 'Group', 'Fundraiser']
             }
         },
-        computed: {
-            country_code() {
-                return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+        watch: {
+            'type': function (val, oldVal) {
+                this.typeObj = _.findWhere(this.typePaths, {type: val});
+                this.path = this.typeObj.path;
+                if (this.file)
+                    this.adjustSelectByType();
             },
-            birthday() {
-                return this.dobYear && this.dobMonth && this.dobDay
-                        ? moment().set({year: this.dobYear, month: this.dobMonth, day:this.dobDay}).format('LL')
-                        : null;
+            'tags': function (val) {
+                this.$validate('tags', true);
+            }
+        },
+        events:{
+            'vueCrop-api':function (api) {
+                // make api available on scope
+                window.vueCropApi = this.vueCropApi = api;
             }
         },
         methods: {
+            isSmall(){
+                return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
+            },
+            adjustSelectByType(){
+                if (this.vueCropApi && _.contains(['banner', 'avatar'], this.typeObj.type)) {
+                    // update dimensions
+                    this.scaledWidth = this.typeObj.width;
+                    this.scaledHeight = this.typeObj.height;
+                    this.width = this.scaledWidth * this.imageAspectRatio;
+                    this.height = this.scaledHeight * this.imageAspectRatio;
+                    // update jCrop
+                    this.vueCropApi.setOptions({aspectRatio: (this.typeObj.width/this.typeObj.height)});
+                    this.vueCropApi.setSelect([0, 0, this.width, this.height]);
+                }
+            },
+            adjustSelect(){
+                this.width = this.scaledWidth * this.imageAspectRatio;
+                this.height = this.scaledHeight * this.imageAspectRatio;
+
+                var w = this.width;
+                var h = this.height;
+                // always go with the width when constrained
+                h = this.constrained ?  (this.height = this.width) : this.height;
+
+                if (!this.constrained) {
+                    this.vueCropApi.setOptions({aspectRatio: (w/h)});
+                }
+                this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
+            },
+            prevent(e){
+                e.preventDefault();
+            },
             checkForError(field){
                 // if upload clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateUpload[field].invalid && this.attemptSubmit;
@@ -402,45 +199,65 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpload.valid) {
-                    var resource = this.$resource('uploads');
-
-                    resource.save(null, {
+                    this.resource.update({id:this.uploadId}, {
                         name: this.name,
-                        email: this.email,
-                        alt_email: this.alt_email,
-                        password: this.password,
-                        password_confirmation: this.password_confirmation,
-                        bio: this.bio,
+                        tags: this.tags,
                         type: this.type,
-                        country_code: this.country_code,
-                        timezone: this.timezone,
-                        phone_one: this.phone_one,
-                        phone_two: this.phone_two,
-                        address_one: this.address_one,
-                        address_two: this.address_two,
-                        city: this.city,
-                        state: this.state,
-                        zip: this.zip,
-                        status: this.status,
-                        gender: this.gender,
-                        public: this.public,
-                        url: this.url,
+                        path: this.path,
+                        file: this.file||undefined,
+                        x_axis: parseInt(this.x_axis / this.imageAspectRatio)||undefined,
+                        y_axis: parseInt(this.y_axis / this.imageAspectRatio)||undefined,
+                        width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
+                        height: parseInt(this.coords.h / this.imageAspectRatio)||undefined,
                     }).then(function (resp) {
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+                        console.log(resp);
+//                    	this.resultImage = resp.data;
+                        window.location.href = '/admin/uploads';
+//                        window.location.href = '/admin' + resp.data.data.links[0].uri;
                     }, function (error) {
                         console.log(error);
                     });
                 }
+            },
+            handleImage(e){
+                var self = this;
+                var reader = new FileReader();
+                reader.onload = function(event){
+                    var img = new Image();
+                    img.onload = function(){
+                        self.imageAspectRatio = Math.min(self.imageMaxWidth / img.width, self.imageMaxHeight / img.height);
+                        self.imageWidth = img.width * self.imageAspectRatio;
+                        self.imageHeight = img.height * self.imageAspectRatio;
+
+                        // adjust container
+                        self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
+                        if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type) ) {
+                            self.adjustSelectByType()
+                        } else {
+                            self.vueCropApi.setSelect([(self.imageWidth / 2) - 50, (self.imageHeight / 2) - 50, self.width * self.imageAspectRatio, self.height * self.imageAspectRatio]);
+                        }
+                    };
+                    self.file = img.src = event.target.result;
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            },
+            test: function(event, selection, coordinates) {
+                this.coords = coordinates;
+                if(coordinates) {
+                    this.x_axis = coordinates.x;
+                    this.y_axis = coordinates.y;
+                    this.width = coordinates.w;
+                    this.height = coordinates.h;
+                }
             }
         },
         ready(){
-            this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
-            });
-
-            this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.data.timezones;
-            });
+            this.resource.get({id:this.uploadId}).then(function (response) {
+                var upload = response.data.data;
+                this.name = upload.name;
+                this.tags = upload.tags;
+                this.type = upload.type;
+            })
         }
     }
 </script> 

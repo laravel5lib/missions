@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUser">
+    <validator name="CreateUser" :groups="['passwordGroup']">
         <form id="CreateUserForm" class="form-horizontal" novalidate>
             <div class="form-group" :class="{ 'has-error': checkForError('name') }">
                 <label for="name" class="col-sm-2 control-label">Name</label>
@@ -30,7 +30,8 @@
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('password') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
-                                       v-validate:password="{ required: true, minlength:8 }" placeholder="Enter password">
+                                       v-validate:password="{ required: true, minlength:8 }" placeholder="Enter password"
+                                       group="passwordGroup">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -42,7 +43,8 @@
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('passwordconfirmation') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
-                                       v-validate:passwordconfirmation="{ required: true, minlength:8 }" placeholder="Enter password again">
+                                       v-validate:passwordconfirmation="{ required: true, minlength:8 }" placeholder="Enter password again"
+                                       group="passwordGroup">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -52,6 +54,7 @@
                             </div>
                         </div>
                     </div>
+                    <div class="help-block" v-if="$CreateUser.passwordGroup.invalid && attemptSubmit">Passwords do not match!</div>
                     <div class="help-block">Password must be at least 8 characters long</div>
                 </div>
             </div>
@@ -277,8 +280,8 @@
                 <div class="col-sm-8">
                     <div class="form-group" :class="{ 'has-error': checkForError('country') }">
 
-                        <label for="country">Country</label>
-                        <v-select class="form-controls" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                        <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
+                        <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
@@ -290,7 +293,7 @@
                 <label for="timezone" class="col-sm-2 control-label">Timezone</label>
 
                 <div class="col-sm-10">
-                    <v-select class="form-controls" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                    <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                     <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
                         <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                     </select>
@@ -424,7 +427,7 @@
                         status: this.status,
                         gender: this.gender,
                         public: this.public,
-                        url: this.url,
+                        url: this.public ? this.url : undefined,
                     }).then(function (resp) {
                         window.location.href = '/admin' + resp.data.data.links[0].uri;
                     }, function (error) {

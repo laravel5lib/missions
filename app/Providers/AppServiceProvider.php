@@ -5,8 +5,11 @@ namespace App\Providers;
 use App\Models\v1\User;
 use App\Models\v1\Reservation;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use League\Glide\Server;
+use League\Glide\ServerFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -62,6 +65,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(Server::class, function () {
+
+            return ServerFactory::create([
+                'source' => Storage::disk('s3')->getDriver(),
+                'cache' => Storage::disk('local')->getDriver(),
+                'source_path_prefix' => 'images',
+                'cache_path_prefix' => 'images/.cache',
+                'base_url' => 'api/images',
+                'max_image_size' => 2000*2000
+            ]);
+        });
     }
 }

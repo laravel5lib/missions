@@ -257,7 +257,7 @@
 				<div class="form-group">
 					<div class="col-xs-10 col-xs-offset-1">
 						<label for="country" class="control-label">Country</label>
-						<v-select class="form-controls" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+						<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
 						<select hidden name="country" id="country" class="hidden" v-model="newUser.country_code" required>
 							<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 						</select>
@@ -266,7 +266,7 @@
 				<div class="form-group">
 					<div class="col-xs-10 col-xs-offset-1">
 						<label for="timezone" class="control-label">Timezone</label>
-						<v-select class="form-controls" id="timezone" :value.sync="newUser.timezone" :options="timezones"></v-select>
+						<v-select class="form-control" id="timezone" :value.sync="newUser.timezone" :options="timezones"></v-select>
 						<select hidden name="timezone" id="timezone" class="hidden" v-model="newUser.timezone" required>
 							<option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
 						</select>
@@ -281,9 +281,9 @@
 					</div><!-- end col -->
 				</div><!-- end form-group -->
 			</form><!-- end form -->
-			<!--<a v-if="currentState === 'login' || currentState === 'create'" class="btn btn-block btn-link" @click="currentState='reset'">Forgot Your Password?</a>-->
-			<a v-if="currentState === 'reset' || currentState === 'create'" class="btn btn-block btn-link" @click="currentState='login'">I Have An Account</a>
-			<a v-if="currentState === 'login' || currentState === 'reset'" class="btn btn-block btn-link" @click="currentState='create'">Create A New Account</a>
+			<!--<a v-if="currentState === 'login' || currentState === 'create'" @click="currentState='reset'">Forgot Your Password?</a>-->
+			<p class="text-center"><a v-if="currentState === 'reset' || currentState === 'create'" @click="currentState='login'">I Have An Account</a></p>
+			<p class="text-center"><a v-if="currentState === 'login' || currentState === 'reset'" @click="currentState='create'">Create A New Account</a></p>
 		</div>
 	</div><!-- end panel-body -->
 </template>

@@ -42,7 +42,7 @@
         <table class="table table-hover">
             <thead>
             <tr>
-				<!--<th>Preview</th>-->
+				<th>Preview</th>
                 <th :class="{'text-primary': orderByField === 'name'}">
                     Name
                     <i @click="setOrderByField('name')" v-if="orderByField !== 'name'" class="fa fa-sort pull-right"></i>
@@ -68,9 +68,9 @@
             </thead>
             <tbody>
             <tr v-for="upload in uploads">
-                <!--<td>
-					<img v-if="upload.type !== 'file'" src="{{upload.source}}" width="100px"/>
-				</td>-->
+                <td>
+					<img v-if="upload.type !== 'file'" :src="checkSource(upload.source)" width="100px"/>
+				</td>
                 <td v-text="upload.name|capitalize"></td>
                 <td v-text="upload.type|capitalize"></td>
                 <td v-text="upload.created_at|moment 'll'"></td>
@@ -164,6 +164,10 @@
             },
         },
         methods: {
+            checkSource(link){
+//                return decodeURIComponent(link.indexOf('/http') ? 'http' + link.split('/http')[1]: link);
+                return link + '?w=100&q=25';
+            },
             setOrderByField(field){
                 return this.orderByField = field, this.direction = 1;
             },

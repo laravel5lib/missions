@@ -19,6 +19,7 @@ class CreateVisasTable extends Migration
             $table->string('surname');
             $table->string('number');
             $table->string('country_code');
+            $table->uuid('upload_id')->nullable();
             $table->date('issued_at');
             $table->date('expires_at');
             $table->timestamps();

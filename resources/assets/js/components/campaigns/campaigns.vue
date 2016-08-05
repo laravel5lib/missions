@@ -8,7 +8,7 @@
           <!-- Wrapper for slides -->
           <div class="carousel-inner" role="listbox">
             <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="campaign in campaigns">
-              <img :src="campaign.thumb_src">
+              <img :src="campaign.banner">
               <div class="carousel-caption">
                 <h6 class="text-uppercase">{{campaign.country}}</h6>
                 <h3>{{campaign.name}}</h3>
@@ -29,17 +29,17 @@
     <hr class="divider inv xlg">
     <div class="container">
         <div class="col-xs-6">
-            <h4>Recent Campaigns</h4>
+            <h4>Current Campaigns</h4>
         </div>
         <div class="col-xs-6 text-right">
-            <a href="#" class="btn btn-primary btn-sm">See All</a>
+            <!--<a href="#" class="btn btn-primary btn-sm">See All</a>-->
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
             <div class="col-sm-6 col-md-4" v-for="campaign in campaigns" style="display:flex">
                 <div class="panel panel-default">
                     <a :href="'/campaigns/' + campaign.page_url" role="button">
-                        <img :src="campaign.thumb_src" :alt="campaign.name" class="img-responsive">
+                        <img :src="campaign.avatar" :alt="campaign.name" class="img-responsive">
                     </a>
                         <div style="min-height:220px;" class="panel-body">
                             <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{campaign.country}}</h6>

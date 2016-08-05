@@ -62,7 +62,7 @@ class UsersController extends Controller
         else
         {
             $user = $this->auth->user();
-            if(! $user) return $this->response->errorNotFound();
+            if(! $user) return $this->response->errorUnauthorized();
         }
 
         return $this->response->item($user, new UserTransformer());

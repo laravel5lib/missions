@@ -123,6 +123,16 @@ class Campaign extends Model
         return $this->belongsTo(Upload::class, 'avatar_upload_id');
     }
 
+    /**
+     * Get the campaign's banner.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function banner()
+    {
+        return $this->belongsTo(Upload::class, 'banner_upload_id');
+    }
+
     public function scopePublic($query)
     {
         return $query->whereDate('published_at', '<=', date('Y-m-d'));

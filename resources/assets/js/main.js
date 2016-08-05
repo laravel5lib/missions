@@ -33,8 +33,7 @@ import adminUserCreate from './components/users/admin-user-create.vue';
 import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
 import adminUploads from './components/uploads/admin-uploads-list.vue';
-import adminUploadCreate from './components/uploads/admin-upload-create.vue';
-import adminUploadEdit from './components/uploads/admin-upload-edit.vue';
+import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -78,7 +77,24 @@ Vue.http.interceptors.push({
 
     response: function (response) {
         if (response.status && response.status === 401) {
-            $.removeCookie('api_token');
+            Vue.http.post('/api/refresh').then(
+                function (response) {
+                    $.cookie('api_token', response.data.token);
+                    window.location.reload();
+                },
+                function (response) {
+                    if (response.status && response.status === 401 || response.status && response.status === 500) {
+                        $.removeCookie('api_token');
+                        window.location.replace('/logout');
+                    };
+                }
+            )
+
+        }
+        if (response.status && response.status === 500) {
+            alert('Oops! Something went wrong with the server.')
+            // $.removeCookie('api_token');
+            // window.location.replace('/logout');
         }
         if (response.headers && response.headers('Authorization')) {
             $.cookie('api_token', response.headers('Authorization'));
@@ -228,8 +244,7 @@ new Vue({
         adminUserEdit,
         adminUserDelete,
         adminUploads,
-        adminUploadCreate,
-        adminUploadEdit,
+        adminUploadCreateUpdate,
     ],
     http: {
         headers: {

@@ -140,6 +140,16 @@ class Group extends Model
     }
 
     /**
+     * Get the group's uploads.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function uploads()
+    {
+        return $this->morphedByMany(Upload::class, 'uploadable');
+    }
+
+    /**
      * Synchronize all the group's managers.
      *
      * @param $user_ids

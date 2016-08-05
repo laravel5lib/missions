@@ -19,6 +19,7 @@ class CreateCampaignsTable extends Migration
             $table->string('short_desc')->nullable();
             $table->string('page_url')->nullable();
             $table->uuid('avatar_upload_id')->nullable();
+            $table->uuid('banner_upload_id')->nullable();
             $table->date('started_at');
             $table->date('ended_at');
             $table->timestamp('published_at')->nullable();

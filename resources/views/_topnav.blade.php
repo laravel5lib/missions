@@ -22,6 +22,9 @@
         <li><a href="#">My Profile</a></li>
         <li><a href="#">My Group</a></li>
         <li><a href="/dashboard">Dashboard</a></li>
+        @can ('view-admin')
+          <li><a href="/admin">Admin</a></li>
+        @endcan
         <li role="separator" class="divider"></li>
         <li><a href="/logout">Sign Out</a></li>
       </ul>

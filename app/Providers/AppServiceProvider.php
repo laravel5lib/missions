@@ -10,6 +10,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use League\Glide\Server;
 use League\Glide\ServerFactory;
+use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Seed database with default roles out of the box
+        Bouncer::seeder(function () {
+            Bouncer::allow('admin')->to([
+                'view-admin',
+                'view-users', 'create-users', 'edit-users', 'delete-users'
+            ]);
+            Bouncer::allow('manager')->to([
+                'view-admin',
+                'view-users', 'create-users', 'edit-users'
+            ]);
+            Bouncer::allow('intern')->to([
+                'view-admin',
+                'view-users', 'edit-users'
+            ]);
+        });
 
         // Morph Map
         Relation::morphMap([
@@ -31,16 +47,18 @@ class AppServiceProvider extends ServiceProvider
             'App\Models\v1\Assignment'
         ]);
 
-//        User::created(function ($user) {
-//            Mail::queue('emails.welcome', $user->toArray(), function ($message) use($user) {
-//                $message->from('mail@missions.me', 'Missions.Me');
-//                $message->sender('mail@missions.me', 'Missions.Me');
-//                $message->to($user->email, $user->name);
-//                $message->replyTo('go@missions.me', 'Missions.Me');
-//                $message->subject('Welcome to Missions.Me');
-//            });
-//        });
+        // Send welcome emails when user is created.
+        User::created(function ($user) {
+            Mail::queue('emails.welcome', $user->toArray(), function ($message) use($user) {
+                $message->from('mail@missions.me', 'Missions.Me');
+                $message->sender('mail@missions.me', 'Missions.Me');
+                $message->to($user->email, $user->name);
+                $message->replyTo('go@missions.me', 'Missions.Me');
+                $message->subject('Welcome to Missions.Me');
+            });
+        });
 
+        // Create general fundraisers when reservation is created.
         Reservation::created(function ($reservation) {
             // needs to fire after costs sync
             $reservation->fundraisers()->create([
@@ -54,7 +72,7 @@ class AppServiceProvider extends ServiceProvider
                'spots' => $reservation->trip->spots - 1
             ]);
 
-            // send confirmation email.
+            // todo: send confirmation email.
         });
     }
 
@@ -65,6 +83,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // register and configure media server.
         $this->app->singleton(Server::class, function () {
 
             return ServerFactory::create([

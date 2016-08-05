@@ -8,13 +8,15 @@
         <aside :show.sync="showRight" placement="right" header="Missions.Me" :width="275">
             <ul class="nav navmenu-nav">
                 <li class="donate-nav"><a class="navDonate" href="#"><i class="fa fa-heart"></i> Donate To A Cause</a></li>
-                <li id="userMenu" class="dropdown-toggle visible-xs text-center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left"src="images/nelson-prof-pic.jpg" alt="Zech Nelson"> Zech Nelson <i class="fa fa-angle-down"></i></a></li>
+                <!-- <li id="userMenu" class="dropdown-toggle visible-xs text-center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left"src="images/nelson-prof-pic.jpg" alt="Zech Nelson"> Zech Nelson <i class="fa fa-angle-down"></i></a></li>
                   <ul class="dropdown-menu" aria-labelledby="userMenu">
                     <li class="text-center"><a href="#">My Profile</a></li>
-                    <li class="text-center"><a href="#">Dashboard</a></li>
+                    <li class="text-center"><a href="#">Dashboard</a></li>-->
                     <!--<li><a href="/admin">Admin</a></li>-->
-                    <li class="text-center"><a href="/logout">Sign Out</a></li>
-                  </ul>
+                    <!--<li class="text-center"><a href="/logout">Sign Out</a></li>
+                  </ul> -->
+                <li><a href="#">Login</a></li>
+                <li><a href="#">Sign Up</a></li>
                 <li class="navlabel">1Nation1Day</li>
                 <li><a href="http://1nation1day.com/honduras">2013 Honduras</a></li>
                 <li><a href="http://1nation1day.com/dominican">2015 Dominican</a></li>

@@ -176,6 +176,9 @@
   > img {
     display: block;
     max-width: 155px;
+    @media (max-width: 767px) {
+      max-width: 50px;
+    }
   }
 
   @media (min-width: $grid-float-breakpoint) {

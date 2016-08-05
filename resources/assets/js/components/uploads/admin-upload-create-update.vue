@@ -20,20 +20,42 @@
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
 			</form>
+			<br>
 			<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-				<div class="col-sm-4 col-md-3" v-for="upload in uploads" style="display:flex">
+				<div class="col-sm-2 col-md-2" v-for="upload in uploads" style="display:flex">
 					<div class="panel panel-default">
-						<a href="#" role="button">
-							<img :src="upload.source + '?w=100&q=25'" :alt="campaign.name" class="img-responsive">
-						</a>
-						<div style="min-height:220px;" class="panel-body">
-							<h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{upload.name}}</h6>
-						</div><!-- end panel-body -->
+
+							<a @click="selectExisting(upload)" role="button">
+								<tooltip effect="scale" placement="top" :content="upload.name">
+									<img :src="upload.source + '?w=100&q=50'" :alt="upload.name" class="img-responsive">
+								</tooltip>
+							</a>
+
+						<!--<div class="panel-body">
+							<h6 class="text-uppercase">{{upload.name}}</h6>
+						</div>--><!-- end panel-body -->
 						<div class="panel-footer">
-							<button type="button" class="btn btn-xs btn-block btn-primary" @click="">Select</button>
+							<button type="button" class="btn btn-xs btn-block btn-primary" @click="selectExisting(upload)">Select</button>
 						</div>
 					</div><!-- end panel -->
 				</div><!-- end col -->
+				<div class="col-xs-12 text-center">
+					<nav>
+						<ul class="pagination pagination-sm">
+							<li :class="{ 'disabled': pagination.current_page == 1 }">
+								<a aria-label="Previous" @click="page=pagination.current_page-1">
+									<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+							<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
+							<li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
+								<a aria-label="Next" @click="page=pagination.current_page+1">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
 			</div>
 		</div>
 		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
@@ -138,9 +160,10 @@
 </template>
 <script>
 	import vSelect from 'vue-select'
+	import VueStrap from 'vue-strap/dist/vue-strap.min'
 	export default{
         name: 'upload-create-update',
-		components: {vSelect},
+		components: {vSelect, 'tooltip': VueStrap.tooltip},
 		props:{
 			uploadId: {
 				type: String,
@@ -210,7 +233,7 @@
 				uiSelector: 0,
 				uploads: [],
 				page: 1,
-				per_page: 4,
+				per_page: 6,
 				search: '',
 				pagination: {},
             }
@@ -230,7 +253,7 @@
 			// Toggle ui states
 			'uiSelector': function (val) {
 				if (val === 1) {
-
+					this.searchUploads();
 				}
 			},
 			// Search Functionality
@@ -395,6 +418,10 @@
 					this.pagination = response.data.meta.pagination;
 				})
 			},
+			selectExisting(upload){
+				// Assumes this is a child component
+				this.$dispatch('uploads-complete', upload);
+			}
         },
 		ready(){
 			if (this.isUpdate) {

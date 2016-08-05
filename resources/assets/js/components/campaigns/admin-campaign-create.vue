@@ -73,9 +73,29 @@
 
 			<accordion :one-at-atime="true">
 				<panel header="Avatar" :is-open.sync="avatarPanelOpen">
+					<div class="media" v-if="selectedAvatar">
+						<div class="media-left">
+							<a href="#">
+								<img class="media-object" :src="selectedAvatar.source + '?w=100&q=50'" width="100" :alt="selectedAvatar.name">
+							</a>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading">{{selectedAvatar.name}}</h4>
+						</div>
+					</div>
 					<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
 				</panel>
 				<panel header="Banner" :is-open.sync="bannerPanelOpen">
+					<div class="media" v-if="selectedBanner">
+						<div class="media-left">
+							<a href="#">
+								<img class="media-object" :src="selectedBanner.source + '?w=100&q=50'" width="100" :alt="selectedBanner.name">
+							</a>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading">{{selectedBanner.name}}</h4>
+						</div>
+					</div>
 					<upload-create-update type="banner" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
 				</panel>
 			</accordion>
@@ -113,7 +133,9 @@
 				attemptSubmit: false,
 				avatarPanelOpen:false,
 				bannerPanelOpen:false,
+				selectedAvatar: null,
 				avatar_upload_id: null,
+				selectedBanner: null,
 				banner_upload_id: null,
 			}
 		},
@@ -154,12 +176,14 @@
 			'uploads-complete'(data){
 				switch(data.type){
 					case 'avatar':
+						this.selectedAvatar = data;
 						this.avatar_upload_id = data.id;
 						this.avatarPanelOpen = false;
 						break;
 					case 'banner':
+						this.selectedBanner = data;
 						this.banner_upload_id = data.id;
-							this.bannerPanelOpen = false;
+						this.bannerPanelOpen = false;
 						break;
 				}
 			}

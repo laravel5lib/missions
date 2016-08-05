@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import login from './components/login.vue';
+import topNav from './components/top-nav.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
@@ -7,6 +8,9 @@ import groupTripWrapper from './components/campaigns/groups-trips-selection-wrap
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
+import recordsList from './components/records/records-list.vue';
+import visasList from './components/visas/visas-list.vue';
+import passportsList from './components/passports/passports-list.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -29,8 +33,7 @@ import adminUserCreate from './components/users/admin-user-create.vue';
 import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
 import adminUploads from './components/uploads/admin-uploads-list.vue';
-import adminUploadCreate from './components/uploads/admin-upload-create.vue';
-import adminUploadEdit from './components/uploads/admin-upload-edit.vue';
+import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -74,7 +77,24 @@ Vue.http.interceptors.push({
 
     response: function (response) {
         if (response.status && response.status === 401) {
-            $.removeCookie('api_token');
+            Vue.http.post('/api/refresh').then(
+                function (response) {
+                    $.cookie('api_token', response.data.token);
+                    window.location.reload();
+                },
+                function (response) {
+                    if (response.status && response.status === 401 || response.status && response.status === 500) {
+                        $.removeCookie('api_token');
+                        window.location.replace('/logout');
+                    };
+                }
+            )
+
+        }
+        if (response.status && response.status === 500) {
+            alert('Oops! Something went wrong with the server.')
+            // $.removeCookie('api_token');
+            // window.location.replace('/logout');
         }
         if (response.headers && response.headers('Authorization')) {
             $.cookie('api_token', response.headers('Authorization'));
@@ -196,6 +216,12 @@ new Vue({
         tripRegWizard,
         reservationsList,
         donationsList,
+        topNav,
+
+        //dashboard components
+        recordsList,
+        passportsList,
+        visasList,
 
         // admin components
         adminCampaignCreate,
@@ -218,8 +244,7 @@ new Vue({
         adminUserEdit,
         adminUserDelete,
         adminUploads,
-        adminUploadCreate,
-        adminUploadEdit,
+        adminUploadCreateUpdate,
     ],
     http: {
         headers: {

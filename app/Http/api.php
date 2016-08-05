@@ -40,9 +40,11 @@ $api->version('v1', [
     });
 
     $api->resource('uploads', 'UploadsController');
+    $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
     $api->post('/login', 'AuthenticationController@authenticate');
     $api->post('/register', 'AuthenticationController@register');
     $api->delete('/logout', 'AuthenticationController@deauthenticate');
+    $api->post('/refresh', 'AuthenticationController@refresh');
     $api->get('/users/me', 'UsersController@show');
     $api->put('/users/me', 'UsersController@update');
     $api->resource('users', 'UsersController');

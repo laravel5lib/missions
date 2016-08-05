@@ -54,6 +54,7 @@ class ReservationRequest extends FormRequest
         $rules['todos'] = 'array';
         $rules['passport'] = 'exists:passports,id';
         $rules['tags'] = 'array';
+        $rules['avatar_upload_id'] = 'string|exists:uploads';
 
         return $rules;
     }

@@ -23,14 +23,20 @@
                 </div>
             </div>
 
-            <!--<div class="form-group" :class="{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }">
+            <div class="form-group" :class="{ 'has-error': !!changePassword && (checkForError('password')||checkForError('passwordconfirmation')) }">
                 <label for="name" class="col-sm-2 control-label">Password</label>
                 <div class="col-sm-10">
-                    <div class="row">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" v-model="changePassword">
+                            Change Password
+                        </label>
+                    </div>
+                    <div v-if="changePassword" class="row">
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('password') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
-                                       v-validate:password="{ required: true, minlength:8 }" placeholder="Enter password">
+                                       v-validate:password="{ minlength:8 }" placeholder="Enter password">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -42,7 +48,7 @@
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('passwordconfirmation') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
-                                       v-validate:passwordconfirmation="{ required: true, minlength:8 }" placeholder="Enter password again">
+                                       v-validate:passwordconfirmation="{ minlength:8 }" placeholder="Enter password again">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -52,9 +58,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="help-block">Password must be at least 8 characters long</div>
+                    <div v-if="changePassword" class="help-block">Password must be at least 8 characters long</div>
                 </div>
-            </div>-->
+            </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">Date of Birth</label>
@@ -277,8 +283,8 @@
                 <div class="col-sm-8">
                     <div class="form-group" :class="{ 'has-error': checkForError('country') }">
 
-                        <label for="country">Country</label>
-                        <v-select class="form-controls" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                        <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
+                        <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
@@ -290,7 +296,7 @@
                 <label for="timezone" class="col-sm-2 control-label">Timezone</label>
 
                 <div class="col-sm-10">
-                    <v-select class="form-controls" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                    <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                     <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
                         <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                     </select>
@@ -352,8 +358,8 @@
                 name: '',
                 email: '',
                 alt_email: '',
-                password: '',
-                password_confirmation: '',
+                password: null,
+                password_confirmation: null,
                 bio: '',
                 status: '',
                 birthday: null,
@@ -377,13 +383,13 @@
                 countries: [],
                 countryCodeObj: null,
                 timezones: [],
+                changePassword: false,
                 showPassword: false,
                 timezoneObj: null,
                 dobMonth: null,
                 dobDay: null,
                 dobYear: null,
                 resource: this.$resource('users{/id}')
-
             }
         },
         computed: {
@@ -408,8 +414,8 @@
                         name: this.name,
                         email: this.email,
                         alt_email: this.alt_email,
-                        password: this.password,
-                        password_confirmation: this.password_confirmation,
+                        password: this.changePassword ? this.password : undefined,
+                        password_confirmation: this.changePassword ? this.password_confirmation : undefined,
                         bio: this.bio,
                         type: this.type,
                         country_code: this.country_code,

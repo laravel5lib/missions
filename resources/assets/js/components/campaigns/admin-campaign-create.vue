@@ -12,7 +12,7 @@
 			<div class="form-group" :class="{ 'has-error': checkForError('country') }">
 				<label for="country" class="col-sm-2 control-label">Country</label>
 				<div class="col-sm-10">
-					<v-select class="form-controls" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+					<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
 					<select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
 						<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 					</select>
@@ -70,6 +70,19 @@
 					</div>
 				</div>
 			</div>
+
+			<accordion :one-at-atime="true">
+				<panel header="Avatar" :is-open="true">
+					<upload-create-update type="avatar" :lock-type="true"></upload-create-update>
+				</panel>
+			</accordion>
+
+			<accordion :one-at-atime="true">
+				<panel header="Banner" :is-open="true">
+					<upload-create-update type="banner" :lock-type="true"></upload-create-update>
+				</panel>
+			</accordion>
+
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<a href="/admin/campaigns" class="btn btn-default">Cancel</a>
@@ -81,9 +94,12 @@
 </template>
 <script>
 	import vSelect from "vue-select";
+	import VueStrap from 'vue-strap/dist/vue-strap.min';
+	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
+
 	export default{
 		name: 'campaign-create',
-		components: {vSelect},
+		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel},
 		data(){
 			return {
 				countries: [],
@@ -97,7 +113,9 @@
 				ended_at: null,
 				published_at: null,
 				page_url: null,
-				attemptSubmit: false
+				attemptSubmit: false,
+				avatar_upload_id: null,
+				banner_upload_id: null,
 			}
 		},
 		computed:{
@@ -129,6 +147,11 @@
 						debugger;
 					});
 				}
+			}
+		},
+		events:{
+			'uploads-complete'(data){
+				debugger;
 			}
 		},
 		ready(){

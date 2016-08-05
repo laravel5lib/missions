@@ -74,7 +74,7 @@
 								<td class="text-danger text-right">{{-upfrontTotal | currency}}</td>
 							</tr>
 							<tr>
-								<td style="border-top:2px solid #000000;"><h5 class="text-right">Total to Raise</h5></td>
+								<td style="border-top:2px solid #000000;"><h5>Total to Raise</h5></td>
 								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{fundraisingGoal | currency}}</h5></td>
 							</tr>
 

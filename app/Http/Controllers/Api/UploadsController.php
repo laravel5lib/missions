@@ -9,6 +9,7 @@ use App\Models\v1\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use League\Glide\Server;
 
 class UploadsController extends Controller
 {
@@ -17,16 +18,22 @@ class UploadsController extends Controller
      * @var Upload
      */
     private $upload;
+    /**
+     * @var Server
+     */
+    private $server;
 
     /**
      * UploadsController constructor.
      * @param Upload $upload
+     * @param Server $server
      */
-    public function __construct(Upload $upload)
+    public function __construct(Upload $upload, Server $server)
     {
         $this->upload = $upload;
 //        $this->middleware('api.auth', ['except' => ['show']]);
 //        $this->middleware('jwt.refresh', ['except' => ['show']]);
+        $this->server = $server;
     }
 
     /**
@@ -48,6 +55,7 @@ class UploadsController extends Controller
      * Create and upload a new upload.
      *
      * @param UploadRequest $request
+     * @return \Dingo\Api\Http\Response
      */
     public function store(UploadRequest $request)
     {
@@ -55,9 +63,9 @@ class UploadsController extends Controller
 
         $source = $this->upload($stream, $request->only('path', 'name', 'file'));
 
-        $upload = $this->save($source, $request->get('type'));
+        $upload = $this->save($source, $request);
 
-        $this->response->item($upload, new UploadTransformer);
+        return $this->response->item($upload, new UploadTransformer);
     }
 
     /**
@@ -74,25 +82,51 @@ class UploadsController extends Controller
     }
 
     /**
+     * Display an image
+     *
+     * @param $path
+     * @param Request $request
+     * @return mixed
+     * @internal param $source
+     */
+    public function display($path, Request $request)
+    {
+        $this->server->outputImage($path, $request->all());
+    }
+
+    /**
      * Update the specified upload.
      *
      * @param UploadRequest $request
      * @param $id
+     * @return \Dingo\Api\Http\Response
      */
     public function update(UploadRequest $request, $id)
     {
-        $stream = $this->process($request);
-
-        $source = $this->upload($stream, $request->only('path', 'name', 'file'));
-
         $upload = $this->upload->findOrFail($id);
+
+        if ($request->has('file'))
+        {
+            $stream = $this->process($request);
+
+            $source = $this->upload($stream, $request->only('path', 'name', 'file'));
+
+            if($source) {
+                // delete old file
+                Storage::disk('s3')->delete($upload->source);
+            }
+        }
+
         $upload->update([
-            'source' => $source['source'],
+            'source' => isset($source['source']) ? $source['source'] : $upload->source,
             'name' => $request->get('name'),
             'type' => $request->get('type')
         ]);
 
-        $this->response->item($upload, new UploadTransformer);
+        if ($request->has('tags'))
+            $upload->retag($request->get('tags'));
+
+        return $this->response->item($upload, new UploadTransformer);
     }
 
     /**
@@ -165,19 +199,27 @@ class UploadsController extends Controller
      * Save the upload record in storage.
      *
      * @param $source
-     * @param $type
+     * @param Request $request
      * @return Upload
+     * @internal param $type
      */
-    private function save($source, $type)
+    private function save($source, Request $request)
     {
         // create new upload record
-        $upload = new Upload;
-        $upload->updateOrCreate([
+        $new = $this->upload->create([
+            'name' => $request->get('name'),
+            'type' => $request->get('type'),
             'source' => $source['source'],
-            'name' => $source['filename'],
-            'type' => $type
+            'meta' => [
+                'width' => $request->get('width'),
+                'height' => $request->get('height'),
+                'size' => null
+            ]
         ]);
 
-        return $upload;
+        if ($request->has('tags'))
+            $new->tag($request->get('tags'));
+
+        return $new;
     }
 }

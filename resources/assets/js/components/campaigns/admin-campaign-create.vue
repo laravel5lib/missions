@@ -72,14 +72,11 @@
 			</div>
 
 			<accordion :one-at-atime="true">
-				<panel header="Avatar" :is-open="true">
-					<upload-create-update type="avatar" :lock-type="true"></upload-create-update>
+				<panel header="Avatar" :is-open.sync="avatarPanelOpen">
+					<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
 				</panel>
-			</accordion>
-
-			<accordion :one-at-atime="true">
-				<panel header="Banner" :is-open="true">
-					<upload-create-update type="banner" :lock-type="true"></upload-create-update>
+				<panel header="Banner" :is-open.sync="bannerPanelOpen">
+					<upload-create-update type="banner" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
 				</panel>
 			</accordion>
 
@@ -114,6 +111,8 @@
 				published_at: null,
 				page_url: null,
 				attemptSubmit: false,
+				avatarPanelOpen:false,
+				bannerPanelOpen:false,
 				avatar_upload_id: null,
 				banner_upload_id: null,
 			}
@@ -139,7 +138,9 @@
 						started_at: this.started_at,
 						ended_at: this.ended_at,
 						published_at: this.published_at,
-						page_url: this.page_url
+						page_url: this.page_url,
+						avatar_upload_id: this.avatar_upload_id,
+						banner_upload_id: this.banner_upload_id,
 
 					}).then(function (resp) {
 						window.location.href = '/admin' + resp.data.data.links[0].uri;
@@ -151,7 +152,16 @@
 		},
 		events:{
 			'uploads-complete'(data){
-				debugger;
+				switch(data.type){
+					case 'avatar':
+						this.avatar_upload_id = data.id;
+						this.avatarPanelOpen = false;
+						break;
+					case 'banner':
+						this.banner_upload_id = data.id;
+							this.bannerPanelOpen = false;
+						break;
+				}
 			}
 		},
 		ready(){

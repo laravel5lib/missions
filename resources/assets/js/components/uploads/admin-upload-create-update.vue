@@ -271,7 +271,7 @@
 			handleSuccess(response){
 				if(this.isChild) {
 					// send data to parent componant
-					this.vm.$dispatch('uploads-complete', response.data.data);
+					this.$dispatch('uploads-complete', response.data.data);
 
 				} else {
 					window.location.href = '/admin/uploads';
@@ -319,6 +319,16 @@
 					this.type = upload.type;
 				});
 			}
+
+			if(this.isChild){
+				this.typeObj = _.findWhere(this.typePaths, {type: this.type});
+				if (this.typeObj) {
+					this.path = this.typeObj.path;
+					if (this.file)
+						this.adjustSelectByType();
+				}
+			}
+
         }
     }
 </script> 

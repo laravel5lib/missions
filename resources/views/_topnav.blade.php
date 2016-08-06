@@ -10,13 +10,13 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="nav navbar-nav navbar-right dropdown">
       @if(auth()->check())
-      <li><a class="btn btn-primary" href="#">Donate</a></li>
-      <li id="userMenu" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left"src="/images/nelson-prof-pic.jpg" alt="Zech Nelson"> {{ auth()->user()->name }} <i class="fa fa-angle-down"></i></a></li>
+      {{--<li><a class="btn btn-primary" href="#">Donate</a></li>--}}
+      <li id="userMenu" class="dropdown-toggle hidden-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left"src="/images/nelson-prof-pic.jpg" alt="Zech Nelson"> {{ auth()->user()->name }} <i class="fa fa-angle-down"></i></a></li>
       <ul class="dropdown-menu" aria-labelledby="userMenu">
         <li><a href="#">My Profile</a></li>
         <li><a href="#">My Group</a></li>
         <li><a href="/dashboard">Dashboard</a></li>
-        @can ('view-admin')
+          @can ('view-admin')
           <li><a href="/admin">Admin</a></li>
         @endcan
         <li role="separator" class="divider"></li>
@@ -30,7 +30,7 @@
         </div>
       </li>
       @endif
-      <top-nav></top-nav>
+      <top-nav auth="{{ auth()->check()? 1 : 0 }}" admin="{{ (auth()->check() && auth()->user()->can('view-admin'))? 1 : 0 }}"></top-nav>
     </div><!-- /.navbar-right -->
   </div><!-- end container -->
 </div><!-- end navbar -->

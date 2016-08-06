@@ -19,7 +19,7 @@ class UploadFilter extends ModelFilter
      */
     public function tags(array $tags)
     {
-        $this->withAllTag($tags)->get();
+        $this->withAllTags($tags)->get();
     }
 
     /**

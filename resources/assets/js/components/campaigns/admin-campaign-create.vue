@@ -72,14 +72,31 @@
 			</div>
 
 			<accordion :one-at-atime="true">
-				<panel header="Avatar" :is-open="true">
-					<upload-create-update type="avatar" :lock-type="true"></upload-create-update>
+				<panel header="Avatar" :is-open.sync="avatarPanelOpen">
+					<div class="media" v-if="selectedAvatar">
+						<div class="media-left">
+							<a href="#">
+								<img class="media-object" :src="selectedAvatar.source + '?w=100&q=50'" width="100" :alt="selectedAvatar.name">
+							</a>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading">{{selectedAvatar.name}}</h4>
+						</div>
+					</div>
+					<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
 				</panel>
-			</accordion>
-
-			<accordion :one-at-atime="true">
-				<panel header="Banner" :is-open="true">
-					<upload-create-update type="banner" :lock-type="true"></upload-create-update>
+				<panel header="Banner" :is-open.sync="bannerPanelOpen">
+					<div class="media" v-if="selectedBanner">
+						<div class="media-left">
+							<a href="#">
+								<img class="media-object" :src="selectedBanner.source + '?w=100&q=50'" width="100" :alt="selectedBanner.name">
+							</a>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading">{{selectedBanner.name}}</h4>
+						</div>
+					</div>
+					<upload-create-update type="banner" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
 				</panel>
 			</accordion>
 
@@ -114,7 +131,11 @@
 				published_at: null,
 				page_url: null,
 				attemptSubmit: false,
+				avatarPanelOpen:false,
+				bannerPanelOpen:false,
+				selectedAvatar: null,
 				avatar_upload_id: null,
+				selectedBanner: null,
 				banner_upload_id: null,
 			}
 		},
@@ -139,7 +160,9 @@
 						started_at: this.started_at,
 						ended_at: this.ended_at,
 						published_at: this.published_at,
-						page_url: this.page_url
+						page_url: this.page_url,
+						avatar_upload_id: this.avatar_upload_id,
+						banner_upload_id: this.banner_upload_id,
 
 					}).then(function (resp) {
 						window.location.href = '/admin' + resp.data.data.links[0].uri;
@@ -151,7 +174,18 @@
 		},
 		events:{
 			'uploads-complete'(data){
-				debugger;
+				switch(data.type){
+					case 'avatar':
+						this.selectedAvatar = data;
+						this.avatar_upload_id = data.id;
+						this.avatarPanelOpen = false;
+						break;
+					case 'banner':
+						this.selectedBanner = data;
+						this.banner_upload_id = data.id;
+						this.bannerPanelOpen = false;
+						break;
+				}
 			}
 		},
 		ready(){

@@ -217,6 +217,13 @@ body {
       margin: 15.5px 15px;
     }
 }
+@media screen and (max-width: 767px) { 
+    .navbar-toggle {
+      display: inline;
+      padding: 9px 10px;
+      margin: 16.5px 5px;
+    }
+}
 li.av-nav > a {
     padding-top: 13.5px;
     padding-bottom: 13.5px;
@@ -304,8 +311,8 @@ li.av-nav > a {
   margin-bottom:0;
 }
 .db-brand-xs {
-  padding: 3px;
-  margin: 7px 10px;
+  padding: 0px;
+  margin: 4px 0px;
 }
 
 // -- Section Backgrounds -- //

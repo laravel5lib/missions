@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
 	<div>
-		<form class="form-inline" v-if="isChild" novalidate>
+		<form class="form-inline" v-if="isChild && !uiLocked" novalidate>
 			<div class="row">
 				<div class="col-sm-offset-2 col-sm-10">
 					<label class="radio-inline">
@@ -192,6 +192,14 @@
 			isChild: {
 				type: Boolean,
 				default: false
+			},
+			uiSelector: {
+				type: Number,
+				default: 0
+			},
+			uiLocked: {
+				type: Boolean,
+				default: false
 			}
 		},
         data(){
@@ -230,7 +238,6 @@
 				],
 				typeObj: null,
 				resource: this.$resource('uploads{/id}'),
-				uiSelector: 0,
 				uploads: [],
 				page: 1,
 				per_page: 6,

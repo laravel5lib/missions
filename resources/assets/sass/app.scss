@@ -16,9 +16,8 @@ $fa-font-path: "~font-awesome/fonts/";*/
   padding: 6px 12px;
 }
 .v-select .dropdown-toggle {
-  border: none;
+  border: none !important;
 }
-
 /**
  * Elements
  */

@@ -8908,6 +8908,10 @@ tbody.collapse.in {
   .navbar-btn.btn-xs, .btn-group-xs > .navbar-btn.btn {
     margin-top: 21.5px;
     margin-bottom: 21.5px; }
+  .navbar-btn:hover, .navbar-btn:focus, .navbar-btn.focus {
+    color: #f6323e !important;
+    border-color: #f8636c !important;
+    text-decoration: none; }
 
 .navbar-text {
   margin-top: 22px;

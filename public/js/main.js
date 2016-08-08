@@ -36125,7 +36125,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":161,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],115:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":162,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],115:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -36333,7 +36333,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":161,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],117:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":162,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],117:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37347,6 +37347,150 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+var _adminUploadCreateUpdate = require('../../components/uploads/admin-upload-create-update.vue');
+
+var _adminUploadCreateUpdate2 = _interopRequireDefault(_adminUploadCreateUpdate);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'passport-create-update',
+    components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel },
+    props: {
+        isUpdate: {
+            type: Boolean,
+            default: false
+        }
+    },
+    data: function data() {
+        return {
+            id: null,
+            given_names: '',
+            surname: '',
+            number: '',
+            issued_at: null,
+            expires_at: null,
+            birth_country: null,
+            citizenship: null,
+            scan_src: null,
+            user_id: null,
+
+            // logic vars
+            countries: [],
+            birthCountryObj: null,
+            citizenshipObj: null,
+            attemptSubmit: false,
+            selectedAvatar: null
+        };
+    },
+
+    computed: {
+        birth_country: function birth_country() {
+            return _.isObject(this.birthCountryObj) ? this.birthCountryObj.code : null;
+        },
+        citizenship: function citizenship() {
+            return _.isObject(this.citizenshipObj) ? this.citizenshipObj.code : null;
+        }
+    },
+    methods: {
+        checkForError: function checkForError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+
+            return this.$CreateUpdatePassport[field].invalid && this.attemptSubmit;
+        },
+        submit: function submit() {
+            this.attemptSubmit = true;
+            if (this.$CreateUpdatePassport.valid) {
+                var resource = this.$resource('passports{/id}');
+                resource.save(null, {
+                    given_names: this.given_names,
+                    surname: this.surname,
+                    number: this.number,
+                    issued_at: this.issued_at,
+                    expires_at: this.expires_at,
+                    birth_country: this.birth_country,
+                    citizenship: this.citizenship,
+                    scan_src: this.scan_src,
+                    user_id: this.user_id
+                }).then(function (resp) {
+                    window.location.href = '/admin' + resp.data.data.links[0].uri;
+                }, function (error) {
+                    debugger;
+                });
+            }
+        },
+        update: function update() {
+            this.attemptSubmit = true;
+            if (this.$CreateUpdatePassport.valid) {
+                var resource = this.$resource('passports{/id}');
+                resource.update({ id: this.id }, {
+                    given_names: this.given_names,
+                    surname: this.surname,
+                    number: this.number,
+                    issued_at: this.issued_at,
+                    expires_at: this.expires_at,
+                    birth_country: this.birth_country,
+                    citizenship: this.citizenship,
+                    scan_src: this.scan_src,
+                    user_id: this.user_id
+                }).then(function (resp) {
+                    window.location.href = '/admin' + resp.data.data.links[0].uri;
+                }, function (error) {
+                    debugger;
+                });
+            }
+        }
+    },
+    events: {
+        'uploads-complete': function uploadsComplete(data) {
+            switch (data.type) {
+                case 'avatar':
+                    this.selectedAvatar = data;
+                    this.scan_src = data.id;
+                    break;
+            }
+        }
+    },
+    ready: function ready() {
+        this.$http.get('utilities/countries').then(function (response) {
+            this.countries = response.data.countries;
+        });
+
+        var fetchURL = this.isUpdate ? 'users/me?include=passports' : 'users/me';
+        this.$http(fetchURL).then(function (response) {
+            // this.user = response.data.data;
+            this.user_id = response.data.data.id;
+            //this.loaded = true;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdatePassport\">\n    <form id=\"CreateUpdatePassport\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"givennames\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Passport Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Passport Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('birth') }\">\n            <label for=\"birth\" class=\"col-sm-2 control-label\">Birth Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"birth\" :value.sync=\"birthCountryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"birth\" id=\"birth\" class=\"hidden\" v-model=\"birth_country\" v-validate:birth=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('citizenship') }\">\n            <label for=\"citizenship\" class=\"col-sm-2 control-label\">Citizenship</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"country\" :value.sync=\"citizenshipObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"citizenship\" id=\"citizenship\" class=\"hidden\" v-model=\"citizenship\" v-validate:citizenship=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Avatar\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"avatar\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['other']\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/dashboard/passports\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-17773f82", module.exports)
+  } else {
+    hotAPI.update("_v-17773f82", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../../components/uploads/admin-upload-create-update.vue":162,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],131:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _vueStrap = require('vue-strap/dist/vue-strap.min');
 
 var _vueStrap2 = _interopRequireDefault(_vueStrap);
@@ -37428,7 +37572,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4b4c5de6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-strap/dist/vue-strap.min":110}],131:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-strap/dist/vue-strap.min":110}],132:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37465,7 +37609,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-558d51ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],132:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],133:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -37761,7 +37905,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],133:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],134:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37812,7 +37956,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],134:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],135:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37861,7 +38005,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],135:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37912,7 +38056,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-strap/dist/vue-strap.min":110}],136:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-strap/dist/vue-strap.min":110}],137:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -38070,7 +38214,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":143,"./create/details.vue":144,"./create/pricing.vue":145,"./create/requirements.vue":146,"./create/settings.vue":147,"vue":112,"vue-hot-reload-api":107,"vueify/lib/insert-css":113}],137:[function(require,module,exports){
+},{"./create/deadlines.vue":144,"./create/details.vue":145,"./create/pricing.vue":146,"./create/requirements.vue":147,"./create/settings.vue":148,"vue":112,"vue-hot-reload-api":107,"vueify/lib/insert-css":113}],138:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38106,7 +38250,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],138:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],139:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38199,7 +38343,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],139:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],140:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -38379,7 +38523,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":148,"./edit/details.vue":149,"./edit/pricing.vue":150,"./edit/requirements.vue":151,"./edit/settings.vue":152,"vue":112,"vue-hot-reload-api":107,"vueify/lib/insert-css":113}],140:[function(require,module,exports){
+},{"./edit/deadlines.vue":149,"./edit/details.vue":150,"./edit/pricing.vue":151,"./edit/requirements.vue":152,"./edit/settings.vue":153,"vue":112,"vue-hot-reload-api":107,"vueify/lib/insert-css":113}],141:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38482,7 +38626,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],141:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],142:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38555,7 +38699,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],142:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],143:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38626,7 +38770,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],143:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38704,7 +38848,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],144:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],145:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 "use strict";
@@ -38813,7 +38957,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],145:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39042,7 +39186,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],146:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],147:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39121,7 +39265,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],147:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39176,7 +39320,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],148:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],149:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39258,7 +39402,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],149:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],150:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -39389,7 +39533,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],150:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39622,7 +39766,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],151:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39704,7 +39848,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],152:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39764,7 +39908,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],153:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39810,7 +39954,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],154:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39977,7 +40121,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],155:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40034,7 +40178,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],156:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40322,7 +40466,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],157:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40367,7 +40511,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],158:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40404,7 +40548,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],159:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40441,7 +40585,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],160:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],161:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -40688,7 +40832,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":129,"./registration/additional-trip-options.vue":153,"./registration/basic-info.vue":154,"./registration/deadline-agreement.vue":155,"./registration/payment-details.vue":156,"./registration/review.vue":157,"./registration/roca.vue":158,"./registration/tos.vue":159,"vue":112,"vue-hot-reload-api":107,"vueify/lib/insert-css":113}],161:[function(require,module,exports){
+},{"../login.vue":129,"./registration/additional-trip-options.vue":154,"./registration/basic-info.vue":155,"./registration/deadline-agreement.vue":156,"./registration/payment-details.vue":157,"./registration/review.vue":158,"./registration/roca.vue":159,"./registration/tos.vue":160,"vue":112,"vue-hot-reload-api":107,"vueify/lib/insert-css":113}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40740,6 +40884,14 @@ exports.default = {
 		isChild: {
 			type: Boolean,
 			default: false
+		},
+		uiSelector: {
+			type: Number,
+			default: 0
+		},
+		uiLocked: {
+			type: Boolean,
+			default: false
 		}
 	},
 	data: function data() {
@@ -40773,7 +40925,6 @@ exports.default = {
 			typePaths: [{ type: 'avatar', path: 'images/avatars', width: 1280, height: 1280 }, { type: 'banner', path: 'images/banners', width: 1300, height: 500 }, { type: 'other', path: 'images/other' }, { type: 'file', path: 'resources/documents' }],
 			typeObj: null,
 			resource: this.$resource('uploads{/id}'),
-			uiSelector: 0,
 			uploads: [],
 			page: 1,
 			per_page: 6,
@@ -40986,7 +41137,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<form class=\"form-inline\" v-if=\"isChild\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector1\" v-model=\"uiSelector\" :value=\"1\"> Select file\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector2\" v-model=\"uiSelector\" :value=\"2\"> Upload file\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr v-if=\"uiSelector!==0\">\n\t</form>\n\t<div v-if=\"isChild &amp;&amp; uiSelector==1\">\n\t\t<form class=\"form-inline text-right\" novalidate=\"\">\n\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t</div>\n\t\t</form>\n\t\t<br>\n\t\t<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\t\t\t<div class=\"col-sm-2 col-md-2\" v-for=\"upload in uploads\" style=\"display:flex\">\n\t\t\t\t<div class=\"panel panel-default\">\n\n\t\t\t\t\t\t<a @click=\"selectExisting(upload)\" role=\"button\">\n\t\t\t\t\t\t\t<tooltip effect=\"scale\" placement=\"top\" :content=\"upload.name\">\n\t\t\t\t\t\t\t\t<img :src=\"upload.source + '?w=100&amp;q=50'\" :alt=\"upload.name\" class=\"img-responsive\">\n\t\t\t\t\t\t\t</tooltip>\n\t\t\t\t\t\t</a>\n\n\t\t\t\t\t<!--<div class=\"panel-body\">\n\t\t\t\t\t\t<h6 class=\"text-uppercase\">{{upload.name}}</h6>\n\t\t\t\t\t</div>--><!-- end panel-body -->\n\t\t\t\t\t<div class=\"panel-footer\">\n\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-block btn-primary\" @click=\"selectExisting(upload)\">Select</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end panel -->\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t\t<nav>\n\t\t\t\t\t<ul class=\"pagination pagination-sm\">\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</nav>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<validator v-if=\"!isChild||uiSelector===2\" name=\"CreateUpload\">\n\t\t<form id=\"CreateUploadForm\" class=\"form-horizontal\" novalidate=\"\" @submit=\"prevent\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('tags') }\">\n\t\t\t\t<label for=\"tags\" class=\"col-sm-2 control-label\">Tags</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<v-select id=\"tags\" class=\"form-control\" multiple=\"\" :value.sync=\"tags\" :options=\"tagOptions\"></v-select>\n\t\t\t\t\t<select hidden=\"\" id=\"tags\" name=\"tags\" v-model=\"tags\" multiple=\"\" v-validate:tags=\"{ required:true }\">\n\t\t\t\t\t\t<option v-for=\"tag in tagOptions\" :value=\"tag\">{{tag}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\" :disabled=\"lockType\">\n\t\t\t\t\t\t<option :value=\"\">-- select type --</option>\n\t\t\t\t\t\t<option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type === 'other'\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width(px)</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height(px)</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height(px)</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">File</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"file\" id=\"file\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t<!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-10\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t\t<a href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" v-if=\"!isUpdate\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t\t<a @click=\"update()\" v-if=\"isUpdate\" class=\"btn btn-primary\">Update</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t</form>\n\t</validator>\n\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<form class=\"form-inline\" v-if=\"isChild &amp;&amp; !uiLocked\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector1\" v-model=\"uiSelector\" :value=\"1\"> Select file\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector2\" v-model=\"uiSelector\" :value=\"2\"> Upload file\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr v-if=\"uiSelector!==0\">\n\t</form>\n\t<div v-if=\"isChild &amp;&amp; uiSelector==1\">\n\t\t<form class=\"form-inline text-right\" novalidate=\"\">\n\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t</div>\n\t\t</form>\n\t\t<br>\n\t\t<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\t\t\t<div class=\"col-sm-2 col-md-2\" v-for=\"upload in uploads\" style=\"display:flex\">\n\t\t\t\t<div class=\"panel panel-default\">\n\n\t\t\t\t\t\t<a @click=\"selectExisting(upload)\" role=\"button\">\n\t\t\t\t\t\t\t<tooltip effect=\"scale\" placement=\"top\" :content=\"upload.name\">\n\t\t\t\t\t\t\t\t<img :src=\"upload.source + '?w=100&amp;q=50'\" :alt=\"upload.name\" class=\"img-responsive\">\n\t\t\t\t\t\t\t</tooltip>\n\t\t\t\t\t\t</a>\n\n\t\t\t\t\t<!--<div class=\"panel-body\">\n\t\t\t\t\t\t<h6 class=\"text-uppercase\">{{upload.name}}</h6>\n\t\t\t\t\t</div>--><!-- end panel-body -->\n\t\t\t\t\t<div class=\"panel-footer\">\n\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-block btn-primary\" @click=\"selectExisting(upload)\">Select</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end panel -->\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t\t<nav>\n\t\t\t\t\t<ul class=\"pagination pagination-sm\">\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</nav>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<validator v-if=\"!isChild||uiSelector===2\" name=\"CreateUpload\">\n\t\t<form id=\"CreateUploadForm\" class=\"form-horizontal\" novalidate=\"\" @submit=\"prevent\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('tags') }\">\n\t\t\t\t<label for=\"tags\" class=\"col-sm-2 control-label\">Tags</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<v-select id=\"tags\" class=\"form-control\" multiple=\"\" :value.sync=\"tags\" :options=\"tagOptions\"></v-select>\n\t\t\t\t\t<select hidden=\"\" id=\"tags\" name=\"tags\" v-model=\"tags\" multiple=\"\" v-validate:tags=\"{ required:true }\">\n\t\t\t\t\t\t<option v-for=\"tag in tagOptions\" :value=\"tag\">{{tag}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\" :disabled=\"lockType\">\n\t\t\t\t\t\t<option :value=\"\">-- select type --</option>\n\t\t\t\t\t\t<option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type === 'other'\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width(px)</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height(px)</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height(px)</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">File</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"file\" id=\"file\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t<!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-10\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t\t<a href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" v-if=\"!isUpdate\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t\t<a @click=\"update()\" v-if=\"isUpdate\" class=\"btn btn-primary\">Update</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t</form>\n\t</validator>\n\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -40997,7 +41148,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],162:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],163:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -41137,7 +41288,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],163:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -41262,7 +41413,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],164:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -41298,7 +41449,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],165:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -41450,7 +41601,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],166:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],167:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -41672,7 +41823,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],167:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -41760,7 +41911,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4fbd58ab", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-strap/dist/vue-strap.min":110}],168:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-strap/dist/vue-strap.min":110}],169:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -41814,6 +41965,10 @@ var _visasList2 = _interopRequireDefault(_visasList);
 var _passportsList = require('./components/passports/passports-list.vue');
 
 var _passportsList2 = _interopRequireDefault(_passportsList);
+
+var _passportCreateUpdate = require('./components/passports/passport-create-update.vue');
+
+var _passportCreateUpdate2 = _interopRequireDefault(_passportCreateUpdate);
 
 var _adminCampaignCreate = require('./components/campaigns/admin-campaign-create.vue');
 
@@ -42070,7 +42225,7 @@ new _vue2.default({
     components: [_login2.default, _campaigns2.default, _campaignGroups2.default, _groupTrips2.default, _groupsTripsSelectionWrapper2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _topNav2.default,
 
     //dashboard components
-    _recordsList2.default, _passportsList2.default, _visasList2.default,
+    _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default,
 
     // admin components
     _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default],
@@ -42094,6 +42249,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/campaigns/admin-campaign-create.vue":114,"./components/campaigns/admin-campaign-details.vue":115,"./components/campaigns/admin-campaign-edit.vue":116,"./components/campaigns/campaign-groups.vue":117,"./components/campaigns/campaigns.vue":118,"./components/campaigns/group-trips.vue":123,"./components/campaigns/groups-trips-selection-wrapper.vue":124,"./components/groups/admin-group-create.vue":125,"./components/groups/admin-group-edit.vue":126,"./components/groups/admin-group-managers.vue":127,"./components/groups/admin-groups-list.vue":128,"./components/login.vue":129,"./components/passports/passports-list.vue":130,"./components/records/records-list.vue":131,"./components/reservations/admin-reservations-list.vue":132,"./components/reservations/donations-list.vue":133,"./components/reservations/reservations-list.vue":134,"./components/top-nav.vue":135,"./components/trips/admin-trip-create.vue":136,"./components/trips/admin-trip-delete.vue":137,"./components/trips/admin-trip-duplicate.vue":138,"./components/trips/admin-trip-edit.vue":139,"./components/trips/admin-trip-facilitators.vue":140,"./components/trips/admin-trip-reservations-list.vue":141,"./components/trips/admin-trips-list.vue":142,"./components/trips/trip-registration-wizard.vue":160,"./components/uploads/admin-upload-create-update.vue":161,"./components/uploads/admin-uploads-list.vue":162,"./components/users/admin-user-create.vue":163,"./components/users/admin-user-delete.vue":164,"./components/users/admin-user-edit.vue":165,"./components/users/admin-users-list.vue":166,"./components/visas/visas-list.vue":167,"bootstrap-sass":15,"jquery":103,"jquery.cookie":102,"moment":104,"underscore":106,"vue":112,"vue-resource":108,"vue-strap/dist/vue-strap.min":110,"vue-validator":111}]},{},[168]);
+},{"./components/campaigns/admin-campaign-create.vue":114,"./components/campaigns/admin-campaign-details.vue":115,"./components/campaigns/admin-campaign-edit.vue":116,"./components/campaigns/campaign-groups.vue":117,"./components/campaigns/campaigns.vue":118,"./components/campaigns/group-trips.vue":123,"./components/campaigns/groups-trips-selection-wrapper.vue":124,"./components/groups/admin-group-create.vue":125,"./components/groups/admin-group-edit.vue":126,"./components/groups/admin-group-managers.vue":127,"./components/groups/admin-groups-list.vue":128,"./components/login.vue":129,"./components/passports/passport-create-update.vue":130,"./components/passports/passports-list.vue":131,"./components/records/records-list.vue":132,"./components/reservations/admin-reservations-list.vue":133,"./components/reservations/donations-list.vue":134,"./components/reservations/reservations-list.vue":135,"./components/top-nav.vue":136,"./components/trips/admin-trip-create.vue":137,"./components/trips/admin-trip-delete.vue":138,"./components/trips/admin-trip-duplicate.vue":139,"./components/trips/admin-trip-edit.vue":140,"./components/trips/admin-trip-facilitators.vue":141,"./components/trips/admin-trip-reservations-list.vue":142,"./components/trips/admin-trips-list.vue":143,"./components/trips/trip-registration-wizard.vue":161,"./components/uploads/admin-upload-create-update.vue":162,"./components/uploads/admin-uploads-list.vue":163,"./components/users/admin-user-create.vue":164,"./components/users/admin-user-delete.vue":165,"./components/users/admin-user-edit.vue":166,"./components/users/admin-users-list.vue":167,"./components/visas/visas-list.vue":168,"bootstrap-sass":15,"jquery":103,"jquery.cookie":102,"moment":104,"underscore":106,"vue":112,"vue-resource":108,"vue-strap/dist/vue-strap.min":110,"vue-validator":111}]},{},[169]);
 
 //# sourceMappingURL=main.js.map

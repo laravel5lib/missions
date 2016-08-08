@@ -1,48 +1,49 @@
 @extends('admin.layouts.default')
 
 @section('content')
+<div class="white-header-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <h3 class="text-capitalize">
+                    <a href="#">
+                        <img class="av-left img-sm" src="{{ $trip->campaign->thumb_src }}" alt="{{ $trip->campaign->name }}">
+                    </a>
+                    {{ $trip->campaign->name }} <small>&middot; Trip Details</small>
+                </h3>
+            </div>
+            <div class="col-sm-4">
+                <hr class="divider inv sm">
+                <hr class="divider inv">
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Actions <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                        <li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="divider inv lg">
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <div class="row">
-                    <div class="col-xs-3 col-sm-2">
-                        <a href="#" class="thumbnail">
-                            <img src="{{ $trip->campaign->thumb_src }}" alt="{{ $trip->campaign->name }}">
-                        </a>
-                    </div>
-                    <div class="col-xs-9 col-sm-10">
-                        <h3>
-                            Trip <small> Details</small>
-
-                            <!-- Single button -->
-                            <div class="btn-group pull-right">
-                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Action <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                                    <li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
-                                </ul>
-                            </div>
-                        </h3>
-                        <h4>
-                            {{ $trip->campaign->name }}
-                            <ul class="nav nav-tabs pull-right" role="tablist">
-                                <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
-                                <li role="presentation"><a href="#reservations" aria-controls="reservations" role="tab" data-toggle="tab">Reservations</a></li>
-                            </ul>
-                        </h4>
-                    </div>
-                </div>
-                <hr>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
+                    <li role="presentation"><a href="#reservations" aria-controls="reservations" role="tab" data-toggle="tab">Reservations</a></li>
+                </ul>
             <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="details">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Details</h3>
+                                <h5>Details</h5>
                             </div>
                             <div class="panel-body">
                                 <dl class="dl-horizontal">
@@ -107,7 +108,7 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Registration</h3>
+                                <h5>Registration</h5>
                             </div>
                             <div class="panel-body">
                                 <dl class="dl-horizontal">
@@ -128,7 +129,7 @@
 
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Pricing</h3>
+                                <h5>Pricing</h5>
                             </div>
                             @foreach($trip->costs as $cost)
                                 <div class="list-group">
@@ -172,7 +173,7 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Requirements</h3>
+                                <h5>Requirements</h5>
                             </div>
                             <table class="table">
                                 <thead>
@@ -197,7 +198,7 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Deadlines</h3>
+                                <h5>Deadlines</h5>
                             </div>
                             <table class="table">
                                 <thead>
@@ -222,7 +223,7 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Todos</h3>
+                                <h5>Todos</h5>
                             </div>
                             <div class="list-group">
                                 @foreach($trip->todos as $todo)
@@ -232,7 +233,7 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Notes</h3>
+                                <h5>Notes</h5>
                             </div>
                             <div class="list-group">
                                 @foreach($trip->notes as $note)

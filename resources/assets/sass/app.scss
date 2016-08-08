@@ -12,12 +12,27 @@ $active-icon-color: #6CC94D;
 $fa-font-path: "~font-awesome/fonts/";*/
 
 /* Vue Elements */
-.v-select.form-control {
-  padding: 6px 12px;
+.v-select {
+  &.form-control {
+    padding: 6px 12px;
+    height: inherit;
+  }
+  .dropdown-toggle {
+    border: none !important;
+  }
+  .selected-tag {
+    font-size: 13px;
+  }
+  &.form-control .dropdown-toggle .form-control {
+    font-size: 14px;
+    min-height: 40px !important;
+    height: 100%;
+  }
+  .open-indicator {
+    line-height: 1.8;
+  }
 }
-.v-select .dropdown-toggle {
-  border: none !important;
-}
+
 /**
  * Elements
  */
@@ -143,6 +158,22 @@ body {
   /* Pad bottom by footer height */
   padding: 0 0 200px;
   padding-top: 65px;
+}
+#admin-page-wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto 20px;
+  /* Pad bottom by footer height */
+  padding: 0 0 20px;
+  padding-top: 65px;
+  & > .container {
+    padding-left: 40px !important;
+    @media screen and (max-width: 767px) {
+      padding-left: 10px !important;
+    }
+  }
 }
 #footer-mm {
   color: $gray-light;
@@ -341,6 +372,12 @@ li.av-nav > a {
 .white-bg {
   color: $text-color;
   background: #fff;
+}
+.white-header-bg {
+  padding: 5px 0;
+  color: $text-color;
+  background: #fff;
+  border-bottom: 1px solid $gray-light;
 }
 .gray-lighter-bg {
   color: $gray-dark;

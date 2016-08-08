@@ -1,23 +1,28 @@
 @extends('admin.layouts.default')
 
 @section('content')
-
+<div class="white-header-bg">
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
                 <h3>
                     Current Campaigns
-                    <a href="/admin/campaigns/create" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus"></i> New</a>
+                    <a href="/admin/campaigns/create" class="btn btn-primary btn-sm pull-right">New <i class="fa fa-plus"></i></a>
                 </h3>
-
-                <ul class="nav nav-pills">
-                    <li role="presentation" class="active"><a href="#active" data-toggle="pill"><i
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="divider inv lg">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" class="active"><a href="#active" data-toggle="tab"><i
                                     class="fa fa-bolt"></i> Active</a></li>
-                    <li role="presentation"><a href="#archive" data-toggle="pill"><i class="fa fa-archive"></i> Archived</a>
+                    <li role="presentation"><a href="#archive" data-toggle="tab"><i class="fa fa-archive"></i> Archived</a>
                     </li>
                 </ul>
-
-                <hr>
 
                 <!-- Tab panes -->
                 <div class="tab-content">

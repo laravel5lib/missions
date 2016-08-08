@@ -1,6 +1,11 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<validator name="UpdateCampaign">
 		<form id="UpdateCampaignForm" class="form-horizontal" novalidate>
+			<div class="row">
+				<div class="col-sm-12">
+					<a class="pull-right" data-toggle="modal" data-target="#deleteConfirmationModal"><h6><i class="fa fa-trash"></i> Delete</h6></a>
+				</div>
+			</div>
 			<div class="form-group" :class="{ 'has-error': checkForError('name') }">
 				<label for="name" class="col-sm-2 control-label">Name</label>
 				<div class="col-sm-10">
@@ -80,12 +85,10 @@
 				</panel>
 			</accordion>
 
-
 			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<a href="/admin/campaigns/{{campaignId}}" class="btn btn-default btn-sm">Cancel</a>
-					<a @click="update()" class="btn btn-primary btn-sm">Update</a>
-					<a class="btn btn-danger btn-sm pull-right" data-toggle="modal" data-target="#deleteConfirmationModal"	>Delete</a>
+				<div class="col-sm-12 text-center">
+					<a href="/admin/campaigns/{{campaignId}}" class="btn btn-default">Cancel</a>
+					<a @click="update()" class="btn btn-primary">Update</a>
 				</div>
 			</div>
 		</form>
@@ -95,13 +98,15 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="myModalLabel">Delete Campaign</h4>
+						<h4 class="modal-title text-center" id="myModalLabel">Are You Sure?</h4>
 					</div>
 					<div class="modal-body">
-						<p>Are you sure you want to delete this campaign?</p>
+						<p class="text-center">Are you sure you want to delete this campaign?</p>
 						<div class="row">
-							<div class="col-xs-6"><a class="btn btn-sm btn-block btn-default" data-dismiss="modal">No</a></div>
-							<div class="col-xs-6"><a @click="deleteCampaign()" class="btn btn-sm btn-block btn-primary">Yes</a></div>
+							<div class="col-sm-12 text-center">
+								<a class="btn btn-sm btn-default" data-dismiss="modal">No</a>
+								<a @click="deleteCampaign()" class="btn btn-sm btn-primary">Yes</a>
+							</div>
 						</div>
 					</div>
 

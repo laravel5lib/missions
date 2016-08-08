@@ -51,10 +51,10 @@
 			</div>
 
 			<div class="form-group">
-				<label for="published_at" class="col-sm-2 control-label">Published Date</label>
+				<label for="published_at" class="col-sm-2 control-label">Published</label>
 				<div class="col-sm-10">
 					<div class="input-group">
-						<span class="input-group-addon">Published</span>
+						<span class="input-group-addon">Published Date</span>
 						<input type="date" class="form-control" v-model="published_at" id="published_at">
 					</div>
 				</div>
@@ -70,7 +70,7 @@
 					</div>
 				</div>
 			</div>
-
+			
 			<accordion :one-at-atime="true">
 				<panel header="Avatar" :is-open.sync="avatarPanelOpen">
 					<div class="media" v-if="selectedAvatar">
@@ -101,7 +101,7 @@
 			</accordion>
 
 			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
+				<div class="text-center">
 					<a href="/admin/campaigns" class="btn btn-default">Cancel</a>
 					<a @click="submit()" class="btn btn-primary">Create</a>
 				</div>

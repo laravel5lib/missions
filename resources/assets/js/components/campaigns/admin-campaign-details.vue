@@ -1,4 +1,22 @@
 <template>
+<div class="white-header-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <h3 class="text-capitalize">{{campaign.name}} <small>&middot; Campaign</small></h3>
+            </div>
+            <div class="col-sm-4">
+                <div class="pull-right">
+                	<hr class="divider inv">
+					<a class="btn btn-default btn-sm"><i class="fa fa-chevron-left icon-left"></i> Back</a>
+					<a class="btn btn-primary btn-sm" href="/admin/campaigns/{{campaignId}}/edit">Edit <i class="fa fa-pencil-square-o"></i></a>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="divider inv lg">
+<div class="container">
 	<div class="row">
 		<div class="col-sm-3">
 			<div class="panel panel-default">
@@ -40,27 +58,16 @@
 			</div>
 		</div>
 		<div class="col-sm-9">
-			<h4>
-				{{campaign.name}} <small>Campaign</small>
-
-				<div class="pull-right">
-					<a class="btn btn-default btn-xs"><i class="fa fa-chevron-left"></i></a>
-					<a class="btn btn-info btn-xs" href="/admin/campaigns/{{campaignId}}/edit"><i class="fa fa-pencil"></i></a>
-				</div>
-
-			</h4>
 			<div class="row">
 				<div class="col-sm-12">
-					<hr>
 					<component :is="currentView" transition="fade" transition-mode="out-in">
 
 					</component>
 				</div>
 			</div>
-
 		</div>
-
 	</div>
+</div>
 </template>
 <style>
 	.fade-transition {

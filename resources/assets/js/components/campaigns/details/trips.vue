@@ -3,18 +3,20 @@
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline text-right" novalidate>
+                    <div class="form-inline" style="display: inline-block;">
+                        <div class="form-group">
+                            <label>Show</label>
+                            <select class="form-control input-sm" v-model="per_page">
+                                <option v-for="option in perPageOptions" :value="option">{{option}}</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-addon">Show</span>
-                        <select class="form-control" v-model="per_page">
-                            <option v-for="option in perPageOptions" :value="option">{{option}}</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
-                    | <a class="btn btn-primary btn-sm" href="{{campaignId}}/trips/create"><i class="fa fa-plus"></i> New</a>
+                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters</button>
+                    <a class="btn btn-primary btn-sm" href="{{campaignId}}/trips/create">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
         </div>
@@ -53,7 +55,7 @@
                 <td>{{trip.reservations}}</td>
                 <td>
                     <a href="/admin/{{trip.links[0].uri}}"><i class="fa fa-eye"></i></a>
-                    <a href="/admin/{{trip.links[0].uri}}/edit"><i class="fa fa-pencil"></i></a>
+                    <a href="/admin/{{trip.links[0].uri}}/edit"><i class="fa fa-pencil-square-o"></i></a>
                 </td>
             </tr>
             </tbody>

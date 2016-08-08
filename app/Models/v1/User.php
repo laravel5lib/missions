@@ -4,13 +4,14 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use EloquentFilter\Filterable;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use SoftDeletes, Filterable, UuidForKey;
+    use SoftDeletes, Filterable, UuidForKey, HasRolesAndAbilities;
 
     /**
      * The table associated with the model.

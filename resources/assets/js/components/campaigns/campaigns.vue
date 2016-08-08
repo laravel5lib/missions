@@ -32,11 +32,11 @@
             <h4>Current Campaigns</h4>
         </div>
         <div class="col-xs-6 text-right">
-            <!--<a href="#" class="btn btn-primary btn-sm">See All</a>-->
+            <a v-if="campaigns.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-            <div class="col-sm-6 col-md-4" v-for="campaign in campaigns" style="display:flex">
+            <div class="col-sm-6 col-md-4" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
                 <div class="panel panel-default">
                     <a :href="'/campaigns/' + campaign.page_url" role="button">
                         <img :src="campaign.avatar" :alt="campaign.name" class="img-responsive">
@@ -286,13 +286,18 @@
 		name: 'campaigns',
         data(){
             return{
-                campaigns:[]
+                campaigns:[],
+                campaignsLimit: 3,
+                resource: this.$resource('campaigns?published=true')
+            }
+        },
+        methods:{
+            seeAll(){
+                this.campaignsLimit = this.campaigns.length
             }
         },
         ready(){
-            var resource = this.$resource('campaigns?published=true');
-
-            resource.query().then(function(campaigns){
+            this.resource.query().then(function(campaigns){
                 this.campaigns = campaigns.data.data
             }).then(function () {
 

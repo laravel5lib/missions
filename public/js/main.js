@@ -36021,11 +36021,19 @@ var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
 
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+var _adminUploadCreateUpdate = require('../../components/uploads/admin-upload-create-update.vue');
+
+var _adminUploadCreateUpdate2 = _interopRequireDefault(_adminUploadCreateUpdate);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
 	name: 'campaign-create',
-	components: { vSelect: _vueSelect2.default },
+	components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel },
 	data: function data() {
 		return {
 			countries: [],
@@ -36039,7 +36047,11 @@ exports.default = {
 			ended_at: null,
 			published_at: null,
 			page_url: null,
-			attemptSubmit: false
+			attemptSubmit: false,
+			avatarPanelOpen: false,
+			bannerPanelOpen: false,
+			avatar_upload_id: null,
+			banner_upload_id: null
 		};
 	},
 
@@ -36065,13 +36077,29 @@ exports.default = {
 					started_at: this.started_at,
 					ended_at: this.ended_at,
 					published_at: this.published_at,
-					page_url: this.page_url
+					page_url: this.page_url,
+					avatar_upload_id: this.avatar_upload_id,
+					banner_upload_id: this.banner_upload_id
 
 				}).then(function (resp) {
 					window.location.href = '/admin' + resp.data.data.links[0].uri;
 				}, function (error) {
 					debugger;
 				});
+			}
+		}
+	},
+	events: {
+		'uploads-complete': function uploadsComplete(data) {
+			switch (data.type) {
+				case 'avatar':
+					this.avatar_upload_id = data.id;
+					this.avatarPanelOpen = false;
+					break;
+				case 'banner':
+					this.banner_upload_id = data.id;
+					this.bannerPanelOpen = false;
+					break;
 			}
 		}
 	},
@@ -36082,7 +36110,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateCampaign\">\n\t<form id=\"CreateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:120 }\" maxlength=\"120\" minlength=\"1\"></textarea>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Published Date</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">Published</span>\n\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Url</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false,  }\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<a href=\"/admin/campaigns\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t<a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateCampaign\">\n\t<form id=\"CreateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:120 }\" maxlength=\"120\" minlength=\"1\"></textarea>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Published Date</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">Published</span>\n\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Url</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false,  }\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<accordion :one-at-atime=\"true\">\n\t\t\t<panel header=\"Avatar\" :is-open.sync=\"avatarPanelOpen\">\n\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</panel>\n\t\t\t<panel header=\"Banner\" :is-open.sync=\"bannerPanelOpen\">\n\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</panel>\n\t\t</accordion>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<a href=\"/admin/campaigns\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t<a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -36093,7 +36121,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],115:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":161,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],115:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -36179,11 +36207,19 @@ var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
 
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+var _adminUploadCreateUpdate = require('../../components/uploads/admin-upload-create-update.vue');
+
+var _adminUploadCreateUpdate2 = _interopRequireDefault(_adminUploadCreateUpdate);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
 	name: 'campaign-edit',
-	components: { vSelect: _vueSelect2.default },
+	components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel },
 	props: ['campaignId'],
 	data: function data() {
 		return {
@@ -36198,6 +36234,10 @@ exports.default = {
 			published_at: null,
 			page_url: null,
 			attemptSubmit: false,
+			avatarPanelOpen: false,
+			bannerPanelOpen: false,
+			avatar_upload_id: null,
+			banner_upload_id: null,
 			resource: this.$resource('campaigns{/id}')
 		};
 	},
@@ -36226,7 +36266,9 @@ exports.default = {
 					started_at: this.started_at,
 					ended_at: this.ended_at,
 					published_at: this.published_at,
-					page_url: this.page_url
+					page_url: this.page_url,
+					avatar_upload_id: this.avatar_upload_id,
+					banner_upload_id: this.banner_upload_id
 
 				}).then(function (resp) {
 					$.extend(this, resp.data.data);
@@ -36240,6 +36282,20 @@ exports.default = {
 			this.resource.delete({ id: this.campaignId }).then(function (response) {
 				window.location.href = '/admin/campaigns/';
 			});
+		}
+	},
+	events: {
+		'uploads-complete': function uploadsComplete(data) {
+			switch (data.type) {
+				case 'avatar':
+					this.avatar_upload_id = data.id;
+					this.avatarPanelOpen = false;
+					break;
+				case 'banner':
+					this.banner_upload_id = data.id;
+					this.bannerPanelOpen = false;
+					break;
+			}
 		}
 	},
 	created: function created() {
@@ -36262,7 +36318,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateCampaign\">\n\t<form id=\"UpdateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:120 }\" maxlength=\"120\" minlength=\"1\"></textarea>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Published Date</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">Published</span>\n\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Url</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false,  }\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<a href=\"/admin/campaigns/{{campaignId}}\" class=\"btn btn-default btn-sm\">Cancel</a>\n\t\t\t\t<a @click=\"update()\" class=\"btn btn-primary btn-sm\">Update</a>\n\t\t\t\t<a class=\"btn btn-danger btn-sm pull-right\" data-toggle=\"modal\" data-target=\"#deleteConfirmationModal\">Delete</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\n\t<div class=\"modal fade\" id=\"deleteConfirmationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"deleteConfirmationModal\">\n\t\t<div class=\"modal-dialog modal-sm\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t\t\t<h4 class=\"modal-title\" id=\"myModalLabel\">Delete Campaign</h4>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<p>Are you sure you want to delete this campaign?</p>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\"><a class=\"btn btn-sm btn-block btn-default\" data-dismiss=\"modal\">No</a></div>\n\t\t\t\t\t\t<div class=\"col-xs-6\"><a @click=\"deleteCampaign()\" class=\"btn btn-sm btn-block btn-primary\">Yes</a></div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateCampaign\">\n\t<form id=\"UpdateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:120 }\" maxlength=\"120\" minlength=\"1\"></textarea>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Published Date</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">Published</span>\n\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Url</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false,  }\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<accordion :one-at-atime=\"true\">\n\t\t\t<panel header=\"Avatar\" :is-open.sync=\"avatarPanelOpen\">\n\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</panel>\n\t\t\t<panel header=\"Banner\" :is-open.sync=\"bannerPanelOpen\">\n\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</panel>\n\t\t</accordion>\n\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<a href=\"/admin/campaigns/{{campaignId}}\" class=\"btn btn-default btn-sm\">Cancel</a>\n\t\t\t\t<a @click=\"update()\" class=\"btn btn-primary btn-sm\">Update</a>\n\t\t\t\t<a class=\"btn btn-danger btn-sm pull-right\" data-toggle=\"modal\" data-target=\"#deleteConfirmationModal\">Delete</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\n\t<div class=\"modal fade\" id=\"deleteConfirmationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"deleteConfirmationModal\">\n\t\t<div class=\"modal-dialog modal-sm\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t\t\t<h4 class=\"modal-title\" id=\"myModalLabel\">Delete Campaign</h4>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<p>Are you sure you want to delete this campaign?</p>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\"><a class=\"btn btn-sm btn-block btn-default\" data-dismiss=\"modal\">No</a></div>\n\t\t\t\t\t\t<div class=\"col-xs-6\"><a @click=\"deleteCampaign()\" class=\"btn btn-sm btn-block btn-primary\">Yes</a></div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -36273,7 +36329,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],117:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":161,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],117:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36356,19 +36412,25 @@ exports.default = {
     name: 'campaigns',
     data: function data() {
         return {
-            campaigns: []
+            campaigns: [],
+            campaignsLimit: 3,
+            resource: this.$resource('campaigns?published=true')
         };
     },
-    ready: function ready() {
-        var resource = this.$resource('campaigns?published=true');
 
-        resource.query().then(function (campaigns) {
+    methods: {
+        seeAll: function seeAll() {
+            this.campaignsLimit = this.campaigns.length;
+        }
+    },
+    ready: function ready() {
+        this.resource.query().then(function (campaigns) {
             this.campaigns = campaigns.data.data;
         }).then(function () {});
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"carousel-example-generic\" class=\"carousel slide\" data-ride=\"carousel\">\n      <!-- Indicators -->\n      <ol class=\"carousel-indicators\">\n        <!--<li data-target=\"#carousel-example-generic\" data-slide-to=\"0\" class=\"active\"></li>-->\n        <li data-target=\"#carousel-example-generic\" class=\"{{ $index == 0 ? 'active' : '' }}\" :data-slide-to=\"$index\" v-for=\"campaign in campaigns\"></li>\n      </ol>\n      <!-- Wrapper for slides -->\n      <div class=\"carousel-inner\" role=\"listbox\">\n        <div class=\"item {{ $index == 0 ? 'active' : '' }}\" v-for=\"campaign in campaigns\">\n          <img :src=\"campaign.thumb_src\">\n          <div class=\"carousel-caption\">\n            <h6 class=\"text-uppercase\">{{campaign.country}}</h6>\n            <h3>{{campaign.name}}</h3>\n            <p>{{campaign.description}}</p>\n          </div>\n        </div>\n      </div>\n      <!-- Controls -->\n      <a class=\"left carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"prev\">\n        <span class=\"fa fa-angle-left\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Previous</span>\n      </a>\n      <a class=\"right carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"next\">\n        <span class=\"fa fa-angle-right\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Next</span>\n      </a>\n</div><!-- end carousel -->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <h4>Recent Campaigns</h4>\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <a href=\"#\" class=\"btn btn-primary btn-sm\">See All</a>\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n        <div class=\"col-sm-6 col-md-4\" v-for=\"campaign in campaigns\" style=\"display:flex\">\n            <div class=\"panel panel-default\">\n                <a :href=\"'/campaigns/' + campaign.page_url\" role=\"button\">\n                    <img :src=\"campaign.thumb_src\" :alt=\"campaign.name\" class=\"img-responsive\">\n                </a>\n                    <div style=\"min-height:220px;\" class=\"panel-body\">\n                        <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{campaign.country}}</h6>\n                        <a :href=\"'/campaigns/' + campaign.page_url\" role=\"button\">\n                            <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">{{campaign.name}}</h5>\n                        </a>\n                        <hr class=\"divider lg\">\n                        <p class=\"small\">{{campaign.description}}</p>\n                    </div><!-- end panel-body -->\n            </div><!-- end panel -->\n        </div><!-- end col -->\n</div>\n<hr class=\"divider inv xlg\">\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center\">\n        <h2 class=\"text-primary\">Missions.Me plans trips around you. We create experiences that will maximize your specific abilities and desires.</h2>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage1.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage3.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage4.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage5.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage8.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage9.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage10.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage12.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage13.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage14.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage15.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage18.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-xs-10 col-xs-offset-1\">\n        <div class=\"row\">\n          <div class=\"col-xs-10 col-xs-offset-1\">\n            <h6 class=\"text-uppercase text-center\">A Trip For Everyone</h6>\n            <h1 class=\"text-center\">Choose A Role</h1>\n            <hr class=\"divider red-small lg\">\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"missionary.html\"><h4 class=\"text-primary\">Missionary</h4></a>\n                <p class=\"small\">Anyone age 13+ can be an M.M missionary. Set out on the journey with your friend or family to bring a message of love and hope along with an unforgettable cultural experience.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"medical-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/medical-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"medical-missionary.html\"><h4>Medical Missionary</h4></a>\n                <p class=\"small\">Treat, diagnose, prescribe, and share the love of Jesus. Anyone in a medical field can serve, including students currently enrolled in school. Physicians, Dentists, Nurses, and all assistants needed.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"group-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/group-leader.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"group-leader.html\"><h4>Group Leader</h4></a>\n                <p class=\"small\">M.M specializes in organizing and creating turn-key group missions experiences for youth groups, college groups, and business groups. You bring passion; we take care of the rest.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"pastor-speaker.html\"><img class=\"img-responsive\" src=\"images/why-mm/speaker.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"pastor-speaker.html\"><h4>Pastor/Speaker</h4></a>\n                <p class=\"small\">Share your gift of leadership with the team by leading a morning devo then impart spiritual wisdom into local church leadership. Let us create a custom schedule that makes the most of your valuable time.</p>\n              </div><!-- end panel-body -->\n            </div><!-- end panel -->\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"business-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/business-person.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"business-leader.html\"><h4>Business Leader</h4></a>\n                <p class=\"small\">A shortened “Business Class” trip is available on select trips. You will experience conferences, stadium outreaches, street ministry, and connect with God in a whole new way. All trips will have you back on Sunday night, ready for Monday.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"media-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/media-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"media-missionary.html\"><h4>Media Missionary</h4></a>\n                <p class=\"small\">Tell the story of life change! M.M needs you to film, shoot, interview, edit, export, and be creative! Experience a whole new world through the lens of a camera while capturing the most exciting moments of the trip.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end gray-lighter-bg -->\n<div class=\"bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h6 class=\"text-uppercase text-primary-darker\">It's So Easy</h6>\n        <h1 class=\"text-primary-darker\">We've Got You</h1>\n        <p>Logistics, we got it covered. Missions.Me makes missions simple by taking care of all of your transportation, hotel, food, training, translators and ministry schedule needs.</p>\n        <hr class=\"divider inv\">\n        <a class=\"btn btn-primary-darker\" href=\"#\">Speak to a rep</a>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"http://placehold.it/600x300\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section-->\n  </div><!-- end container -->\n</div><!-- end red-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-lawn.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-lawn2.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-conf.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-conf2.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary-darker\">Level Of Impact</h1>\n        <p>We are interested in changing nations, communities, and individuals. Every outreach we organize deems to do just that. In just one week's time you and your team will be face to face with entire schools, neighborhoods, and churches. We believe a short-term team must serve a long-term and sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted.</p>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"http://placehold.it/600x300\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-6 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary\">Safety and Security</h1>\n        <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our leadership provides in depth training to create a safe experience for every missionary. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe. Multiple leaders care for each missionary and guidelines are faceted so that no person is ever alone. We also do background checks on all potential leaders. Missions.Me has a proven track record of safety and security that keeps our teams coming back.</p>\n        <blockquote>\"I have traveled with Missions.Me in many countries and have witnessed first-hand their organization and safety measures. I am completely confident sending my teens on a Missions.Me missions trip.\"\n          <footer>Sue, Mother from Lancaster, PA</footer></blockquote>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-light-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-center\">Trip Difficulty Ratings</h1>\n        <hr class=\"divider red-small lg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n    <div class=\"row text-center\">\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level1.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>These trips are great for those just getting started in the world-changing business. First timers of all ages area welcome.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level2.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>If Level 1 proved to be a piece of cake, you’re ready for a Level 2 adventure. A little tougher, a little sweatier, but much more sweeter.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level3.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>Chuck Norris. Mr. T. Annie Oakley. Yep, they’re all level 3 missionaries. It may not be physically tough, but it’ll be a challenge.</p>\n      </div>\n    </div>\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"carousel-example-generic\" class=\"carousel slide\" data-ride=\"carousel\">\n      <!-- Indicators -->\n      <ol class=\"carousel-indicators\">\n        <!--<li data-target=\"#carousel-example-generic\" data-slide-to=\"0\" class=\"active\"></li>-->\n        <li data-target=\"#carousel-example-generic\" class=\"{{ $index == 0 ? 'active' : '' }}\" :data-slide-to=\"$index\" v-for=\"campaign in campaigns\"></li>\n      </ol>\n      <!-- Wrapper for slides -->\n      <div class=\"carousel-inner\" role=\"listbox\">\n        <div class=\"item {{ $index == 0 ? 'active' : '' }}\" v-for=\"campaign in campaigns\">\n          <img :src=\"campaign.banner\">\n          <div class=\"carousel-caption\">\n            <h6 class=\"text-uppercase\">{{campaign.country}}</h6>\n            <h3>{{campaign.name}}</h3>\n            <p>{{campaign.description}}</p>\n          </div>\n        </div>\n      </div>\n      <!-- Controls -->\n      <a class=\"left carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"prev\">\n        <span class=\"fa fa-angle-left\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Previous</span>\n      </a>\n      <a class=\"right carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"next\">\n        <span class=\"fa fa-angle-right\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Next</span>\n      </a>\n</div><!-- end carousel -->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <h4>Current Campaigns</h4>\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <a v-if=\"campaigns.length > 3\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n        <div class=\"col-sm-6 col-md-4\" v-for=\"campaign in campaigns|limitBy campaignsLimit\" style=\"display:flex\">\n            <div class=\"panel panel-default\">\n                <a :href=\"'/campaigns/' + campaign.page_url\" role=\"button\">\n                    <img :src=\"campaign.avatar\" :alt=\"campaign.name\" class=\"img-responsive\">\n                </a>\n                    <div style=\"min-height:220px;\" class=\"panel-body\">\n                        <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{campaign.country}}</h6>\n                        <a :href=\"'/campaigns/' + campaign.page_url\" role=\"button\">\n                            <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">{{campaign.name}}</h5>\n                        </a>\n                        <hr class=\"divider lg\">\n                        <p class=\"small\">{{campaign.description}}</p>\n                    </div><!-- end panel-body -->\n            </div><!-- end panel -->\n        </div><!-- end col -->\n</div>\n<hr class=\"divider inv xlg\">\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center\">\n        <h2 class=\"text-primary\">Missions.Me plans trips around you. We create experiences that will maximize your specific abilities and desires.</h2>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage1.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage3.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage4.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage5.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage8.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage9.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage10.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage12.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage13.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage14.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage15.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage18.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-xs-10 col-xs-offset-1\">\n        <div class=\"row\">\n          <div class=\"col-xs-10 col-xs-offset-1\">\n            <h6 class=\"text-uppercase text-center\">A Trip For Everyone</h6>\n            <h1 class=\"text-center\">Choose A Role</h1>\n            <hr class=\"divider red-small lg\">\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"missionary.html\"><h4 class=\"text-primary\">Missionary</h4></a>\n                <p class=\"small\">Anyone age 13+ can be an M.M missionary. Set out on the journey with your friend or family to bring a message of love and hope along with an unforgettable cultural experience.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"medical-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/medical-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"medical-missionary.html\"><h4>Medical Missionary</h4></a>\n                <p class=\"small\">Treat, diagnose, prescribe, and share the love of Jesus. Anyone in a medical field can serve, including students currently enrolled in school. Physicians, Dentists, Nurses, and all assistants needed.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"group-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/group-leader.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"group-leader.html\"><h4>Group Leader</h4></a>\n                <p class=\"small\">M.M specializes in organizing and creating turn-key group missions experiences for youth groups, college groups, and business groups. You bring passion; we take care of the rest.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"pastor-speaker.html\"><img class=\"img-responsive\" src=\"images/why-mm/speaker.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"pastor-speaker.html\"><h4>Pastor/Speaker</h4></a>\n                <p class=\"small\">Share your gift of leadership with the team by leading a morning devo then impart spiritual wisdom into local church leadership. Let us create a custom schedule that makes the most of your valuable time.</p>\n              </div><!-- end panel-body -->\n            </div><!-- end panel -->\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"business-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/business-person.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"business-leader.html\"><h4>Business Leader</h4></a>\n                <p class=\"small\">A shortened “Business Class” trip is available on select trips. You will experience conferences, stadium outreaches, street ministry, and connect with God in a whole new way. All trips will have you back on Sunday night, ready for Monday.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"media-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/media-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"media-missionary.html\"><h4>Media Missionary</h4></a>\n                <p class=\"small\">Tell the story of life change! M.M needs you to film, shoot, interview, edit, export, and be creative! Experience a whole new world through the lens of a camera while capturing the most exciting moments of the trip.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end gray-lighter-bg -->\n<div class=\"bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h6 class=\"text-uppercase text-primary-darker\">It's So Easy</h6>\n        <h1 class=\"text-primary-darker\">We've Got You</h1>\n        <p>Logistics, we got it covered. Missions.Me makes missions simple by taking care of all of your transportation, hotel, food, training, translators and ministry schedule needs.</p>\n        <hr class=\"divider inv\">\n        <a class=\"btn btn-primary-darker\" href=\"#\">Speak to a rep</a>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"http://placehold.it/600x300\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section-->\n  </div><!-- end container -->\n</div><!-- end red-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-lawn.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-lawn2.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-conf.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-conf2.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary-darker\">Level Of Impact</h1>\n        <p>We are interested in changing nations, communities, and individuals. Every outreach we organize deems to do just that. In just one week's time you and your team will be face to face with entire schools, neighborhoods, and churches. We believe a short-term team must serve a long-term and sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted.</p>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"http://placehold.it/600x300\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-6 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary\">Safety and Security</h1>\n        <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our leadership provides in depth training to create a safe experience for every missionary. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe. Multiple leaders care for each missionary and guidelines are faceted so that no person is ever alone. We also do background checks on all potential leaders. Missions.Me has a proven track record of safety and security that keeps our teams coming back.</p>\n        <blockquote>\"I have traveled with Missions.Me in many countries and have witnessed first-hand their organization and safety measures. I am completely confident sending my teens on a Missions.Me missions trip.\"\n          <footer>Sue, Mother from Lancaster, PA</footer></blockquote>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-light-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-center\">Trip Difficulty Ratings</h1>\n        <hr class=\"divider red-small lg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n    <div class=\"row text-center\">\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level1.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>These trips are great for those just getting started in the world-changing business. First timers of all ages area welcome.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level2.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>If Level 1 proved to be a piece of cake, you’re ready for a Level 2 adventure. A little tougher, a little sweatier, but much more sweeter.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level3.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>Chuck Norris. Mr. T. Annie Oakley. Yep, they’re all level 3 missionaries. It may not be physically tough, but it’ll be a challenge.</p>\n      </div>\n    </div>\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -37280,25 +37342,78 @@ if (module.hot) {(function () {  module.hot.accept()
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
     name: 'passports-list',
+    components: { 'modal': _vueStrap2.default.modal },
     data: function data() {
         return {
             passports: [],
-
+            paginatedPassports: [],
+            selectedPassport: null,
             //logic vars
-            loaded: false
+            page: 1,
+            per_page: 3,
+            pagination: {
+                current_page: 1,
+                total_pages: 0
+            },
+            loaded: false,
+            deleteModal: false
         };
+    },
+
+    watch: {
+        'page': function page(val, oldVal) {
+            this.pagination.current_page = val;
+            this.paginate();
+        },
+        'passports': function passports(val) {
+            if (val.length) {
+                this.paginate();
+            }
+        }
+    },
+    methods: {
+        // emulate pagination
+
+        paginate: function paginate() {
+            var array = [];
+            var start = (this.pagination.current_page - 1) * this.per_page;
+            var end = start + this.per_page;
+            var range = _.range(start, end);
+            _.each(range, function (index) {
+                if (this.passports[index]) array.push(this.passports[index]);
+            }, this);
+            this.paginatedPassports = array;
+        },
+        removePassport: function removePassport(passport) {
+            if (passport) {
+                this.$http.delete('passports/' + passport.id).then(function (response) {
+                    this.passports = _.reject(this.passports, function (item) {
+                        return item.id === passport.id;
+                    });
+                    this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
+                });
+            }
+        }
     },
     ready: function ready() {
         this.$http('users/me?include=passports').then(function (response) {
             this.passports = response.data.data.passports.data;
+            this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
             this.loaded = true;
         });
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !passports.length\">\n        <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n    </div>\n\n    <div class=\"col-sm-4\" v-for=\"passport in passports\">\n        <div class=\"panel panel-default\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{passport.citizenship_name}}</h6>\n                <a role=\"button\" :href=\"'/dashboard' + passport.links[0].uri\">\n                    <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                        {{passport.given_names}} {{passport.surname}}\n                    </h5>\n                </a>\n                <hr class=\"divider lg\">\n                <p class=\"small\">\n                    <b>ID:</b> {{passport.number}}\n                    <br>\n                    <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}\n                    <br>\n                    <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}\n                    <br>\n                    <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}\n                </p>\n            </div><!-- end panel-body -->\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !passports.length\">\n        <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n    </div>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12 text-right\">\n            <a href=\"passports/create\" class=\"btn btn-xs btn-primary\"><i class=\"fa fa-plus\"></i> Add Passport</a>\n            <hr>\n        </div>\n    </div>\n\n\n    <div class=\"col-sm-4\" v-for=\"passport in paginatedPassports\">\n        <div class=\"panel panel-default\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{passport.citizenship_name}}</h6>\n                <a role=\"button\" :href=\"'/dashboard' + passport.links[0].uri\">\n                    <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                        {{passport.given_names}} {{passport.surname}}\n                    </h5>\n                </a>\n                <hr class=\"divider lg\">\n                <p class=\"small\">\n                    <b>ID:</b> {{passport.number}}\n                    <br>\n                    <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}\n                    <br>\n                    <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}\n                    <br>\n                    <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}\n                </p>\n            </div><!-- end panel-body -->\n            <div class=\"panel-footer\" style=\"padding: 0;\">\n                <div class=\"btn-group btn-group-justified btn-group-sm\" role=\"group\" aria-label=\"...\">\n                    <a class=\"btn btn-info\" :href=\"'/dashboard' + passport.links[0].uri + '/edit'\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger\" @click=\"selectedPassport = passport,deleteModal = true\"><i class=\"fa fa-times\"></i></a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n    <modal :show.sync=\"deleteModal\" title=\"Remove Passport\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body\">Are you sure you want to delete this Passport?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removePassport(selectedPassport)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -37309,7 +37424,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4b4c5de6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],131:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-strap/dist/vue-strap.min":110}],131:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37766,7 +37881,7 @@ exports.default = {
     ready: function ready() {}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div style=\"display:inline;\">\n    <button class=\"navbar-toggle\" @click=\"showRight = true\">\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <aside :show.sync=\"showRight\" placement=\"right\" header=\"Missions.Me\" :width=\"275\">\n        <ul class=\"nav navmenu-nav\">\n            <li class=\"donate-nav\"><a class=\"navDonate\" href=\"#\"><i class=\"fa fa-heart\"></i> Donate To A Cause</a></li>\n            <li id=\"userMenu\" class=\"dropdown-toggle visible-xs text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><a href=\"#\"><img class=\"img-xs img-circle av-left\" src=\"images/nelson-prof-pic.jpg\" alt=\"Zech Nelson\"> Zech Nelson <i class=\"fa fa-angle-down\"></i></a></li>\n              <ul class=\"dropdown-menu\" aria-labelledby=\"userMenu\">\n                <li class=\"text-center\"><a href=\"profile.html\">My Profile</a></li>\n                <li class=\"text-center\"><a href=\"group-profile.html\">My Group</a></li>\n                <li class=\"text-center\"><a href=\"Settings.html\">Dashboard</a></li>\n                <li class=\"text-center\"><a href=\"#\">Sign Out</a></li>\n              </ul>\n            <li class=\"navlabel\">1Nation1Day</li>\n            <li><a href=\"http://1nation1day.com/honduras\">2013 Honduras</a></li>\n            <li><a href=\"http://1nation1day.com/dominican\">2015 Dominican</a></li>\n            <li class=\"navlabel\">Trips</li>\n            <li><a href=\"why-mm.html\">Why Missions.Me?</a></li>\n            <li><a href=\"index.html\">Write The Future Honduras</a></li>\n            <li><a href=\"index.html\">Write The Future Nicaragua</a></li>\n            <li><a href=\"index.html\">Write The Future Ecuador</a></li>\n            <li><a href=\"index.html\">2016 India Summer</a></li>\n            <li><a href=\"index.html\">Medical</a></li>\n            <li class=\"navlabel\">Projects</li>\n            <li><a href=\"why-mm.html\">Clean Water</a></li>\n            <li><a href=\"index.html\">Rescue Orphans</a></li>\n            <li><a href=\"index.html\">Homes</a></li>\n            <li><a href=\"index.html\">Trafficking Rescue</a></li>\n            <li><a href=\"index.html\">Leadership Centers</a></li>\n            <li><a href=\"index.html\">Sponsor A Project</a></li>\n            <li class=\"navlabel\">Train</li>\n            <li><a href=\"index.html\">Missions.Me College</a></li>\n            <li><a href=\"index.html\">Speakers</a></li>\n            <li class=\"navlabel\">About</li>\n            <li class=\"active\"><a href=\"about-mm.html\">Missions.Me</a></li>\n            <li><a href=\"about-mm.html\">Accountability</a></li>\n            <li><a href=\"about-mm.html\">Contact Us</a></li>\n            <li><a href=\"about-mm.html\">Jobs</a></li>\n            <li><a href=\"blog-post.html\">Blog</a></li>\n          </ul>\n    </aside>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div style=\"display:inline;\">\n    <button class=\"navbar-toggle\" @click=\"showRight = true\">\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n    </button>\n    <aside :show.sync=\"showRight\" placement=\"right\" header=\"Missions.Me\" :width=\"275\">\n        <ul class=\"nav navmenu-nav\">\n            <li class=\"donate-nav\"><a class=\"navDonate\" href=\"#\"><i class=\"fa fa-heart\"></i> Donate To A Cause</a></li>\n            <!-- <li id=\"userMenu\" class=\"dropdown-toggle visible-xs text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><a href=\"#\"><img class=\"img-xs img-circle av-left\"src=\"images/nelson-prof-pic.jpg\" alt=\"Zech Nelson\"> Zech Nelson <i class=\"fa fa-angle-down\"></i></a></li>\n              <ul class=\"dropdown-menu\" aria-labelledby=\"userMenu\">\n                <li class=\"text-center\"><a href=\"#\">My Profile</a></li>\n                <li class=\"text-center\"><a href=\"#\">Dashboard</a></li>-->\n                <!--<li><a href=\"/admin\">Admin</a></li>-->\n                <!--<li class=\"text-center\"><a href=\"/logout\">Sign Out</a></li>\n              </ul> -->\n            <li><a href=\"#\">Login</a></li>\n            <li><a href=\"#\">Sign Up</a></li>\n            <li class=\"navlabel\">1Nation1Day</li>\n            <li><a href=\"http://1nation1day.com/honduras\">2013 Honduras</a></li>\n            <li><a href=\"http://1nation1day.com/dominican\">2015 Dominican</a></li>\n            <li class=\"navlabel\">Trips</li>\n            <li><a href=\"/campaigns\">Campaigns</a></li>\n            <li class=\"navlabel\">Projects</li>\n            <li><a href=\"why-mm.html\">Clean Water</a></li>\n            <li><a href=\"index.html\">Rescue Orphans</a></li>\n            <li><a href=\"index.html\">Homes</a></li>\n            <li><a href=\"index.html\">Trafficking Rescue</a></li>\n            <li><a href=\"index.html\">Leadership Centers</a></li>\n            <li><a href=\"index.html\">Sponsor A Project</a></li>\n            <li class=\"navlabel\">Train</li>\n            <li><a href=\"index.html\">Missions.Me College</a></li>\n            <li><a href=\"index.html\">Speakers</a></li>\n            <li class=\"navlabel\">About</li>\n            <li class=\"active\"><a href=\"about-mm.html\">Missions.Me</a></li>\n            <li><a href=\"about-mm.html\">Accountability</a></li>\n            <li><a href=\"about-mm.html\">Contact Us</a></li>\n            <li><a href=\"about-mm.html\">Jobs</a></li>\n            <li><a href=\"blog-post.html\">Blog</a></li>\n          </ul>\n    </aside>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -40512,17 +40627,55 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _vueSelect = require('vue-select');
 
-//	import VueStrap from 'vue-strap/dist/vue-strap.min';
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
-	name: 'upload-create',
-	//		components: {'alert': VueStrap.alert},
+	name: 'upload-create-update',
+	components: { vSelect: _vueSelect2.default },
+	props: {
+		uploadId: {
+			type: String,
+			default: null
+		},
+		type: {
+			type: String,
+			default: null
+		},
+		tagOptions: {
+			type: Array,
+			default: function _default() {
+				return ['campaign', 'user', 'group', 'fundraiser'];
+			}
+		},
+		tags: {
+			type: Array,
+			default: function _default() {
+				return [];
+			}
+		},
+		lockType: {
+			type: Boolean,
+			default: false
+		},
+		isUpdate: {
+			type: Boolean,
+			default: false
+		},
+		isChild: {
+			type: Boolean,
+			default: false
+		}
+	},
 	data: function data() {
 		return {
 			//				showRight: false,
 
 			name: '',
-			type: null,
+			//                type: null,
 			path: '',
 			file: null,
 			x_axis: null,
@@ -40545,16 +40698,22 @@ exports.default = {
 			aspectRatio: this.width / this.height,
 			fileA: null,
 			resultImage: null,
+			typePaths: [{ type: 'avatar', path: 'images/avatars', width: 1280, height: 1280 }, { type: 'banner', path: 'images/banners', width: 1300, height: 500 }, { type: 'other', path: 'images/other' }, { type: 'file', path: 'resources/documents' }],
 			typeObj: null,
-			typePaths: [{ type: 'avatar', path: 'images/avatars', width: 1280, height: 1280 }, { type: 'banner', path: 'images/banners', width: 1300, height: 500 }, { type: 'other', path: 'images/other' }, { type: 'file', path: 'resources/documents' }]
+			resource: this.$resource('uploads{/id}')
 		};
 	},
 
 	watch: {
 		'type': function type(val, oldVal) {
 			this.typeObj = _.findWhere(this.typePaths, { type: val });
-			this.path = this.typeObj.path;
-			if (this.file) this.adjustSelectByType();
+			if (this.typeObj) {
+				this.path = this.typeObj.path;
+				if (this.file) this.adjustSelectByType();
+			}
+		},
+		'tags': function tags(val) {
+			this.$validate('tags', true);
 		}
 	},
 	events: {
@@ -40604,9 +40763,9 @@ exports.default = {
 		submit: function submit() {
 			this.attemptSubmit = true;
 			if (this.$CreateUpload.valid) {
-				var resource = this.$resource('uploads');
-				resource.save(null, {
+				this.resource.save(null, {
 					name: this.name,
+					tags: this.tags,
 					type: this.type,
 					path: this.path,
 					file: this.file,
@@ -40616,12 +40775,40 @@ exports.default = {
 					height: parseInt(this.coords.h / this.imageAspectRatio)
 				}).then(function (resp) {
 					console.log(resp);
-					//                    	this.resultImage = resp.data;
-					window.location.href = '/admin/uploads';
-					//                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+					this.handleSuccess(resp);
 				}, function (error) {
 					console.log(error);
 				});
+			}
+		},
+		update: function update() {
+			this.attemptSubmit = true;
+			if (this.$CreateUpload.valid) {
+				this.resource.update({ id: this.uploadId }, {
+					name: this.name,
+					tags: this.tags,
+					type: this.type,
+					path: this.path,
+					file: this.file || undefined,
+					x_axis: parseInt(this.x_axis / this.imageAspectRatio) || undefined,
+					y_axis: parseInt(this.y_axis / this.imageAspectRatio) || undefined,
+					width: parseInt(this.coords.w / this.imageAspectRatio) || undefined,
+					height: parseInt(this.coords.h / this.imageAspectRatio) || undefined
+				}).then(function (resp) {
+					console.log(resp);
+					this.handleSuccess(resp);
+				}, function (error) {
+					console.log(error);
+				});
+			}
+		},
+		handleSuccess: function handleSuccess(response) {
+			if (this.isChild) {
+				// send data to parent componant
+				this.$dispatch('uploads-complete', response.data.data);
+			} else {
+				window.location.href = '/admin/uploads';
+				// window.location.href = '/admin' + response.data.data.links[0].uri;
 			}
 		},
 		handleImage: function handleImage(e) {
@@ -40657,146 +40844,38 @@ exports.default = {
 			}
 		}
 	},
-	ready: function ready() {}
+	ready: function ready() {
+		if (this.isUpdate) {
+			this.resource.get({ id: this.uploadId }).then(function (response) {
+				var upload = response.data.data;
+				this.name = upload.name;
+				this.tags = upload.tags;
+				this.type = upload.type;
+			});
+		}
+
+		if (this.isChild) {
+			this.typeObj = _.findWhere(this.typePaths, { type: this.type });
+			if (this.typeObj) {
+				this.path = this.typeObj.path;
+				if (this.file) this.adjustSelectByType();
+			}
+		}
+	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <validator name=\"CreateUpload\">\n        <form id=\"CreateUploadForm\" class=\"form-horizontal\" novalidate=\"\" @submit=\"prevent\">\n            <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n                <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n                <div class=\"col-sm-10\">\n                    <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n            <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n                <label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n                <div class=\"col-sm-10\">\n                    <select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\">\n                        <option :value=\"\">-- select type --</option>\n                        <option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t\t<option value=\"file\">File</option>\n                    </select>\n                </div>\n            </div>\n\n            <div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type === 'other'\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n                <div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n                    <div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width(px)</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height(px)</span>\n                        <input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n                    </div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height(px)</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n            </div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">File</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"file\" id=\"file\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t <!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-10\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t\t<a href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t</form>\n    </validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <validator name=\"CreateUpload\">\n        <form id=\"CreateUploadForm\" class=\"form-horizontal\" novalidate=\"\" @submit=\"prevent\">\n            <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n                <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n                <div class=\"col-sm-10\">\n                    <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n            <div class=\"form-group\" :class=\"{ 'has-error': checkForError('tags') }\">\n                <label for=\"tags\" class=\"col-sm-2 control-label\">Tags</label>\n                <div class=\"col-sm-10\">\n\t\t\t\t\t<v-select id=\"tags\" class=\"form-control\" multiple=\"\" :value.sync=\"tags\" :options=\"tagOptions\"></v-select>\n\t\t\t\t\t<select hidden=\"\" id=\"tags\" name=\"tags\" v-model=\"tags\" multiple=\"\" v-validate:tags=\"{ required:true }\">\n\t\t\t\t\t\t<option v-for=\"tag in tagOptions\" :value=\"tag\">{{tag}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n            </div>\n            <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n                <label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n                <div class=\"col-sm-10\">\n                    <select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\" :disabled=\"lockType\">\n                        <option :value=\"\">-- select type --</option>\n                        <option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t\t<option value=\"file\">File</option>\n                    </select>\n                </div>\n            </div>\n\n            <div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type === 'other'\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n                <div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n                    <div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width(px)</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height(px)</span>\n                        <input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n                    </div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height(px)</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n            </div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">File</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"file\" id=\"file\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t <!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-10\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t\t<a href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" v-if=\"!isUpdate\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t\t<a @click=\"update()\" v-if=\"isUpdate\" class=\"btn btn-primary\">Update</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t</form>\n    </validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-96d65970", module.exports)
+    hotAPI.createRecord("_v-e6a8f7c4", module.exports)
   } else {
-    hotAPI.update("_v-96d65970", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],162:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _vueSelect = require('vue-select');
-
-var _vueSelect2 = _interopRequireDefault(_vueSelect);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-    name: 'upload-edit',
-    components: { vSelect: _vueSelect2.default },
-    data: function data() {
-        return {
-            name: '',
-            email: '',
-            alt_email: '',
-            password: '',
-            password_confirmation: '',
-            bio: '',
-            status: '',
-            birthday: null,
-            country_code: null,
-            timezone: null,
-            phone_one: '',
-            phone_two: '',
-            address_one: '',
-            address_two: '',
-            city: '',
-            state: '',
-            zip: '',
-            public: false,
-            url: '',
-            gender: false,
-            admin: false,
-
-            // logic variables
-            //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
-            attemptSubmit: false,
-            countries: [],
-            countryCodeObj: null,
-            timezones: [],
-            showPassword: false,
-            timezoneObj: null,
-            dobMonth: null,
-            dobDay: null,
-            dobYear: null
-
-        };
-    },
-
-    computed: {
-        country_code: function country_code() {
-            return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
-        },
-        birthday: function birthday() {
-            return this.dobYear && this.dobMonth && this.dobDay ? moment().set({ year: this.dobYear, month: this.dobMonth, day: this.dobDay }).format('LL') : null;
-        }
-    },
-    methods: {
-        checkForError: function checkForError(field) {
-            // if upload clicked submit button while the field is invalid trigger error styles
-
-            return this.$CreateUpload[field].invalid && this.attemptSubmit;
-        },
-        submit: function submit() {
-            this.attemptSubmit = true;
-            if (this.$CreateUpload.valid) {
-                var resource = this.$resource('uploads');
-
-                resource.save(null, {
-                    name: this.name,
-                    email: this.email,
-                    alt_email: this.alt_email,
-                    password: this.password,
-                    password_confirmation: this.password_confirmation,
-                    bio: this.bio,
-                    type: this.type,
-                    country_code: this.country_code,
-                    timezone: this.timezone,
-                    phone_one: this.phone_one,
-                    phone_two: this.phone_two,
-                    address_one: this.address_one,
-                    address_two: this.address_two,
-                    city: this.city,
-                    state: this.state,
-                    zip: this.zip,
-                    status: this.status,
-                    gender: this.gender,
-                    public: this.public,
-                    url: this.url
-                }).then(function (resp) {
-                    window.location.href = '/admin' + resp.data.data.links[0].uri;
-                }, function (error) {
-                    console.log(error);
-                });
-            }
-        }
-    },
-    ready: function ready() {
-        this.$http.get('utilities/countries').then(function (response) {
-            this.countries = response.data.countries;
-        });
-
-        this.$http.get('utilities/timezones').then(function (response) {
-            this.timezones = response.data.timezones;
-        });
-    }
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpload\">\n    <form id=\"CreateUploadForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Upload Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Alt. Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Password</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ required: true, minlength:8 }\" placeholder=\"Enter password\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ required: true, minlength:8 }\" placeholder=\"Enter password again\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"help-block\">Password must be at least 8 characters long</div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\">Date of Birth</label>\n\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-xs-5\">\n                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                            <option value=\"01\">January</option>\n                            <option value=\"02\">February</option>\n                            <option value=\"03\">March</option>\n                            <option value=\"04\">April</option>\n                            <option value=\"05\">May</option>\n                            <option value=\"06\">June</option>\n                            <option value=\"07\">July</option>\n                            <option value=\"08\">August</option>\n                            <option value=\"09\">September</option>\n                            <option value=\"10\">October</option>\n                            <option value=\"11\">November</option>\n                            <option value=\"12\">December</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Month</h6>\n                    </div>\n                    <div class=\"col-xs-3\">\n                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                            <option value=\"01\">1</option>\n                            <option value=\"02\">2</option>\n                            <option value=\"03\">3</option>\n                            <option value=\"04\">4</option>\n                            <option value=\"05\">5</option>\n                            <option value=\"06\">6</option>\n                            <option value=\"07\">7</option>\n                            <option value=\"08\">8</option>\n                            <option value=\"09\">9</option>\n                            <option value=\"10\">10</option>\n                            <option value=\"11\">11</option>\n                            <option value=\"12\">12</option>\n                            <option value=\"13\">13</option>\n                            <option value=\"14\">14</option>\n                            <option value=\"15\">15</option>\n                            <option value=\"16\">16</option>\n                            <option value=\"17\">17</option>\n                            <option value=\"18\">18</option>\n                            <option value=\"19\">19</option>\n                            <option value=\"20\">20</option>\n                            <option value=\"21\">21</option>\n                            <option value=\"22\">22</option>\n                            <option value=\"23\">23</option>\n                            <option value=\"24\">24</option>\n                            <option value=\"25\">25</option>\n                            <option value=\"26\">26</option>\n                            <option value=\"27\">27</option>\n                            <option value=\"28\">28</option>\n                            <option value=\"29\">29</option>\n                            <option value=\"30\">30</option>\n                            <option value=\"31\">31</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Day</h6>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                            <option value=\"1930\">1930</option>\n                            <option value=\"1931\">1931</option>\n                            <option value=\"1932\">1932</option>\n                            <option value=\"1933\">1933</option>\n                            <option value=\"1934\">1934</option>\n                            <option value=\"1935\">1935</option>\n                            <option value=\"1936\">1936</option>\n                            <option value=\"1937\">1937</option>\n                            <option value=\"1938\">1938</option>\n                            <option value=\"1939\">1939</option>\n                            <option value=\"1940\">1940</option>\n                            <option value=\"1941\">1941</option>\n                            <option value=\"1942\">1942</option>\n                            <option value=\"1943\">1943</option>\n                            <option value=\"1944\">1944</option>\n                            <option value=\"1945\">1945</option>\n                            <option value=\"1946\">1946</option>\n                            <option value=\"1947\">1947</option>\n                            <option value=\"1948\">1948</option>\n                            <option value=\"1949\">1949</option>\n                            <option value=\"1950\">1950</option>\n                            <option value=\"1951\">1951</option>\n                            <option value=\"1952\">1952</option>\n                            <option value=\"1953\">1953</option>\n                            <option value=\"1954\">1954</option>\n                            <option value=\"1955\">1955</option>\n                            <option value=\"1956\">1956</option>\n                            <option value=\"1957\">1957</option>\n                            <option value=\"1958\">1958</option>\n                            <option value=\"1959\">1959</option>\n                            <option value=\"1960\">1960</option>\n                            <option value=\"1961\">1961</option>\n                            <option value=\"1962\">1962</option>\n                            <option value=\"1963\">1963</option>\n                            <option value=\"1964\">1964</option>\n                            <option value=\"1965\">1965</option>\n                            <option value=\"1966\">1966</option>\n                            <option value=\"1967\">1967</option>\n                            <option value=\"1968\">1968</option>\n                            <option value=\"1969\">1969</option>\n                            <option value=\"1970\">1970</option>\n                            <option value=\"1971\">1971</option>\n                            <option value=\"1972\">1972</option>\n                            <option value=\"1973\">1973</option>\n                            <option value=\"1974\">1974</option>\n                            <option value=\"1975\">1975</option>\n                            <option value=\"1976\">1976</option>\n                            <option value=\"1977\">1977</option>\n                            <option value=\"1978\">1978</option>\n                            <option value=\"1979\">1979</option>\n                            <option value=\"1980\">1980</option>\n                            <option value=\"1981\">1981</option>\n                            <option value=\"1982\">1982</option>\n                            <option value=\"1983\">1983</option>\n                            <option value=\"1984\">1984</option>\n                            <option value=\"1985\">1985</option>\n                            <option value=\"1986\">1986</option>\n                            <option value=\"1987\">1987</option>\n                            <option value=\"1988\">1988</option>\n                            <option value=\"1989\">1989</option>\n                            <option value=\"1990\" selected=\"selected\">1990</option>\n                            <option value=\"1991\">1991</option>\n                            <option value=\"1992\">1992</option>\n                            <option value=\"1993\">1993</option>\n                            <option value=\"1994\">1994</option>\n                            <option value=\"1995\">1995</option>\n                            <option value=\"1996\">1996</option>\n                            <option value=\"1997\">1997</option>\n                            <option value=\"1998\">1998</option>\n                            <option value=\"1999\">1999</option>\n                            <option value=\"2000\">2000</option>\n                            <option value=\"2001\">2001</option>\n                            <option value=\"2002\">2002</option>\n                            <option value=\"2003\">2003</option>\n                            <option value=\"2004\">2004</option>\n                            <option value=\"2005\">2005</option>\n                            <option value=\"2006\">2006</option>\n                            <option value=\"2007\">2007</option>\n                            <option value=\"2008\">2008</option>\n                            <option value=\"2009\">2009</option>\n                            <option value=\"2010\">2010</option>\n                            <option value=\"2011\">2011</option>\n                            <option value=\"2012\">2012</option>\n                            <option value=\"2013\">2013</option>\n                            <option value=\"2014\">2014</option>\n                            <option value=\"2015\">2015</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Year</h6>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div><!-- end form-group -->\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n            <label for=\"gender\" class=\"col-sm-2 control-label\">Gender</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"bio\">Bio</label>\n            <div class=\"col-sm-10\">\n                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"Upload Bio\" maxlength=\"120\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress\">Address 1</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress2\">Address 2</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                <div class=\"form-group\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                </div>\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-controls\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <label for=\"timezone\" class=\"col-sm-2 control-label\">Timezone</label>\n\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-controls\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"public\" class=\"col-sm-2 control-label\">Public</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <div class=\"form-group\" v-if=\"!!public\">\n            <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n            <div class=\"col-sm-10\">\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon\">www.missions.me/uploads/</span>\n                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-68d94656", module.exports)
-  } else {
-    hotAPI.update("_v-68d94656", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],163:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],162:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -40936,7 +41015,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],164:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -41061,7 +41140,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],165:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -41097,7 +41176,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],166:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -41249,7 +41328,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],167:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],166:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -41471,31 +41550,84 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],168:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
     name: 'visas-list',
+    components: { 'modal': _vueStrap2.default.modal },
     data: function data() {
         return {
             visas: [],
-
+            paginatedVisas: [],
+            selectedVisa: null,
             //logic vars
-            loaded: false
+            page: 1,
+            per_page: 3,
+            pagination: {
+                current_page: 1,
+                total_pages: 0
+            },
+            loaded: false,
+            deleteModal: false
         };
     },
+
+    watch: {
+        'page': function page(val, oldVal) {
+            this.pagination.current_page = val;
+            this.paginate();
+        },
+        'visas': function visas(val) {
+            if (val.length) {
+                this.paginate();
+            }
+        }
+    },
+    methods: {
+        // emulate pagination
+
+        paginate: function paginate() {
+            var array = [];
+            var start = (this.pagination.current_page - 1) * this.per_page;
+            var end = start + this.per_page;
+            var range = _.range(start, end);
+            _.each(range, function (index) {
+                if (this.visas[index]) array.push(this.visas[index]);
+            }, this);
+            this.paginatedVisas = array;
+        },
+        removeVisa: function removeVisa(visa) {
+            if (visa) {
+                this.$http.delete('visas/' + visa.id).then(function (response) {
+                    this.visas = _.reject(this.visas, function (item) {
+                        return item.id === visa.id;
+                    });
+                    this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
+                });
+            }
+        }
+    },
     ready: function ready() {
-        this.$http('users/me?include=passports,visas').then(function (response) {
+        this.$http('users/me?include=visas').then(function (response) {
             this.visas = response.data.data.visas.data;
+            this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
             this.loaded = true;
         });
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !visas.length\">\n        <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n    </div>\n\n    <div class=\"col-sm-4\" v-for=\"visa in visas\">\n        <div class=\"panel panel-default\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{visa.country_name}}</h6>\n                <a role=\"button\" :href=\"'/dashboard' + visa.links[0].uri\">\n                    <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                        {{visa.given_names}} {{visa.surname}}\n                    </h5>\n                </a>\n                <hr class=\"divider lg\">\n                <p class=\"small\">\n                    <b>ID:</b> {{visa.number}}\n                    <br>\n                    <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}\n                    <br>\n                    <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}\n                </p>\n            </div><!-- end panel-body -->\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !visas.length\">\n        <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n    </div>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12 text-right\">\n            <a href=\"visas/create\" class=\"btn btn-xs btn-primary\"><i class=\"fa fa-plus\"></i> Add Visa</a>\n            <hr>\n        </div>\n    </div>\n\n\n    <div class=\"col-sm-4\" v-for=\"visa in paginatedVisas\">\n        <div class=\"panel panel-default\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{visa.country_name}}</h6>\n                <a role=\"button\" :href=\"'/dashboard' + visa.links[0].uri\">\n                    <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                        {{visa.given_names}} {{visa.surname}}\n                    </h5>\n                </a>\n                <hr class=\"divider lg\">\n                <p class=\"small\">\n                    <b>ID:</b> {{visa.number}}\n                    <br>\n                    <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}\n                    <br>\n                    <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}\n                </p>\n            </div><!-- end panel-body -->\n            <div class=\"panel-footer\" style=\"padding: 0;\">\n                <div class=\"btn-group btn-group-justified btn-group-sm\" role=\"group\" aria-label=\"...\">\n                        <a class=\"btn btn-info\" :href=\"'/dashboard' + visa.links[0].uri + '/edit'\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger\" @click=\"selectedVisa = visa,deleteModal = true\"><i class=\"fa fa-times\"></i></a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n    <modal :show.sync=\"deleteModal\" title=\"Remove Visa\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body\">Are you sure you want to delete this Visa?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removeVisa(selectedVisa)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -41506,7 +41638,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4fbd58ab", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],169:[function(require,module,exports){
+},{"vue":112,"vue-hot-reload-api":107,"vue-strap/dist/vue-strap.min":110}],168:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -41641,13 +41773,9 @@ var _adminUploadsList = require('./components/uploads/admin-uploads-list.vue');
 
 var _adminUploadsList2 = _interopRequireDefault(_adminUploadsList);
 
-var _adminUploadCreate = require('./components/uploads/admin-upload-create.vue');
+var _adminUploadCreateUpdate = require('./components/uploads/admin-upload-create-update.vue');
 
-var _adminUploadCreate2 = _interopRequireDefault(_adminUploadCreate);
-
-var _adminUploadEdit = require('./components/uploads/admin-upload-edit.vue');
-
-var _adminUploadEdit2 = _interopRequireDefault(_adminUploadEdit);
+var _adminUploadCreateUpdate2 = _interopRequireDefault(_adminUploadCreateUpdate);
 
 var _vueStrap = require('vue-strap/dist/vue-strap.min');
 
@@ -41656,10 +41784,10 @@ var _vueStrap2 = _interopRequireDefault(_vueStrap);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // jQuery
-
+window.$ = window.jQuery = require('jquery');
 
 // admin components
-window.$ = window.jQuery = require('jquery');
+
 window.moment = require('moment');
 window._ = require('underscore');
 // require('vue-strap/src/index.js');
@@ -41700,7 +41828,20 @@ _vue2.default.http.interceptors.push({
 
     response: function response(_response) {
         if (_response.status && _response.status === 401) {
-            $.removeCookie('api_token');
+            _vue2.default.http.post('/api/refresh').then(function (response) {
+                $.cookie('api_token', response.data.token);
+                window.location.reload();
+            }, function (response) {
+                if (response.status && response.status === 401 || response.status && response.status === 500) {
+                    $.removeCookie('api_token');
+                    window.location.replace('/logout');
+                };
+            });
+        }
+        if (_response.status && _response.status === 500) {
+            alert('Oops! Something went wrong with the server.');
+            // $.removeCookie('api_token');
+            // window.location.replace('/logout');
         }
         if (_response.headers && _response.headers('Authorization')) {
             $.cookie('api_token', _response.headers('Authorization'));
@@ -41810,7 +41951,7 @@ new _vue2.default({
     _recordsList2.default, _passportsList2.default, _visasList2.default,
 
     // admin components
-    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreate2.default, _adminUploadEdit2.default],
+    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default],
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -41831,6 +41972,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/campaigns/admin-campaign-create.vue":114,"./components/campaigns/admin-campaign-details.vue":115,"./components/campaigns/admin-campaign-edit.vue":116,"./components/campaigns/campaign-groups.vue":117,"./components/campaigns/campaigns.vue":118,"./components/campaigns/group-trips.vue":123,"./components/campaigns/groups-trips-selection-wrapper.vue":124,"./components/groups/admin-group-create.vue":125,"./components/groups/admin-group-edit.vue":126,"./components/groups/admin-group-managers.vue":127,"./components/groups/admin-groups-list.vue":128,"./components/login.vue":129,"./components/passports/passports-list.vue":130,"./components/records/records-list.vue":131,"./components/reservations/admin-reservations-list.vue":132,"./components/reservations/donations-list.vue":133,"./components/reservations/reservations-list.vue":134,"./components/top-nav.vue":135,"./components/trips/admin-trip-create.vue":136,"./components/trips/admin-trip-delete.vue":137,"./components/trips/admin-trip-duplicate.vue":138,"./components/trips/admin-trip-edit.vue":139,"./components/trips/admin-trip-facilitators.vue":140,"./components/trips/admin-trip-reservations-list.vue":141,"./components/trips/admin-trips-list.vue":142,"./components/trips/trip-registration-wizard.vue":160,"./components/uploads/admin-upload-create.vue":161,"./components/uploads/admin-upload-edit.vue":162,"./components/uploads/admin-uploads-list.vue":163,"./components/users/admin-user-create.vue":164,"./components/users/admin-user-delete.vue":165,"./components/users/admin-user-edit.vue":166,"./components/users/admin-users-list.vue":167,"./components/visas/visas-list.vue":168,"bootstrap-sass":15,"jquery":103,"jquery.cookie":102,"moment":104,"underscore":106,"vue":112,"vue-resource":108,"vue-strap/dist/vue-strap.min":110,"vue-validator":111}]},{},[169]);
+},{"./components/campaigns/admin-campaign-create.vue":114,"./components/campaigns/admin-campaign-details.vue":115,"./components/campaigns/admin-campaign-edit.vue":116,"./components/campaigns/campaign-groups.vue":117,"./components/campaigns/campaigns.vue":118,"./components/campaigns/group-trips.vue":123,"./components/campaigns/groups-trips-selection-wrapper.vue":124,"./components/groups/admin-group-create.vue":125,"./components/groups/admin-group-edit.vue":126,"./components/groups/admin-group-managers.vue":127,"./components/groups/admin-groups-list.vue":128,"./components/login.vue":129,"./components/passports/passports-list.vue":130,"./components/records/records-list.vue":131,"./components/reservations/admin-reservations-list.vue":132,"./components/reservations/donations-list.vue":133,"./components/reservations/reservations-list.vue":134,"./components/top-nav.vue":135,"./components/trips/admin-trip-create.vue":136,"./components/trips/admin-trip-delete.vue":137,"./components/trips/admin-trip-duplicate.vue":138,"./components/trips/admin-trip-edit.vue":139,"./components/trips/admin-trip-facilitators.vue":140,"./components/trips/admin-trip-reservations-list.vue":141,"./components/trips/admin-trips-list.vue":142,"./components/trips/trip-registration-wizard.vue":160,"./components/uploads/admin-upload-create-update.vue":161,"./components/uploads/admin-uploads-list.vue":162,"./components/users/admin-user-create.vue":163,"./components/users/admin-user-delete.vue":164,"./components/users/admin-user-edit.vue":165,"./components/users/admin-users-list.vue":166,"./components/visas/visas-list.vue":167,"bootstrap-sass":15,"jquery":103,"jquery.cookie":102,"moment":104,"underscore":106,"vue":112,"vue-resource":108,"vue-strap/dist/vue-strap.min":110,"vue-validator":111}]},{},[168]);
 
 //# sourceMappingURL=main.js.map

@@ -168,6 +168,7 @@ return [
         Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
         Conner\Tagging\Providers\TaggingServiceProvider::class,
         Silber\Bouncer\BouncerServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 

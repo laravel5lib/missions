@@ -83,7 +83,7 @@
                             <h4 class="media-heading">{{selectedAvatar.name}}</h4>
                         </div>
                     </div>
-                    <upload-create-update type="avatar" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['user']"></upload-create-update>
+                    <upload-create-update type="avatar" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['other']"></upload-create-update>
                 </panel>
             </accordion>
 

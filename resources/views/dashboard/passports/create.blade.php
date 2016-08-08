@@ -4,12 +4,12 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="text-muted text-center">My Passports</h1>
+                <h1 class="text-muted text-center">My Passports <small>Create</small></h1>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <passports-list></passports-list>
+                <passport-create-update></passport-create-update>
             </div>
         </div>
     </div>

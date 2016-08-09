@@ -102,28 +102,31 @@ $factory->define(App\Models\v1\Assignment::class, function (Faker\Generator $fak
  */
 $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
 {
-    $started_at = $faker->dateTimeBetween('now', '+ 6 months');
-    $ended_at = $faker->dateTimeBetween('now', '+ 2 weeks');
+    $campaign = new App\Models\v1\Campaign;
+
+    $campaign = $campaign->find($campaign->lists('id')->random());
 
     return [
         'group_id'         => $faker->randomElement(App\Models\v1\Group::lists('id')->toArray()),
-        'campaign_id'      => $faker->randomElement(App\Models\v1\Campaign::lists('id')->toArray()),
+        'campaign_id'      => $campaign->id,
         'rep_id'           => random_int(1, 99),
         'spots'            => random_int(0, 500),
         'companion_limit'  => random_int(0, 3),
-        'country_code'     => strtolower($faker->countryCode),
+        'country_code'     => $campaign->country_code,
         'type'             => $faker->randomElement(['full', 'short', 'medical', 'media']),
         'difficulty'       => $faker->randomElement(['level_1', 'level_2', 'level_3']),
-        'started_at'       => $started_at,
-        'ended_at'         => $ended_at,
-        'todos'            => $faker->sentences(6),
+        'started_at'       => $campaign->started_at,
+        'ended_at'         => $campaign->ended_at,
+        'todos'            => ['Send shirt', 'Send wrist band', 'Enter into LGL', 'Send launch guide', 'Send luggage tag'],
         'prospects'        => $faker->randomElements([
             'adults', 'teens', 'men', 'women', 'medical professionals',
             'media professionals', 'business professionals', 'pastors',
             'families'], 4),
         'description'      => $faker->realText(1000),
-        'published_at'     => $faker->optional(0.9)->dateTimeThisYear,
-        'closed_at'        => $faker->dateTimeThisYear
+        'published_at'     => $faker->optional(0.9)->dateTimeBetween(
+            $faker->dateTime('+ 1 week'), $faker->dateTimeInInterval($campaign->published_at, '+ 1 month')
+        ),
+        'closed_at'        => $faker->dateTimeInInterval($campaign->started_at, '- 7 days')
     ];
 });
 
@@ -137,10 +140,10 @@ $factory->defineAs(App\Models\v1\Campaign::class, 'active', function (Faker\Gene
     return [
         'name'             => $faker->catchPhrase,
         'country_code'     => strtolower($faker->countryCode),
-        'short_desc'       => $faker->realText(120),
+        'short_desc'       => $faker->realText(255),
         'page_url'         => $faker->slug,
         'started_at'       => $startDate,
-        'ended_at'         => $faker->dateTimeInInterval($startDate, '+ 1 week'),
+        'ended_at'         => $faker->dateTimeInInterval($startDate, '+ 10 days'),
         'published_at'     => $faker->dateTimeBetween('- 1 month', '+ 1 month'),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
@@ -149,16 +152,16 @@ $factory->defineAs(App\Models\v1\Campaign::class, 'active', function (Faker\Gene
 
 $factory->defineAs(App\Models\v1\Campaign::class, 'archived', function (Faker\Generator $faker)
 {
-    $startDate = $faker->dateTimeBetween('- 6 months', '- 1 year');
+    $startDate = $faker->dateTimeBetween('- 1 year', '- 6 months');
 
     return [
         'name'             => $faker->catchPhrase,
         'country_code'     => strtolower($faker->countryCode),
-        'short_desc'       => $faker->realText(120),
+        'short_desc'       => $faker->realText(255),
         'page_url'         => $faker->slug,
         'started_at'       => $startDate,
-        'ended_at'         => $faker->dateTimeInInterval($startDate, '+ 1 week'),
-        'published_at'     => $faker->dateTimeBetween('- 2 years', '- 1 month'),
+        'ended_at'         => $faker->dateTimeInInterval($startDate, '+ 10 days'),
+        'published_at'     => $faker->dateTimeBetween('- 1 year', '- 6 months'),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];

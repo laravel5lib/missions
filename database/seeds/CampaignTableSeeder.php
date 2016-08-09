@@ -12,6 +12,6 @@ class CampaignTableSeeder extends Seeder
     public function run()
     {
         factory(App\Models\v1\Campaign::class, 'active', 3)->create();
-//        factory(App\Models\v1\Campaign::class, 'archived', 3)->create();
+        factory(App\Models\v1\Campaign::class, 'archived', 3)->create();
     }
 }

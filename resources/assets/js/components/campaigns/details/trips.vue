@@ -21,7 +21,7 @@
             </div>
         </div>
         <hr>
-        <table class="table table-hover">
+        <table class="table table-striped">
             <thead>
             <tr>
                 <th :class="{'text-primary': orderByField === 'group.data.name'}">
@@ -54,8 +54,7 @@
                 <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>
                 <td>{{trip.reservations}}</td>
                 <td>
-                    <a href="/admin/{{trip.links[0].uri}}"><i class="fa fa-eye"></i></a>
-                    <a href="/admin/{{trip.links[0].uri}}/edit"><i class="fa fa-pencil-square-o"></i></a>
+                    <a href="/admin{{trip.links[0].uri}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></a>
                 </td>
             </tr>
             </tbody>

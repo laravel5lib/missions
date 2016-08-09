@@ -14,13 +14,26 @@
                 <td v-if="!editMode">{{campaign.description}}</td>
             </tr>
             <tr>
+                <th>Page Url</th>
+                <td>{{campaign.page_url}}</td>
+            </tr>
+            <tr>
+                <th>Page Source</th>
+                <td>{{campaign.page_src}}</td>
+            </tr>
+            <tr>
                 <th>Country</th>
                 <td>{{campaign.country}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
             </tr>
             <tr>
-                <th>Thumbnail</th>
-                <td>{{campaign.thumb_src}}</td>
+                <th>Groups</th>
+                <td>{{campaign.groups_count}}</td>
+                <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{campaign.status}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
             </tr>
             <tr>

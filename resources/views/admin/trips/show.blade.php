@@ -7,7 +7,7 @@
             <div class="col-sm-8">
                 <h3 class="text-capitalize">
                     <a href="#">
-                        <img class="av-left img-sm" src="{{ $trip->campaign->thumb_src }}" alt="{{ $trip->campaign->name }}">
+                        <img class="av-left img-sm" src="{{ image($trip->campaign->avatar->source . '?w=100') }}" alt="{{ $trip->campaign->name }}">
                     </a>
                     {{ $trip->campaign->name }} <small>&middot; Trip Details</small>
                 </h3>
@@ -60,7 +60,7 @@
                     <div class="col-xs-12 col-sm-8 col-md-9">
                         <div id="details"></div>
                         <div class="panel panel-default">
-                            <div id="details" class="panel-heading">
+                            <div class="panel-heading">
                                 <h5 class="text-capitalize"><!-- <img class="av-left img-xs" src="{{ $trip->campaign->thumb_src }}"> --> {{ $trip->campaign->name }}</h5>
                             </div>
                             <div class="panel-body">
@@ -136,7 +136,7 @@
                         </div>
                         <div id="registration"></div>
                         <div class="panel panel-default">
-                            <div id="registration" class="panel-heading">
+                            <div class="panel-heading">
                                 <h5>Registration</h5>
                             </div>
                             <div class="panel-body">
@@ -160,7 +160,7 @@
                         <admin-trip-facilitators trip-id="{{ $trip->id }}"></admin-trip-facilitators>
                         <div id="pricing"></div>
                         <div class="panel panel-default">
-                            <div id="pricing" class="panel-heading">
+                            <div class="panel-heading">
                                 <h5>Pricing</h5>
                             </div>
                             @foreach($trip->costs as $cost)
@@ -213,7 +213,7 @@
                         </div>
                         <div id="requirements"></div>
                         <div class="panel panel-default">
-                            <div id="requirements" class="panel-heading">
+                            <div class="panel-heading">
                                 <h5>Requirements</h5>
                             </div>
                             <div class="panel-body">
@@ -234,8 +234,8 @@
                         </div>
                         <div id="deadlines"></div>
                         <div class="panel panel-default">
-                            <div id="deadlines" class="panel-heading">
-                                <h5>Deadlines</h5>
+                            <div class="panel-heading">
+                                <h5>Other Deadlines</h5>
                             </div>
                             <div class="panel-body">
                                 @foreach($trip->deadlines as $deadline)
@@ -267,12 +267,20 @@
                         <div id="notes"></div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
+                                <h5>Description</h5>
+                            </div>
+                            <div class="panel-body">
+                                {{ $trip->description }}
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
                                 <h5>Notes</h5>
                             </div>
                             <div class="list-group">
                                 @foreach($trip->notes as $note)
                                 <div class="list-group-item">
-                                    <div class="list-group-item-heading"><b>{{$note->subject}}</b> by <b>{{ $note->user_id }}</b></div>
+                                    <div class="list-group-item-heading"><b>{{$note->subject}}</b> by <b>{{ $note->user->name }}</b> on <b>{{ $note->updated_at->format('F j, Y h:i:s a') }}</b></div>
                                     <div class="list-group-item-text">{{ $note->content }}</div>
                                 </div>
                                 @endforeach

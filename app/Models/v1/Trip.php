@@ -274,6 +274,17 @@ class Trip extends Model
     }
 
     /**
+     * Return the trip's difficulty.
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function getDifficultyAttribute($value)
+    {
+        return str_replace('_', ' ', $value);
+    }
+
+    /**
      * Get the status of the trip.
      *
      * @return string

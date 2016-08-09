@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <h3>
-                    Current Campaigns
+                    Campaigns
                     <a href="/admin/campaigns/create" class="btn btn-primary btn-sm pull-right">New <i class="fa fa-plus"></i></a>
                 </h3>
             </div>
@@ -47,15 +47,15 @@
                                     <td>{{ $campaign->name }}</td>
                                     <td>{{ $campaign->groups()->count() }} <i class="fa fa-group"></i></td>
                                     <td>
-                                        @if($campaign->published_at and $campaign->published_at->isFuture())
+                                        @if($campaign->status == 'Scheduled')
                                             <i class="fa fa-calendar"></i> Scheduled
-                                        @elseif($campaign->published_at and $campaign->published_at->isPast())
+                                        @elseif($campaign->status == 'Published')
                                             <i class="fa fa-check"></i> Published
                                         @else
                                             <i class="fa fa-pencil"></i> Draft
                                         @endif
                                     </td>
-                                    <td><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-pencil"></i></a>
+                                    <td><a href="/admin/campaigns/{{ $campaign->id }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a>
                                     </td>
                                 </tr>
                                 @endif
@@ -84,17 +84,15 @@
                                     <td>{{ $campaign->name }}</td>
                                     <td>{{ $campaign->groups()->count() }} <i class="fa fa-group"></i></td>
                                     <td>
-                                        @if($campaign->published_at and $campaign->published_at->isFuture())
+                                        @if($campaign->status == 'Scheduled')
                                             <i class="fa fa-calendar"></i> Scheduled
-                                        @elseif($campaign->published_at and $campaign->published_at->isPast())
+                                        @elseif($campaign->status == 'Published')
                                             <i class="fa fa-check"></i> Published
                                         @else
                                             <i class="fa fa-pencil"></i> Draft
                                         @endif
                                     </td>
-                                    <td>
-                                        <a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-eye"></i></a>
-                                        <a href="/admin/campaigns/{{ $campaign->id }}/edit"><i class="fa fa-pencil"></i></a>
+                                    <td><a href="/admin/campaigns/{{ $campaign->id }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a>
                                     </td>
                                 </tr>
                                 @endif

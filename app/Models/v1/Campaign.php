@@ -94,6 +94,35 @@ class Campaign extends Model
     }
 
     /**
+     * Get the campaign's name.
+     *
+     * @param $value
+     * @return string
+     */
+    public function getNameAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    /**
+     * Get the Campaign's Status.
+     *
+     * @return string
+     */
+    public function getStatusAttribute()
+    {
+        if ($this->published_at and $this->published_at->isFuture()) {
+            return 'Scheduled';
+        }
+
+        if ($this->published_at and $this->published_at->isPast()) {
+            return 'Published';
+        }
+
+        return 'Draft';
+    }
+
+    /**
      * Get all the campaign's trips.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

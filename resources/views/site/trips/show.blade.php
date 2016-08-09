@@ -160,7 +160,7 @@
                     </div> -->
                     <hr class="divider lg">
                     <ul class="list-group">
-                        @foreach($trip->costs as $cost)
+                        @foreach($trip->activeCosts as $cost)
                             <a   class="list-group-item">
                                 <h5 class="list-group-item-heading">{{ $cost->name }}</h5>
                                 <p class="list-group-item-text">${{ number_format($cost->amount, 2, '.', ',') }}</p>

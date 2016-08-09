@@ -7,7 +7,7 @@
             <div class="col-sm-8">
                 <h3 class="text-capitalize">
                     <a href="#">
-                        <img class="av-left img-sm" src="{{ $trip->campaign->thumb_src }}" alt="{{ $trip->campaign->name }}">
+                        <img class="av-left img-sm" src="{{ image($trip->campaign->avatar->source . '?w=100') }}" alt="{{ $trip->campaign->name }}">
                     </a>
                     {{ $trip->campaign->name }} <small>&middot; Trip Details</small>
                 </h3>
@@ -47,23 +47,15 @@
                             </div>
                             <div class="panel-body">
                                 <dl class="dl-horizontal">
-                                    {{--<dt>Thumbnail</dt>--}}
-                                    {{--<dd><a href="#">{{ $trip->campaign->thumb_src }}</a></dd>--}}
-
-                                    <dt>Description</dt>
-                                    <dd>{{ $trip->description }}</dd>
-
-                                    <dt>Campaign</dt>
-                                    <dd><a href="#">{{ $trip->campaign->name }}</a></dd>
 
                                     <dt>Type</dt>
-                                    <dd>{{ $trip->type }} Missionary</dd>
+                                    <dd>{{ $trip->type }} Trip</dd>
 
                                     <dt>Group</dt>
                                     <dd><a href="#">{{ $trip->group->name }}</a></dd>
 
-                                    <dt>Trip Rep</dt>
-                                    <dd><a href="#">{{ $trip->rep_id }}</a></dd>
+                                    <dt>Campaign</dt>
+                                    <dd><a href="#">{{ $trip->campaign->name }}</a></dd>
 
                                     <dt>Perfect For</dt>
                                     <dd>
@@ -74,26 +66,11 @@
                                         </ul>
                                     </dd>
 
-                                    {{--<dt>Requirements</dt>
-                                    <dd>
-                                        <ul class="list-inline">
-                                            @foreach($trip->requirements as $requirement)
-                                                <li class="badge">{{ $requirement->item_type }} {{ $requirement->item }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </dd>--}}
-
-                                    <dt>Public Page</dt>
-                                    <dd>{{ $trip->page_url }}</dd>
-
                                     <dt>Difficulty</dt>
                                     <dd>{{ $trip->difficulty }}</dd>
 
-                                    <dt>Companion Limit</dt>
-                                    <dd>{{ $trip->companion_limit }}</dd>
-
                                     <dt>Country</dt>
-                                    <dd>{{ $trip->country_code }}</dd>
+                                    <dd>{{ country($trip->country_code) }}</dd>
 
                                     <dt>Start Date</dt>
                                     <dd>{{ date('F d, Y', strtotime($trip->started_at)) }}</dd>
@@ -101,8 +78,14 @@
                                     <dt>End Date</dt>
                                     <dd>{{ date('F d, Y', strtotime($trip->ended_at)) }}</dd>
 
+                                    <dt>Created Date</dt>
+                                    <dd>{{ date('F d, Y', strtotime($trip->updated_at)) }}</dd>
+
                                     <dt>Updated Date</dt>
                                     <dd>{{ date('F d, Y', strtotime($trip->updated_at)) }}</dd>
+
+                                    {{--<dt>Description</dt>--}}
+                                    {{--<dd>{{ $trip->description }}</dd>--}}
                                 </dl>
                             </div>
                         </div>
@@ -115,11 +98,14 @@
                                     <dt>Spots Available</dt>
                                     <dd>{{ $trip->spots }}</dd>
 
+                                    <dt>Companion Limit</dt>
+                                    <dd>{{ $trip->companion_limit }}</dd>
+
                                     <dt>Registration Closes</dt>
-                                    <dd>{{ date('F d, Y', strtotime($trip->ended_at)) }}</dd>
+                                    <dd>{{ date('F d, Y', strtotime($trip->closed_at)) }}</dd>
 
                                     <dt>Publish Date</dt>
-                                    <dd>{{ date('F d, Y', strtotime($trip->updated_at)) }}</dd>
+                                    <dd>{{ date('F d, Y', strtotime($trip->published_at)) }}</dd>
 
                                 </dl>
                             </div>
@@ -198,7 +184,7 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h5>Deadlines</h5>
+                                <h5>Other Deadlines</h5>
                             </div>
                             <table class="table">
                                 <thead>
@@ -233,12 +219,20 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
+                                <h5>Description</h5>
+                            </div>
+                            <div class="panel-body">
+                                {{ $trip->description }}
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
                                 <h5>Notes</h5>
                             </div>
                             <div class="list-group">
                                 @foreach($trip->notes as $note)
                                 <div class="list-group-item">
-                                    <div class="list-group-item-heading"><b>{{$note->subject}}</b> by <b>{{ $note->user_id }}</b></div>
+                                    <div class="list-group-item-heading"><b>{{$note->subject}}</b> by <b>{{ $note->user->name }}</b> on <b>{{ $note->updated_at->format('F j, Y h:i:s a') }}</b></div>
                                     <div class="list-group-item-text">{{ $note->content }}</div>
                                 </div>
                                 @endforeach

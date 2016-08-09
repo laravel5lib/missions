@@ -22,8 +22,9 @@
 			<table class="table table-hover">
 				<thead>
 				<tr>
-					<th>Trip Type</th>
-					<th>Trip Starting Cost</th>
+					<th>Type</th>
+					<th>Dates</th>
+					<th>Starting Cost</th>
 					<th>Spots Available</th>
 					<th>Ideal For</th>
 					<th></th>
@@ -32,6 +33,7 @@
 				<tbody>
 				<tr v-for="trip in trips" style="border-bottom: 1px solid #e6e6e6">
 					<td style="text-transform: capitalize;vertical-align:middle;">{{ trip.type }}</td>
+					<td style="vertical-align:middle;">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</td>
 					<td style="vertical-align:middle;">{{ trip.lowest | currency }}</td>
 					<td style="vertical-align:middle;">{{ trip.spots }}</td>
 					<td style="vertical-align:middle;">

@@ -72,6 +72,7 @@ class Country {
         "Djibouti"                                     => "dj",
         "Dominica"                                     => "dm",
         "Dominican Republic"                           => "do",
+        "Dutch Caribbean"                              => 'bq',
         "East Timor"                                   => "tl",
         "Ecuador"                                      => "ec",
         "Egypt"                                        => "eg",

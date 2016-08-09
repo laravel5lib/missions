@@ -1,5 +1,5 @@
 <template>
-    <div class="panel panel-default" v-for="reservation in reservations">
+    <div class="panel panel-default" v-for="reservation in reservations" v-if="reservations.length > 0">
         <div class="panel-heading">
             <h2 class="panel-title">
                 {{ reservation.trip.campaign.name }}
@@ -17,6 +17,7 @@
             <br>
         </div>
     </div>
+    <div class="alert alert-info" v-if="reservation.length < 1">No reservations found</div>
 </template>
 <script>
     export default{

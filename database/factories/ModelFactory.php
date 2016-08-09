@@ -18,10 +18,10 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'city'             => $faker->optional(0.5)->city,
         'state'            => $faker->optional(0.5)->state,
         'zip'              => $faker->optional(0.5)->postcode,
-        'country_code'     => $faker->randomElement(['us', 'ca', 'gb', 'au', 'za', 'hn', 'do']),
+        'country_code'     => strtolower($faker->countryCode),
         'timezone'         => $faker->timezone,
-        'bio'              => $faker->optional(0.5)->sentence(6),
-        'url'              => $faker->randomElement([$faker->userName, str_random(10)]),
+        'bio'              => $faker->optional(0.5)->realText(120),
+        'url'              => $faker->slug,
         'public'           => $faker->boolean(50),
         'remember_token'   => str_random(10),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
@@ -111,7 +111,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
         'rep_id'           => random_int(1, 99),
         'spots'            => random_int(0, 500),
         'companion_limit'  => random_int(0, 3),
-        'country_code'     => $faker->randomElement(['hn', 'ni', 'ec']),
+        'country_code'     => strtolower($faker->countryCode),
         'type'             => $faker->randomElement(['full', 'short', 'medical', 'media']),
         'difficulty'       => $faker->randomElement(['level_1', 'level_2', 'level_3']),
         'started_at'       => $started_at,
@@ -121,7 +121,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
             'adults', 'teens', 'men', 'women', 'medical professionals',
             'media professionals', 'business professionals', 'pastors',
             'families'], 4),
-        'description'      => $faker->paragraph(10),
+        'description'      => $faker->realText(1000),
         'published_at'     => $faker->optional(0.9)->dateTimeThisYear,
         'closed_at'        => $faker->dateTimeThisYear
     ];
@@ -130,16 +130,35 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
 /**
  * Campaign Factory
  */
-$factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker)
+$factory->defineAs(App\Models\v1\Campaign::class, 'active', function (Faker\Generator $faker)
 {
+    $startDate = $faker->dateTimeBetween('+ 6 months', '+ 1 year');
+
     return [
         'name'             => $faker->catchPhrase,
-        'country_code'     => $faker->randomElement(['hn', 'ni', 'ec']),
-        'short_desc'       => $faker->paragraph(3),
-        'page_url'         => $faker->word,
-        'started_at'       => $faker->dateTimeThisYear,
-        'ended_at'         => $faker->dateTimeThisYear,
-        'published_at'     => $faker->dateTimeThisYear,
+        'country_code'     => strtolower($faker->countryCode),
+        'short_desc'       => $faker->realText(120),
+        'page_url'         => $faker->slug,
+        'started_at'       => $startDate,
+        'ended_at'         => $faker->dateTimeInInterval($startDate, '+ 1 week'),
+        'published_at'     => $faker->dateTimeBetween('- 1 month', '+ 1 month'),
+        'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
+        'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Campaign::class, 'archived', function (Faker\Generator $faker)
+{
+    $startDate = $faker->dateTimeBetween('- 6 months', '- 1 year');
+
+    return [
+        'name'             => $faker->catchPhrase,
+        'country_code'     => strtolower($faker->countryCode),
+        'short_desc'       => $faker->realText(120),
+        'page_url'         => $faker->slug,
+        'started_at'       => $startDate,
+        'ended_at'         => $faker->dateTimeInInterval($startDate, '+ 1 week'),
+        'published_at'     => $faker->dateTimeBetween('- 2 years', '- 1 month'),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];
@@ -153,14 +172,14 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
     return [
         'name'             => $faker->company,
         'type'             => $faker->randomElement(['church', 'business', 'youth', 'nonprofit', 'other']),
-        'description'      => $faker->paragraph(2),
+        'description'      => $faker->realText(120),
         'timezone'         => $faker->timezone,
         'address_one'      => $faker->optional(0.5)->streetAddress,
         'address_two'      => $faker->optional(0.5)->buildingNumber,
         'city'             => $faker->optional(0.5)->city,
         'state'            => $faker->optional(0.5)->state,
         'zip'              => $faker->optional(0.5)->postcode,
-        'country_code'     => $faker->randomElement(['us', 'ca', 'gb', 'au', 'za', 'hn', 'do']),
+        'country_code'     => strtolower($faker->countryCode),
         'phone_one'        => $faker->optional(0.5)->phoneNumber,
         'phone_two'        => $faker->optional(0.5)->phoneNumber,
         'email'            => $faker->optional(0.5)->companyEmail,
@@ -214,7 +233,7 @@ $factory->define(App\Models\v1\Deadline::class, function (Faker\Generator $faker
 $factory->define(App\Models\v1\Todo::class, function (Faker\Generator $faker)
 {
     return [
-        'task'          => $faker->sentence(6),
+        'task'          => $faker->realText(25),
         'completed_at'  => $faker->optional(0.5)->dateTimeThisYear,
         'todoable_type' => 'reservations',
         'todoable_id'   => $faker->randomElement(App\Models\v1\Reservation::lists('id')->toArray()),
@@ -228,7 +247,7 @@ $factory->define(App\Models\v1\Note::class, function (Faker\Generator $faker)
 {
     return [
         'subject'       => $faker->catchPhrase,
-        'content'       => $faker->paragraph(2),
+        'content'       => $faker->realText(120),
         'user_id'       => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
         'noteable_type' => $faker->randomElement([
             'reservations', 'trips', 'users', 'donations', 'fundraisers', 'projects', 'groups'
@@ -254,16 +273,39 @@ $factory->define(App\Models\v1\Companion::class, function (Faker\Generator $fake
 /**
  * Cost Factory
  */
-$factory->define(App\Models\v1\Cost::class, function (Faker\Generator $faker)
+$factory->defineAs(App\Models\v1\Cost::class, 'incremental', function (Faker\Generator $faker)
 {
-    $amount = $faker->randomNumber(4);
-
     return [
-        'name'                 => $faker->sentence(2),
+        'name'                 => $faker->catchPhrase,
         'description'          => $faker->optional(0.5)->sentence(10),
         'active_at'            => $faker->dateTimeThisYear('+ 6 months'),
-        'amount'               => $amount,
-        'type'                 => $faker->randomElement(['optional', 'incremental', 'static']),
+        'amount'               => $faker->numberBetween($min = 1000, $max = 3000),
+        'type'                 => 'incremental',
+        'cost_assignable_type' => 'trips',
+        'cost_assignable_id'   => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Cost::class, 'static', function (Faker\Generator $faker)
+{
+    return [
+        'name'                 => $faker->catchPhrase,
+        'description'          => $faker->optional(0.5)->sentence(10),
+        'amount'               => $faker->numberBetween($min = 50, $max = 200),
+        'type'                 => 'static',
+        'cost_assignable_type' => 'trips',
+        'cost_assignable_id'   => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Cost::class, 'optional', function (Faker\Generator $faker)
+{
+    return [
+        'name'                 => $faker->catchPhrase,
+        'description'          => $faker->optional(0.5)->sentence(10),
+        'active_at'            => $faker->dateTimeThisYear('+ 6 months'),
+        'amount'               => $faker->numberBetween($min = 100, $max = 500),
+        'type'                 => 'optional',
         'cost_assignable_type' => 'trips',
         'cost_assignable_id'   => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
     ];
@@ -274,11 +316,14 @@ $factory->define(App\Models\v1\Cost::class, function (Faker\Generator $faker)
  */
 $factory->define(App\Models\v1\Payment::class, function (Faker\Generator $faker)
 {
+    $due_first = $faker->dateTimeThisYear('+ 6 months');
+    $due_second = \Carbon\Carbon::parse(date_format($due_first, 'Y-M-d h:i:s'))->addMonths(6)->toDateTimeString();
+
     return [
         'cost_id'      => $faker->randomElement(App\Models\v1\Cost::lists('id')->toArray()),
         'percent_owed' => random_int(10, 100),
         'amount_owed'  => $faker->randomNumber(4) / 2,
-        'due_at'       => $faker->dateTimeThisYear(),
+        'due_at'       => $faker->randomElement([$due_first, $due_second]),
         'grace_period' => random_int(1, 3),
         'upfront'      => $faker->boolean(50)
     ];
@@ -305,7 +350,7 @@ $factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $fa
 $factory->define(App\Models\v1\Fundraiser::class, function (Faker\Generator $faker)
 {
     return [
-        'name'        => $faker->sentence(3),
+        'name'        => $faker->catchPhrase,
         'goal_amount' => $faker->numberBetween(1000, 3000),
         'description' => implode('<br />', $faker->paragraphs(3)),
         'expires_at'  => $faker->dateTimeThisYear(),
@@ -323,8 +368,8 @@ $factory->define(App\Models\v1\Donation::class, function (Faker\Generator $faker
         'name'                 => $faker->name,
         'amount'               => $faker->numberBetween(1, 1000) * 100,
         'currency'             => $faker->currencyCode,
-        'description'          => $faker->sentence(4),
-        'message'              => $faker->sentence(5),
+        'description'          => $faker->realText(120),
+        'message'              => $faker->realText(120),
         'anonymous'            => $faker->boolean(25),
         'email'                => $faker->safeEmail,
         'phone'                => $faker->phoneNumber,
@@ -333,7 +378,7 @@ $factory->define(App\Models\v1\Donation::class, function (Faker\Generator $faker
         'address_city'         => $faker->city,
         'address_state'        => $faker->state,
         'address_zip'          => $faker->postcode,
-        'address_country_code' => $faker->countryCode,
+        'address_country_code' => strtolower($faker->countryCode),
         'designation_id'       => $faker->randomElement(App\Models\v1\Fundraiser::lists('id')->toArray()),
         'designation_type'     => 'fundraisers',
         'donor_id'             => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
@@ -408,7 +453,7 @@ $factory->define(App\Models\v1\Medical\Release::class, function (Faker\Generator
     $conditions = [
         [
             "name"       => $faker->randomElement(App\Utilities\v1\Condition::all()),
-            "medication" => $faker->sentence(3)
+            "medication" => $faker->realText(120)
         ],
         [
             "name"       => $faker->randomElement(App\Utilities\v1\Condition::all()),
@@ -416,14 +461,14 @@ $factory->define(App\Models\v1\Medical\Release::class, function (Faker\Generator
         ],
         [
             "name"       => $faker->randomElement(App\Utilities\v1\Condition::all()),
-            "medication" => $faker->sentence(3)
+            "medication" => $faker->realText(120)
         ]
     ];
 
     $allergies = [
         [
             "name"       => $faker->randomElement(App\Utilities\v1\Allergy::all()),
-            "medication" => $faker->sentence(3)
+            "medication" => $faker->realText(120)
         ],
         [
             "name"       => $faker->randomElement(App\Utilities\v1\Allergy::all()),
@@ -431,7 +476,7 @@ $factory->define(App\Models\v1\Medical\Release::class, function (Faker\Generator
         ],
         [
             "name"       => $faker->randomElement(App\Utilities\v1\Allergy::all()),
-            "medication" => $faker->sentence(3)
+            "medication" => $faker->realText(120)
         ]
     ];
 
@@ -612,11 +657,11 @@ $factory->define(App\Models\v1\Accommodation::class, function (Faker\Generator $
         'zip'          => $faker->postcode,
         'phone'        => $faker->phoneNumber,
         'fax'          => $faker->optional(0.5)->phoneNumber,
-        'country_code' => $faker->countryCode,
+        'country_code' => strtolower($faker->countryCode),
         'email'        => $faker->optional(0.5)->companyEmail,
         'url'          => $faker->optional(0.5)->url,
         'region_id'    => $faker->randomElement(App\Models\v1\Region::lists('id')->toArray()),
-        'short_desc'   => $faker->optional(0.5)->paragraph(3),
+        'short_desc'   => $faker->optional(0.5)->realText(120),
         'check_in_at'  => $faker->dateTimeThisYear,
         'check_out_at' => $faker->dateTimeThisYear
     ];

@@ -8,7 +8,7 @@
             <div class="col-sm-4">
                 <div class="pull-right">
                 	<hr class="divider inv">
-					<a class="btn btn-default btn-sm"><i class="fa fa-chevron-left icon-left"></i> Back</a>
+					<a href="/admin/campaigns" class="btn btn-default btn-sm"><i class="fa fa-chevron-left icon-left"></i> Back</a>
 					<a class="btn btn-primary btn-sm" href="/admin/campaigns/{{campaignId}}/edit">Edit <i class="fa fa-pencil-square-o"></i></a>
 				</div>
             </div>

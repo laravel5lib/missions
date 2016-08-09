@@ -13,6 +13,8 @@
                 <h6 class="text-uppercase">{{campaign.country}}</h6>
                 <h3>{{campaign.name}}</h3>
                 <p>{{campaign.description}}</p>
+                <a :href="'/campaigns/' + campaign.id" class="btn btn-primary btn-sm">More Details</a>
+                <hr class="divider inv" />
               </div>
             </div>
           </div>

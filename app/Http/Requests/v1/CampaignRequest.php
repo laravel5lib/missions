@@ -28,6 +28,7 @@ class CampaignRequest extends FormRequest
             'country_code' => 'required|string',
             'started_at'   => 'required|date',
             'ended_at'     => 'required|date',
+            'page_src'     => 'required_with:published_at|string',
             'page_url'     => 'required_with:published_at|string|unique:campaigns,page_url'
         ];
 
@@ -38,7 +39,8 @@ class CampaignRequest extends FormRequest
                 'country_code' => 'sometimes|required|string',
                 'started_at'   => 'sometimes|required|date',
                 'ended_at'     => 'sometimes|required|date',
-                'page_url'     => 'required_with:published_at|string|unique:campaigns,page_url'
+                'page_src'     => 'required_with:published_at|string',
+                'page_url'     => 'required_with:published_at|string|unique:campaigns,page_url' . $this->route('campaigns')
             ];
         }
 
@@ -47,7 +49,7 @@ class CampaignRequest extends FormRequest
             'banner_upload_id' => 'string|exists:uploads,id,type,banner',
             'description'      => 'string|max:120',
             'published_at'     => 'date',
-            'tags'             => 'array'
+            'tags'             => 'array',
         ];
 
         return $rules = $required + $optional;

@@ -1,6 +1,8 @@
 @extends('site.layouts.default')
 
 @section('content')
-	@include('site/campaigns/partials/_1n1d2017')
+	@if($campaign->page_src)
+		@include('site/campaigns/partials/' . $campaign->page_src)
+	@endif
 	<group-trip-wrapper campaign-id="{{ $campaign->id }}" campaign-name="{{ $campaign->name }}"></group-trip-wrapper>
 @endsection

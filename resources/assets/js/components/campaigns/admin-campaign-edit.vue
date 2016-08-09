@@ -71,7 +71,19 @@
 					<div class="input-group">
 						<span class="input-group-addon">www.missions.me/campaigns/</span>
 						<input type="text" id="page_url" v-model="page_url" class="form-control"
-							   v-validate:url="{ required: false,  }" />
+							   v-validate:url="{ required: false }" />
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group" :class="{ 'has-error': checkForError('src') }">
+				<label for="description" class="col-sm-2 control-label">Page Source</label>
+				<div class="col-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
+						<input type="text" id="page_src" v-model="page_src" class="form-control"
+							   v-validate:src="{ required: false }" />
+						<span class="input-group-addon">.blade.php</span>
 					</div>
 				</div>
 			</div>
@@ -136,6 +148,7 @@
 				ended_at: null,
 				published_at: null,
 				page_url: null,
+				page_src: null,
 				attemptSubmit: false,
 				avatarPanelOpen:false,
 				bannerPanelOpen:false,
@@ -167,8 +180,9 @@
 						short_desc: this.short_desc,
 						started_at: this.started_at,
 						ended_at: this.ended_at,
-						published_at: this.published_at,
+//						published_at: this.published_at,
 						page_url: this.page_url,
+						page_src: this.page_src,
 						avatar_upload_id: this.avatar_upload_id,
 						banner_upload_id: this.banner_upload_id,
 

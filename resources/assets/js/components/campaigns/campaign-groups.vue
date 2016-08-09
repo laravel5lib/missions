@@ -17,8 +17,8 @@
 		</div>
 	</div>
 	<hr class="divider inv xlg">
-	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-			<div class="col-xs-6 col-sm-4 col-md-3" v-for="group in groups" style="display:flex">
+	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;" v-if="groups.length > 0">
+			<div class="col-xs-6 col-sm-4 col-md-3" v-for="group in groups" style="display:flex" v-if="groups.length > 0">
 				<div class="panel panel-default">
 					<a role="button" @click="selectGroup(group)">
 						<img :src="group.avatar" :alt="group.name" class="img-responsive">
@@ -28,6 +28,9 @@
 					</a>
 				</div>
 			</div>
+	</div>
+	<div class="container text-center" v-else>
+		<p class="lead">Sorry, we couldn't find any participating groups.</p>
 	</div>
 	<div class="container">
 			<div class="col-sm-12 text-center">

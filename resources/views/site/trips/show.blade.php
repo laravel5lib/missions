@@ -68,9 +68,11 @@
             <div class="panel panel-default">
             	<div class="panel-body">
 
-                    @unless($trip->closed_at->isPast())
+                    @if($trip->status <> 'active')
+                        <btn class="btn btn-default btn-lg btn-block" disabled>Registration Closed</btn>
+                    @else
                         <a href="/trips/{{ $trip->id }}/register" class="btn btn-info btn-lg btn-block">Register Now</a>
-                    @endunless
+                    @endif
 
                     <hr class="divider lg">
                     <h6 class="text-center text-uppercase small text-muted">Start Date</h6>

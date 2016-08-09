@@ -25,14 +25,15 @@
 					<th>Type</th>
 					<th>Dates</th>
 					<th>Starting Cost</th>
-					<th>Spots Available</th>
+					<th>Spots Left</th>
 					<th>Ideal For</th>
+					<th>Status</th>
 					<th></th>
 				</tr>
 				</thead>
 				<tbody>
 				<tr v-for="trip in trips" style="border-bottom: 1px solid #e6e6e6">
-					<td style="text-transform: capitalize;vertical-align:middle;">{{ trip.type }}</td>
+					<td style="vertical-align:middle;">{{ trip.type | capitalize }}</td>
 					<td style="vertical-align:middle;">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</td>
 					<td style="vertical-align:middle;">{{ trip.lowest | currency }}</td>
 					<td style="vertical-align:middle;">{{ trip.spots }}</td>
@@ -41,6 +42,7 @@
 							{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
 						</span>
 					</td>
+					<td style="vertical-align:middle;">{{ trip.status | capitalize }}</td>
 					<td class="text-right"><a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a></td>
 				</tr>
 				</tbody>

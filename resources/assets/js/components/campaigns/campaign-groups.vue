@@ -21,7 +21,7 @@
 			<div class="col-xs-6 col-sm-4 col-md-3" v-for="group in groups" style="display:flex">
 				<div class="panel panel-default">
 					<a role="button" @click="selectGroup(group)">
-						<img :src="'http://lorempixel.com/242/200/people/' + $index" :alt="group.name" class="img-responsive">
+						<img :src="group.avatar" :alt="group.name" class="img-responsive">
 					<div class="panel-body">
 						<h5 class="text-center">{{group.name}}</h5>
 					</div>

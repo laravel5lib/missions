@@ -4,7 +4,7 @@
 		<hr class="divider inv xlg">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center">
-				<img class="img-circle img-lg" src="http://lorempixel.com/500/500/">
+				<img class="img-circle img-lg" src="{{ group.avatar }}">
 				<h3>{{ group.name }}</h3>
 			</div>
 		</div>

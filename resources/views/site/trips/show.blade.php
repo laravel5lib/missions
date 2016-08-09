@@ -90,14 +90,8 @@
                         Difficulty
                     </h6>
                     <hr class="divider lg">
-                    <ul class="list-group">
-                        @foreach($trip->activeCosts as $cost)
-                            <a   class="list-group-item">
-                                <h5 class="list-group-item-heading">{{ $cost->name }}</h5>
-                                <p class="list-group-item-text">${{ number_format($cost->amount, 2, '.', ',') }}</p>
-                            </a>
-                        @endforeach
-                    </ul>
+                    <h6 class="text-center text-uppercase small text-muted">Starts At</h6>
+                    <h4 class="text-center">${{  number_format($trip->starting_cost, 2, '.', ',') }}</h4>
             	</div>
             </div>
         </div>

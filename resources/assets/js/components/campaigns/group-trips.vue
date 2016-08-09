@@ -35,7 +35,7 @@
 				<tr v-for="trip in trips" style="border-bottom: 1px solid #e6e6e6">
 					<td style="vertical-align:middle;">{{ trip.type | capitalize }}</td>
 					<td style="vertical-align:middle;">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</td>
-					<td style="vertical-align:middle;">{{ trip.lowest | currency }}</td>
+					<td style="vertical-align:middle;">{{ trip.starting_cost | currency }}</td>
 					<td style="vertical-align:middle;">{{ trip.spots }}</td>
 					<td style="vertical-align:middle;">
 						<span v-for="prospect in trip.prospects">

@@ -113,9 +113,21 @@ class Trip extends Model
      */
     public function activeCosts()
     {
-        return $this->morphMany(Cost::class, 'cost_assignable')
-                    ->whereDate('active_at', '<=', Carbon::now())
-                    ->orderBy('active_at', 'desc');
+        return $this->costs()->active();
+    }
+
+    /**
+     * Get the current starting cost for the trip.
+     *
+     * @return int
+     */
+    public function getStartingCostAttribute()
+    {
+        $incremental = $this->activeCosts()->type('incremental')->first();
+
+        $amount = $incremental ? $incremental->amount : 0;
+
+        return $amount + $this->activeCosts()->type('static')->sum('amount');
     }
 
     /**

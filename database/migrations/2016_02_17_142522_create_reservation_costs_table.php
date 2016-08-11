@@ -15,7 +15,6 @@ class CreateReservationCostsTable extends Migration
         Schema::create('reservation_costs', function(Blueprint $table) {
             $table->uuid('cost_id')->index();
             $table->uuid('reservation_id')->index();
-            $table->integer('grace_period')->default(0);
             $table->boolean('locked')->default(false);
             $table->timestamps();
         });

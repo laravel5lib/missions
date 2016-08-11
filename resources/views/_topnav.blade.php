@@ -30,7 +30,7 @@
         </div>
       </li>
       @endif
-      <top-nav auth="{{ auth()->check()? 1 : 0 }}" admin="{{ (auth()->check() && auth()->user()->can('view-admin'))? 1 : 0 }}"></top-nav>
+      <top-nav auth="{{ auth()->check()? 1 : 0 }}" admin="{{ (auth()->check() && auth()->user()->can('view-admin'))? 1 : 0 }}" name="{{ auth()->user()->name }}" avatar="{{ image(auth()->user()->avatar->source) }}"></top-nav>
     </div><!-- /.navbar-right -->
   </div><!-- end container -->
 </div><!-- end navbar -->

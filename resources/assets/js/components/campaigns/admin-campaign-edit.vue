@@ -28,8 +28,9 @@
 				<label for="description" class="col-sm-2 control-label">Description</label>
 				<div class="col-sm-10">
 					<textarea name="short_desc" id="description" rows="2" v-model="short_desc" class="form-control"
-							  v-validate:description="{ required: true, minlength:1, maxlength:120 }" maxlength="120"
+							  v-validate:description="{ required: true, minlength:1, maxlength:255 }" maxlength="255"
 							  minlength="1"></textarea>
+					<div v-if="short_desc" class="help-block">{{short_desc.length}}/255 characters remaining</div>
 				</div>
 			</div>
 
@@ -58,14 +59,12 @@
 			<div class="form-group">
 				<label for="published_at" class="col-sm-2 control-label">Published Date</label>
 				<div class="col-sm-10">
-					<div class="input-group">
-						<span class="input-group-addon">Published</span>
-						<input type="date" class="form-control" v-model="published_at" id="published_at">
-					</div>
+					<input type="datetime-local" class="form-control" v-model="published_at" id="published_at">
 				</div>
+
 			</div>
 
-			<div class="form-group" :class="{ 'has-error': checkForError('url') }">
+			<div class="form-group" :class="{ 'has-error': checkForError('url') }" v-if="published_at">
 				<label for="description" class="col-sm-2 control-label">Page Url</label>
 				<div class="col-sm-10">
 					<div class="input-group">
@@ -76,7 +75,7 @@
 				</div>
 			</div>
 
-			<div class="form-group" :class="{ 'has-error': checkForError('src') }">
+			<div class="form-group" :class="{ 'has-error': checkForError('src') }" v-if="published_at">
 				<label for="description" class="col-sm-2 control-label">Page Source</label>
 				<div class="col-sm-10">
 					<div class="input-group">
@@ -147,6 +146,8 @@
 				started_at: null,
 				ended_at: null,
 				published_at: null,
+				published_at_date: null,
+				published_at_time: null,
 				page_url: null,
 				page_src: null,
 				attemptSubmit: false,
@@ -160,7 +161,7 @@
 		computed:{
 			country_code(){
 				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
-			},
+			}
 		},
 		methods: {
 			checkForError(field){
@@ -180,7 +181,7 @@
 						short_desc: this.short_desc,
 						started_at: this.started_at,
 						ended_at: this.ended_at,
-//						published_at: this.published_at,
+						published_at: this.published_at,
 						page_url: this.page_url,
 						page_src: this.page_src,
 						avatar_upload_id: this.avatar_upload_id,
@@ -226,7 +227,7 @@
 				this.short_desc = campaign.description;
 				this.started_at = campaign.started_at;
 				this.ended_at = campaign.ended_at;
-				this.published_at = campaign.published_at;
+				this.published_at = moment(campaign.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
 				this.page_url = campaign.page_url;
 				this.countryCodeObj = _.findWhere(this.countries, {name: campaign.country});
 				this.country_code = this.countryCodeObj.code;

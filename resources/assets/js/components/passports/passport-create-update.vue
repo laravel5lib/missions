@@ -2,15 +2,15 @@
     <validator name="CreateUpdatePassport">
         <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
             <div class="form-group" :class="{ 'has-error': checkForError('givennames') }">
-                <label for="name" class="col-sm-2 control-label">Given Names</label>
+                <label for="given_names" class="col-sm-2 control-label">Given Names</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="given_names" id="givennames" v-model="given_names"
+                    <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
                            placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="150" minlength="1" required>
                 </div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('surname') }">
-                <label for="name" class="col-sm-2 control-label">Surname</label>
+                <label for="surname" class="col-sm-2 control-label">Surname</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
                            placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('number') }">
-                <label for="name" class="col-sm-2 control-label">Passport Number</label>
+                <label for="number" class="col-sm-2 control-label">Passport Number</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
                            placeholder="Passport Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
@@ -30,15 +30,16 @@
                 <label for="issued_at" class="col-sm-2 control-label">Dates</label>
                 <div class="col-sm-10">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('issued') }">
                                 <span class="input-group-addon">Issued</span>
                                 <input type="date" class="form-control" v-model="issued_at" id="issued_at"
                                        v-validate:issued="{ required: true }" required>
                             </div>
+                            <br>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('expires') }">
                                 <span class="input-group-addon">Expires</span>
@@ -83,7 +84,7 @@
                             <h4 class="media-heading">{{selectedAvatar.name}}</h4>
                         </div>
                     </div>
-                    <upload-create-update type="avatar" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['other']"></upload-create-update>
+                    <upload-create-update type="avatar" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']"></upload-create-update>
                 </panel>
             </accordion>
 
@@ -108,11 +109,14 @@
             isUpdate: {
                 type:Boolean,
                 default: false
+            },
+            id: {
+                type: String,
+                default: null
             }
         },
         data(){
             return{
-                id:null,
                 given_names: '',
                 surname: '',
                 number: '',
@@ -120,7 +124,7 @@
                 expires_at: null,
                 birth_country: null,
                 citizenship: null,
-                scan_src: null,
+                upload_id: null,
                 user_id: null,
 
                 // logic vars
@@ -156,10 +160,11 @@
                         expires_at: this.expires_at,
                         birth_country: this.birth_country,
                         citizenship: this.citizenship,
-                        scan_src: this.scan_src,
+                        upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
+                        window.location.href = '/dashboard/passports';
                     }, function (error) {
                         debugger;
                     });
@@ -177,10 +182,11 @@
                         expires_at: this.expires_at,
                         birth_country: this.birth_country,
                         citizenship: this.citizenship,
-                        scan_src: this.scan_src,
+                        upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
+                        window.location.href = '/dashboard/passports';
                     }, function (error) {
                         debugger;
                     });
@@ -193,7 +199,7 @@
                 switch(data.type){
                     case 'avatar':
                         this.selectedAvatar = data;
-                        this.scan_src = data.id;
+                        this.upload_id = data.id;
                         break;
                 }
             }
@@ -207,7 +213,14 @@
             this.$http(fetchURL).then(function (response) {
                 // this.user = response.data.data;
                 this.user_id = response.data.data.id;
-                //this.loaded = true;
+
+                if (this.isUpdate) {
+                    var passport = _.findWhere(response.data.data.passports.data, {id: this.id});
+                    $.extend(this, passport);
+
+                    this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country})
+                    this.citizenshipObj = _.findWhere(this.countries, {code: passport.citizenship})
+                }
             });
         }
 

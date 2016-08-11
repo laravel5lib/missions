@@ -109,11 +109,14 @@
             isUpdate: {
                 type:Boolean,
                 default: false
+            },
+            id: {
+                type: String,
+                default: null
             }
         },
         data(){
             return{
-                id:null,
                 given_names: '',
                 surname: '',
                 number: '',
@@ -208,7 +211,14 @@
             this.$http(fetchURL).then(function (response) {
                 // this.user = response.data.data;
                 this.user_id = response.data.data.id;
-                //this.loaded = true;
+
+                if (this.isUpdate) {
+                    var passport = _.findWhere(response.data.data.passports.data, {id: this.id});
+                    $.extend(this, passport);
+
+                    this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country})
+                    this.citizenshipObj = _.findWhere(this.countries, {code: passport.citizenship})
+                }
             });
         }
 

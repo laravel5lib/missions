@@ -68,7 +68,7 @@
 							   maxlength="100" minlength="1" required>
 					</div>
 				</div>
-				<div class="form-group" :class="{ 'has-error': checkForError('tags') }" v-show="!uiLocked">
+				<div class="form-group" :class="{ 'has-error': checkForError('tags') }" v-show="!uiLocked" >
 					<label for="tags" class="col-sm-2 control-label">Tags</label>
 					<div class="col-sm-10">
 						<v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
@@ -77,7 +77,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="form-group" :class="{ 'has-error': checkForError('type') }" v-show="!uiLocked">
+				<div class="form-group" :class="{ 'has-error': checkForError('type') }" v-show="!uiLocked" >
 					<label for="type" class="col-sm-2 control-label">Type</label>
 					<div class="col-sm-10">
 						<select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">

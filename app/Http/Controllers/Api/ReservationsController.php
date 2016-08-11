@@ -92,6 +92,9 @@ class ReservationsController extends Controller
         $reservation->syncDeadlines($reservation->trip->deadlines);
         $reservation->addTodos($reservation->trip->todos);
 
+        if ($request->has('tags'))
+            $reservation->tag($request->get('tags'));
+
         return $this->response->item($reservation, new ReservationTransformer);
     }
 
@@ -112,6 +115,9 @@ class ReservationsController extends Controller
         $reservation->syncRequirements($request->get('requirements'));
         $reservation->syncDeadlines($request->get('deadlines'));
         $reservation->syncTodos($request->get('todos'));
+
+        if ($request->has('tags'))
+            $reservation->retag($request->get('tags'));
 
         return $this->response->item($reservation, new ReservationTransformer);
     }

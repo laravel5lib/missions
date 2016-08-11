@@ -4,10 +4,12 @@ namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Reservation;
 use App\Utilities\v1\ShirtSize;
+use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
 class ReservationTransformer extends TransformerAbstract
 {
+    private $validParams = ['status'];
 
     /**
      * List of resources available to include
@@ -17,7 +19,7 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'member', 'tags'
+        'fundraisers', 'member', 'passport', 'visa'
     ];
 
     /**
@@ -28,6 +30,8 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function transform(Reservation $reservation)
     {
+        $reservation->load('tagged', 'avatar');
+
         return [
             'id'              => $reservation->id,
             'given_names'     => $reservation->given_names,
@@ -38,8 +42,10 @@ class ReservationTransformer extends TransformerAbstract
             'shirt_size_name' => implode(array_values(ShirtSize::get($reservation->shirt_size)), ''),
             'birthday'        => $reservation->birthday->toDateString(),
             'companion_limit' => (int) $reservation->companions_limit,
+            'avatar'          => $reservation->avatar ? image($reservation->avatar->source) : null,
             'created_at'      => $reservation->created_at->toDateTimeString(),
             'updated_at'      => $reservation->updated_at->toDateTimeString(),
+            'tags'            => $reservation->tagNames(),
             'links'           => [
                 [
                     'rel' => 'self',
@@ -92,11 +98,31 @@ class ReservationTransformer extends TransformerAbstract
      * Include Costs
      *
      * @param Reservation $reservation
+     * @param ParamBag $params
      * @return \League\Fractal\Resource\Collection
      */
-    public function includeCosts(Reservation $reservation)
+    public function includeCosts(Reservation $reservation, ParamBag $params = null)
     {
-        $costs = $reservation->costs;
+        // Optional params validation
+        if ( ! is_null($params)) {
+            $this->validateParams($params);
+
+            $costs = [];
+
+            if (in_array('active', $params->get('status')))
+            {
+                $active = $reservation->activeCosts;
+
+                $maxDate = $active->where('type', 'incremental')->max('active_at');
+
+                $costs = $active->reject(function ($value, $key) use($maxDate) {
+                    return $value->type == 'incremental' && $value->active_at < $maxDate;
+                });
+            }
+
+        } else {
+            $costs = $reservation->costs;
+        }
 
         return $this->collection($costs, new CostTransformer);
     }
@@ -192,17 +218,30 @@ class ReservationTransformer extends TransformerAbstract
         return $this->item($member, new TeamMemberTransformer);
     }
 
-    /**
-     * Include Tags
-     *
-     * @param Reservation $reservation
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeTags(Reservation $reservation)
+    public function includePassport(Reservation $reservation)
     {
-        $tags = $reservation->tags;
+        $passport = $reservation->passport;
 
-        return $this->collection($tags, new TagTransformer);
+        return $this->item($passport, new PassportTransformer);
+    }
+
+    public function includeVisa(Reservation $reservation)
+    {
+        $visa = $reservation->visa;
+
+        return $this->item($visa, new VisaTransformer);
+    }
+
+    private function validateParams($params)
+    {
+        $usedParams = array_keys(iterator_to_array($params));
+        if ($invalidParams = array_diff($usedParams, $this->validParams)) {
+            throw new \Exception(sprintf(
+                'Invalid param(s): "%s". Valid param(s): "%s"',
+                implode(',', $usedParams),
+                implode(',', $this->validParams)
+            ));
+        }
     }
 
 }

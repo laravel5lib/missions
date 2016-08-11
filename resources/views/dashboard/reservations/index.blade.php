@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="text-muted text-center">User Reservations</h1>
+                <h1 class="text-muted text-center">My Reservations</h1>
             </div>
             <div class="col-sm-12">
                 <ul class="nav nav-tabs">

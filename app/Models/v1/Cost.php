@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -82,12 +83,26 @@ class Cost extends Model
     }
 
     /**
-     * Get all of the cost's tags.
+     * Get only active costs.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     * @param $query
+     * @return mixed
      */
-    public function tags()
+    public function scopeActive($query)
     {
-        return $this->morphToMany(Tag::class, 'taggable');
+        return $query->whereDate('active_at', '<=', Carbon::now())
+                     ->orderBy('active_at', 'desc');
+    }
+
+    /**
+     * Get only costs of the specified type.
+     *
+     * @param $query
+     * @param $type
+     * @return mixed
+     */
+    public function scopeType($query, $type)
+    {
+        return $query->whereType($type);
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
 use Illuminate\Database\Eloquent\Model;
 
 class Facilitator extends Model
 {
+    use UuidForKey;
 
     /**
      * The table associated with the model.
@@ -84,15 +86,5 @@ class Facilitator extends Model
     public function reservations()
     {
         return $this->hasManyThrough(Reservation::class, Trip::class);
-    }
-
-    /**
-     * Get all of the facilitator's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
     }
 }

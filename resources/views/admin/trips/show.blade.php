@@ -1,148 +1,198 @@
 @extends('admin.layouts.default')
 
 @section('content')
+<div class="white-header-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <h3 class="text-capitalize">
+                    <a href="#">
+                        <img class="av-left img-sm" src="{{ image($trip->campaign->avatar->source . '?w=100') }}" alt="{{ $trip->campaign->name }}">
+                    </a>
+                    {{ $trip->campaign->name }} <small>&middot; Trip Details</small>
+                </h3>
+            </div>
+            <div class="col-sm-4">
+                <hr class="divider inv sm">
+                <hr class="divider inv">
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Actions <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                        <li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="divider inv lg">
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <div class="row">
-                    <div class="col-xs-3 col-sm-2">
-                        <a href="#" class="thumbnail">
-                            <img src="{{ $trip->campaign->thumb_src }}" alt="{{ $trip->campaign->name }}">
-                        </a>
-                    </div>
-                    <div class="col-xs-9 col-sm-10">
-                        <h3>
-                            Trip <small> Details</small>
-
-                            <!-- Single button -->
-                            <div class="btn-group pull-right">
-                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Action <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                                    <li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
-                                </ul>
-                            </div>
-                        </h3>
-                        <h4>
-                            {{ $trip->campaign->name }}
-                            <ul class="nav nav-tabs pull-right" role="tablist">
-                                <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
-                                <li role="presentation"><a href="#reservations" aria-controls="reservations" role="tab" data-toggle="tab">Reservations</a></li>
-                            </ul>
-                        </h4>
-                    </div>
-                </div>
-                <hr>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
+                    <li role="presentation"><a href="#reservations" aria-controls="reservations" role="tab" data-toggle="tab">Reservations</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
             <!-- Tab panes -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="details">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="details">
+                    <div class="col-xs-12 col-sm-4 col-md-3">
+                        <div class="panel panel-default">
+                            <div class="list-group">
+                                <a href="#details" class="list-group-item">Details</a>
+                                <a href="#registration" class="list-group-item">Registration</a>
+                                <a href="#pricing" class="list-group-item">Pricing</a>
+                                <a href="#requirements" class="list-group-item">Requirements</a>
+                                <a href="#deadlines" class="list-group-item">Deadlines</a>
+                                <a href="#todos" class="list-group-item">Todos</a>
+                                <a href="#notes" class="list-group-item">Notes</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-9">
+                        <div id="details"></div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Details</h3>
+                                <h5 class="text-capitalize">{{ $trip->campaign->name }}</h5>
                             </div>
                             <div class="panel-body">
-                                <dl class="dl-horizontal">
-                                    {{--<dt>Thumbnail</dt>--}}
-                                    {{--<dd><a href="#">{{ $trip->campaign->thumb_src }}</a></dd>--}}
-
-                                    <dt>Description</dt>
-                                    <dd>{{ $trip->description }}</dd>
-
-                                    <dt>Campaign</dt>
-                                    <dd><a href="#">{{ $trip->campaign->name }}</a></dd>
-
-                                    <dt>Type</dt>
-                                    <dd>{{ $trip->type }} Missionary</dd>
-
-                                    <dt>Group</dt>
-                                    <dd><a href="#">{{ $trip->group->name }}</a></dd>
-
-                                    <dt>Trip Rep</dt>
-                                    <dd><a href="#">{{ $trip->rep_id }}</a></dd>
-
-                                    <dt>Perfect For</dt>
-                                    <dd>
-                                        <ul class="list-inline">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-8">
+                                        <div class="row">
+                                            <div class="col-sm-6 text-center">
+                                                <label>Status</label>
+                                                <p>{{ ucfirst($trip->status) }}</p>
+                                            </div>
+                                            <div class="col-sm-6 text-center">
+                                                <label>Publish Date</label>
+                                                <p>{{ date('F d, Y', strtotime($trip->updated_at)) }}</p>
+                                            </div>
+                                        </div>
+                                        <hr class="divider">
+                                        <div class="row">
+                                            <div class="col-sm-6 text-center">
+                                                <label>Group</label>
+                                                <p><a href="/admin/groups/{{ $trip->group->id }}">{{ $trip->group->name }}</a></p>
+                                            </div>
+                                            <div class="col-sm-6 text-center">
+                                                <label>Country</label>
+                                                <p>{{ country($trip->country_code) }}</p>
+                                            </div>
+                                        </div>
+                                        <hr class="divider">
+                                        <div class="row">
+                                            <div class="col-sm-4 text-center">
+                                                <label>Start Date</label>
+                                                <p>{{ $trip->started_at->format('F d, Y') }}</p>
+                                            </div>
+                                            <div class="col-sm-4 text-center">
+                                                <label>End Date</label>
+                                                <p>{{ $trip->ended_at->format('F d, Y') }}</p>
+                                            </div>
+                                            <div class="col-sm-4 text-center">
+                                                <label>Updated Date</label>
+                                                <p>{{ $trip->updated_at->format('F d, Y') }}</p>
+                                            </div>
+                                        </div>
+                                        <hr class="divider">
+                                        <label>Perfect For</label>
+                                        <ul class="list-unstyled">
                                             @foreach($trip->prospects as $prospect)
                                                 <li class="badge">{{ $prospect }}</li>
                                             @endforeach
                                         </ul>
-                                    </dd>
-
-                                    {{--<dt>Requirements</dt>
-                                    <dd>
-                                        <ul class="list-inline">
-                                            @foreach($trip->requirements as $requirement)
-                                                <li class="badge">{{ $requirement->item_type }} {{ $requirement->item }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </dd>--}}
-
-                                    <dt>Public Page</dt>
-                                    <dd>{{ $trip->page_url }}</dd>
-
-                                    <dt>Difficulty</dt>
-                                    <dd>{{ $trip->difficulty }}</dd>
-
-                                    <dt>Companion Limit</dt>
-                                    <dd>{{ $trip->companion_limit }}</dd>
-
-                                    <dt>Country</dt>
-                                    <dd>{{ $trip->country_code }}</dd>
-
-                                    <dt>Start Date</dt>
-                                    <dd>{{ date('F d, Y', strtotime($trip->started_at)) }}</dd>
-
-                                    <dt>End Date</dt>
-                                    <dd>{{ date('F d, Y', strtotime($trip->ended_at)) }}</dd>
-
-                                    <dt>Updated Date</dt>
-                                    <dd>{{ date('F d, Y', strtotime($trip->updated_at)) }}</dd>
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Registration</h3>
-                            </div>
-                            <div class="panel-body">
-                                <dl class="dl-horizontal">
-                                    <dt>Spots Available</dt>
-                                    <dd>{{ $trip->spots }}</dd>
-
-                                    <dt>Registration Closes</dt>
-                                    <dd>{{ date('F d, Y', strtotime($trip->ended_at)) }}</dd>
-
-                                    <dt>Publish Date</dt>
-                                    <dd>{{ date('F d, Y', strtotime($trip->updated_at)) }}</dd>
-
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Pricing</h3>
-                            </div>
-                            @foreach($trip->costs as $cost)
-                                <div class="list-group">
-                                    <div href="#" class="list-group-item">
-                                        <h4 class="list-group-item-heading">{{ $cost->name }}</h4>
-                                        <div class="list-group-item-text row">
-                                            <div class="col-sm-6">
-                                                {{ $cost->description }}
-                                            </div>
-                                            <div class="col-sm-6">
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 text-center">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <label>Type</label>
+                                                <p class="text-capitalize">{{ $trip->type }}</p>
+                                                <hr class="divider">
+                                                <label>Trip Rep</label>
+                                                <p><a href="/admin/users/{{ $trip->rep_id }}">{{ $trip->rep->name }}</a></p>
+                                                <hr class="divider">
+                                                <label>Tags</label>
                                                 <ul class="list-unstyled">
-                                                    <li style="text-transform: capitalize">{{ $cost->type }}</li>
-                                                    <li>{{ date('F d, Y', strtotime($cost->active_at)) }}</li>
-                                                    <li>${{ number_format($cost->amount, 2) }}</li>
+                                                    @forelse($trip->tags as $tag)
+                                                    <li class="badge">{{ $tag }}</li>
+                                                    @empty
+                                                    None
+                                                    @endforelse
                                                 </ul>
+                                                <hr class="divider">
+                                                <label>Difficulty</label>
+                                                <h4>{{ $trip->difficulty }}</h4>
+                                                <hr class="divider">
+                                                <label>Companion Limit</label>
+                                                <h4>{{ $trip->companion_limit }}</h4>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                </dl>
+                            </div>
+                        </div>
+                        <div id="registration"></div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h5>Registration</h5>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-6 col-md-4 text-center">
+                                        <label>Spots Available</label>
+                                        <h4>{{ $trip->spots }}</h4>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-4 text-center">
+                                        <label>Registration Closes</label>
+                                        <h4>{{ date('F d, Y', strtotime($trip->ended_at)) }}</h4>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-4 text-center">
+                                        <label>Starting Cost</label>
+                                        <h4>${{ number_format($trip->starting_cost, 2, '.', ',') }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <admin-trip-facilitators trip-id="{{ $trip->id }}"></admin-trip-facilitators>
+                        <div id="pricing"></div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h5>Pricing</h5>
+                            </div>
+                            @foreach($trip->costs as $cost)
+                                <div class="panel-body">
+                                        <h4>{{ $cost->name }}</h4>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <p class="small">{{ $cost->description }}</p>
+                                            </div>
+                                        </div>
+                                        <hr class="divider">
+                                        <div class="row">
+                                            <div class="col-sm-4 text-center">
+                                                <label>Cost Type</label>
+                                                <p>{{ $cost->type }}</p>
+                                            </div>
+                                            <div class="col-sm-4 text-center">
+                                                <label>Active Date</label>
+                                                <p>{{ date('F d, Y', strtotime($cost->active_at)) }}</p>
+                                            </div>
+                                            <div class="col-sm-4 text-center">
+                                                <label>Cost</label>
+                                                <p>${{ number_format($cost->amount, 2) }}</p>
+                                            </div>
+                                        </div>
+                                        <hr class="divider">
                                         <table class="table">
                                             <thead>
                                             <tr>
@@ -163,63 +213,56 @@
                                             @endforeach
                                             </tbody>
                                         </table>
-                                    </div>
                                 </div>
+                                <hr class="divider">
                             @endforeach
                         </div>
+                        <div id="requirements"></div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Requirements</h3>
+                                <h5>Requirements</h5>
                             </div>
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Due</th>
-                                    <th>Grace</th>
-                                    <th>Enforced</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                            <div class="panel-body">
                                 @foreach($trip->requirements as $requirement)
-                                    <tr>
-                                        <td style="text-transform: capitalize">{{ $requirement->item }} {{ $requirement->item_type }}</td>
-                                        <td>{{ date('F d, Y', strtotime($requirement->due_at)) }}</td>
-                                        <td>{{ $requirement->grace_period }} {{ $requirement->grace_period > 1 ? 'days' : 'day' }}</td>
-                                        <td>{{ $requirement->enforced ? 'Yes' : 'No' }}</td>
-                                    </tr>
+                                <div class="row">
+                                  <div class="col-xs-8">
+                                    <h5><a href="#">{{ $requirement->item }} {{ $requirement->item_type }}</a></h5>
+                                    <h6><small>Enforced: {{ $requirement->enforced ? 'Yes' : 'No' }}</small></h6>
+                                  </div>
+                                  <div class="col-xs-4 text-right">
+                                    <h5><i class="fa fa-calendar"></i> {{ date('F d, Y', strtotime($requirement->due_at)) }}</h5>
+                                    <h6><small>Grace Period: {{ $requirement->grace_period }} {{ $requirement->grace_period > 1 ? 'days' : 'day' }}</small></h6>
+                                  </div>
+                                </div><!-- end row -->
+                                <hr class="divider">
                                 @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Deadlines</h3>
                             </div>
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Due</th>
-                                    <th>Grace</th>
-                                    <th>Enforced</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($trip->deadlines as $deadline)
-                                <tr>
-                                    <td style="text-transform: capitalize">{{ $deadline->name }}</td>
-                                    <td>{{ date('F d, Y', strtotime($deadline->due_at)) }}</td>
-                                    <td>{{ $deadline->grace_period }} {{ $deadline->grace_period > 1 ? 'days' : 'day' }}</td>
-                                    <td>{{ $deadline->enforced ? 'Yes' : 'No' }}</td>
-                                </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
                         </div>
+                        <div id="deadlines"></div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Todos</h3>
+                                <h5>Other Deadlines</h5>
+                            </div>
+                            <div class="panel-body">
+                                @foreach($trip->deadlines as $deadline)
+                                    <div class="row">
+                                      <div class="col-xs-8">
+                                        <h5><a href="#">{{ $deadline->name }}</a></h5>
+                                        <h6><small>Enforced: {{ $deadline->enforced ? 'Yes' : 'No' }}</small></h6>
+                                      </div>
+                                      <div class="col-xs-4 text-right">
+                                        <h5><i class="fa fa-calendar"></i> {{ $deadline->grace_period }} {{ $deadline->grace_period > 1 ? 'days' : 'day' }}</h5>
+                                        <h6><small>Grace Period: {{ $deadline->grace_period }} {{ $deadline->grace_period > 1 ? 'days' : 'day' }}</small></h6>
+                                      </div>
+                                    </div><!-- end row -->
+                                    <hr class="divider">
+                                @endforeach
+                            </div>
+                        </div>
+                        <div id="todos"></div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h5>Todos</h5>
                             </div>
                             <div class="list-group">
                                 @foreach($trip->todos as $todo)
@@ -227,25 +270,35 @@
                                 @endforeach
                             </div>
                         </div>
+                        <div id="notes"></div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Notes</h3>
+                                <h5>Description</h5>
+                            </div>
+                            <div class="panel-body">
+                                {{ $trip->description }}
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h5>Notes</h5>
                             </div>
                             <div class="list-group">
                                 @foreach($trip->notes as $note)
                                 <div class="list-group-item">
-                                    <div class="list-group-item-heading"><b>{{$note->subject}}</b> by <b>{{ $note->user_id }}</b></div>
+                                    <div class="list-group-item-heading"><b>{{$note->subject}}</b> by <b>{{ $note->user->name }}</b> on <b>{{ $note->updated_at->format('F j, Y h:i:s a') }}</b></div>
                                     <div class="list-group-item-text">{{ $note->content }}</div>
                                 </div>
                                 @endforeach
                             </div>
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="reservations">
+                </div>
+                <div role="tabpanel" class="tab-pane" id="reservations">
+                    <div class="col-xs-12">
                         <admin-trip-reservations trip-id="{{ $trip->id }}"></admin-trip-reservations>
                     </div>
                 </div>
-
             </div>
         </div>
 

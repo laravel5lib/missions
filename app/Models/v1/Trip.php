@@ -4,13 +4,14 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use Carbon\Carbon;
+use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trip extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey;
+    use SoftDeletes, Filterable, UuidForKey, Taggable;
 
     /**
      * The table associated with the model.
@@ -112,9 +113,21 @@ class Trip extends Model
      */
     public function activeCosts()
     {
-        return $this->morphMany(Cost::class, 'cost_assignable')
-                    ->whereDate('active_at', '<=', Carbon::now())
-                    ->orderBy('active_at', 'desc');
+        return $this->costs()->active();
+    }
+
+    /**
+     * Get the current starting cost for the trip.
+     *
+     * @return int
+     */
+    public function getStartingCostAttribute()
+    {
+        $incremental = $this->activeCosts()->type('incremental')->first();
+
+        $amount = $incremental ? $incremental->amount : 0;
+
+        return $amount + $this->activeCosts()->type('static')->sum('amount');
     }
 
     /**
@@ -144,7 +157,9 @@ class Trip extends Model
      */
     public function facilitators()
     {
-        return $this->hasMany(Facilitator::class);
+        return $this->belongsToMany(User::class, 'facilitators')
+                    ->withTimestamps()
+                    ->withPivot('permissions');
     }
 
     /**
@@ -165,16 +180,6 @@ class Trip extends Model
     public function reservations()
     {
         return $this->hasMany(Reservation::class);
-    }
-
-    /**
-     * Get all of the trip's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     /**
@@ -256,11 +261,39 @@ class Trip extends Model
         if( ! $ids->isEmpty()) Requirement::destroy($ids);
     }
 
+    /**
+     * Syncronize all the trip's facilitators.
+     *
+     * @param $user_ids
+     */
+    public function syncFacilitators($user_ids = null)
+    {
+        if ( is_null($user_ids)) return;
+
+        $this->facilitators()->sync($user_ids);
+    }
+
+    /**
+     * Check if trip is published.
+     *
+     * @return bool
+     */
     public function isPublished()
     {
         if (is_null($this->published_at)) return false;
         
         return $this->published_at <= Carbon::now() ? true : false;
+    }
+
+    /**
+     * Return the trip's difficulty.
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function getDifficultyAttribute($value)
+    {
+        return str_replace('_', ' ', $value);
     }
 
     /**

@@ -13,7 +13,7 @@ class UserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'reservations', 'notes', 'managing', 'facilitating'
+        'reservations', 'notes', 'managing', 'facilitating', 'passports', 'visas', 'uploads'
     ];
 
     /**
@@ -24,6 +24,8 @@ class UserTransformer extends TransformerAbstract
      */
     public function transform(User $user)
     {
+        $user->load('banner', 'avatar');
+
         return [
             'id'           => $user->id,
             'name'         => $user->name,
@@ -39,11 +41,13 @@ class UserTransformer extends TransformerAbstract
             'city'         => $user->city,
             'state'        => $user->state,
             'zip'          => $user->zip,
-            'country_code' => $user->country,
-            'country_name' => country($user->country),
+            'country_code' => $user->country_code,
+            'country_name' => country($user->country_code),
             'timezone'     => $user->timezone,
             'bio'          => $user->bio,
             'url'          => $user->url,
+            'avatar'       => $user->avatar ? image($user->avatar->source) : null,
+            'banner'       => $user->banner ? image($user->banner->source) : null,
             'public'       => (bool) $user->public,
             'created_at'   => $user->created_at->toDateTimeString(),
             'updated_at'   => $user->updated_at->toDateTimeString(),
@@ -54,6 +58,13 @@ class UserTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    public function includeUploads(User $user)
+    {
+        $uploads = $user->uploads;
+
+        return $this->collection($uploads, new UploadTransformer);
     }
 
     /**
@@ -67,6 +78,20 @@ class UserTransformer extends TransformerAbstract
         $reservations = $user->reservations;
 
         return $this->collection($reservations, new ReservationTransformer);
+    }
+
+    public function includePassports(User $user)
+    {
+        $passports = $user->passports;
+
+        return $this->collection($passports, new PassportTransformer);
+    }
+
+    public function includeVisas(User $user)
+    {
+        $visas = $user->visas;
+
+        return $this->collection($visas, new VisaTransformer);
     }
 
     /**
@@ -90,7 +115,7 @@ class UserTransformer extends TransformerAbstract
      */
     public function includeManaging(User $user)
     {
-        $groups = $user->groupsManaging;
+        $groups = $user->managing;
 
         return $this->collection($groups, new GroupTransformer);
     }
@@ -103,7 +128,7 @@ class UserTransformer extends TransformerAbstract
      */
     public function includeFacilitating(User $user)
     {
-        $trips = $user->tripsFacilitating;
+        $trips = $user->facilitating;
 
         return $this->collection($trips, new TripTransformer);
     }

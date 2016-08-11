@@ -2,10 +2,13 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
 use Illuminate\Database\Eloquent\Model;
 
 class Manager extends Model
 {
+    use UuidForKey;
+
     /**
      * The table associated with the model.
      *
@@ -73,15 +76,5 @@ class Manager extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get all of the manager's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
     }
 }

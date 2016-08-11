@@ -85,12 +85,12 @@ class Fundraiser extends Model
     }
 
     /**
-     * Get all of the fundraiser's tags.
+     * Get the fundraiser's page banner.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function tags()
+    public function banner()
     {
-        return $this->morphToMany(Tag::class, 'taggable');
+        return $this->belongsTo(Upload::class, 'banner_upload_id');
     }
 }

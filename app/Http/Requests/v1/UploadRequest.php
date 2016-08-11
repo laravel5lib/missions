@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\v1;
 
-use App\Http\Requests\Request;
+use Dingo\Api\Http\FormRequest;
 
-class UploadRequest extends Request
+class UploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,15 +23,37 @@ class UploadRequest extends Request
      */
     public function rules()
     {
-        return [
+        $rules = [
             'file'   => 'required',
             'path'   => 'required|string',
             'name'   => 'string',
-            'type'   => 'required|in:photo,banner,thumbnail,file',
+            'meta'   => 'array',
+            'type'   => 'required|in:other,banner,file,avatar',
             'x_axis' => 'numeric',
             'y_axis' => 'numeric',
             'width'  => 'numeric',
-            'height' => 'numeric'
+            'height' => 'numeric',
+            'tags'   => 'required|array',
+            'tags.*' => 'in:Campaign,User,Group,Fundraiser'
         ];
+
+        if($this->method('put'))
+        {
+            $rules = [
+                'file'   => 'sometimes|required',
+                'path'   => 'sometimes|required|string',
+                'name'   => 'string',
+                'meta'   => 'array',
+                'type'   => 'required|in:other,banner,file,avatar',
+                'x_axis' => 'numeric',
+                'y_axis' => 'numeric',
+                'width'  => 'numeric',
+                'height' => 'numeric',
+                'tags'   => 'required|array',
+                'tags.*' => 'in:Campaign,User,Group,Fundraiser'
+            ];
+        }
+
+        return $rules;
     }
 }

@@ -29,16 +29,6 @@ class Team extends Model
         return $this->hasMany(TeamMember::class);
     }
 
-    /**
-     * Get all of the team's tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
-    }
-
     public function isPublished()
     {
         if ( ! is_null($this->published_at) and $this->published_at <= Carbon::now())

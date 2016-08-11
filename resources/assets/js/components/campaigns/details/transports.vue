@@ -9,7 +9,7 @@
         <table class="table table-hover">
             <tbody>
             <tr v-for="transport in transports">
-                <td>{{transport.name}}</td>
+                <th>{{transport.name}}</th>
                 <td>{{transport.type|capitalize}}</td>
             </tr>
             </tbody>

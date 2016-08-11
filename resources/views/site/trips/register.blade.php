@@ -1,15 +1,17 @@
 @extends('site.layouts.default')
 
 @section('content')
+<div class="dark-bg-primary">
 <div class="container">
-    <div class="panel panel-default">
-    	  <div class="panel-heading">
-    			<h3 class="panel-title">{{ $trip->country_name }} Trip Registration</h3>
-    	  </div>
-    	  <div class="panel-body">
-                <trip-registration-wizard trip-id="{{ $trip->id }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}"></trip-registration-wizard>
-    	  </div>
-    </div>
+	<div class="col-md-10 col-md-offset-1 col-sm-12 col-sm-0">
+		<hr class="divider inv xlg">
+		<h1 class="text-center">Let's Go!</h1>
+		<h4 class="text-center">Register to start changing the world!</h4>
+		<hr class="divider inv xlg">
+		<trip-registration-wizard trip-id="{{ $trip->id }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}"></trip-registration-wizard>
+		<hr class="divider inv xlg">
+	</div>
+</div>
 </div>
 @endsection
 

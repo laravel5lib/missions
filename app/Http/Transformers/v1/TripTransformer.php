@@ -29,7 +29,7 @@ class TripTransformer extends TransformerAbstract
      */
     public function transform(Trip $trip)
     {
-        $trip->load('reservations');
+        $trip->load('reservations', 'costs');
 
         return [
             'id'              => $trip->id,
@@ -38,6 +38,7 @@ class TripTransformer extends TransformerAbstract
             'rep_id'          => $trip->rep_id,
             'spots'           => (int) $trip->spots,
             'status'          => $trip->status,
+            'starting_cost'   => (int) $trip->starting_cost,
             'companion_limit' => (int) $trip->companion_limit,
             'reservations'    => (int) $trip->reservations()->count(),
             'country_code'    => $trip->country_code,
@@ -53,6 +54,7 @@ class TripTransformer extends TransformerAbstract
             'closed_at'       => $trip->closed_at->toDateTimeString(),
             'created_at'      => $trip->created_at->toDateTimeString(),
             'updated_at'      => $trip->updated_at->toDateTimeString(),
+            'tags'            => $trip->tagNames(),
             'links'           => [
                 [
                     'rel' => 'self',
@@ -192,7 +194,7 @@ class TripTransformer extends TransformerAbstract
     {
         $facilitators = $trip->facilitators;
 
-        return $this->collection($facilitators, new FacilitatorTransformer);
+        return $this->collection($facilitators, new UserTransformer);
     }
 
     private function validateParams($params)

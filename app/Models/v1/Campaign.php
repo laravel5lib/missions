@@ -3,13 +3,14 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Campaign extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey;
+    use SoftDeletes, Filterable, UuidForKey, Taggable;
 
     /**
      * The table associated with the model.
@@ -93,6 +94,35 @@ class Campaign extends Model
     }
 
     /**
+     * Get the campaign's name.
+     *
+     * @param $value
+     * @return string
+     */
+    public function getNameAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    /**
+     * Get the Campaign's Status.
+     *
+     * @return string
+     */
+    public function getStatusAttribute()
+    {
+        if ($this->published_at and $this->published_at->isFuture()) {
+            return 'Scheduled';
+        }
+
+        if ($this->published_at and $this->published_at->isPast()) {
+            return 'Published';
+        }
+
+        return 'Draft';
+    }
+
+    /**
      * Get all the campaign's trips.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -113,13 +143,23 @@ class Campaign extends Model
     }
 
     /**
-     * Get all of the campaign's tags.
+     * Get the campaign's avatar.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function tags()
+    public function avatar()
     {
-        return $this->morphToMany(Tag::class, 'taggable');
+        return $this->belongsTo(Upload::class, 'avatar_upload_id');
+    }
+
+    /**
+     * Get the campaign's banner.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function banner()
+    {
+        return $this->belongsTo(Upload::class, 'banner_upload_id');
     }
 
     public function scopePublic($query)

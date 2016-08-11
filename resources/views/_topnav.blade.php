@@ -11,7 +11,7 @@
     <div class="nav navbar-nav navbar-right dropdown">
       @if(auth()->check())
       <li><a class="btn btn-primary hidden-xs" href="#">Donate</a></li>
-      <li id="userMenu" class="dropdown-toggle hidden-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left"src="/images/nelson-prof-pic.jpg" alt="Zech Nelson"> {{ auth()->user()->name }} <i class="fa fa-angle-down"></i></a></li>
+      <li id="userMenu" class="dropdown-toggle hidden-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left" src="{{ auth()->user()->avatar->source }}" alt="{{ auth()->user()->name }}"> {{ auth()->user()->name }} <i class="fa fa-angle-down"></i></a></li>
       <ul class="dropdown-menu" aria-labelledby="userMenu">
         <li><a href="#">My Profile</a></li>
         <li><a href="#">My Group</a></li>
@@ -30,7 +30,7 @@
         </div>
       </li>
       @endif
-      <top-nav auth="{{ auth()->check()? 1 : 0 }}" admin="{{ (auth()->check() && auth()->user()->can('view-admin'))? 1 : 0 }}"></top-nav>
+      <top-nav auth="{{ auth()->check()? 1 : 0 }}" admin="{{ (auth()->check() && auth()->user()->can('view-admin'))? 1 : 0 }}" name="{{ auth()->user()->name }}" avatar="{{ auth()->user()->avatar->source }}"></top-nav>
     </div><!-- /.navbar-right -->
   </div><!-- end container -->
 </div><!-- end navbar -->

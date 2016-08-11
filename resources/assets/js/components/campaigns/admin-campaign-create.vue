@@ -51,10 +51,10 @@
 			</div>
 
 			<div class="form-group">
-				<label for="published_at" class="col-sm-2 control-label">Published Date</label>
+				<label for="published_at" class="col-sm-2 control-label">Published</label>
 				<div class="col-sm-10">
 					<div class="input-group">
-						<span class="input-group-addon">Published</span>
+						<span class="input-group-addon">Published Date</span>
 						<input type="date" class="form-control" v-model="published_at" id="published_at">
 					</div>
 				</div>
@@ -71,6 +71,18 @@
 				</div>
 			</div>
 
+			<div class="form-group" :class="{ 'has-error': checkForError('src') }">
+				<label for="description" class="col-sm-2 control-label">Page Source</label>
+				<div class="col-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
+						<input type="text" id="page_src" v-model="page_src" class="form-control"
+							   v-validate:src="{ required: false,  }" />
+						<span class="input-group-addon">.blade.php</span>
+					</div>
+				</div>
+			</div>
+			
 			<accordion :one-at-atime="true">
 				<panel header="Avatar" :is-open.sync="avatarPanelOpen">
 					<div class="media" v-if="selectedAvatar">
@@ -101,7 +113,7 @@
 			</accordion>
 
 			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
+				<div class="text-center">
 					<a href="/admin/campaigns" class="btn btn-default">Cancel</a>
 					<a @click="submit()" class="btn btn-primary">Create</a>
 				</div>
@@ -130,6 +142,7 @@
 				ended_at: null,
 				published_at: null,
 				page_url: null,
+				page_src: null,
 				attemptSubmit: false,
 				avatarPanelOpen:false,
 				bannerPanelOpen:false,
@@ -161,6 +174,7 @@
 						ended_at: this.ended_at,
 						published_at: this.published_at,
 						page_url: this.page_url,
+						page_src: this.page_src,
 						avatar_upload_id: this.avatar_upload_id,
 						banner_upload_id: this.banner_upload_id,
 

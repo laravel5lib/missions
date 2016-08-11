@@ -95,17 +95,16 @@ class Reservation extends Model
     public function costs()
     {
         return $this->belongsToMany(Cost::class, 'reservation_costs')
-                    ->withPivot('grace_period', 'locked')
+                    ->withPivot('locked')
                     ->withTimestamps();
     }
 
     public function activeCosts()
     {
         return $this->belongsToMany(Cost::class, 'reservation_costs')
-            ->whereDate('active_at', '<=', Carbon::now())
-            ->orderBy('active_at', 'desc')
-            ->withPivot('grace_period', 'locked')
-            ->withTimestamps();
+                    ->active()
+                    ->withPivot('locked')
+                    ->withTimestamps();
     }
 
     /**
@@ -233,6 +232,36 @@ class Reservation extends Model
         {
             return $this->birthday->diffInYears();
         }
+    }
+
+    /**
+     * Get the total cost for the reservation.
+     *
+     * @return mixed
+     */
+    public function getTotalCost()
+    {
+        return $this->costs()->sum('amount');
+    }
+
+    /**
+     * Get the total amount raised for the reservation.
+     *
+     * @return mixed
+     */
+    public function getTotalRaised()
+    {
+        return $this->donations()->sum('amount');
+    }
+
+    /**
+     * Get the total amount still owed for the reservation.
+     *
+     * @return mixed
+     */
+    public function getTotalOwed()
+    {
+        return $this->getTotalCost() - $this->getTotalRaised();
     }
 
     /**

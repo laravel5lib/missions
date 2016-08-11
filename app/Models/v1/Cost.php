@@ -68,7 +68,7 @@ class Cost extends Model
     public function reservations()
     {
         return $this->belongsToMany(Reservation::class, 'reservation_costs')
-                    ->withPivot('grace_period', 'locked')
+                    ->withPivot('locked')
                     ->withTimestamps();
     }
 
@@ -80,6 +80,21 @@ class Cost extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Get today's or the given date's balance due for the cost.
+     *
+     * @param null $date
+     * @return mixed
+     */
+    public function getBalanceDue($date = null)
+    {
+        is_null($date) ? $date = Carbon::now() : $date;
+
+        $this->load('payments');
+
+        return $this->payments()->where('due_at', '<=', $date)->sum('amount_owed');
     }
 
     /**

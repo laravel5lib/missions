@@ -109,7 +109,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
     return [
         'group_id'         => $faker->randomElement(App\Models\v1\Group::lists('id')->toArray()),
         'campaign_id'      => $campaign->id,
-        'rep_id'           => random_int(1, 99),
+        'rep_id'           => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
         'spots'            => random_int(0, 500),
         'companion_limit'  => random_int(0, 3),
         'country_code'     => $campaign->country_code,
@@ -123,9 +123,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
             'media professionals', 'business professionals', 'pastors',
             'families'], 4),
         'description'      => $faker->realText(1000),
-        'published_at'     => $faker->optional(0.9)->dateTimeBetween(
-            $faker->dateTime('+ 1 week'), $faker->dateTimeInInterval($campaign->published_at, '+ 1 month')
-        ),
+        'published_at'     => $faker->optional(0.9)->dateTimeInInterval($campaign->published_at, '+ 1 month'),
         'closed_at'        => $faker->dateTimeInInterval($campaign->started_at, '- 7 days')
     ];
 });

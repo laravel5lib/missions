@@ -2,15 +2,15 @@
     <validator name="CreateUpdatePassport">
         <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
             <div class="form-group" :class="{ 'has-error': checkForError('givennames') }">
-                <label for="name" class="col-sm-2 control-label">Given Names</label>
+                <label for="given_names" class="col-sm-2 control-label">Given Names</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="given_names" id="givennames" v-model="given_names"
+                    <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
                            placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="150" minlength="1" required>
                 </div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('surname') }">
-                <label for="name" class="col-sm-2 control-label">Surname</label>
+                <label for="surname" class="col-sm-2 control-label">Surname</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
                            placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('number') }">
-                <label for="name" class="col-sm-2 control-label">Passport Number</label>
+                <label for="number" class="col-sm-2 control-label">Passport Number</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
                            placeholder="Passport Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
@@ -30,15 +30,16 @@
                 <label for="issued_at" class="col-sm-2 control-label">Dates</label>
                 <div class="col-sm-10">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('issued') }">
                                 <span class="input-group-addon">Issued</span>
                                 <input type="date" class="form-control" v-model="issued_at" id="issued_at"
                                        v-validate:issued="{ required: true }" required>
                             </div>
+                            <br>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('expires') }">
                                 <span class="input-group-addon">Expires</span>

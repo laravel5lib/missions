@@ -35,7 +35,7 @@
                     <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
                 <th :class="{'text-primary': orderByField === 'status'}">
-                    Published
+                    Status
                     <i @click="setOrderByField('status')" v-if="orderByField !== 'status'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'status'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
@@ -50,7 +50,7 @@
             <tr v-for="trip in trips|filterBy search|orderBy orderByField direction">
                 <td>{{trip.group.data.name}}</td>
                 <td>{{trip.type|capitalize}}</td>
-                <td>{{trip.status}}</td>
+                <td>{{trip.status|capitalize}}</td>
                 <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>
                 <td>{{trip.reservations}}</td>
                 <td>

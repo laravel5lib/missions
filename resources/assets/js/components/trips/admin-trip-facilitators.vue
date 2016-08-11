@@ -10,7 +10,7 @@
 		<div>
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">
 				<div class="thumbnail">
-					<img src="http://lorempixel.com/300/300" alt="">
+					<img :src="user.avatar" alt="{{ user.name }}">
 					<div class="caption">
 						<h5 v-text="facilitator.name"></h5>
 						<p>

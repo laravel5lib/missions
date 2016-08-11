@@ -61,57 +61,71 @@
                         <div id="details"></div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h5 class="text-capitalize"><!-- <img class="av-left img-xs" src="{{ $trip->campaign->thumb_src }}"> --> {{ $trip->campaign->name }}</h5>
+                                <h5 class="text-capitalize">{{ $trip->campaign->name }}</h5>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-8">
-                                        <label>Description</label>
-                                        <p class="small">{{ $trip->description }}</p>
+                                        <div class="row">
+                                            <div class="col-sm-6 text-center">
+                                                <label>Status</label>
+                                                <p>{{ ucfirst($trip->status) }}</p>
+                                            </div>
+                                            <div class="col-sm-6 text-center">
+                                                <label>Publish Date</label>
+                                                <p>{{ date('F d, Y', strtotime($trip->updated_at)) }}</p>
+                                            </div>
+                                        </div>
                                         <hr class="divider">
                                         <div class="row">
                                             <div class="col-sm-6 text-center">
                                                 <label>Group</label>
-                                                <p><a href="#">{{ $trip->group->name }}</a></p>
+                                                <p><a href="/admin/groups/{{ $trip->group->id }}">{{ $trip->group->name }}</a></p>
                                             </div>
                                             <div class="col-sm-6 text-center">
                                                 <label>Country</label>
-                                                <p>{{ $trip->country_code }}</p>
+                                                <p>{{ country($trip->country_code) }}</p>
                                             </div>
                                         </div>
                                         <hr class="divider">
                                         <div class="row">
                                             <div class="col-sm-4 text-center">
                                                 <label>Start Date</label>
-                                                <p>{{ date('F d, Y', strtotime($trip->started_at)) }}</p>
+                                                <p>{{ $trip->started_at->format('F d, Y') }}</p>
                                             </div>
                                             <div class="col-sm-4 text-center">
                                                 <label>End Date</label>
-                                                <p>{{ date('F d, Y', strtotime($trip->ended_at)) }}</p>
+                                                <p>{{ $trip->ended_at->format('F d, Y') }}</p>
                                             </div>
                                             <div class="col-sm-4 text-center">
                                                 <label>Updated Date</label>
-                                                <p>{{ date('F d, Y', strtotime($trip->updated_at)) }}</p>
+                                                <p>{{ $trip->updated_at->format('F d, Y') }}</p>
                                             </div>
                                         </div>
                                         <hr class="divider">
-                                        <label>Public Page</label>
-                                        <p>{{ $trip->page_url }}</p>
+                                        <label>Perfect For</label>
+                                        <ul class="list-unstyled">
+                                            @foreach($trip->prospects as $prospect)
+                                                <li class="badge">{{ $prospect }}</li>
+                                            @endforeach
+                                        </ul>
                                     </div>
                                     <div class="col-sm-12 col-md-4 text-center">
                                         <div class="panel panel-default">
                                             <div class="panel-body">
                                                 <label>Type</label>
-                                                <p class="text-capitalize">{{ $trip->type }} Missionary</p>
+                                                <p class="text-capitalize">{{ $trip->type }}</p>
                                                 <hr class="divider">
                                                 <label>Trip Rep</label>
-                                                <p><a href="#">{{ $trip->rep_id }}</a></p>
+                                                <p><a href="/admin/users/{{ $trip->rep_id }}">{{ $trip->rep->name }}</a></p>
                                                 <hr class="divider">
-                                                <label>Perfect For</label>
+                                                <label>Tags</label>
                                                 <ul class="list-unstyled">
-                                                    @foreach($trip->prospects as $prospect)
-                                                    <li class="badge">{{ $prospect }}</li>
-                                                    @endforeach
+                                                    @forelse($trip->tags as $tag)
+                                                    <li class="badge">{{ $tag }}</li>
+                                                    @empty
+                                                    None
+                                                    @endforelse
                                                 </ul>
                                                 <hr class="divider">
                                                 <label>Difficulty</label>
@@ -123,14 +137,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                    {{--<dt>Requirements</dt>
-                                    <dd>
-                                        <ul class="list-inline">
-                                            @foreach($trip->requirements as $requirement)
-                                                <li class="badge">{{ $requirement->item_type }} {{ $requirement->item }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </dd>--}}
                                 </dl>
                             </div>
                         </div>
@@ -150,8 +156,8 @@
                                         <h4>{{ date('F d, Y', strtotime($trip->ended_at)) }}</h4>
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-4 text-center">
-                                        <label>Publish Date</label>
-                                        <h4>{{ date('F d, Y', strtotime($trip->updated_at)) }}</h4>
+                                        <label>Starting Cost</label>
+                                        <h4>${{ number_format($trip->starting_cost, 2, '.', ',') }}</h4>
                                     </div>
                                 </div>
                             </div>

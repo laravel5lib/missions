@@ -20,10 +20,10 @@ class TripTableSeeder extends Seeder
             $incrementalCosts->each(function($ic) {
                 Cost::findOrFail($ic->id)->payments()->saveMany([
                     factory(App\Models\v1\Payment::class)->make([
-                    'due_at' => $ic->active_at->addMonths(6),
-                    'amount_owed' => $ic->amount/2,
-                    'percent_owed' => 50,
-                    'upfront' => false
+                        'due_at' => $ic->active_at->addMonths(6),
+                        'amount_owed' => $ic->amount/2,
+                        'percent_owed' => 50,
+                        'upfront' => false
                     ]),
                     factory(App\Models\v1\Payment::class)->make([
                         'due_at' => $ic->active_at->addMonths(12),
@@ -33,18 +33,6 @@ class TripTableSeeder extends Seeder
                     ])
                 ]);
             });
-
-            $staticCost = $t->costs()->save(factory(App\Models\v1\Cost::class, 'static')->make([
-                'name'   => 'Deposit'
-            ]));
-
-           $staticCost->payments()->save(factory(App\Models\v1\Payment::class)->make([
-                'amount_owed' => $staticCost->amount,
-                'due_at' => NULL,
-                'grace_period' => 0,
-                'percent_owed' => 100,
-                'upfront' => true
-            ]));
 
             $t->deadlines()->saveMany(factory(App\Models\v1\Deadline::class, 2)->make());
 

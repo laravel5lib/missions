@@ -90,7 +90,7 @@
 					</div>
 				</div>
 
-				<div class="row col-sm-offset-2" v-if="type && type === 'other'">
+				<div class="row col-sm-offset-2" v-if="type && type === 'other'" v-show="!uiLocked">
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" v-model="constrained">

@@ -84,7 +84,7 @@
                             <h4 class="media-heading">{{selectedAvatar.name}}</h4>
                         </div>
                     </div>
-                    <upload-create-update type="avatar" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['other']"></upload-create-update>
+                    <upload-create-update type="avatar" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']"></upload-create-update>
                 </panel>
             </accordion>
 
@@ -121,7 +121,7 @@
                 expires_at: null,
                 birth_country: null,
                 citizenship: null,
-                scan_src: null,
+                upload_id: null,
                 user_id: null,
 
                 // logic vars
@@ -157,7 +157,7 @@
                         expires_at: this.expires_at,
                         birth_country: this.birth_country,
                         citizenship: this.citizenship,
-                        scan_src: this.scan_src,
+                        upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
                         window.location.href = '/admin' + resp.data.data.links[0].uri;
@@ -178,7 +178,7 @@
                         expires_at: this.expires_at,
                         birth_country: this.birth_country,
                         citizenship: this.citizenship,
-                        scan_src: this.scan_src,
+                        upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
                         window.location.href = '/admin' + resp.data.data.links[0].uri;
@@ -194,7 +194,7 @@
                 switch(data.type){
                     case 'avatar':
                         this.selectedAvatar = data;
-                        this.scan_src = data.id;
+                        this.upload_id = data.id;
                         break;
                 }
             }

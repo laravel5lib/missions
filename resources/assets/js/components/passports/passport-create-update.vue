@@ -163,7 +163,7 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                     }, function (error) {
                         debugger;
                     });
@@ -184,7 +184,7 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                     }, function (error) {
                         debugger;
                     });

@@ -276,7 +276,7 @@
                                 <h5>Description</h5>
                             </div>
                             <div class="panel-body">
-                                {{ $trip->description }}
+                                {% $trip->description %}
                             </div>
                         </div>
                         <div class="panel panel-default">

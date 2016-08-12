@@ -117,7 +117,7 @@
                                                 <p class="text-capitalize">{{ $trip->type }}</p>
                                                 <hr class="divider">
                                                 <label>Trip Rep</label>
-                                                <p><a href="/admin/users/{{ $trip->rep_id }}">{{ $trip->rep->name }}</a></p>
+                                                <p><a href="/admin/users/{{ $trip->rep_id }}">{{ $trip->rep->name or ''}}</a></p>
                                                 <hr class="divider">
                                                 <label>Tags</label>
                                                 <ul class="list-unstyled">
@@ -276,7 +276,7 @@
                                 <h5>Description</h5>
                             </div>
                             <div class="panel-body">
-                                {{ $trip->description }}
+                                {% $trip->description %}
                             </div>
                         </div>
                         <div class="panel panel-default">
@@ -296,7 +296,8 @@
                 </div>
                 <div role="tabpanel" class="tab-pane" id="reservations">
                     <div class="col-xs-12">
-                        <admin-trip-reservations trip-id="{{ $trip->id }}"></admin-trip-reservations>
+                        <admin-reservations-list trip-id="{{ $trip->id }}"></admin-reservations-list>
+                        {{--<admin-trip-reservations trip-id="{{ $trip->id }}"></admin-trip-reservations>--}}
                     </div>
                 </div>
             </div>

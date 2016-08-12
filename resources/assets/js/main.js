@@ -41,6 +41,7 @@ import adminUploadCreateUpdate from './components/uploads/admin-upload-create-up
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 window._ = require('underscore');
+window.marked = require('marked');
 // require('vue-strap/src/index.js');
 // window.VueStrap = require('vue-strap/dist/vue-strap.min');
 import VueStrap from 'vue-strap/dist/vue-strap.min';

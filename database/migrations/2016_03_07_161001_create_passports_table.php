@@ -20,6 +20,7 @@ class CreatePassportsTable extends Migration
             $table->string('number');
             $table->string('birth_country', 5);
             $table->string('citizenship', 5);
+            $table->uuid('upload_id')->nullable();
             $table->date('issued_at');
             $table->date('expires_at');
             $table->timestamps();

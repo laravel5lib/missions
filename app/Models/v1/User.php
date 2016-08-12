@@ -4,13 +4,14 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use EloquentFilter\Filterable;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use SoftDeletes, Filterable, UuidForKey;
+    use SoftDeletes, Filterable, UuidForKey, HasRolesAndAbilities;
 
     /**
      * The table associated with the model.
@@ -413,6 +414,36 @@ class User extends Authenticatable implements JWTSubject
     public function notes()
     {
         return $this->hasMany(Note::class);
+    }
+
+    /**
+     * Get the user's avatar.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function avatar()
+    {
+        return $this->belongsTo(Upload::class, 'avatar_upload_id');
+    }
+
+    /**
+     * Get the user's page banner.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function banner()
+    {
+        return $this->belongsTo(Upload::class, 'banner_upload_id');
+    }
+
+    /**
+     * Get the user's uploads.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function uploads()
+    {
+        return $this->morphToMany(Upload::class, 'uploadable');
     }
 
     /**

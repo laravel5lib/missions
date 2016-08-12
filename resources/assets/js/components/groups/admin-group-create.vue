@@ -54,7 +54,7 @@
                     <div class="form-group" :class="{ 'has-error': checkForError('country') }">
 
                         <label for="country">Country</label>
-                        <v-select class="form-controls" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                        <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
@@ -76,7 +76,7 @@
                 <label for="timezone" class="col-sm-2 control-label">Timezone</label>
 
                 <div class="col-sm-10">
-                    <v-select class="form-controls" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                    <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                     <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
                         <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                     </select>
@@ -126,7 +126,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-sm-12 text-center">
                     <a href="/admin/groups" class="btn btn-default">Cancel</a>
                     <a @click="submit()" class="btn btn-primary">Create</a>
                 </div>

@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use Carbon\Carbon;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -94,7 +95,15 @@ class Reservation extends Model
     public function costs()
     {
         return $this->belongsToMany(Cost::class, 'reservation_costs')
-                    ->withPivot('grace_period', 'locked')
+                    ->withPivot('locked')
+                    ->withTimestamps();
+    }
+
+    public function activeCosts()
+    {
+        return $this->belongsToMany(Cost::class, 'reservation_costs')
+                    ->active()
+                    ->withPivot('locked')
                     ->withTimestamps();
     }
 
@@ -193,6 +202,16 @@ class Reservation extends Model
     }
 
     /**
+     * Get the reservation's avatar.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function avatar()
+    {
+        return $this->belongsTo(Upload::class, 'avatar_upload_id');
+    }
+
+    /**
      * Get the name on the reservation.
      *
      * @return string
@@ -213,6 +232,36 @@ class Reservation extends Model
         {
             return $this->birthday->diffInYears();
         }
+    }
+
+    /**
+     * Get the total cost for the reservation.
+     *
+     * @return mixed
+     */
+    public function getTotalCost()
+    {
+        return $this->costs()->sum('amount');
+    }
+
+    /**
+     * Get the total amount raised for the reservation.
+     *
+     * @return mixed
+     */
+    public function getTotalRaised()
+    {
+        return $this->donations()->sum('amount');
+    }
+
+    /**
+     * Get the total amount still owed for the reservation.
+     *
+     * @return mixed
+     */
+    public function getTotalOwed()
+    {
+        return $this->getTotalCost() - $this->getTotalRaised();
     }
 
     /**

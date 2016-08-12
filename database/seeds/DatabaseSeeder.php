@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,13 +12,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(BouncerSeeder::class);
+        $this->call(UploadSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(PassportTableSeeder::class);
         $this->call(VisaTableSeeder::class);
         $this->call(GroupTableSeeder::class);
         $this->call(CampaignTableSeeder::class);
         $this->call(TripTableSeeder::class);
-        $this->call(PaymentSeeder::class);
         $this->call(ReservationTableSeeder::class);
         $this->call(AssignmentTableSeeder::class);
         $this->call(DonationTableSeeder::class);
@@ -30,6 +32,5 @@ class DatabaseSeeder extends Seeder
         $this->call(SiteTableSeeder::class);
         $this->call(TransportSeeder::class);
         $this->call(AccommodationSeeder::class);
-        $this->call(UploadSeeder::class);
     }
 }

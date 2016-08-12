@@ -9,7 +9,7 @@
         <table class="table table-hover">
             <tbody>
             <tr v-for="region in regions">
-                <td>{{region.name|capitalize}}</td>
+                <th>{{region.name|capitalize}}</th>
                 <td>{{region.country_name}}</td>
             </tr>
             </tbody>

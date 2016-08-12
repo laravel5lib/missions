@@ -1,11 +1,10 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title"> Managers
-				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddManagerModal"><span
+				<h5>Managers</h5>
+				<button class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#AddManagerModal"><span
 						class="fa fa-plus"></span> New
 				</button>
-			</h3>
 		</div>
 		<div>
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="manager in managers" track-by="id">
@@ -28,14 +27,14 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-						<h4 class="modal-title">Modal title</h4></div>
+						<h4 class="modal-title">Add Manager</h4></div>
 					<div class="modal-body">
 						<validator name="AddManager">
 							<form class="form-horizontal" novalidate>
 								<div class="form-group" :class="{ 'has-error': checkForError('user') }"><label
 										class="col-sm-2 control-label">User</label>
 									<div class="col-sm-10">
-										<v-select class="form-controls" id="user" :value.sync="userObj" :options="users"
+										<v-select class="form-control" id="user" :value.sync="userObj" :options="users"
 												  :on-search="getUsers" label="name"></v-select>
 										<select hidden="" v-model="user_id" v-validate:user="{ required: true}">
 											<option :value="user.id" v-for="user in users">{{user.name}}</option>

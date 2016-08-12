@@ -23,3 +23,7 @@ Route::resource('groups', 'GroupsController');
 
 Route::resource('reservations', 'ReservationsController');
 
+Route::resource('users', 'UsersController');
+
+Route::resource('uploads', 'UploadsController');
+

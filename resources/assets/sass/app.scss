@@ -11,6 +11,28 @@ $active-icon-color: #6CC94D;
 /*$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "~font-awesome/fonts/";*/
 
+/* Vue Elements */
+.v-select {
+  &.form-control {
+    padding: 6px 12px;
+    height: inherit;
+  }
+  .dropdown-toggle {
+    border: none !important;
+  }
+  .selected-tag {
+    font-size: 13px;
+  }
+  &.form-control .dropdown-toggle .form-control {
+    font-size: 14px;
+    min-height: 40px !important;
+    height: 100%;
+  }
+  .open-indicator {
+    line-height: 1.8;
+  }
+}
+
 /**
  * Elements
  */
@@ -137,6 +159,22 @@ body {
   padding: 0 0 200px;
   padding-top: 65px;
 }
+#admin-page-wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto 20px;
+  /* Pad bottom by footer height */
+  padding: 0 0 20px;
+  padding-top: 65px;
+  & > .container {
+    padding-left: 40px !important;
+    @media screen and (max-width: 767px) {
+      padding-left: 10px !important;
+    }
+  }
+}
 #footer-mm {
   color: $gray-light;
     background-color: $gray-darker;
@@ -199,21 +237,74 @@ body {
 }
 
 /* MM main nav styles */
-.mm-main-navbar {
-  box-shadow: 0 0 8px rgba(0,0,0,.4);
-  border-bottom: none;
-  @media screen and (min-width: 767px) { 
+.navbar-toggle {
+  display: inline;
+}
+@media screen and (min-width: 767px) { 
     .navbar-toggle {
-      display: block;
+      display: inline;
+      padding: 10px 10px;
+      margin: 15.5px 15px;
     }
-  }
+}
+@media screen and (max-width: 767px) { 
+    .navbar-toggle {
+      display: inline;
+      padding: 9px 10px;
+      margin: 16.5px 5px;
+    }
 }
 li.av-nav > a {
     padding-top: 13.5px;
     padding-bottom: 13.5px;
 }
 
+/* Aside Nav Styles */
+.aside {
+    background: #3e3e3e !important;
+  }
+.aside .aside-dialog .aside-header {
+    border-bottom: 1px solid #242424 !important;
+    background: #242424 !important;
+    color: #f5f5f5 !important;
+}
+.aside .aside-dialog .aside-body {
+  padding: 0 !important;
+  background: #3e3e3e;
+  color: #e6e6e6;
+  ul.nav {
+    margin-bottom: 100px;
+    li > a {
+      font-size: .9em;
+      color: #e6e6e6;
+      padding: 5px 20px !important;
+      &:hover, &:focus {
+        color: #f6323e;
+      }
+    }
+  }
+}
+.aside .aside-dialog .aside-body ul.nav li.donate-nav a {
+  text-align: center;
+  padding: 10px 20px !important;
+  color: #fff;
+  background: $brand-primary;
+}
+.aside-body ul.nav > li.navlabel {
+  font-size: .7em;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  color: #808080;
+  background: #242424;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
 /* Offcanvas nav */
+.aside-backdrop {
+  z-index: 1020 !important;
+}
 .navmenu.mm-offcanvas-width {
   width: 200px;
   .nav > li {
@@ -250,8 +341,8 @@ li.av-nav > a {
   margin-bottom:0;
 }
 .db-brand-xs {
-  padding: 3px;
-  margin: 7px 10px;
+  padding: 0px;
+  margin: 4px 0px;
 }
 
 // -- Section Backgrounds -- //
@@ -281,6 +372,12 @@ li.av-nav > a {
 .white-bg {
   color: $text-color;
   background: #fff;
+}
+.white-header-bg {
+  padding: 5px 0;
+  color: $text-color;
+  background: #fff;
+  border-bottom: 1px solid $gray-light;
 }
 .gray-lighter-bg {
   color: $gray-dark;
@@ -350,6 +447,41 @@ $img-base-size: 40px;
 .max-panel-height {
   max-height: 390px;
   overflow: scroll;
+}
+
+// -- Video Background -- //
+.vid-bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: -100;
+}
+
+.vid-bg-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: auto;
+    min-width: 100%;
+    min-height: 100%;
+    -webkit-transform: translate(-50%, -50%);
+       -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+}
+
+@media (max-width: 767px) {
+    .vid-bg {
+        background: url('images/video/video-placeholder.png') center center / cover no-repeat;
+    }
+
+    .vid-bg-video {
+        display: none;
+    }
 }
 
 // -- Trip Rep Bubble -- //

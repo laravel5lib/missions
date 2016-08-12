@@ -2,81 +2,89 @@
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <form class="form-inline text-right" novalidate>
+                <form class="form-inline" novalidate>
+                	<div class="form-inline" style="display: inline-block;">
+                    	<div class="form-group">
+	                        <label>Show</label>
+	                        <select class="form-control  input-sm" v-model="per_page">
+	                            <option v-for="option in perPageOptions" :value="option">{{option}}</option>
+	                        </select>
+                        </div>
+                    </div>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Fields
+                        Sort By
                         <span class="caret"></span>
                         </button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						<ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="given_names" :disabled="maxCheck('given_names')"> Given Names
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="surname" :disabled="maxCheck('surname')"> Surname
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="group" :disabled="maxCheck('group')"> Group
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="campaign" :disabled="maxCheck('campaign')"> Campaign
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="type" :disabled="maxCheck('type')"> Type
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="amount_raised" :disabled="maxCheck('amount_raised')"> Amout Raised
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="percent_raised" :disabled="maxCheck('percent_failed')"> Percent Raised
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="registered" :disabled="maxCheck('registered')"> Registered On
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="gender" :disabled="maxCheck('gender')"> Gender
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="status" :disabled="maxCheck('status')"> Status
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="age" :disabled="maxCheck('age')"> Age
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="email" :disabled="maxCheck('email')"> Email
 								</label>
 							</li>
 							<li role="separator" class="divider"></li>
 							<li>
-								<div class="input-group input-group-sm">
-									<span class="input-group-addon">Max Visible Fields</span>
+								<div style="margin-bottom: 0px;" class="input-group input-group-sm">
+									<label>Max Visible Fields</label>
 									<select class="form-control" v-model="maxActiveFields">
 										<option v-for="option in maxActiveFieldsOptions" :value="option">{{option}}</option>
 									</select>
@@ -89,28 +97,28 @@
                         Filters
                         <span class="caret"></span>
                         </button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width:300px;">
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width:300px; max-height: 575px; padding: 10px 20px; overflow: scroll;">
 							<li>
-								<input type="text" class="form-control" style="width:100%" v-model="tagsString"
+								<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
 									   :debounce="250" placeholder="Tag, tag2, tag3...">
 							</li>
 							<li>
-								<v-select class="form-controls" id="groupFilter" multiple :debounce="250" :on-search="getGroups()"
+								<v-select class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups()"
 										  :value.sync="groupsArr" :options="groupsOptions" label="name"
 										  placeholder="Filter Groups"></v-select>
 							</li>
 							<li>
-								<v-select class="form-controls" id="userFilter" multiple :debounce="250" :on-search="getUsers()"
+								<v-select class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers()"
 										  :value.sync="usersArr" :options="usersOptions" label="name"
 										  placeholder="Filter Users"></v-select>
 							</li>
 							<li>
-								<v-select class="form-controls" id="campaignFilter" :debounce="250" :on-search="getCampaigns()"
+								<v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns()"
 										  :value.sync="campaignObj" :options="campaignOptions" label="name"
 										  placeholder="Filter by Campaign"></v-select>
 							</li>
 							<li>
-								<select class="form-control" v-model="filters.gender" style="width:100%;">
+								<select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
 									<option value="">Any Genders</option>
 									<option value="male">Male</option>
 									<option value="female">Female</option>
@@ -118,7 +126,7 @@
 							</li>
 
 							<li>
-								<select class="form-control" v-model="filters.status" style="width:100%;">
+								<select class="form-control input-sm" v-model="filters.status" style="width:100%;">
 									<option value="">Any Status</option>
 									<option value="single">Single</option>
 									<option value="married">Married</option>
@@ -126,7 +134,7 @@
 							</li>
 
 							<li>
-								<v-select class="form-controls" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+								<v-select class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
 										  :options="shirtSizeOptions" label="name" placeholder="Filter Sizes"></v-select>
 							</li>
 
@@ -148,7 +156,7 @@
 							</li>
 
 							<li style="padding: 3px 20px;">
-								<label class="control-label">Travel Companions</label>
+								<label class="control-label small">Travel Companions</label>
 								<div>
 									<label class="radio-inline">
 										<input type="radio" name="companions" id="companions1" v-model="filters.hasCompanions" :value="null"> Any
@@ -163,7 +171,7 @@
 							</li>
 
 							<li style="padding: 3px 20px;">
-								<label class="control-label">Passport</label>
+								<label class="control-label small">Passport</label>
 								<div>
 									<label class="radio-inline">
 										<input type="radio" name="passports" id="passports1" v-model="filters.hasPassport" :value="null"> Any
@@ -181,13 +189,7 @@
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 						</ul>
                     </div>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-addon">Show</span>
-                        <select class="form-control" v-model="per_page">
-                            <option v-for="option in perPageOptions" :value="option">{{option}}</option>
-                        </select>
-                    </div>
-                    | <a class="btn btn-primary btn-sm" href="reservations/create"><i class="fa fa-plus"></i> New</a>
+                    <a class="btn btn-primary btn-sm" href="reservations/create">New <i class="fa fa-plus"></i> </a>
                 </form>
             </div>
         </div>

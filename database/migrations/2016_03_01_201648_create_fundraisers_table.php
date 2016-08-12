@@ -22,6 +22,7 @@ class CreateFundraisersTable extends Migration
             $table->string('fundable_type');
             $table->uuid('sponsor_id')->index();
             $table->string('sponsor_type');
+            $table->uuid('banner_upload_id')->nullable();
             $table->timestamp('expires_at');
             $table->timestamps();
             $table->softDeletes();

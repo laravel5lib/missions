@@ -3,10 +3,18 @@
 		<div class="col-sm-12">
 			<validator name="BasicInfo" @valid="onValid">
 				<form novalidate name="BasicInfoForm" id="BasicInfoForm">
+					<div class="col-sm-12">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" v-model="onBehalf" @change="toggleUserData">
+								This reservation is for someone else.
+							</label>
+						</div>
+					</div>
 					<div class="col-md-6">
 						<label>Full Legal Name</label>
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('firstName') }">
 									<!--<label for="infoFirstName">First</label>-->
 									<input type="text" class="form-control input-sm" v-model="firstName"
@@ -14,7 +22,7 @@
 										   id="infoFirstName">
 								</div>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('middleName') }">
 									<!--<label for="infoMiddleName">Middle</label>-->
 									<input type="text" class="form-control input-sm" v-model="middleName"
@@ -22,7 +30,7 @@
 										   id="infoMiddleName">
 								</div>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('lastName') }">
 									<!--<label for="infoLastName">Last</label>-->
 									<input type="text" class="form-control input-sm" v-model="lastName"
@@ -208,14 +216,14 @@
 						</div>
 
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('city') }">
 									<label for="infoCity">City</label>
 									<input type="text" class="form-control input-sm" v-model="city"
 										   v-validate:city="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoCity" placeholder="">
 								</div>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('state') }">
 									<label for="infoState">State/Prov.</label>
 									<input type="text" class="form-control input-sm" v-model="state"
@@ -232,10 +240,10 @@
 										   v-validate:zip="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoZip" placeholder="12345">
 								</div>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('country') }">
 									<label for="infoCountry">Country</label>
-									<v-select class="form-controls" id="infoCountry" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+									<v-select class="form-control" id="infoCountry" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
 									<select hidden name="country" id="infoCountry" class="hidden" v-model="country" v-validate:country="{ required: true }">
 										<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 									</select>
@@ -273,7 +281,7 @@
 				attemptedContinue: false,
 				countries: [],
 				countryCodeObj: null,
-
+				onBehalf: false,
 
 				// basic info data
 				address: null,
@@ -344,11 +352,59 @@
 			checkForError(field){
 				// if user clicked continue button while the field is invalid trigger error styles
 				return this.$BasicInfo[field.toLowerCase()].invalid && this.attemptedContinue
+			},
+			toggleUserData(){
+				switch (this.onBehalf) {
+					case true:
+						this.firstName = null;
+						this.middleName = null;
+						this.lastName = null;
+						this.dobDay = '';
+						this.dobMonth = '';
+						this.dobYearCalc = '';
+						this.dobYear = '';
+						this.email = null;
+						this.gender = null;
+						this.address = null;
+						this.relationshipStatus = 'single';
+						this.phone = '';
+						this.mobile = '';
+						this.address = null;
+						this.state = null;
+						this.zipCode = null;
+						this.country = 'us';
+						break;
+					case false:
+						var user = this.$parent.userData;
+						var names = user.name.split(' ');
+						this.firstName = _.first(names);
+						this.middleName = _.without(names, _.first(names), _.last(names));
+						this.lastName = names.length>1 ? _.last(names) : null;
+
+						var birthdays = user.birthday.split('-');
+						this.dobDay = birthdays[2];
+						this.dobMonth = birthdays[1];
+						this.dobYearCalc = (parseInt(birthdays[0]) - this.currentYear + 100).toString();
+
+						this.email = user.email;
+						this.gender = user.gender.toLowerCase();
+						this.address = user.street;
+						this.relationshipStatus = user.status.toLowerCase();
+						this.phone = user.phone_one;
+						this.mobile = user.phone_two;
+						this.address = user.street;
+						this.state = user.state;
+						this.zipCode = user.zip;
+						this.country = user.country_code;
+						break;
+				}
+
 			}
 		},
 		activate(done){
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.data.countries;
+				this.toggleUserData();
 			});
 
 			this.$dispatch('basic-info', true);

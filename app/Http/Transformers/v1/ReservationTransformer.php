@@ -58,9 +58,26 @@ class ReservationTransformer extends TransformerAbstract
         ];
     }
 
-    public function includeDues(Reservation $reservation)
+    /**
+     * Include Dues
+     *
+     * @param Reservation $reservation
+     * @param ParamBag|null $params ( i.e dues:status(active|extended) )
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeDues(Reservation $reservation, ParamBag $params = null)
     {
-        $dues = $reservation->dues;
+        // Optional params validation
+        if ( ! is_null($params)) {
+            $this->validateParams($params);
+
+            $dues = $reservation->dues->filter(function ($value) use ($params) {
+                return in_array($value->getStatus(),  $params->get('status'));
+            });
+
+        } else {
+            $dues = $reservation->dues;
+        }
 
         return $this->collection($dues, new DueTransformer);
     }

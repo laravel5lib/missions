@@ -29,12 +29,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.passports.create');
     });
 
-    Route::get('passports/{id}', function () {
-        return view('dashboard.passports.index');
+    Route::get('passports/{id}', function ($id) {
+        return view('dashboard.passports.index', compact('id'));
     });
 
-    Route::get('passports/{id}/edit', function () {
-        return view('dashboard.passports.edit');
+    Route::get('passports/{id}/edit', function ($id) {
+        return view('dashboard.passports.edit', compact('id'));
     });
 
     // Visas
@@ -46,12 +46,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.visas.create');
     });
 
-    Route::get('visas/{id}', function () {
-        return view('dashboard.visas.index');
+    Route::get('visas/{id}', function ($id) {
+        return view('dashboard.visas.index', compact('id'));
     });
 
-    Route::get('visas/{id}/edit', function () {
-        return view('dashboard.visas.edit');
+    Route::get('visas/{id}/edit', function ($id) {
+        return view('dashboard.visas.edit', compact('id'));
     });
 
 

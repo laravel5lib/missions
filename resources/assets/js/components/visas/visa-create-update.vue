@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUpdatePassport">
-        <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
+    <validator name="CreateUpdateVisa">
+        <form id="CreateUpdateVisa" class="form-horizontal" novalidate>
             <div class="form-group" :class="{ 'has-error': checkForError('givennames') }">
                 <label for="given_names" class="col-sm-2 control-label">Given Names</label>
                 <div class="col-sm-10">
@@ -18,10 +18,10 @@
                 </div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('number') }">
-                <label for="number" class="col-sm-2 control-label">Passport Number</label>
+                <label for="number" class="col-sm-2 control-label">Visa Number</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
-                           placeholder="Passport Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Visa Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="9" required>
                 </div>
             </div>
@@ -51,21 +51,11 @@
                 </div>
             </div>
             
-            <div class="form-group" :class="{ 'has-error': checkForError('birth') }">
-                <label for="birth" class="col-sm-2 control-label">Birth Country</label>
+            <div class="form-group" :class="{ 'has-error': checkForError('country') }">
+                <label for="country" class="col-sm-2 control-label">Country</label>
                 <div class="col-sm-10">
-                    <v-select class="form-control" id="birth" :value.sync="birthCountryObj" :options="countries" label="name"></v-select>
-                    <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate:birth="{ required: true }">
-                        <option :value="country.code" v-for="country in countries">{{country.name}}</option>
-                    </select>
-
-                </div>
-            </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('citizenship') }">
-                <label for="citizenship" class="col-sm-2 control-label">Citizenship</label>
-                <div class="col-sm-10">
-                    <v-select class="form-control" id="country" :value.sync="citizenshipObj" :options="countries" label="name"></v-select>
-                    <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate:citizenship="{ required: true }">
+                    <v-select class="form-control" id="countryObj" :value.sync="countryObj" :options="countries" label="name"></v-select>
+                    <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
 
@@ -90,7 +80,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <a href="/dashboard/passports" class="btn btn-default">Cancel</a>
+                    <a href="/dashboard/visas" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
                 </div>
@@ -103,7 +93,7 @@
     import VueStrap from 'vue-strap/dist/vue-strap.min';
     import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
     export default{
-        name: 'passport-create-update',
+        name: 'visa-create-update',
         components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel},
         props: {
             isUpdate: {
@@ -122,49 +112,43 @@
                 number: '',
                 issued_at: null,
                 expires_at: null,
-                birth_country: null,
-                citizenship: null,
+                country_code: null,
                 upload_id: null,
                 user_id: null,
 
                 // logic vars
                 countries: [],
-                birthCountryObj: null,
-                citizenshipObj: null,
+                countryObj: null,
                 attemptSubmit: false,
                 selectedAvatar: null
             }
         },
         computed: {
-            birth_country(){
-                return _.isObject(this.birthCountryObj) ? this.birthCountryObj.code : null;
-            },
-            citizenship(){
-                return _.isObject(this.citizenshipObj) ? this.citizenshipObj.code : null;
+            country_code(){
+                return _.isObject(this.countryObj) ? this.countryObj.code : null;
             },
         },
         methods: {
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateUpdatePassport[field].invalid && this.attemptSubmit;
+                return this.$CreateUpdateVisa[field].invalid && this.attemptSubmit;
             },
             submit(){
                 this.attemptSubmit = true;
-                if (this.$CreateUpdatePassport.valid) {
-                    var resource = this.$resource('passports{/id}');
+                if (this.$CreateUpdateVisa.valid) {
+                    var resource = this.$resource('visas{/id}');
                     resource.save(null, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
                         issued_at: this.issued_at,
                         expires_at: this.expires_at,
-                        birth_country: this.birth_country,
-                        citizenship: this.citizenship,
+                        country_code: this.country_code,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/passports';
+                        window.location.href = '/dashboard/visas';
                     }, function (error) {
                         debugger;
                     });
@@ -172,21 +156,20 @@
             },
             update(){
                 this.attemptSubmit = true;
-                if (this.$CreateUpdatePassport.valid) {
-                    var resource = this.$resource('passports{/id}');
+                if (this.$CreateUpdateVisa.valid) {
+                    var resource = this.$resource('visas{/id}');
                     resource.update({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
                         issued_at: this.issued_at,
                         expires_at: this.expires_at,
-                        birth_country: this.birth_country,
-                        citizenship: this.citizenship,
+                        country_code: this.country_code,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/passports';
+                        window.location.href = '/dashboard/visas';
                     }, function (error) {
                         debugger;
                     });
@@ -209,17 +192,16 @@
                 this.countries = response.data.countries;
             });
 
-            var fetchURL = this.isUpdate ? 'users/me?include=passports' : 'users/me';
+            var fetchURL = this.isUpdate ? 'users/me?include=visas' : 'users/me';
             this.$http(fetchURL).then(function (response) {
                 // this.user = response.data.data;
                 this.user_id = response.data.data.id;
 
                 if (this.isUpdate) {
-                    var passport = _.findWhere(response.data.data.passports.data, {id: this.id});
-                    $.extend(this, passport);
+                    var visa = _.findWhere(response.data.data.visas.data, {id: this.id});
+                    $.extend(this, visa);
 
-                    this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country})
-                    this.citizenshipObj = _.findWhere(this.countries, {code: passport.citizenship})
+                    this.countryObj = _.findWhere(this.countries, {code: visa.country_code})
                 }
             });
         }

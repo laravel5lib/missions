@@ -25,6 +25,7 @@
 					<textarea name="short_desc" id="description" rows="2" v-model="short_desc" class="form-control"
 							  v-validate:description="{ required: true, minlength:1, maxlength:120 }" maxlength="120"
 							  minlength="1"></textarea>
+					<div v-if="short_desc" class="help-block">{{short_desc.length}}/255 characters remaining</div>
 				</div>
 			</div>
 
@@ -53,14 +54,11 @@
 			<div class="form-group">
 				<label for="published_at" class="col-sm-2 control-label">Published</label>
 				<div class="col-sm-10">
-					<div class="input-group">
-						<span class="input-group-addon">Published Date</span>
-						<input type="date" class="form-control" v-model="published_at" id="published_at">
-					</div>
+						<input type="datetime-local" class="form-control" v-model="published_at" id="published_at">
 				</div>
 			</div>
 
-			<div class="form-group" :class="{ 'has-error': checkForError('url') }">
+			<div class="form-group" :class="{ 'has-error': checkForError('url') }" v-if="published_at">
 				<label for="description" class="col-sm-2 control-label">Page Url</label>
 				<div class="col-sm-10">
 					<div class="input-group">
@@ -71,7 +69,7 @@
 				</div>
 			</div>
 
-			<div class="form-group" :class="{ 'has-error': checkForError('src') }">
+			<div class="form-group" :class="{ 'has-error': checkForError('src') }" v-if="published_at">
 				<label for="description" class="col-sm-2 control-label">Page Source</label>
 				<div class="col-sm-10">
 					<div class="input-group">
@@ -157,10 +155,20 @@
 				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
 			},
 		},
+		watch:{
+			'name': function (val) {
+				if(typeof val === 'string') {
+					this.page_url = this.convertToSlug(val);
+				}
+			}
+		},
 		methods: {
 			checkForError(field){
 				// if user clicked submit button while the field is invalid trigger error styles 
 				return this.$CreateCampaign[field].invalid && this.attemptSubmit;
+			},
+			convertToSlug(text){
+				return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
 			},
 			submit(){
 				this.attemptSubmit = true;

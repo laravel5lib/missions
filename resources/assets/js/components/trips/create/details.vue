@@ -145,6 +145,7 @@
 	}
 </style>
 <script>
+	var marked = require('marked');
 	import vSelect from "vue-select"
 	export default{
 		name: 'trip-details',
@@ -209,7 +210,7 @@
 			}
 		},
 		filters: {
-			marked: window.marked,
+			marked: marked,
 		},
 		methods: {
 			populateWizardData(onValid){

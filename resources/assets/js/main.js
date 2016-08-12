@@ -5,6 +5,7 @@ import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
+import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
@@ -41,7 +42,6 @@ import adminUploadCreateUpdate from './components/uploads/admin-upload-create-up
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 window._ = require('underscore');
-window.marked = require('marked');
 // require('vue-strap/src/index.js');
 // window.VueStrap = require('vue-strap/dist/vue-strap.min');
 import VueStrap from 'vue-strap/dist/vue-strap.min';
@@ -210,12 +210,13 @@ new Vue({
         public: false
       }
     },
-    components: [
+    components: {
         login,
         campaigns,
         campaignGroups,
         groupTrips,
         groupTripWrapper,
+        tripDetailsMissionaries,
         tripRegWizard,
         reservationsList,
         donationsList,
@@ -233,7 +234,7 @@ new Vue({
         adminCampaignEdit,
         adminCampaignDetails,
         adminCampaignTripCreate,
-        adminCampaignTripEdit,
+        'campaign-trip-edit-wizard': adminCampaignTripEdit,
         adminTrips,
         adminTripsReservations,
         adminTripsFacilitators,
@@ -250,7 +251,7 @@ new Vue({
         adminUserDelete,
         adminUploads,
         adminUploadCreateUpdate,
-    ],
+    },
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

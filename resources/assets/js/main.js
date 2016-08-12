@@ -210,7 +210,7 @@ new Vue({
         public: false
       }
     },
-    components: {
+    components: [
         login,
         campaigns,
         campaignGroups,
@@ -234,7 +234,7 @@ new Vue({
         adminCampaignEdit,
         adminCampaignDetails,
         adminCampaignTripCreate,
-        'campaign-trip-edit-wizard': adminCampaignTripEdit,
+        adminCampaignTripEdit,
         adminTrips,
         adminTripsReservations,
         adminTripsFacilitators,
@@ -251,7 +251,7 @@ new Vue({
         adminUserDelete,
         adminUploads,
         adminUploadCreateUpdate,
-    },
+    ],
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

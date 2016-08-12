@@ -1,11 +1,18 @@
 @extends('dashboard.layouts.default')
 
 @section('content')
+<div class="white-header-bg">
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="text-muted text-center">My Reservations</h1>
+                <h3>My Reservations</h3>
             </div>
+        </div>
+    </div>
+</div>
+<hr class="divider inv lg">
+    <div class="container">
+        <div class="row">
             <div class="col-sm-12">
                 <ul class="nav nav-tabs">
                     <li role="presentation" class="active">

@@ -8,7 +8,7 @@ use League\Fractal\TransformerAbstract;
 
 class DueTransformer extends TransformerAbstract
 {
-    private $validParams = [];
+    private $validParams = ['status'];
 
     /**
      * List of resources available to include
@@ -25,7 +25,7 @@ class DueTransformer extends TransformerAbstract
      */
     public function transform(Due $due)
     {
-        $due->load('payment.cost', 'reservation');
+        $due->load('payment.cost');
 
         return [
             'cost'         => $due->payment->cost->name,

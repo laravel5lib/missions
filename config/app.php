@@ -169,6 +169,7 @@ return [
         Conner\Tagging\Providers\TaggingServiceProvider::class,
         Silber\Bouncer\BouncerServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
+        Haleks\Markdown\MarkdownServiceProvider::class,
 
     ],
 
@@ -218,6 +219,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
+        'Markdown' => Haleks\Markdown\Facades\Markdown::class,
 
     ],
 

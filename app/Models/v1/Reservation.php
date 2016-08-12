@@ -107,6 +107,11 @@ class Reservation extends Model
                     ->withTimestamps();
     }
 
+    public function dues()
+    {
+        return $this->hasMany(Due::class);
+    }
+
     /**
      * Get all of the reservation's deadlines
      *
@@ -279,6 +284,20 @@ class Reservation extends Model
         $data = $costs->pluck('id')->all();
         
         $this->costs()->sync($data);
+    }
+
+    public function addDues($dues)
+    {
+        if ( ! $dues) return;
+
+        if ( ! $dues instanceof Collection)
+            $dues = collect($dues);
+
+        $data = $dues->map(function($due) {
+            return new Due($due);
+        })->all();
+
+        $this->dues()->saveMany($data);
     }
 
     /**

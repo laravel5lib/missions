@@ -19,7 +19,7 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'member', 'passport', 'visa'
+        'fundraisers', 'member', 'passport', 'visa', 'dues'
     ];
 
     /**
@@ -56,6 +56,13 @@ class ReservationTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    public function includeDues(Reservation $reservation)
+    {
+        $dues = $reservation->dues;
+
+        return $this->collection($dues, new DueTransformer);
     }
 
     /**

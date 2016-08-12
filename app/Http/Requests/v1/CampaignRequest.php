@@ -40,7 +40,7 @@ class CampaignRequest extends FormRequest
                 'started_at'   => 'sometimes|required|date|before:ended_at',
                 'ended_at'     => 'sometimes|required|date|after:started_at',
                 'page_src'     => 'required_with:published_at|string',
-                'page_url'     => 'required_with:published_at|string|unique:campaigns,page_url' . $this->route('campaigns')
+                'page_url'     => 'required_with:published_at|string|unique:campaigns,id,' . $this->route('campaigns')
             ];
         }
 

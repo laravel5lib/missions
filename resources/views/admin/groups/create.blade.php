@@ -1,12 +1,24 @@
 @extends('admin.layouts.default')
 
 @section('content')
+<div class="white-header-bg">
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h3>Groups <small>Create</small></h3>
-                <hr>
-                <group-create></group-create>
+                <h3>Create Your Group</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="divider inv lg">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+            	<div class="panel panel-default">
+            		<div class="panel-body">
+                		<group-create></group-create>
+                	</div>
+                </div>
             </div>
         </div>
     </div>

@@ -21,7 +21,6 @@
 					<select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
 						<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 					</select>
-
 				</div>
 			</div>
 			<div class="form-group" :class="{ 'has-error': checkForError('description') }">
@@ -32,7 +31,6 @@
 							  minlength="1"></textarea>
 				</div>
 			</div>
-
 			<div class="form-group" :class="{ 'has-error': (checkForError('start') || checkForError('end')) }">
 				<label for="started_at" class="col-sm-2 control-label">Dates</label>
 				<div class="col-sm-10">

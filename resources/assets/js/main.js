@@ -5,6 +5,7 @@ import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
+import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
@@ -216,6 +217,7 @@ new Vue({
         campaignGroups,
         groupTrips,
         groupTripWrapper,
+        tripDetailsMissionaries,
         tripRegWizard,
         reservationsList,
         donationsList,

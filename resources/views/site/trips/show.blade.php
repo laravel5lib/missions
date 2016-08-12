@@ -24,7 +24,7 @@
             <div id="collapseDetails" class="collapse">
                 <div class="col-xs-12">
 
-                    {{ $trip->description }}
+                    {% $trip->description %}
 
                     <hr class="divider inv" />
 
@@ -46,7 +46,7 @@
         </div><!-- end visible-xs -->
         <div class="col-sm-7 col-md-7 col-lg-8 hidden-xs">
 
-            {{ $trip->description }}
+            {% $trip->description %}
 
             <hr class="divider inv" />
 
@@ -61,7 +61,8 @@
             <h4>Missionaries Registered</h4>
             <hr class="divider">
             <div class="row">
-                @each('site.trips.partials._missionaries', $trip->reservations, 'res', 'site.trips.partials._no_missionaries')
+                <trip-details-missionaries :reservations="{{ json_encode($trip->reservations) }}"></trip-details-missionaries>
+{{--                @each('site.trips.partials._missionaries', $trip->reservations, 'res', 'site.trips.partials._no_missionaries')--}}
             </div>
         </div>
         <div class="col-xs-12 col-sm-5 col-md-5 col-lg-4">

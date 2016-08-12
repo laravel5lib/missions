@@ -56,7 +56,7 @@
                                             <i class="fa fa-pencil"></i> Draft
                                         @endif
                                     </td>
-                                    <td class="text-center"><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-pencil-square-o"></i></a>
+                                    <td class="text-center"><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-gear"></i></a>
                                     </td>
                                 </tr>
                                 @endif
@@ -93,7 +93,7 @@
                                             <i class="fa fa-pencil"></i> Draft
                                         @endif
                                     </td>
-                                    <td class="text-center"><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-pencil-square-o"></i></a>
+                                    <td class="text-center"><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-gear"></i></a>
                                     </td>
                                 </tr>
                                 @endif

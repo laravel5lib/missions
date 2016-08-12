@@ -1,10 +1,10 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-				<h5>Managers</h5>
-				<button class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#AddManagerModal"><span
+				<h5>Managers
+				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddManagerModal"><span
 						class="fa fa-plus"></span> New
-				</button>
+				</button></h5>
 		</div>
 		<div>
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="manager in managers" track-by="id">

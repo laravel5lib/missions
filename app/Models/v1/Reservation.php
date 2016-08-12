@@ -109,7 +109,7 @@ class Reservation extends Model
 
     public function dues()
     {
-        return $this->hasMany(Due::class);
+        return $this->morphMany(Due::class, 'payable');
     }
 
     /**
@@ -246,7 +246,9 @@ class Reservation extends Model
      */
     public function getTotalCost()
     {
-        return $this->costs()->sum('amount');
+        $payments = $this->dues()->with('payment')->get();
+
+        return $payments->sum('payment.amount_owed');
     }
 
     /**

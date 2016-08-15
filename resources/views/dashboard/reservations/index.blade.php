@@ -26,11 +26,11 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="active">
-                        <reservations-list user-id="{{ Auth::user()->id }}" type="active"></reservations-list>
+                        <reservations-list reservations="{{ json_encode($activeReservations) }}"></reservations-list>
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="archive">
-                        <reservations-list user-id="{{ Auth::user()->id }}" type="archive"></reservations-list>
+                        <reservations-list reservations="{{ json_encode($inactiveReservations) }}"></reservations-list>
                     </div>
 
                 </div>

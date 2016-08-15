@@ -21,7 +21,6 @@
 					<select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
 						<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 					</select>
-
 				</div>
 			</div>
 			<div class="form-group" :class="{ 'has-error': checkForError('description') }">
@@ -33,7 +32,6 @@
 					<div v-if="short_desc" class="help-block">{{short_desc.length}}/255 characters remaining</div>
 				</div>
 			</div>
-
 			<div class="form-group" :class="{ 'has-error': (checkForError('start') || checkForError('end')) }">
 				<label for="started_at" class="col-sm-2 control-label">Dates</label>
 				<div class="col-sm-10">
@@ -163,10 +161,20 @@
 				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
 			}
 		},
+		watch:{
+			'name': function (val) {
+				if(typeof val === 'string') {
+					this.page_url = this.convertToSlug(val);
+				}
+			}
+		},
 		methods: {
 			checkForError(field){
 				// if user clicked submit button while the field is invalid trigger error styles 
 				return this.$UpdateCampaign[field].invalid && this.attemptSubmit;
+			},
+			convertToSlug(text){
+				return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
 			},
 			update(){
 				// Touch fields for proper validation

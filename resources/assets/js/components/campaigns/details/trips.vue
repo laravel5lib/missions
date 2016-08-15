@@ -43,7 +43,7 @@
                     Start &amp; End
                 </th>
                 <th><i class="fa fa-plane"></i></th>
-                <th><i class="fa fa-cog"></i></th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -53,8 +53,8 @@
                 <td>{{trip.status|capitalize}}</td>
                 <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>
                 <td>{{trip.reservations}}</td>
-                <td>
-                    <a href="/admin{{trip.links[0].uri}}" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></a>
+                <td class="text-center">
+                    <a href="/admin{{trip.links[0].uri}}"><i class="fa fa-gear"></i></a>
                 </td>
             </tr>
             </tbody>

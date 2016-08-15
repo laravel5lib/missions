@@ -95,17 +95,21 @@ class Reservation extends Model
     public function costs()
     {
         return $this->belongsToMany(Cost::class, 'reservation_costs')
-                    ->withPivot('grace_period', 'locked')
+                    ->withPivot('locked')
                     ->withTimestamps();
     }
 
     public function activeCosts()
     {
         return $this->belongsToMany(Cost::class, 'reservation_costs')
-            ->whereDate('active_at', '<=', Carbon::now())
-            ->orderBy('active_at', 'desc')
-            ->withPivot('grace_period', 'locked')
-            ->withTimestamps();
+                    ->active()
+                    ->withPivot('locked')
+                    ->withTimestamps();
+    }
+
+    public function dues()
+    {
+        return $this->morphMany(Due::class, 'payable');
     }
 
     /**
@@ -236,6 +240,38 @@ class Reservation extends Model
     }
 
     /**
+     * Get the total cost for the reservation.
+     *
+     * @return mixed
+     */
+    public function getTotalCost()
+    {
+        $payments = $this->dues()->with('payment')->get();
+
+        return $payments->sum('payment.amount_owed');
+    }
+
+    /**
+     * Get the total amount raised for the reservation.
+     *
+     * @return mixed
+     */
+    public function getTotalRaised()
+    {
+        return $this->donations()->sum('amount');
+    }
+
+    /**
+     * Get the total amount still owed for the reservation.
+     *
+     * @return mixed
+     */
+    public function getTotalOwed()
+    {
+        return $this->getTotalCost() - $this->getTotalRaised();
+    }
+
+    /**
      * Syncronize all the trip's costs.
      *
      * @param $costs
@@ -250,6 +286,20 @@ class Reservation extends Model
         $data = $costs->pluck('id')->all();
         
         $this->costs()->sync($data);
+    }
+
+    public function addDues($dues)
+    {
+        if ( ! $dues) return;
+
+        if ( ! $dues instanceof Collection)
+            $dues = collect($dues);
+
+        $data = $dues->map(function($due) {
+            return new Due($due);
+        })->all();
+
+        $this->dues()->saveMany($data);
     }
 
     /**

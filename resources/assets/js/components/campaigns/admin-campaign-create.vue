@@ -155,10 +155,20 @@
 				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
 			},
 		},
+		watch:{
+			'name': function (val) {
+				if(typeof val === 'string') {
+					this.page_url = this.convertToSlug(val);
+				}
+			}
+		},
 		methods: {
 			checkForError(field){
 				// if user clicked submit button while the field is invalid trigger error styles 
 				return this.$CreateCampaign[field].invalid && this.attemptSubmit;
+			},
+			convertToSlug(text){
+				return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
 			},
 			submit(){
 				this.attemptSubmit = true;

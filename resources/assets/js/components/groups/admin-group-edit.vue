@@ -128,7 +128,7 @@
             </template>
 
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-sm-12 text-center">
                     <a href="/admin/groups" class="btn btn-default">Cancel</a>
                     <a @click="submit()" class="btn btn-primary">Update</a>
                 </div>

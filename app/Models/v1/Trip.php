@@ -108,12 +108,22 @@ class Trip extends Model
 
     /**
      * Get all the trip's active costs.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function activeCosts()
     {
         return $this->costs()->active();
+    }
+
+    /**
+     * Get the trip's user rep.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rep()
+    {
+        return $this->belongsTo(User::class, 'rep_id');
     }
 
     /**
@@ -281,7 +291,7 @@ class Trip extends Model
     public function isPublished()
     {
         if (is_null($this->published_at)) return false;
-        
+
         return $this->published_at <= Carbon::now() ? true : false;
     }
 

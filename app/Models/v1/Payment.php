@@ -26,6 +26,11 @@ class Payment extends Model
         return $this->belongsTo(Cost::class);
     }
 
+    public function due()
+    {
+        return $this->hasOne(Due::class);
+    }
+
     public function scopePast($query)
     {
         return $query->where('due_at', '<', Carbon::now());

@@ -4,11 +4,12 @@
 <div class="white-header-bg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
-                <h3>
-                    Campaigns
-                    <a href="/admin/campaigns/create" class="btn btn-primary btn-sm pull-right">New <i class="fa fa-plus"></i></a>
-                </h3>
+            <div class="col-sm-8">
+                <h3>Campaigns</h3>
+            </div>
+            <div class="col-sm-4">
+                <hr class="divider inv sm">
+                <a href="/admin/campaigns/create" class="btn btn-primary pull-right">New <i class="fa fa-plus"></i></a>
             </div>
         </div>
     </div>
@@ -55,7 +56,7 @@
                                             <i class="fa fa-pencil"></i> Draft
                                         @endif
                                     </td>
-                                    <td><a href="/admin/campaigns/{{ $campaign->id }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a>
+                                    <td class="text-center"><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-gear"></i></a>
                                     </td>
                                 </tr>
                                 @endif
@@ -92,7 +93,7 @@
                                             <i class="fa fa-pencil"></i> Draft
                                         @endif
                                     </td>
-                                    <td><a href="/admin/campaigns/{{ $campaign->id }}" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a>
+                                    <td class="text-center"><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-gear"></i></a>
                                     </td>
                                 </tr>
                                 @endif

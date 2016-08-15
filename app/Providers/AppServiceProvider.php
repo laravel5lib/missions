@@ -46,15 +46,24 @@ class AppServiceProvider extends ServiceProvider
 
         Reservation::created(function ($reservation) {
 
-            $active = $reservation->trip->activeCosts;
+            $active = $reservation->trip->activeCosts()->with('payments')->get();
 
             $maxDate = $active->where('type', 'incremental')->max('active_at');
 
-            $costs = $active->reject(function ($value) use($maxDate) {
+            $dues = $active->reject(function ($value) use($maxDate) {
                 return $value->type == 'incremental' && $value->active_at < $maxDate;
+            })->flatMap(function ($cost) {
+                return $cost->payments->map(function ($payment) {
+                    return [
+                        'payment_id' => $payment->id,
+                        'due_at' => $payment->due_at,
+                        'grace_period' => $payment->grace_period,
+                        'outstanding_balance' => $payment->amount_owed,
+                    ];
+                })->all();
             });
 
-            $reservation->syncCosts($costs);
+            $reservation->addDues($dues);
             $reservation->syncRequirements($reservation->trip->requirements);
             $reservation->syncDeadlines($reservation->trip->deadlines);
             $reservation->addTodos($reservation->trip->todos);

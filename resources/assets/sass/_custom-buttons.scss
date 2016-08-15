@@ -51,7 +51,13 @@
     @include opacity(.65);
     @include box-shadow(none);
   }
-
+  .fa {
+    margin-left: 4px;
+    &.icon-left {
+      margin-left: 0px;
+      margin-right: 4px;
+    }
+  }
   // [converter] extracted a& to a.btn
 }
 
@@ -187,7 +193,7 @@ a.btn {
   }
   &:hover,
   &:focus {
-    color: $link-hover-color;
+    color: $link-hover-color !important;
     text-decoration: $link-hover-decoration;
     background-color: transparent;
   }

@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="text-muted text-center">My Records</h1>
+                <h1 class="text-muted text-center">My Passports</h1>
             </div>
         </div>
         <div class="row">

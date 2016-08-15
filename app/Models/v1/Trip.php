@@ -108,14 +108,36 @@ class Trip extends Model
 
     /**
      * Get all the trip's active costs.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function activeCosts()
     {
-        return $this->morphMany(Cost::class, 'cost_assignable')
-                    ->whereDate('active_at', '<=', Carbon::now())
-                    ->orderBy('active_at', 'desc');
+        return $this->costs()->active();
+    }
+
+    /**
+     * Get the trip's user rep.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rep()
+    {
+        return $this->belongsTo(User::class, 'rep_id');
+    }
+
+    /**
+     * Get the current starting cost for the trip.
+     *
+     * @return int
+     */
+    public function getStartingCostAttribute()
+    {
+        $incremental = $this->activeCosts()->type('incremental')->first();
+
+        $amount = $incremental ? $incremental->amount : 0;
+
+        return $amount + $this->activeCosts()->type('static')->sum('amount');
     }
 
     /**
@@ -269,8 +291,19 @@ class Trip extends Model
     public function isPublished()
     {
         if (is_null($this->published_at)) return false;
-        
+
         return $this->published_at <= Carbon::now() ? true : false;
+    }
+
+    /**
+     * Return the trip's difficulty.
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function getDifficultyAttribute($value)
+    {
+        return str_replace('_', ' ', $value);
     }
 
     /**

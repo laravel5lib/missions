@@ -32,7 +32,9 @@ class UploadRequest extends FormRequest
             'x_axis' => 'numeric',
             'y_axis' => 'numeric',
             'width'  => 'numeric',
-            'height' => 'numeric'
+            'height' => 'numeric',
+            'tags'   => 'required|array',
+            'tags.*' => 'in:Campaign,User,Group,Fundraiser'
         ];
 
         if($this->method('put'))
@@ -46,7 +48,9 @@ class UploadRequest extends FormRequest
                 'x_axis' => 'numeric',
                 'y_axis' => 'numeric',
                 'width'  => 'numeric',
-                'height' => 'numeric'
+                'height' => 'numeric',
+                'tags'   => 'required|array',
+                'tags.*' => 'in:Campaign,User,Group,Fundraiser'
             ];
         }
 

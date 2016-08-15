@@ -87,11 +87,6 @@ class ReservationsController extends Controller
         // Eager load trip relationships for sync
         $reservation->load('trip.costs', 'trip.requirements', 'trip.deadlines');
 
-        $reservation->syncCosts($reservation->trip->costs);
-        $reservation->syncRequirements($reservation->trip->requirements);
-        $reservation->syncDeadlines($reservation->trip->deadlines);
-        $reservation->addTodos($reservation->trip->todos);
-
         if ($request->has('tags'))
             $reservation->tag($request->get('tags'));
 

@@ -10,6 +10,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use League\Glide\Server;
 use League\Glide\ServerFactory;
+use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,7 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         // Morph Map
         Relation::morphMap([
             'App\Models\v1\Fundraiser',
@@ -28,9 +28,12 @@ class AppServiceProvider extends ServiceProvider
             'App\Models\v1\Trip',
             'App\Models\v1\User',
             'App\Models\v1\Reservation',
-            'App\Models\v1\Assignment'
+            'App\Models\v1\Assignment',
+            'App\Models\v1\Campaign',
+            'App\Models\v1\Upload'
         ]);
 
+        // Send welcome emails when user is created.
 //        User::created(function ($user) {
 //            Mail::queue('emails.welcome', $user->toArray(), function ($message) use($user) {
 //                $message->from('mail@missions.me', 'Missions.Me');
@@ -42,7 +45,29 @@ class AppServiceProvider extends ServiceProvider
 //        });
 
         Reservation::created(function ($reservation) {
-            // needs to fire after costs sync
+
+            $active = $reservation->trip->activeCosts()->with('payments')->get();
+
+            $maxDate = $active->where('type', 'incremental')->max('active_at');
+
+            $dues = $active->reject(function ($value) use($maxDate) {
+                return $value->type == 'incremental' && $value->active_at < $maxDate;
+            })->flatMap(function ($cost) {
+                return $cost->payments->map(function ($payment) {
+                    return [
+                        'payment_id' => $payment->id,
+                        'due_at' => $payment->due_at,
+                        'grace_period' => $payment->grace_period,
+                        'outstanding_balance' => $payment->amount_owed,
+                    ];
+                })->all();
+            });
+
+            $reservation->addDues($dues);
+            $reservation->syncRequirements($reservation->trip->requirements);
+            $reservation->syncDeadlines($reservation->trip->deadlines);
+            $reservation->addTodos($reservation->trip->todos);
+
             $reservation->fundraisers()->create([
                 'name' => 'General Fundraiser',
                 'sponsor_type' => User::class,
@@ -50,11 +75,12 @@ class AppServiceProvider extends ServiceProvider
                 'goal_amount' => $reservation->costs()->sum('amount'),
                 'expires_at' => $reservation->trip->started_at
             ]);
+
             $reservation->trip()->update([
                'spots' => $reservation->trip->spots - 1
             ]);
 
-            // send confirmation email.
+            // todo: send confirmation email.
         });
     }
 
@@ -65,6 +91,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // register and configure media server.
         $this->app->singleton(Server::class, function () {
 
             return ServerFactory::create([

@@ -33,6 +33,7 @@
 					</div>
 				</div>
 			</div>
+			<hr class="divider visible-xs">
 			<div class="row">
 				<div class="col-sm-5 col-md-4 hidden-xs">
 					<ul class="nav nav-pills nav-stacked">

@@ -13,6 +13,8 @@
                 <h6 class="text-uppercase">{{campaign.country}}</h6>
                 <h3>{{campaign.name}}</h3>
                 <p>{{campaign.description}}</p>
+                <a :href="'/campaigns/' + campaign.id" class="btn btn-primary btn-sm">More Details</a>
+                <hr class="divider inv" />
               </div>
             </div>
           </div>
@@ -29,14 +31,14 @@
     <hr class="divider inv xlg">
     <div class="container">
         <div class="col-xs-6">
-            <h4>Recent Campaigns</h4>
+            <h4>Current Campaigns</h4>
         </div>
         <div class="col-xs-6 text-right">
-            <a href="#" class="btn btn-primary btn-sm">See All</a>
+            <a v-if="campaigns.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-            <div class="col-sm-6 col-md-4" v-for="campaign in campaigns" style="display:flex">
+            <div class="col-sm-6 col-md-4" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
                 <div class="panel panel-default">
                     <a :href="'/campaigns/' + campaign.page_url" role="button">
                         <img :src="campaign.avatar" :alt="campaign.name" class="img-responsive">
@@ -46,6 +48,7 @@
                             <a :href="'/campaigns/' + campaign.page_url" role="button">
                                 <h5 style="text-transform:capitalize;" class="text-primary">{{campaign.name}}</h5>
                             </a>
+                            <h6>{{campaign.started_at | moment 'll'}} - {{campaign.ended_at | moment 'll'}}</h6>
                             <hr class="divider lg" />
                             <p class="small">{{campaign.description}}</p>
                         </div><!-- end panel-body -->
@@ -286,13 +289,18 @@
 		name: 'campaigns',
         data(){
             return{
-                campaigns:[]
+                campaigns:[],
+                campaignsLimit: 3,
+                resource: this.$resource('campaigns?published=true')
+            }
+        },
+        methods:{
+            seeAll(){
+                this.campaignsLimit = this.campaigns.length
             }
         },
         ready(){
-            var resource = this.$resource('campaigns?published=true');
-
-            resource.query().then(function(campaigns){
+            this.resource.query().then(function(campaigns){
                 this.campaigns = campaigns.data.data
             }).then(function () {
 

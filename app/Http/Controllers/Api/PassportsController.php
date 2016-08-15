@@ -26,7 +26,7 @@ class PassportsController extends Controller
         $this->passport = $passport;
 
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     /**

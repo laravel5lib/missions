@@ -35,7 +35,7 @@ class DonationsController extends Controller
         $this->payment = $paymentGateway;
 
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     /**

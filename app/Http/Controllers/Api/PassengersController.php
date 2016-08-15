@@ -25,7 +25,7 @@ class PassengersController extends Controller
     public function __construct(Passenger $passenger)
     {
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
         $this->passenger = $passenger;
     }
 

@@ -25,7 +25,7 @@ class ReferralsController extends Controller
     public function __construct(Referral $referral)
     {
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
         $this->referral = $referral;
     }
 

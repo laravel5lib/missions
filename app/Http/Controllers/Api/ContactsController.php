@@ -20,7 +20,7 @@ class ContactsController extends Controller
         $this->user = $user;
 
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     /**

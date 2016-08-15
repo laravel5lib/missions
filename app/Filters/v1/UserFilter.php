@@ -39,6 +39,11 @@ class UserFilter extends ModelFilter
         return $this->whereIn('country_code', $countries);
     }
 
+    public function url($url)
+    {
+        return $this->where('url', $url);
+    }
+
     /**
      * Find by search
      *

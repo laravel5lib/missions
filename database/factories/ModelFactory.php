@@ -711,3 +711,19 @@ $factory->defineAs(App\Models\v1\Upload::class, 'banner', function (Faker\Genera
         'type' => 'banner'
     ];
 });
+
+$factory->define(App\Models\v1\Link::class, function(Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->word,
+        'url' => $faker->url
+    ];
+});
+
+$factory->define(App\Models\v1\Story::class, function(Faker\Generator $faker)
+{
+    return [
+        'title' => $faker->sentence,
+        'content' => $faker->paragraph(10)
+    ];
+});

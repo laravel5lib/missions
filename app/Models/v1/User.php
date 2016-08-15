@@ -337,6 +337,24 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get groups the user has traveled with.
+     *
+     * @return mixed
+     */
+    public function getGroups()
+    {
+        $groupIds = $this->reservations()
+                         ->with('trip')
+                         ->get()
+                         ->pluck('trip.group_id')
+                         ->unique();
+
+        $groups = Group::whereIn('id', $groupIds)->public()->get();
+
+        return $groups;
+    }
+
+    /**
      * Get all the user's assignments.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -444,6 +462,26 @@ class User extends Authenticatable implements JWTSubject
     public function uploads()
     {
         return $this->morphToMany(Upload::class, 'uploadable');
+    }
+
+    /**
+     * Get the user's links.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function links()
+    {
+        return $this->morphMany(Link::class, 'linkable');
+    }
+
+    public function donations()
+    {
+        return $this->hasMany(Donation::class, 'donor_id');
+    }
+
+    public function stories()
+    {
+        return $this->morphMany(Story::class, 'author')->orderBy('created_at', 'desc');
     }
 
     /**

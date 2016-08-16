@@ -21,6 +21,8 @@ class UserTableSeeder extends Seeder
             $user->stories()->saveMany(factory(App\Models\v1\Story::class, 3)->make());
         });
         factory(App\Models\v1\User::class, 'joe')->create();
-        factory(App\Models\v1\User::class, config('seeders.users'))->create();
+        factory(App\Models\v1\User::class, config('seeders.users'))->create()->each(function($user) {
+            $user->stories()->saveMany(factory(App\Models\v1\Story::class, 2)->make());
+        });
     }
 }

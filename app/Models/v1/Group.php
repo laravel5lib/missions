@@ -160,6 +160,16 @@ class Group extends Model
     }
 
     /**
+     * Get the group's stories.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function stories()
+    {
+        return $this->morphMany(Story::class, 'author');
+    }
+
+    /**
      * Get public groups.
      *
      * @param $query

@@ -190,7 +190,6 @@
                         user_id: this.user_id,
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        debugger;
                         window.location.href = '/dashboard/passports';
                     }, function (error) {
                         debugger;

@@ -150,6 +150,28 @@ class Group extends Model
     }
 
     /**
+     * Get public groups.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePublic($query)
+    {
+        return $query->where('public', true);
+    }
+
+    /**
+     * Get private groups.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePrivate($query)
+    {
+        return $query->where('public', false);
+    }
+
+    /**
      * Synchronize all the group's managers.
      *
      * @param $user_ids

@@ -42,6 +42,7 @@
 								<input type="date" class="form-control" v-model="started_at" id="started_at"
 									   v-validate:start="{ required: true }" required>
 							</div>
+							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="input-group" :class="{ 'has-error': checkForError('end') }">
@@ -49,6 +50,7 @@
 								<input type="date" class="form-control" v-model="ended_at" id="ended_at"
 									   v-validate:end="{ required: true }" required>
 							</div>
+							<div v-if="errors.ended_at" class="help-block">{{errors.ended_at.toString()}}</div>
 						</div>
 					</div>
 				</div>
@@ -70,6 +72,7 @@
 						<input type="text" id="page_url" v-model="page_url" class="form-control"
 							   v-validate:url="{ required: false }" />
 					</div>
+					<div v-if="errors.page_url" class="help-block">{{errors.page_url.toString()}}</div>
 				</div>
 			</div>
 
@@ -137,6 +140,7 @@
 			return {
 				countries: [],
 				countryCodeObj: null,
+				errors: [],
 
 				name: null,
 				country_code: null,
@@ -198,7 +202,7 @@
 					}).then(function (resp) {
 						$.extend(this, resp.data.data);
 					}, function (error) {
-						debugger;
+						self.errors = error.data.errors;
 					});
 				}
 			},

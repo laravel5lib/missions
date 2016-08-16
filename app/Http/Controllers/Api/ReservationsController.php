@@ -24,7 +24,7 @@ class ReservationsController extends Controller
      */
     public function __construct(Reservation $reservation)
     {
-//        $this->middleware('api.auth');
+        $this->middleware('api.auth', ['only' => 'store', 'update', 'destroy']);
 //        $this->middleware('jwt.refresh');
         $this->reservation = $reservation;
     }

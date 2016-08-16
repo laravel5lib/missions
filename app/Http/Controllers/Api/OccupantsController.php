@@ -25,7 +25,7 @@ class OccupantsController extends Controller
     public function __construct(Occupant $occupant)
     {
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
         $this->occupant = $occupant;
     }
 

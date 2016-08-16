@@ -34,7 +34,7 @@
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('issued') }">
                                 <span class="input-group-addon">Issued</span>
-                                <input type="date" class="form-control" v-model="issued_at" id="issued_at"
+                                <input type="date" class="form-control" v-model="issued_at" id="issued_at" :max="today"
                                        v-validate:issued="{ required: true }" required>
                             </div>
                             <br>
@@ -43,7 +43,7 @@
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('expires') }">
                                 <span class="input-group-addon">Expires</span>
-                                <input type="date" class="form-control" v-model="expires_at" id="expires_at"
+                                <input type="date" class="form-control" v-model="expires_at" id="expires_at" :min="tomorrow"
                                        v-validate:expires="{ required: true }" required>
                             </div>
                         </div>
@@ -132,7 +132,11 @@
                 birthCountryObj: null,
                 citizenshipObj: null,
                 attemptSubmit: false,
-                selectedAvatar: null
+                selectedAvatar: null,
+                today: moment().format('YYYY-MM-DD'),
+                yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
+                tomorrow:moment().add(1, 'days').format('YYYY-MM-DD'),
+
             }
         },
         computed: {

@@ -1,3 +1,4 @@
+@unless(! $link)
 <li>
     <a href="{{ $link->url }}">
         @if(in_array($link->name, ['facebook', 'instagram', 'twitter', 'linkedin']))
@@ -9,3 +10,4 @@
         @endif
     </a>
 </li>
+@endunless

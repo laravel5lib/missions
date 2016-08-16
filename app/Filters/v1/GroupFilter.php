@@ -125,4 +125,15 @@ class GroupFilter extends ModelFilter
         $this->where('public', true);
     }
 
+    /**
+     * Find by url slug.
+     *
+     * @param $url
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function url($url)
+    {
+        return $this->where('url', $url);
+    }
+
 }

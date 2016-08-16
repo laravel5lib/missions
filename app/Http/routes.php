@@ -263,6 +263,10 @@ Route::get('/register', 'Auth\Authcontroller@create');
 Route::post('/register', 'Auth\AuthController@register');
 Route::get('/logout', 'Auth\AuthController@logout');
 
+Route::get('/groups/{slug}', function ($slug) {
+    return view('site.groups.profile');
+});
+
 Route::get('/profiles/{slug}', 'UsersController@profile');
 Route::get('/@{slug}', 'UsersController@profile');
 

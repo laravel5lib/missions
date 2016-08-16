@@ -19,7 +19,7 @@
                             {{ $group->state ? $group->state.', ' : null }}
                             <small>{{ $group->country_name }}</small></p>
                         <ul class="list-unstyled list-inline">
-                            @each('site.partials._social_link', $group->social, 'link')
+                            @each('site.partials._social_link', $group->social->data, 'link')
                         </ul>
                     </div><!-- end panel-body -->
                 </div><!-- end panel-default -->

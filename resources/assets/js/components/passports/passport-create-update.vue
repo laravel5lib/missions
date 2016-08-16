@@ -84,7 +84,7 @@
                             <h4 class="media-heading">{{selectedAvatar.name}}</h4>
                         </div>
                     </div>
-                    <upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']"></upload-create-update>
+                    <upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
                 </panel>
             </accordion>
 
@@ -202,7 +202,9 @@
             'uploads-complete'(data){
                 switch(data.type){
                     case 'avatar':
+                        //save for preview
                         this.selectedAvatar = data;
+                        // save for upload reference
                         this.upload_id = data.id;
                         break;
                 }

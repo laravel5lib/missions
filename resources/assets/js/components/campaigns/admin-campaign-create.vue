@@ -184,7 +184,7 @@
 						short_desc: this.short_desc,
 						started_at: this.started_at,
 						ended_at: this.ended_at,
-						published_at: this.published_at,
+						published_at: moment(this.published_at).format('YYYY-MM-DD HH:mm:ss'),
 						page_url: this.page_url,
 						page_src: this.page_src,
 						avatar_upload_id: this.avatar_upload_id,

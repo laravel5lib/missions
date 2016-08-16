@@ -193,7 +193,7 @@
 						short_desc: this.short_desc,
 						started_at: this.started_at,
 						ended_at: this.ended_at,
-						published_at: this.published_at,
+						published_at: moment(this.published_at).format('YYYY-MM-DD HH:mm:ss'),
 						page_url: this.page_url,
 						page_src: this.page_src,
 						avatar_upload_id: this.avatar_upload_id,
@@ -239,7 +239,7 @@
 				this.short_desc = campaign.description;
 				this.started_at = campaign.started_at;
 				this.ended_at = campaign.ended_at;
-				this.published_at = moment(campaign.published_at).format('YYYY-MM-DD HH:mm:ss');
+				this.published_at = moment(campaign.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
 				this.page_url = campaign.page_url;
 				this.countryCodeObj = _.findWhere(this.countries, {name: campaign.country});
 				this.country_code = this.countryCodeObj.code;

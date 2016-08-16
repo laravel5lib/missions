@@ -200,6 +200,7 @@
 						banner_upload_id: this.banner_upload_id,
 
 					}).then(function (resp) {
+						resp.data.data.published_at = moment(resp.data.data.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS')
 						$.extend(this, resp.data.data);
 					}, function (error) {
 						self.errors = error.data.errors;

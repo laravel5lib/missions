@@ -6,7 +6,7 @@
                 <h5>{{ reservation.trip.data.campaign.data.name }} <small>{{ reservation.country }}</small></h5>
             </div>
             <div class="panel-body text-center">
-                <img src="http://lorempixel.com/300/300/" class="img-circle img-lg">
+                <img :src="reservation.avatar" class="img-circle img-lg">
                 <hr class="divider inv sm">
                 <h6 class="label label-default text-uppercase">{{ reservation.trip.data.type }} Missionary</h6>
                 <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>

@@ -60,7 +60,7 @@
 		</div>
 		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
 			<form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent">
-				<div class="form-group" :class="{ 'has-error': checkForError('name') }">
+				<div class="form-group" :class="{ 'has-error': checkForError('name') }" v-show="!uiLocked">
 					<label for="name" class="col-sm-2 control-label">Name</label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
@@ -147,7 +147,7 @@
 
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<a href="/admin/uploads" class="btn btn-default">Cancel</a>
+						<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
 						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Create</a>
 						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Update</a>
 					</div>
@@ -200,13 +200,17 @@
 			uiLocked: {
 				type: Boolean,
 				default: false
+			},
+			name: {
+				type: String,
+				default: ''
 			}
 		},
         data(){
             return {
 //				showRight: false,
 
-                name: '',
+//                name: '',
 //                type: null,
                 path: '',
                 file: null,
@@ -351,7 +355,6 @@
                         width: parseInt(this.coords.w / this.imageAspectRatio),
                         height: parseInt(this.coords.h / this.imageAspectRatio),
                     }).then(function (resp) {
-						console.log(resp);
 						this.handleSuccess(resp)
                     }, function (error) {
                         console.log(error);
@@ -372,7 +375,6 @@
 						width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
 						height: parseInt(this.coords.h / this.imageAspectRatio)||undefined,
 					}).then(function (resp) {
-						console.log(resp);
 						this.handleSuccess(resp)
 					}, function (error) {
 						console.log(error);

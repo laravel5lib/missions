@@ -66,9 +66,9 @@
 					<div class="input-group">
 						<span class="input-group-addon">www.missions.me/campaigns/</span>
 						<input type="text" id="page_url" v-model="page_url" class="form-control"
-							   v-validate:url="{ required: false,  }" />
+							   v-validate:url="{ required: false }" />
 					</div>
-					<div v-if="errors.page_url" class="help-block">{{errors.page_url.toString()}}</div>
+					<div v-show="errors.page_url" class="help-block">{{errors.page_url}}</div>
 				</div>
 			</div>
 

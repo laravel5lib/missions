@@ -13,7 +13,7 @@ class GroupTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'trips', 'managers', 'facilitators', 'fundraisers', 'uploads'
+        'trips', 'managers', 'facilitators', 'fundraisers', 'uploads', 'social'
     ];
 
     /**
@@ -55,6 +55,13 @@ class GroupTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    public function includeSocial(Group $group)
+    {
+        $links = $group->social;
+
+        return $this->collection($links, new LinkTransformer);
     }
 
     /**

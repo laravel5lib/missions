@@ -16,6 +16,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.index');
     });
 
+    Route::get('settings', function() {
+        return view('dashboard.settings');
+    });
+
     Route::get('records', function () {
         return view('dashboard.records.index');
     });
@@ -241,10 +245,7 @@ Route::get('/register', 'Auth\Authcontroller@create');
 Route::post('/register', 'Auth\AuthController@register');
 Route::get('/logout', 'Auth\AuthController@logout');
 
-Route::get('/groups/{slug}', function ($slug) {
-    return view('site.groups.profile');
-});
-
+Route::get('/groups/{slug}', 'GroupsController@profile');
 Route::get('/profiles/{slug}', 'UsersController@profile');
 Route::get('/@{slug}', 'UsersController@profile');
 

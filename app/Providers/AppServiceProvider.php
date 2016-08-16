@@ -44,9 +44,30 @@ class AppServiceProvider extends ServiceProvider
 //            });
 //        });
 
-        // Create general fundraisers when reservation is created.
         Reservation::created(function ($reservation) {
-            // needs to fire after costs sync
+
+            $active = $reservation->trip->activeCosts()->with('payments')->get();
+
+            $maxDate = $active->where('type', 'incremental')->max('active_at');
+
+            $dues = $active->reject(function ($value) use($maxDate) {
+                return $value->type == 'incremental' && $value->active_at < $maxDate;
+            })->flatMap(function ($cost) {
+                return $cost->payments->map(function ($payment) {
+                    return [
+                        'payment_id' => $payment->id,
+                        'due_at' => $payment->due_at,
+                        'grace_period' => $payment->grace_period,
+                        'outstanding_balance' => $payment->amount_owed,
+                    ];
+                })->all();
+            });
+
+            $reservation->addDues($dues);
+            $reservation->syncRequirements($reservation->trip->requirements);
+            $reservation->syncDeadlines($reservation->trip->deadlines);
+            $reservation->addTodos($reservation->trip->todos);
+
             $reservation->fundraisers()->create([
                 'name' => 'General Fundraiser',
                 'sponsor_type' => User::class,
@@ -54,6 +75,7 @@ class AppServiceProvider extends ServiceProvider
                 'goal_amount' => $reservation->costs()->sum('amount'),
                 'expires_at' => $reservation->trip->started_at
             ]);
+
             $reservation->trip()->update([
                'spots' => $reservation->trip->spots - 1
             ]);

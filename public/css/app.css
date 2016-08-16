@@ -7523,6 +7523,11 @@ select[multiple].input-lg,
     opacity: 0.65;
     filter: alpha(opacity=65);
     box-shadow: none; }
+  .btn .fa {
+    margin-left: 4px; }
+    .btn .fa.icon-left {
+      margin-left: 0px;
+      margin-right: 4px; }
 
 a.btn.disabled,
 fieldset[disabled] a.btn {
@@ -8903,6 +8908,10 @@ tbody.collapse.in {
   .navbar-btn.btn-xs, .btn-group-xs > .navbar-btn.btn {
     margin-top: 21.5px;
     margin-bottom: 21.5px; }
+  .navbar-btn:hover, .navbar-btn:focus, .navbar-btn.focus {
+    color: #f6323e !important;
+    border-color: #f8636c !important;
+    text-decoration: none; }
 
 .navbar-text {
   margin-top: 22px;
@@ -13488,10 +13497,22 @@ button.close {
 $fa-font-path: "~font-awesome/fonts/";*/
 /* Vue Elements */
 .v-select.form-control {
-  padding: 6px 12px; }
+  padding: 6px 12px;
+  height: inherit; }
 
 .v-select .dropdown-toggle {
-  border: none; }
+  border: none !important; }
+
+.v-select .selected-tag {
+  font-size: 13px; }
+
+.v-select.form-control .dropdown-toggle .form-control {
+  font-size: 14px;
+  min-height: 40px !important;
+  height: 100%; }
+
+.v-select .open-indicator {
+  line-height: 1.8; }
 
 /**
  * Elements
@@ -13682,6 +13703,21 @@ body {
   padding: 0 0 200px;
   padding-top: 65px; }
 
+#admin-page-wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto 20px;
+  /* Pad bottom by footer height */
+  padding: 0 0 20px;
+  padding-top: 65px; }
+  #admin-page-wrap > .container {
+    padding-left: 40px !important; }
+    @media screen and (max-width: 767px) {
+      #admin-page-wrap > .container {
+        padding-left: 10px !important; } }
+
 #footer-mm {
   color: #e6e6e6;
   background-color: #3e3e3e;
@@ -13857,6 +13893,12 @@ li.av-nav > a {
 .white-bg {
   color: #3e3e3e;
   background: #fff; }
+
+.white-header-bg {
+  padding: 5px 0;
+  color: #3e3e3e;
+  background: #fff;
+  border-bottom: 1px solid #e6e6e6; }
 
 .gray-lighter-bg {
   color: #808080;

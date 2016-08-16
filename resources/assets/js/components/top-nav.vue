@@ -12,7 +12,7 @@
 				<li v-if="auth" id="userMenu" class="dropdown-toggle visible-xs text-center" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false">
 					<a href="#">
-						<img class="img-xs img-circle av-left" src="images/nelson-prof-pic.jpg" alt="Zech Nelson"> Zech Nelson
+						<img class="img-xs img-circle av-left" :src="avatar" :alt="name"> {{ name }}
 						<i class="fa fa-angle-down"></i>
 					</a>
 				</li>
@@ -68,6 +68,14 @@
 				coerce: function (val) {
 					return !!parseInt(val);
 				}
+			},
+			name: {
+				type: String,
+				default: null
+			},
+			avatar: {
+				type: String,
+				default: null
 			}
 		},
 		data(){

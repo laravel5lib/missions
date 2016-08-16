@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GroupTableSeeder::class);
         $this->call(CampaignTableSeeder::class);
         $this->call(TripTableSeeder::class);
-        $this->call(PaymentSeeder::class);
         $this->call(ReservationTableSeeder::class);
         $this->call(AssignmentTableSeeder::class);
         $this->call(DonationTableSeeder::class);

@@ -1,16 +1,16 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title"> Facilitators
-				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddFacilitatorModal"><span
-						class="fa fa-plus"></span> New
+			<h5>Facilitators
+				<button class="btn btn-default btn-xs pull-right" data-toggle="modal" data-target="#AddFacilitatorModal">
+						Add New <i class="fa fa-plus"></i> 
 				</button>
-			</h3>
+			</h5>
 		</div>
 		<div>
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">
 				<div class="thumbnail">
-					<img src="http://lorempixel.com/300/300" alt="">
+					<img :src="user.avatar" alt="{{ user.name }}">
 					<div class="caption">
 						<h5 v-text="facilitator.name"></h5>
 						<p>
@@ -27,26 +27,33 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-						<h4 class="modal-title">Select A Facilitator</h4></div>
+						<h4 class="modal-title text-center">Select A Facilitator</h4></div>
 					<div class="modal-body">
-						<validator name="AddFacilitator">
-							<form class="form-horizontal" novalidate>
-								<div class="form-trip" :class="{ 'has-error': checkForError('user') }"><label
-										class="col-sm-2 control-label">User</label>
-									<div class="col-sm-10">
-										<v-select class="form-control" id="user" :value.sync="userObj" :options="users"
-												  :on-search="getUsers" label="name"></v-select>
-										<select hidden="" v-model="user_id" v-validate:user="{ required: true}">
-											<option :value="user.id" v-for="user in users">{{user.name}}</option>
-										</select>
-									</div>
-								</div>
-							</form>
-						</validator>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary btn-sm" @click="addFacilitator()">Save</button>
+						<div class="row">
+							<div class="col-sm-12 text-center">
+								<validator name="AddFacilitator">
+									<form class="form-horizontal" novalidate>
+										<div class="form-trip" :class="{ 'has-error': checkForError('user') }"><label
+												class="col-sm-2 control-label">User</label>
+											<div class="col-sm-10">
+												<v-select class="form-control" id="user" :value.sync="userObj" :options="users"
+														  :on-search="getUsers" label="name"></v-select>
+												<select hidden="" v-model="user_id" v-validate:user="{ required: true}">
+													<option :value="user.id" v-for="user in users">{{user.name}}</option>
+												</select>
+											</div>
+										</div>
+									</form>
+								</validator>
+							</div>
+						</div>
+						<div class="row">
+						<hr class="divider inv">
+							<div class="col-sm-12 text-center">
+								<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary btn-sm" @click="addFacilitator()">Save</button>
+							</div>
+						</div>
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->

@@ -13,6 +13,8 @@
                 <h6 class="text-uppercase">{{campaign.country}}</h6>
                 <h3>{{campaign.name}}</h3>
                 <p>{{campaign.description}}</p>
+                <a :href="'/campaigns/' + campaign.id" class="btn btn-primary btn-sm">More Details</a>
+                <hr class="divider inv" />
               </div>
             </div>
           </div>
@@ -46,6 +48,7 @@
                             <a :href="'/campaigns/' + campaign.page_url" role="button">
                                 <h5 style="text-transform:capitalize;" class="text-primary">{{campaign.name}}</h5>
                             </a>
+                            <h6>{{campaign.started_at | moment 'll'}} - {{campaign.ended_at | moment 'll'}}</h6>
                             <hr class="divider lg" />
                             <p class="small">{{campaign.description}}</p>
                         </div><!-- end panel-body -->

@@ -2,101 +2,109 @@
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <form class="form-inline text-right" novalidate>
+                <form class="form-inline" novalidate>
+                    <div class="form-inline" style="display: inline-block;">
+                        <div class="form-group">
+                            <label>Show</label>
+                            <select class="form-control input-sm" v-model="per_page">
+                                <option v-for="option in perPageOptions" :value="option">{{option}}</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Fields
+                        Sort By
                         <span class="caret"></span>
                         </button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						<ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="name" :disabled="maxCheck('name')"> Name
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="email" :disabled="maxCheck('email')"> Email
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="alt_email" :disabled="maxCheck('alt_email')"> Alt Email
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="gender" :disabled="maxCheck('gender')"> Gender
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="status" :disabled="maxCheck('status')"> Status
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="birthday" :disabled="maxCheck('birthday')"> Birthday
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="phone_one" :disabled="maxCheck('phone_one')"> Phone 1
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="phone_two" :disabled="maxCheck('phone_two')"> Phone 2
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="street" :disabled="maxCheck('street')"> Street
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="city" :disabled="maxCheck('city')"> City
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="zip" :disabled="maxCheck('zip')"> Zip
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="state" :disabled="maxCheck('state')"> State
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="country_name" :disabled="maxCheck('country_name')"> Country
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="public" :disabled="maxCheck('public')"> Public
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="isAdmin" :disabled="maxCheck('isAdmin')"> Admin
 								</label>
 							</li>
 							<li>
-								<label style="padding: 3px 20px;">
+								<label style="margin-bottom: 0" class="small">
 									<input type="checkbox" v-model="activeFields" value="timezone" :disabled="maxCheck('timezone')"> Timezone
 								</label>
 							</li>
 							<li role="separator" class="divider"></li>
 							<li>
-								<div class="input-group input-group-sm">
-									<span class="input-group-addon">Max Visible Fields</span>
+								<div class="input-group input-group-sm text-center">
+									<label>Max Visible Fields</label>
 									<select class="form-control" v-model="maxActiveFields">
 										<option v-for="option in maxActiveFieldsOptions" :value="option">{{option}}</option>
 									</select>
@@ -109,7 +117,7 @@
                         Filters
                         <span class="caret"></span>
                         </button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width:300px;">
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width:300px; max-height: 575px; padding: 10px 20px; overflow: scroll;">
 							<li>
 								<v-select class="form-control" id="countryFilter" multiple :debounce="250" :on-search="getCountries()"
 										  :value.sync="countriesArr" :options="countriesOptions" label="name"
@@ -162,16 +170,10 @@
 							</li>
 
 							<li role="separator" class="divider"></li>
-							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()">Reset Filters</button>
 						</ul>
                     </div>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-addon">Show</span>
-                        <select class="form-control" v-model="per_page">
-                            <option v-for="option in perPageOptions" :value="option">{{option}}</option>
-                        </select>
-                    </div>
-                    | <a class="btn btn-primary btn-sm" href="users/create"><i class="fa fa-plus"></i> New</a>
+                    <a class="btn btn-primary btn-sm" href="users/create">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
         </div>
@@ -265,10 +267,8 @@
                 <td v-if="isActive('isAdmin')" v-text="user.isAdmin?'Yes':'No'"></td>
                 <td v-if="isActive('timezone')" v-text="user.timezone"></td>
                 <td>
-                    <a href="/admin{{user.links[0].uri}}"><i class="fa fa-eye"></i></a>
-                    <!--<a href="/admin{{campaignId + user.links[0].uri}}/edit"><i class="fa fa-pencil"></i></a>-->
+                    <a href="/admin{{user.links[0].uri}}"><i class="fa fa-gear"></i></a>
                 </td>
-
             </tr>
             </tbody>
             <tfoot>

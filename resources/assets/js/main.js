@@ -11,6 +11,8 @@ import donationsList from './components/reservations/donations-list.vue';
 import recordsList from './components/records/records-list.vue';
 import visasList from './components/visas/visas-list.vue';
 import passportsList from './components/passports/passports-list.vue';
+import passportCreateUpdate from './components/passports/passport-create-update.vue';
+import visaCreateUpdate from './components/visas/visa-create-update.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -221,7 +223,9 @@ new Vue({
         //dashboard components
         recordsList,
         passportsList,
+        passportCreateUpdate,
         visasList,
+        visaCreateUpdate,
 
         // admin components
         adminCampaignCreate,

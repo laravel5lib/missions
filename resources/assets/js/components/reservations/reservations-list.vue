@@ -1,22 +1,22 @@
 <template>
-    <div class="panel panel-default" v-for="reservation in reservations">
-        <div class="panel-heading">
-            <h2 class="panel-title">
-                {{ reservation.trip.campaign.name }}
-                <small>{{ reservation.country }}</small>
-            </h2>
+<div>
+<div class="col-xs-12 col-sm-6 col-md-4">
+    <div class="panel panel-default" v-for="reservation in reservations" v-if="reservations.length > 0">
+        <div class="panel-heading text-center">
+            <h5>{{ reservation.trip.campaign.name }} <small>{{ reservation.country }}</small></h5>
         </div>
-        <div class="panel-body">
-
-            <h5>
-                {{ reservation.surname }}, {{ reservation.given_names }}
-                <small>{{ reservation.trip.group.name }}</small>
-            </h5>
-            <p>{{ reservation.trip.type }} Missionary</p>
+        <div class="panel-body text-center">
+            <img src="http://lorempixel.com/300/300/" class="img-circle img-lg">
+            <hr class="divider inv sm">
+            <h6 class="label label-default text-uppercase">{{ reservation.trip.type }} Missionary</h6>
+            <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>
+            <h5 class="text-capitalize">{{ reservation.trip.group.name }}</h5>
             <a class="btn btn-sm btn-primary" href="/dashboard/reservations/{{ reservation.id }}">View Reservation</a>
-            <br>
         </div>
     </div>
+</div>
+    <div class="alert alert-info" v-if="reservation.length < 1">No reservations found</div>
+</div>
 </template>
 <script>
     export default{

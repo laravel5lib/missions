@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
 	<div>
-		<form class="form-inline" v-if="isChild" novalidate>
+		<form class="form-inline" v-if="isChild && !uiLocked" novalidate>
 			<div class="row">
 				<div class="col-sm-offset-2 col-sm-10">
 					<label class="radio-inline">
@@ -68,7 +68,7 @@
 							   maxlength="100" minlength="1" required>
 					</div>
 				</div>
-				<div class="form-group" :class="{ 'has-error': checkForError('tags') }">
+				<div class="form-group" :class="{ 'has-error': checkForError('tags') }" v-show="!uiLocked" >
 					<label for="tags" class="col-sm-2 control-label">Tags</label>
 					<div class="col-sm-10">
 						<v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
@@ -77,7 +77,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="form-group" :class="{ 'has-error': checkForError('type') }">
+				<div class="form-group" :class="{ 'has-error': checkForError('type') }" v-show="!uiLocked" >
 					<label for="type" class="col-sm-2 control-label">Type</label>
 					<div class="col-sm-10">
 						<select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
@@ -90,7 +90,7 @@
 					</div>
 				</div>
 
-				<div class="row col-sm-offset-2" v-if="type && type === 'other'">
+				<div class="row col-sm-offset-2" v-if="type && type === 'other'" v-show="!uiLocked">
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" v-model="constrained">
@@ -192,6 +192,14 @@
 			isChild: {
 				type: Boolean,
 				default: false
+			},
+			uiSelector: {
+				type: Number,
+				default: 0
+			},
+			uiLocked: {
+				type: Boolean,
+				default: false
 			}
 		},
         data(){
@@ -230,7 +238,6 @@
 				],
 				typeObj: null,
 				resource: this.$resource('uploads{/id}'),
-				uiSelector: 0,
 				uploads: [],
 				page: 1,
 				per_page: 6,

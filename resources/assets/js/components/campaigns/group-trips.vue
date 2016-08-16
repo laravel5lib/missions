@@ -4,7 +4,7 @@
 		<hr class="divider inv xlg">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center">
-				<img class="img-circle img-lg" src="http://lorempixel.com/500/500/">
+				<img class="img-circle img-lg" src="{{ group.avatar }}">
 				<h3>{{ group.name }}</h3>
 			</div>
 		</div>
@@ -22,23 +22,27 @@
 			<table class="table table-hover">
 				<thead>
 				<tr>
-					<th>Trip Type</th>
-					<th>Trip Starting Cost</th>
-					<th>Spots Available</th>
+					<th>Type</th>
+					<th>Dates</th>
+					<th>Starting Cost</th>
+					<th>Spots Left</th>
 					<th>Ideal For</th>
+					<th>Status</th>
 					<th></th>
 				</tr>
 				</thead>
 				<tbody>
 				<tr v-for="trip in trips" style="border-bottom: 1px solid #e6e6e6">
-					<td style="text-transform: capitalize;vertical-align:middle;">{{ trip.type }}</td>
-					<td style="vertical-align:middle;">{{ trip.lowest | currency }}</td>
+					<td style="vertical-align:middle;">{{ trip.type | capitalize }}</td>
+					<td style="vertical-align:middle;">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</td>
+					<td style="vertical-align:middle;">{{ trip.starting_cost | currency }}</td>
 					<td style="vertical-align:middle;">{{ trip.spots }}</td>
 					<td style="vertical-align:middle;">
 						<span v-for="prospect in trip.prospects">
 							{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
 						</span>
 					</td>
+					<td style="vertical-align:middle;">{{ trip.status | capitalize }}</td>
 					<td class="text-right"><a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a></td>
 				</tr>
 				</tbody>

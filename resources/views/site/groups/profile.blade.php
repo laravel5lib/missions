@@ -3,13 +3,13 @@
 @section('content')
 
     <div id="parallax1" class="prof-cover-photo">
-        <img src="{{ $group->banner }}" alt="{{ $group->name }}">
+        <img src="{{ image($group->banner->source) }}" alt="{{ $group->name }}">
     </div><!-- end page-header-outer -->
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sm-offset-0 col-sm-4 col-xs-10 col-xs-offset-1">
                 <div class="panel panel-default profile-pic-panel">
-                    <img src="{{ $group->avatar }}" alt="{{ $group->name }}" class="img-responsive">
+                    <img src="{{ image($group->avatar->source) }}" alt="{{ $group->name }}" class="img-responsive">
                     <div class="panel-body">
                         <h4>{{ $group->name }}</h4>
                         <h6>/{{ $group->url }}</h6>
@@ -17,47 +17,12 @@
                         <p><i class="fa fa-map-marker"></i>
                             {{ $group->city ? $group->city.', ' : null }}
                             {{ $group->state ? $group->state.', ' : null }}
-                            <small>{{ $group->country_name }}</small></p>
+                            <small>{{ country($group->country_code) }}</small></p>
                         <ul class="list-unstyled list-inline">
-                            @each('site.partials._social_link', $group->social->data, 'link')
+                            {{--@each('site.partials._social_link', $group->social, 'link')--}}
                         </ul>
                     </div><!-- end panel-body -->
                 </div><!-- end panel-default -->
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h4>Countries Visited</h4>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-rounded img-xs" src="images/v-prof-pic.jpg" alt="...">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading">Colombia</h5>
-                            </div><!-- end media-body -->
-                        </div><!-- end media -->
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-rounded img-xs" src="images/v-prof-pic.jpg" alt="...">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading">Guatemala</h5>
-                            </div><!-- end media-body -->
-                        </div><!-- end media -->
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-rounded img-xs" src="images/v-prof-pic.jpg" alt="...">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading">Dominican Republic</h5>
-                            </div><!-- end media-body -->
-                        </div><!-- end media -->
-                    </div><!-- end panel-body -->
-                </div><!-- end panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5>Need Help?</h5>
@@ -72,78 +37,13 @@
                 <ul id="profTabs" class="nav nav-tabs" role="tablist">
                     <li data-toggle="tooltip" title="Current Trips" role="presentation" class="active"><a href="#current-trips" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-plane"></i></a></li>
                     <li data-toggle="tooltip" title="Updates" role="presentation"><a href="#updates" aria-controls="updates" role="tab" data-toggle="tab"><i class="fa fa-pencil"></i></a></li>
+                    @can('edit', $group)
                     <li data-toggle="tooltip" title="Dashboard" class="pull-right"><a href="#"><i class="fa fa-tachometer"></i></a></li>
+                    @endcan
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="row tab-pane active" id="current-trips">
-                        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12">
-                            <div class="panel panel-default">
-                                <img src="images/india-prof-pic.jpg" alt="India" class="img-responsive">
-                                <div class="panel-body">
-                                    <h6><span class="label label-default">Write The Future</span></h6>
-                                    <h4>Peru 2016</h4>
-                                    <h6>Full Week Missionary</h6>
-                                    <h6>July 20 - July 27, 2015</h6>
-                                    <ul class="list-inline">
-                                        <li data-toggle="tooltip" title="Reservations"><i class="fa fa-user"></i> 30</li>
-                                        <li data-toggle="tooltip" title="Registration Open" class="pull-right"><i class="fa fa-sign-in"></i></li>
-                                    </ul>
-                                    <a class="btn btn-default btn-link btn-sm btn-block" href="#">Learn More</a>
-                                    <p><a class="btn btn-primary btn-lg btn-block" href="#">Register</a></p>
-                                </div><!-- end panel-body -->
-                            </div><!-- end panel -->
-                        </div><!-- end col -->
-                        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12">
-                            <div class="panel panel-default">
-                                <img src="images/japan-prof-pic.jpg" alt="Japan" class="img-responsive">
-                                <div class="panel-body">
-                                    <h6><span class="label label-default">Write The Future</span></h6>
-                                    <h4>Peru 2016</h4>
-                                    <h6>Full Week Missionary</h6>
-                                    <h6>July 20 - July 27, 2015</h6>
-                                    <ul class="list-inline">
-                                        <li data-toggle="tooltip" title="Reservations"><i class="fa fa-user"></i> 30</li>
-                                        <li data-toggle="tooltip" title="Registration Open" class="pull-right"><i class="fa fa-sign-in"></i></li>
-                                    </ul>
-                                    <a class="btn btn-default btn-link btn-sm btn-block" href="#">Learn More</a>
-                                    <p><a class="btn btn-primary btn-lg btn-block" href="#">Register</a></p>
-                                </div><!-- end panel-body -->
-                            </div><!-- end panel -->
-                        </div><!-- end col -->
-                        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12">
-                            <div class="panel panel-default">
-                                <img src="images/japan-prof-pic.jpg" alt="Japan" class="img-responsive">
-                                <div class="panel-body">
-                                    <h6><span class="label label-default">Write The Future</span></h6>
-                                    <h4>Peru 2016</h4>
-                                    <h6>Full Week Missionary</h6>
-                                    <h6>July 20 - July 27, 2015</h6>
-                                    <ul class="list-inline">
-                                        <li data-toggle="tooltip" title="Reservations"><i class="fa fa-user"></i> 30</li>
-                                        <li data-toggle="tooltip" title="Registration Open" class="pull-right"><i class="fa fa-sign-in"></i></li>
-                                    </ul>
-                                    <a class="btn btn-default btn-link btn-sm btn-block" href="#">Learn More</a>
-                                    <p><a class="btn btn-primary btn-lg btn-block" href="#">Register</a></p>
-                                </div><!-- end panel-body -->
-                            </div><!-- end panel -->
-                        </div><!-- end col -->
-                        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12">
-                            <div class="panel panel-default">
-                                <img src="images/japan-prof-pic.jpg" alt="Japan" class="img-responsive">
-                                <div class="panel-body">
-                                    <h6><span class="label label-default">Write The Future</span></h6>
-                                    <h4>Peru 2016</h4>
-                                    <h6>Full Week Missionary</h6>
-                                    <h6>July 20 - July 27, 2015</h6>
-                                    <ul class="list-inline">
-                                        <li data-toggle="tooltip" title="Reservations"><i class="fa fa-user"></i> 30</li>
-                                        <li data-toggle="tooltip" title="Registration Open" class="pull-right"><i class="fa fa-sign-in"></i></li>
-                                    </ul>
-                                    <a class="btn btn-default btn-link btn-sm btn-block" href="#">Learn More</a>
-                                    <p><a class="btn btn-primary btn-lg btn-block" href="#">Register</a></p>
-                                </div><!-- end panel-body -->
-                            </div><!-- end panel -->
-                        </div><!-- end col -->
+                        <group-profile-trips id="{{ $group->id }}"></group-profile-trips>
                     </div><!-- end tab-pane -->
                     <div role="tabpanel" class="row tab-pane" id="updates">
                         <div class="col-md-12 col-md-offset-0 col-xs-12">

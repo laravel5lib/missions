@@ -239,7 +239,7 @@
 				this.short_desc = campaign.description;
 				this.started_at = campaign.started_at;
 				this.ended_at = campaign.ended_at;
-				this.published_at = moment(campaign.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
+				this.published_at = moment(campaign.published_at).format('YYYY-MM-DD HH:mm:ss');
 				this.page_url = campaign.page_url;
 				this.countryCodeObj = _.findWhere(this.countries, {name: campaign.country});
 				this.country_code = this.countryCodeObj.code;

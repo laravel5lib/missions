@@ -33,6 +33,7 @@ class CampaignTransformer extends TransformerAbstract
             'country'      => country($campaign->country_code),
             'description'  => $campaign->short_desc,
             'page_url'     => $campaign->page_url,
+            'page_src'     => $campaign->page_src,
             'avatar'       => $campaign->avatar ? image($campaign->avatar->source) : null,
             'banner'       => $campaign->banner ? image($campaign->banner->source) : null,
             'started_at'   => $campaign->started_at->toDateString(),

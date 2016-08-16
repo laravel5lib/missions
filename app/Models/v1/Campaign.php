@@ -26,7 +26,7 @@ class Campaign extends Model
      */
     protected $fillable = [
         'name', 'country_code', 'short_desc', 'page_url', 'thumb_src',
-        'started_at', 'ended_at', 'published_at'
+        'started_at', 'ended_at', 'published_at', 'page_src'
     ];
 
     /**

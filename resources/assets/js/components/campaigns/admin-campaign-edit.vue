@@ -202,6 +202,7 @@
 					}).then(function (resp) {
 						resp.data.data.published_at = moment(resp.data.data.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS')
 						$.extend(this, resp.data.data);
+						window.location.href = '/admin/campaigns/'
 					}, function (error) {
 						self.errors = error.data.errors;
 					});
@@ -242,6 +243,7 @@
 				this.ended_at = campaign.ended_at;
 				this.published_at = moment(campaign.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
 				this.page_url = campaign.page_url;
+				this.page_src = campaign.page_src;
 				this.countryCodeObj = _.findWhere(this.countries, {name: campaign.country});
 				this.country_code = this.countryCodeObj.code;
 			});

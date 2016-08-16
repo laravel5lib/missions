@@ -25,7 +25,7 @@ class Visa extends Model
      */
     protected $fillable = [
         'given_names', 'surname', 'number', 'country_code',
-        'scan_src', 'issued_at', 'expires_at', 'user_id'
+        'upload_id', 'issued_at', 'expires_at', 'user_id'
     ];
 
     /**

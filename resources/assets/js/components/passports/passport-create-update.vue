@@ -190,6 +190,7 @@
                         user_id: this.user_id,
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
+                        debugger;
                         window.location.href = '/dashboard/passports';
                     }, function (error) {
                         debugger;
@@ -201,7 +202,7 @@
         events:{
             'uploads-complete'(data){
                 switch(data.type){
-                    case 'avatar':
+                    case 'other':
                         //save for preview
                         this.selectedAvatar = data;
                         // save for upload reference

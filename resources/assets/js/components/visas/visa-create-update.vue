@@ -183,7 +183,7 @@
         events:{
             'uploads-complete'(data){
                 switch(data.type){
-                    case 'avatar':
+                    case 'other':
                         //save for preview
                         this.selectedAvatar = data;
                         // save for upload reference

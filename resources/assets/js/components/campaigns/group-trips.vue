@@ -4,7 +4,7 @@
 		<hr class="divider inv xlg">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center">
-				<img class="img-circle img-lg" src="{{ group.avatar }}">
+				<a :href="'/groups/' + group.url"><img class="img-circle img-lg" src="{{ group.avatar }}"></a>
 				<h3>{{ group.name }}</h3>
 			</div>
 		</div>

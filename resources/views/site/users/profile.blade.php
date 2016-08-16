@@ -88,8 +88,7 @@
                                             <span class="sr-only">40% Complete (success)</span>
                                         </div>
                                     </div>
-                                    <a class="btn btn-default btn-link btn-sm btn-block" href="#">Learn More</a>
-                                    <p><a class="btn btn-primary btn-block" href="#">Donate</a></p>
+                                    <p><a class="btn btn-primary btn-block" href="#">Details</a></p>
                                 </div><!-- end panel-body -->
                             </div><!-- end panel -->
                         </div><!-- end col -->
@@ -106,8 +105,7 @@
                                             <span class="sr-only">40% Complete (success)</span>
                                         </div>
                                     </div>
-                                    <a class="btn btn-default btn-link btn-sm btn-block" href="#">Learn More</a>
-                                    <p><a class="btn btn-primary btn-block" href="#">Donate</a></p>
+                                    <p><a class="btn btn-primary btn-block" href="#">Details</a></p>
                                 </div><!-- end panel-body -->
                             </div><!-- end panel -->
                         </div><!-- end col -->

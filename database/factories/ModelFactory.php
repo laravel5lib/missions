@@ -367,7 +367,7 @@ $factory->define(App\Models\v1\Donation::class, function (Faker\Generator $faker
 {
     return [
         'name'                 => $faker->name,
-        'amount'               => $faker->numberBetween(1, 1000) * 100,
+        'amount'               => $faker->numberBetween(1, 1000),
         'currency'             => $faker->currencyCode,
         'description'          => $faker->realText(120),
         'message'              => $faker->realText(120),
@@ -380,8 +380,8 @@ $factory->define(App\Models\v1\Donation::class, function (Faker\Generator $faker
         'address_state'        => $faker->state,
         'address_zip'          => $faker->postcode,
         'address_country_code' => strtolower($faker->countryCode),
-        'designation_id'       => $faker->randomElement(App\Models\v1\Fundraiser::lists('id')->toArray()),
-        'designation_type'     => 'fundraisers',
+        'designation_id'       => $faker->randomElement(App\Models\v1\Reservation::lists('id')->toArray()),
+        'designation_type'     => 'reservations',
         'donor_id'             => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
         'donor_type'           => 'users',
         'payment_type'         => 'card',

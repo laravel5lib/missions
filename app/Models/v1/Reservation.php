@@ -3,7 +3,6 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use Carbon\Carbon;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -174,6 +173,42 @@ class Reservation extends Model
     public function donations()
     {
         return $this->morphMany(Donation::class, 'designation');
+    }
+
+    /**
+     * Get all the reservation's donors.
+     *
+     * @return mixed
+     */
+    public function getDonors()
+    {
+        $donations = $this->donations()->with('donor')->get();
+
+        $donors = $donations->map(function($donation) {
+            return [
+                'id' => $donation->donor_id,
+                'name' => $donation->donor->name,
+                'amount' => $donation->amount
+            ];
+        })->groupBy('id')->map(function($donor)
+        {
+            return [
+                'name'   => $donor->pluck('name')->first(),
+                'amount' => $donor->sum('amount')
+            ];
+        });
+
+        return $donors->all();
+    }
+
+    /**
+     * Get the total number of donors to the reservation.
+     *
+     * @return int
+     */
+    public function getDonorsCount()
+    {
+        return count($this->getDonors());
     }
 
     /**

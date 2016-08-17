@@ -101,7 +101,7 @@ body {
 }
 /* Parallax Headers */
 .prof-cover-photo {
-  height: 55vh;
+  //height: 55vh; removed temp
   overflow: hidden;
 }
 .cover-overlay {
@@ -115,6 +115,7 @@ body {
 }
 .prof-cover-photo > img {
   height: 89%;
+  width: 100%; // added temp
   position: relative;
   top: -16%;
 }

@@ -4,13 +4,13 @@
 
 
     <div id="parallax1" class="prof-cover-photo">
-        <img src="{{ image($user->banner->source) }}" alt="">
+        <img src="{{ image($user->banner->source) }}" alt="{{ $user->name }}">
     </div><!-- end page-header-outer -->
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sm-offset-0 col-sm-4 col-xs-10 col-xs-offset-1">
                 <div class="panel panel-default profile-pic-panel">
-                    <img src="{{ image($user->avatar->source) }}" alt="Zech Nelson" class="img-responsive">
+                    <img src="{{ image($user->avatar->source) }}" alt="{{ $user->name }}" class="img-responsive">
                     <div class="panel-body">
                         <h4>{{ $user->name }}</h4>
                         <h6>/{{ $user->url }}</h6>

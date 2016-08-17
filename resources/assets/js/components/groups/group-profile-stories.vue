@@ -9,7 +9,7 @@
         </div>
         <div id="collapse-{{ story.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
             <div class="panel-body">
-                <h5 class="media-heading"><a href="#">{{ story.author.name }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
+                <h5 class="media-heading"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
                 {{ story.content }}
             </div>
         </div>
@@ -25,10 +25,9 @@
             }
         },
         ready(){
-            this.$http.get('groups/' + this.id, {
-                include: 'stories'
+            this.$http.get('stories?group=' + this.id, {
             }).then(function(response) {
-                this.stories = response.data.data.stories.data;
+                this.stories = response.data.data;
             });
         }
     }

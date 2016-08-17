@@ -19,6 +19,7 @@ class StoryTransformer extends TransformerAbstract
 
         $array = [
             'id'         => $story->id,
+            'title'      => $story->title,
             'author'     => $story->author->name,
             'created_at' => $story->created_at->toDateTimeString(),
             'updated_at' => $story->updated_at->toDateTimeString(),

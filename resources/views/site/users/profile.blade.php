@@ -22,46 +22,29 @@
                     </div><!-- end panel-body -->
                 </div><!-- end panel-default -->
                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Groups Traveled With</h5>
+                    </div><!-- end panel-heading -->
                     <div class="panel-body">
-                        <h4>Groups Traveled With</h4>
                         @each('site.partials._group', $user->getGroups(), 'group')
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
+                @if(count($user->getCountriesVisited()))
                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Countries Visited</h5>
+                    </div><!-- end panel-heading -->
                     <div class="panel-body">
-                        <h4>Countries Visited</h4>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-rounded img-xs" src="images/v-prof-pic.jpg" alt="...">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading">Colombia</h5>
-                            </div><!-- end media-body -->
-                        </div><!-- end media -->
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-rounded img-xs" src="images/v-prof-pic.jpg" alt="...">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading">Guatemala</h5>
-                            </div><!-- end media-body -->
-                        </div><!-- end media -->
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-rounded img-xs" src="images/v-prof-pic.jpg" alt="...">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading">Dominican Republic</h5>
-                            </div><!-- end media-body -->
-                        </div><!-- end media -->
+                        <h4>
+                            @foreach($user->getCountriesVisited() as $country)
+                                <p><span class="label label-primary">
+                                    <i class="fa fa-map-marker"></i> {{ country($country) }}
+                                </span></p>
+                            @endforeach
+                        </h4>
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
+                @endif
             </div><!-- end col -->
             <div class="col-lg-6 col-sm-8 col-sm-offset-0 col-xs-10 col-xs-offset-1">
                 <ul id="profTabs" class="nav nav-tabs" role="tablist">

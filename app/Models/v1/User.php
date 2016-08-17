@@ -504,6 +504,15 @@ class User extends Authenticatable implements JWTSubject
         return $this->morphMany(Accolade::class, 'recipient');
     }
 
+    public function getCountriesVisited()
+    {
+        $this->load('accolades');
+
+        $accolade = $this->accolades()->where('name', 'countries_visited')->first();
+
+        return $accolade->items;
+    }
+
     /**
      * Check if user is an admin.
      *

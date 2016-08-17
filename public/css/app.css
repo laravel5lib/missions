@@ -13620,6 +13620,9 @@ body {
 a {
   cursor: pointer; }
 
+.text-strike {
+  text-decoration: line-through; }
+
 .footer {
   background-color: #f5f5f5;
   border-top: 1px solid #e7e7e7;
@@ -13648,7 +13651,6 @@ body {
 
 /* Parallax Headers */
 .prof-cover-photo {
-  height: 55vh;
   overflow: hidden; }
 
 .cover-overlay {
@@ -13664,6 +13666,7 @@ body {
 
 .prof-cover-photo > img {
   height: 89%;
+  width: 100%;
   position: relative;
   top: -16%; }
 

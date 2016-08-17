@@ -60,29 +60,32 @@
 				</div>
 			</div>
 
-			<div class="form-group" :class="{ 'has-error': checkForError('url') }" v-if="published_at">
-				<label for="description" class="col-sm-2 control-label">Page Url</label>
-				<div class="col-sm-10">
-					<div class="input-group">
-						<span class="input-group-addon">www.missions.me/campaigns/</span>
-						<input type="text" id="page_url" v-model="page_url" class="form-control"
-							   v-validate:url="{ required: false }" />
+			<template v-if="published_at">
+				<div class="form-group" :class="{ 'has-error': checkForError('url') || errors.page_url }">
+					<label for="description" class="col-sm-2 control-label">Page Url</label>
+					<div class="col-sm-10">
+						<div class="input-group">
+							<span class="input-group-addon">www.missions.me/campaigns/</span>
+							<input type="text" id="page_url" v-model="page_url" class="form-control"
+								   v-validate:url="{ required: false }" />
+						</div>
+						<div v-show="errors.page_url" class="help-block">{{errors.page_url}}</div>
 					</div>
-					<div v-show="errors.page_url" class="help-block">{{errors.page_url}}</div>
 				</div>
-			</div>
 
-			<div class="form-group" :class="{ 'has-error': checkForError('src') }" v-if="published_at">
-				<label for="description" class="col-sm-2 control-label">Page Source</label>
-				<div class="col-sm-10">
-					<div class="input-group">
-						<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
-						<input type="text" id="page_src" v-model="page_src" class="form-control"
-							   v-validate:src="{ required: false,  }" />
-						<span class="input-group-addon">.blade.php</span>
+				<div class="form-group" :class="{ 'has-error': checkForError('src') }">
+					<label for="description" class="col-sm-2 control-label">Page Source</label>
+					<div class="col-sm-10">
+						<div class="input-group">
+							<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
+							<input type="text" id="page_src" v-model="page_src" class="form-control"
+								   v-validate:src="{ required: false,  }" />
+							<span class="input-group-addon">.blade.php</span>
+						</div>
 					</div>
 				</div>
-			</div>
+			</template>
+
 			
 			<accordion :one-at-atime="true">
 				<panel header="Avatar" :is-open.sync="avatarPanelOpen">
@@ -134,7 +137,7 @@
 			return {
 				countries: [],
 				countryCodeObj: null,
-				errors: [],
+				errors: {},
 
 				name: null,
 				country: null,
@@ -171,6 +174,10 @@
 				// if user clicked submit button while the field is invalid trigger error styles 
 				return this.$CreateCampaign[field].invalid && this.attemptSubmit;
 			},
+			checkForServerError(field){
+				debugger;
+				return this.error
+			},
 			convertToSlug(text){
 				return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
 			},
@@ -193,7 +200,7 @@
 					}).then(function (resp) {
 						window.location.href = '/admin' + resp.data.data.links[0].uri;
 					}, function (error) {
-						self.errors = error.data.errors;
+						this.errors = error.data.errors;
 					});
 				}
 			}

@@ -203,7 +203,7 @@
                     </div><!-- end row tab -->
                     <div role="tabpanel" class="row tab-pane" id="stories">
                         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                            @each('site.partials._story', $user->stories, 'story')
+                            <user-profile-stories id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-stories>
                         </div>
                     </div><!-- end row tab -->
                 </div><!-- end tab-content -->

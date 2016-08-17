@@ -15,6 +15,7 @@ import visasList from './components/visas/visas-list.vue';
 import passportsList from './components/passports/passports-list.vue';
 import passportCreateUpdate from './components/passports/passport-create-update.vue';
 import visaCreateUpdate from './components/visas/visa-create-update.vue';
+import userSettings from './components/users/user-settings.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -231,6 +232,7 @@ new Vue({
         passportCreateUpdate,
         visasList,
         visaCreateUpdate,
+        userSettings,
 
         // admin components
         adminCampaignCreate,

@@ -158,7 +158,7 @@
                     this.reservationResource.update({id: this.reservationId}, {
                         passport_id: passport.id
                     }).then(function (response) {
-                        toggleChangeState();
+                        this.toggleChangeState();
                     });
                 }
             },

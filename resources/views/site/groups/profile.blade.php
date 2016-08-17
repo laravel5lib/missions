@@ -48,6 +48,7 @@
                     </div><!-- end tab-pane -->
                     <div role="tabpanel" class="row tab-pane" id="stories">
                         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            <group-profile-stories id="{{ $group->id }}"></group-profile-stories>
                             @each('site.partials._story', $group->stories, 'story')
                         </div>
                     </div><!-- end row tab -->

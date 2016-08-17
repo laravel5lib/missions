@@ -17,8 +17,8 @@
 					</a>
 				</li>
 				<ul v-if="auth" class="dropdown-menu" aria-labelledby="userMenu">
-					<li class="text-center"><a href="#">My Profile</a></li>
-					<li class="text-center"><a href="#">Dashboard</a></li>
+					<li class="text-center"><a :href="url">My Profile</a></li>
+					<li class="text-center"><a href="/dahboard">Dashboard</a></li>
 					<li v-if="admin" class="text-center"><a href="/admin">Admin</a></li>
 					<li class="text-center"><a href="/logout">Sign Out</a></li>
 				</ul>
@@ -74,6 +74,10 @@
 				default: null
 			},
 			avatar: {
+				type: String,
+				default: null
+			},
+			url: {
 				type: String,
 				default: null
 			}

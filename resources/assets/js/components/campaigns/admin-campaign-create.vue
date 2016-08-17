@@ -86,35 +86,48 @@
 				</div>
 			</template>
 
-			
-			<accordion :one-at-atime="true">
-				<panel header="Avatar" :is-open.sync="avatarPanelOpen">
-					<div class="media" v-if="selectedAvatar">
-						<div class="media-left">
-							<a href="#">
-								<img class="media-object" :src="selectedAvatar.source + '?w=100&q=50'" width="100" :alt="selectedAvatar.name">
-							</a>
-						</div>
-						<div class="media-body">
-							<h4 class="media-heading">{{selectedAvatar.name}}</h4>
-						</div>
-					</div>
+			<div class="media">
+				<div class="media-left">
+					<a href="#">
+						<img class="media-object" :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100" :alt="selectedAvatar ? selectedAvatar.name : ''">
+					</a>
+				</div>
+				<div class="media-body">
+					<h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
+					<button class="btn btn-block btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
+						Set Avatar
+					</button>
+				</div>
+			</div>
+			<div class="collapse" id="avatarCollapse">
+				<div class="well">
 					<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
-				</panel>
-				<panel header="Banner" :is-open.sync="bannerPanelOpen">
-					<div class="media" v-if="selectedBanner">
-						<div class="media-left">
-							<a href="#">
-								<img class="media-object" :src="selectedBanner.source + '?w=100&q=50'" width="100" :alt="selectedBanner.name">
-							</a>
-						</div>
-						<div class="media-body">
-							<h4 class="media-heading">{{selectedBanner.name}}</h4>
-						</div>
-					</div>
+				</div>
+			</div>
+
+			<br>
+
+			<div class="media">
+				<div class="media-left">
+					<a href="#">
+						<img class="media-object" :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100" :alt="selectedBanner ? selectedBanner.name : ''">
+					</a>
+				</div>
+				<div class="media-body">
+					<h4 class="media-heading">{{selectedBanner ? selectedBanner.name : ''}}</h4>
+					<button class="btn btn-block btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
+						Set Banner
+					</button>
+				</div>
+			</div>
+
+			<div class="collapse" id="bannerCollapse">
+				<div class="well">
 					<upload-create-update type="banner" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
-				</panel>
-			</accordion>
+				</div>
+			</div>
+
+			<br>
 
 			<div class="form-group">
 				<div class="text-center">
@@ -149,8 +162,6 @@
 				page_url: null,
 				page_src: null,
 				attemptSubmit: false,
-				avatarPanelOpen:false,
-				bannerPanelOpen:false,
 				selectedAvatar: null,
 				avatar_upload_id: null,
 				selectedBanner: null,
@@ -173,10 +184,6 @@
 			checkForError(field){
 				// if user clicked submit button while the field is invalid trigger error styles 
 				return this.$CreateCampaign[field].invalid && this.attemptSubmit;
-			},
-			checkForServerError(field){
-				debugger;
-				return this.error
 			},
 			convertToSlug(text){
 				return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
@@ -211,12 +218,12 @@
 					case 'avatar':
 						this.selectedAvatar = data;
 						this.avatar_upload_id = data.id;
-						this.avatarPanelOpen = false;
+						jQuery('#avatarCollapse').collapse('hide');
 						break;
 					case 'banner':
 						this.selectedBanner = data;
 						this.banner_upload_id = data.id;
-						this.bannerPanelOpen = false;
+						jQuery('#bannerCollapse').collapse('hide');
 						break;
 				}
 			}

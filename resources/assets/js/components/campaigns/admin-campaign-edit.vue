@@ -64,38 +64,74 @@
 
 			</div>
 
-			<div class="form-group" :class="{ 'has-error': checkForError('url') }" v-if="published_at">
-				<label for="description" class="col-sm-2 control-label">Page Url</label>
-				<div class="col-sm-10">
-					<div class="input-group">
-						<span class="input-group-addon">www.missions.me/campaigns/</span>
-						<input type="text" id="page_url" v-model="page_url" class="form-control"
-							   v-validate:url="{ required: false }" />
-					</div>
-					<div v-if="errors.page_url" class="help-block">{{errors.page_url.toString()}}</div>
-				</div>
-			</div>
-
-			<div class="form-group" :class="{ 'has-error': checkForError('src') }" v-if="published_at">
-				<label for="description" class="col-sm-2 control-label">Page Source</label>
-				<div class="col-sm-10">
-					<div class="input-group">
-						<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
-						<input type="text" id="page_src" v-model="page_src" class="form-control"
-							   v-validate:src="{ required: false }" />
-						<span class="input-group-addon">.blade.php</span>
+			<template v-if="published_at">
+				<div class="form-group" :class="{ 'has-error': checkForError('url') || errors.page_url }">
+					<label for="description" class="col-sm-2 control-label">Page Url</label>
+					<div class="col-sm-10">
+						<div class="input-group">
+							<span class="input-group-addon">www.missions.me/campaigns/</span>
+							<input type="text" id="page_url" v-model="page_url" class="form-control"
+								   v-validate:url="{ required: false }" />
+						</div>
+						<div v-if="errors.page_url" class="help-block">{{errors.page_url.toString()}}</div>
 					</div>
 				</div>
-			</div>
 
-			<accordion :one-at-atime="true">
-				<panel header="Avatar" :is-open.sync="avatarPanelOpen">
+				<div class="form-group" :class="{ 'has-error': checkForError('src') }">
+					<label for="description" class="col-sm-2 control-label">Page Source</label>
+					<div class="col-sm-10">
+						<div class="input-group">
+							<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
+							<input type="text" id="page_src" v-model="page_src" class="form-control"
+								   v-validate:src="{ required: false }" />
+							<span class="input-group-addon">.blade.php</span>
+						</div>
+					</div>
+				</div>
+			</template>
+
+			<div class="media">
+				<div class="media-left">
+					<a href="#">
+						<img class="media-object" :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100" :alt="selectedAvatar ? selectedAvatar.name : ''">
+					</a>
+				</div>
+				<div class="media-body">
+					<h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
+					<button class="btn btn-block btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
+						Set Avatar
+					</button>
+				</div>
+			</div>
+			<div class="collapse" id="avatarCollapse">
+				<div class="well">
 					<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
-				</panel>
-				<panel header="Banner" :is-open.sync="bannerPanelOpen">
+				</div>
+			</div>
+
+			<br>
+
+			<div class="media">
+				<div class="media-left">
+					<a href="#">
+						<img class="media-object" :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100" :alt="selectedBanner ? selectedBanner.name : ''">
+					</a>
+				</div>
+				<div class="media-body">
+					<h4 class="media-heading">{{selectedBanner ? selectedBanner.name : ''}}</h4>
+					<button class="btn btn-block btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
+						Set Banner
+					</button>
+				</div>
+			</div>
+
+			<div class="collapse" id="bannerCollapse">
+				<div class="well">
 					<upload-create-update type="banner" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
-				</panel>
-			</accordion>
+				</div>
+			</div>
+
+			<br>
 
 			<div class="form-group">
 				<div class="col-sm-12 text-center">
@@ -153,9 +189,9 @@
 				page_url: null,
 				page_src: null,
 				attemptSubmit: false,
-				avatarPanelOpen:false,
-				bannerPanelOpen:false,
+				selectedAvatar: null,
 				avatar_upload_id: null,
+				selectedBanner: null,
 				banner_upload_id: null,
 				resource: this.$resource('campaigns{/id}')
 			}
@@ -219,12 +255,14 @@
 			'uploads-complete'(data){
 				switch(data.type){
 					case 'avatar':
+						this.selectedAvatar = data;
 						this.avatar_upload_id = data.id;
-						this.avatarPanelOpen = false;
+						jQuery('#avatarCollapse').collapse('hide');
 						break;
 					case 'banner':
+						this.selectedBanner = data;
 						this.banner_upload_id = data.id;
-						this.bannerPanelOpen = false;
+						jQuery('#bannerCollapse').collapse('hide');
 						break;
 				}
 			}
@@ -244,7 +282,7 @@
 				this.published_at = moment(campaign.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
 				this.page_url = campaign.page_url;
 				this.page_src = campaign.page_src;
-				this.countryCodeObj = _.findWhere(this.countries, {name: campaign.country});
+				this.countryCodeObj = _.findWhere(this.countries, { name: campaign.country });
 				this.country_code = this.countryCodeObj.code;
 			});
 

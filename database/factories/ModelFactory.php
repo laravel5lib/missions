@@ -727,3 +727,18 @@ $factory->define(App\Models\v1\Story::class, function(Faker\Generator $faker)
         'content' => $faker->paragraph(10)
     ];
 });
+
+$factory->define(App\Models\v1\Accolade::class, function(Faker\Generator $faker)
+{
+    $countries = [];
+
+    for ($i = 0; $i <= 10; $i++) {
+        array_push($countries, $faker->countryCode);
+    }
+
+    return [
+        'display_name' => 'Countries Visited',
+        'name'         => 'countries_visited',
+        'items'        => $faker->randomElements($countries, 4)
+    ];
+});

@@ -13,7 +13,8 @@ class UserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'reservations', 'notes', 'managing', 'facilitating', 'passports', 'visas', 'uploads'
+        'reservations', 'notes', 'managing', 'facilitating',
+        'passports', 'visas', 'uploads', 'accolades'
     ];
 
     /**
@@ -58,6 +59,13 @@ class UserTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    public function includeAccolades(User $user)
+    {
+        $accolades = $user->accolades;
+
+        return $this->collection($accolades, new AccoladeTransformer);
     }
 
     public function includeUploads(User $user)

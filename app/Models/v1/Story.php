@@ -11,7 +11,7 @@ class Story extends Model
 {
     use UuidForKey, Filterable, Taggable;
 
-    protected $fillable = ['title', 'content'];
+    protected $fillable = ['title', 'content', 'author_id', 'author_type'];
 
     public function author()
     {

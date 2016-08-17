@@ -19,6 +19,7 @@ import visaCreateUpdate from './components/visas/visa-create-update.vue';
 import reservationsPassportsManager from './components/reservations/reservations-passports-manager.vue';
 import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
 import userSettings from './components/users/user-settings.vue';
+import userProfileStories from './components/users/user-profile-stories.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -239,6 +240,7 @@ new Vue({
         reservationsPassportsManager,
         reservationsVisasManager,
         userSettings,
+        userProfileStories,
 
         // admin components
         adminCampaignCreate,

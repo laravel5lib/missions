@@ -161,7 +161,7 @@
                     this.reservationResource.update({id: this.reservationId}, {
                         visa_id: visa.id
                     }).then(function (response) {
-                        toggleChangeState();
+                        this.toggleChangeState();
                     });
                 }
             },

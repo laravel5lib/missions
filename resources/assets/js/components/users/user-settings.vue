@@ -9,7 +9,7 @@
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('email') }">
+            <div class="form-group" :class="{ 'has-error': checkForError('email') || errors.email }">
                 <label for="name" class="col-sm-2 control-label">Email</label>
                 <div class="col-sm-10">
                     <input type="email" class="form-control" name="email" id="email" v-model="email"
@@ -17,7 +17,7 @@
                     <div v-show="errors.email" class="help-block">{{errors.email}}</div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" :class="{ 'has-error': errors.alt_email }">
                 <label for="name" class="col-sm-2 control-label">Alt. Email</label>
                 <div class="col-sm-10">
                     <input type="email" class="form-control" name="alt_email" id="alt_email" v-model="alt_email">

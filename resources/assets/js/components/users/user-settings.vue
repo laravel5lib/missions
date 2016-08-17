@@ -14,12 +14,14 @@
                 <div class="col-sm-10">
                     <input type="email" class="form-control" name="email" id="email" v-model="email"
                            v-validate:email="{ required: true, minlength:1, maxlength:100 }">
+                    <div v-show="errors.email" class="help-block">{{errors.email}}</div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="name" class="col-sm-2 control-label">Alt. Email</label>
                 <div class="col-sm-10">
                     <input type="email" class="form-control" name="alt_email" id="alt_email" v-model="alt_email">
+                    <div v-show="errors.alt_email" class="help-block">{{errors.alt_email}}</div>
                 </div>
             </div>
 
@@ -329,13 +331,14 @@
                     </label>
                 </div>
             </div>
-            <div class="form-group" v-if="!!public">
+            <div class="form-group" :class="{ 'has-error': checkForError('url') || errors.url }" v-if="!!public">
                 <label for="url" class="col-sm-2 control-label">Url Slug</label>
                 <div class="col-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon">www.missions.me/users/</span>
                         <input type="text" id="url" v-model="url" class="form-control" required v-validate:url="{ required: !!public }"/>
                     </div>
+                    <div v-show="errors.url" class="help-block">{{errors.url}}</div>
                 </div>
             </div>
             <div class="form-group">
@@ -344,6 +347,13 @@
                     <a @click="submit()" class="btn btn-primary">Update</a>
                 </div>
             </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div v-if="saved" class="alert alert-success" role="alert"><i class="fa fa-check"></i> Profile Updated</div>
+                </div>
+            </div>
+
         </form>
     </validator>
 </template>
@@ -388,7 +398,9 @@
                 dobMonth: null,
                 dobDay: null,
                 dobYear: null,
-                resource: this.$resource('users/me')
+                resource: this.$resource('users/me'),
+                errors: {},
+                saved: false,
             }
         },
         computed: {
@@ -405,6 +417,9 @@
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$UserSettings[field].invalid && this.attemptSubmit;
+            },
+            onModified(){
+                this.saved = false;
             },
             submit(){
                 this.attemptSubmit = true;
@@ -432,8 +447,13 @@
                         url: this.public ? this.url : undefined,
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
+                        this.saved = true;
+                        setTimeout(function () {
+                            this.saved = false;
+                        }.bind(this), 3000);
                     }, function (error) {
                         console.log(error);
+                        this.errors = error.data.errors;
                     });
                 }
             }

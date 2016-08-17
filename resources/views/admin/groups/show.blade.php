@@ -55,7 +55,7 @@
                                     <div class="col-sm-12 text-center">
                                         <div class="well">
                                             <label>Url slug</label>
-                                            <h4>http://missions.me/{{ $group->url }}</h4>
+                                            <h4><a href="/groups/{{ $group->url }}">http://missions.me/groups/{{ $group->url }}</a></h4>
                                         </div>
                                     </div>
                                 </div>

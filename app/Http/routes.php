@@ -20,6 +20,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.settings');
     });
 
+    Route::get('groups', function() {
+        return view('dashboard.groups.index');
+    });
+
+    Route::get('groups/{slug}', function() {
+        return view('dashboard.groups.show');
+    });
+
     Route::get('records', function () {
         return view('dashboard.records.index');
     });

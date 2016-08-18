@@ -474,14 +474,43 @@ class User extends Authenticatable implements JWTSubject
         return $this->morphMany(Link::class, 'linkable');
     }
 
+    /**
+     * Get all the user's donations made.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function donations()
     {
         return $this->hasMany(Donation::class, 'donor_id');
     }
 
+    /**
+     * Get all stories the user has authored.
+     *
+     * @return mixed
+     */
     public function stories()
     {
         return $this->morphMany(Story::class, 'author')->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get the all the user's accolades.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function accolades()
+    {
+        return $this->morphMany(Accolade::class, 'recipient');
+    }
+
+    public function getCountriesVisited()
+    {
+        $this->load('accolades');
+
+        $accolade = $this->accolades()->where('name', 'countries_visited')->first();
+
+        return $accolade->items;
     }
 
     /**

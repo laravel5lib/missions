@@ -1,10 +1,10 @@
 <template>
     <div>
-        <button class="btn btn-primary btn-sm" @click="newMode=!newMode">New <i class="fa fa-plus"></i></button>
+        <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
         <hr>
         <div class="panel panel-default" v-if="newMode">
             <div class="panel-heading">
-                Write New Story
+                <h5>Write New Story</h5>
             </div>
             <div class="panel-body">
                 <form>
@@ -14,11 +14,11 @@
                     </div>
                     <div class="form-group">
                         <label for="newStoryContent">Content
-                            <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev" aria-expanded="false" aria-controls="markdownPrev">
+                            <button class="btn btn-info btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev" aria-expanded="false" aria-controls="markdownPrev">
                                 Preview
                             </button>
                         </label>
-                        <textarea class="form-control" id="newStoryContent" v-model="selectedStory.content" minlength="1"></textarea>
+                        <textarea class="form-control" id="newStoryContent" v-model="selectedStory.content" minlength="1" rows="20"></textarea>
                         <div class="collapse" id="markdownPrev">
                             <br>
                             <div class="well" v-html="selectedStory.content | marked"></div>
@@ -26,7 +26,7 @@
                     </div>
                     <div class="form-group">
                         <button class="btn btn-xs btn-default" type="button" @click="newMode = false">Cancel</button>
-                        <button class="btn btn-xs btn-primary" type="button" @click="createStory(selectedStory)">Save</button>
+                        <button class="btn btn-xs btn-success" type="button" @click="createStory(selectedStory)">Save</button>
                     </div>
                 </form>
             </div>
@@ -39,10 +39,10 @@
                     </a>
                 </h5>
             </div>
-            <div id="collapse-{{ story.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
+            <div id="collapse-{{ story.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
                 <div class="panel-body" v-if="editMode !== story.id">
                     <h5 class="media-heading"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
-                    {{ story.content | marked }}
+                    <div v-html="story.content | marked"></div>
                 </div>
                 <div class="panel-body" v-if="editMode === story.id">
                     <form>
@@ -52,11 +52,11 @@
                         </div>
                         <div class="form-group">
                             <label for="selectedStoryContent">Content
-                                <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev{{$index}}" aria-expanded="false" aria-controls="markdownPrev">
+                                <button class="btn btn-info btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev{{$index}}" aria-expanded="false" aria-controls="markdownPrev">
                                     Preview
                                 </button>
                             </label>
-                            <textarea class="form-control" id="selectedStoryContent" v-model="selectedStory.content" minlength="1"></textarea>
+                            <textarea class="form-control" id="selectedStoryContent" v-model="selectedStory.content" minlength="1" rows="20"></textarea>
                             <div class="collapse" id="markdownPrev{{$index}}">
                                 <br>
                                 <div class="well" v-html="selectedStory.content | marked"></div>
@@ -64,7 +64,7 @@
                         </div>
                         <div class="form-group">
                             <button class="btn btn-xs btn-default" type="button" @click="editMode = null">Cancel</button>
-                            <button class="btn btn-xs btn-primary" type="button" @click="updateStory(selectedStory)">Update</button>
+                            <button class="btn btn-xs btn-success" type="button" @click="updateStory(selectedStory)">Update</button>
                         </div>
                     </form>
                 </div>

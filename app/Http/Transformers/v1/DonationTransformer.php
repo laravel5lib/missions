@@ -53,6 +53,8 @@ class DonationTransformer extends TransformerAbstract
      */
     public function includeDonor(Donation $donation)
     {
-        //
+        $donor = $donation->donor;
+
+        return $this->item($donor, new DonorTransformer);
     }
 }

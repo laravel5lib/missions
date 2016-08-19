@@ -14,7 +14,7 @@ class Donor extends Model
 
     protected $fillable = [
         'name', 'email', 'phone', 'address_one', 'address_two',
-        'city', 'state', 'country_code',
+        'city', 'state', 'zip', 'country_code',
         'account_holder_id', 'account_holder_type'
     ];
 
@@ -28,5 +28,19 @@ class Donor extends Model
     public function accountHolder()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Get the total amount donated by the donor for all time
+     * or by passing a specific designation filter.
+     *
+     * @param array $designation ['reservation' => '{id}']
+     * @return mixed
+     */
+    public function totalDonated(array $designation = [])
+    {
+        return $this->donations()
+                    ->filter($designation)
+                    ->sum('amount');
     }
 }

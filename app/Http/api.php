@@ -39,10 +39,10 @@ $api->version('v1', [
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
     $api->resource('reservations', 'ReservationsController');
-    $api->get('reservations/{id}/donations', 'ReservationsController@donations');
+    $api->get('reservations/{id}/donors', 'ReservationsController@donors');
     $api->resource('assignments', 'AssignmentsController');
-    $api->get('fundraisers.donations', 'DonationsController@index');
     $api->resource('fundraisers', 'FundraisersController');
+    $api->resource('donors', 'DonorsController');
     $api->resource('donations', 'DonationsController');
     $api->post('donations/authorize', 'DonationsController@authorizeCard');
     $api->resource('passports', 'PassportsController');

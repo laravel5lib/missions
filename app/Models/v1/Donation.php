@@ -59,6 +59,13 @@ class Donation extends Model
     public $timestamps = true;
 
     /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = ['donor', 'designation'];
+
+    /**
      * Get the donation's designation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

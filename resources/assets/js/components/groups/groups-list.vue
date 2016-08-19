@@ -3,7 +3,8 @@
     <form class="form-horizontal" v-if="selectUi">
         <label class="control-label col-sm-2">Jump to:</label>
         <div class="form-group col-sm-10">
-            <select class="form-control" v-model="currentGroup" @change="goto()">
+            <select class="form-control" v-model="currentGroup" @change="rememberSelection()">
+                <option :value="">-- Select Group --</option>
                 <option v-for="group in groups" :value="group.id">{{group.name}}</option>
             </select>
         </div>
@@ -28,23 +29,34 @@
         </div>
     </div>
     <div class="alert alert-info" v-if="!selectUi && groups.length < 1">No groups found</div>
+    <hr>
+    <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+        <div class="panel panel-default" v-if="currentGroup != null && currentGroup !== 'undefined'">
+            <div class="panel-body">
+                <group-edit :group-id="currentGroup" :managing="true"></group-edit>
+            </div>
+        </div>
+    </div>
 </div>
 </template>
 <script>
+    import groupEdit from './admin-group-edit.vue';
     export default{
         name: 'groups-list',
-        props: ['userId', 'type', 'selectUi', 'currentGroup'],
+        components: {'group-edit': groupEdit},
+        props: ['userId', 'type', 'selectUi'],
         data(){
             return{
-                groups: []
+                groups: [],
+                currentGroup: localStorage.currentGroup && localStorage.currentGroup !== 'undefined' ? localStorage.currentGroup : null
             }
         },
         methods: {
             country(code){
                 return code;
             },
-            goto(){
-                window.location.href = '/dashboard/groups/' + this.currentGroup;
+            rememberSelection(){
+                localStorage.currentGroup = this.currentGroup;
             },
             getGroups(){
                 this.$http.get('users/me', {

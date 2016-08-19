@@ -38197,7 +38197,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     name: 'group-edit',
     components: { vSelect: _vueSelect2.default },
-    props: ['groupId'],
+    props: ['groupId', 'managing'],
     data: function data() {
         return {
             name: '',
@@ -38261,7 +38261,9 @@ exports.default = {
                     url: this.url,
                     email: this.email
                 }).then(function (resp) {
-                    window.location.href = '/' + location.pathname.split('/')[1] + '/' + resp.data.data.links[0].uri;
+                    if (!this.managing) {
+                        window.location.href = '/' + location.pathname.split('/')[1] + '/' + resp.data.data.links[0].uri;
+                    }
                 }, function (error) {
                     console.log(error);
                     debugger;
@@ -38618,12 +38620,21 @@ if (module.hot) {(function () {  module.hot.accept()
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _adminGroupEdit = require('./admin-group-edit.vue');
+
+var _adminGroupEdit2 = _interopRequireDefault(_adminGroupEdit);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
     name: 'groups-list',
-    props: ['userId', 'type', 'selectUi', 'currentGroup'],
+    components: { 'group-edit': _adminGroupEdit2.default },
+    props: ['userId', 'type', 'selectUi'],
     data: function data() {
         return {
-            groups: []
+            groups: [],
+            currentGroup: localStorage.currentGroup && localStorage.currentGroup !== 'undefined' ? localStorage.currentGroup : null
         };
     },
 
@@ -38631,8 +38642,8 @@ exports.default = {
         country: function country(code) {
             return code;
         },
-        goto: function goto() {
-            window.location.href = '/dashboard/groups/' + this.currentGroup;
+        rememberSelection: function rememberSelection() {
+            localStorage.currentGroup = this.currentGroup;
         },
         getGroups: function getGroups() {
             this.$http.get('users/me', {
@@ -38648,7 +38659,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <form class=\"form-horizontal\" v-if=\"selectUi\">\n        <label class=\"control-label col-sm-2\">Jump to:</label>\n        <div class=\"form-group col-sm-10\">\n            <select class=\"form-control\" v-model=\"currentGroup\" @change=\"goto()\">\n                <option v-for=\"group in groups\" :value=\"group.id\">{{group.name}}</option>\n            </select>\n        </div>\n    </form>\n    <hr>\n    <div class=\"col-xs-12 col-sm-6 col-md-4\" v-for=\"group in groups\" v-if=\"!selectUi &amp;&amp; groups.length > 0\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading text-center\">\n                <h5>{{ group.name }} <small>{{ group.country }}</small></h5>\n            </div>\n            <div class=\"panel-body text-center\">\n                <img :src=\"group.avatar||group.banner\" class=\"img-circle img-lg\">\n                <hr class=\"divider inv sm\">\n                <h6 class=\"label label-default text-uppercase\">{{ group.type }} Group</h6>\n                <!--<h4>{{ group.surname }}, {{ group.given_names }}</h4>-->\n                <h5 class=\"text-capitalize\"> </h5>\n                <div class=\"btn-group btn-group-justified\">\n                    <a class=\"btn btn-sm btn-info\" href=\"/groups/{{ group.url }}\"><i class=\"fa fa-eye\"></i> View</a>\n                    <a class=\"btn btn-sm btn-primary\" href=\"/dashboard/groups/{{ group.id }}\"><i class=\"fa fa-pencil\"></i> Manage</a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"alert alert-info\" v-if=\"!selectUi &amp;&amp; groups.length < 1\">No groups found</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <form class=\"form-horizontal\" v-if=\"selectUi\">\n        <label class=\"control-label col-sm-2\">Jump to:</label>\n        <div class=\"form-group col-sm-10\">\n            <select class=\"form-control\" v-model=\"currentGroup\" @change=\"rememberSelection()\">\n                <option :value=\"\">-- Select Group --</option>\n                <option v-for=\"group in groups\" :value=\"group.id\">{{group.name}}</option>\n            </select>\n        </div>\n    </form>\n    <hr>\n    <div class=\"col-xs-12 col-sm-6 col-md-4\" v-for=\"group in groups\" v-if=\"!selectUi &amp;&amp; groups.length > 0\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading text-center\">\n                <h5>{{ group.name }} <small>{{ group.country }}</small></h5>\n            </div>\n            <div class=\"panel-body text-center\">\n                <img :src=\"group.avatar||group.banner\" class=\"img-circle img-lg\">\n                <hr class=\"divider inv sm\">\n                <h6 class=\"label label-default text-uppercase\">{{ group.type }} Group</h6>\n                <!--<h4>{{ group.surname }}, {{ group.given_names }}</h4>-->\n                <h5 class=\"text-capitalize\"> </h5>\n                <div class=\"btn-group btn-group-justified\">\n                    <a class=\"btn btn-sm btn-info\" href=\"/groups/{{ group.url }}\"><i class=\"fa fa-eye\"></i> View</a>\n                    <a class=\"btn btn-sm btn-primary\" href=\"/dashboard/groups/{{ group.id }}\"><i class=\"fa fa-pencil\"></i> Manage</a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"alert alert-info\" v-if=\"!selectUi &amp;&amp; groups.length < 1\">No groups found</div>\n    <hr>\n    <div class=\"col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2\">\n        <div class=\"panel panel-default\" v-if=\"currentGroup != null &amp;&amp; currentGroup !== 'undefined'\">\n            <div class=\"panel-body\">\n                <group-edit :group-id=\"currentGroup\" :managing=\"true\"></group-edit>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -38659,7 +38670,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-199fdb3d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":113,"vue-hot-reload-api":108}],134:[function(require,module,exports){
+},{"./admin-group-edit.vue":127,"vue":113,"vue-hot-reload-api":108}],134:[function(require,module,exports){
 'use strict';
 
 var _vueSelect = require('vue-select');

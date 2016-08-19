@@ -21,6 +21,7 @@
             		<div class="panel-body">
 		               <group-edit group-id="{{ $id }}"></group-edit>
 		            </div>
+                </div>
             </div>
         </div>
     </div>

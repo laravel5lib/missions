@@ -9,7 +9,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <groups-list user-id="{{ auth()->check() ? auth()->id() : null }}"></groups-list>
+                <groups-list user-id="{{ auth()->check() ? auth()->id() : null }}" :select-ui="true"></groups-list>
             </div>
         </div>
     </div>

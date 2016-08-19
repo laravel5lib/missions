@@ -12,6 +12,7 @@ import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
 import recordsList from './components/records/records-list.vue';
+import groupsList from './components/groups/groups-list.vue';
 import visasList from './components/visas/visas-list.vue';
 import passportsList from './components/passports/passports-list.vue';
 import passportCreateUpdate from './components/passports/passport-create-update.vue';
@@ -20,6 +21,8 @@ import reservationsPassportsManager from './components/reservations/reservations
 import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
 import userSettings from './components/users/user-settings.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
+import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
+import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -224,6 +227,7 @@ new Vue({
         groupTrips,
         groupProfileTrips,
         groupProfileStories,
+        groupProfileFundraisers,
         groupTripWrapper,
         tripDetailsMissionaries,
         tripRegWizard,
@@ -236,11 +240,13 @@ new Vue({
         passportsList,
         passportCreateUpdate,
         visasList,
+        groupsList,
         visaCreateUpdate,
         reservationsPassportsManager,
         reservationsVisasManager,
         userSettings,
         userProfileStories,
+        userProfileFundraisers,
 
         // admin components
         adminCampaignCreate,

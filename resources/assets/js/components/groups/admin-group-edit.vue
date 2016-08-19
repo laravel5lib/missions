@@ -204,7 +204,7 @@
                         url: this.url,
                         email: this.email
                     }).then(function (resp) {
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+                        window.location.href = '/' + location.pathname.split('/')[1] + '/' + resp.data.data.links[0].uri;
                     }, function (error) {
                         console.log(error);
                         debugger;

@@ -46,6 +46,9 @@
                     <div role="tabpanel" class="row tab-pane active" id="current-trips">
                         <group-profile-trips id="{{ $group->id }}"></group-profile-trips>
                     </div><!-- end tab-pane -->
+                    <div role="tabpanel" class="row tab-pane active" id="fundraisers">
+                        <group-profile-fundraisers id="{{ $group->id }}"></group-profile-fundraisers>
+                    </div><!-- end tab-pane -->
                     <div role="tabpanel" class="row tab-pane" id="stories">
                         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                             <group-profile-stories id="{{ $group->id }}"></group-profile-stories>

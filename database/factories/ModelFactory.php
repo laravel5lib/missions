@@ -366,25 +366,36 @@ $factory->define(App\Models\v1\Fundraiser::class, function (Faker\Generator $fak
 $factory->define(App\Models\v1\Donation::class, function (Faker\Generator $faker)
 {
     return [
-        'name'                 => $faker->name,
         'amount'               => $faker->numberBetween(1, 1000),
         'currency'             => $faker->currencyCode,
         'description'          => $faker->realText(120),
         'message'              => $faker->realText(120),
         'anonymous'            => $faker->boolean(25),
-        'email'                => $faker->safeEmail,
-        'phone'                => $faker->phoneNumber,
-        'company_name'         => $faker->optional(0.7)->company,
-        'address_street'       => $faker->streetAddress,
-        'address_city'         => $faker->city,
-        'address_state'        => $faker->state,
-        'address_zip'          => $faker->postcode,
-        'address_country_code' => strtolower($faker->countryCode),
         'designation_id'       => $faker->randomElement(App\Models\v1\Reservation::lists('id')->toArray()),
         'designation_type'     => 'reservations',
-        'donor_id'             => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
-        'donor_type'           => 'users',
+        'donor_id'             => $faker->randomElement(App\Models\v1\Donor::lists('id')->toArray()),
         'payment_type'         => 'card',
+    ];
+});
+
+/**
+ * Donor Factory
+ */
+$factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker)
+{
+    return [
+        'name'                => $faker->name,
+        'email'               => $faker->safeEmail,
+        'phone'               => $faker->phoneNumber,
+        'company'             => $faker->optional(0.7)->company,
+        'address_one'         => $faker->streetAddress,
+        'address_two'         => $faker->buildingNumber,
+        'city'                => $faker->city,
+        'state'               => $faker->state,
+        'zip'                 => $faker->postcode,
+        'country_code'        => strtolower($faker->countryCode),
+        'account_holder_id'   => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
+        'account_holder_type' => 'users'
     ];
 });
 
@@ -486,7 +497,6 @@ $factory->define(App\Models\v1\Medical\Release::class, function (Faker\Generator
         'name'          => $faker->firstName . ' ' . $faker->lastName,
         'conditions'    => $faker->randomElements($conditions, 1),
         'allergies'     => $faker->randomElements($allergies, 2),
-        'has_insurance' => true,
         'ins_provider'  => $faker->company,
         'ins_policy_no' => $faker->ean8,
         'is_risk'       => $faker->boolean(50)

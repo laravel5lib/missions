@@ -1,6 +1,15 @@
 <template>
 <div>
-    <div class="col-xs-12 col-sm-6 col-md-4" v-for="group in groups" v-if="groups.length > 0">
+    <form class="form-horizontal" v-if="selectUi">
+        <label class="control-label col-sm-2">Jump to:</label>
+        <div class="form-group col-sm-10">
+            <select class="form-control" v-model="currentGroup" @change="goto()">
+                <option v-for="group in groups" :value="group.id">{{group.name}}</option>
+            </select>
+        </div>
+    </form>
+    <hr>
+    <div class="col-xs-12 col-sm-6 col-md-4" v-for="group in groups" v-if="!selectUi && groups.length > 0">
         <div class="panel panel-default">
             <div class="panel-heading text-center">
                 <h5>{{ group.name }} <small>{{ group.country }}</small></h5>
@@ -18,13 +27,13 @@
             </div>
         </div>
     </div>
-    <div class="alert alert-info" v-if="groups.length < 1">No groups found</div>
+    <div class="alert alert-info" v-if="!selectUi && groups.length < 1">No groups found</div>
 </div>
 </template>
 <script>
     export default{
         name: 'groups-list',
-        props: ['userId', 'type'],
+        props: ['userId', 'type', 'selectUi', 'currentGroup'],
         data(){
             return{
                 groups: []
@@ -33,6 +42,9 @@
         methods: {
             country(code){
                 return code;
+            },
+            goto(){
+                window.location.href = '/dashboard/groups/' + this.currentGroup;
             },
             getGroups(){
                 this.$http.get('users/me', {

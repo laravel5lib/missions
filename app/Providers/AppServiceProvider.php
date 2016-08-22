@@ -68,12 +68,16 @@ class AppServiceProvider extends ServiceProvider
             $reservation->syncDeadlines($reservation->trip->deadlines);
             $reservation->addTodos($reservation->trip->todos);
 
+            $name = 'Send ' . $reservation->name . ' to ' . country($reservation->trip->country_code);
             $reservation->fundraisers()->create([
-                'name' => 'General Fundraiser',
+                'name' => $name,
+                'url' => str_replace(' ', '-', strtolower($name)) . '-' .substr($reservation->id, 0, 4),
+                'description' => file_get_contents(resource_path('assets/sample_fundraiser.md')),
                 'sponsor_type' => User::class,
                 'sponsor_id' => $reservation->user_id,
-                'goal_amount' => $reservation->costs()->sum('amount'),
-                'expires_at' => $reservation->trip->started_at
+                'goal_amount' => $reservation->getTotalCost(),
+                'expires_at' => $reservation->trip->started_at,
+                'banner_upload_id' => $reservation->trip->campaign->banner->id
             ]);
 
             $reservation->trip()->update([

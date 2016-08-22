@@ -261,6 +261,16 @@ class Reservation extends Model
     }
 
     /**
+     * Get the percentage of what was raised.
+     *
+     * @return float
+     */
+    public function getPercentRaised()
+    {
+        return round(($this->getTotalRaised()/$this->getTotalCost()) * 100);
+    }
+
+    /**
      * Get the total amount still owed for the reservation.
      *
      * @return mixed

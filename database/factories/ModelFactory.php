@@ -351,11 +351,12 @@ $factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $fa
 $factory->define(App\Models\v1\Fundraiser::class, function (Faker\Generator $faker)
 {
     return [
-        'name'        => $faker->catchPhrase,
-        'goal_amount' => $faker->numberBetween(1000, 3000),
-        'description' => implode('<br />', $faker->paragraphs(3)),
-        'expires_at'  => $faker->dateTimeThisYear(),
-        'public'      => $faker->boolean(50),
+        'name'             => $faker->catchPhrase,
+        'goal_amount'      => $faker->numberBetween(1000, 3000),
+        'description'      => implode('<br />', $faker->paragraphs(3)),
+        'url'              => $faker->unique()->slug(3),
+        'expires_at'       => $faker->dateTimeThisYear(),
+        'public'           => $faker->boolean(50),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::lists('id')->toArray())
     ];
 });

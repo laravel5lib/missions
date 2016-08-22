@@ -22,7 +22,6 @@ class FundraisersController extends Controller
         $this->fundraiser = $fundraiser;
 
         $this->middleware('api.auth', ['except' => ['index','show']]);
-//        $this->middleware('jwt.refresh', ['except' => ['index','show']]);
     }
 
     /**

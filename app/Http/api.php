@@ -42,6 +42,7 @@ $api->version('v1', [
     $api->get('reservations/{id}/donors', 'ReservationsController@donors');
     $api->resource('assignments', 'AssignmentsController');
     $api->resource('fundraisers', 'FundraisersController');
+    $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
     $api->resource('donors', 'DonorsController');
     $api->resource('donations', 'DonationsController');
     $api->post('donations/authorize', 'DonationsController@authorizeCard');

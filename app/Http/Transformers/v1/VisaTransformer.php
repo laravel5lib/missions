@@ -31,7 +31,7 @@ class VisaTransformer extends TransformerAbstract
             'number' => $visa->number,
             'country_code' => $visa->country_code,
             'country_name' => country($visa->country_code),
-            'scan_src' => $visa->scan_src,
+            'upload_id' => $visa->upload_id,
             'issued_at' => $visa->issued_at->format('Y-m-d'),
             'expires_at' => $visa->expires_at->format('Y-m-d'),
             'created_at' => $visa->created_at->toDateTimeString(),

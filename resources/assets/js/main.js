@@ -4,15 +4,25 @@ import topNav from './components/top-nav.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
+import groupProfileTrips from './components/groups/group-profile-trips.vue';
+import groupProfileStories from './components/groups/group-profile-stories.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
+import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
 import recordsList from './components/records/records-list.vue';
+import groupsList from './components/groups/groups-list.vue';
 import visasList from './components/visas/visas-list.vue';
 import passportsList from './components/passports/passports-list.vue';
 import passportCreateUpdate from './components/passports/passport-create-update.vue';
 import visaCreateUpdate from './components/visas/visa-create-update.vue';
+import reservationsPassportsManager from './components/reservations/reservations-passports-manager.vue';
+import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
+import userSettings from './components/users/user-settings.vue';
+import userProfileStories from './components/users/user-profile-stories.vue';
+import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
+import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -41,6 +51,7 @@ import adminUploadCreateUpdate from './components/uploads/admin-upload-create-up
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 window._ = require('underscore');
+window.marked = require('marked');
 // require('vue-strap/src/index.js');
 // window.VueStrap = require('vue-strap/dist/vue-strap.min');
 import VueStrap from 'vue-strap/dist/vue-strap.min';
@@ -214,7 +225,11 @@ new Vue({
         campaigns,
         campaignGroups,
         groupTrips,
+        groupProfileTrips,
+        groupProfileStories,
+        groupProfileFundraisers,
         groupTripWrapper,
+        tripDetailsMissionaries,
         tripRegWizard,
         reservationsList,
         donationsList,
@@ -225,7 +240,13 @@ new Vue({
         passportsList,
         passportCreateUpdate,
         visasList,
+        groupsList,
         visaCreateUpdate,
+        reservationsPassportsManager,
+        reservationsVisasManager,
+        userSettings,
+        userProfileStories,
+        userProfileFundraisers,
 
         // admin components
         adminCampaignCreate,

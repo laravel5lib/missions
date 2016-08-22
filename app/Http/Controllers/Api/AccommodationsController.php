@@ -26,7 +26,7 @@ class AccommodationsController extends Controller
     {
         $this->accommodation = $accommodation;
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     /**

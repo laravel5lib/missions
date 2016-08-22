@@ -24,7 +24,7 @@ class TripsController extends Controller
     {
         $this->middleware('internal', ['only' => ['store', 'update', 'destroy']]);
         $this->middleware('api.auth', ['only' => ['store', 'update', 'destroy']]);
-        $this->middleware('jwt.refresh', ['only' => ['store', 'update', 'destroy']]);
+//        $this->middleware('jwt.refresh', ['only' => ['store', 'update', 'destroy']]);
         $this->trip = $trip;
     }
 

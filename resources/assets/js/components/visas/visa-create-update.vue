@@ -34,7 +34,7 @@
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('issued') }">
                                 <span class="input-group-addon">Issued</span>
-                                <input type="date" class="form-control" v-model="issued_at" id="issued_at"
+                                <input type="date" class="form-control" v-model="issued_at" id="issued_at" :max="today"
                                        v-validate:issued="{ required: true }" required>
                             </div>
                             <br>
@@ -43,7 +43,7 @@
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('expires') }">
                                 <span class="input-group-addon">Expires</span>
-                                <input type="date" class="form-control" v-model="expires_at" id="expires_at"
+                                <input type="date" class="form-control" v-model="expires_at" id="expires_at" :min="tomorrow"
                                        v-validate:expires="{ required: true }" required>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                             <h4 class="media-heading">{{selectedAvatar.name}}</h4>
                         </div>
                     </div>
-                    <upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']"></upload-create-update>
+                    <upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'visa-'+given_names+'-'+surname"></upload-create-update>
                 </panel>
             </accordion>
 
@@ -120,7 +120,10 @@
                 countries: [],
                 countryObj: null,
                 attemptSubmit: false,
-                selectedAvatar: null
+                selectedAvatar: null,
+                today: moment().format('YYYY-MM-DD'),
+                yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
+                tomorrow:moment().add(1, 'days').format('YYYY-MM-DD'),
             }
         },
         computed: {
@@ -180,8 +183,10 @@
         events:{
             'uploads-complete'(data){
                 switch(data.type){
-                    case 'avatar':
+                    case 'other':
+                        //save for preview
                         this.selectedAvatar = data;
+                        // save for upload reference
                         this.upload_id = data.id;
                         break;
                 }

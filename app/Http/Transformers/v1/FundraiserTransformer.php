@@ -12,9 +12,7 @@ class FundraiserTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected $availableIncludes = [
-        'sponsor'
-    ];
+    protected $availableIncludes = [];
 
     /**
      * Turn this item object into a generic array
@@ -47,20 +45,4 @@ class FundraiserTransformer extends TransformerAbstract
         return $array;
     }
 
-    /**
-     * Include Sponsor
-     *
-     * @param Fundraiser $fundraiser
-     * @return \League\Fractal\Resource\Item
-     */
-    public function includeSponsor(Fundraiser $fundraiser)
-    {
-        $sponsor = $fundraiser->sponsor;
-
-        dd(get_class($sponsor));
-
-//        return $this->collection($sponsor, new UserTransformer);
-
-
-    }
 }

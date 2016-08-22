@@ -28,8 +28,8 @@ class VisaRequest extends FormRequest
             'surname' => 'required|string',
             'number' => 'required|string|min:6',
             'country_code' => 'required|string',
-            'issued_at' => 'required|date',
-            'expires_at' => 'required|date',
+            'issued_at' => 'required|date|before:now',
+            'expires_at' => 'required|date|after:now',
             'user_id' => 'required|exists:users,id'
         ];
 

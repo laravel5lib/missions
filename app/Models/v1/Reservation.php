@@ -3,7 +3,6 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
-use Carbon\Carbon;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;

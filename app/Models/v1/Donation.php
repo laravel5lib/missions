@@ -24,12 +24,8 @@ class Donation extends Model
      * @var array
      */
     protected $fillable = [
-        'amount', 'description', 'message', 'anonymous',
-        'email', 'phone', 'name', 'company_name',
-        'address_street', 'address_city', 'address_state',
-        'address_zip', 'address_country', 'currency',
-        'payment_type', 'donor_id', 'donor_type', 'designation_id',
-        'designation_type'
+        'amount', 'description', 'message', 'anonymous', 'currency',
+        'payment_type', 'donor_id', 'designation_id', 'designation_type'
     ];
 
     /**
@@ -63,6 +59,13 @@ class Donation extends Model
     public $timestamps = true;
 
     /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = ['donor', 'designation'];
+
+    /**
      * Get the donation's designation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
@@ -79,21 +82,7 @@ class Donation extends Model
      */
     public function donor()
     {
-        return $this->morphTo(); // User or Group
-    }
-
-    /**
-     * Scope a query to only include donations
-     * designated to a specific fundraiser.
-     *
-     * @param $query
-     * @param $id
-     * @return mixed
-     */
-    public function scopeWhereFundraiser($query, $id)
-    {
-        return $query->where('designation_type', 'App\Models\v1\Fundraiser')
-                     ->where('designation_id', $id);
+        return $this->belongsTo(Donor::class);
     }
 
 }

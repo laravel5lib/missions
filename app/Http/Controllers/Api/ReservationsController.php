@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Transformers\v1\DonationTransformer;
+use App\Http\Transformers\v1\DonorTransformer;
+use App\Models\v1\Donor;
 use App\Models\v1\Reservation;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\ReservationRequest;
@@ -24,8 +26,7 @@ class ReservationsController extends Controller
      */
     public function __construct(Reservation $reservation)
     {
-//        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
+        $this->middleware('api.auth', ['only' => 'store', 'update', 'destroy']);
         $this->reservation = $reservation;
     }
 
@@ -53,25 +54,26 @@ class ReservationsController extends Controller
      */
     public function show($id)
     {
-        $reservation = Reservation::findOrFail($id);
+        $reservation = $this->reservation->findOrFail($id);
 
         return $this->response->item($reservation, new ReservationTransformer);
     }
 
     /**
-     * Show all the donations for the specified reservation.
+     * Show all the donors for the specified reservation.
      *
      * @param $id
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function donations($id, Request $request)
+    public function donors($id, Request $request)
     {
-        $donations = Reservation::findOrFail($id)
-                        ->donations()
-                        ->paginate($request->get('per_page', 10));
+        $request->merge(['reservation' => $id]);
 
-        return $this->response->paginator($donations, new DonationTransformer);
+        $donors = Donor::filter($request->all())
+            ->paginate($request->get('per_page'));
+
+        return $this->response->paginator($donors, new DonorTransformer(['reservation' => $id]));
     }
 
     /**
@@ -102,7 +104,7 @@ class ReservationsController extends Controller
      */
     public function update(ReservationRequest $request, $id)
     {
-        $reservation = Reservation::findOrFail($id);
+        $reservation = $this->reservation->findOrFail($id);
 
         $reservation->update($request->except('costs', 'requirements', 'deadlines', 'todos'));
 
@@ -125,7 +127,7 @@ class ReservationsController extends Controller
      */
     public function destroy($id)
     {
-        $reservation = Reservation::findOrFail($id);
+        $reservation = $this->reseration->findOrFail($id);
 
         $reservation->delete();
 

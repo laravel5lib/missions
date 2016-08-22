@@ -27,7 +27,7 @@ class SitesController extends Controller
         $this->site = $site;
 
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     public function index(Request $request)

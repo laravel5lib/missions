@@ -39,13 +39,15 @@
 								<input type="date" class="form-control" v-model="started_at" id="started_at"
 									   v-validate:start="{ required: true }" required>
 							</div>
+							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="input-group" :class="{ 'has-error': checkForError('end') }">
 								<span class="input-group-addon">End</span>
-								<input type="date" class="form-control" v-model="ended_at" id="ended_at"
+								<input type="date" class="form-control" v-model="ended_at" id="ended_at" :min="started_at"
 									   v-validate:end="{ required: true }" required>
 							</div>
+							<div v-if="errors.ended_at" class="help-block">{{errors.ended_at.toString()}}</div>
 						</div>
 					</div>
 				</div>
@@ -58,57 +60,74 @@
 				</div>
 			</div>
 
-			<div class="form-group" :class="{ 'has-error': checkForError('url') }" v-if="published_at">
-				<label for="description" class="col-sm-2 control-label">Page Url</label>
-				<div class="col-sm-10">
-					<div class="input-group">
-						<span class="input-group-addon">www.missions.me/campaigns/</span>
-						<input type="text" id="page_url" v-model="page_url" class="form-control"
-							   v-validate:url="{ required: false,  }" />
+			<template v-if="published_at">
+				<div class="form-group" :class="{ 'has-error': checkForError('url') || errors.page_url }">
+					<label for="description" class="col-sm-2 control-label">Page Url</label>
+					<div class="col-sm-10">
+						<div class="input-group">
+							<span class="input-group-addon">www.missions.me/campaigns/</span>
+							<input type="text" id="page_url" v-model="page_url" class="form-control"
+								   v-validate:url="{ required: false }" />
+						</div>
+						<div v-show="errors.page_url" class="help-block">{{errors.page_url}}</div>
 					</div>
+				</div>
+
+				<div class="form-group" :class="{ 'has-error': checkForError('src') }">
+					<label for="description" class="col-sm-2 control-label">Page Source</label>
+					<div class="col-sm-10">
+						<div class="input-group">
+							<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
+							<input type="text" id="page_src" v-model="page_src" class="form-control"
+								   v-validate:src="{ required: false,  }" />
+							<span class="input-group-addon">.blade.php</span>
+						</div>
+					</div>
+				</div>
+			</template>
+
+			<div class="media">
+				<div class="media-left">
+					<a href="#">
+						<img class="media-object" :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100" :alt="selectedAvatar ? selectedAvatar.name : ''">
+					</a>
+				</div>
+				<div class="media-body">
+					<h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
+					<button class="btn btn-block btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
+						Set Avatar
+					</button>
+				</div>
+			</div>
+			<div class="collapse" id="avatarCollapse">
+				<div class="well">
+					<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
 				</div>
 			</div>
 
-			<div class="form-group" :class="{ 'has-error': checkForError('src') }" v-if="published_at">
-				<label for="description" class="col-sm-2 control-label">Page Source</label>
-				<div class="col-sm-10">
-					<div class="input-group">
-						<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
-						<input type="text" id="page_src" v-model="page_src" class="form-control"
-							   v-validate:src="{ required: false,  }" />
-						<span class="input-group-addon">.blade.php</span>
-					</div>
+			<br>
+
+			<div class="media">
+				<div class="media-left">
+					<a href="#">
+						<img class="media-object" :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100" :alt="selectedBanner ? selectedBanner.name : ''">
+					</a>
+				</div>
+				<div class="media-body">
+					<h4 class="media-heading">{{selectedBanner ? selectedBanner.name : ''}}</h4>
+					<button class="btn btn-block btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
+						Set Banner
+					</button>
 				</div>
 			</div>
-			
-			<accordion :one-at-atime="true">
-				<panel header="Avatar" :is-open.sync="avatarPanelOpen">
-					<div class="media" v-if="selectedAvatar">
-						<div class="media-left">
-							<a href="#">
-								<img class="media-object" :src="selectedAvatar.source + '?w=100&q=50'" width="100" :alt="selectedAvatar.name">
-							</a>
-						</div>
-						<div class="media-body">
-							<h4 class="media-heading">{{selectedAvatar.name}}</h4>
-						</div>
-					</div>
-					<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
-				</panel>
-				<panel header="Banner" :is-open.sync="bannerPanelOpen">
-					<div class="media" v-if="selectedBanner">
-						<div class="media-left">
-							<a href="#">
-								<img class="media-object" :src="selectedBanner.source + '?w=100&q=50'" width="100" :alt="selectedBanner.name">
-							</a>
-						</div>
-						<div class="media-body">
-							<h4 class="media-heading">{{selectedBanner.name}}</h4>
-						</div>
-					</div>
+
+			<div class="collapse" id="bannerCollapse">
+				<div class="well">
 					<upload-create-update type="banner" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
-				</panel>
-			</accordion>
+				</div>
+			</div>
+
+			<br>
 
 			<div class="form-group">
 				<div class="text-center">
@@ -131,6 +150,7 @@
 			return {
 				countries: [],
 				countryCodeObj: null,
+				errors: {},
 
 				name: null,
 				country: null,
@@ -142,8 +162,6 @@
 				page_url: null,
 				page_src: null,
 				attemptSubmit: false,
-				avatarPanelOpen:false,
-				bannerPanelOpen:false,
 				selectedAvatar: null,
 				avatar_upload_id: null,
 				selectedBanner: null,
@@ -180,7 +198,7 @@
 						short_desc: this.short_desc,
 						started_at: this.started_at,
 						ended_at: this.ended_at,
-						published_at: this.published_at,
+						published_at: moment(this.published_at).format('YYYY-MM-DD HH:mm:ss'),
 						page_url: this.page_url,
 						page_src: this.page_src,
 						avatar_upload_id: this.avatar_upload_id,
@@ -189,7 +207,7 @@
 					}).then(function (resp) {
 						window.location.href = '/admin' + resp.data.data.links[0].uri;
 					}, function (error) {
-						debugger;
+						this.errors = error.data.errors;
 					});
 				}
 			}
@@ -200,12 +218,12 @@
 					case 'avatar':
 						this.selectedAvatar = data;
 						this.avatar_upload_id = data.id;
-						this.avatarPanelOpen = false;
+						jQuery('#avatarCollapse').collapse('hide');
 						break;
 					case 'banner':
 						this.selectedBanner = data;
 						this.banner_upload_id = data.id;
-						this.bannerPanelOpen = false;
+						jQuery('#bannerCollapse').collapse('hide');
 						break;
 				}
 			}

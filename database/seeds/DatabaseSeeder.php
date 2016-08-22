@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
         $this->call(TripTableSeeder::class);
         $this->call(ReservationTableSeeder::class);
         $this->call(AssignmentTableSeeder::class);
-        $this->call(DonationTableSeeder::class);
+        $this->call(DonorTableSeeder::class);
+//        $this->call(DonationTableSeeder::class);
         $this->call(ContactTableSeeder::class);
         $this->call(MedicalReleaseSeeder::class);
         $this->call(RegionSeeder::class);

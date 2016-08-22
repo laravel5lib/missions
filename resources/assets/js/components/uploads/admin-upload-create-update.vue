@@ -60,7 +60,7 @@
 		</div>
 		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
 			<form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent">
-				<div class="form-group" :class="{ 'has-error': checkForError('name') }">
+				<div class="form-group" :class="{ 'has-error': checkForError('name') }" v-show="!uiLocked">
 					<label for="name" class="col-sm-2 control-label">Name</label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
@@ -90,17 +90,17 @@
 					</div>
 				</div>
 
-				<div class="row col-sm-offset-2" v-if="type && type === 'other'" v-show="!uiLocked">
+				<div class="row col-sm-offset-2" v-if="type && type === 'other'">
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" v-model="constrained">
-							Lock Proportions
+							Lock Proportions (px)
 						</label>
 					</div>
 					<div class="" :class="{'col-sm-4': !constrained, 'col-sm-8': constrained}">
 						<div class="input-group">
-							<span class="input-group-addon" v-if="!constrained" id="basic-addon3">Width(px)</span>
-							<span class="input-group-addon" v-if="constrained" id="basic-addon3">Width/Height(px)</span>
+							<span class="input-group-addon" v-if="!constrained" id="basic-addon3">Width</span>
+							<span class="input-group-addon" v-if="constrained" id="basic-addon3">Width/Height</span>
 							<input type="number" number class="form-control" v-model="scaledWidth" id="height" min="100" aria-describedby="basic-addon3"
 								   placeholder="300">
 						</div>
@@ -108,7 +108,7 @@
 					</div>
 					<div class="col-sm-4" v-if="!constrained">
 						<div class="input-group">
-							<span class="input-group-addon" id="basic-addon1">Height(px)</span>
+							<span class="input-group-addon" id="basic-addon1">Height</span>
 							<input type="number" number class="form-control" v-model="scaledHeight" id="width" min="100" aria-describedby="basic-addon1"
 								   placeholder="300">
 						</div>
@@ -121,7 +121,7 @@
 				<div class="form-group">
 					<label for="file" class="col-sm-2 control-label">File</label>
 					<div class="col-sm-10">
-						<input type="file" id="file" v-model="fileA" @change="handleImage" class="form-control">
+						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="form-control">
 						<!--<h5>Coords: {{coords|json}}</h5>-->
 					</div>
 				</div>
@@ -147,7 +147,7 @@
 
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<a href="/admin/uploads" class="btn btn-default">Cancel</a>
+						<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
 						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Create</a>
 						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Update</a>
 					</div>
@@ -200,13 +200,17 @@
 			uiLocked: {
 				type: Boolean,
 				default: false
+			},
+			name: {
+				type: String,
+				default: ''
 			}
 		},
         data(){
             return {
 //				showRight: false,
 
-                name: '',
+//                name: '',
 //                type: null,
                 path: '',
                 file: null,
@@ -245,6 +249,17 @@
 				pagination: {},
             }
         },
+		computed:{
+			allowedTypes() {
+				if (_.contains(['avatar', 'banner', 'other'], this.type)) {
+					return 'image/bmp, image/jpg, image/jpeg, image/png, image/gif';
+				}
+
+				if (this.type === 'file') {
+					return 'application/pdf';
+				}
+			}
+		},
 		watch:{
         	'type': function (val, oldVal) {
         		this.typeObj = _.findWhere(this.typePaths, {type: val});
@@ -340,7 +355,6 @@
                         width: parseInt(this.coords.w / this.imageAspectRatio),
                         height: parseInt(this.coords.h / this.imageAspectRatio),
                     }).then(function (resp) {
-						console.log(resp);
 						this.handleSuccess(resp)
                     }, function (error) {
                         console.log(error);
@@ -361,7 +375,6 @@
 						width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
 						height: parseInt(this.coords.h / this.imageAspectRatio)||undefined,
 					}).then(function (resp) {
-						console.log(resp);
 						this.handleSuccess(resp)
 					}, function (error) {
 						console.log(error);

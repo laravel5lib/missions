@@ -26,7 +26,7 @@ class TransportsController extends Controller
     {
         $this->transport = $transport;
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     /**

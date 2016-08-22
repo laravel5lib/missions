@@ -140,6 +140,16 @@ class Group extends Model
     }
 
     /**
+     * Get the group's social links.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function social()
+    {
+        return $this->morphMany(Link::class, 'linkable');
+    }
+
+    /**
      * Get the group's uploads.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
@@ -147,6 +157,38 @@ class Group extends Model
     public function uploads()
     {
         return $this->morphedByMany(Upload::class, 'uploadable');
+    }
+
+    /**
+     * Get the group's stories.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function stories()
+    {
+        return $this->morphMany(Story::class, 'author');
+    }
+
+    /**
+     * Get public groups.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePublic($query)
+    {
+        return $query->where('public', true);
+    }
+
+    /**
+     * Get private groups.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePrivate($query)
+    {
+        return $query->where('public', false);
     }
 
     /**

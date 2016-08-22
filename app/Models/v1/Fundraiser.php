@@ -64,14 +64,14 @@ class Fundraiser extends Model
         return $this->morphTo();
     }
 
-    /**
-     * Get all the fundraiser's donations.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
     public function donations()
     {
-        return $this->morphMany(Donation::class, 'designation');
+        return $this->fundable->donations();
+    }
+
+    public function donors()
+    {
+        return $this->fundable->getDonors();
     }
 
     /**

@@ -48,8 +48,8 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 },{"../core-js/symbol":12,"../core-js/symbol/iterator":13}],15:[function(require,module,exports){
 /*!
- * Bootstrap v3.3.6 (http://getbootstrap.com)
- * Copyright 2011-2015 Twitter, Inc.
+ * Bootstrap v3.3.7 (http://getbootstrap.com)
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under the MIT license
  */
 
@@ -60,16 +60,16 @@ if (typeof jQuery === 'undefined') {
 +function ($) {
   'use strict';
   var version = $.fn.jquery.split(' ')[0].split('.')
-  if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1) || (version[0] > 2)) {
-    throw new Error('Bootstrap\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 3')
+  if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1) || (version[0] > 3)) {
+    throw new Error('Bootstrap\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 4')
   }
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: transition.js v3.3.6
+ * Bootstrap: transition.js v3.3.7
  * http://getbootstrap.com/javascript/#transitions
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -126,10 +126,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: alert.js v3.3.6
+ * Bootstrap: alert.js v3.3.7
  * http://getbootstrap.com/javascript/#alerts
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -145,7 +145,7 @@ if (typeof jQuery === 'undefined') {
     $(el).on('click', dismiss, this.close)
   }
 
-  Alert.VERSION = '3.3.6'
+  Alert.VERSION = '3.3.7'
 
   Alert.TRANSITION_DURATION = 150
 
@@ -158,7 +158,7 @@ if (typeof jQuery === 'undefined') {
       selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
     }
 
-    var $parent = $(selector)
+    var $parent = $(selector === '#' ? [] : selector)
 
     if (e) e.preventDefault()
 
@@ -221,10 +221,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: button.js v3.3.6
+ * Bootstrap: button.js v3.3.7
  * http://getbootstrap.com/javascript/#buttons
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -241,7 +241,7 @@ if (typeof jQuery === 'undefined') {
     this.isLoading = false
   }
 
-  Button.VERSION  = '3.3.6'
+  Button.VERSION  = '3.3.7'
 
   Button.DEFAULTS = {
     loadingText: 'loading...'
@@ -263,10 +263,10 @@ if (typeof jQuery === 'undefined') {
 
       if (state == 'loadingText') {
         this.isLoading = true
-        $el.addClass(d).attr(d, d)
+        $el.addClass(d).attr(d, d).prop(d, true)
       } else if (this.isLoading) {
         this.isLoading = false
-        $el.removeClass(d).removeAttr(d)
+        $el.removeClass(d).removeAttr(d).prop(d, false)
       }
     }, this), 0)
   }
@@ -330,10 +330,15 @@ if (typeof jQuery === 'undefined') {
 
   $(document)
     .on('click.bs.button.data-api', '[data-toggle^="button"]', function (e) {
-      var $btn = $(e.target)
-      if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn')
+      var $btn = $(e.target).closest('.btn')
       Plugin.call($btn, 'toggle')
-      if (!($(e.target).is('input[type="radio"]') || $(e.target).is('input[type="checkbox"]'))) e.preventDefault()
+      if (!($(e.target).is('input[type="radio"], input[type="checkbox"]'))) {
+        // Prevent double click on radios, and the double selections (so cancellation) on checkboxes
+        e.preventDefault()
+        // The target component still receive the focus
+        if ($btn.is('input,button')) $btn.trigger('focus')
+        else $btn.find('input:visible,button:visible').first().trigger('focus')
+      }
     })
     .on('focus.bs.button.data-api blur.bs.button.data-api', '[data-toggle^="button"]', function (e) {
       $(e.target).closest('.btn').toggleClass('focus', /^focus(in)?$/.test(e.type))
@@ -342,10 +347,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: carousel.js v3.3.6
+ * Bootstrap: carousel.js v3.3.7
  * http://getbootstrap.com/javascript/#carousel
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -373,7 +378,7 @@ if (typeof jQuery === 'undefined') {
       .on('mouseleave.bs.carousel', $.proxy(this.cycle, this))
   }
 
-  Carousel.VERSION  = '3.3.6'
+  Carousel.VERSION  = '3.3.7'
 
   Carousel.TRANSITION_DURATION = 600
 
@@ -580,13 +585,14 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: collapse.js v3.3.6
+ * Bootstrap: collapse.js v3.3.7
  * http://getbootstrap.com/javascript/#collapse
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
+/* jshint latedef: false */
 
 +function ($) {
   'use strict';
@@ -610,7 +616,7 @@ if (typeof jQuery === 'undefined') {
     if (this.options.toggle) this.toggle()
   }
 
-  Collapse.VERSION  = '3.3.6'
+  Collapse.VERSION  = '3.3.7'
 
   Collapse.TRANSITION_DURATION = 350
 
@@ -792,10 +798,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: dropdown.js v3.3.6
+ * Bootstrap: dropdown.js v3.3.7
  * http://getbootstrap.com/javascript/#dropdowns
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -812,7 +818,7 @@ if (typeof jQuery === 'undefined') {
     $(element).on('click.bs.dropdown', this.toggle)
   }
 
-  Dropdown.VERSION = '3.3.6'
+  Dropdown.VERSION = '3.3.7'
 
   function getParent($this) {
     var selector = $this.attr('data-target')
@@ -958,10 +964,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: modal.js v3.3.6
+ * Bootstrap: modal.js v3.3.7
  * http://getbootstrap.com/javascript/#modals
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -992,7 +998,7 @@ if (typeof jQuery === 'undefined') {
     }
   }
 
-  Modal.VERSION  = '3.3.6'
+  Modal.VERSION  = '3.3.7'
 
   Modal.TRANSITION_DURATION = 300
   Modal.BACKDROP_TRANSITION_DURATION = 150
@@ -1099,7 +1105,9 @@ if (typeof jQuery === 'undefined') {
     $(document)
       .off('focusin.bs.modal') // guard against infinite focus loop
       .on('focusin.bs.modal', $.proxy(function (e) {
-        if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
+        if (document !== e.target &&
+            this.$element[0] !== e.target &&
+            !this.$element.has(e.target).length) {
           this.$element.trigger('focus')
         }
       }, this))
@@ -1296,11 +1304,11 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tooltip.js v3.3.6
+ * Bootstrap: tooltip.js v3.3.7
  * http://getbootstrap.com/javascript/#tooltip
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -1323,7 +1331,7 @@ if (typeof jQuery === 'undefined') {
     this.init('tooltip', element, options)
   }
 
-  Tooltip.VERSION  = '3.3.6'
+  Tooltip.VERSION  = '3.3.7'
 
   Tooltip.TRANSITION_DURATION = 150
 
@@ -1614,9 +1622,11 @@ if (typeof jQuery === 'undefined') {
 
     function complete() {
       if (that.hoverState != 'in') $tip.detach()
-      that.$element
-        .removeAttr('aria-describedby')
-        .trigger('hidden.bs.' + that.type)
+      if (that.$element) { // TODO: Check whether guarding this code with this `if` is really necessary.
+        that.$element
+          .removeAttr('aria-describedby')
+          .trigger('hidden.bs.' + that.type)
+      }
       callback && callback()
     }
 
@@ -1659,7 +1669,10 @@ if (typeof jQuery === 'undefined') {
       // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
       elRect = $.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top })
     }
-    var elOffset  = isBody ? { top: 0, left: 0 } : $element.offset()
+    var isSvg = window.SVGElement && el instanceof window.SVGElement
+    // Avoid using $.offset() on SVGs since it gives incorrect results in jQuery 3.
+    // See https://github.com/twbs/bootstrap/issues/20280
+    var elOffset  = isBody ? { top: 0, left: 0 } : (isSvg ? null : $element.offset())
     var scroll    = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() }
     var outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null
 
@@ -1775,6 +1788,7 @@ if (typeof jQuery === 'undefined') {
       that.$tip = null
       that.$arrow = null
       that.$viewport = null
+      that.$element = null
     })
   }
 
@@ -1811,10 +1825,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: popover.js v3.3.6
+ * Bootstrap: popover.js v3.3.7
  * http://getbootstrap.com/javascript/#popovers
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -1831,7 +1845,7 @@ if (typeof jQuery === 'undefined') {
 
   if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
 
-  Popover.VERSION  = '3.3.6'
+  Popover.VERSION  = '3.3.7'
 
   Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
     placement: 'right',
@@ -1920,10 +1934,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: scrollspy.js v3.3.6
+ * Bootstrap: scrollspy.js v3.3.7
  * http://getbootstrap.com/javascript/#scrollspy
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -1949,7 +1963,7 @@ if (typeof jQuery === 'undefined') {
     this.process()
   }
 
-  ScrollSpy.VERSION  = '3.3.6'
+  ScrollSpy.VERSION  = '3.3.7'
 
   ScrollSpy.DEFAULTS = {
     offset: 10
@@ -2093,10 +2107,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tab.js v3.3.6
+ * Bootstrap: tab.js v3.3.7
  * http://getbootstrap.com/javascript/#tabs
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -2113,7 +2127,7 @@ if (typeof jQuery === 'undefined') {
     // jscs:enable requireDollarBeforejQueryAssignment
   }
 
-  Tab.VERSION = '3.3.6'
+  Tab.VERSION = '3.3.7'
 
   Tab.TRANSITION_DURATION = 150
 
@@ -2249,10 +2263,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: affix.js v3.3.6
+ * Bootstrap: affix.js v3.3.7
  * http://getbootstrap.com/javascript/#affix
  * ========================================================================
- * Copyright 2011-2015 Twitter, Inc.
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -2278,7 +2292,7 @@ if (typeof jQuery === 'undefined') {
     this.checkPosition()
   }
 
-  Affix.VERSION  = '3.3.6'
+  Affix.VERSION  = '3.3.7'
 
   Affix.RESET    = 'affix affix-top affix-bottom'
 
@@ -13458,6 +13472,1296 @@ return jQuery;
 }));
 
 },{}],104:[function(require,module,exports){
+(function (global){
+/**
+ * marked - a markdown parser
+ * Copyright (c) 2011-2014, Christopher Jeffrey. (MIT Licensed)
+ * https://github.com/chjj/marked
+ */
+
+;(function() {
+
+/**
+ * Block-Level Grammar
+ */
+
+var block = {
+  newline: /^\n+/,
+  code: /^( {4}[^\n]+\n*)+/,
+  fences: noop,
+  hr: /^( *[-*_]){3,} *(?:\n+|$)/,
+  heading: /^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,
+  nptable: noop,
+  lheading: /^([^\n]+)\n *(=|-){2,} *(?:\n+|$)/,
+  blockquote: /^( *>[^\n]+(\n(?!def)[^\n]+)*\n*)+/,
+  list: /^( *)(bull) [\s\S]+?(?:hr|def|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,
+  html: /^ *(?:comment *(?:\n|\s*$)|closed *(?:\n{2,}|\s*$)|closing *(?:\n{2,}|\s*$))/,
+  def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +["(]([^\n]+)[")])? *(?:\n+|$)/,
+  table: noop,
+  paragraph: /^((?:[^\n]+\n?(?!hr|heading|lheading|blockquote|tag|def))+)\n*/,
+  text: /^[^\n]+/
+};
+
+block.bullet = /(?:[*+-]|\d+\.)/;
+block.item = /^( *)(bull) [^\n]*(?:\n(?!\1bull )[^\n]*)*/;
+block.item = replace(block.item, 'gm')
+  (/bull/g, block.bullet)
+  ();
+
+block.list = replace(block.list)
+  (/bull/g, block.bullet)
+  ('hr', '\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))')
+  ('def', '\\n+(?=' + block.def.source + ')')
+  ();
+
+block.blockquote = replace(block.blockquote)
+  ('def', block.def)
+  ();
+
+block._tag = '(?!(?:'
+  + 'a|em|strong|small|s|cite|q|dfn|abbr|data|time|code'
+  + '|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo'
+  + '|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|[^\\w\\s@]*@)\\b';
+
+block.html = replace(block.html)
+  ('comment', /<!--[\s\S]*?-->/)
+  ('closed', /<(tag)[\s\S]+?<\/\1>/)
+  ('closing', /<tag(?:"[^"]*"|'[^']*'|[^'">])*?>/)
+  (/tag/g, block._tag)
+  ();
+
+block.paragraph = replace(block.paragraph)
+  ('hr', block.hr)
+  ('heading', block.heading)
+  ('lheading', block.lheading)
+  ('blockquote', block.blockquote)
+  ('tag', '<' + block._tag)
+  ('def', block.def)
+  ();
+
+/**
+ * Normal Block Grammar
+ */
+
+block.normal = merge({}, block);
+
+/**
+ * GFM Block Grammar
+ */
+
+block.gfm = merge({}, block.normal, {
+  fences: /^ *(`{3,}|~{3,})[ \.]*(\S+)? *\n([\s\S]*?)\s*\1 *(?:\n+|$)/,
+  paragraph: /^/,
+  heading: /^ *(#{1,6}) +([^\n]+?) *#* *(?:\n+|$)/
+});
+
+block.gfm.paragraph = replace(block.paragraph)
+  ('(?!', '(?!'
+    + block.gfm.fences.source.replace('\\1', '\\2') + '|'
+    + block.list.source.replace('\\1', '\\3') + '|')
+  ();
+
+/**
+ * GFM + Tables Block Grammar
+ */
+
+block.tables = merge({}, block.gfm, {
+  nptable: /^ *(\S.*\|.*)\n *([-:]+ *\|[-| :]*)\n((?:.*\|.*(?:\n|$))*)\n*/,
+  table: /^ *\|(.+)\n *\|( *[-:]+[-| :]*)\n((?: *\|.*(?:\n|$))*)\n*/
+});
+
+/**
+ * Block Lexer
+ */
+
+function Lexer(options) {
+  this.tokens = [];
+  this.tokens.links = {};
+  this.options = options || marked.defaults;
+  this.rules = block.normal;
+
+  if (this.options.gfm) {
+    if (this.options.tables) {
+      this.rules = block.tables;
+    } else {
+      this.rules = block.gfm;
+    }
+  }
+}
+
+/**
+ * Expose Block Rules
+ */
+
+Lexer.rules = block;
+
+/**
+ * Static Lex Method
+ */
+
+Lexer.lex = function(src, options) {
+  var lexer = new Lexer(options);
+  return lexer.lex(src);
+};
+
+/**
+ * Preprocessing
+ */
+
+Lexer.prototype.lex = function(src) {
+  src = src
+    .replace(/\r\n|\r/g, '\n')
+    .replace(/\t/g, '    ')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\u2424/g, '\n');
+
+  return this.token(src, true);
+};
+
+/**
+ * Lexing
+ */
+
+Lexer.prototype.token = function(src, top, bq) {
+  var src = src.replace(/^ +$/gm, '')
+    , next
+    , loose
+    , cap
+    , bull
+    , b
+    , item
+    , space
+    , i
+    , l;
+
+  while (src) {
+    // newline
+    if (cap = this.rules.newline.exec(src)) {
+      src = src.substring(cap[0].length);
+      if (cap[0].length > 1) {
+        this.tokens.push({
+          type: 'space'
+        });
+      }
+    }
+
+    // code
+    if (cap = this.rules.code.exec(src)) {
+      src = src.substring(cap[0].length);
+      cap = cap[0].replace(/^ {4}/gm, '');
+      this.tokens.push({
+        type: 'code',
+        text: !this.options.pedantic
+          ? cap.replace(/\n+$/, '')
+          : cap
+      });
+      continue;
+    }
+
+    // fences (gfm)
+    if (cap = this.rules.fences.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'code',
+        lang: cap[2],
+        text: cap[3] || ''
+      });
+      continue;
+    }
+
+    // heading
+    if (cap = this.rules.heading.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'heading',
+        depth: cap[1].length,
+        text: cap[2]
+      });
+      continue;
+    }
+
+    // table no leading pipe (gfm)
+    if (top && (cap = this.rules.nptable.exec(src))) {
+      src = src.substring(cap[0].length);
+
+      item = {
+        type: 'table',
+        header: cap[1].replace(/^ *| *\| *$/g, '').split(/ *\| */),
+        align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
+        cells: cap[3].replace(/\n$/, '').split('\n')
+      };
+
+      for (i = 0; i < item.align.length; i++) {
+        if (/^ *-+: *$/.test(item.align[i])) {
+          item.align[i] = 'right';
+        } else if (/^ *:-+: *$/.test(item.align[i])) {
+          item.align[i] = 'center';
+        } else if (/^ *:-+ *$/.test(item.align[i])) {
+          item.align[i] = 'left';
+        } else {
+          item.align[i] = null;
+        }
+      }
+
+      for (i = 0; i < item.cells.length; i++) {
+        item.cells[i] = item.cells[i].split(/ *\| */);
+      }
+
+      this.tokens.push(item);
+
+      continue;
+    }
+
+    // lheading
+    if (cap = this.rules.lheading.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'heading',
+        depth: cap[2] === '=' ? 1 : 2,
+        text: cap[1]
+      });
+      continue;
+    }
+
+    // hr
+    if (cap = this.rules.hr.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'hr'
+      });
+      continue;
+    }
+
+    // blockquote
+    if (cap = this.rules.blockquote.exec(src)) {
+      src = src.substring(cap[0].length);
+
+      this.tokens.push({
+        type: 'blockquote_start'
+      });
+
+      cap = cap[0].replace(/^ *> ?/gm, '');
+
+      // Pass `top` to keep the current
+      // "toplevel" state. This is exactly
+      // how markdown.pl works.
+      this.token(cap, top, true);
+
+      this.tokens.push({
+        type: 'blockquote_end'
+      });
+
+      continue;
+    }
+
+    // list
+    if (cap = this.rules.list.exec(src)) {
+      src = src.substring(cap[0].length);
+      bull = cap[2];
+
+      this.tokens.push({
+        type: 'list_start',
+        ordered: bull.length > 1
+      });
+
+      // Get each top-level item.
+      cap = cap[0].match(this.rules.item);
+
+      next = false;
+      l = cap.length;
+      i = 0;
+
+      for (; i < l; i++) {
+        item = cap[i];
+
+        // Remove the list item's bullet
+        // so it is seen as the next token.
+        space = item.length;
+        item = item.replace(/^ *([*+-]|\d+\.) +/, '');
+
+        // Outdent whatever the
+        // list item contains. Hacky.
+        if (~item.indexOf('\n ')) {
+          space -= item.length;
+          item = !this.options.pedantic
+            ? item.replace(new RegExp('^ {1,' + space + '}', 'gm'), '')
+            : item.replace(/^ {1,4}/gm, '');
+        }
+
+        // Determine whether the next list item belongs here.
+        // Backpedal if it does not belong in this list.
+        if (this.options.smartLists && i !== l - 1) {
+          b = block.bullet.exec(cap[i + 1])[0];
+          if (bull !== b && !(bull.length > 1 && b.length > 1)) {
+            src = cap.slice(i + 1).join('\n') + src;
+            i = l - 1;
+          }
+        }
+
+        // Determine whether item is loose or not.
+        // Use: /(^|\n)(?! )[^\n]+\n\n(?!\s*$)/
+        // for discount behavior.
+        loose = next || /\n\n(?!\s*$)/.test(item);
+        if (i !== l - 1) {
+          next = item.charAt(item.length - 1) === '\n';
+          if (!loose) loose = next;
+        }
+
+        this.tokens.push({
+          type: loose
+            ? 'loose_item_start'
+            : 'list_item_start'
+        });
+
+        // Recurse.
+        this.token(item, false, bq);
+
+        this.tokens.push({
+          type: 'list_item_end'
+        });
+      }
+
+      this.tokens.push({
+        type: 'list_end'
+      });
+
+      continue;
+    }
+
+    // html
+    if (cap = this.rules.html.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: this.options.sanitize
+          ? 'paragraph'
+          : 'html',
+        pre: !this.options.sanitizer
+          && (cap[1] === 'pre' || cap[1] === 'script' || cap[1] === 'style'),
+        text: cap[0]
+      });
+      continue;
+    }
+
+    // def
+    if ((!bq && top) && (cap = this.rules.def.exec(src))) {
+      src = src.substring(cap[0].length);
+      this.tokens.links[cap[1].toLowerCase()] = {
+        href: cap[2],
+        title: cap[3]
+      };
+      continue;
+    }
+
+    // table (gfm)
+    if (top && (cap = this.rules.table.exec(src))) {
+      src = src.substring(cap[0].length);
+
+      item = {
+        type: 'table',
+        header: cap[1].replace(/^ *| *\| *$/g, '').split(/ *\| */),
+        align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
+        cells: cap[3].replace(/(?: *\| *)?\n$/, '').split('\n')
+      };
+
+      for (i = 0; i < item.align.length; i++) {
+        if (/^ *-+: *$/.test(item.align[i])) {
+          item.align[i] = 'right';
+        } else if (/^ *:-+: *$/.test(item.align[i])) {
+          item.align[i] = 'center';
+        } else if (/^ *:-+ *$/.test(item.align[i])) {
+          item.align[i] = 'left';
+        } else {
+          item.align[i] = null;
+        }
+      }
+
+      for (i = 0; i < item.cells.length; i++) {
+        item.cells[i] = item.cells[i]
+          .replace(/^ *\| *| *\| *$/g, '')
+          .split(/ *\| */);
+      }
+
+      this.tokens.push(item);
+
+      continue;
+    }
+
+    // top-level paragraph
+    if (top && (cap = this.rules.paragraph.exec(src))) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'paragraph',
+        text: cap[1].charAt(cap[1].length - 1) === '\n'
+          ? cap[1].slice(0, -1)
+          : cap[1]
+      });
+      continue;
+    }
+
+    // text
+    if (cap = this.rules.text.exec(src)) {
+      // Top-level should never reach here.
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'text',
+        text: cap[0]
+      });
+      continue;
+    }
+
+    if (src) {
+      throw new
+        Error('Infinite loop on byte: ' + src.charCodeAt(0));
+    }
+  }
+
+  return this.tokens;
+};
+
+/**
+ * Inline-Level Grammar
+ */
+
+var inline = {
+  escape: /^\\([\\`*{}\[\]()#+\-.!_>])/,
+  autolink: /^<([^ >]+(@|:\/)[^ >]+)>/,
+  url: noop,
+  tag: /^<!--[\s\S]*?-->|^<\/?\w+(?:"[^"]*"|'[^']*'|[^'">])*?>/,
+  link: /^!?\[(inside)\]\(href\)/,
+  reflink: /^!?\[(inside)\]\s*\[([^\]]*)\]/,
+  nolink: /^!?\[((?:\[[^\]]*\]|[^\[\]])*)\]/,
+  strong: /^__([\s\S]+?)__(?!_)|^\*\*([\s\S]+?)\*\*(?!\*)/,
+  em: /^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
+  code: /^(`+)\s*([\s\S]*?[^`])\s*\1(?!`)/,
+  br: /^ {2,}\n(?!\s*$)/,
+  del: noop,
+  text: /^[\s\S]+?(?=[\\<!\[_*`]| {2,}\n|$)/
+};
+
+inline._inside = /(?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*/;
+inline._href = /\s*<?([\s\S]*?)>?(?:\s+['"]([\s\S]*?)['"])?\s*/;
+
+inline.link = replace(inline.link)
+  ('inside', inline._inside)
+  ('href', inline._href)
+  ();
+
+inline.reflink = replace(inline.reflink)
+  ('inside', inline._inside)
+  ();
+
+/**
+ * Normal Inline Grammar
+ */
+
+inline.normal = merge({}, inline);
+
+/**
+ * Pedantic Inline Grammar
+ */
+
+inline.pedantic = merge({}, inline.normal, {
+  strong: /^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,
+  em: /^_(?=\S)([\s\S]*?\S)_(?!_)|^\*(?=\S)([\s\S]*?\S)\*(?!\*)/
+});
+
+/**
+ * GFM Inline Grammar
+ */
+
+inline.gfm = merge({}, inline.normal, {
+  escape: replace(inline.escape)('])', '~|])')(),
+  url: /^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/,
+  del: /^~~(?=\S)([\s\S]*?\S)~~/,
+  text: replace(inline.text)
+    (']|', '~]|')
+    ('|', '|https?://|')
+    ()
+});
+
+/**
+ * GFM + Line Breaks Inline Grammar
+ */
+
+inline.breaks = merge({}, inline.gfm, {
+  br: replace(inline.br)('{2,}', '*')(),
+  text: replace(inline.gfm.text)('{2,}', '*')()
+});
+
+/**
+ * Inline Lexer & Compiler
+ */
+
+function InlineLexer(links, options) {
+  this.options = options || marked.defaults;
+  this.links = links;
+  this.rules = inline.normal;
+  this.renderer = this.options.renderer || new Renderer;
+  this.renderer.options = this.options;
+
+  if (!this.links) {
+    throw new
+      Error('Tokens array requires a `links` property.');
+  }
+
+  if (this.options.gfm) {
+    if (this.options.breaks) {
+      this.rules = inline.breaks;
+    } else {
+      this.rules = inline.gfm;
+    }
+  } else if (this.options.pedantic) {
+    this.rules = inline.pedantic;
+  }
+}
+
+/**
+ * Expose Inline Rules
+ */
+
+InlineLexer.rules = inline;
+
+/**
+ * Static Lexing/Compiling Method
+ */
+
+InlineLexer.output = function(src, links, options) {
+  var inline = new InlineLexer(links, options);
+  return inline.output(src);
+};
+
+/**
+ * Lexing/Compiling
+ */
+
+InlineLexer.prototype.output = function(src) {
+  var out = ''
+    , link
+    , text
+    , href
+    , cap;
+
+  while (src) {
+    // escape
+    if (cap = this.rules.escape.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += cap[1];
+      continue;
+    }
+
+    // autolink
+    if (cap = this.rules.autolink.exec(src)) {
+      src = src.substring(cap[0].length);
+      if (cap[2] === '@') {
+        text = cap[1].charAt(6) === ':'
+          ? this.mangle(cap[1].substring(7))
+          : this.mangle(cap[1]);
+        href = this.mangle('mailto:') + text;
+      } else {
+        text = escape(cap[1]);
+        href = text;
+      }
+      out += this.renderer.link(href, null, text);
+      continue;
+    }
+
+    // url (gfm)
+    if (!this.inLink && (cap = this.rules.url.exec(src))) {
+      src = src.substring(cap[0].length);
+      text = escape(cap[1]);
+      href = text;
+      out += this.renderer.link(href, null, text);
+      continue;
+    }
+
+    // tag
+    if (cap = this.rules.tag.exec(src)) {
+      if (!this.inLink && /^<a /i.test(cap[0])) {
+        this.inLink = true;
+      } else if (this.inLink && /^<\/a>/i.test(cap[0])) {
+        this.inLink = false;
+      }
+      src = src.substring(cap[0].length);
+      out += this.options.sanitize
+        ? this.options.sanitizer
+          ? this.options.sanitizer(cap[0])
+          : escape(cap[0])
+        : cap[0]
+      continue;
+    }
+
+    // link
+    if (cap = this.rules.link.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.inLink = true;
+      out += this.outputLink(cap, {
+        href: cap[2],
+        title: cap[3]
+      });
+      this.inLink = false;
+      continue;
+    }
+
+    // reflink, nolink
+    if ((cap = this.rules.reflink.exec(src))
+        || (cap = this.rules.nolink.exec(src))) {
+      src = src.substring(cap[0].length);
+      link = (cap[2] || cap[1]).replace(/\s+/g, ' ');
+      link = this.links[link.toLowerCase()];
+      if (!link || !link.href) {
+        out += cap[0].charAt(0);
+        src = cap[0].substring(1) + src;
+        continue;
+      }
+      this.inLink = true;
+      out += this.outputLink(cap, link);
+      this.inLink = false;
+      continue;
+    }
+
+    // strong
+    if (cap = this.rules.strong.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.strong(this.output(cap[2] || cap[1]));
+      continue;
+    }
+
+    // em
+    if (cap = this.rules.em.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.em(this.output(cap[2] || cap[1]));
+      continue;
+    }
+
+    // code
+    if (cap = this.rules.code.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.codespan(escape(cap[2], true));
+      continue;
+    }
+
+    // br
+    if (cap = this.rules.br.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.br();
+      continue;
+    }
+
+    // del (gfm)
+    if (cap = this.rules.del.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.del(this.output(cap[1]));
+      continue;
+    }
+
+    // text
+    if (cap = this.rules.text.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.text(escape(this.smartypants(cap[0])));
+      continue;
+    }
+
+    if (src) {
+      throw new
+        Error('Infinite loop on byte: ' + src.charCodeAt(0));
+    }
+  }
+
+  return out;
+};
+
+/**
+ * Compile Link
+ */
+
+InlineLexer.prototype.outputLink = function(cap, link) {
+  var href = escape(link.href)
+    , title = link.title ? escape(link.title) : null;
+
+  return cap[0].charAt(0) !== '!'
+    ? this.renderer.link(href, title, this.output(cap[1]))
+    : this.renderer.image(href, title, escape(cap[1]));
+};
+
+/**
+ * Smartypants Transformations
+ */
+
+InlineLexer.prototype.smartypants = function(text) {
+  if (!this.options.smartypants) return text;
+  return text
+    // em-dashes
+    .replace(/---/g, '\u2014')
+    // en-dashes
+    .replace(/--/g, '\u2013')
+    // opening singles
+    .replace(/(^|[-\u2014/(\[{"\s])'/g, '$1\u2018')
+    // closing singles & apostrophes
+    .replace(/'/g, '\u2019')
+    // opening doubles
+    .replace(/(^|[-\u2014/(\[{\u2018\s])"/g, '$1\u201c')
+    // closing doubles
+    .replace(/"/g, '\u201d')
+    // ellipses
+    .replace(/\.{3}/g, '\u2026');
+};
+
+/**
+ * Mangle Links
+ */
+
+InlineLexer.prototype.mangle = function(text) {
+  if (!this.options.mangle) return text;
+  var out = ''
+    , l = text.length
+    , i = 0
+    , ch;
+
+  for (; i < l; i++) {
+    ch = text.charCodeAt(i);
+    if (Math.random() > 0.5) {
+      ch = 'x' + ch.toString(16);
+    }
+    out += '&#' + ch + ';';
+  }
+
+  return out;
+};
+
+/**
+ * Renderer
+ */
+
+function Renderer(options) {
+  this.options = options || {};
+}
+
+Renderer.prototype.code = function(code, lang, escaped) {
+  if (this.options.highlight) {
+    var out = this.options.highlight(code, lang);
+    if (out != null && out !== code) {
+      escaped = true;
+      code = out;
+    }
+  }
+
+  if (!lang) {
+    return '<pre><code>'
+      + (escaped ? code : escape(code, true))
+      + '\n</code></pre>';
+  }
+
+  return '<pre><code class="'
+    + this.options.langPrefix
+    + escape(lang, true)
+    + '">'
+    + (escaped ? code : escape(code, true))
+    + '\n</code></pre>\n';
+};
+
+Renderer.prototype.blockquote = function(quote) {
+  return '<blockquote>\n' + quote + '</blockquote>\n';
+};
+
+Renderer.prototype.html = function(html) {
+  return html;
+};
+
+Renderer.prototype.heading = function(text, level, raw) {
+  return '<h'
+    + level
+    + ' id="'
+    + this.options.headerPrefix
+    + raw.toLowerCase().replace(/[^\w]+/g, '-')
+    + '">'
+    + text
+    + '</h'
+    + level
+    + '>\n';
+};
+
+Renderer.prototype.hr = function() {
+  return this.options.xhtml ? '<hr/>\n' : '<hr>\n';
+};
+
+Renderer.prototype.list = function(body, ordered) {
+  var type = ordered ? 'ol' : 'ul';
+  return '<' + type + '>\n' + body + '</' + type + '>\n';
+};
+
+Renderer.prototype.listitem = function(text) {
+  return '<li>' + text + '</li>\n';
+};
+
+Renderer.prototype.paragraph = function(text) {
+  return '<p>' + text + '</p>\n';
+};
+
+Renderer.prototype.table = function(header, body) {
+  return '<table>\n'
+    + '<thead>\n'
+    + header
+    + '</thead>\n'
+    + '<tbody>\n'
+    + body
+    + '</tbody>\n'
+    + '</table>\n';
+};
+
+Renderer.prototype.tablerow = function(content) {
+  return '<tr>\n' + content + '</tr>\n';
+};
+
+Renderer.prototype.tablecell = function(content, flags) {
+  var type = flags.header ? 'th' : 'td';
+  var tag = flags.align
+    ? '<' + type + ' style="text-align:' + flags.align + '">'
+    : '<' + type + '>';
+  return tag + content + '</' + type + '>\n';
+};
+
+// span level renderer
+Renderer.prototype.strong = function(text) {
+  return '<strong>' + text + '</strong>';
+};
+
+Renderer.prototype.em = function(text) {
+  return '<em>' + text + '</em>';
+};
+
+Renderer.prototype.codespan = function(text) {
+  return '<code>' + text + '</code>';
+};
+
+Renderer.prototype.br = function() {
+  return this.options.xhtml ? '<br/>' : '<br>';
+};
+
+Renderer.prototype.del = function(text) {
+  return '<del>' + text + '</del>';
+};
+
+Renderer.prototype.link = function(href, title, text) {
+  if (this.options.sanitize) {
+    try {
+      var prot = decodeURIComponent(unescape(href))
+        .replace(/[^\w:]/g, '')
+        .toLowerCase();
+    } catch (e) {
+      return '';
+    }
+    if (prot.indexOf('javascript:') === 0 || prot.indexOf('vbscript:') === 0) {
+      return '';
+    }
+  }
+  var out = '<a href="' + href + '"';
+  if (title) {
+    out += ' title="' + title + '"';
+  }
+  out += '>' + text + '</a>';
+  return out;
+};
+
+Renderer.prototype.image = function(href, title, text) {
+  var out = '<img src="' + href + '" alt="' + text + '"';
+  if (title) {
+    out += ' title="' + title + '"';
+  }
+  out += this.options.xhtml ? '/>' : '>';
+  return out;
+};
+
+Renderer.prototype.text = function(text) {
+  return text;
+};
+
+/**
+ * Parsing & Compiling
+ */
+
+function Parser(options) {
+  this.tokens = [];
+  this.token = null;
+  this.options = options || marked.defaults;
+  this.options.renderer = this.options.renderer || new Renderer;
+  this.renderer = this.options.renderer;
+  this.renderer.options = this.options;
+}
+
+/**
+ * Static Parse Method
+ */
+
+Parser.parse = function(src, options, renderer) {
+  var parser = new Parser(options, renderer);
+  return parser.parse(src);
+};
+
+/**
+ * Parse Loop
+ */
+
+Parser.prototype.parse = function(src) {
+  this.inline = new InlineLexer(src.links, this.options, this.renderer);
+  this.tokens = src.reverse();
+
+  var out = '';
+  while (this.next()) {
+    out += this.tok();
+  }
+
+  return out;
+};
+
+/**
+ * Next Token
+ */
+
+Parser.prototype.next = function() {
+  return this.token = this.tokens.pop();
+};
+
+/**
+ * Preview Next Token
+ */
+
+Parser.prototype.peek = function() {
+  return this.tokens[this.tokens.length - 1] || 0;
+};
+
+/**
+ * Parse Text Tokens
+ */
+
+Parser.prototype.parseText = function() {
+  var body = this.token.text;
+
+  while (this.peek().type === 'text') {
+    body += '\n' + this.next().text;
+  }
+
+  return this.inline.output(body);
+};
+
+/**
+ * Parse Current Token
+ */
+
+Parser.prototype.tok = function() {
+  switch (this.token.type) {
+    case 'space': {
+      return '';
+    }
+    case 'hr': {
+      return this.renderer.hr();
+    }
+    case 'heading': {
+      return this.renderer.heading(
+        this.inline.output(this.token.text),
+        this.token.depth,
+        this.token.text);
+    }
+    case 'code': {
+      return this.renderer.code(this.token.text,
+        this.token.lang,
+        this.token.escaped);
+    }
+    case 'table': {
+      var header = ''
+        , body = ''
+        , i
+        , row
+        , cell
+        , flags
+        , j;
+
+      // header
+      cell = '';
+      for (i = 0; i < this.token.header.length; i++) {
+        flags = { header: true, align: this.token.align[i] };
+        cell += this.renderer.tablecell(
+          this.inline.output(this.token.header[i]),
+          { header: true, align: this.token.align[i] }
+        );
+      }
+      header += this.renderer.tablerow(cell);
+
+      for (i = 0; i < this.token.cells.length; i++) {
+        row = this.token.cells[i];
+
+        cell = '';
+        for (j = 0; j < row.length; j++) {
+          cell += this.renderer.tablecell(
+            this.inline.output(row[j]),
+            { header: false, align: this.token.align[j] }
+          );
+        }
+
+        body += this.renderer.tablerow(cell);
+      }
+      return this.renderer.table(header, body);
+    }
+    case 'blockquote_start': {
+      var body = '';
+
+      while (this.next().type !== 'blockquote_end') {
+        body += this.tok();
+      }
+
+      return this.renderer.blockquote(body);
+    }
+    case 'list_start': {
+      var body = ''
+        , ordered = this.token.ordered;
+
+      while (this.next().type !== 'list_end') {
+        body += this.tok();
+      }
+
+      return this.renderer.list(body, ordered);
+    }
+    case 'list_item_start': {
+      var body = '';
+
+      while (this.next().type !== 'list_item_end') {
+        body += this.token.type === 'text'
+          ? this.parseText()
+          : this.tok();
+      }
+
+      return this.renderer.listitem(body);
+    }
+    case 'loose_item_start': {
+      var body = '';
+
+      while (this.next().type !== 'list_item_end') {
+        body += this.tok();
+      }
+
+      return this.renderer.listitem(body);
+    }
+    case 'html': {
+      var html = !this.token.pre && !this.options.pedantic
+        ? this.inline.output(this.token.text)
+        : this.token.text;
+      return this.renderer.html(html);
+    }
+    case 'paragraph': {
+      return this.renderer.paragraph(this.inline.output(this.token.text));
+    }
+    case 'text': {
+      return this.renderer.paragraph(this.parseText());
+    }
+  }
+};
+
+/**
+ * Helpers
+ */
+
+function escape(html, encode) {
+  return html
+    .replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function unescape(html) {
+	// explicitly match decimal, hex, and named HTML entities 
+  return html.replace(/&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/g, function(_, n) {
+    n = n.toLowerCase();
+    if (n === 'colon') return ':';
+    if (n.charAt(0) === '#') {
+      return n.charAt(1) === 'x'
+        ? String.fromCharCode(parseInt(n.substring(2), 16))
+        : String.fromCharCode(+n.substring(1));
+    }
+    return '';
+  });
+}
+
+function replace(regex, opt) {
+  regex = regex.source;
+  opt = opt || '';
+  return function self(name, val) {
+    if (!name) return new RegExp(regex, opt);
+    val = val.source || val;
+    val = val.replace(/(^|[^\[])\^/g, '$1');
+    regex = regex.replace(name, val);
+    return self;
+  };
+}
+
+function noop() {}
+noop.exec = noop;
+
+function merge(obj) {
+  var i = 1
+    , target
+    , key;
+
+  for (; i < arguments.length; i++) {
+    target = arguments[i];
+    for (key in target) {
+      if (Object.prototype.hasOwnProperty.call(target, key)) {
+        obj[key] = target[key];
+      }
+    }
+  }
+
+  return obj;
+}
+
+
+/**
+ * Marked
+ */
+
+function marked(src, opt, callback) {
+  if (callback || typeof opt === 'function') {
+    if (!callback) {
+      callback = opt;
+      opt = null;
+    }
+
+    opt = merge({}, marked.defaults, opt || {});
+
+    var highlight = opt.highlight
+      , tokens
+      , pending
+      , i = 0;
+
+    try {
+      tokens = Lexer.lex(src, opt)
+    } catch (e) {
+      return callback(e);
+    }
+
+    pending = tokens.length;
+
+    var done = function(err) {
+      if (err) {
+        opt.highlight = highlight;
+        return callback(err);
+      }
+
+      var out;
+
+      try {
+        out = Parser.parse(tokens, opt);
+      } catch (e) {
+        err = e;
+      }
+
+      opt.highlight = highlight;
+
+      return err
+        ? callback(err)
+        : callback(null, out);
+    };
+
+    if (!highlight || highlight.length < 3) {
+      return done();
+    }
+
+    delete opt.highlight;
+
+    if (!pending) return done();
+
+    for (; i < tokens.length; i++) {
+      (function(token) {
+        if (token.type !== 'code') {
+          return --pending || done();
+        }
+        return highlight(token.text, token.lang, function(err, code) {
+          if (err) return done(err);
+          if (code == null || code === token.text) {
+            return --pending || done();
+          }
+          token.text = code;
+          token.escaped = true;
+          --pending || done();
+        });
+      })(tokens[i]);
+    }
+
+    return;
+  }
+  try {
+    if (opt) opt = merge({}, marked.defaults, opt);
+    return Parser.parse(Lexer.lex(src, opt), opt);
+  } catch (e) {
+    e.message += '\nPlease report this to https://github.com/chjj/marked.';
+    if ((opt || marked.defaults).silent) {
+      return '<p>An error occured:</p><pre>'
+        + escape(e.message + '', true)
+        + '</pre>';
+    }
+    throw e;
+  }
+}
+
+/**
+ * Options
+ */
+
+marked.options =
+marked.setOptions = function(opt) {
+  merge(marked.defaults, opt);
+  return marked;
+};
+
+marked.defaults = {
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  sanitizer: null,
+  mangle: true,
+  smartLists: false,
+  silent: false,
+  highlight: null,
+  langPrefix: 'lang-',
+  smartypants: false,
+  headerPrefix: '',
+  renderer: new Renderer,
+  xhtml: false
+};
+
+/**
+ * Expose
+ */
+
+marked.Parser = Parser;
+marked.parser = Parser.parse;
+
+marked.Renderer = Renderer;
+
+marked.Lexer = Lexer;
+marked.lexer = Lexer.lex;
+
+marked.InlineLexer = InlineLexer;
+marked.inlineLexer = InlineLexer.output;
+
+marked.parse = marked;
+
+if (typeof module !== 'undefined' && typeof exports === 'object') {
+  module.exports = marked;
+} else if (typeof define === 'function' && define.amd) {
+  define(function() { return marked; });
+} else {
+  this.marked = marked;
+}
+
+}).call(function() {
+  return this || (typeof window !== 'undefined' ? window : global);
+}());
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],105:[function(require,module,exports){
 //! moment.js
 //! version : 2.14.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -17653,7 +18957,7 @@ return jQuery;
     return _moment;
 
 }));
-},{}],105:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -17774,7 +19078,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],106:[function(require,module,exports){
+},{}],107:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -19324,7 +20628,7 @@ process.umask = function() { return 0; };
   }
 }.call(this));
 
-},{}],107:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 var Vue // late bind
 var map = Object.create(null)
 var shimmed = false
@@ -19621,11 +20925,10 @@ function restoreState (vm, state, isRoot) {
 }
 
 function format (id) {
-  var match = id.match(/[^\/]+\.vue$/)
-  return match ? match[0] : id
+  return id.match(/[^\/]+\.vue$/)[0]
 }
 
-},{}],108:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 /*!
  * vue-resource v0.7.4
  * https://github.com/vuejs/vue-resource
@@ -21002,7 +22305,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 module.exports = plugin;
-},{}],109:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 "use strict";
 
 var _stringify = require("babel-runtime/core-js/json/stringify");
@@ -21399,16 +22702,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
             return "object" === ("undefined" == typeof t ? "undefined" : (0, c["default"])(t)) && this.label && t[this.label] ? t[this.label] : t;
           } }, onChange: Function, taggable: { type: Boolean, "default": !1 }, pushTags: { type: Boolean, "default": !1 }, createOption: { type: Function, "default": function _default(t) {
             return "object" === (0, c["default"])(this.options[0]) ? (0, u["default"])({}, this.label, t) : t;
-          } } }, data: function data() {
+          } }, resetOnOptionsChange: { type: Boolean, "default": !1 } }, data: function data() {
         return { search: "", open: !1 };
       }, watch: { value: function value(t, e) {
           this.multiple ? this.onChange ? this.onChange(t) : null : this.onChange && t !== e ? this.onChange(t) : null;
         }, options: function options() {
-          this.taggable || this.$set("value", this.multiple ? [] : null);
+          !this.taggable && this.resetOnOptionsChange && this.$set("value", this.multiple ? [] : null);
         }, multiple: function multiple(t) {
           this.$set("value", t ? [] : null);
         } }, methods: { select: function select(t) {
-          this.isOptionSelected(t) ? this.multiple && this.value.$remove(t) : (this.taggable && !this.optionExists(t) && (t = this.createOption(t), this.pushTags && this.options.push(t)), this.multiple ? this.value ? this.value.push(t) : this.$set("value", [t]) : this.value = t), this.onAfterSelect(t);
+          this.isOptionSelected(t) ? this.deselect(t) : (this.taggable && !this.optionExists(t) && (t = this.createOption(t), this.pushTags && this.options.push(t)), this.multiple ? this.value ? this.value.push(t) : this.$set("value", [t]) : this.value = t), this.onAfterSelect(t);
+        }, deselect: function deselect(t) {
+          var e = this;if (this.multiple) {
+            var n = -1;this.value.forEach(function (r) {
+              (r === t || "object" === ("undefined" == typeof r ? "undefined" : (0, c["default"])(r)) && r[e.label] === t[e.label]) && (n = r);
+            }), this.value.$remove(n);
+          } else this.value = null;
         }, onAfterSelect: function onAfterSelect(t) {
           this.multiple || (this.open = !this.open, this.$els.search.blur()), this.clearSearchOnSelect && (this.search = "");
         }, toggleDropdown: function toggleDropdown(t) {
@@ -21416,13 +22725,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         }, isOptionSelected: function isOptionSelected(t) {
           var e = this;if (this.multiple && this.value) {
             var n = !1;return this.value.forEach(function (r) {
-              "object" === ("undefined" == typeof r ? "undefined" : (0, c["default"])(r)) && r[e.label] === t ? n = !0 : r === t && (n = !0);
+              "object" === ("undefined" == typeof r ? "undefined" : (0, c["default"])(r)) && r[e.label] === t[e.label] ? n = !0 : r === t && (n = !0);
             }), n;
           }return this.value === t;
         }, onEscape: function onEscape() {
           this.search.length ? this.search = "" : this.$els.search.blur();
         }, maybeDeleteValue: function maybeDeleteValue() {
-          return !this.$els.search.value.length && this.value ? this.multiple ? this.value.pop() : this.$set("value", null) : void 0;
+          if (!this.$els.search.value.length && this.value) return this.multiple ? this.value.pop() : this.$set("value", null);
         }, optionExists: function optionExists(t) {
           var e = this,
               n = !1;return this.options.forEach(function (r) {
@@ -21431,11 +22740,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         } }, computed: { dropdownClasses: function dropdownClasses() {
           return { open: this.open, searchable: this.searchable, loading: this.loading };
         }, searchPlaceholder: function searchPlaceholder() {
-          return this.isValueEmpty && this.placeholder ? this.placeholder : void 0;
+          if (this.isValueEmpty && this.placeholder) return this.placeholder;
         }, filteredOptions: function filteredOptions() {
           var t = this.$options.filters.filterBy(this.options, this.search);return this.taggable && this.search.length && !this.optionExists(this.search) && t.unshift(this.search), t;
         }, isValueEmpty: function isValueEmpty() {
-          return this.value ? "object" === (0, c["default"])(this.value) ? !(0, i["default"])(this.value).length : !this.value.length : !0;
+          return !this.value || ("object" === (0, c["default"])(this.value) ? !(0, i["default"])(this.value).length : !this.value.length);
         }, valueAsArray: function valueAsArray() {
           return this.multiple ? this.value : this.value ? [this.value] : [];
         } } };
@@ -21607,7 +22916,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         c = _getOwnPropertyDescriptor2.default;e.f = n(2) ? c : function (t, e) {
       if (t = i(t), e = s(e, !0), a) try {
         return c(t, e);
-      } catch (n) {}return u(t, e) ? o(!r.f.call(t, e), t[e]) : void 0;
+      } catch (n) {}if (u(t, e)) return o(!r.f.call(t, e), t[e]);
     };
   }, function (t, e, n) {
     var r = n(5),
@@ -21647,14 +22956,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
             s,
             u = String(o(e)),
             a = r(n),
-            c = u.length;return 0 > a || a >= c ? t ? "" : void 0 : (i = u.charCodeAt(a), 55296 > i || i > 56319 || a + 1 === c || (s = u.charCodeAt(a + 1)) < 56320 || s > 57343 ? t ? u.charAt(a) : i : t ? u.slice(a, a + 2) : (i - 55296 << 10) + (s - 56320) + 65536);
+            c = u.length;return a < 0 || a >= c ? t ? "" : void 0 : (i = u.charCodeAt(a), i < 55296 || i > 56319 || a + 1 === c || (s = u.charCodeAt(a + 1)) < 56320 || s > 57343 ? t ? u.charAt(a) : i : t ? u.slice(a, a + 2) : (i - 55296 << 10) + (s - 56320) + 65536);
       };
     };
   }, function (t, e, n) {
     var r = n(24),
         o = Math.max,
         i = Math.min;t.exports = function (t, e) {
-      return t = r(t), 0 > t ? o(t + e, 0) : i(t, e);
+      return t = r(t), t < 0 ? o(t + e, 0) : i(t, e);
     };
   }, function (t, e, n) {
     var r = n(24),
@@ -21762,7 +23071,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       return void 0 === e ? O(t) : Y(O(t), e);
     },
         Q = function Q(t) {
-      var e = I.call(this, t = w(t, !0));return this === V && o(z, t) && !o(D, t) ? !1 : e || !o(this, t) || !o(z, t) || o(this, N) && this[N][t] ? e : !0;
+      var e = I.call(this, t = w(t, !0));return !(this === V && o(z, t) && !o(D, t)) && (!(e || !o(this, t) || !o(z, t) || o(this, N) && this[N][t]) || e);
     },
         q = function q(t, e) {
       if (t = x(t), e = w(e, !0), t !== V || !o(z, e) || o(D, e)) {
@@ -21776,7 +23085,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     },
         tt = function tt(t) {
       for (var e, n = t === V, r = M(n ? D : x(t)), i = [], s = 0; r.length > s;) {
-        o(z, e = r[s++]) && (n ? o(V, e) : !0) && i.push(z[e]);
+        !o(z, e = r[s++]) || n && !o(V, e) || i.push(z[e]);
       }return i;
     };R || (_T = function T() {
       if (this instanceof _T) throw TypeError("Symbol is not a constructor!");var t = p(arguments.length > 0 ? arguments[0] : void 0),
@@ -21806,7 +23115,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           for (var e, n, r = [t], o = 1; arguments.length > o;) {
             r.push(arguments[o++]);
           }return e = r[1], "function" == typeof e && (n = e), !n && g(e) || (e = function e(t, _e2) {
-            return n && (_e2 = n.call(this, t, _e2)), G(_e2) ? void 0 : _e2;
+            if (n && (_e2 = n.call(this, t, _e2)), !G(_e2)) return _e2;
           }), r[1] = e, $.apply(C, r);
         }
       } }), _T[F][B] || n(7)(_T[F], B, _T[F].valueOf), f(_T, "Symbol"), f(Math, "Math", !0), f(r.JSON, "JSON", !0);
@@ -21815,7 +23124,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   }, function (t, e, n) {
     n(26)("observable");
   }, function (t, e, n) {
-    n(73);for (var r = n(1), o = n(7), i = n(18), s = n(8)("toStringTag"), u = ["NodeList", "DOMTokenList", "MediaList", "StyleSheetList", "CSSRuleList"], a = 0; 5 > a; a++) {
+    n(73);for (var r = n(1), o = n(7), i = n(18), s = n(8)("toStringTag"), u = ["NodeList", "DOMTokenList", "MediaList", "StyleSheetList", "CSSRuleList"], a = 0; a < 5; a++) {
       var c = u[a],
           l = r[c],
           f = l && l.prototype;f && !f[s] && o(f, s, c), i[c] = i.Array;
@@ -21837,7 +23146,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }, t;
     };
   }, function (t, e) {
-    t.exports = '<div class="dropdown v-select" :class=dropdownClasses> <div v-el:toggle @mousedown.prevent=toggleDropdown class="dropdown-toggle clearfix" type=button> <span class=form-control v-if="!searchable && isValueEmpty"> {{ placeholder }} </span> <span class=selected-tag v-for="option in valueAsArray" track-by=$index> {{ getOptionLabel(option) }} <button v-if=multiple @click=select(option) type=button class=close> <span aria-hidden=true>&times;</span> </button> </span> <input v-el:search :debounce=debounce v-model=search v-show=searchable @keydown.delete=maybeDeleteValue @keyup.esc=onEscape @keydown.up.prevent=typeAheadUp @keydown.down.prevent=typeAheadDown @keyup.enter.prevent=typeAheadSelect @blur="open = false" @focus="open = true" type=search class=form-control :placeholder=searchPlaceholder :style="{ width: isValueEmpty ? \'100%\' : \'auto\' }"> <i v-el:open-indicator role=presentation class=open-indicator></i> <slot name=spinner> <div class=spinner v-show="onSearch && loading">Loading...</div> </slot> </div> <ul v-el:dropdown-menu v-show=open :transition=transition class=dropdown-menu :style="{ \'max-height\': maxHeight }"> <li v-for="option in filteredOptions" track-by=$index :class="{ active: isOptionSelected(option), highlight: $index === typeAheadPointer }" @mouseover="typeAheadPointer = $index"> <a @mousedown.prevent=select(option)> {{ getOptionLabel(option) }} </a> </li> <li transition=fade v-if=!filteredOptions.length class=divider></li> <li transition=fade v-if=!filteredOptions.length class=text-center> <slot name=no-options>Sorry, no matching options.</slot> </li> </ul> </div>';
+    t.exports = ' <div class="dropdown v-select" :class=dropdownClasses> <div v-el:toggle @mousedown.prevent=toggleDropdown class="dropdown-toggle clearfix" type=button> <span class=form-control v-if="!searchable && isValueEmpty"> {{ placeholder }} </span> <span class=selected-tag v-for="option in valueAsArray" track-by=$index> {{ getOptionLabel(option) }} <button v-if=multiple @click=select(option) type=button class=close> <span aria-hidden=true>&times;</span> </button> </span> <input v-el:search :debounce=debounce v-model=search v-show=searchable @keydown.delete=maybeDeleteValue @keyup.esc=onEscape @keydown.up.prevent=typeAheadUp @keydown.down.prevent=typeAheadDown @keyup.enter.prevent=typeAheadSelect @blur="open = false" @focus="open = true" type=search class=form-control :placeholder=searchPlaceholder :style="{ width: isValueEmpty ? \'100%\' : \'auto\' }"> <i v-el:open-indicator role=presentation class=open-indicator></i> <slot name=spinner> <div class=spinner v-show="onSearch && loading">Loading...</div> </slot> </div> <ul v-el:dropdown-menu v-show=open :transition=transition class=dropdown-menu :style="{ \'max-height\': maxHeight }"> <li v-for="option in filteredOptions" track-by=$index :class="{ active: isOptionSelected(option), highlight: $index === typeAheadPointer }" @mouseover="typeAheadPointer = $index"> <a @mousedown.prevent=select(option)> {{ getOptionLabel(option) }} </a> </li> <li transition=fade v-if=!filteredOptions.length class=divider></li> <li transition=fade v-if=!filteredOptions.length class=text-center> <slot name=no-options>Sorry, no matching options.</slot> </li> </ul> </div> ';
   }, function (t, e, n) {
     var r, o;n(87), r = n(42), o = n(84), t.exports = r || {}, t.exports.__esModule && (t.exports = t.exports["default"]), o && (("function" == typeof t.exports ? t.exports.options || (t.exports.options = {}) : t.exports).template = o);
   }, function (t, e, n) {
@@ -21937,7 +23246,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   }]);
 });
 
-},{"babel-runtime/core-js/json/stringify":1,"babel-runtime/core-js/object/create":2,"babel-runtime/core-js/object/define-properties":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/core-js/object/get-own-property-descriptor":5,"babel-runtime/core-js/object/get-own-property-names":6,"babel-runtime/core-js/object/get-own-property-symbols":7,"babel-runtime/core-js/object/get-prototype-of":8,"babel-runtime/core-js/object/is-extensible":9,"babel-runtime/core-js/object/keys":10,"babel-runtime/core-js/object/prevent-extensions":11,"babel-runtime/helpers/typeof":14}],110:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"babel-runtime/core-js/object/create":2,"babel-runtime/core-js/object/define-properties":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/core-js/object/get-own-property-descriptor":5,"babel-runtime/core-js/object/get-own-property-names":6,"babel-runtime/core-js/object/get-own-property-symbols":7,"babel-runtime/core-js/object/get-prototype-of":8,"babel-runtime/core-js/object/is-extensible":9,"babel-runtime/core-js/object/keys":10,"babel-runtime/core-js/object/prevent-extensions":11,"babel-runtime/helpers/typeof":14}],111:[function(require,module,exports){
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -23311,10 +24620,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   }]);
 });
 
-},{}],111:[function(require,module,exports){
+},{}],112:[function(require,module,exports){
 (function (process){
 /*!
- * vue-validator v2.1.3
+ * vue-validator v2.1.5
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -23376,7 +24685,6 @@ babelHelpers.possibleConstructorReturn = function (self, call) {
 };
 
 babelHelpers;
-
 /**
  * Utilties
  */
@@ -23857,6 +25165,7 @@ function Validate (Vue) {
    */
 
   Vue.directive('validate', {
+    deep: true,
     terminal: true,
     priority: vIf.priority + PRIORITY_VALIDATE,
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
@@ -23924,10 +25233,10 @@ function Validate (Vue) {
         return;
       }
 
-      if (isPlainObject(value)) {
-        this.handleObject(value);
-      } else if (Array.isArray(value)) {
-        this.handleArray(value);
+      if (isPlainObject(value) || old && isPlainObject(old)) {
+        this.handleObject(value, old);
+      } else if (Array.isArray(value) || old && Array.isArray(old)) {
+        this.handleArray(value, old);
       }
 
       var options = { field: this.field, noopable: this._initialNoopValidation };
@@ -24052,15 +25361,19 @@ function Validate (Vue) {
       replace(this.anchor, this.el);
       this.anchor = null;
     },
-    handleArray: function handleArray(value) {
+    handleArray: function handleArray(value, old) {
       var _this = this;
+
+      old && this.validation.resetValidation();
 
       each(value, function (val) {
         _this.validation.setValidation(val);
       });
     },
-    handleObject: function handleObject(value) {
+    handleObject: function handleObject(value, old) {
       var _this2 = this;
+
+      old && this.validation.resetValidation();
 
       each(value, function (val, key) {
         if (isPlainObject(val)) {
@@ -24165,6 +25478,16 @@ var BaseValidation = function () {
     this._unwatch && this._unwatch();
   };
 
+  BaseValidation.prototype.resetValidation = function resetValidation() {
+    var _this2 = this;
+
+    var keys = Object.keys(this._validators);
+    each(keys, function (key, index) {
+      _this2._validators[key] = null;
+      delete _this2._validators[key];
+    });
+  };
+
   BaseValidation.prototype.setValidation = function setValidation(name, arg, msg, initial) {
     var validator = this._validators[name];
     if (!validator) {
@@ -24184,10 +25507,10 @@ var BaseValidation = function () {
   };
 
   BaseValidation.prototype.setValidationClasses = function setValidationClasses(classes) {
-    var _this2 = this;
+    var _this3 = this;
 
     each(classes, function (value, key) {
-      _this2._classes[key] = value;
+      _this3._classes[key] = value;
     });
   };
 
@@ -24245,7 +25568,7 @@ var BaseValidation = function () {
   };
 
   BaseValidation.prototype.validate = function validate(cb) {
-    var _this3 = this;
+    var _this4 = this;
 
     var noopable = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
     var el = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
@@ -24257,7 +25580,7 @@ var BaseValidation = function () {
     var valid = true;
 
     this._runValidators(function (descriptor, name, done) {
-      var asset = _this3._resolveValidator(name);
+      var asset = _this4._resolveValidator(name);
       var validator = null;
       var msg = null;
 
@@ -24288,8 +25611,8 @@ var BaseValidation = function () {
       }
 
       if (validator) {
-        var value = _this3._getValue(_this3._el);
-        _this3._invokeValidator(_this3._vm, validator, value, descriptor.arg, function (ret, err) {
+        var value = _this4._getValue(_this4._el);
+        _this4._invokeValidator(_this4._vm, validator, value, descriptor.arg, function (ret, err) {
           if (!ret) {
             valid = false;
             if (err) {
@@ -24298,7 +25621,7 @@ var BaseValidation = function () {
               results[name] = err;
             } else if (msg) {
               var error = { validator: name };
-              error.message = typeof msg === 'function' ? msg.call(_this3._vm, _this3.field, descriptor.arg) : msg;
+              error.message = typeof msg === 'function' ? msg.call(_this4._vm, _this4.field, descriptor.arg) : msg;
               errors.push(error);
               results[name] = error.message;
             } else {
@@ -24315,23 +25638,23 @@ var BaseValidation = function () {
       }
     }, function () {
       // finished
-      _this3._fireEvent(_this3._el, valid ? 'valid' : 'invalid');
+      _this4._fireEvent(_this4._el, valid ? 'valid' : 'invalid');
 
       var props = {
         valid: valid,
         invalid: !valid,
-        touched: _this3.touched,
-        untouched: !_this3.touched,
-        dirty: _this3.dirty,
-        pristine: !_this3.dirty,
-        modified: _this3.modified
+        touched: _this4.touched,
+        untouched: !_this4.touched,
+        dirty: _this4.dirty,
+        pristine: !_this4.dirty,
+        modified: _this4.modified
       };
       if (!empty(errors)) {
         props.errors = errors;
       }
       _.extend(results, props);
 
-      _this3.willUpdateClasses(results, el);
+      _this4.willUpdateClasses(results, el);
 
       cb(results);
     });
@@ -24355,15 +25678,15 @@ var BaseValidation = function () {
   };
 
   BaseValidation.prototype.willUpdateClasses = function willUpdateClasses(results) {
-    var _this4 = this;
+    var _this5 = this;
 
     var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
     if (this._checkClassIds(el)) {
       (function () {
-        var classIds = _this4._getClassIds(el);
-        _this4.vm.$nextTick(function () {
-          _this4.vm.$emit(VALIDATE_UPDATE, classIds, _this4, results);
+        var classIds = _this5._getClassIds(el);
+        _this5.vm.$nextTick(function () {
+          _this5.vm.$emit(VALIDATE_UPDATE, classIds, _this5, results);
         });
       })();
     } else {
@@ -25905,7 +27228,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.1.3';
+plugin.version = '2.1.5';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
@@ -25913,10 +27236,10 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 module.exports = plugin;
 }).call(this,require('_process'))
-},{"_process":105}],112:[function(require,module,exports){
+},{"_process":106}],113:[function(require,module,exports){
 (function (process,global){
 /*!
- * Vue.js v1.0.26
+ * Vue.js v1.0.24
  * (c) 2016 Evan You
  * Released under the MIT License.
  */
@@ -26315,15 +27638,10 @@ var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
 // UA sniffing for working around browser-specific quirks
 var UA = inBrowser && window.navigator.userAgent.toLowerCase();
-var isIE = UA && UA.indexOf('trident') > 0;
 var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
 var isAndroid = UA && UA.indexOf('android') > 0;
 var isIos = UA && /(iphone|ipad|ipod|ios)/i.test(UA);
-var iosVersionMatch = isIos && UA.match(/os ([\d_]+)/);
-var iosVersion = iosVersionMatch && iosVersionMatch[1].split('_');
-
-// detecting iOS UIWebView by indexedDB
-var hasMutationObserverBug = iosVersion && Number(iosVersion[0]) >= 9 && Number(iosVersion[1]) >= 3 && !window.indexedDB;
+var isWechat = UA && UA.indexOf('micromessenger') > 0;
 
 var transitionProp = undefined;
 var transitionEndEvent = undefined;
@@ -26364,7 +27682,7 @@ var nextTick = (function () {
   }
 
   /* istanbul ignore if */
-  if (typeof MutationObserver !== 'undefined' && !hasMutationObserverBug) {
+  if (typeof MutationObserver !== 'undefined' && !(isWechat && isIos)) {
     var counter = 1;
     var observer = new MutationObserver(nextTickHandler);
     var textNode = document.createTextNode(counter);
@@ -26436,12 +27754,12 @@ var p = Cache.prototype;
 
 p.put = function (key, value) {
   var removed;
+  if (this.size === this.limit) {
+    removed = this.shift();
+  }
 
   var entry = this.get(key, true);
   if (!entry) {
-    if (this.size === this.limit) {
-      removed = this.shift();
-    }
     entry = {
       key: key
     };
@@ -26686,7 +28004,7 @@ function compileRegex() {
   var unsafeOpen = escapeRegex(config.unsafeDelimiters[0]);
   var unsafeClose = escapeRegex(config.unsafeDelimiters[1]);
   tagRE = new RegExp(unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '|' + open + '((?:.|\\n)+?)' + close, 'g');
-  htmlRE = new RegExp('^' + unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '$');
+  htmlRE = new RegExp('^' + unsafeOpen + '.*' + unsafeClose + '$');
   // reset cache
   cache = new Cache(1000);
 }
@@ -27473,8 +28791,7 @@ if (process.env.NODE_ENV !== 'production') {
       return (/HTMLUnknownElement/.test(el.toString()) &&
         // Chrome returns unknown for several HTML5 elements.
         // https://code.google.com/p/chromium/issues/detail?id=540526
-        // Firefox returns unknown for some "Interactive elements."
-        !/^(data|time|rtc|rb|details|dialog|summary)$/.test(tag)
+        !/^(data|time|rtc|rb)$/.test(tag)
       );
     }
   };
@@ -27810,9 +29127,7 @@ function mergeOptions(parent, child, vm) {
   }
   if (child.mixins) {
     for (var i = 0, l = child.mixins.length; i < l; i++) {
-      var mixin = child.mixins[i];
-      var mixinOptions = mixin.prototype instanceof Vue ? mixin.options : mixin;
-      parent = mergeOptions(parent, mixinOptions, vm);
+      parent = mergeOptions(parent, child.mixins[i], vm);
     }
   }
   for (key in parent) {
@@ -28240,13 +29555,10 @@ var util = Object.freeze({
 	hasProto: hasProto,
 	inBrowser: inBrowser,
 	devtools: devtools,
-	isIE: isIE,
 	isIE9: isIE9,
 	isAndroid: isAndroid,
 	isIos: isIos,
-	iosVersionMatch: iosVersionMatch,
-	iosVersion: iosVersion,
-	hasMutationObserverBug: hasMutationObserverBug,
+	isWechat: isWechat,
 	get transitionProp () { return transitionProp; },
 	get transitionEndEvent () { return transitionEndEvent; },
 	get animationProp () { return animationProp; },
@@ -28734,9 +30046,7 @@ var saveRE = /[\{,]\s*[\w\$_]+\s*:|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\
 var restoreRE = /"(\d+)"/g;
 var pathTestRE = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/;
 var identRE = /[^\w$\.](?:[A-Za-z_$][\w$]*)/g;
-var literalValueRE$1 = /^(?:true|false|null|undefined|Infinity|NaN)$/;
-
-function noop() {}
+var booleanLiteralRE = /^(?:true|false)$/;
 
 /**
  * Save / Rewrite / Restore
@@ -28818,7 +30128,7 @@ function compileGetter(exp) {
   // save strings and object literal keys
   var body = exp.replace(saveRE, save).replace(wsRE, '');
   // rewrite all paths
-  // pad 1 space here because the regex matches 1 extra char
+  // pad 1 space here becaue the regex matches 1 extra char
   body = (' ' + body).replace(identRE, rewrite).replace(restoreRE, restore);
   return makeGetterFn(body);
 }
@@ -28839,15 +30149,7 @@ function makeGetterFn(body) {
     return new Function('scope', 'return ' + body + ';');
     /* eslint-enable no-new-func */
   } catch (e) {
-    if (process.env.NODE_ENV !== 'production') {
-      /* istanbul ignore if */
-      if (e.toString().match(/unsafe-eval|CSP/)) {
-        warn('It seems you are using the default build of Vue.js in an environment ' + 'with Content Security Policy that prohibits unsafe-eval. ' + 'Use the CSP-compliant build instead: ' + 'http://vuejs.org/guide/installation.html#CSP-compliant-build');
-      } else {
-        warn('Invalid expression. ' + 'Generated function body: ' + body);
-      }
-    }
-    return noop;
+    process.env.NODE_ENV !== 'production' && warn('Invalid expression. ' + 'Generated function body: ' + body);
   }
 }
 
@@ -28909,8 +30211,8 @@ function parseExpression(exp, needSet) {
 
 function isSimplePath(exp) {
   return pathTestRE.test(exp) &&
-  // don't treat literal values as paths
-  !literalValueRE$1.test(exp) &&
+  // don't treat true/false as paths
+  !booleanLiteralRE.test(exp) &&
   // Math constants e.g. Math.PI, Math.E etc.
   exp.slice(0, 5) !== 'Math.';
 }
@@ -29326,7 +30628,7 @@ function traverse(val, seen) {
   }
   var isA = isArray(val);
   var isO = isObject(val);
-  if ((isA || isO) && Object.isExtensible(val)) {
+  if (isA || isO) {
     if (val.__ob__) {
       var depId = val.__ob__.dep.id;
       if (seen.has(depId)) {
@@ -29389,7 +30691,6 @@ function isRealTemplate(node) {
 
 var tagRE$1 = /<([\w:-]+)/;
 var entityRE = /&#?\w+?;/;
-var commentRE = /<!--/;
 
 /**
  * Convert a string template to a DocumentFragment.
@@ -29412,9 +30713,8 @@ function stringToFragment(templateString, raw) {
   var frag = document.createDocumentFragment();
   var tagMatch = templateString.match(tagRE$1);
   var entityMatch = entityRE.test(templateString);
-  var commentMatch = commentRE.test(templateString);
 
-  if (!tagMatch && !entityMatch && !commentMatch) {
+  if (!tagMatch && !entityMatch) {
     // text only, return a single text node.
     frag.appendChild(document.createTextNode(templateString));
   } else {
@@ -30381,7 +31681,7 @@ var vFor = {
    * the filters. This is passed to and called by the watcher.
    *
    * It is necessary for this to be called during the
-   * watcher's dependency collection phase because we want
+   * wathcer's dependency collection phase because we want
    * the v-for to update when the source Object is mutated.
    */
 
@@ -30724,10 +32024,7 @@ var text$2 = {
   },
 
   update: function update(value) {
-    // #3029 only update when the value changes. This prevent
-    // browsers from overwriting values like selectionStart
-    value = _toString(value);
-    if (value !== this.el.value) this.el.value = value;
+    this.el.value = _toString(value);
   },
 
   unbind: function unbind() {
@@ -30776,8 +32073,6 @@ var radio = {
 var select = {
 
   bind: function bind() {
-    var _this = this;
-
     var self = this;
     var el = this.el;
 
@@ -30809,12 +32104,7 @@ var select = {
     // selectedIndex with value -1 to 0 when the element
     // is appended to a new parent, therefore we have to
     // force a DOM update whenever that happens...
-    this.vm.$on('hook:attached', function () {
-      nextTick(_this.forceUpdate);
-    });
-    if (!inDoc(el)) {
-      nextTick(this.forceUpdate);
-    }
+    this.vm.$on('hook:attached', this.forceUpdate);
   },
 
   update: function update(value) {
@@ -32084,7 +33374,7 @@ function processPropValue(vm, prop, rawValue, fn) {
   if (value === undefined) {
     value = getPropDefaultValue(vm, prop);
   }
-  value = coerceProp(prop, value, vm);
+  value = coerceProp(prop, value);
   var coerced = value !== rawValue;
   if (!assertProp(prop, value, vm)) {
     value = undefined;
@@ -32203,17 +33493,13 @@ function assertProp(prop, value, vm) {
  * @return {*}
  */
 
-function coerceProp(prop, value, vm) {
+function coerceProp(prop, value) {
   var coerce = prop.options.coerce;
   if (!coerce) {
     return value;
   }
-  if (typeof coerce === 'function') {
-    return coerce(value);
-  } else {
-    process.env.NODE_ENV !== 'production' && warn('Invalid coerce for prop "' + prop.name + '": expected function, got ' + typeof coerce + '.', vm);
-    return value;
-  }
+  // coerce is a function
+  return coerce(value);
 }
 
 /**
@@ -32745,9 +34031,10 @@ var transition$1 = {
     // resolve on owner vm
     var hooks = resolveAsset(this.vm.$options, 'transitions', id);
     id = id || 'v';
-    oldId = oldId || 'v';
     el.__v_trans = new Transition(el, id, hooks, this.vm);
-    removeClass(el, oldId + '-transition');
+    if (oldId) {
+      removeClass(el, oldId + '-transition');
+    }
     addClass(el, id + '-transition');
   }
 };
@@ -33172,7 +34459,7 @@ function makeTextNodeLinkFn(tokens, frag) {
           if (token.html) {
             replace(node, parseTemplate(value, true));
           } else {
-            node.data = _toString(value);
+            node.data = value;
           }
         } else {
           vm._bindDir(token.descriptor, node, host, scope);
@@ -34156,7 +35443,7 @@ function eventsMixin (Vue) {
   };
 }
 
-function noop$1() {}
+function noop() {}
 
 /**
  * A directive links a DOM element with a piece of data,
@@ -34255,7 +35542,7 @@ Directive.prototype._bind = function () {
         }
       };
     } else {
-      this._update = noop$1;
+      this._update = noop;
     }
     var preProcess = this._preProcess ? bind(this._preProcess, this) : null;
     var postProcess = this._postProcess ? bind(this._postProcess, this) : null;
@@ -35693,7 +36980,7 @@ var filters = {
 
   json: {
     read: function read(value, indent) {
-      return typeof value === 'string' ? value : JSON.stringify(value, null, arguments.length > 1 ? indent : 2);
+      return typeof value === 'string' ? value : JSON.stringify(value, null, Number(indent) || 2);
     },
     write: function write(value) {
       try {
@@ -35766,13 +37053,7 @@ var filters = {
 
   pluralize: function pluralize(value) {
     var args = toArray(arguments, 1);
-    var length = args.length;
-    if (length > 1) {
-      var index = value % 10 - 1;
-      return index in args ? args[index] : args[length - 1];
-    } else {
-      return args[0] + (value === 1 ? '' : 's');
-    }
+    return args.length > 1 ? args[value % 10 - 1] || args[args.length - 1] : args[0] + (value === 1 ? '' : 's');
   },
 
   /**
@@ -35957,9 +37238,7 @@ function installGlobalAPI (Vue) {
           }
         }
         if (type === 'component' && isPlainObject(definition)) {
-          if (!definition.name) {
-            definition.name = id;
-          }
+          definition.name = id;
           definition = Vue.extend(definition);
         }
         this.options[type + 's'][id] = definition;
@@ -35974,7 +37253,7 @@ function installGlobalAPI (Vue) {
 
 installGlobalAPI(Vue);
 
-Vue.version = '1.0.26';
+Vue.version = '1.0.24';
 
 // devtools global hook
 /* istanbul ignore next */
@@ -35990,7 +37269,7 @@ setTimeout(function () {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":105}],113:[function(require,module,exports){
+},{"_process":106}],114:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 exports.insert = function (css) {
@@ -36010,7 +37289,7 @@ exports.insert = function (css) {
   return elem
 }
 
-},{}],114:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36038,6 +37317,7 @@ exports.default = {
 		return {
 			countries: [],
 			countryCodeObj: null,
+			errors: {},
 
 			name: null,
 			country: null,
@@ -36049,8 +37329,6 @@ exports.default = {
 			page_url: null,
 			page_src: null,
 			attemptSubmit: false,
-			avatarPanelOpen: false,
-			bannerPanelOpen: false,
 			selectedAvatar: null,
 			avatar_upload_id: null,
 			selectedBanner: null,
@@ -36089,7 +37367,7 @@ exports.default = {
 					short_desc: this.short_desc,
 					started_at: this.started_at,
 					ended_at: this.ended_at,
-					published_at: this.published_at,
+					published_at: moment(this.published_at).format('YYYY-MM-DD HH:mm:ss'),
 					page_url: this.page_url,
 					page_src: this.page_src,
 					avatar_upload_id: this.avatar_upload_id,
@@ -36098,7 +37376,7 @@ exports.default = {
 				}).then(function (resp) {
 					window.location.href = '/admin' + resp.data.data.links[0].uri;
 				}, function (error) {
-					debugger;
+					this.errors = error.data.errors;
 				});
 			}
 		}
@@ -36109,12 +37387,12 @@ exports.default = {
 				case 'avatar':
 					this.selectedAvatar = data;
 					this.avatar_upload_id = data.id;
-					this.avatarPanelOpen = false;
+					jQuery('#avatarCollapse').collapse('hide');
 					break;
 				case 'banner':
 					this.selectedBanner = data;
 					this.banner_upload_id = data.id;
-					this.bannerPanelOpen = false;
+					jQuery('#bannerCollapse').collapse('hide');
 					break;
 			}
 		}
@@ -36126,18 +37404,18 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateCampaign\">\n\t<form id=\"CreateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:120 }\" maxlength=\"120\" minlength=\"1\"></textarea>\n\t\t\t\t<div v-if=\"short_desc\" class=\"help-block\">{{short_desc.length}}/255 characters remaining</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Published</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"datetime-local\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\" v-if=\"published_at\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Url</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false,  }\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('src') }\" v-if=\"published_at\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Source</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">/resources/views/sites/campaigns/partials/</span>\n\t\t\t\t\t<input type=\"text\" id=\"page_src\" v-model=\"page_src\" class=\"form-control\" v-validate:src=\"{ required: false,  }\">\n\t\t\t\t\t<span class=\"input-group-addon\">.blade.php</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t\n\t\t<accordion :one-at-atime=\"true\">\n\t\t\t<panel header=\"Avatar\" :is-open.sync=\"avatarPanelOpen\">\n\t\t\t\t<div class=\"media\" v-if=\"selectedAvatar\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</panel>\n\t\t\t<panel header=\"Banner\" :is-open.sync=\"bannerPanelOpen\">\n\t\t\t\t<div class=\"media\" v-if=\"selectedBanner\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedBanner.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedBanner.name\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedBanner.name}}</h4>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</panel>\n\t\t</accordion>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"text-center\">\n\t\t\t\t<a href=\"/admin/campaigns\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t<a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateCampaign\">\n\t<form id=\"CreateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:120 }\" maxlength=\"120\" minlength=\"1\"></textarea>\n\t\t\t\t<div v-if=\"short_desc\" class=\"help-block\">{{short_desc.length}}/255 characters remaining</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.started_at\" class=\"help-block\">{{errors.started_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" :min=\"started_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.ended_at\" class=\"help-block\">{{errors.ended_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Published</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"datetime-local\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t</div>\n\t\t</div>\n\n\t\t<template v-if=\"published_at\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.page_url }\">\n\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Url</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false }\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<div v-show=\"errors.page_url\" class=\"help-block\">{{errors.page_url}}</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('src') }\">\n\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Source</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">/resources/views/sites/campaigns/partials/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_src\" v-model=\"page_src\" class=\"form-control\" v-validate:src=\"{ required: false,  }\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">.blade.php</span>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</template>\n\n\t\t<div class=\"media\">\n\t\t\t<div class=\"media-left\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n\t\t\t\t</a>\n\t\t\t</div>\n\t\t\t<div class=\"media-body\">\n\t\t\t\t<h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n\t\t\t\t<button class=\"btn btn-block btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n\t\t\t\t\tSet Avatar\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"collapse\" id=\"avatarCollapse\">\n\t\t\t<div class=\"well\">\n\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<br>\n\n\t\t<div class=\"media\">\n\t\t\t<div class=\"media-left\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"media-object\" :src=\"selectedBanner ? (selectedBanner.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedBanner ? selectedBanner.name : ''\">\n\t\t\t\t</a>\n\t\t\t</div>\n\t\t\t<div class=\"media-body\">\n\t\t\t\t<h4 class=\"media-heading\">{{selectedBanner ? selectedBanner.name : ''}}</h4>\n\t\t\t\t<button class=\"btn btn-block btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#bannerCollapse\" aria-expanded=\"false\" aria-controls=\"bannerCollapse\">\n\t\t\t\t\tSet Banner\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"collapse\" id=\"bannerCollapse\">\n\t\t\t<div class=\"well\">\n\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<br>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"text-center\">\n\t\t\t\t<a href=\"/admin/campaigns\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t<a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-402a95aa", module.exports)
+    hotAPI.createRecord("_v-0b3f2b04", module.exports)
   } else {
-    hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0b3f2b04", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":162,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],115:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":170,"vue":113,"vue-hot-reload-api":108,"vue-select":110,"vue-strap/dist/vue-strap.min":111}],116:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -36207,12 +37485,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6c0d9684", module.exports)
+    hotAPI.createRecord("_v-0edb47a0", module.exports)
   } else {
-    hotAPI.update("_v-6c0d9684", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0edb47a0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./details/details.vue":119,"./details/regions.vue":120,"./details/transports.vue":121,"./details/trips.vue":122,"vue":112,"vue-hot-reload-api":107,"vueify/lib/insert-css":113}],116:[function(require,module,exports){
+},{"./details/details.vue":120,"./details/regions.vue":121,"./details/transports.vue":122,"./details/trips.vue":123,"vue":113,"vue-hot-reload-api":108,"vueify/lib/insert-css":114}],117:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36241,6 +37519,7 @@ exports.default = {
 		return {
 			countries: [],
 			countryCodeObj: null,
+			errors: [],
 
 			name: null,
 			country_code: null,
@@ -36253,9 +37532,9 @@ exports.default = {
 			page_url: null,
 			page_src: null,
 			attemptSubmit: false,
-			avatarPanelOpen: false,
-			bannerPanelOpen: false,
+			selectedAvatar: null,
 			avatar_upload_id: null,
+			selectedBanner: null,
 			banner_upload_id: null,
 			resource: this.$resource('campaigns{/id}')
 		};
@@ -36294,16 +37573,18 @@ exports.default = {
 					short_desc: this.short_desc,
 					started_at: this.started_at,
 					ended_at: this.ended_at,
-					published_at: this.published_at,
+					published_at: moment(this.published_at).format('YYYY-MM-DD HH:mm:ss'),
 					page_url: this.page_url,
 					page_src: this.page_src,
 					avatar_upload_id: this.avatar_upload_id,
 					banner_upload_id: this.banner_upload_id
 
 				}).then(function (resp) {
+					resp.data.data.published_at = moment(resp.data.data.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
 					$.extend(this, resp.data.data);
+					window.location.href = '/admin/campaigns/';
 				}, function (error) {
-					debugger;
+					self.errors = error.data.errors;
 				});
 			}
 		},
@@ -36318,12 +37599,14 @@ exports.default = {
 		'uploads-complete': function uploadsComplete(data) {
 			switch (data.type) {
 				case 'avatar':
+					this.selectedAvatar = data;
 					this.avatar_upload_id = data.id;
-					this.avatarPanelOpen = false;
+					jQuery('#avatarCollapse').collapse('hide');
 					break;
 				case 'banner':
+					this.selectedBanner = data;
 					this.banner_upload_id = data.id;
-					this.bannerPanelOpen = false;
+					jQuery('#bannerCollapse').collapse('hide');
 					break;
 			}
 		}
@@ -36342,24 +37625,25 @@ exports.default = {
 			this.ended_at = campaign.ended_at;
 			this.published_at = moment(campaign.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
 			this.page_url = campaign.page_url;
+			this.page_src = campaign.page_src;
 			this.countryCodeObj = _.findWhere(this.countries, { name: campaign.country });
 			this.country_code = this.countryCodeObj.code;
 		});
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateCampaign\">\n\t<form id=\"UpdateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<a class=\"pull-right\" data-toggle=\"modal\" data-target=\"#deleteConfirmationModal\"><h6><i class=\"fa fa-trash\"></i> Delete</h6></a>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:255 }\" maxlength=\"255\" minlength=\"1\"></textarea>\n\t\t\t\t<div v-if=\"short_desc\" class=\"help-block\">{{short_desc.length}}/255 characters remaining</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Published Date</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"datetime-local\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t</div>\n\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\" v-if=\"published_at\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Url</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false }\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('src') }\" v-if=\"published_at\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Source</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\">/resources/views/sites/campaigns/partials/</span>\n\t\t\t\t\t<input type=\"text\" id=\"page_src\" v-model=\"page_src\" class=\"form-control\" v-validate:src=\"{ required: false }\">\n\t\t\t\t\t<span class=\"input-group-addon\">.blade.php</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<accordion :one-at-atime=\"true\">\n\t\t\t<panel header=\"Avatar\" :is-open.sync=\"avatarPanelOpen\">\n\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</panel>\n\t\t\t<panel header=\"Banner\" :is-open.sync=\"bannerPanelOpen\">\n\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</panel>\n\t\t</accordion>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t<a href=\"/admin/campaigns/{{campaignId}}\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t<a @click=\"update()\" class=\"btn btn-primary\">Update</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\n\t<div class=\"modal fade\" id=\"deleteConfirmationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"deleteConfirmationModal\">\n\t\t<div class=\"modal-dialog modal-sm\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t\t\t<h4 class=\"modal-title text-center\" id=\"myModalLabel\">Are You Sure?</h4>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<p class=\"text-center\">Are you sure you want to delete this campaign?</p>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t\t<a class=\"btn btn-sm btn-default\" data-dismiss=\"modal\">No</a>\n\t\t\t\t\t\t\t<a @click=\"deleteCampaign()\" class=\"btn btn-sm btn-primary\">Yes</a>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateCampaign\">\n\t<form id=\"UpdateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<a class=\"pull-right\" data-toggle=\"modal\" data-target=\"#deleteConfirmationModal\"><h6><i class=\"fa fa-trash\"></i> Delete</h6></a>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:255 }\" maxlength=\"255\" minlength=\"1\"></textarea>\n\t\t\t\t<div v-if=\"short_desc\" class=\"help-block\">{{short_desc.length}}/255 characters remaining</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.started_at\" class=\"help-block\">{{errors.started_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.ended_at\" class=\"help-block\">{{errors.ended_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<label for=\"published_at\" class=\"col-sm-2 control-label\">Published Date</label>\n\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t<input type=\"datetime-local\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t</div>\n\n\t\t</div>\n\n\t\t<template v-if=\"published_at\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.page_url }\">\n\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Url</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false }\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<div v-if=\"errors.page_url\" class=\"help-block\">{{errors.page_url.toString()}}</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('src') }\">\n\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Page Source</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">/resources/views/sites/campaigns/partials/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_src\" v-model=\"page_src\" class=\"form-control\" v-validate:src=\"{ required: false }\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">.blade.php</span>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</template>\n\n\t\t<div class=\"media\">\n\t\t\t<div class=\"media-left\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n\t\t\t\t</a>\n\t\t\t</div>\n\t\t\t<div class=\"media-body\">\n\t\t\t\t<h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n\t\t\t\t<button class=\"btn btn-block btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n\t\t\t\t\tSet Avatar\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"collapse\" id=\"avatarCollapse\">\n\t\t\t<div class=\"well\">\n\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<br>\n\n\t\t<div class=\"media\">\n\t\t\t<div class=\"media-left\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"media-object\" :src=\"selectedBanner ? (selectedBanner.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedBanner ? selectedBanner.name : ''\">\n\t\t\t\t</a>\n\t\t\t</div>\n\t\t\t<div class=\"media-body\">\n\t\t\t\t<h4 class=\"media-heading\">{{selectedBanner ? selectedBanner.name : ''}}</h4>\n\t\t\t\t<button class=\"btn btn-block btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#bannerCollapse\" aria-expanded=\"false\" aria-controls=\"bannerCollapse\">\n\t\t\t\t\tSet Banner\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"collapse\" id=\"bannerCollapse\">\n\t\t\t<div class=\"well\">\n\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<br>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t<a href=\"/admin/campaigns/{{campaignId}}\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t<a @click=\"update()\" class=\"btn btn-primary\">Update</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\n\t<div class=\"modal fade\" id=\"deleteConfirmationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"deleteConfirmationModal\">\n\t\t<div class=\"modal-dialog modal-sm\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t\t\t<h4 class=\"modal-title text-center\" id=\"myModalLabel\">Are You Sure?</h4>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<p class=\"text-center\">Are you sure you want to delete this campaign?</p>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t\t<a class=\"btn btn-sm btn-default\" data-dismiss=\"modal\">No</a>\n\t\t\t\t\t\t\t<a @click=\"deleteCampaign()\" class=\"btn btn-sm btn-primary\">Yes</a>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3a603938", module.exports)
+    hotAPI.createRecord("_v-23ed330c", module.exports)
   } else {
-    hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-23ed330c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":162,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],117:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":170,"vue":113,"vue-hot-reload-api":108,"vue-select":110,"vue-strap/dist/vue-strap.min":111}],118:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36427,12 +37711,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-12a47980", module.exports)
+    hotAPI.createRecord("_v-a06e71d8", module.exports)
   } else {
-    hotAPI.update("_v-12a47980", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-a06e71d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],118:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],119:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36466,12 +37750,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-58d98fb2", module.exports)
+    hotAPI.createRecord("_v-97adfaf4", module.exports)
   } else {
-    hotAPI.update("_v-58d98fb2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-97adfaf4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],119:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],120:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36507,12 +37791,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c27860f8", module.exports)
+    hotAPI.createRecord("_v-57ded358", module.exports)
   } else {
-    hotAPI.update("_v-c27860f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-57ded358", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],120:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],121:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36542,12 +37826,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-88b7227e", module.exports)
+    hotAPI.createRecord("_v-74bf7295", module.exports)
   } else {
-    hotAPI.update("_v-88b7227e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-74bf7295", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],121:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],122:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36576,12 +37860,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2299a818", module.exports)
+    hotAPI.createRecord("_v-115c23c4", module.exports)
   } else {
-    hotAPI.update("_v-2299a818", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-115c23c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],122:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],123:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36650,12 +37934,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-19c29ab0", module.exports)
+    hotAPI.createRecord("_v-f096f8f8", module.exports)
   } else {
-    hotAPI.update("_v-19c29ab0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-f096f8f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],123:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],124:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36720,18 +38004,18 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dark-bg-primary\">\n<div class=\"container\">\n\t<hr class=\"divider inv xlg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center\">\n\t\t\t<img class=\"img-circle img-lg\" src=\"{{ group.avatar }}\">\n\t\t\t<h3>{{ group.name }}</h3>\n\t\t</div>\n\t</div>\n\t<hr class=\"divider inv lg\">\n</div>\n</div>\n<div class=\"container\">\n\t<hr class=\"divider inv lg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t<h2>Choose A Trip</h2>\n\t\t\t<hr class=\"divider red-small lg\">\n\t\t</div>\n\t\t<div class=\"col-xs-12\">\n\t\t<table class=\"table table-hover\">\n\t\t\t<thead>\n\t\t\t<tr>\n\t\t\t\t<th>Type</th>\n\t\t\t\t<th>Dates</th>\n\t\t\t\t<th>Starting Cost</th>\n\t\t\t\t<th>Spots Left</th>\n\t\t\t\t<th>Ideal For</th>\n\t\t\t\t<th>Status</th>\n\t\t\t\t<th></th>\n\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t<tr v-for=\"trip in trips\" style=\"border-bottom: 1px solid #e6e6e6\">\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.type | capitalize }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.starting_cost | currency }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.spots }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">\n\t\t\t\t\t<span v-for=\"prospect in trip.prospects\">\n\t\t\t\t\t\t{{ prospect | capitalize }}<span v-show=\"$index + 1 != trip.prospects.length\">, </span> \n\t\t\t\t\t</span>\n\t\t\t\t</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.status | capitalize }}</td>\n\t\t\t\t<td class=\"text-right\"><a href=\"/trips/{{ trip.id }}\" class=\"btn btn-primary-hollow btn-sm\">Select</a></td>\n\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t</div>\n\t</div><!-- end row -->\n\t<hr class=\"divider inv xlg\">\n</div><!-- end container -->\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dark-bg-primary\">\n<div class=\"container\">\n\t<hr class=\"divider inv xlg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center\">\n\t\t\t<a :href=\"'/groups/' + group.url\"><img class=\"img-circle img-lg\" src=\"{{ group.avatar }}\"></a>\n\t\t\t<h3>{{ group.name }}</h3>\n\t\t</div>\n\t</div>\n\t<hr class=\"divider inv lg\">\n</div>\n</div>\n<div class=\"container\">\n\t<hr class=\"divider inv lg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t<h2>Choose A Trip</h2>\n\t\t\t<hr class=\"divider red-small lg\">\n\t\t</div>\n\t\t<div class=\"col-xs-12\">\n\t\t<table class=\"table table-hover\">\n\t\t\t<thead>\n\t\t\t<tr>\n\t\t\t\t<th>Type</th>\n\t\t\t\t<th>Dates</th>\n\t\t\t\t<th>Starting Cost</th>\n\t\t\t\t<th>Spots Left</th>\n\t\t\t\t<th>Ideal For</th>\n\t\t\t\t<th>Status</th>\n\t\t\t\t<th></th>\n\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t<tr v-for=\"trip in trips\" style=\"border-bottom: 1px solid #e6e6e6\">\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.type | capitalize }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.starting_cost | currency }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.spots }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">\n\t\t\t\t\t<span v-for=\"prospect in trip.prospects\">\n\t\t\t\t\t\t{{ prospect | capitalize }}<span v-show=\"$index + 1 != trip.prospects.length\">, </span> \n\t\t\t\t\t</span>\n\t\t\t\t</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.status | capitalize }}</td>\n\t\t\t\t<td class=\"text-right\"><a href=\"/trips/{{ trip.id }}\" class=\"btn btn-primary-hollow btn-sm\">Select</a></td>\n\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t</div>\n\t</div><!-- end row -->\n\t<hr class=\"divider inv xlg\">\n</div><!-- end container -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1c3f53a2", module.exports)
+    hotAPI.createRecord("_v-91c337fa", module.exports)
   } else {
-    hotAPI.update("_v-1c3f53a2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-91c337fa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],124:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],125:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -36784,12 +38068,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-94fcdc0a", module.exports)
+    hotAPI.createRecord("_v-752828b2", module.exports)
   } else {
-    hotAPI.update("_v-94fcdc0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-752828b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./campaign-groups.vue":117,"./group-trips.vue":123,"vue":112,"vue-hot-reload-api":107,"vueify/lib/insert-css":113}],125:[function(require,module,exports){
+},{"./campaign-groups.vue":118,"./group-trips.vue":124,"vue":113,"vue-hot-reload-api":108,"vueify/lib/insert-css":114}],126:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36831,6 +38115,7 @@ exports.default = {
             timezones: []
         };
     },
+    //timezoneObj: null,
 
     computed: {
         country_code: function country_code() {
@@ -36891,12 +38176,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0f6c0d9e", module.exports)
+    hotAPI.createRecord("_v-6ef1dd1c", module.exports)
   } else {
-    hotAPI.update("_v-0f6c0d9e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6ef1dd1c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],126:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110}],127:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36912,7 +38197,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     name: 'group-edit',
     components: { vSelect: _vueSelect2.default },
-    props: ['groupId'],
+    props: ['groupId', 'managing'],
     data: function data() {
         return {
             name: '',
@@ -36940,6 +38225,7 @@ exports.default = {
             timezones: []
         };
     },
+    //timezoneObj: null,
 
     computed: {
         country_code: function country_code() {
@@ -36975,7 +38261,9 @@ exports.default = {
                     url: this.url,
                     email: this.email
                 }).then(function (resp) {
-                    window.location.href = '/admin' + resp.data.data.links[0].uri;
+                    if (!this.managing) {
+                        window.location.href = '/' + location.pathname.split('/')[1] + '/' + resp.data.data.links[0].uri;
+                    }
                 }, function (error) {
                     console.log(error);
                     debugger;
@@ -37023,12 +38311,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7071c3a8", module.exports)
+    hotAPI.createRecord("_v-35b90700", module.exports)
   } else {
-    hotAPI.update("_v-7071c3a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-35b90700", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],127:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110}],128:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37124,12 +38412,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1244b388", module.exports)
+    hotAPI.createRecord("_v-1ea3db48", module.exports)
   } else {
-    hotAPI.update("_v-1244b388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1ea3db48", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],128:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110}],129:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37199,12 +38487,190 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6170d6da", module.exports)
+    hotAPI.createRecord("_v-1f92c63f", module.exports)
   } else {
-    hotAPI.update("_v-6170d6da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1f92c63f", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],129:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],130:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'group-profile-fundraisers',
+    props: ['id'],
+    data: function data() {
+        return {
+            fundraisers: [],
+
+            pathName: window.location.pathname
+        };
+    },
+    ready: function ready() {
+        this.$http.get('groups/' + this.id, {
+            include: 'fundraisers'
+        }).then(function (response) {
+            this.fundraisers = response.data.data.fundraisers.data;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"col-sm-12\" v-if=\"!fundraisers.length\">\n        <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n    </div>\n    <div class=\"col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12\" v-for=\"fundraiser in fundraisers\" v-if=\"fundraisers.length\">\n        <div class=\"panel panel-default\">\n            <img :src=\"fundraiser.banner||'images/india-prof-pic.jpg'\" alt=\"India\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h4>{{ fundraiser.name }}</h4>\n                <h6>\n                    {{ fundraiser.description || 'No Description'}}\n                    <br>\n                    Expires: {{ fundraiser.expires_at | moment 'll'  }}\n                </h6>\n                <h3><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>\n                <p><span>{{ fundraiser.goal_amount &gt; 0 ? (fundraiser.raised_amount / fundraiser.goal_amount * 100) : 0 }}</span>% <small>Funded</small> / <span>2</span> <small>Donors</small></p>\n                <div class=\"progress\">\n                    <div class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\" :style=\"{ width: (fundraiser.goal_amount > 0 ? (fundraiser.raised_amount / fundraiser.goal_amount * 100) : 0 ) + '%'}\">\n                        <span class=\"sr-only\">{{ fundraiser.goal_amount &gt; 0 ? (fundraiser.raised_amount / fundraiser.goal_amount * 100) : 0 }}% Complete (success)</span>\n                    </div>\n                </div>\n                <p><a class=\"btn btn-primary btn-block\" :href=\" pathName + '/' + fundraiser.links[0].uri\">Details</a></p>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-9e3256c8", module.exports)
+  } else {
+    hotAPI.update("_v-9e3256c8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":113,"vue-hot-reload-api":108}],131:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'group-profile-stories',
+    props: ['id'],
+    data: function data() {
+        return {
+            stories: [],
+
+            // pagination vars
+            page: 1,
+            per_page: 5,
+            pagination: {}
+
+        };
+    },
+
+    watch: {
+        'page': function page(val, oldVal) {
+            this.searchStories();
+        }
+    },
+    methods: {
+        searchStories: function searchStories() {
+            this.$http.get('stories?group=' + this.id, {
+                page: this.page,
+                per_page: this.per_page
+            }).then(function (response) {
+                this.stories = response.data.data;
+                this.pagination = response.data.meta.pagination;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchStories();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"panel panel-default\" v-for=\"story in stories\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ story.id }}\">\n            <h5>\n                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse-{{ story.id }}\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                    {{ story.title }}\n                </a>\n            </h5>\n        </div>\n        <div id=\"collapse-{{ story.id }}\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"heading-{{ story.id }}\">\n            <div class=\"panel-body\">\n                <h5 class=\"media-heading\"><a href=\"#\">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>\n                {{ story.content }}\n            </div>\n        </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-242b64a7", module.exports)
+  } else {
+    hotAPI.update("_v-242b64a7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":113,"vue-hot-reload-api":108}],132:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'group-profile-trips',
+    props: ['id'],
+    data: function data() {
+        return {
+            trips: [],
+            resource: this.$resource('trips?include=campaign&onlyPublished=true&groups[]=' + this.id)
+        };
+    },
+    ready: function ready() {
+        this.resource.query().then(function (trips) {
+            this.trips = trips.data.data;
+        }).then(function () {});
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <p v-if=\"trips.length < 1\" class=\"text-center text-muted lead\">\n        This group does not have any trips yet. Please check back soon!\n    </p>\n    <div class=\"col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12\" v-for=\"trip in trips\">\n        <div class=\"panel panel-default\">\n            <img :src=\"trip.campaign.data.avatar\" alt=\"{{ trip.campaign.data.name }}\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h6><span class=\"label label-default\">{{ trip.campaign.data.name }}</span></h6>\n                <h4>{{ trip.country_name }} {{ trip.started_at|moment 'YYYY' }}</h4>\n                <h6>{{ trip.type|capitalize }} Trip</h6>\n                <h6>{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</h6>\n                <ul class=\"list-inline\">\n                    <li data-toggle=\"tooltip\" title=\"Reservations\"><i class=\"fa fa-user\"></i> {{ trip.reservations }}</li>\n                    <li data-toggle=\"tooltip\" title=\"Registration Open\" class=\"pull-right\"><i class=\"fa fa-sign-in\"></i></li>\n                </ul>\n                <p><a class=\"btn btn-primary btn-lg btn-block\" :href=\"'/trips/' + trip.id\">Details</a></p>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-bae2227c", module.exports)
+  } else {
+    hotAPI.update("_v-bae2227c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":113,"vue-hot-reload-api":108}],133:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _adminGroupEdit = require('./admin-group-edit.vue');
+
+var _adminGroupEdit2 = _interopRequireDefault(_adminGroupEdit);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'groups-list',
+    components: { 'group-edit': _adminGroupEdit2.default },
+    props: ['userId', 'type', 'selectUi'],
+    data: function data() {
+        return {
+            groups: [],
+            currentGroup: localStorage.currentGroup && localStorage.currentGroup !== 'undefined' ? localStorage.currentGroup : null
+        };
+    },
+
+    methods: {
+        country: function country(code) {
+            return code;
+        },
+        rememberSelection: function rememberSelection() {
+            localStorage.currentGroup = this.currentGroup;
+        },
+        getGroups: function getGroups() {
+            this.$http.get('users/me', {
+                include: 'managing',
+                user: new Array(this.userId)
+            }).then(function (response) {
+                this.groups = response.data.data.managing.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.getGroups();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <form class=\"form-horizontal\" v-if=\"selectUi\">\n        <label class=\"control-label col-sm-2\">Jump to:</label>\n        <div class=\"form-group col-sm-10\">\n            <select class=\"form-control\" v-model=\"currentGroup\" @change=\"rememberSelection()\">\n                <option :value=\"\">-- Select Group --</option>\n                <option v-for=\"group in groups\" :value=\"group.id\">{{group.name}}</option>\n            </select>\n        </div>\n    </form>\n    <hr>\n    <div class=\"col-xs-12 col-sm-6 col-md-4\" v-for=\"group in groups\" v-if=\"!selectUi &amp;&amp; groups.length > 0\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading text-center\">\n                <h5>{{ group.name }} <small>{{ group.country }}</small></h5>\n            </div>\n            <div class=\"panel-body text-center\">\n                <img :src=\"group.avatar||group.banner\" class=\"img-circle img-lg\">\n                <hr class=\"divider inv sm\">\n                <h6 class=\"label label-default text-uppercase\">{{ group.type }} Group</h6>\n                <!--<h4>{{ group.surname }}, {{ group.given_names }}</h4>-->\n                <h5 class=\"text-capitalize\"> </h5>\n                <div class=\"btn-group btn-group-justified\">\n                    <a class=\"btn btn-sm btn-info\" href=\"/groups/{{ group.url }}\"><i class=\"fa fa-eye\"></i> View</a>\n                    <a class=\"btn btn-sm btn-primary\" href=\"/dashboard/groups/{{ group.id }}\"><i class=\"fa fa-pencil\"></i> Manage</a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"alert alert-info\" v-if=\"!selectUi &amp;&amp; groups.length < 1\">No groups found</div>\n    <hr>\n    <div class=\"col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2\">\n        <div class=\"panel panel-default\" v-if=\"currentGroup != null &amp;&amp; currentGroup !== 'undefined'\">\n            <div class=\"panel-body\">\n                <group-edit :group-id=\"currentGroup\" :managing=\"true\"></group-edit>\n            </div>\n        </div>\n    </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-199fdb3d", module.exports)
+  } else {
+    hotAPI.update("_v-199fdb3d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./admin-group-edit.vue":127,"vue":113,"vue-hot-reload-api":108}],134:[function(require,module,exports){
 'use strict';
 
 var _vueSelect = require('vue-select');
@@ -37361,12 +38827,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7dce67a4", module.exports)
+    hotAPI.createRecord("_v-036a9d78", module.exports)
   } else {
-    hotAPI.update("_v-7dce67a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-036a9d78", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],130:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110}],135:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37417,7 +38883,11 @@ exports.default = {
             birthCountryObj: null,
             citizenshipObj: null,
             attemptSubmit: false,
-            selectedAvatar: null
+            selectedAvatar: null,
+            today: moment().format('YYYY-MM-DD'),
+            yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
+            tomorrow: moment().add(1, 'days').format('YYYY-MM-DD')
+
         };
     },
 
@@ -37483,8 +38953,10 @@ exports.default = {
     events: {
         'uploads-complete': function uploadsComplete(data) {
             switch (data.type) {
-                case 'avatar':
+                case 'other':
+                    //save for preview
                     this.selectedAvatar = data;
+                    // save for upload reference
                     this.upload_id = data.id;
                     break;
             }
@@ -37511,18 +38983,18 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdatePassport\">\n    <form id=\"CreateUpdatePassport\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"given_names\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"surname\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"number\" class=\"col-sm-2 control-label\">Passport Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Passport Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('birth') }\">\n            <label for=\"birth\" class=\"col-sm-2 control-label\">Birth Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"birth\" :value.sync=\"birthCountryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"birth\" id=\"birth\" class=\"hidden\" v-model=\"birth_country\" v-validate:birth=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('citizenship') }\">\n            <label for=\"citizenship\" class=\"col-sm-2 control-label\">Citizenship</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"country\" :value.sync=\"citizenshipObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"citizenship\" id=\"citizenship\" class=\"hidden\" v-model=\"citizenship\" v-validate:citizenship=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Avatar\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/dashboard/passports\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdatePassport\">\n    <form id=\"CreateUpdatePassport\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"given_names\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"surname\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"number\" class=\"col-sm-2 control-label\">Passport Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Passport Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" :max=\"today\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" :min=\"tomorrow\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('birth') }\">\n            <label for=\"birth\" class=\"col-sm-2 control-label\">Birth Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"birth\" :value.sync=\"birthCountryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"birth\" id=\"birth\" class=\"hidden\" v-model=\"birth_country\" v-validate:birth=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('citizenship') }\">\n            <label for=\"citizenship\" class=\"col-sm-2 control-label\">Citizenship</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"country\" :value.sync=\"citizenshipObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"citizenship\" id=\"citizenship\" class=\"hidden\" v-model=\"citizenship\" v-validate:citizenship=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Upload Copy\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'passport-'+given_names+'-'+surname\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/dashboard/passports\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-17773f82", module.exports)
+    hotAPI.createRecord("_v-b807f5a4", module.exports)
   } else {
-    hotAPI.update("_v-17773f82", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-b807f5a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":162,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],131:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":170,"vue":113,"vue-hot-reload-api":108,"vue-select":110,"vue-strap/dist/vue-strap.min":111}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37605,12 +39077,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4b4c5de6", module.exports)
+    hotAPI.createRecord("_v-2aa502b9", module.exports)
   } else {
-    hotAPI.update("_v-4b4c5de6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2aa502b9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-strap/dist/vue-strap.min":110}],132:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-strap/dist/vue-strap.min":111}],137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37642,12 +39114,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-558d51ea", module.exports)
+    hotAPI.createRecord("_v-384f8292", module.exports)
   } else {
-    hotAPI.update("_v-558d51ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-384f8292", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],133:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],138:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -37669,6 +39141,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
 	name: 'admin-reservations-list',
 	components: { vSelect: _vueSelect2.default },
+	props: {
+		tripId: {
+			type: String,
+			default: null
+		}
+	},
 	data: function data() {
 		return {
 			reservations: [],
@@ -37850,6 +39328,7 @@ exports.default = {
 		},
 		searchReservations: function searchReservations() {
 			var params = {
+				trip_id: this.tripId ? new Array(this.tripId) : undefined,
 				include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
 				search: this.search,
 				per_page: this.per_page,
@@ -37928,7 +39407,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"amount_raised\" :disabled=\"maxCheck('amount_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n                    <div id=\"toggleFilters\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Filters\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu2\" style=\"min-width:300px; max-height: 575px; padding: 10px 20px; overflow: scroll;\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"groupFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getGroups()\" :value.sync=\"groupsArr\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers()\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns()\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Filter Sizes\"></v-select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t\t\t\t</ul>\n                    </div>\n                    <a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>\n                </form>\n            </div>\n        </div>\n        <hr>\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('amount_raised')\" :class=\"{'text-primary': orderByField === 'amount_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('amount_raised')\" v-if=\"orderByField !== 'amount_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'amount_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('amount_raised')\" v-text=\"reservation.amount_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <!--<td>\n                    <a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                    <a href=\"/admin{{campaignId + reservation.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n                </td>-->\n\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <nav>\n                            <ul class=\"pagination pagination-sm\">\n                                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                        <span aria-hidden=\"true\">«</span>\n                                    </a>\n                                </li>\n                                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                        <span aria-hidden=\"true\">»</span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </nav>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"amount_raised\" :disabled=\"maxCheck('amount_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n                    <div id=\"toggleFilters\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Filters\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu2\" style=\"min-width:300px; max-height: 575px; padding: 10px 20px; overflow: scroll;\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"groupFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getGroups()\" :value.sync=\"groupsArr\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers()\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns()\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Filter Sizes\"></v-select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t\t\t\t</ul>\n                    </div>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr>\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('amount_raised')\" :class=\"{'text-primary': orderByField === 'amount_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('amount_raised')\" v-if=\"orderByField !== 'amount_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'amount_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('amount_raised')\" v-text=\"reservation.amount_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <!--<td>\n                    <a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                    <a href=\"/admin{{campaignId + reservation.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n                </td>-->\n\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <nav>\n                            <ul class=\"pagination pagination-sm\">\n                                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                        <span aria-hidden=\"true\">«</span>\n                                    </a>\n                                </li>\n                                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                        <span aria-hidden=\"true\">»</span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </nav>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -37938,12 +39417,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0ff77a9a", module.exports)
+    hotAPI.createRecord("_v-f7d35b42", module.exports)
   } else {
-    hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-f7d35b42", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],134:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":113,"vue-hot-reload-api":108,"vue-select":110,"vueify/lib/insert-css":114}],139:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37989,12 +39468,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5e12a7a6", module.exports)
+    hotAPI.createRecord("_v-a13fe9fe", module.exports)
   } else {
-    hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-a13fe9fe", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],135:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],140:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38002,16 +39481,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
     name: 'reservations-list',
-    props: {
-        reservations: {
-            default: [],
-            coerce: function coerce(val) {
-                return JSON.parse(val);
-            }
-        }
-    },
+    props: ['userId', 'type'],
     data: function data() {
-        return {};
+        return {
+            reservations: []
+        };
     },
 
     methods: {
@@ -38020,30 +39494,254 @@ exports.default = {
         },
         getReservations: function getReservations() {
             this.$http.get('reservations', {
-                include: 'trip.campaign,trip.group'
-                //                    , user: array(Auth::user()->id)
+                include: 'trip.campaign,trip.group',
+                user: new Array(this.userId)
             }).then(function (response) {
-                this.reservations = response.data.data;
+
+                switch (this.type) {
+                    case 'active':
+                        this.reservations = _.filter(response.data.data, function (reservation) {
+                            return moment().isBefore(reservation.trip.data.ended_at);
+                        });
+                        break;
+                    case 'archive':
+                        this.reservations = _.filter(response.data.data, function (reservation) {
+                            return moment().isAfter(reservation.trip.data.ended_at);
+                        });
+                        break;
+                }
             });
         }
     },
     ready: function ready() {
-        //this.getReservations();
+        this.getReservations();
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n<div class=\"col-xs-12 col-sm-6 col-md-4\">\n    <div class=\"panel panel-default\" v-for=\"reservation in reservations\" v-if=\"reservations.length > 0\">\n        <div class=\"panel-heading text-center\">\n            <h5>{{ reservation.trip.campaign.name }} <small>{{ reservation.country }}</small></h5>\n        </div>\n        <div class=\"panel-body text-center\">\n            <img src=\"http://lorempixel.com/300/300/\" class=\"img-circle img-lg\">\n            <hr class=\"divider inv sm\">\n            <h6 class=\"label label-default text-uppercase\">{{ reservation.trip.type }} Missionary</h6>\n            <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>\n            <h5 class=\"text-capitalize\">{{ reservation.trip.group.name }}</h5>\n            <a class=\"btn btn-sm btn-primary\" href=\"/dashboard/reservations/{{ reservation.id }}\">View Reservation</a>\n        </div>\n    </div>\n</div>\n    <div class=\"alert alert-info\" v-if=\"reservation.length < 1\">No reservations found</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"col-xs-12 col-sm-6 col-md-4\" v-for=\"reservation in reservations\" v-if=\"reservations.length > 0\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading text-center\">\n                <h5>{{ reservation.trip.data.campaign.data.name }} <small>{{ reservation.country }}</small></h5>\n            </div>\n            <div class=\"panel-body text-center\">\n                <img :src=\"reservation.avatar\" class=\"img-circle img-lg\">\n                <hr class=\"divider inv sm\">\n                <h6 class=\"label label-default text-uppercase\">{{ reservation.trip.data.type }} Missionary</h6>\n                <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>\n                <h5 class=\"text-capitalize\">{{ reservation.trip.data.group.data.name }}</h5>\n                <a class=\"btn btn-sm btn-primary\" href=\"/dashboard/reservations/{{ reservation.id }}\">View Reservation</a>\n            </div>\n        </div>\n    </div>\n    <div class=\"alert alert-info\" v-if=\"reservations.length < 1\">No reservations found</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-01de7a71", module.exports)
+    hotAPI.createRecord("_v-49f0bb1d", module.exports)
   } else {
-    hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-49f0bb1d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],136:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],141:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _passportCreateUpdate = require('../passports/passport-create-update.vue');
+
+var _passportCreateUpdate2 = _interopRequireDefault(_passportCreateUpdate);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'reservations-passports-manager',
+    components: { passportCreateUpdate: _passportCreateUpdate2.default },
+    props: ['reservationId', 'passportId'],
+    data: function data() {
+        return {
+            passport: null,
+            passports: [],
+
+            //logic vars
+            passportResource: this.$resource('passports{/id}'),
+            reservationResource: this.$resource('reservations{/id}'),
+            loaded: false,
+            newState: false,
+            changeState: false,
+
+            // pagination vars
+            paginatedPassports: [],
+            selectedPassport: null,
+            page: 1,
+            per_page: 3,
+            pagination: {
+                current_page: 1,
+                total_pages: 0
+            }
+
+        };
+    },
+
+    watch: {
+        'page': function page(val, oldVal) {
+            this.pagination.current_page = val;
+            this.paginate();
+        },
+        'passports': function passports(val) {
+            if (val.length) {
+                this.paginate();
+            }
+        }
+    },
+    methods: {
+        // emulate pagination
+
+        paginate: function paginate() {
+            var array = [];
+            var start = (this.pagination.current_page - 1) * this.per_page;
+            var end = start + this.per_page;
+            var range = _.range(start, end);
+            _.each(range, function (index) {
+                if (this.passports[index]) array.push(this.passports[index]);
+            }, this);
+            this.paginatedPassports = array;
+        },
+        setPassport: function setPassport(passport) {
+            if (passport) {
+                this.passport = passport;
+                this.reservationResource.update({ id: this.reservationId }, {
+                    passport_id: passport.id
+                }).then(function (response) {
+                    this.toggleChangeState();
+                });
+            }
+        },
+        toggleChangeState: function toggleChangeState() {
+            this.changeState = !this.changeState;
+            this.newState = false;
+        },
+        toggleNewState: function toggleNewState() {
+            this.newState = !this.newState;
+            this.changeState = false;
+        }
+    },
+    ready: function ready() {
+        this.$http('users/me?include=passports').then(function (response) {
+            this.passports = response.data.data.passports.data;
+            this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
+            this.passport = _.findWhere(response.data.data.passports.data, { id: this.passportId });
+            this.loaded = true;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" v-if=\"loaded\">\n    <div class=\"col-sm-6\">\n        <div class=\"panel panel-default\" v-if=\"passport\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{passport.citizenship_name}}</h6>\n                <a role=\"button\" :href=\"'/dashboard' + passport.links[0].uri\">\n                    <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                        {{passport.given_names}} {{passport.surname}}\n                    </h5>\n                </a>\n                <hr class=\"divider lg\">\n                <p class=\"small\">\n                    <b>ID:</b> {{passport.number}}\n                    <br>\n                    <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}\n                    <br>\n                    <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}\n                    <br>\n                    <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}\n                </p>\n            </div><!-- end panel-body -->\n        </div>\n        <div v-if=\"!passport\" class=\"alert alert-info\" role=\"alert\">This reservation has no passport(s) assigned to it. Please select one or add one.</div>\n    </div>\n\n    <div class=\"col-sm-6\">\n        <div class=\"panel panel-default\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <form novalidate=\"\">\n                    <label>Actions</label>\n                    <a class=\"btn btn-block btn-info btn-sm\" @click=\"toggleChangeState()\">\n                        <i class=\"fa fa-pencil\"></i> Change Passport\n                    </a>\n                    <a class=\"btn btn-block btn-primary btn-sm\" href=\"/dashboard/passports/create\">\n                        <i class=\"fa fa-plus\"></i> Add New Passport\n                    </a>\n                </form>\n\n            </div><!-- end panel-body -->\n        </div>\n    </div>\n\n    <div class=\"col-sm-12\" v-if=\"changeState\">\n        <div class=\"row\">\n            <div class=\"col-sm-4\" v-for=\"passport in paginatedPassports\">\n                <div class=\"panel panel-default\">\n                    <div style=\"min-height:220px;\" class=\"panel-body\">\n                        <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{passport.citizenship_name}}</h6>\n                        <a role=\"button\" :href=\"'/dashboard' + passport.links[0].uri\">\n                            <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                                {{passport.given_names}} {{passport.surname}}\n                            </h5>\n                        </a>\n                        <hr class=\"divider lg\">\n                        <p class=\"small\">\n                            <b>ID:</b> {{passport.number}}\n                            <br>\n                            <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}\n                            <br>\n                            <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}\n                            <br>\n                            <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}\n                        </p>\n                    </div><!-- end panel-body -->\n                    <div class=\"panel-footer\" style=\"padding: 0;\">\n                        <div class=\"btn-group btn-group-justified btn-group-sm\" role=\"group\" aria-label=\"...\">\n                            <a class=\"btn btn-danger\" @click=\"setPassport(passport)\">\n                                Select Passport\n                            </a>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-12 text-center\">\n            <nav>\n                <ul class=\"pagination pagination-sm\">\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                            <span aria-hidden=\"true\">«</span>\n                        </a>\n                    </li>\n                    <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                            <span aria-hidden=\"true\">»</span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n\n    <!--<div class=\"col-sm-12\" v-if=\"newState\">\n        <passport-create-update></passport-create-update>\n    </div>-->\n\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-75d11b12", module.exports)
+  } else {
+    hotAPI.update("_v-75d11b12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../passports/passport-create-update.vue":135,"vue":113,"vue-hot-reload-api":108}],142:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _visaCreateUpdate = require('../visas/visa-create-update.vue');
+
+var _visaCreateUpdate2 = _interopRequireDefault(_visaCreateUpdate);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'reservations-visas-manager',
+    components: { visaCreateUpdate: _visaCreateUpdate2.default },
+    props: ['reservationId', 'visaId'],
+    data: function data() {
+        return {
+            visa: null,
+            visas: [],
+
+            //logic vars
+            visaResource: this.$resource('visas{/id}'),
+            reservationResource: this.$resource('reservations{/id}'),
+            loaded: false,
+            newState: false,
+            changeState: false,
+
+            // pagination vars
+            paginatedVisas: [],
+            selectedVisa: null,
+            page: 1,
+            per_page: 3,
+            pagination: {
+                current_page: 1,
+                total_pages: 0
+            }
+
+        };
+    },
+
+    watch: {
+        'page': function page(val, oldVal) {
+            this.pagination.current_page = val;
+            this.paginate();
+        },
+        'visas': function visas(val) {
+            if (val.length) {
+                this.paginate();
+            }
+        }
+    },
+    methods: {
+        // emulate pagination
+
+        paginate: function paginate() {
+            var array = [];
+            var start = (this.pagination.current_page - 1) * this.per_page;
+            var end = start + this.per_page;
+            var range = _.range(start, end);
+            _.each(range, function (index) {
+                if (this.visas[index]) array.push(this.visas[index]);
+            }, this);
+            this.paginatedVisas = array;
+        },
+        setVisa: function setVisa(visa) {
+            if (visa) {
+                this.visa = visa;
+                this.reservationResource.update({ id: this.reservationId }, {
+                    visa_id: visa.id
+                }).then(function (response) {
+                    this.toggleChangeState();
+                });
+            }
+        },
+        toggleChangeState: function toggleChangeState() {
+            this.changeState = !this.changeState;
+            this.newState = false;
+        },
+        toggleNewState: function toggleNewState() {
+            this.newState = !this.newState;
+            this.changeState = false;
+        }
+    },
+    ready: function ready() {
+        this.$http('users/me?include=visas').then(function (response) {
+            this.visas = response.data.data.visas.data;
+            this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
+            this.visa = _.findWhere(response.data.data.visas.data, { id: this.visaId });
+            this.loaded = true;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" v-if=\"loaded\">\n    <div class=\"col-sm-6\">\n        <div class=\"panel panel-default\" v-if=\"visa\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{visa.citizenship_name}}</h6>\n                <a role=\"button\" :href=\"'/dashboard' + visa.links[0].uri\">\n                    <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                        {{visa.given_names}} {{visa.surname}}\n                    </h5>\n                </a>\n                <hr class=\"divider lg\">\n                <p class=\"small\">\n                    <b>ID:</b> {{visa.number}}\n                    <br>\n                    <b>BIRTH COUNTRY:</b> {{visa.citizenship_name}}\n                    <br>\n                    <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}\n                    <br>\n                    <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}\n                </p>\n            </div>\n        </div>\n        <div v-if=\"!visa\" class=\"alert alert-info\" role=\"alert\">This reservation has no visa(s) assigned to it. Please select one or add one.</div>\n    </div>\n\n    <div class=\"col-sm-6\">\n        <div class=\"panel panel-default\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <form novalidate=\"\">\n                    <label>Actions</label>\n                    <a class=\"btn btn-block btn-info btn-sm\" @click=\"toggleChangeState()\">\n                        <i class=\"fa fa-pencil\"></i> Change Visa\n                    </a>\n                    <a class=\"btn btn-block btn-primary btn-sm\" href=\"/dashboard/visas/create\">\n                        <i class=\"fa fa-plus\"></i> Add New Visa\n                    </a>\n                </form>\n\n            </div><!-- end panel-body -->\n        </div>\n    </div>\n\n    <div class=\"col-sm-12\" v-if=\"changeState\">\n        <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !visas.length\">\n            <div class=\"alert alert-info\" role=\"alert\">No visas found. Please create add one.</div>\n        </div>\n        <div class=\"row\" v-if=\"loaded &amp;&amp; visas.length\">\n            <div class=\"col-sm-4\" v-for=\"visa in paginatedVisas\">\n                <div class=\"panel panel-default\">\n                    <div style=\"min-height:220px;\" class=\"panel-body\">\n                        <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{visa.citizenship_name}}</h6>\n                        <a role=\"button\" :href=\"'/dashboard' + visa.links[0].uri\">\n                            <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                                {{visa.given_names}} {{visa.surname}}\n                            </h5>\n                        </a>\n                        <hr class=\"divider lg\">\n                        <p class=\"small\">\n                            <b>ID:</b> {{visa.number}}\n                            <br>\n                            <b>BIRTH COUNTRY:</b> {{visa.citizenship_name}}\n                            <br>\n                            <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}\n                            <br>\n                            <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}\n                        </p>\n                    </div><!-- end panel-body -->\n                    <div class=\"panel-footer\" style=\"padding: 0;\">\n                        <div class=\"btn-group btn-group-justified btn-group-sm\" role=\"group\" aria-label=\"...\">\n                            <a class=\"btn btn-danger\" @click=\"setVisa(visa)\">\n                                Select Visa\n                            </a>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-sm-12 text-center\">\n                <nav>\n                    <ul class=\"pagination pagination-sm\">\n                        <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                            <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                <span aria-hidden=\"true\">«</span>\n                            </a>\n                        </li>\n                        <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                        <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                            <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                <span aria-hidden=\"true\">»</span>\n                            </a>\n                        </li>\n                    </ul>\n                </nav>\n            </div>\n        </div>\n    </div>\n\n    <!--<div class=\"col-sm-12\" v-if=\"newState\">\n        <visa-create-update></visa-create-update>\n    </div>-->\n\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-459f93c3", module.exports)
+  } else {
+    hotAPI.update("_v-459f93c3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../visas/visa-create-update.vue":179,"vue":113,"vue-hot-reload-api":108}],143:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38081,6 +39779,10 @@ exports.default = {
 		avatar: {
 			type: String,
 			default: null
+		},
+		url: {
+			type: String,
+			default: null
 		}
 	},
 	data: function data() {
@@ -38091,18 +39793,18 @@ exports.default = {
 	ready: function ready() {}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div style=\"display:inline;\">\n\t<button class=\"navbar-toggle\" @click=\"showRight = true\">\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t</button>\n\t<aside :show.sync=\"showRight\" placement=\"right\" header=\"Missions.Me\" :width=\"275\">\n\t\t<ul class=\"nav navmenu-nav\">\n\t\t\t<li class=\"donate-nav\"><a class=\"navDonate\" href=\"#\"><i class=\"fa fa-heart\"></i> Donate To A Cause</a>\n\t\t\t</li>\n\t\t\t<li v-if=\"auth\" id=\"userMenu\" class=\"dropdown-toggle visible-xs text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"img-xs img-circle av-left\" :src=\"avatar\" :alt=\"name\"> {{ name }}\n\t\t\t\t\t<i class=\"fa fa-angle-down\"></i>\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t<ul v-if=\"auth\" class=\"dropdown-menu\" aria-labelledby=\"userMenu\">\n\t\t\t\t<li class=\"text-center\"><a href=\"#\">My Profile</a></li>\n\t\t\t\t<li class=\"text-center\"><a href=\"#\">Dashboard</a></li>\n\t\t\t\t<li v-if=\"admin\" class=\"text-center\"><a href=\"/admin\">Admin</a></li>\n\t\t\t\t<li class=\"text-center\"><a href=\"/logout\">Sign Out</a></li>\n\t\t\t</ul>\n\t\t\t<li v-if=\"!auth\"><a href=\"#\">Login</a></li>\n\t\t\t<li v-if=\"!auth\"><a href=\"#\">Sign Up</a></li>\n\t\t\t<li class=\"navlabel\">1Nation1Day</li>\n\t\t\t<li><a href=\"http://1nation1day.com/honduras\">2013 Honduras</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/dominican\">2015 Dominican</a></li>\n\t\t\t<li class=\"navlabel\">Trips</li>\n\t\t\t<li><a href=\"/campaigns\">Campaigns</a></li>\n\t\t\t<li class=\"navlabel\">Projects</li>\n\t\t\t<li><a href=\"why-mm.html\">Clean Water</a></li>\n\t\t\t<li><a href=\"index.html\">Rescue Orphans</a></li>\n\t\t\t<li><a href=\"index.html\">Homes</a></li>\n\t\t\t<li><a href=\"index.html\">Trafficking Rescue</a></li>\n\t\t\t<li><a href=\"index.html\">Leadership Centers</a></li>\n\t\t\t<li><a href=\"index.html\">Sponsor A Project</a></li>\n\t\t\t<li class=\"navlabel\">Train</li>\n\t\t\t<li><a href=\"index.html\">Missions.Me College</a></li>\n\t\t\t<li><a href=\"index.html\">Speakers</a></li>\n\t\t\t<li class=\"navlabel\">About</li>\n\t\t\t<li class=\"active\"><a href=\"about-mm.html\">Missions.Me</a></li>\n\t\t\t<li><a href=\"about-mm.html\">Accountability</a></li>\n\t\t\t<li><a href=\"about-mm.html\">Contact Us</a></li>\n\t\t\t<li><a href=\"about-mm.html\">Jobs</a></li>\n\t\t\t<li><a href=\"blog-post.html\">Blog</a></li>\n\t\t</ul>\n\t</aside>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div style=\"display:inline;\">\n\t<button class=\"navbar-toggle\" @click=\"showRight = true\">\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t</button>\n\t<aside :show.sync=\"showRight\" placement=\"right\" header=\"Missions.Me\" :width=\"275\">\n\t\t<ul class=\"nav navmenu-nav\">\n\t\t\t<li class=\"donate-nav\"><a class=\"navDonate\" href=\"#\"><i class=\"fa fa-heart\"></i> Donate To A Cause</a>\n\t\t\t</li>\n\t\t\t<li v-if=\"auth\" id=\"userMenu\" class=\"dropdown-toggle visible-xs text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"img-xs img-circle av-left\" :src=\"avatar\" :alt=\"name\"> {{ name }}\n\t\t\t\t\t<i class=\"fa fa-angle-down\"></i>\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t<ul v-if=\"auth\" class=\"dropdown-menu\" aria-labelledby=\"userMenu\">\n\t\t\t\t<li class=\"text-center\"><a :href=\"url\">My Profile</a></li>\n\t\t\t\t<li class=\"text-center\"><a href=\"/dashboard\">Dashboard</a></li>\n\t\t\t\t<li v-if=\"admin\" class=\"text-center\"><a href=\"/admin\">Admin</a></li>\n\t\t\t\t<li class=\"text-center\"><a href=\"/logout\">Sign Out</a></li>\n\t\t\t</ul>\n\t\t\t<li v-if=\"!auth\"><a href=\"#\">Login</a></li>\n\t\t\t<li v-if=\"!auth\"><a href=\"#\">Sign Up</a></li>\n\t\t\t<li class=\"navlabel\">1Nation1Day</li>\n\t\t\t<li><a href=\"http://1nation1day.com/honduras\">2013 Honduras</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/dominican\">2015 Dominican</a></li>\n\t\t\t<li class=\"navlabel\">Trips</li>\n\t\t\t<li><a href=\"/campaigns\">Campaigns</a></li>\n\t\t\t<li class=\"navlabel\">Projects</li>\n\t\t\t<li><a href=\"why-mm.html\">Clean Water</a></li>\n\t\t\t<li><a href=\"index.html\">Rescue Orphans</a></li>\n\t\t\t<li><a href=\"index.html\">Homes</a></li>\n\t\t\t<li><a href=\"index.html\">Trafficking Rescue</a></li>\n\t\t\t<li><a href=\"index.html\">Leadership Centers</a></li>\n\t\t\t<li><a href=\"index.html\">Sponsor A Project</a></li>\n\t\t\t<li class=\"navlabel\">Train</li>\n\t\t\t<li><a href=\"index.html\">Missions.Me College</a></li>\n\t\t\t<li><a href=\"index.html\">Speakers</a></li>\n\t\t\t<li class=\"navlabel\">About</li>\n\t\t\t<li class=\"active\"><a href=\"about-mm.html\">Missions.Me</a></li>\n\t\t\t<li><a href=\"about-mm.html\">Accountability</a></li>\n\t\t\t<li><a href=\"about-mm.html\">Contact Us</a></li>\n\t\t\t<li><a href=\"about-mm.html\">Jobs</a></li>\n\t\t\t<li><a href=\"blog-post.html\">Blog</a></li>\n\t\t</ul>\n\t</aside>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1f813726", module.exports)
+    hotAPI.createRecord("_v-a231700c", module.exports)
   } else {
-    hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-a231700c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-strap/dist/vue-strap.min":110}],137:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-strap/dist/vue-strap.min":111}],144:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -38255,12 +39957,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4eaab280", module.exports)
+    hotAPI.createRecord("_v-469c8f94", module.exports)
   } else {
-    hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-469c8f94", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":144,"./create/details.vue":145,"./create/pricing.vue":146,"./create/requirements.vue":147,"./create/settings.vue":148,"vue":112,"vue-hot-reload-api":107,"vueify/lib/insert-css":113}],138:[function(require,module,exports){
+},{"./create/deadlines.vue":151,"./create/details.vue":152,"./create/pricing.vue":153,"./create/requirements.vue":154,"./create/settings.vue":155,"vue":113,"vue-hot-reload-api":108,"vueify/lib/insert-css":114}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38291,12 +39993,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1f88c822", module.exports)
+    hotAPI.createRecord("_v-5e2d84c3", module.exports)
   } else {
-    hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5e2d84c3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],139:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38384,12 +40086,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-07829d12", module.exports)
+    hotAPI.createRecord("_v-66842823", module.exports)
   } else {
-    hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-66842823", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],140:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110}],147:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -38564,12 +40266,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1684d064", module.exports)
+    hotAPI.createRecord("_v-8c08b4bc", module.exports)
   } else {
-    hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-8c08b4bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":149,"./edit/details.vue":150,"./edit/pricing.vue":151,"./edit/requirements.vue":152,"./edit/settings.vue":153,"vue":112,"vue-hot-reload-api":107,"vueify/lib/insert-css":113}],141:[function(require,module,exports){
+},{"./edit/deadlines.vue":156,"./edit/details.vue":157,"./edit/pricing.vue":158,"./edit/requirements.vue":159,"./edit/settings.vue":160,"vue":113,"vue-hot-reload-api":108,"vueify/lib/insert-css":114}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38667,12 +40369,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-9f5ddb6a", module.exports)
+    hotAPI.createRecord("_v-cc43e7c2", module.exports)
   } else {
-    hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-cc43e7c2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],142:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110}],149:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38740,12 +40442,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-25146f20", module.exports)
+    hotAPI.createRecord("_v-6bdfd31c", module.exports)
   } else {
-    hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6bdfd31c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],143:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38811,12 +40513,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-41204f31", module.exports)
+    hotAPI.createRecord("_v-23a3fbdd", module.exports)
   } else {
-    hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-23a3fbdd", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],144:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38889,26 +40591,27 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-8ed335c4", module.exports)
+    hotAPI.createRecord("_v-c9cbdc6c", module.exports)
   } else {
-    hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-c9cbdc6c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],145:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],152:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _vueSelect = require("vue-select");
+var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var marked = require('marked');
 exports.default = {
 	name: 'trip-details',
 	components: { vSelect: _vueSelect2.default },
@@ -38947,6 +40650,9 @@ exports.default = {
 			return _.pluck(this.prospectsObj, 'value');
 		}
 	},
+	filters: {
+		marked: marked
+	},
 	methods: {
 		populateWizardData: function populateWizardData(onValid) {
 			if (!onValid) this.$validate(true);
@@ -38961,6 +40667,7 @@ exports.default = {
 				ended_at: this.ended_at
 			});
 		},
+		//rep_id: this.rep_id,
 		getGroups: function getGroups(search, loading) {
 			loading(true);
 			this.$http.get('groups', { search: search }).then(function (response) {
@@ -38988,7 +40695,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDetails\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDetailsForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Campaign</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<p>{{$parent.campaign.name|capitalize}}</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Group</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select class=\"form-control\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<textarea name=\"description\" id=\"description\" rows=\"2\" v-model=\"description\" class=\"form-control\" v-validate:description=\"{ required: true}\"></textarea>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"full\">Full</option>\n\t\t\t\t\t\t\t<option value=\"media\">Media</option>\n\t\t\t\t\t\t\t<option value=\"medical\">Medical</option>\n\t\t\t\t\t\t\t<option value=\"short\">Short</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('prospects') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Perfect For</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"group\" :value.sync=\"prospectsObj\" :options=\"prospectsList\" label=\"name\" placeholder=\"Select Prospects\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" multiple=\"\" v-model=\"prospects\" v-validate:prospects=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"prospect.value\" v-for=\"prospect in prospectsList\">{{prospect.name}}\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('difficulty') }\">\n\t\t\t\t\t<label for=\"difficulty\" class=\"col-sm-2 control-label\">Difficulty</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"difficulty\" class=\"form-control input-sm\" v-model=\"difficulty\" v-validate:difficulty=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"level_1\">Level 1</option>\n\t\t\t\t\t\t\t<option value=\"level_2\">Level 2</option>\n\t\t\t\t\t\t\t<option value=\"level_3\">Level 3</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n\t\t\t\t\t<label for=\"companion_limit\" class=\"col-sm-2 control-label\">Companion Limit</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"companion_limit\" v-model=\"companion_limit\" class=\"form-control\" v-validate:companions=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('rep') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Trip Rep.</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"rep\" :value.sync=\"repObj\" :options=\"reps\" label=\"name\"></v-select>\n\t\t\t\t\t\t<!--v-validate:rep=\"{ required: false}\"-->\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"rep_id\">\n\t\t\t\t\t\t\t<option v-for=\"rep in reps\" :value=\"rep\">{{rep}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDetails\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDetailsForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Campaign</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<p>{{$parent.campaign.name|capitalize}}</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Group</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select class=\"form-control\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">\n\t\t\t\t\t\tDescription\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#markdownPrev\" aria-expanded=\"false\" aria-controls=\"markdownPrev\">\n\t\t\t\t\t\t\tPreview\n\t\t\t\t\t\t</button>\n\n\t\t\t\t\t</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t<textarea name=\"description\" id=\"description\" rows=\"5\" v-model=\"description\" class=\"form-control\" v-validate:description=\"{ required: true}\"></textarea>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-12 collapse\" id=\"markdownPrev\">\n\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t<div class=\"well\" v-html=\"description | marked\"></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"full\">Full</option>\n\t\t\t\t\t\t\t<option value=\"media\">Media</option>\n\t\t\t\t\t\t\t<option value=\"medical\">Medical</option>\n\t\t\t\t\t\t\t<option value=\"short\">Short</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('prospects') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Perfect For</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"group\" :value.sync=\"prospectsObj\" :options=\"prospectsList\" label=\"name\" placeholder=\"Select Prospects\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" multiple=\"\" v-model=\"prospects\" v-validate:prospects=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"prospect.value\" v-for=\"prospect in prospectsList\">{{prospect.name}}\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('difficulty') }\">\n\t\t\t\t\t<label for=\"difficulty\" class=\"col-sm-2 control-label\">Difficulty</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"difficulty\" class=\"form-control input-sm\" v-model=\"difficulty\" v-validate:difficulty=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"level_1\">Level 1</option>\n\t\t\t\t\t\t\t<option value=\"level_2\">Level 2</option>\n\t\t\t\t\t\t\t<option value=\"level_3\">Level 3</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n\t\t\t\t\t<label for=\"companion_limit\" class=\"col-sm-2 control-label\">Companion Limit</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"companion_limit\" v-model=\"companion_limit\" class=\"form-control\" v-validate:companions=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('rep') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Trip Rep.</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"rep\" :value.sync=\"repObj\" :options=\"reps\" label=\"name\"></v-select>\n\t\t\t\t\t\t<!--v-validate:rep=\"{ required: false}\"-->\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"rep_id\">\n\t\t\t\t\t\t\t<option v-for=\"rep in reps\" :value=\"rep\">{{rep}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -38998,12 +40705,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-087e8cf6", module.exports)
+    hotAPI.createRecord("_v-0a5fa131", module.exports)
   } else {
-    hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0a5fa131", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],146:[function(require,module,exports){
+},{"marked":104,"vue":113,"vue-hot-reload-api":108,"vue-select":110,"vueify/lib/insert-css":114}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39227,12 +40934,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5c73f5ee", module.exports)
+    hotAPI.createRecord("_v-3f362696", module.exports)
   } else {
-    hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3f362696", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],147:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39306,12 +41013,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-af5f3746", module.exports)
+    hotAPI.createRecord("_v-616b6831", module.exports)
   } else {
-    hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-616b6831", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],148:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39361,12 +41068,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-49d154f0", module.exports)
+    hotAPI.createRecord("_v-0f0f62c4", module.exports)
   } else {
-    hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0f0f62c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],149:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39443,23 +41150,25 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-03d4d92c", module.exports)
+    hotAPI.createRecord("_v-1273c0d8", module.exports)
   } else {
-    hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1273c0d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],150:[function(require,module,exports){
-"use strict";
+},{"vue":113,"vue-hot-reload-api":108}],157:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _vueSelect = require("vue-select");
+var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var marked = require('marked');
 
 exports.default = {
 	name: 'trip-details',
@@ -39498,6 +41207,9 @@ exports.default = {
 		prospects: function prospects() {
 			return _.pluck(this.prospectsObj, 'value');
 		}
+	},
+	filters: {
+		marked: marked
 	},
 	methods: {
 		populateWizardData: function populateWizardData(onValid) {
@@ -39568,18 +41280,18 @@ exports.default = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDetails\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDetailsForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Campaign</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<p>{{$parent.trip.campaign.name|capitalize}}</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Group</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select class=\"form-control\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">Description</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<textarea name=\"description\" id=\"description\" rows=\"2\" v-model=\"description\" class=\"form-control\" v-validate:description=\"{ required: true}\"></textarea>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"full\">Full</option>\n\t\t\t\t\t\t\t<option value=\"media\">Media</option>\n\t\t\t\t\t\t\t<option value=\"medical\">Medical</option>\n\t\t\t\t\t\t\t<option value=\"short\">Short</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('prospects') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Perfect For</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"group\" :value.sync=\"prospectsObj\" :options=\"prospectsList\" label=\"name\" placeholder=\"Select Prospects\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" multiple=\"\" v-model=\"prospects\" v-validate:prospects=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"prospect.value\" v-for=\"prospect in prospectsList\">{{prospect.name}}\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('difficulty') }\">\n\t\t\t\t\t<label for=\"difficulty\" class=\"col-sm-2 control-label\">Difficulty</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"difficulty\" class=\"form-control input-sm\" v-model=\"difficulty\" v-validate:difficulty=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"level_1\">Level 1</option>\n\t\t\t\t\t\t\t<option value=\"level_2\">Level 2</option>\n\t\t\t\t\t\t\t<option value=\"level_3\">Level 3</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n\t\t\t\t\t<label for=\"companion_limit\" class=\"col-sm-2 control-label\">Companion Limit</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"companion_limit\" v-model=\"companion_limit\" class=\"form-control\" v-validate:companions=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('rep') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Trip Rep.</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"rep\" :value.sync=\"repObj\" :options=\"reps\" label=\"name\"></v-select>\n\t\t\t\t\t\t<!--v-validate:rep=\"{ required: false}\"-->\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"rep_id\">\n\t\t\t\t\t\t\t<option v-for=\"rep in reps\" :value=\"rep\">{{rep}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDetails\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDetailsForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Campaign</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<p>{{$parent.trip.campaign.name|capitalize}}</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Group</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select class=\"form-control\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">\n\t\t\t\t\t\tDescription\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#markdownPrev\" aria-expanded=\"false\" aria-controls=\"markdownPrev\">\n\t\t\t\t\t\t\tPreview\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t<textarea name=\"description\" id=\"description\" rows=\"5\" v-model=\"description\" class=\"form-control\" v-validate:description=\"{ required: true}\"></textarea>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-12 collapse\" id=\"markdownPrev\">\n\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t<div class=\"well\" v-html=\"description | marked\"></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"full\">Full</option>\n\t\t\t\t\t\t\t<option value=\"media\">Media</option>\n\t\t\t\t\t\t\t<option value=\"medical\">Medical</option>\n\t\t\t\t\t\t\t<option value=\"short\">Short</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('prospects') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Perfect For</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"group\" :value.sync=\"prospectsObj\" :options=\"prospectsList\" label=\"name\" placeholder=\"Select Prospects\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" multiple=\"\" v-model=\"prospects\" v-validate:prospects=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"prospect.value\" v-for=\"prospect in prospectsList\">{{prospect.name}}\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('difficulty') }\">\n\t\t\t\t\t<label for=\"difficulty\" class=\"col-sm-2 control-label\">Difficulty</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"difficulty\" class=\"form-control input-sm\" v-model=\"difficulty\" v-validate:difficulty=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"level_1\">Level 1</option>\n\t\t\t\t\t\t\t<option value=\"level_2\">Level 2</option>\n\t\t\t\t\t\t\t<option value=\"level_3\">Level 3</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n\t\t\t\t\t<label for=\"companion_limit\" class=\"col-sm-2 control-label\">Companion Limit</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"companion_limit\" v-model=\"companion_limit\" class=\"form-control\" v-validate:companions=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('rep') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Trip Rep.</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"rep\" :value.sync=\"repObj\" :options=\"reps\" label=\"name\"></v-select>\n\t\t\t\t\t\t<!--v-validate:rep=\"{ required: false}\"-->\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"rep_id\">\n\t\t\t\t\t\t\t<option v-for=\"rep in reps\" :value=\"rep\">{{rep}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5888d913", module.exports)
+    hotAPI.createRecord("_v-72548882", module.exports)
   } else {
-    hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-72548882", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],151:[function(require,module,exports){
+},{"marked":104,"vue":113,"vue-hot-reload-api":108,"vue-select":110}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39807,12 +41519,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2e8e2497", module.exports)
+    hotAPI.createRecord("_v-c649f17a", module.exports)
   } else {
-    hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-c649f17a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],152:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39889,12 +41601,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3dd864e2", module.exports)
+    hotAPI.createRecord("_v-4f05b663", module.exports)
   } else {
-    hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4f05b663", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],153:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39949,12 +41661,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-f3e5b1bc", module.exports)
+    hotAPI.createRecord("_v-3d46cc14", module.exports)
   } else {
-    hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3d46cc14", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],154:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39995,12 +41707,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-424f54dc", module.exports)
+    hotAPI.createRecord("_v-0109f388", module.exports)
   } else {
-    hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0109f388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],155:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40162,12 +41874,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3935869d", module.exports)
+    hotAPI.createRecord("_v-22c28071", module.exports)
   } else {
-    hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-22c28071", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],156:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40219,12 +41931,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ca5dc6f6", module.exports)
+    hotAPI.createRecord("_v-ddfdfb4e", module.exports)
   } else {
-    hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ddfdfb4e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],157:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40507,12 +42219,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-40feac0a", module.exports)
+    hotAPI.createRecord("_v-5deab4a7", module.exports)
   } else {
-    hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5deab4a7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],158:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40552,12 +42264,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-9d0c84f0", module.exports)
+    hotAPI.createRecord("_v-6a94c15c", module.exports)
   } else {
-    hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6a94c15c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],159:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40589,12 +42301,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5f91920b", module.exports)
+    hotAPI.createRecord("_v-64f90a42", module.exports)
   } else {
-    hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-64f90a42", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],160:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40626,12 +42338,84 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-235a6f58", module.exports)
+    hotAPI.createRecord("_v-05de1c04", module.exports)
   } else {
-    hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-05de1c04", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],161:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],168:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'trip-details-missionaries',
+    props: {
+        reservations: {
+            type: Array,
+            default: function _default() {
+                return [];
+            }
+        }
+    },
+    data: function data() {
+        return {
+            //logic vars
+            page: 1,
+            per_page: 3,
+            pagination: {
+                current_page: 1,
+                total_pages: 0
+            },
+            paginatedReservations: []
+        };
+    },
+
+    watch: {
+        'page': function page(val, oldVal) {
+            this.pagination.current_page = val;
+            this.paginate();
+        },
+        'reservations': function reservations(val) {
+            if (val.length) {
+                this.paginate();
+            }
+        }
+    },
+    methods: {
+        // emulate pagination
+
+        paginate: function paginate() {
+            var array = [];
+            var start = (this.pagination.current_page - 1) * this.per_page;
+            var end = start + this.per_page;
+            var range = _.range(start, end);
+            _.each(range, function (index) {
+                if (this.reservations[index]) array.push(this.reservations[index]);
+            }, this);
+            this.paginatedReservations = array;
+        }
+    },
+    ready: function ready() {
+        console.log(this.reservations);
+        this.pagination.total_pages = Math.ceil(this.reservations.length / this.per_page);
+        this.paginate();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <template v-if=\"reservations.length\">\n        <div class=\"col-xs-6 col-md-4\" v-for=\"reservation in paginatedReservations\">\n            <div class=\"panel panel-default\">\n                <img class=\"img-responsive\" :src=\"'/api/' + reservation.avatar.source + '?q=25'\" alt=\"{{ reservation.name }}\">\n                <div class=\"panel-body text-center\">\n                    <h6>{{ reservation.given_names }} {{ reservation.surname }}</h6>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-sm-12 text-center\">\n            <nav>\n                <ul class=\"pagination pagination-sm\">\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                            <span aria-hidden=\"true\">«</span>\n                        </a>\n                    </li>\n                    <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                            <span aria-hidden=\"true\">»</span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </template>\n    <template v-if=\"!paginatedReservations.length\">\n        <hr class=\"divider inv\">\n        <p class=\"text-center text-muted\">No missionaries registered yet. Be the first!</p>\n        <hr class=\"divider inv\">\n    </template>\n\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-5747c53b", module.exports)
+  } else {
+    hotAPI.update("_v-5747c53b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":113,"vue-hot-reload-api":108}],169:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -40873,12 +42657,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6fb76f2d", module.exports)
+    hotAPI.createRecord("_v-906ca04e", module.exports)
   } else {
-    hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-906ca04e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":129,"./registration/additional-trip-options.vue":154,"./registration/basic-info.vue":155,"./registration/deadline-agreement.vue":156,"./registration/payment-details.vue":157,"./registration/review.vue":158,"./registration/roca.vue":159,"./registration/tos.vue":160,"vue":112,"vue-hot-reload-api":107,"vueify/lib/insert-css":113}],162:[function(require,module,exports){
+},{"../login.vue":134,"./registration/additional-trip-options.vue":161,"./registration/basic-info.vue":162,"./registration/deadline-agreement.vue":163,"./registration/payment-details.vue":164,"./registration/review.vue":165,"./registration/roca.vue":166,"./registration/tos.vue":167,"vue":113,"vue-hot-reload-api":108,"vueify/lib/insert-css":114}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40938,13 +42722,17 @@ exports.default = {
 		uiLocked: {
 			type: Boolean,
 			default: false
+		},
+		name: {
+			type: String,
+			default: ''
 		}
 	},
 	data: function data() {
 		return {
 			//				showRight: false,
 
-			name: '',
+			//                name: '',
 			//                type: null,
 			path: '',
 			file: null,
@@ -40979,6 +42767,17 @@ exports.default = {
 		};
 	},
 
+	computed: {
+		allowedTypes: function allowedTypes() {
+			if (_.contains(['avatar', 'banner', 'other'], this.type)) {
+				return 'image/bmp, image/jpg, image/jpeg, image/png, image/gif';
+			}
+
+			if (this.type === 'file') {
+				return 'application/pdf';
+			}
+		}
+	},
 	watch: {
 		'type': function type(val, oldVal) {
 			this.typeObj = _.findWhere(this.typePaths, { type: val });
@@ -41073,7 +42872,6 @@ exports.default = {
 					width: parseInt(this.coords.w / this.imageAspectRatio),
 					height: parseInt(this.coords.h / this.imageAspectRatio)
 				}).then(function (resp) {
-					console.log(resp);
 					this.handleSuccess(resp);
 				}, function (error) {
 					console.log(error);
@@ -41094,7 +42892,6 @@ exports.default = {
 					width: parseInt(this.coords.w / this.imageAspectRatio) || undefined,
 					height: parseInt(this.coords.h / this.imageAspectRatio) || undefined
 				}).then(function (resp) {
-					console.log(resp);
 					this.handleSuccess(resp);
 				}, function (error) {
 					console.log(error);
@@ -41183,18 +42980,18 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<form class=\"form-inline\" v-if=\"isChild &amp;&amp; !uiLocked\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector1\" v-model=\"uiSelector\" :value=\"1\"> Select file\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector2\" v-model=\"uiSelector\" :value=\"2\"> Upload file\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr v-if=\"uiSelector!==0\">\n\t</form>\n\t<div v-if=\"isChild &amp;&amp; uiSelector==1\">\n\t\t<form class=\"form-inline text-right\" novalidate=\"\">\n\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t</div>\n\t\t</form>\n\t\t<br>\n\t\t<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\t\t\t<div class=\"col-sm-2 col-md-2\" v-for=\"upload in uploads\" style=\"display:flex\">\n\t\t\t\t<div class=\"panel panel-default\">\n\n\t\t\t\t\t\t<a @click=\"selectExisting(upload)\" role=\"button\">\n\t\t\t\t\t\t\t<tooltip effect=\"scale\" placement=\"top\" :content=\"upload.name\">\n\t\t\t\t\t\t\t\t<img :src=\"upload.source + '?w=100&amp;q=50'\" :alt=\"upload.name\" class=\"img-responsive\">\n\t\t\t\t\t\t\t</tooltip>\n\t\t\t\t\t\t</a>\n\n\t\t\t\t\t<!--<div class=\"panel-body\">\n\t\t\t\t\t\t<h6 class=\"text-uppercase\">{{upload.name}}</h6>\n\t\t\t\t\t</div>--><!-- end panel-body -->\n\t\t\t\t\t<div class=\"panel-footer\">\n\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-block btn-primary\" @click=\"selectExisting(upload)\">Select</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end panel -->\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t\t<nav>\n\t\t\t\t\t<ul class=\"pagination pagination-sm\">\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</nav>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<validator v-if=\"!isChild||uiSelector===2\" name=\"CreateUpload\">\n\t\t<form id=\"CreateUploadForm\" class=\"form-horizontal\" novalidate=\"\" @submit=\"prevent\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('tags') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"tags\" class=\"col-sm-2 control-label\">Tags</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<v-select id=\"tags\" class=\"form-control\" multiple=\"\" :value.sync=\"tags\" :options=\"tagOptions\"></v-select>\n\t\t\t\t\t<select hidden=\"\" id=\"tags\" name=\"tags\" v-model=\"tags\" multiple=\"\" v-validate:tags=\"{ required:true }\">\n\t\t\t\t\t\t<option v-for=\"tag in tagOptions\" :value=\"tag\">{{tag}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\" :disabled=\"lockType\">\n\t\t\t\t\t\t<option :value=\"\">-- select type --</option>\n\t\t\t\t\t\t<option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type === 'other'\" v-show=\"!uiLocked\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width(px)</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height(px)</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height(px)</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">File</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"file\" id=\"file\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t<!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-10\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t\t<a href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" v-if=\"!isUpdate\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t\t<a @click=\"update()\" v-if=\"isUpdate\" class=\"btn btn-primary\">Update</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t</form>\n\t</validator>\n\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<form class=\"form-inline\" v-if=\"isChild &amp;&amp; !uiLocked\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector1\" v-model=\"uiSelector\" :value=\"1\"> Select file\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector2\" v-model=\"uiSelector\" :value=\"2\"> Upload file\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr v-if=\"uiSelector!==0\">\n\t</form>\n\t<div v-if=\"isChild &amp;&amp; uiSelector==1\">\n\t\t<form class=\"form-inline text-right\" novalidate=\"\">\n\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t</div>\n\t\t</form>\n\t\t<br>\n\t\t<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\t\t\t<div class=\"col-sm-2 col-md-2\" v-for=\"upload in uploads\" style=\"display:flex\">\n\t\t\t\t<div class=\"panel panel-default\">\n\n\t\t\t\t\t\t<a @click=\"selectExisting(upload)\" role=\"button\">\n\t\t\t\t\t\t\t<tooltip effect=\"scale\" placement=\"top\" :content=\"upload.name\">\n\t\t\t\t\t\t\t\t<img :src=\"upload.source + '?w=100&amp;q=50'\" :alt=\"upload.name\" class=\"img-responsive\">\n\t\t\t\t\t\t\t</tooltip>\n\t\t\t\t\t\t</a>\n\n\t\t\t\t\t<!--<div class=\"panel-body\">\n\t\t\t\t\t\t<h6 class=\"text-uppercase\">{{upload.name}}</h6>\n\t\t\t\t\t</div>--><!-- end panel-body -->\n\t\t\t\t\t<div class=\"panel-footer\">\n\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-block btn-primary\" @click=\"selectExisting(upload)\">Select</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end panel -->\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t\t<nav>\n\t\t\t\t\t<ul class=\"pagination pagination-sm\">\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</nav>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<validator v-if=\"!isChild||uiSelector===2\" name=\"CreateUpload\">\n\t\t<form id=\"CreateUploadForm\" class=\"form-horizontal\" novalidate=\"\" @submit=\"prevent\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('tags') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"tags\" class=\"col-sm-2 control-label\">Tags</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<v-select id=\"tags\" class=\"form-control\" multiple=\"\" :value.sync=\"tags\" :options=\"tagOptions\"></v-select>\n\t\t\t\t\t<select hidden=\"\" id=\"tags\" name=\"tags\" v-model=\"tags\" multiple=\"\" v-validate:tags=\"{ required:true }\">\n\t\t\t\t\t\t<option v-for=\"tag in tagOptions\" :value=\"tag\">{{tag}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\" :disabled=\"lockType\">\n\t\t\t\t\t\t<option :value=\"\">-- select type --</option>\n\t\t\t\t\t\t<option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type === 'other'\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions (px)\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">File</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"file\" id=\"file\" :accept=\"allowedTypes\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t<!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-10\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t\t<a v-if=\"!isChild\" href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" v-if=\"!isUpdate\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t\t<a @click=\"update()\" v-if=\"isUpdate\" class=\"btn btn-primary\">Update</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t</form>\n\t</validator>\n\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-e6a8f7c4", module.exports)
+    hotAPI.createRecord("_v-0b158eca", module.exports)
   } else {
-    hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0b158eca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],163:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110,"vue-strap/dist/vue-strap.min":111}],171:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -41329,12 +43126,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-507a71a9", module.exports)
+    hotAPI.createRecord("_v-8a802f56", module.exports)
   } else {
-    hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-8a802f56", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],164:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110,"vueify/lib/insert-css":114}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -41454,12 +43251,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-e7b14e18", module.exports)
+    hotAPI.createRecord("_v-0bcd7c70", module.exports)
   } else {
-    hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0bcd7c70", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],165:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -41490,12 +43287,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-b88f63ba", module.exports)
+    hotAPI.createRecord("_v-11aa36f7", module.exports)
   } else {
-    hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-11aa36f7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107}],166:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -41642,12 +43439,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-372d71fc", module.exports)
+    hotAPI.createRecord("_v-acb15654", module.exports)
   } else {
-    hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-acb15654", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-select":109}],167:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110}],175:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -41864,12 +43661,332 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-46ea867d", module.exports)
+    hotAPI.createRecord("_v-296e3329", module.exports)
   } else {
-    hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-296e3329", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vueify/lib/insert-css":113}],168:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":113,"vue-hot-reload-api":108,"vue-select":110,"vueify/lib/insert-css":114}],176:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'user-profile-fundraisers',
+    props: ['id', 'authId'],
+    data: function data() {
+        return {
+            fundraisers: [],
+
+            pathName: window.location.pathname
+        };
+    },
+    ready: function ready() {
+        this.$http.get('reservations', {
+            user: new Array(this.id),
+            include: 'fundraisers',
+            per_page: 100
+        }).then(function (response) {
+            _.each(response.data.data, function (reservation) {
+                this.fundraisers = _.union(this.fundraisers, reservation.fundraisers.data);
+            }, this);
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12\" v-for=\"fundraiser in fundraisers\">\n        <div class=\"panel panel-default\">\n            <img :src=\"fundraiser.banner||'images/india-prof-pic.jpg'\" alt=\"India\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h4>{{ fundraiser.name }}</h4>\n                <h6>\n                    {{ fundraiser.description || 'No Description'}}\n                    <br>\n                    Expires: {{ fundraiser.expires_at | moment 'll'  }}\n                </h6>\n                <h3><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>\n                <p><span>{{ fundraiser.goal_amount &gt; 0 ? (fundraiser.raised_amount / fundraiser.goal_amount * 100) : 0 }}</span>% <small>Funded</small> / <span>2</span> <small>Donors</small></p>\n                <div class=\"progress\">\n                    <div class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\" :style=\"{ width: (fundraiser.goal_amount > 0 ? (fundraiser.raised_amount / fundraiser.goal_amount * 100) : 0 ) + '%'}\">\n                        <span class=\"sr-only\">{{ fundraiser.goal_amount &gt; 0 ? (fundraiser.raised_amount / fundraiser.goal_amount * 100) : 0 }}% Complete (success)</span>\n                    </div>\n                </div>\n                <p><a class=\"btn btn-primary btn-block\" :href=\" pathName + '/' + fundraiser.links[0].uri\">Details</a></p>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-0f4b0dca", module.exports)
+  } else {
+    hotAPI.update("_v-0f4b0dca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":113,"vue-hot-reload-api":108}],177:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var marked = require('marked');
+exports.default = {
+    name: 'user-profile-stories',
+    components: { 'modal': _vueStrap2.default.modal },
+    props: ['id', 'authId'],
+    data: function data() {
+        return {
+            stories: [],
+            deleteModal: false,
+            selectedStory: {
+                title: '',
+                content: ''
+            },
+            editMode: false,
+            editMarkedContentToggle: false,
+            newMode: false,
+            newMarkedContentToggle: false,
+            // pagination vars
+            page: 1,
+            per_page: 5,
+            pagination: {}
+
+        };
+    },
+
+    watch: {
+        'page': function page(val, oldVal) {
+            this.searchStories();
+        }
+    },
+    filters: {
+        marked: marked
+    },
+    methods: {
+        isUser: function isUser() {
+            return this.id === this.authId;
+        },
+        removeStory: function removeStory(story) {
+            if (story) {
+                this.$http.delete('stories/' + story.id).then(function (response) {
+                    this.stories = _.reject(this.stories, function (item) {
+                        return item.id === story.id;
+                    });
+                    this.resetData();
+                    this.searchStories();
+                });
+            }
+        },
+        updateStory: function updateStory(story) {
+            if (story) {
+                story.author_id = this.authId;
+                story.author_type = 'users';
+                this.$http.put('stories/' + story.id, story).then(function (response) {
+                    this.editMode = false;
+                    this.resetData();
+                    return response.data.data;
+                    //this.searchStories();
+                });
+            }
+        },
+        createStory: function createStory(story) {
+            if (story) {
+                story.author_id = this.authId;
+                story.author_type = 'users';
+
+                this.$http.post('stories', story).then(function (response) {
+                    this.newMode = false;
+                    this.resetData();
+                    this.searchStories();
+                }, function (response) {
+                    debugger;
+                });
+            }
+        },
+        searchStories: function searchStories() {
+            this.$http.get('stories?user=' + this.id, {
+                page: this.page,
+                per_page: this.per_page
+            }).then(function (response) {
+                this.stories = response.data.data;
+                this.pagination = response.data.meta.pagination;
+            });
+        },
+        resetData: function resetData() {
+            this.selectedStory = {
+                title: '',
+                content: ''
+            };
+        }
+    },
+    ready: function ready() {
+        this.searchStories();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <template v-if=\"isUser()\">\n        <button class=\"btn btn-primary btn-sm\" @click=\"newMode=!newMode\">Post Story <i class=\"fa fa-plus\"></i></button>\n        <hr>\n    </template>\n    <div class=\"panel panel-default\" v-if=\"newMode\">\n        <div class=\"panel-heading\">\n            <h5>Write New Story</h5>\n        </div>\n        <div class=\"panel-body\">\n            <form>\n                <div class=\"form-group\">\n                    <label for=\"newStoryTitle\">Title</label>\n                    <input type=\"text\" class=\"form-control\" id=\"newStoryTitle\" v-model=\"selectedStory.title\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"newStoryContent\">Content\n                        <button class=\"btn btn-info btn-xs\" type=\"button\" @click=\"newMarkedContentToggle = !newMarkedContentToggle\">\n                            <span v-show=\"!newMarkedContentToggle\">Preview</span>\n                            <span v-show=\"newMarkedContentToggle\">Edit</span>\n                        </button>\n                    </label>\n                    <textarea class=\"form-control\" id=\"newStoryContent\" v-model=\"selectedStory.content\" minlength=\"1\" rows=\"20\"></textarea>\n                    <div class=\"collapse\" id=\"markdownPrev\">\n                    \t<textarea v-show=\"!newMarkedContentToggle\" class=\"form-control\" id=\"newStoryContent\" v-model=\"selectedStory.content\" minlength=\"1\"></textarea>\n                    <div class=\"collapse\" :class=\"{ 'in': newMarkedContentToggle }\">\n                        <div class=\"well\" v-html=\"selectedStory.content | marked\"></div>\n                    </div>\n                </div>\n                <div class=\"form-group\">\n                    <button class=\"btn btn-xs btn-default\" type=\"button\" @click=\"newMode = false\">Cancel</button>\n                    <button class=\"btn btn-xs btn-success\" type=\"button\" @click=\"createStory(selectedStory)\">Save</button>\n                </div>\n            </div></form>\n        </div>\n    </div>\n    <div class=\"panel panel-default\" v-for=\"story in stories\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ story.id }}\">\n            <h5>\n                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse-{{ story.id }}\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                    {{ story.title }}\n                </a>\n            </h5>\n        </div>\n        <div id=\"collapse-{{ story.id }}\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"heading-{{ story.id }}\">\n            <div class=\"panel-body\" v-if=\"editMode !== story.id\">\n                <h5 class=\"media-heading\"><a href=\"#\">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>\n                {{{ story.content | marked }}}\n            </div>\n            <div class=\"panel-body\" v-if=\"editMode === story.id\">\n                <form>\n                    <div class=\"form-group\">\n                        <label for=\"selectedStoryTitle\">Title</label>\n                        <input type=\"text\" class=\"form-control\" id=\"selectedStoryTitle\" v-model=\"selectedStory.title\">\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"selectedStoryContent\">Content\n                            <button class=\"btn btn-info btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#markdownPrev{{$index}}\" aria-expanded=\"false\" aria-controls=\"markdownPrev\" @click=\"editMarkedContentToggle = !editMarkedContentToggle\">\n                                <span v-show=\"!editMarkedContentToggle\">Preview</span>\n                                <span v-show=\"editMarkedContentToggle\">Edit</span>\n                            </button>\n                        </label>\n                        <textarea v-show=\"!editMarkedContentToggle\" class=\"form-control\" id=\"selectedStoryContent\" v-model=\"selectedStory.content\" minlength=\"1\" rows=\"20\"></textarea>\n                        <div class=\"collapse\" :class=\"{ 'in': editMarkedContentToggle }\">\n                            <div class=\"well\" v-html=\"selectedStory.content | marked\"></div>\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <button class=\"btn btn-xs btn-default\" type=\"button\" @click=\"editMode = null\">Cancel</button>\n                        <button class=\"btn btn-xs btn-success\" type=\"button\" @click=\"updateStory(selectedStory)\">Update</button>\n                    </div>\n                </form>\n            </div>\n            <div class=\"panel-footer\" style=\"padding: 0;\" v-if=\"isUser()\">\n                <div class=\"btn-group btn-group-justified btn-group-sm\" role=\"group\" aria-label=\"...\">\n                    <a class=\"btn btn-info\" @click=\"selectedStory = story,editMode = story.id\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger\" @click=\"selectedStory = story,deleteModal = true\"><i class=\"fa fa-times\"></i></a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n\n    <modal v-if=\"isUser()\" :show.sync=\"deleteModal\" title=\"Remove Passport\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body\">Are you sure you want to delete this Story?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removeStory(selectedStory)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-63f13656", module.exports)
+  } else {
+    hotAPI.update("_v-63f13656", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"marked":104,"vue":113,"vue-hot-reload-api":108,"vue-strap/dist/vue-strap.min":111}],178:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'user-settings',
+    components: { vSelect: _vueSelect2.default },
+    data: function data() {
+        return {
+            name: '',
+            email: '',
+            alt_email: '',
+            password: null,
+            password_confirmation: null,
+            bio: '',
+            status: '',
+            birthday: null,
+            country_code: null,
+            timezone: null,
+            phone_one: '',
+            phone_two: '',
+            address_one: '',
+            address_two: '',
+            city: '',
+            state: '',
+            zip: '',
+            public: false,
+            url: null,
+            gender: false,
+            admin: false,
+
+            // logic variables
+            //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
+            attemptSubmit: false,
+            countries: [],
+            countryCodeObj: null,
+            timezones: [],
+            changePassword: false,
+            showPassword: false,
+            timezoneObj: null,
+            dobMonth: null,
+            dobDay: null,
+            dobYear: null,
+            resource: this.$resource('users/me'),
+            errors: {},
+            saved: false
+        };
+    },
+
+    computed: {
+        country_code: function country_code() {
+            return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+        },
+        birthday: function birthday() {
+            return this.dobYear && this.dobMonth && this.dobDay ? moment().set({ year: this.dobYear, month: this.dobMonth, day: this.dobDay }).format('LL') : null;
+        }
+    },
+    methods: {
+        checkForError: function checkForError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+
+            return this.$UserSettings[field].invalid && this.attemptSubmit;
+        },
+        onModified: function onModified() {
+            this.saved = false;
+        },
+        submit: function submit() {
+            this.attemptSubmit = true;
+            if (this.$UserSettings.valid) {
+                this.resource.update({ id: this.userId }, {
+                    name: this.name,
+                    email: this.email,
+                    alt_email: this.alt_email,
+                    password: this.changePassword ? this.password : undefined,
+                    password_confirmation: this.changePassword ? this.password_confirmation : undefined,
+                    bio: this.bio,
+                    type: this.type,
+                    country_code: this.country_code,
+                    timezone: this.timezone,
+                    phone_one: this.phone_one,
+                    phone_two: this.phone_two,
+                    address_one: this.address_one,
+                    address_two: this.address_two,
+                    city: this.city,
+                    state: this.state,
+                    zip: this.zip,
+                    status: this.status,
+                    gender: this.gender,
+                    public: this.public,
+                    url: this.public ? this.url : undefined
+                }).then(function (resp) {
+                    //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
+                    this.saved = true;
+                    setTimeout(function () {
+                        this.saved = false;
+                    }.bind(this), 3000);
+                }, function (error) {
+                    console.log(error);
+                    this.errors = error.data.errors;
+                });
+            }
+        }
+    },
+    ready: function ready() {
+        this.$http.get('utilities/countries').then(function (response) {
+            this.countries = response.data.countries;
+        });
+
+        this.$http.get('utilities/timezones').then(function (response) {
+            this.timezones = response.data.timezones;
+        });
+
+        this.resource.get().then(function (response) {
+            var user = response.data.data;
+            this.name = user.name;
+            this.bio = user.bio;
+            this.type = user.type;
+            this.countryCodeObj = _.findWhere(this.countries, { code: user.country_code });
+            this.country_code = user.country_code;
+            this.timezone = user.timezone;
+            this.phone_one = user.phone_one;
+            this.phone_two = user.phone_two;
+            this.address_one = user.address_one;
+            this.address_two = user.address_two;
+            this.city = user.city;
+            this.state = user.state;
+            this.zip = user.zip;
+            this.public = user.public;
+            this.url = user.url;
+            this.email = user.email;
+            this.alt_email = user.alt_email;
+            this.gender = user.gender;
+            this.status = user.status;
+            this.alt_email = user.alt_email;
+        }, function (response) {
+            console.log('Update Failed! :(');
+            console.log(response);
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UserSettings\">\n    <form id=\"UserSettingsForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"User Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') || errors.email }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n                <div v-show=\"errors.email\" class=\"help-block\">{{errors.email}}</div>\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': errors.alt_email }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Alt. Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n                <div v-show=\"errors.alt_email\" class=\"help-block\">{{errors.alt_email}}</div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': !!changePassword &amp;&amp; (checkForError('password')||checkForError('passwordconfirmation')) }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Password</label>\n            <div class=\"col-sm-10\">\n                <div class=\"checkbox\">\n                    <label>\n                        <input type=\"checkbox\" v-model=\"changePassword\">\n                        Change Password\n                    </label>\n                </div>\n                <div v-if=\"changePassword\" class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ minlength:8 }\" placeholder=\"Enter password\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ minlength:8 }\" placeholder=\"Enter password again\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                </div>\n                <div v-if=\"changePassword\" class=\"help-block\">Password must be at least 8 characters long</div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\">Date of Birth</label>\n\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-xs-5\">\n                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                            <option value=\"01\">January</option>\n                            <option value=\"02\">February</option>\n                            <option value=\"03\">March</option>\n                            <option value=\"04\">April</option>\n                            <option value=\"05\">May</option>\n                            <option value=\"06\">June</option>\n                            <option value=\"07\">July</option>\n                            <option value=\"08\">August</option>\n                            <option value=\"09\">September</option>\n                            <option value=\"10\">October</option>\n                            <option value=\"11\">November</option>\n                            <option value=\"12\">December</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Month</h6>\n                    </div>\n                    <div class=\"col-xs-3\">\n                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                            <option value=\"01\">1</option>\n                            <option value=\"02\">2</option>\n                            <option value=\"03\">3</option>\n                            <option value=\"04\">4</option>\n                            <option value=\"05\">5</option>\n                            <option value=\"06\">6</option>\n                            <option value=\"07\">7</option>\n                            <option value=\"08\">8</option>\n                            <option value=\"09\">9</option>\n                            <option value=\"10\">10</option>\n                            <option value=\"11\">11</option>\n                            <option value=\"12\">12</option>\n                            <option value=\"13\">13</option>\n                            <option value=\"14\">14</option>\n                            <option value=\"15\">15</option>\n                            <option value=\"16\">16</option>\n                            <option value=\"17\">17</option>\n                            <option value=\"18\">18</option>\n                            <option value=\"19\">19</option>\n                            <option value=\"20\">20</option>\n                            <option value=\"21\">21</option>\n                            <option value=\"22\">22</option>\n                            <option value=\"23\">23</option>\n                            <option value=\"24\">24</option>\n                            <option value=\"25\">25</option>\n                            <option value=\"26\">26</option>\n                            <option value=\"27\">27</option>\n                            <option value=\"28\">28</option>\n                            <option value=\"29\">29</option>\n                            <option value=\"30\">30</option>\n                            <option value=\"31\">31</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Day</h6>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                            <option value=\"1930\">1930</option>\n                            <option value=\"1931\">1931</option>\n                            <option value=\"1932\">1932</option>\n                            <option value=\"1933\">1933</option>\n                            <option value=\"1934\">1934</option>\n                            <option value=\"1935\">1935</option>\n                            <option value=\"1936\">1936</option>\n                            <option value=\"1937\">1937</option>\n                            <option value=\"1938\">1938</option>\n                            <option value=\"1939\">1939</option>\n                            <option value=\"1940\">1940</option>\n                            <option value=\"1941\">1941</option>\n                            <option value=\"1942\">1942</option>\n                            <option value=\"1943\">1943</option>\n                            <option value=\"1944\">1944</option>\n                            <option value=\"1945\">1945</option>\n                            <option value=\"1946\">1946</option>\n                            <option value=\"1947\">1947</option>\n                            <option value=\"1948\">1948</option>\n                            <option value=\"1949\">1949</option>\n                            <option value=\"1950\">1950</option>\n                            <option value=\"1951\">1951</option>\n                            <option value=\"1952\">1952</option>\n                            <option value=\"1953\">1953</option>\n                            <option value=\"1954\">1954</option>\n                            <option value=\"1955\">1955</option>\n                            <option value=\"1956\">1956</option>\n                            <option value=\"1957\">1957</option>\n                            <option value=\"1958\">1958</option>\n                            <option value=\"1959\">1959</option>\n                            <option value=\"1960\">1960</option>\n                            <option value=\"1961\">1961</option>\n                            <option value=\"1962\">1962</option>\n                            <option value=\"1963\">1963</option>\n                            <option value=\"1964\">1964</option>\n                            <option value=\"1965\">1965</option>\n                            <option value=\"1966\">1966</option>\n                            <option value=\"1967\">1967</option>\n                            <option value=\"1968\">1968</option>\n                            <option value=\"1969\">1969</option>\n                            <option value=\"1970\">1970</option>\n                            <option value=\"1971\">1971</option>\n                            <option value=\"1972\">1972</option>\n                            <option value=\"1973\">1973</option>\n                            <option value=\"1974\">1974</option>\n                            <option value=\"1975\">1975</option>\n                            <option value=\"1976\">1976</option>\n                            <option value=\"1977\">1977</option>\n                            <option value=\"1978\">1978</option>\n                            <option value=\"1979\">1979</option>\n                            <option value=\"1980\">1980</option>\n                            <option value=\"1981\">1981</option>\n                            <option value=\"1982\">1982</option>\n                            <option value=\"1983\">1983</option>\n                            <option value=\"1984\">1984</option>\n                            <option value=\"1985\">1985</option>\n                            <option value=\"1986\">1986</option>\n                            <option value=\"1987\">1987</option>\n                            <option value=\"1988\">1988</option>\n                            <option value=\"1989\">1989</option>\n                            <option value=\"1990\" selected=\"selected\">1990</option>\n                            <option value=\"1991\">1991</option>\n                            <option value=\"1992\">1992</option>\n                            <option value=\"1993\">1993</option>\n                            <option value=\"1994\">1994</option>\n                            <option value=\"1995\">1995</option>\n                            <option value=\"1996\">1996</option>\n                            <option value=\"1997\">1997</option>\n                            <option value=\"1998\">1998</option>\n                            <option value=\"1999\">1999</option>\n                            <option value=\"2000\">2000</option>\n                            <option value=\"2001\">2001</option>\n                            <option value=\"2002\">2002</option>\n                            <option value=\"2003\">2003</option>\n                            <option value=\"2004\">2004</option>\n                            <option value=\"2005\">2005</option>\n                            <option value=\"2006\">2006</option>\n                            <option value=\"2007\">2007</option>\n                            <option value=\"2008\">2008</option>\n                            <option value=\"2009\">2009</option>\n                            <option value=\"2010\">2010</option>\n                            <option value=\"2011\">2011</option>\n                            <option value=\"2012\">2012</option>\n                            <option value=\"2013\">2013</option>\n                            <option value=\"2014\">2014</option>\n                            <option value=\"2015\">2015</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Year</h6>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div><!-- end form-group -->\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n            <label for=\"gender\" class=\"col-sm-2 control-label\">Gender</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"bio\">Bio</label>\n            <div class=\"col-sm-10\">\n                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"User Bio\" maxlength=\"120\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress\">Address 1</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress2\">Address 2</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                <div class=\"form-group\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                </div>\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\n                    <label class=\"control-label\" for=\"country\" style=\"padding-top:0;margin-bottom: 5px;\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <label for=\"timezone\" class=\"col-sm-2 control-label\">Timezone</label>\n\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"public\" class=\"col-sm-2 control-label\">Public</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.url }\" v-if=\"!!public\">\n            <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n            <div class=\"col-sm-10\">\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon\">www.missions.me/users/</span>\n                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                </div>\n                <div v-show=\"errors.url\" class=\"help-block\">{{errors.url}}</div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/admin/users\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <div v-if=\"saved\" class=\"alert alert-success\" role=\"alert\"><i class=\"fa fa-check\"></i> Profile Updated</div>\n            </div>\n        </div>\n\n    </form>\n</validator>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-ee234926", module.exports)
+  } else {
+    hotAPI.update("_v-ee234926", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":113,"vue-hot-reload-api":108,"vue-select":110}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -41918,7 +44035,10 @@ exports.default = {
             countries: [],
             countryObj: null,
             attemptSubmit: false,
-            selectedAvatar: null
+            selectedAvatar: null,
+            today: moment().format('YYYY-MM-DD'),
+            yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
+            tomorrow: moment().add(1, 'days').format('YYYY-MM-DD')
         };
     },
 
@@ -41979,8 +44099,10 @@ exports.default = {
     events: {
         'uploads-complete': function uploadsComplete(data) {
             switch (data.type) {
-                case 'avatar':
+                case 'other':
+                    //save for preview
                     this.selectedAvatar = data;
+                    // save for upload reference
                     this.upload_id = data.id;
                     break;
             }
@@ -42006,18 +44128,18 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdateVisa\">\n    <form id=\"CreateUpdateVisa\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"given_names\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"surname\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"number\" class=\"col-sm-2 control-label\">Visa Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Visa Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n            <label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"countryObj\" :value.sync=\"countryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Avatar\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/dashboard/visas\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdateVisa\">\n    <form id=\"CreateUpdateVisa\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"given_names\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"surname\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"number\" class=\"col-sm-2 control-label\">Visa Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Visa Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" :max=\"today\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" :min=\"tomorrow\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n            <label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"countryObj\" :value.sync=\"countryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Avatar\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'visa-'+given_names+'-'+surname\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/dashboard/visas\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-12a04920", module.exports)
+    hotAPI.createRecord("_v-62eb7acc", module.exports)
   } else {
-    hotAPI.update("_v-12a04920", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-62eb7acc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":162,"vue":112,"vue-hot-reload-api":107,"vue-select":109,"vue-strap/dist/vue-strap.min":110}],169:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":170,"vue":113,"vue-hot-reload-api":108,"vue-select":110,"vue-strap/dist/vue-strap.min":111}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -42100,12 +44222,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4fbd58ab", module.exports)
+    hotAPI.createRecord("_v-d20a1352", module.exports)
   } else {
-    hotAPI.update("_v-4fbd58ab", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d20a1352", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":112,"vue-hot-reload-api":107,"vue-strap/dist/vue-strap.min":110}],170:[function(require,module,exports){
+},{"vue":113,"vue-hot-reload-api":108,"vue-strap/dist/vue-strap.min":111}],181:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -42132,9 +44254,21 @@ var _groupTrips = require('./components/campaigns/group-trips.vue');
 
 var _groupTrips2 = _interopRequireDefault(_groupTrips);
 
+var _groupProfileTrips = require('./components/groups/group-profile-trips.vue');
+
+var _groupProfileTrips2 = _interopRequireDefault(_groupProfileTrips);
+
+var _groupProfileStories = require('./components/groups/group-profile-stories.vue');
+
+var _groupProfileStories2 = _interopRequireDefault(_groupProfileStories);
+
 var _groupsTripsSelectionWrapper = require('./components/campaigns/groups-trips-selection-wrapper.vue');
 
 var _groupsTripsSelectionWrapper2 = _interopRequireDefault(_groupsTripsSelectionWrapper);
+
+var _tripDetailsMissionaries = require('./components/trips/trip-details-missionaries.vue');
+
+var _tripDetailsMissionaries2 = _interopRequireDefault(_tripDetailsMissionaries);
 
 var _tripRegistrationWizard = require('./components/trips/trip-registration-wizard.vue');
 
@@ -42152,6 +44286,10 @@ var _recordsList = require('./components/records/records-list.vue');
 
 var _recordsList2 = _interopRequireDefault(_recordsList);
 
+var _groupsList = require('./components/groups/groups-list.vue');
+
+var _groupsList2 = _interopRequireDefault(_groupsList);
+
 var _visasList = require('./components/visas/visas-list.vue');
 
 var _visasList2 = _interopRequireDefault(_visasList);
@@ -42167,6 +44305,30 @@ var _passportCreateUpdate2 = _interopRequireDefault(_passportCreateUpdate);
 var _visaCreateUpdate = require('./components/visas/visa-create-update.vue');
 
 var _visaCreateUpdate2 = _interopRequireDefault(_visaCreateUpdate);
+
+var _reservationsPassportsManager = require('./components/reservations/reservations-passports-manager.vue');
+
+var _reservationsPassportsManager2 = _interopRequireDefault(_reservationsPassportsManager);
+
+var _reservationsVisasManager = require('./components/reservations/reservations-visas-manager.vue');
+
+var _reservationsVisasManager2 = _interopRequireDefault(_reservationsVisasManager);
+
+var _userSettings = require('./components/users/user-settings.vue');
+
+var _userSettings2 = _interopRequireDefault(_userSettings);
+
+var _userProfileStories = require('./components/users/user-profile-stories.vue');
+
+var _userProfileStories2 = _interopRequireDefault(_userProfileStories);
+
+var _userProfileFundraisers = require('./components/users/user-profile-fundraisers.vue');
+
+var _userProfileFundraisers2 = _interopRequireDefault(_userProfileFundraisers);
+
+var _groupProfileFundraisers = require('./components/groups/group-profile-fundraisers.vue');
+
+var _groupProfileFundraisers2 = _interopRequireDefault(_groupProfileFundraisers);
 
 var _adminCampaignCreate = require('./components/campaigns/admin-campaign-create.vue');
 
@@ -42265,6 +44427,7 @@ window.$ = window.jQuery = require('jquery');
 
 window.moment = require('moment');
 window._ = require('underscore');
+window.marked = require('marked');
 // require('vue-strap/src/index.js');
 // window.VueStrap = require('vue-strap/dist/vue-strap.min');
 
@@ -42420,10 +44583,10 @@ new _vue2.default({
             public: false
         }
     },
-    components: [_login2.default, _campaigns2.default, _campaignGroups2.default, _groupTrips2.default, _groupsTripsSelectionWrapper2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _topNav2.default,
+    components: [_login2.default, _campaigns2.default, _campaignGroups2.default, _groupTrips2.default, _groupProfileTrips2.default, _groupProfileStories2.default, _groupProfileFundraisers2.default, _groupsTripsSelectionWrapper2.default, _tripDetailsMissionaries2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _topNav2.default,
 
     //dashboard components
-    _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default, _visaCreateUpdate2.default,
+    _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default, _groupsList2.default, _visaCreateUpdate2.default, _reservationsPassportsManager2.default, _reservationsVisasManager2.default, _userSettings2.default, _userProfileStories2.default, _userProfileFundraisers2.default,
 
     // admin components
     _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default],
@@ -42447,6 +44610,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/campaigns/admin-campaign-create.vue":114,"./components/campaigns/admin-campaign-details.vue":115,"./components/campaigns/admin-campaign-edit.vue":116,"./components/campaigns/campaign-groups.vue":117,"./components/campaigns/campaigns.vue":118,"./components/campaigns/group-trips.vue":123,"./components/campaigns/groups-trips-selection-wrapper.vue":124,"./components/groups/admin-group-create.vue":125,"./components/groups/admin-group-edit.vue":126,"./components/groups/admin-group-managers.vue":127,"./components/groups/admin-groups-list.vue":128,"./components/login.vue":129,"./components/passports/passport-create-update.vue":130,"./components/passports/passports-list.vue":131,"./components/records/records-list.vue":132,"./components/reservations/admin-reservations-list.vue":133,"./components/reservations/donations-list.vue":134,"./components/reservations/reservations-list.vue":135,"./components/top-nav.vue":136,"./components/trips/admin-trip-create.vue":137,"./components/trips/admin-trip-delete.vue":138,"./components/trips/admin-trip-duplicate.vue":139,"./components/trips/admin-trip-edit.vue":140,"./components/trips/admin-trip-facilitators.vue":141,"./components/trips/admin-trip-reservations-list.vue":142,"./components/trips/admin-trips-list.vue":143,"./components/trips/trip-registration-wizard.vue":161,"./components/uploads/admin-upload-create-update.vue":162,"./components/uploads/admin-uploads-list.vue":163,"./components/users/admin-user-create.vue":164,"./components/users/admin-user-delete.vue":165,"./components/users/admin-user-edit.vue":166,"./components/users/admin-users-list.vue":167,"./components/visas/visa-create-update.vue":168,"./components/visas/visas-list.vue":169,"bootstrap-sass":15,"jquery":103,"jquery.cookie":102,"moment":104,"underscore":106,"vue":112,"vue-resource":108,"vue-strap/dist/vue-strap.min":110,"vue-validator":111}]},{},[170]);
+},{"./components/campaigns/admin-campaign-create.vue":115,"./components/campaigns/admin-campaign-details.vue":116,"./components/campaigns/admin-campaign-edit.vue":117,"./components/campaigns/campaign-groups.vue":118,"./components/campaigns/campaigns.vue":119,"./components/campaigns/group-trips.vue":124,"./components/campaigns/groups-trips-selection-wrapper.vue":125,"./components/groups/admin-group-create.vue":126,"./components/groups/admin-group-edit.vue":127,"./components/groups/admin-group-managers.vue":128,"./components/groups/admin-groups-list.vue":129,"./components/groups/group-profile-fundraisers.vue":130,"./components/groups/group-profile-stories.vue":131,"./components/groups/group-profile-trips.vue":132,"./components/groups/groups-list.vue":133,"./components/login.vue":134,"./components/passports/passport-create-update.vue":135,"./components/passports/passports-list.vue":136,"./components/records/records-list.vue":137,"./components/reservations/admin-reservations-list.vue":138,"./components/reservations/donations-list.vue":139,"./components/reservations/reservations-list.vue":140,"./components/reservations/reservations-passports-manager.vue":141,"./components/reservations/reservations-visas-manager.vue":142,"./components/top-nav.vue":143,"./components/trips/admin-trip-create.vue":144,"./components/trips/admin-trip-delete.vue":145,"./components/trips/admin-trip-duplicate.vue":146,"./components/trips/admin-trip-edit.vue":147,"./components/trips/admin-trip-facilitators.vue":148,"./components/trips/admin-trip-reservations-list.vue":149,"./components/trips/admin-trips-list.vue":150,"./components/trips/trip-details-missionaries.vue":168,"./components/trips/trip-registration-wizard.vue":169,"./components/uploads/admin-upload-create-update.vue":170,"./components/uploads/admin-uploads-list.vue":171,"./components/users/admin-user-create.vue":172,"./components/users/admin-user-delete.vue":173,"./components/users/admin-user-edit.vue":174,"./components/users/admin-users-list.vue":175,"./components/users/user-profile-fundraisers.vue":176,"./components/users/user-profile-stories.vue":177,"./components/users/user-settings.vue":178,"./components/visas/visa-create-update.vue":179,"./components/visas/visas-list.vue":180,"bootstrap-sass":15,"jquery":103,"jquery.cookie":102,"marked":104,"moment":105,"underscore":107,"vue":113,"vue-resource":109,"vue-strap/dist/vue-strap.min":111,"vue-validator":112}]},{},[181]);
 
 //# sourceMappingURL=main.js.map

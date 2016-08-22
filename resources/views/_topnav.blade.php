@@ -13,7 +13,7 @@
       <li><a class="navbar-btn btn btn-primary hidden-xs" href="#">Donate</a></li>
       <li id="userMenu" class="dropdown-toggle hidden-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left" src="{{ image(auth()->user()->avatar->source . '?w=100') }}" alt="{{ auth()->user()->name }}"> {{ auth()->user()->name }} <i class="fa fa-angle-down"></i></a></li>
       <ul class="dropdown-menu" aria-labelledby="userMenu">
-        <li><a href="#">My Profile</a></li>
+        <li><a href="{{ '/@' . auth()->user()->url }}">My Profile</a></li>
         <li><a href="#">My Group</a></li>
         <li><a href="/dashboard">Dashboard</a></li>
           @can ('view-admin')
@@ -30,7 +30,7 @@
         </div>
       </li>
       @endif
-      <top-nav auth="{{ auth()->check()? 1 : 0 }}" admin="{{ (auth()->check() && auth()->user()->can('view-admin'))? 1 : 0 }}" name="{{ auth()->check() ? auth()->user()->name : null }}" avatar="{{ auth()->check() ? image(auth()->user()->avatar->source) : null }}"></top-nav>
+      <top-nav auth="{{ auth()->check()? 1 : 0 }}" admin="{{ (auth()->check() && auth()->user()->can('view-admin'))? 1 : 0 }}" name="{{ auth()->check() ? auth()->user()->name : null }}" avatar="{{ auth()->check() ? image(auth()->user()->avatar->source) : null }}" url="{{ auth()->check() ?  '@' . auth()->user()->url : null }}"></top-nav>
     </div><!-- /.navbar-right -->
   </div><!-- end container -->
 </div><!-- end navbar -->

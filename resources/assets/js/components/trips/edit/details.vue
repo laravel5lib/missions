@@ -21,11 +21,25 @@
 					</div>
 
 					<div class="form-group" :class="{ 'has-error': checkForError('description') }">
-						<label for="description" class="col-sm-2 control-label">Description</label>
+						<label for="description" class="col-sm-2 control-label">
+							Description
+							<button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev" aria-expanded="false" aria-controls="markdownPrev">
+								Preview
+							</button>
+						</label>
 						<div class="col-sm-10">
-							<textarea name="description" id="description" rows="2" v-model="description"
-									  class="form-control"
-									  v-validate:description="{ required: true}"></textarea>
+							<div class="row">
+								<div class="col-sm-12">
+									<textarea name="description" id="description" rows="5" v-model="description"
+											  class="form-control"
+											  v-validate:description="{ required: true}"></textarea>
+								</div>
+								<div class="col-sm-12 collapse" id="markdownPrev">
+									<br>
+									<div class="well" v-html="description | marked"></div>
+								</div>
+							</div>
+
 						</div>
 					</div>
 
@@ -124,6 +138,8 @@
 	</div>
 </template>
 <script>
+	var marked = require('marked');
+
 	import vSelect from "vue-select"
 	export default{
 		name: 'trip-details',
@@ -186,6 +202,9 @@
 			prospects(){
 				return _.pluck(this.prospectsObj, 'value');
 			}
+		},
+		filters: {
+			marked: marked,
 		},
 		methods: {
 			populateWizardData(onValid){

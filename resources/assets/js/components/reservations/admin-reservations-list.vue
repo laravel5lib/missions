@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <form class="form-inline" novalidate>
+                <form class="form-inline text-right" novalidate>
                 	<div class="form-inline" style="display: inline-block;">
                     	<div class="form-group">
 	                        <label>Show</label>
@@ -189,7 +189,7 @@
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 						</ul>
                     </div>
-                    <a class="btn btn-primary btn-sm" href="reservations/create">New <i class="fa fa-plus"></i> </a>
+                    <!--<a class="btn btn-primary btn-sm" href="reservations/create">New <i class="fa fa-plus"></i> </a>-->
                 </form>
             </div>
         </div>
@@ -307,6 +307,12 @@
 	export default{
         name: 'admin-reservations-list',
 		components: {vSelect},
+		props:{
+			tripId: {
+				type: String,
+				default: null
+			}
+		},
 		data(){
             return{
                 reservations: [],
@@ -498,6 +504,7 @@
             },
             searchReservations(){
             	var params = {
+					trip_id: this.tripId ? new Array(this.tripId) : undefined,
 					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
 					search: this.search,
 					per_page: this.per_page,

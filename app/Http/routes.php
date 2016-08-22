@@ -16,6 +16,18 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.index');
     });
 
+    Route::get('settings', function() {
+        return view('dashboard.settings');
+    });
+
+    Route::get('groups', function() {
+        return view('dashboard.groups.index');
+    });
+
+    Route::get('groups/{id}', function($id) {
+        return view('dashboard.groups.edit', compact('id'));
+    });
+
     Route::get('records', function () {
         return view('dashboard.records.index');
     });
@@ -56,30 +68,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
 
 
     Route::get('/reservations', function () use ($dispatcher) {
-        try {
-            $reservations = $dispatcher->get('reservations', ['include' => 'trip.campaign,trip.group', 'user' => array(Auth::user()->id)]);
 
-            // filter reservations
-            $activeReservations = collect();
-            $inactiveReservations = collect();
-            foreach ($reservations as $reservation) {
-                $reservation->country = country($reservation->trip->campaign->country_code);
-
-                if($reservation->trip->ended_at->gt(now())) {
-                    $activeReservations->push($reservation);
-                } else {
-                    $inactiveReservations->push($reservation);
-                }
-            }
-
-        } catch (Dingo\Api\Exception\InternalHttpException $e) {
-            // We can get the response here to check the status code of the error or response body.
-            $response = $e->getResponse();
-            return $response;
-        }
-
-    //    return $reservations;
-        return view('dashboard.reservations.index', compact('activeReservations', 'inactiveReservations'));
+        return view('dashboard.reservations.index');
     });
 
     Route::get('/reservations/{id}', function ($id) use ($dispatcher) {
@@ -262,6 +252,14 @@ Route::post('/login', 'Auth\AuthController@authenticate');
 Route::get('/register', 'Auth\Authcontroller@create');
 Route::post('/register', 'Auth\AuthController@register');
 Route::get('/logout', 'Auth\AuthController@logout');
+
+Route::get('/groups/{slug}', 'GroupsController@profile');
+Route::get('/profiles/{slug}', 'UsersController@profile');
+Route::get('/@{slug}', 'UsersController@profile');
+
+Route::get('/{slug}', function ($slug) {
+    return $slug;
+});
 
 Route::get('/', function () {
     return view('site.index');

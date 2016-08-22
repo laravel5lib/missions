@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use App\Http\Requests\v1\CardRequest;
 use App\Http\Requests\v1\DonationRequest;
 use App\Models\v1\Donation;
 use App\Http\Transformers\v1\DonationTransformer;
+use App\Models\v1\Donor;
 use App\Services\PaymentGateway;
+use Dingo\Api\Contract\Http\Request;
 
 class DonationsController extends Controller
 {
@@ -21,34 +22,40 @@ class DonationsController extends Controller
     /**
      * @var PaymentGateway
      */
-    private $paymentGateway;
+    private $payment;
+
+    /**
+     * @var Donor
+     */
+    private $donor;
 
     /**
      * DonationsController constructor.
      *
      * @param Donation $donation
-     * @param PaymentGateway $paymentGateway
+     * @param PaymentGateway $payment
+     * @param Donor $donor
      */
-    public function __construct(Donation $donation, PaymentGateway $paymentGateway)
+    public function __construct(Donation $donation, PaymentGateway $payment, Donor $donor)
     {
         $this->donation = $donation;
-        $this->payment = $paymentGateway;
+        $this->payment = $payment;
+        $this->donor = $donor;
 
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
     }
 
     /**
      * Get all donations.
      *
-     * @param null $fundraiser_id
+     * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function index($fundraiser_id = null)
+    public function index(Request $request)
     {
-        $donations = $this->donation;
-        if ($fundraiser_id) $donations = $donations->whereFundraiser($fundraiser_id);
-        $donations = $donations->paginate(25);
+        $donations = $this->donation
+            ->filter($request->all())
+            ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($donations, new DonationTransformer);
     }
@@ -86,7 +93,8 @@ class DonationsController extends Controller
             $this->payment->captureCharge($request->get('charge_id'));
         }
 
-        $donation = $this->donation->create($request->all());
+        $donor = $this->donor->firstOrCreate($request->get('donor'));
+        $donation = $donor->donations()->create($request->except('donor'));
 
         return $this->response->item($donation, new DonationTransformer);
     }

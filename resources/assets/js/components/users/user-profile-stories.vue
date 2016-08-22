@@ -21,9 +21,7 @@
                                 <span v-show="newMarkedContentToggle">Edit</span>
                             </button>
                         </label>
-                        <textarea class="form-control" id="newStoryContent" v-model="selectedStory.content" minlength="1" rows="20"></textarea>
-                        <div class="collapse" id="markdownPrev">
-                        	<textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="selectedStory.content" minlength="1"></textarea>
+                        <textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="selectedStory.content" minlength="1" rows="20"></textarea>
                         <div class="collapse" :class="{ 'in': newMarkedContentToggle }">
                             <div class="well" v-html="selectedStory.content | marked"></div>
                         </div>

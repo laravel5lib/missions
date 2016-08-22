@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import login from './components/login.vue';
 import topNav from './components/top-nav.vue';
+import donate from './components/donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
@@ -52,6 +53,7 @@ window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 window._ = require('underscore');
 window.marked = require('marked');
+window.ScrollMagic = require('scrollmagic');
 // require('vue-strap/src/index.js');
 // window.VueStrap = require('vue-strap/dist/vue-strap.min');
 import VueStrap from 'vue-strap/dist/vue-strap.min';
@@ -234,6 +236,7 @@ new Vue({
         reservationsList,
         donationsList,
         topNav,
+        donate,
 
         //dashboard components
         recordsList,

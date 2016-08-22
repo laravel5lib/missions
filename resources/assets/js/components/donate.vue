@@ -1,0 +1,268 @@
+<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+    <div>
+        <validator name="Donation">
+            <form class="form-horizontal" name="DonationForm" novalidate>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Recipient</label>
+                    <div class="col-sm-10">
+                        <h5>{{ recipient }}</h5>
+                    </div>
+                </div>
+                <div class="form-group" :class="{ 'has-error': checkForError('donor')}">
+                    <label class="control-label col-sm-2">Name of Donor / Company Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" v-model="donor" v-validate:donor="{required: true}">
+                    </div>
+                </div>
+                <div class="" :class="{ 'has-error': checkForError('amount')}">
+                    <label class="control-label col-sm-2">Amount</label>
+                    <div class="input-group col-sm-10">
+                        <span class="input-group-addon">$</span>
+                        <input type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                    </div>
+                    <br>
+                </div>
+
+                <!-- Credit Card -->
+                <fieldset class="col-sm-10 col-sm-offset-2">
+                    <legend>Payment Details</legend>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
+                                <label for="cardHolderName">Card Holder's Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon input"><span class="fa fa-user"></span></span>
+                                    <input type="text" class="form-control input" id="cardHolderName" placeholder="Name on card"
+                                           v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
+                                <label for="cardNumber">Card Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon input"><span class="fa fa-lock"></span></span>
+                                    <input type="text" class="form-control input" id="cardNumber" placeholder="Valid Card Number"
+                                           v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
+                                           @keyup="formatCard($event)" maxlength="19"/>
+                                </div>
+                                <span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-7 col-md-7">
+                            <label for="expiryMonth">EXPIRY DATE</label>
+                            <div class="row">
+                                <div class="col-xs-6 col-lg-6">
+                                    <div class="form-group" :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
+                                        <select v-model="cardMonth" class="form-control input" id="expiryMonth" v-validate:month="{ required: true }">
+                                            <option v-for="month in monthList" value="{{month}}">{{month}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-lg-6">
+                                    <div class="form-group" :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
+                                        <select v-model="cardYear" class="form-control input" id="expiryYear" v-validate:year="{ required: true }">
+                                            <option v-for="year in yearList" value="{{year}}">{{year}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-5 col-md-5 pull-right">
+                            <div class="form-group" :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
+                                <label for="cvCode">
+                                    CV CODE</label>
+                                <input type="text" class="form-control input" id="cvCode" maxlength="3" v-model="cardCVC"
+                                       placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 3 }"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <div class="form-group" :class="{ 'has-error': checkForError('email') }">
+                                <label for="infoEmailAddress">Billing Email Address</label>
+                                <input type="text" class="form-control input" v-model="cardEmail" v-validate:email="['email']" id="infoEmailAddress">
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="form-group" :class="{ 'has-error': checkForError('zip') }">
+                                <label for="infoZip">Billing ZIP/Postal Code</label>
+                                <input type="text" class="form-control input" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" v-model="cardSave">Save payment details for next time.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+
+            </form>
+        </validator>
+    </div>
+</template>
+<script>
+    import vSelect from 'vue-select';
+    export default{
+        name: 'donate',
+        components:{ vSelect },
+        props: {
+            type: {
+                type: String,
+                default: null
+            },
+            recipient: {
+                type: String,
+                default: 'Missions.Me'
+            }
+        },
+        data(){
+            return{
+                donor: '',
+                amount: 1,
+
+                //card vars
+                card: null,
+                cardHolderName: null,
+                cardNumber: '',
+                cardMonth: '',
+                cardYear: '',
+                cardCVC: '',
+                cardEmail: null,
+                cardZip: null,
+                cardSave: false,
+
+                // stripe vars
+                stripeKey: null,
+                stripeError: null,
+                monthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                placeholders: {
+                    year: 'Year',
+                    month: 'Month',
+                    cvc: 'CVC',
+                    number: 'Card Number'
+                },
+                validationErrors: {
+                    cardNumber: '',
+                    cardCVC: '',
+                    cardYear: '',
+                    cardMonth: ''
+                },
+                showButton: true,
+                showLabels: true,
+                devMode: true,
+                // deferred variable used for card validation
+                // needs to be on `this` scope to access in response callback
+                stripeDeferred: {},
+                attemptedCreateToken: false,
+                attemptSubmit: false
+            }
+        },
+        watch: {
+            'paymentComplete'(val, oldVal) {
+                this.$dispatch('payment-complete', val)
+            }
+        },
+
+        methods: {
+            checkForError(field){
+                // if user clicked submit button while the field is invalid trigger error styles 
+                return this.$Donation[field].invalid && this.attemptSubmit;
+            },
+            resetCaching() {
+                console.log('resetting');
+                this.cardMonth = '';
+                this.cardCVC = '';
+                this.cardYear = '';
+                this.cardNumber = '';
+                return this.card = null;
+            },
+            formatCard(event) {
+                var output;
+                output = this.cardNumber.split('-').join('');
+                if (output.length > 0) {
+                    output = output.replace(/[^\d]+/g, '');
+                    output = output.match(new RegExp('.{1,4}', 'g'));
+                    if (output) {
+                        return this.cardNumber = output.join('-');
+                    } else {
+                        return this.cardNumber = '';
+                    }
+                }
+            },
+            createToken() {
+                this.stripeDeferred = $.Deferred();
+
+                if (this.$Donation.invalid) {
+                    this.attemptedCreateToken = true;
+                    this.stripeDeferred.reject(false);
+                } else {
+                    Stripe.setPublishableKey(this.stripeKey);
+                    Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+                }
+                return this.stripeDeferred.promise();
+            },
+            createTokenCallback(status, resp) {
+                console.log(status);
+                console.log(resp);
+                this.validationErrors = {
+                    cardNumber: '',
+                    cardCVC: '',
+                    cardYear: '',
+                    cardMonth: ''
+                };
+                this.stripeError = resp.error;
+                if (this.stripeError) {
+                    if (this.stripeError.param === 'number') {
+                        this.validationErrors.cardNumber = 'error';
+                    }
+                    if (this.stripeError.param === 'exp_year') {
+                        this.validationErrors.cardYear = 'error';
+                    }
+                    if (this.stripeError.param === 'exp_month') {
+                        this.validationErrors.cardMonth = 'error';
+                    }
+                    if (this.stripeError.param === 'cvc') {
+                        this.validationErrors.cardCVC = 'error';
+                    }
+                    this.stripeDeferred.reject(false);
+                }
+                if (status === 200) {
+                    this.card = resp;
+                    // send payment data to parent
+                    this.$parent.paymentInfo = {
+                        token: resp,
+                        save: this.cardSave,
+                        email: this.cardEmail
+                    };
+//                    this.$parent.upfrontTotal = this.upfrontTotal;
+//                    this.$parent.fundraisingGoal = this.fundraisingGoal;
+                    this.stripeDeferred.resolve(true);
+                }
+            }
+        },
+        events: {
+            'VueStripe::create-card-token': function () {
+                return this.createToken();
+            },
+            'VueStripe::reset-form': function () {
+                return this.resetCaching();
+            }
+        },
+        ready: function () {
+            this.$dispatch('payment-complete', true);
+            if (this.devMode) {
+                this.cardNumber = '4242424242424242';
+                this.cardCVC = '123';
+                this.cardYear = '19';
+                return this.cardMonth = '1';
+            }
+        },
+    }
+</script>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Transformers\v1\DonorTransformer;
+use App\Models\v1\Donor;
 use App\Models\v1\Fundraiser;
 use App\Http\Requests\v1\FundraiserRequest;
 use App\Http\Transformers\v1\FundraiserTransformer;
@@ -22,7 +24,7 @@ class FundraisersController extends Controller
     {
         $this->fundraiser = $fundraiser;
 
-        $this->middleware('api.auth', ['except' => ['index','show']]);
+        $this->middleware('api.auth', ['except' => ['index','show', 'donors']]);
     }
 
     /**
@@ -49,6 +51,29 @@ class FundraisersController extends Controller
         $fundraiser = $this->fundraiser->findOrFail($id);
 
         return $this->response->item($fundraiser, new FundraiserTransformer);
+    }
+
+    /**
+     * Get a list of donors.
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function donors($id, Request $request)
+    {
+        $fundraiser = $this->fundraiser->findOrFail($id);
+
+        // Filter donors by the fundraiser's designation
+        $designation = [str_singular($fundraiser->fundable_type) => $fundraiser->fundable_id];
+        $request->merge($designation);
+
+        $donors = Donor::filter($request->all())
+            ->paginate($request->get('per_page'));
+
+        // Pass the designation to the transformer to filter
+        // embedded relationships by designation.
+        return $this->response->paginator($donors, new DonorTransformer($designation));
     }
 
     /**

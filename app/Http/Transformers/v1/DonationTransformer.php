@@ -26,12 +26,12 @@ class DonationTransformer extends TransformerAbstract
     {
         $array = [
             'id'           => $donation->id,
-            'name'         => $donation->name,
-            'company_name' => $donation->company_name,
+            'anonymous'    => (bool) $donation->anonymous,
             'amount'       => (int) $donation->amount,
+            'currency'     => $donation->currency,
+            'payment_type' => $donation->payment_type,
             'description'  => $donation->description,
             'message'      => $donation->message,
-            'anonymous'    => (bool) $donation->anonymous,
             'created_at'   => $donation->created_at->toDateTimeString(),
             'updated_at'   => $donation->updated_at->toDateTimeString(),
             'links'        => [
@@ -53,6 +53,8 @@ class DonationTransformer extends TransformerAbstract
      */
     public function includeDonor(Donation $donation)
     {
-        //
+        $donor = $donation->donor;
+
+        return $this->item($donor, new DonorTransformer);
     }
 }

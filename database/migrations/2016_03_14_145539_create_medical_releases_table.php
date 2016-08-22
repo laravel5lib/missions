@@ -21,7 +21,6 @@ class CreateMedicalReleasesTable extends Migration
             $table->json('conditions')->nullable(); // name, medication
             $table->json('allergies')->nullable(); // name, medication
             $table->boolean('is_risk')->default(false);
-            $table->boolean('has_insurance')->default(false);
             $table->timestamps();
         });
     }

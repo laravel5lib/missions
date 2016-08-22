@@ -10,7 +10,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="nav navbar-nav navbar-right dropdown">
       @if(auth()->check())
-      <li><a class="navbar-btn btn btn-primary hidden-xs" href="#">Donate</a></li>
+      <li><a class="navbar-btn btn btn-primary hidden-xs" href="/donate">Donate</a></li>
       <li id="userMenu" class="dropdown-toggle hidden-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left" src="{{ image(auth()->user()->avatar->source . '?w=100') }}" alt="{{ auth()->user()->name }}"> {{ auth()->user()->name }} <i class="fa fa-angle-down"></i></a></li>
       <ul class="dropdown-menu" aria-labelledby="userMenu">
         <li><a href="{{ '/@' . auth()->user()->url }}">My Profile</a></li>

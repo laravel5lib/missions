@@ -7,7 +7,7 @@
 		</button>
 		<aside :show.sync="showRight" placement="right" header="Missions.Me" :width="275">
 			<ul class="nav navmenu-nav">
-				<li class="donate-nav"><a class="navDonate" href="#"><i class="fa fa-heart"></i> Donate To A Cause</a>
+				<li class="donate-nav"><a class="navDonate" href="/donate"><i class="fa fa-heart"></i> Donate To A Cause</a>
 				</li>
 				<li v-if="auth" id="userMenu" class="dropdown-toggle visible-xs text-center" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false">

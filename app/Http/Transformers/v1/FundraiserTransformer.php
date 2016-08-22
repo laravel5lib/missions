@@ -25,16 +25,19 @@ class FundraiserTransformer extends TransformerAbstract
         $fundraiser->load('banner');
 
         $array = [
-            'id'            => $fundraiser->id,
-            'name'          => $fundraiser->name,
-            'goal_amount'   => $fundraiser->goal_amount,
-            'raised_amount' => (int) $fundraiser->raised() / 100,
-            'banner'        => $fundraiser->banner ? image($fundraiser->banner->source) : null,
-            'description'   => $fundraiser->description,
-            'expires_at'    => $fundraiser->expires_at ? $fundraiser->expires_at->toDateTimeString() : null,
-            'created_at'    => $fundraiser->created_at->toDateTimeString(),
-            'updated_at'    => $fundraiser->updated_at->toDateTimeString(),
-            'links'         => [
+            'id'             => $fundraiser->id,
+            'name'           => $fundraiser->name,
+            'goal_amount'    => $fundraiser->goal_amount,
+            'raised_amount'  => $fundraiser->raised(),
+            'raised_percent' => $fundraiser->fundable->getPercentRaised(),
+            'donors_count'   => $fundraiser->fundable->donors_count,
+            'banner'         => $fundraiser->banner ? image($fundraiser->banner->source) : null,
+            'url'            => $fundraiser->url,
+            'description'    => $fundraiser->description,
+            'expires_at'     => $fundraiser->expires_at ? $fundraiser->expires_at->toDateTimeString() : null,
+            'created_at'     => $fundraiser->created_at->toDateTimeString(),
+            'updated_at'     => $fundraiser->updated_at->toDateTimeString(),
+            'links'          => [
                 [
                     'rel' => 'self',
                     'uri' => '/fundraisers/' . $fundraiser->id,

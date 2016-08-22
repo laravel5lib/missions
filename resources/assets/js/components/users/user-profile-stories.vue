@@ -62,7 +62,7 @@
                     <div class="col-sm-4">
                         <div style="padding: 0;" v-if="isUser()">
                             <div role="group" aria-label="...">
-                                <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a> 
+                                <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a>
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,deleteModal = true"><i class="fa fa-trash"></i> Delete</a>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                         </div>
                         <div class="form-group">
                             <label for="selectedStoryContent">Content
-                                <button class="btn btn-info btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev{{$index}}"
+                                <button class="btn btn-default-hollow btn-sm" type="button" data-toggle="collapse" data-target="#markdownPrev{{$index}}"
                                         aria-expanded="false" aria-controls="markdownPrev" @click="editMarkedContentToggle = !editMarkedContentToggle">
                                     <span v-show="!editMarkedContentToggle">Preview</span>
                                     <span v-show="editMarkedContentToggle">Edit</span>
@@ -90,8 +90,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-xs btn-default" type="button" @click="editMode = null">Cancel</button>
-                            <button class="btn btn-xs btn-success" type="button" @click="updateStory(selectedStory)">Update</button>
+                            <button class="btn btn-sm btn-default" type="button" @click="editMode = null">Cancel</button>
+                            <button class="btn btn-sm btn-primary" type="button" @click="updateStory(selectedStory)">Update</button>
                         </div>
                     </form>
                 </div>

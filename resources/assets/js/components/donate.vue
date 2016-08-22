@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
         <validator name="Donation">
-            <form class="form-horizontal" name="DonationForm" novalidate>
+            <form class="form-horizontal" name="DonationForm" novalidate v-show="donationState === 'form'">
                 <div class="form-group">
                     <label class="control-label col-sm-2">Recipient</label>
                     <div class="col-sm-10">
@@ -28,7 +28,7 @@
                     <legend>Payment Details</legend>
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
-                            <div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
+                            <div class="form-groups" :class="{ 'has-error': checkForError('cardholdername') }">
                                 <label for="cardHolderName">Card Holder's Name</label>
                                 <div class="input-group">
                                     <span class="input-group-addon input"><span class="fa fa-user"></span></span>
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
-                            <div class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
+                            <div class="form-groups" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
                                 <label for="cardNumber">Card Number</label>
                                 <div class="input-group">
                                     <span class="input-group-addon input"><span class="fa fa-lock"></span></span>
@@ -80,10 +80,25 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-12">
+                            <div>
+                                <label>Provide Phone or Email</label>
+                            </div>
+                            <label class="radio-inline">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="email" v-model="validateWith"> Email
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="phone" v-model="validateWith"> Phone
+                            </label>
+                        </div>
                         <div class="col-sm-7">
-                            <div class="form-group" :class="{ 'has-error': checkForError('email') }">
+                            <div v-if="validateWith === 'email'" class="form-group" :class="{ 'has-error': checkForError('email') }">
                                 <label for="infoEmailAddress">Billing Email Address</label>
                                 <input type="text" class="form-control input" v-model="cardEmail" v-validate:email="['email']" id="infoEmailAddress">
+                            </div>
+                            <div v-if="validateWith === 'phone'" class="form-group" :class="{ 'has-error': checkForError('phone') }">
+                                <label for="infoEmailAddress">Billing Phone</label>
+                                <input type="tel" class="form-control input" v-model="cardPhone | phone" v-validate:phone="{ required: true }" id="infoPhone">
                             </div>
                         </div>
                         <div class="col-sm-5">
@@ -102,8 +117,46 @@
                     </div>
                 </fieldset>
 
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div class="form-group">
+                        <div class="">
+                            <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
+                            <a @click="goToState('review')" class="btn btn-primary">Review Donation</a>
+                        </div>
+                    </div>
+                </div>
 
             </form>
+            <div class="panel panel-primary" v-show="donationState === 'review'">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h5>Donation Details</h5>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>Card Holder Name</dt>
+                        <dd>{{cardHolderName}}</dd>
+                        <dt>Card Number</dt>
+                        <dd>{{cardNumber}}</dd>
+                        <dt>Card Expiration</dt>
+                        <dd>{{cardMonth}}/{{cardYear}}</dd>
+                        <dt>Billing Email</dt>
+                        <dd>{{cardEmail}}</dd>
+                        <dt>Billing Zip</dt>
+                        <dd>{{cardZip}}</dd>
+                        <dt>Save Payment Method</dt>
+                        <dd>{{cardSave ? 'Yes' : 'No'}}</dd>
+                    </dl>
+                    <hr>
+                    <p class="list-group-item-text">Recipient: {{recipient}}</p>
+                    <p class="list-group-item-text">Amount to be charged immediately: {{amount|currency}}</p>
+                </div>
+                <div class="panel-footer">
+                    <a @click="goToState('form')" class="btn btn-default">Reset</a>
+                    <a @click="createToken" class="btn btn-primary">Donate</a>
+                </div>
+            </div>
         </validator>
     </div>
 </template>
@@ -120,12 +173,21 @@
             recipient: {
                 type: String,
                 default: 'Missions.Me'
+            },
+            stripeKey: {
+                type: String,
+                default: null
+            },
+            auth: {
+                type:String,
+                default: '0'
             }
         },
         data(){
             return{
                 donor: '',
                 amount: 1,
+                validateWith: 'email',
 
                 //card vars
                 card: null,
@@ -135,11 +197,11 @@
                 cardYear: '',
                 cardCVC: '',
                 cardEmail: null,
+                cardPhone: null,
                 cardZip: null,
                 cardSave: false,
 
                 // stripe vars
-                stripeKey: null,
                 stripeError: null,
                 monthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                 placeholders: {
@@ -161,7 +223,8 @@
                 // needs to be on `this` scope to access in response callback
                 stripeDeferred: {},
                 attemptedCreateToken: false,
-                attemptSubmit: false
+                attemptSubmit: false,
+                donationState: 'form'
             }
         },
         watch: {
@@ -169,7 +232,32 @@
                 this.$dispatch('payment-complete', val)
             }
         },
-
+        computed:{
+            yearList() {
+                var num, today, years, yyyy;
+                today = new Date;
+                yyyy = today.getFullYear();
+                years = (function () {
+                    var i, ref, ref1, results;
+                    results = [];
+                    for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
+                        results.push(num.toString().substr(2, 2));
+                    }
+                    return results;
+                })();
+                return years;
+            },
+            cardParams() {
+                return {
+                    name: this.cardHolderName,
+                    number: this.cardNumber,
+                    expMonth: this.cardMonth,
+                    expYear: this.cardYear,
+                    cvc: this.cardCVC,
+                    address_zip: this.cardZip,
+                };
+            }
+        },
         methods: {
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
@@ -236,7 +324,7 @@
                 if (status === 200) {
                     this.card = resp;
                     // send payment data to parent
-                    this.$parent.paymentInfo = {
+                    this.paymentInfo = {
                         token: resp,
                         save: this.cardSave,
                         email: this.cardEmail
@@ -245,6 +333,23 @@
 //                    this.$parent.fundraisingGoal = this.fundraisingGoal;
                     this.stripeDeferred.resolve(true);
                 }
+            },
+            goToState(state){
+                switch (state) {
+                    case 'form':
+                        this.donationState = state;
+
+                        break;
+                    case 'review':
+                        this.attemptSubmit = true;
+                        if (this.$Donation.valid) {
+                            this.donationState = state;
+                        }
+                        break;
+                }
+            },
+            submit(){
+
             }
         },
         events: {
@@ -261,7 +366,17 @@
                 this.cardNumber = '4242424242424242';
                 this.cardCVC = '123';
                 this.cardYear = '19';
-                return this.cardMonth = '1';
+                this.cardMonth = '1';
+            }
+
+            if (parseInt(this.auth)) {
+                this.$http.get('users/me').then(function (response) {
+                    this.donor = response.data.data.name
+                    this.cardHolderName = response.data.data.name
+                    this.cardEmail = response.data.data.email
+                    this.cardPhone = response.data.data.phone_one
+                    this.cardZip = response.data.data.zip
+                });
             }
         },
     }

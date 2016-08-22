@@ -9,7 +9,7 @@
 		<div>
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="manager in managers" track-by="id">
 				<div class="thumbnail">
-					<img src="http://lorempixel.com/300/300" alt="">
+					<img :src="manager.avatar" alt="{{ manager.name }}">
 					<div class="caption">
 						<h5 v-text="manager.name"></h5>
 
@@ -119,7 +119,7 @@
 			}
 		},
 		ready: function ready() {
-			this.resource.get({id: this.groupId}, {include: 'managers.user'}).then(function (response) {
+			this.resource.get({id: this.groupId}, {include: 'managers'}).then(function (response) {
 				this.group = response.data.data;
 				this.managers = this.group.managers.data;
 				//                $.extend(this.$data, response.data.data);

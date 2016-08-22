@@ -13645,6 +13645,7 @@ body {
 
 /* Parallax Headers */
 .prof-cover-photo {
+  height: 400px;
   overflow: hidden; }
 
 .cover-overlay {
@@ -13659,10 +13660,10 @@ body {
   /* IE6-9 */ }
 
 .prof-cover-photo > img {
-  height: 89%;
+  height: 120%;
   width: 100%;
   position: relative;
-  top: -16%; }
+  top: -20%; }
 
 .p-head-title {
   color: #fff;
@@ -13952,7 +13953,7 @@ li.av-nav > a {
   margin-left: 10px; }
 
 .profile-pic-panel {
-  margin-top: -130px; }
+  margin-top: -215px; }
   @media screen and (max-width: 767px) {
     .profile-pic-panel {
       margin-top: 40px; } }

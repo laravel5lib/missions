@@ -122,7 +122,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
             'adults', 'teens', 'men', 'women', 'medical professionals',
             'media professionals', 'business professionals', 'pastors',
             'families'], 4),
-        'description'      => $faker->realText(1000),
+        'description'      => file_get_contents(resource_path('assets/sample_trip.md')),
         'published_at'     => $faker->optional(0.9)->dateTimeInInterval($campaign->published_at, '+ 1 month'),
         'closed_at'        => $faker->dateTimeInInterval($campaign->started_at, '- 7 days')
     ];
@@ -351,11 +351,12 @@ $factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $fa
 $factory->define(App\Models\v1\Fundraiser::class, function (Faker\Generator $faker)
 {
     return [
-        'name'        => $faker->catchPhrase,
-        'goal_amount' => $faker->numberBetween(1000, 3000),
-        'description' => implode('<br />', $faker->paragraphs(3)),
-        'expires_at'  => $faker->dateTimeThisYear(),
-        'public'      => $faker->boolean(50),
+        'name'             => $faker->catchPhrase,
+        'goal_amount'      => $faker->numberBetween(1000, 3000),
+        'description'      => file_get_contents(resource_path('assets/sample_fundraiser.md')),
+        'url'              => $faker->unique()->slug(3),
+        'expires_at'       => $faker->dateTimeThisYear(),
+        'public'           => $faker->boolean(50),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::lists('id')->toArray())
     ];
 });
@@ -734,7 +735,7 @@ $factory->define(App\Models\v1\Story::class, function(Faker\Generator $faker)
 {
     return [
         'title' => $faker->sentence,
-        'content' => $faker->paragraph(10)
+        'content' => file_get_contents(resource_path('assets/sample_story.md')),
     ];
 });
 

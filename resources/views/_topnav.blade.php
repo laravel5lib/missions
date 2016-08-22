@@ -5,7 +5,7 @@
       <a class="navbar-brand visible-xs" href="#"><img class="db-brand-xs" src="/images/mm-icon-red.png" alt="MM"></a>
     </div>
     <div class="navbar-header hidden-xs">
-      <a class="navbar-brand" href="#"><img src="/images/mm-logo-horiz.png" alt="Missions.Me"></a>
+      <a class="navbar-brand" href="/"><img src="/images/mm-logo-horiz.png" alt="Missions.Me"></a>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="nav navbar-nav navbar-right dropdown">

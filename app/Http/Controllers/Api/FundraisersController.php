@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Models\v1\Fundraiser;
 use App\Http\Requests\v1\FundraiserRequest;
 use App\Http\Transformers\v1\FundraiserTransformer;
+use Dingo\Api\Contract\Http\Request;
 
 class FundraisersController extends Controller
 {
@@ -27,11 +28,12 @@ class FundraisersController extends Controller
     /**
      * Get all fundraisers.
      *
+     * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $fundraisers = $this->fundraiser->paginate(25);
+        $fundraisers = $this->fundraiser->filter($request->all())->paginate(25);
 
         return $this->response->paginator($fundraisers, new FundraiserTransformer);
     }

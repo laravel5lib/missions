@@ -1,7 +1,9 @@
 <template>
     <div>
-        <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
-        <hr>
+        <template v-if="isUser()">
+            <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
+            <hr>
+        </template>
         <div class="panel panel-default" v-if="newMode">
             <div class="panel-heading">
                 <h5>Write New Story</h5>
@@ -14,13 +16,15 @@
                     </div>
                     <div class="form-group">
                         <label for="newStoryContent">Content
-                            <button class="btn btn-info btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev" aria-expanded="false" aria-controls="markdownPrev">
-                                Preview
+                            <button class="btn btn-info btn-xs" type="button" @click="newMarkedContentToggle = !newMarkedContentToggle">
+                                <span v-show="!newMarkedContentToggle">Preview</span>
+                                <span v-show="newMarkedContentToggle">Edit</span>
                             </button>
                         </label>
                         <textarea class="form-control" id="newStoryContent" v-model="selectedStory.content" minlength="1" rows="20"></textarea>
                         <div class="collapse" id="markdownPrev">
-                            <br>
+                        	<textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="selectedStory.content" minlength="1"></textarea>
+                        <div class="collapse" :class="{ 'in': newMarkedContentToggle }">
                             <div class="well" v-html="selectedStory.content | marked"></div>
                         </div>
                     </div>
@@ -42,7 +46,7 @@
             <div id="collapse-{{ story.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
                 <div class="panel-body" v-if="editMode !== story.id">
                     <h5 class="media-heading"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
-                    <div v-html="story.content | marked"></div>
+                    {{{ story.content | marked }}}
                 </div>
                 <div class="panel-body" v-if="editMode === story.id">
                     <form>
@@ -52,13 +56,14 @@
                         </div>
                         <div class="form-group">
                             <label for="selectedStoryContent">Content
-                                <button class="btn btn-info btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev{{$index}}" aria-expanded="false" aria-controls="markdownPrev">
-                                    Preview
+                                <button class="btn btn-info btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev{{$index}}"
+                                        aria-expanded="false" aria-controls="markdownPrev" @click="editMarkedContentToggle = !editMarkedContentToggle">
+                                    <span v-show="!editMarkedContentToggle">Preview</span>
+                                    <span v-show="editMarkedContentToggle">Edit</span>
                                 </button>
                             </label>
-                            <textarea class="form-control" id="selectedStoryContent" v-model="selectedStory.content" minlength="1" rows="20"></textarea>
-                            <div class="collapse" id="markdownPrev{{$index}}">
-                                <br>
+                            <textarea v-show="!editMarkedContentToggle" class="form-control" id="selectedStoryContent" v-model="selectedStory.content" minlength="1" rows="20"></textarea>
+                            <div class="collapse" :class="{ 'in': editMarkedContentToggle }">
                                 <div class="well" v-html="selectedStory.content | marked"></div>
                             </div>
                         </div>
@@ -119,7 +124,9 @@
                     content:''
                 },
                 editMode: false,
+                editMarkedContentToggle: false,
                 newMode: false,
+                newMarkedContentToggle: false,
                 // pagination vars
                 page: 1,
                 per_page: 5,

@@ -1,8 +1,6 @@
 @extends('site.layouts.default')
 
 @section('content')
-
-
     <div id="parallax1" class="prof-cover-photo">
         <img src="{{ image($user->banner->source) }}" alt="{{ $user->name }}">
     </div><!-- end page-header-outer -->
@@ -56,40 +54,7 @@
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="row tab-pane active" id="fundraisers">
-                        <div class="col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12">
-                            <div class="panel panel-default">
-                                <img src="images/india-prof-pic.jpg" alt="India" class="img-responsive">
-                                <div class="panel-body">
-                                    <h4>Christmas In India</h4>
-                                    <h6>Tagline</h6>
-                                    <h3><span class="text-success">$2000</span> <small>Raised</small></h3>
-                                    <p><span>50</span>% <small>Funded</small> / <span>2</span> <small>Donors</small></p>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                            <span class="sr-only">40% Complete (success)</span>
-                                        </div>
-                                    </div>
-                                    <p><a class="btn btn-primary btn-block" href="#">Details</a></p>
-                                </div><!-- end panel-body -->
-                            </div><!-- end panel -->
-                        </div><!-- end col -->
-                        <div class="col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12">
-                            <div class="panel panel-default">
-                                <img src="images/japan-prof-pic.jpg" alt="Japan" class="img-responsive">
-                                <div class="panel-body">
-                                    <h4>Christmas In Japan</h4>
-                                    <h6>Tagline</h6>
-                                    <h3><span class="text-success">$2000</span> <small>Raised</small></h3>
-                                    <p><span>50</span>% <small>Funded</small> / <span>2</span> <small>Donors</small></p>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                            <span class="sr-only">40% Complete (success)</span>
-                                        </div>
-                                    </div>
-                                    <p><a class="btn btn-primary btn-block" href="#">Details</a></p>
-                                </div><!-- end panel-body -->
-                            </div><!-- end panel -->
-                        </div><!-- end col -->
+                        <user-profile-fundraisers id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-fundraisers>
                     </div><!-- end row -->
                     <div role="tabpanel" class="row tab-pane" id="updates">
                         <div class="col-md-12 col-md-offset-0 col-xs-12">

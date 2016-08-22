@@ -253,6 +253,8 @@ Route::get('/register', 'Auth\Authcontroller@create');
 Route::post('/register', 'Auth\AuthController@register');
 Route::get('/logout', 'Auth\AuthController@logout');
 
+Route::get('/fundraisers', 'FundraisersController@index');
+Route::get('/fundraisers/{slug}', 'FundraisersController@show');
 Route::get('/groups/{slug}', 'GroupsController@profile');
 Route::get('/profiles/{slug}', 'UsersController@profile');
 Route::get('/@{slug}', 'UsersController@profile');

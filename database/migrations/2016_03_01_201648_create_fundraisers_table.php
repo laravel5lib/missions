@@ -15,6 +15,7 @@ class CreateFundraisersTable extends Migration
         Schema::create('fundraisers', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name', 60);
+            $table->string('url')->unique();
             $table->integer('goal_amount')->default(0);
             $table->text('description')->nullable();
             $table->boolean('public')->default(false);

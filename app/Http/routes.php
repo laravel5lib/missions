@@ -257,6 +257,10 @@ Route::get('/groups/{slug}', 'GroupsController@profile');
 Route::get('/profiles/{slug}', 'UsersController@profile');
 Route::get('/@{slug}', 'UsersController@profile');
 
+Route::get('/donate', function () {
+    return view('site.donate');
+});
+
 Route::get('/{slug}', function ($slug) {
     return $slug;
 });

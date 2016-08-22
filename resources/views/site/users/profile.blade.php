@@ -1,7 +1,7 @@
 @extends('site.layouts.default')
 
 @section('content')
-    <div id="parallax1" class="prof-cover-photo">
+    <div id="parallax1" class="prof-cover-photo hidden-xs">
         <img src="{{ image($user->banner->source) }}" alt="{{ $user->name }}">
     </div><!-- end page-header-outer -->
     <div class="container">
@@ -46,8 +46,8 @@
             </div><!-- end col -->
             <div class="col-lg-6 col-sm-8 col-sm-offset-0 col-xs-10 col-xs-offset-1">
                 <ul id="profTabs" class="nav nav-tabs" role="tablist">
-                    <li data-toggle="tooltip" title="Fundraisers" role="presentation" class="active"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i> Fundraisers</a></li>
-                    <li data-toggle="tooltip" title="Stories" role="presentation"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-list-ul"></i> Stories</a></li>
+                    <li data-toggle="tooltip" title="Fundraisers" role="presentation" class="active"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i> <span class="hidden-xs">Fundraisers</span></a></li>
+                    <li data-toggle="tooltip" title="Stories" role="presentation"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-list-ul"></i> <span class="hidden-xs">Stories</span></a></li>
                     @can('edit', auth()->user())
                     <li data-toggle="tooltip" title="Dashboard" class="pull-right"><a href="/dashboard"><i class="fa fa-tachometer"></i></a></li>
                     @endcan
@@ -148,8 +148,10 @@
                         </div>
                     </div><!-- end row tab -->
                     <div role="tabpanel" class="row tab-pane" id="stories">
-                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                            <user-profile-stories id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-stories>
+                        <div class="col-md-12 col-md-offset-0 col-xs-12">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <user-profile-stories id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-stories>
+                            </div>
                         </div>
                     </div><!-- end row tab -->
                 </div><!-- end tab-content -->
@@ -212,6 +214,5 @@
         </div><!-- end row -->
 
     </div><!-- end container-->
-
 
 @endsection

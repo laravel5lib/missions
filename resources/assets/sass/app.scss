@@ -105,7 +105,7 @@ body {
 }
 /* Parallax Headers */
 .prof-cover-photo {
-  //height: 55vh; removed temp
+  height: 400px;
   overflow: hidden;
 }
 .cover-overlay {
@@ -118,10 +118,10 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 ); /* IE6-9 */
 }
 .prof-cover-photo > img {
-  height: 89%;
+  height: 120%;
   width: 100%; // added temp
   position: relative;
-  top: -16%;
+  top: -20%;
 }
 .p-head-title {
   color: #fff;
@@ -442,7 +442,7 @@ $img-base-size: 40px;
   margin-left: 10px;
 }
 .profile-pic-panel {
-  margin-top: -130px;
+  margin-top: -215px;
   @media screen and (max-width: 767px) {
     margin-top: 40px;
   }

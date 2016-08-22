@@ -1,34 +1,46 @@
 <template>
     <div>
         <template v-if="isUser()">
-            <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
-            <hr>
+        <div class="row hidden-xs">
+            <div class="col-sm-8">
+                <h5>Share your amazing stories with the world!</h5>
+            </div>
+            <div class="col-sm-4 text-right">
+                <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
+            </div>
+        </div>
+        <div class="row visible-xs">
+            <div class="col-sm-12 text-center">
+                <h5>Share your amazing stories with the world!</h5>
+            </div>
+            <div class="col-sm-12 text-center">
+                <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
+            </div>
+        </div>
+        <hr class="divider inv">
         </template>
         <div class="panel panel-default" v-if="newMode">
-            <div class="panel-heading">
-                <h5>Write New Story</h5>
-            </div>
             <div class="panel-body">
                 <form>
                     <div class="form-group">
-                        <label for="newStoryTitle">Title</label>
+                        <label for="newStoryTitle">Story Title</label>
                         <input type="text" class="form-control" id="newStoryTitle" v-model="selectedStory.title">
                     </div>
                     <div class="form-group">
-                        <label for="newStoryContent">Content
-                            <button class="btn btn-info btn-xs" type="button" @click="newMarkedContentToggle = !newMarkedContentToggle">
+                        <label for="newStoryContent">Content 
+                            <button class="btn btn-default-hollow btn-sm" type="button" @click="newMarkedContentToggle = !newMarkedContentToggle">
                                 <span v-show="!newMarkedContentToggle">Preview</span>
                                 <span v-show="newMarkedContentToggle">Edit</span>
                             </button>
                         </label>
-                        <textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="selectedStory.content" minlength="1" rows="20"></textarea>
+                        <textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="selectedStory.content" minlength="1" rows="10"></textarea>
                         <div class="collapse" :class="{ 'in': newMarkedContentToggle }">
                             <div class="well" v-html="selectedStory.content | marked"></div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-xs btn-default" type="button" @click="newMode = false">Cancel</button>
-                        <button class="btn btn-xs btn-success" type="button" @click="createStory(selectedStory)">Save</button>
+                        <button class="btn btn-sm btn-default" type="button" @click="newMode = false">Cancel</button>
+                        <button class="btn btn-sm btn-primary" type="button" @click="createStory(selectedStory)">Publish</button>
                     </div>
                 </form>
             </div>
@@ -43,7 +55,19 @@
             </div>
             <div id="collapse-{{ story.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
                 <div class="panel-body" v-if="editMode !== story.id">
-                    <h5 class="media-heading"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
+                    </div>
+                    <div class="col-sm-4">
+                        <div style="padding: 0;" v-if="isUser()">
+                            <div role="group" aria-label="...">
+                                <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a> 
+                                <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,deleteModal = true"><i class="fa fa-trash"></i> Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                     {{{ story.content | marked }}}
                 </div>
                 <div class="panel-body" v-if="editMode === story.id">
@@ -70,12 +94,6 @@
                             <button class="btn btn-xs btn-success" type="button" @click="updateStory(selectedStory)">Update</button>
                         </div>
                     </form>
-                </div>
-                <div class="panel-footer" style="padding: 0;" v-if="isUser()">
-                    <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
-                        <a class="btn btn-info" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger" @click="selectedStory = story,deleteModal = true"><i class="fa fa-times"></i></a>
-                    </div>
                 </div>
             </div>
         </div>

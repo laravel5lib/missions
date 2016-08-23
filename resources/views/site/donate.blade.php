@@ -7,7 +7,7 @@
                 <h1 class="text-muted text-center">Donate</h1>
             </div>
             <div class="col-sm-12">
-                <donate stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"></donate>
+                <donate stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}" type="{{ $type or '' }}" type-id="{{ $slug or '' }}"></donate>
             </div>
         </div>
     </div>

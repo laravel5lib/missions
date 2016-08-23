@@ -12,8 +12,8 @@
             <li>Goal Amount: ${{ $fundraiser->goal_amount }}</li>
             <li>Raised Amount: ${{ $fundraiser->fundable->getTotalRaised() }}</li>
             <li>Percent Raised: {{ $fundraiser->fundable->getPercentRaised() }}%</li>
-            <li>Deadline: {{ $fundraiser->expires_at->format('F j, Y h:i a') }}</li>
-            <li>Time Left: {{ $fundraiser->expires_at->diffForHumans() }}</li>
+            <li>Deadline: {{ $fundraiser->ended_at->format('F j, Y h:i a') }}</li>
+            <li>Time Left: {{ $fundraiser->ended_at->diffForHumans() }}</li>
         </ul>
     </div>
     <div>

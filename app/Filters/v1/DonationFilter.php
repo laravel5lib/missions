@@ -22,4 +22,26 @@ class DonationFilter extends ModelFilter
         return $this->where('designation_type', 'reservations')
                     ->where('designation_id', $id);
     }
+
+    /**
+     * Filter by start date.
+     *
+     * @param $started_at
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function starts($started_at)
+    {
+        return $this->whereDate('created_at', '>=', $started_at);
+    }
+
+    /**
+     * Filter by end date.
+     *
+     * @param $ended_at
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function ends($ended_at)
+    {
+        return $this->whereDate('created_at', '<=', $ended_at);
+    }
 }

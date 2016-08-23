@@ -44,6 +44,13 @@ class UserFilter extends ModelFilter
         return $this->where('url', $url);
     }
 
+    public function fundraiser($url)
+    {
+        return $this->whereHas('fundraisers', function($fundraiser) use($url) {
+           $fundraiser->where('url', $url);
+        });
+    }
+
     /**
      * Find by search
      *

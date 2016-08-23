@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Fundraiser extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey;
+    use Filterable, UuidForKey;
 
     /**
      * The table associated with the model.
@@ -24,8 +24,8 @@ class Fundraiser extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'expires_at', 'goal_amount', 'description',
-        'sponsor_id', 'sponsor_type', 'url'
+        'name', 'started_at', 'ended_at', 'goal_amount', 'description',
+        'sponsor_id', 'sponsor_type', 'url', 'type'
     ];
 
     /**
@@ -34,7 +34,7 @@ class Fundraiser extends Model
      * @var array
      */
     protected $dates = [
-        'expires_at', 'created_at', 'updated_at', 'deleted_at'
+        'started_at', 'ended_at', 'created_at', 'updated_at', 'deleted_at'
     ];
 
     /**

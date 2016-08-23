@@ -68,6 +68,13 @@ class FundraisersController extends Controller
         $designation = [str_singular($fundraiser->fundable_type) => $fundraiser->fundable_id];
         $request->merge($designation);
 
+        // Filter by fundraiser's start and end dates.
+        if( ! $request->has('starts'))
+            $request->merge(['starts' => $fundraiser->started_at]);
+
+        if( ! $request->has('ends'))
+            $request->merge(['ends' => $fundraiser->ended_at]);
+
         $donors = Donor::filter($request->all())
             ->paginate($request->get('per_page'));
 

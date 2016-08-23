@@ -4,8 +4,10 @@
  */
 $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
 {
+    $name = $faker->name;
+
     return [
-        'name'             => $faker->name,
+        'name'             => $name,
         'email'            => $faker->unique()->safeEmail,
         'alt_email'        => $faker->optional(0.5)->safeEmail,
         'password'         => str_random(10),
@@ -21,7 +23,7 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'country_code'     => strtolower($faker->countryCode),
         'timezone'         => $faker->timezone,
         'bio'              => $faker->optional(0.5)->realText(120),
-        'url'              => $faker->slug,
+        'url'              => str_slug($name),
         'public'           => $faker->boolean(50),
         'remember_token'   => str_random(10),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
@@ -38,6 +40,7 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
 
     return array_merge($user, [
         'name'     => 'Admin',
+        'url'      => 'admin',
         'email'    => 'admin@admin.com',
         'password' => 'secret',
         'admin'    => true
@@ -352,12 +355,14 @@ $factory->define(App\Models\v1\Fundraiser::class, function (Faker\Generator $fak
 {
     return [
         'name'             => $faker->catchPhrase,
+        'type'             => $faker->randomElement(['general', 'envelope']),
         'goal_amount'      => $faker->numberBetween(1000, 3000),
         'description'      => file_get_contents(resource_path('assets/sample_fundraiser.md')),
         'url'              => $faker->unique()->slug(3),
-        'expires_at'       => $faker->dateTimeThisYear(),
+        'started_at'       => $faker->dateTimeThisYear(),
+        'ended_at'         => $faker->dateTimeThisYear(),
         'public'           => $faker->boolean(50),
-        'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::lists('id')->toArray())
+        'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::pluck('id')->toArray())
     ];
 });
 
@@ -372,9 +377,9 @@ $factory->define(App\Models\v1\Donation::class, function (Faker\Generator $faker
         'description'          => $faker->realText(120),
         'message'              => $faker->realText(120),
         'anonymous'            => $faker->boolean(25),
-        'designation_id'       => $faker->randomElement(App\Models\v1\Reservation::lists('id')->toArray()),
+        'designation_id'       => $faker->randomElement(App\Models\v1\Reservation::pluck('id')->toArray()),
         'designation_type'     => 'reservations',
-        'donor_id'             => $faker->randomElement(App\Models\v1\Donor::lists('id')->toArray()),
+        'donor_id'             => $faker->randomElement(App\Models\v1\Donor::pluck('id')->toArray()),
         'payment_type'         => 'card',
     ];
 });
@@ -395,7 +400,7 @@ $factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker)
         'state'               => $faker->state,
         'zip'                 => $faker->postcode,
         'country_code'        => strtolower($faker->countryCode),
-        'account_holder_id'   => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
+        'account_holder_id'   => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
         'account_holder_type' => 'users'
     ];
 });
@@ -413,8 +418,8 @@ $factory->define(App\Models\v1\Passport::class, function (Faker\Generator $faker
         'expires_at'    => $faker->dateTimeThisDecade,
         'birth_country' => $faker->randomElement(['us', 'ca', 'gb', 'hn']),
         'citizenship'   => $faker->randomElement(['us', 'ca', 'gb', 'hn']),
-        'user_id'       => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
-        'upload_id' => $faker->randomElement(\App\Models\v1\Upload::lists('id')->toArray())
+        'user_id'       => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
+        'upload_id' => $faker->randomElement(\App\Models\v1\Upload::pluck('id')->toArray())
     ];
 });
 
@@ -430,8 +435,8 @@ $factory->define(App\Models\v1\Visa::class, function (Faker\Generator $faker)
         'issued_at'    => $faker->dateTimeThisYear,
         'expires_at'   => $faker->dateTimeThisDecade,
         'country_code' => strtolower($faker->countryCode),
-        'user_id'      => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
-        'upload_id' => $faker->randomElement(\App\Models\v1\Upload::lists('id')->toArray())
+        'user_id'      => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
+        'upload_id' => $faker->randomElement(\App\Models\v1\Upload::pluck('id')->toArray())
     ];
 });
 
@@ -441,7 +446,7 @@ $factory->define(App\Models\v1\Visa::class, function (Faker\Generator $faker)
 $factory->define(App\Models\v1\Contact::class, function (Faker\Generator $faker)
 {
     return [
-        'user_id'        => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
+        'user_id'        => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
         'suffix'         => $faker->randomElement(['mr', 'miss', 'mrs', 'dr', 'ps', 'sir']),
         'first_name'     => $faker->firstName,
         'last_name'      => $faker->optional(0.5)->lastName,
@@ -494,7 +499,7 @@ $factory->define(App\Models\v1\Medical\Release::class, function (Faker\Generator
     ];
 
     return [
-        'user_id'       => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
+        'user_id'       => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
         'name'          => $faker->firstName . ' ' . $faker->lastName,
         'conditions'    => $faker->randomElements($conditions, 1),
         'allergies'     => $faker->randomElements($allergies, 2),
@@ -515,8 +520,8 @@ $factory->define(App\Models\v1\Medical\Release::class, function (Faker\Generator
 $factory->define(App\Models\v1\Interaction\Decision::class, function (Faker\Generator $faker)
 {
     return [
-        'team_member_id' => $faker->randomElement(App\Models\v1\TeamMember::lists('id')->toArray()),
-        'region_id'      => $faker->randomElement(App\Models\v1\Region::lists('id')->toArray()),
+        'team_member_id' => $faker->randomElement(App\Models\v1\TeamMember::pluck('id')->toArray()),
+        'region_id'      => $faker->randomElement(App\Models\v1\Region::pluck('id')->toArray()),
         'name'           => $faker->name,
         'gender'         => $faker->randomElement(['male', 'female']),
         'age_group'      => $faker->randomElement(['child', 'youth', 'adult']),
@@ -535,8 +540,8 @@ $factory->define(App\Models\v1\Interaction\Decision::class, function (Faker\Gene
 $factory->define(App\Models\v1\Interaction\Exam::class, function (Faker\Generator $faker)
 {
     return [
-        'team_member_id' => $faker->randomElement(App\Models\v1\TeamMember::lists('id')->toArray()),
-        'region_id'      => $faker->randomElement(App\Models\v1\Region::lists('id')->toArray()),
+        'team_member_id' => $faker->randomElement(App\Models\v1\TeamMember::pluck('id')->toArray()),
+        'region_id'      => $faker->randomElement(App\Models\v1\Region::pluck('id')->toArray()),
         'name'           => $faker->name,
         'gender'         => $faker->randomElement(['male', 'female']),
         'age_group'      => $faker->randomElement(['child', 'youth', 'adult']),
@@ -558,8 +563,8 @@ $factory->define(App\Models\v1\Interaction\Exam::class, function (Faker\Generato
 $factory->define(App\Models\v1\Interaction\Site::class, function (Faker\Generator $faker)
 {
     return [
-        'team_member_id'  => $faker->randomElement(App\Models\v1\TeamMember::lists('id')->toArray()),
-        'region_id'       => $faker->randomElement(App\Models\v1\Region::lists('id')->toArray()),
+        'team_member_id'  => $faker->randomElement(App\Models\v1\TeamMember::pluck('id')->toArray()),
+        'region_id'       => $faker->randomElement(App\Models\v1\Region::pluck('id')->toArray()),
         'call_sign'       => $faker->randomNumber(1),
         'site_type'       => $faker->randomElement([
             'plaza', 'school', 'park', 'market', 'neighborhood', 'stadium', 'church', 'other'
@@ -580,7 +585,7 @@ $factory->define(App\Models\v1\Region::class, function (Faker\Generator $faker)
         'name'         => $faker->city,
         'country_code' => strtolower($faker->countryCode),
         'call_sign'    => $faker->safeColorName,
-        'campaign_id'  => $faker->randomElement(App\Models\v1\Campaign::lists('id')->toArray()),
+        'campaign_id'  => $faker->randomElement(App\Models\v1\Campaign::pluck('id')->toArray()),
     ];
 });
 
@@ -591,7 +596,7 @@ $factory->define(App\Models\v1\Team::class, function (Faker\Generator $faker)
 {
     return [
         'call_sign'    => $faker->randomNumber(2),
-        'region_id'    => $faker->randomElement(App\Models\v1\Region::lists('id')->toArray()),
+        'region_id'    => $faker->randomElement(App\Models\v1\Region::pluck('id')->toArray()),
         'published_at' => $faker->dateTimeThisYear
     ];
 });
@@ -602,8 +607,8 @@ $factory->define(App\Models\v1\Team::class, function (Faker\Generator $faker)
 $factory->define(App\Models\v1\TeamMember::class, function (Faker\Generator $faker)
 {
     return [
-        'team_id'         => $faker->randomElement(App\Models\v1\Team::lists('id')->toArray()),
-        'assignable_id'   => $faker->randomElement(App\Models\v1\Reservation::lists('id')->toArray()),
+        'team_id'         => $faker->randomElement(App\Models\v1\Team::pluck('id')->toArray()),
+        'assignable_id'   => $faker->randomElement(App\Models\v1\Reservation::pluck('id')->toArray()),
         'assignable_type' => 'reservations',
         'role_id'         => $faker->randomNumber(1),
         'group'           => $faker->randomNumber(1),
@@ -620,7 +625,7 @@ $factory->defineAs(App\Models\v1\TeamMember::class, 'assignment', function (Fake
     $member = $factory->raw(App\Models\v1\TeamMember::class);
 
     return array_merge($member, [
-        'assignable_id'   => $faker->randomElement(App\Models\v1\Assignment::lists('id')->toArray()),
+        'assignable_id'   => $faker->randomElement(App\Models\v1\Assignment::pluck('id')->toArray()),
         'assignable_type' => 'assignments',
         'forms'           => ['decision']
     ]);
@@ -632,7 +637,7 @@ $factory->defineAs(App\Models\v1\TeamMember::class, 'assignment', function (Fake
 $factory->define(App\Models\v1\Transport::class, function (Faker\Generator $faker)
 {
     return [
-        'campaign_id' => $faker->randomElement(App\Models\v1\Campaign::lists('id')->toArray()),
+        'campaign_id' => $faker->randomElement(App\Models\v1\Campaign::pluck('id')->toArray()),
         'type'        => $faker->randomElement(['flight', 'bus', 'other']),
         'vessel_no'   => $faker->numerify('DL####'),
         'name'        => $faker->company,
@@ -650,8 +655,8 @@ $factory->define(App\Models\v1\Transport::class, function (Faker\Generator $fake
 $factory->define(App\Models\v1\Passenger::class, function (Faker\Generator $faker)
 {
     return [
-        'transport_id'   => $faker->randomElement(App\Models\v1\Transport::lists('id')->toArray()),
-        'reservation_id' => $faker->randomElement(App\Models\v1\Reservation::lists('id')->toArray()),
+        'transport_id'   => $faker->randomElement(App\Models\v1\Transport::pluck('id')->toArray()),
+        'reservation_id' => $faker->randomElement(App\Models\v1\Reservation::pluck('id')->toArray()),
         'seat_no'        => $faker->randomNumber(2) . '' . $faker->randomLetter
     ];
 });
@@ -672,7 +677,7 @@ $factory->define(App\Models\v1\Accommodation::class, function (Faker\Generator $
         'country_code' => strtolower($faker->countryCode),
         'email'        => $faker->optional(0.5)->companyEmail,
         'url'          => $faker->optional(0.5)->url,
-        'region_id'    => $faker->randomElement(App\Models\v1\Region::lists('id')->toArray()),
+        'region_id'    => $faker->randomElement(App\Models\v1\Region::pluck('id')->toArray()),
         'short_desc'   => $faker->optional(0.5)->realText(120),
         'check_in_at'  => $faker->dateTimeThisYear,
         'check_out_at' => $faker->dateTimeThisYear
@@ -685,8 +690,8 @@ $factory->define(App\Models\v1\Accommodation::class, function (Faker\Generator $
 $factory->define(App\Models\v1\Occupant::class, function (Faker\Generator $faker)
 {
     return [
-        'accommodation_id' => $faker->randomElement(App\Models\v1\Accommodation::lists('id')->toArray()),
-        'reservation_id'   => $faker->randomElement(App\Models\v1\Reservation::lists('id')->toArray()),
+        'accommodation_id' => $faker->randomElement(App\Models\v1\Accommodation::pluck('id')->toArray()),
+        'reservation_id'   => $faker->randomElement(App\Models\v1\Reservation::pluck('id')->toArray()),
         'room_no'          => $faker->numerify('Rm ##') . ' - ' . $faker->randomElement(['single', 'double']),
         'room_leader'      => $faker->boolean(25)
     ];

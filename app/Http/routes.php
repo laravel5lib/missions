@@ -254,7 +254,6 @@ Route::post('/register', 'Auth\AuthController@register');
 Route::get('/logout', 'Auth\AuthController@logout');
 
 Route::get('/fundraisers', 'FundraisersController@index');
-Route::get('/fundraisers/{slug}', 'FundraisersController@show');
 Route::get('/groups/{slug}', 'GroupsController@profile');
 Route::get('/profiles/{slug}', 'UsersController@profile');
 Route::get('/@{slug}', 'UsersController@profile');
@@ -266,6 +265,8 @@ Route::get('/donate', function () {
 Route::get('/{slug}', function ($slug) {
     return $slug;
 });
+
+Route::get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')->where('sponsor_slug', '.+');
 
 Route::get('/', function () {
     return view('site.index');

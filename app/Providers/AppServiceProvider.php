@@ -71,12 +71,13 @@ class AppServiceProvider extends ServiceProvider
             $name = 'Send ' . $reservation->name . ' to ' . country($reservation->trip->country_code);
             $reservation->fundraisers()->create([
                 'name' => $name,
-                'url' => str_replace(' ', '-', strtolower($name)) . '-' .substr($reservation->id, 0, 4),
+                'url' => str_slug(country($reservation->trip->country_code)).'-'.$reservation->trip->started_at->format('Y').'-'.str_random(4),
                 'description' => file_get_contents(resource_path('assets/sample_fundraiser.md')),
-                'sponsor_type' => User::class,
+                'sponsor_type' => 'users',
                 'sponsor_id' => $reservation->user_id,
                 'goal_amount' => $reservation->getTotalCost(),
-                'expires_at' => $reservation->trip->started_at,
+                'started_at' => $reservation->created_at,
+                'ended_at' => $reservation->trip->started_at,
                 'banner_upload_id' => $reservation->trip->campaign->banner->id
             ]);
 

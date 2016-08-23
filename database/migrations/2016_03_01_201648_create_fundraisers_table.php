@@ -16,6 +16,7 @@ class CreateFundraisersTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name', 60);
             $table->string('url')->unique();
+            $table->string('type')->default('general');
             $table->integer('goal_amount')->default(0);
             $table->text('description')->nullable();
             $table->boolean('public')->default(false);
@@ -24,7 +25,8 @@ class CreateFundraisersTable extends Migration
             $table->uuid('sponsor_id')->index();
             $table->string('sponsor_type');
             $table->uuid('banner_upload_id')->nullable();
-            $table->timestamp('expires_at');
+            $table->timestamp('started_at');
+            $table->timestamp('ended_at');
             $table->timestamps();
             $table->softDeletes();
         });

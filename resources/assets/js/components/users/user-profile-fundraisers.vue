@@ -15,7 +15,7 @@
                             <span class="sr-only">{{ fundraiser.raised_percent }}% Complete (success)</span>
                         </div>
                     </div>
-                    <p><a class="btn btn-primary btn-block" :href="'/fundraisers/' + fundraiser.url">Details</a></p>
+                    <p><a class="btn btn-primary btn-block" :href="pathName + '/' + fundraiser.url">Details</a></p>
                 </div><!-- end panel-body -->
             </div><!-- end panel -->
         </div><!-- end col -->

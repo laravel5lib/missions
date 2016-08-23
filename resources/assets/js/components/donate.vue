@@ -161,6 +161,10 @@
                 type: String,
                 default: null
             },
+            typeId: {
+                type: String,
+                default: null
+            },
             recipient: {
                 type: String,
                 default: 'Missions.Me'

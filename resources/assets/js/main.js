@@ -53,6 +53,7 @@ window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 window._ = require('underscore');
 window.marked = require('marked');
+require('gsap');
 window.ScrollMagic = require('scrollmagic');
 // require('vue-strap/src/index.js');
 // window.VueStrap = require('vue-strap/dist/vue-strap.min');

@@ -257,10 +257,19 @@ Route::get('/fundraisers', 'FundraisersController@index');
 Route::get('/groups/{slug}', 'GroupsController@profile');
 Route::get('/profiles/{slug}', 'UsersController@profile');
 Route::get('/@{slug}', 'UsersController@profile');
+Route::get('@{slug}/donate', function ($slug) {
+    $type = 'users';
+    return view('site.donate', compact('type', 'slug'));
+});
+
+Route::get('{type}/{slug?}/donate', function ($type, $slug) {
+    return view('site.donate', compact('type', 'slug'));
+})->where('type', 'profiles|groups|reservations|trips');
 
 Route::get('/donate', function () {
     return view('site.donate');
 });
+
 
 Route::get('/{slug}', function ($slug) {
     return $slug;

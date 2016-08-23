@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import login from './components/login.vue';
 import topNav from './components/top-nav.vue';
+import actionTrigger from './components/action-trigger.vue';
 import donate from './components/donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
@@ -237,6 +238,7 @@ new Vue({
         reservationsList,
         donationsList,
         topNav,
+        actionTrigger,
         donate,
 
         //dashboard components

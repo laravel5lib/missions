@@ -7,16 +7,16 @@
 				</div>
 			</div>
 			<div class="form-group" :class="{ 'has-error': checkForError('name') }">
-				<label for="name" class="col-sm-2 control-label">Name</label>
-				<div class="col-sm-10">
+				<div class="col-sm-12">
+					<label for="name">Name</label>
 					<input type="text" class="form-control" name="name" id="name" v-model="name"
 						   placeholder="Campaign Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
 						   maxlength="100" minlength="1" required>
 				</div>
 			</div>
 			<div class="form-group" :class="{ 'has-error': checkForError('country') }">
-				<label for="country" class="col-sm-2 control-label">Country</label>
-				<div class="col-sm-10">
+				<div class="col-sm-12">
+					<label for="country">Country</label>
 					<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
 					<select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
 						<option :value="country.code" v-for="country in countries">{{country.name}}</option>
@@ -24,8 +24,8 @@
 				</div>
 			</div>
 			<div class="form-group" :class="{ 'has-error': checkForError('description') }">
-				<label for="description" class="col-sm-2 control-label">Description</label>
-				<div class="col-sm-10">
+				<div class="col-sm-12">
+					<label for="description">Description</label>
 					<textarea name="short_desc" id="description" rows="2" v-model="short_desc" class="form-control"
 							  v-validate:description="{ required: true, minlength:1, maxlength:255 }" maxlength="255"
 							  minlength="1"></textarea>
@@ -33,8 +33,8 @@
 				</div>
 			</div>
 			<div class="form-group" :class="{ 'has-error': (checkForError('start') || checkForError('end')) }">
-				<label for="started_at" class="col-sm-2 control-label">Dates</label>
-				<div class="col-sm-10">
+				<div class="col-sm-12">
+					<label for="started_at">Dates</label>
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="input-group" :class="{ 'has-error': checkForError('start') }">
@@ -57,17 +57,16 @@
 			</div>
 
 			<div class="form-group">
-				<label for="published_at" class="col-sm-2 control-label">Published Date</label>
-				<div class="col-sm-10">
+				<div class="col-sm-12">
+					<label for="published_at">Published Date</label>
 					<input type="datetime-local" class="form-control" v-model="published_at" id="published_at">
 				</div>
-
 			</div>
 
 			<template v-if="published_at">
 				<div class="form-group" :class="{ 'has-error': checkForError('url') || errors.page_url }">
-					<label for="description" class="col-sm-2 control-label">Page Url</label>
-					<div class="col-sm-10">
+					<div class="col-sm-12">
+						<label for="description">Page Url</label>
 						<div class="input-group">
 							<span class="input-group-addon">www.missions.me/campaigns/</span>
 							<input type="text" id="page_url" v-model="page_url" class="form-control"
@@ -78,8 +77,8 @@
 				</div>
 
 				<div class="form-group" :class="{ 'has-error': checkForError('src') }">
-					<label for="description" class="col-sm-2 control-label">Page Source</label>
-					<div class="col-sm-10">
+					<div class="col-sm-12">
+						<label for="description">Page Source</label>
 						<div class="input-group">
 							<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
 							<input type="text" id="page_src" v-model="page_src" class="form-control"
@@ -90,48 +89,50 @@
 				</div>
 			</template>
 
-			<div class="media">
-				<div class="media-left">
-					<a href="#">
-						<img class="media-object" :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100" :alt="selectedAvatar ? selectedAvatar.name : ''">
-					</a>
-				</div>
-				<div class="media-body">
-					<h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
-					<button class="btn btn-block btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
-						Set Avatar
-					</button>
-				</div>
-			</div>
-			<div class="collapse" id="avatarCollapse">
-				<div class="well">
-					<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
-				</div>
-			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="media">
+						<div class="media-left">
+							<a href="#">
+								<img class="media-object" :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100" :alt="selectedAvatar ? selectedAvatar.name : ''">
+							</a>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
+							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
+								Set Avatar
+							</button>
+						</div>
+					</div>
+					<div class="collapse" id="avatarCollapse">
+						<div class="well">
+							<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
+						</div>
+					</div>
+				</div><!-- end col -->
+				<div class="col-sm-6">
+					<div class="media">
+						<div class="media-left">
+							<a href="#">
+								<img class="media-object" :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100" :alt="selectedBanner ? selectedBanner.name : ''">
+							</a>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading">{{selectedBanner ? selectedBanner.name : ''}}</h4>
+							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
+								Set Banner
+							</button>
+						</div>
+					</div>
 
-			<br>
-
-			<div class="media">
-				<div class="media-left">
-					<a href="#">
-						<img class="media-object" :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100" :alt="selectedBanner ? selectedBanner.name : ''">
-					</a>
-				</div>
-				<div class="media-body">
-					<h4 class="media-heading">{{selectedBanner ? selectedBanner.name : ''}}</h4>
-					<button class="btn btn-block btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
-						Set Banner
-					</button>
-				</div>
-			</div>
-
-			<div class="collapse" id="bannerCollapse">
-				<div class="well">
-					<upload-create-update type="banner" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
-				</div>
-			</div>
-
-			<br>
+					<div class="collapse" id="bannerCollapse">
+						<div class="well">
+							<upload-create-update type="banner" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
+						</div>
+					</div>
+				</div><!-- end col -->
+			</div><!-- end row -->
+			<hr class="divider inv lg">
 
 			<div class="form-group">
 				<div class="col-sm-12 text-center">

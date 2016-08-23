@@ -80,28 +80,19 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
-                            <div>
-                                <label>Provide Phone or Email</label>
-                            </div>
-                            <label class="radio-inline">
-                                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="email" v-model="validateWith"> Email
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="phone" v-model="validateWith"> Phone
-                            </label>
-                        </div>
-                        <div class="col-sm-7">
-                            <div v-if="validateWith === 'email'" class="form-group" :class="{ 'has-error': checkForError('email') }">
+                        <div class="col-sm-4">
+                            <div class="form-group" :class="{ 'has-error': checkForError('email') }">
                                 <label for="infoEmailAddress">Billing Email Address</label>
-                                <input type="text" class="form-control input" v-model="cardEmail" v-validate:email="['email']" id="infoEmailAddress">
-                            </div>
-                            <div v-if="validateWith === 'phone'" class="form-group" :class="{ 'has-error': checkForError('phone') }">
-                                <label for="infoEmailAddress">Billing Phone</label>
-                                <input type="tel" class="form-control input" v-model="cardPhone | phone" v-validate:phone="{ required: true }" id="infoPhone">
+                                <input type="text" class="form-control input" v-model="cardEmail" v-validate:email="['oneOrOther']" id="infoEmailAddress">
                             </div>
                         </div>
-                        <div class="col-sm-5">
+                        <div class="col-sm-4">
+                            <div class="form-group" :class="{ 'has-error': checkForError('phone') }">
+                                <label for="infoPhone">Billing Phone</label>
+                                <input type="tel" class="form-control input" v-model="cardPhone | phone" v-validate:phone="['oneOrOther']" id="infoPhone">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
                             <div class="form-group" :class="{ 'has-error': checkForError('zip') }">
                                 <label for="infoZip">Billing ZIP/Postal Code</label>
                                 <input type="text" class="form-control input" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
@@ -225,6 +216,13 @@
                 attemptedCreateToken: false,
                 attemptSubmit: false,
                 donationState: 'form'
+            }
+        },
+        validators: {
+            oneOrOther(val){
+                return val === this.vm.cardEmail
+                        ? (!val.length && this.vm.cardPhone && this.vm.cardPhone.length > 0) || (val.length > 0 && /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val))
+                        : (!val.length && this.vm.cardEmail && this.vm.cardEmail.length > 0) || val.length > 0;
             }
         },
         watch: {

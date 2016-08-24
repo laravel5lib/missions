@@ -19,7 +19,7 @@
     <div>
         {% $fundraiser->description %}
     </div>
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="row">
         <user-profile-fundraisers-donors id="{{ $fundraiser->id }}"></user-profile-fundraisers-donors>
     </div>
 @stop

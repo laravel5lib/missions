@@ -2,32 +2,33 @@
     <div>
         <validator name="Donation">
             <form class="form-horizontal" name="DonationForm" novalidate v-show="donationState === 'form'">
-                <div class="form-group">
-                    <label class="control-label col-sm-2">Recipient</label>
-                    <div class="col-sm-10">
-                        <h5>{{ recipient }}</h5>
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                            <label>Recipient</label>
+                            <h2>{{ recipient }}</h2>
                     </div>
                 </div>
-                <div class="form-group" :class="{ 'has-error': checkForError('donor')}">
-                    <label class="control-label col-sm-2">Name of Donor / Company Name</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" v-model="donor" v-validate:donor="{required: true}">
+                <hr class="divider inv sm">
+                <div class="row">
+                    <div class="col-sm-12" :class="{ 'has-error': checkForError('amount')}">
+                        <label>Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            <input type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                        </div>
                     </div>
                 </div>
-                <div class="" :class="{ 'has-error': checkForError('amount')}">
-                    <label class="control-label col-sm-2">Amount</label>
-                    <div class="input-group col-sm-10">
-                        <span class="input-group-addon">$</span>
-                        <input type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                <hr class="divider inv sm">
+                <div class="row">
+                    <div class="col-sm-12" :class="{ 'has-error': checkForError('donor')}">
+                            <label>Donor Or Company Name</label>
+                            <input type="text" class="form-control" v-model="donor" v-validate:donor="{required: true}">
                     </div>
-                    <br>
                 </div>
-
+                <hr class="divider inv sm">
                 <!-- Credit Card -->
-                <fieldset class="col-sm-10 col-sm-offset-2">
-                    <legend>Payment Details</legend>
                     <div class="row">
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-sm-12">
                             <div class="form-groups" :class="{ 'has-error': checkForError('cardholdername') }">
                                 <label for="cardHolderName">Card Holder's Name</label>
                                 <div class="input-group">
@@ -37,7 +38,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6">
+                    </div>
+                    <hr class="divider inv sm">
+                    <div class="row">
+                        <div class="col-sm-12">
                             <div class="form-groups" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
                                 <label for="cardNumber">Card Number</label>
                                 <div class="input-group">
@@ -50,28 +54,28 @@
                             </div>
                         </div>
                     </div>
+                    <hr class="divider inv sm">
                     <div class="row">
-                        <div class="col-xs-7 col-md-7">
-                            <label for="expiryMonth">EXPIRY DATE</label>
-                            <div class="row">
-                                <div class="col-xs-6 col-lg-6">
-                                    <div class="form-group" :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
-                                        <select v-model="cardMonth" class="form-control input" id="expiryMonth" v-validate:month="{ required: true }">
-                                            <option v-for="month in monthList" value="{{month}}">{{month}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 col-lg-6">
-                                    <div class="form-group" :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
-                                        <select v-model="cardYear" class="form-control input" id="expiryYear" v-validate:year="{ required: true }">
-                                            <option v-for="year in yearList" value="{{year}}">{{year}}</option>
-                                        </select>
-                                    </div>
-                                </div>
+                        <label style="display:block;margin-left: 10px;" for="expiryMonth">EXPIRY DATE</label>
+                        <div class="col-xs-6 col-md-6">
+                            <div :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
+                                <select v-model="cardMonth" class="form-control input" id="expiryMonth" v-validate:month="{ required: true }">
+                                    <option v-for="month in monthList" value="{{month}}">{{month}}</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-xs-5 col-md-5 pull-right">
-                            <div class="form-group" :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
+                        <div class="col-xs-6 col-md-6">
+                            <div :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
+                                <select v-model="cardYear" class="form-control input" id="expiryYear" v-validate:year="{ required: true }">
+                                    <option v-for="year in yearList" value="{{year}}">{{year}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="divider inv sm">
+                    <div class="row">
+                        <div class="col-xs-6 col-md-6">
+                            <div :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
                                 <label for="cvCode">
                                     CV CODE</label>
                                 <input type="text" class="form-control input" id="cvCode" maxlength="3" v-model="cardCVC"
@@ -79,44 +83,49 @@
                             </div>
                         </div>
                     </div>
+                    <hr class="divider inv sm">
                     <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group" :class="{ 'has-error': checkForError('email') }">
-                                <label for="infoEmailAddress">Billing Email Address</label>
+                        <div class="col-sm-12">
+                            <div :class="{ 'has-error': checkForError('email') }">
+                                <label for="infoEmailAddress">Billing Email</label>
                                 <input type="text" class="form-control input" v-model="cardEmail" v-validate:email="['oneOrOther']" id="infoEmailAddress">
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group" :class="{ 'has-error': checkForError('phone') }">
+                    </div>
+                    <hr class="divider inv sm">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div :class="{ 'has-error': checkForError('phone') }">
                                 <label for="infoPhone">Billing Phone</label>
                                 <input type="tel" class="form-control input" v-model="cardPhone | phone" v-validate:phone="['oneOrOther']" id="infoPhone">
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group" :class="{ 'has-error': checkForError('zip') }">
-                                <label for="infoZip">Billing ZIP/Postal Code</label>
+                        <div class="col-sm-6">
+                            <div :class="{ 'has-error': checkForError('zip') }">
+                                <label for="infoZip">ZIP</label>
                                 <input type="text" class="form-control input" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12">
+                        <hr class="divider inv sm">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" v-model="cardSave">Save payment details for next time.
+                                    <input type="checkbox" v-model="cardSave">Save payment details for next time
                                 </label>
                             </div>
                         </div>
                     </div>
-                </fieldset>
-
-                <div class="col-sm-offset-2 col-sm-10">
-                    <div class="form-group">
-                        <div class="">
-                            <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
-                            <a @click="goToState('review')" class="btn btn-primary">Review Donation</a>
+                    <hr class="divider inv sm">
+                    <div class="col-sm-12 text-center">
+                        <div class="form-group">
+                            <div class="">
+                                <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
+                                <a @click="goToState('review')" class="btn btn-primary">Review Donation</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-
             </form>
             <div class="panel panel-primary" v-show="donationState === 'review'">
                 <div class="panel-heading">

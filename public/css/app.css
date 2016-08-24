@@ -13660,10 +13660,10 @@ body {
   /* IE6-9 */ }
 
 .prof-cover-photo > img {
-  height: 120%;
+  height: 100%;
   width: 100%;
   position: relative;
-  top: -20%; }
+  top: -36%; }
 
 .p-head-title {
   color: #fff;

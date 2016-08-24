@@ -18,6 +18,12 @@ class ReservationTableSeeder extends Seeder
             $r->notes()->save(factory(App\Models\v1\Note::class)->make());
 
             $r->tag(['vip', 'missionary']);
+
+            $r->donations()->saveMany([
+                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addDay()]),
+                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addWeek()]),
+                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addMonth()])
+            ]);
         });
 
         // Give the admin user at least one reservation.
@@ -30,6 +36,12 @@ class ReservationTableSeeder extends Seeder
             $r->notes()->save(factory(App\Models\v1\Note::class)->make());
 
             $r->tag(['vip', 'missionary']);
+
+            $r->donations()->saveMany([
+                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addDay()]),
+                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addWeek()]),
+                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addMonth()])
+            ]);
         });
     }
 }

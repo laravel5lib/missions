@@ -33,7 +33,7 @@ class FundraiserTransformer extends TransformerAbstract
             'goal_amount'    => (int) $fundraiser->goal_amount,
             'raised_amount'  => (int) $fundraiser->raised(),
             'raised_percent' => (int) $fundraiser->fundable->getPercentRaised(),
-            'donors_count'   => $fundraiser->fundable->donors_count,
+            'donors_count'   => (int) $fundraiser->countDonors(),
             'banner'         => $fundraiser->banner ? image($fundraiser->banner->source) : null,
             'url'            => $fundraiser->url,
             'description'    => $fundraiser->description,

@@ -69,9 +69,15 @@ class Fundraiser extends Model
         return $this->fundable->donations();
     }
 
-    public function donors()
+    public function countDonors()
     {
-        return $this->fundable->getDonors();
+        $filters = [
+            str_singular($this->fundable_type) => $this->fundable_id,
+            'starts'                           => $this->started_at,
+            'ends'                             => $this->ended_at
+        ];
+
+        return Donor::filter($filters)->count();
     }
 
     /**

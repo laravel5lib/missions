@@ -5,7 +5,6 @@ namespace App\Models\v1;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Fundraiser extends Model
 {
@@ -64,20 +63,26 @@ class Fundraiser extends Model
         return $this->morphTo();
     }
 
+    /**
+     * Get the donations made through the fundraiser.
+     *
+     * @return mixed
+     */
     public function donations()
     {
-        return $this->fundable->donations();
+        // we limit the results by passing in the fundraiser dates.
+        return $this->fundable->fund->donations($this->started_at, $this->ended_at);
     }
 
-    public function countDonors()
+    /**
+     * Get the donors you gave through the fundraiser.
+     *
+     * @return mixed
+     */
+    public function donors()
     {
-        $filters = [
-            str_singular($this->fundable_type) => $this->fundable_id,
-            'starts'                           => $this->started_at,
-            'ends'                             => $this->ended_at
-        ];
-
-        return Donor::filter($filters)->count();
+        // we limit the results by passing in the fundraiser dates.
+        return $this->fundable->fund->donors($this->started_at, $this->ended_at);
     }
 
     /**
@@ -87,11 +92,17 @@ class Fundraiser extends Model
      */
     public function raised()
     {
-        return $this->donations()
-            ->whereBetween('created_at', [
-                $this->started_at, $this->ended_at
-            ])
-            ->sum('amount');
+        return $this->donations()->sum('amount');
+    }
+
+    public function getPercentRaised()
+    {
+        // check for 0 values first,
+        // because division by zero is not possible
+        if( $this->raised() === 0 or $this->goal_amount === 0 )
+            return 0;
+
+        return round(($this->raised()/$this->goal_amount) * 100);
     }
 
     /**

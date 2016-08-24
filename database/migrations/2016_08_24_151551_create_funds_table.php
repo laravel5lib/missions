@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDonorsTable extends Migration
+class CreateFundsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,13 @@ class CreateDonorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('donors', function (Blueprint $table) {
+        Schema::create('funds', function(Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name', 60);
-            $table->string('email', 60)->nullable();
-            $table->string('phone', 60)->nullable();
-            $table->string('company', 60)->nullable();
+            $table->string('name');
+            $table->integer('balance');
+            $table->uuid('fundable_id');
+            $table->uuid('fundable_type');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +29,6 @@ class CreateDonorsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('donors');
+        Schema::drop('funds');
     }
 }

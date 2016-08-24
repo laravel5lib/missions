@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\v1\Transaction;
+use App\Models\v1\Trip;
 use App\Models\v1\User;
 use App\Models\v1\Reservation;
 use Illuminate\Support\Facades\Mail;
@@ -85,7 +87,25 @@ class AppServiceProvider extends ServiceProvider
                'spots' => $reservation->trip->spots - 1
             ]);
 
+            $reservation->fund()->create([
+                'name' => generateFundName($reservation),
+                'balance' => 0
+            ]);
+
             // todo: send confirmation email.
+        });
+
+        Trip::created(function ($trip) {
+            $trip->fund()->create([
+                'name' => generateFundName($trip),
+                'balance' => 0
+            ]);
+        });
+
+        Transaction::created(function ($transaction) {
+            $balance = $transaction->fund->balance + $transaction->amount;
+            $transaction->fund->balance = $balance;
+            $transaction->fund->save();
         });
     }
 

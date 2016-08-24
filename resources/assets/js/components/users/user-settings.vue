@@ -343,24 +343,21 @@
                                     <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    <a href="/admin/users" class="btn btn-default">Cancel</a>
-                                    <a @click="submit()" class="btn btn-primary">Update</a>
-                                </div>
-                            </div>
-
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <div v-if="saved" class="alert alert-success" role="alert"><i class="fa fa-check"></i> Profile Updated</div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
+                </div><!-- end col -->
+                <div class="col-sm-12 text-center">
+                    <hr class="divider inv lg">
+                    <a href="/admin/users" class="btn btn-default">Cancel</a>
+                    <a @click="submit()" class="btn btn-primary">Update</a>
+                    <hr class="divider inv xlg">
+                </div><!-- end col -->
             </div><!-- end row -->
-            </div>
         </form>
     </validator>
 </template>

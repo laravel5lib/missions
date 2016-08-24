@@ -21,10 +21,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
     });
 
     Route::get('groups', function() {
+        if( ! auth()->user()->managing()->count()) abort(403);
         return view('dashboard.groups.index');
     });
 
     Route::get('groups/{id}', function($id) {
+        if( ! auth()->user()->managing()->count()) abort(403);
         return view('dashboard.groups.edit', compact('id'));
     });
 

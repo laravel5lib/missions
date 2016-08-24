@@ -12,7 +12,7 @@ class DonorTableSeeder extends Seeder
     public function run()
     {
         factory(App\Models\v1\Donor::class, 25)->create()->each(function($donor) {
-            $donor->donations()->saveMany(factory(App\Models\v1\Donation::class, 4)->make());
+//            $donor->donations()->saveMany(factory(App\Models\v1\Donation::class, 2)->make());
         });
     }
 }

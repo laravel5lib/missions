@@ -18,6 +18,8 @@ class CreateStoriesTable extends Migration
             $table->text('content');
             $table->uuid('author_id');
             $table->string('author_type');
+            $table->boolean('featured')->default(false);
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
     }

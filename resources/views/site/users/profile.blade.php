@@ -222,7 +222,7 @@
                 </div><!-- end panel -->
             </div><!-- end col -->
         </div><!-- end row -->
-
+    <hr class="divider inv xlg">
     </div><!-- end container-->
 
 @endsection

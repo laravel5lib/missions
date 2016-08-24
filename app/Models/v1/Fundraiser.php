@@ -87,7 +87,11 @@ class Fundraiser extends Model
      */
     public function raised()
     {
-        return $this->donations()->sum('amount');
+        return $this->donations()
+            ->whereBetween('created_at', [
+                $this->started_at, $this->ended_at
+            ])
+            ->sum('amount');
     }
 
     /**

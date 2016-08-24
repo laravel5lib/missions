@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-sm-12 text-center">
                             <label>Recipient</label>
-                            <h2>{{ recipient }}</h2>
+                            <h4>{{ recipient }}</h4>
                     </div>
                 </div>
                 <hr class="divider inv sm">

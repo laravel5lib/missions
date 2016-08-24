@@ -14,7 +14,7 @@ class UserTransformer extends TransformerAbstract
      */
     protected $availableIncludes = [
         'reservations', 'notes', 'managing', 'facilitating',
-        'passports', 'visas', 'uploads', 'accolades'
+        'passports', 'visas', 'uploads', 'accolades', 'fundraisers'
     ];
 
     /**

@@ -3,6 +3,8 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Donor;
+use App\Models\v1\Group;
+use App\Models\v1\User;
 use League\Fractal\TransformerAbstract;
 
 class DonorTransformer extends TransformerAbstract
@@ -13,7 +15,7 @@ class DonorTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'donations'
+        'donations', 'accountHolder'
     ];
 
     /**
@@ -40,6 +42,8 @@ class DonorTransformer extends TransformerAbstract
      */
     public function transform(Donor $donor)
     {
+        $donor->load('accountHolder');
+
         $array = [
             'id'                  => $donor->id,
             'name'                => $donor->name,
@@ -52,6 +56,7 @@ class DonorTransformer extends TransformerAbstract
             'zip'                 => $donor->zip,
             'country_code'        => $donor->country_code,
             'country_name'        => country($donor->country_code),
+            'account_url'         => $donor->account_holder ? $donor->account_holder->url : null,
             'account_holder_id'   => $donor->account_holder_id,
             'account_holder_type' => $donor->account_holder_type,
             'total_donated'       => (int) $donor->totalDonated($this->designation),
@@ -66,6 +71,25 @@ class DonorTransformer extends TransformerAbstract
         ];
 
         return $array;
+    }
+
+    /**
+     * Include Account Holder.
+     *
+     * @param Donor $donor
+     * @return \League\Fractal\Resource\Item|null
+     */
+    public function includeAccountHolder(Donor $donor)
+    {
+        $holder = $donor->account_holder;
+
+        if (is_a($holder, User::class))
+            return $this->item($holder, new UserTransformer);
+
+        if (is_a($holder, Group::class))
+            return $this->item($holder, new GroupTransformer);
+
+        return null;
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Fundraiser;
+use App\Models\v1\Group;
+use App\Models\v1\User;
 use League\Fractal\TransformerAbstract;
 
 class FundraiserTransformer extends TransformerAbstract
@@ -12,7 +14,7 @@ class FundraiserTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected $availableIncludes = [];
+    protected $availableIncludes = ['sponsor'];
 
     /**
      * Turn this item object into a generic array
@@ -27,14 +29,16 @@ class FundraiserTransformer extends TransformerAbstract
         $array = [
             'id'             => $fundraiser->id,
             'name'           => $fundraiser->name,
-            'goal_amount'    => $fundraiser->goal_amount,
-            'raised_amount'  => $fundraiser->raised(),
-            'raised_percent' => $fundraiser->fundable->getPercentRaised(),
-            'donors_count'   => $fundraiser->fundable->donors_count,
+            'type'           => $fundraiser->type,
+            'goal_amount'    => (int) $fundraiser->goal_amount,
+            'raised_amount'  => (int) $fundraiser->raised(),
+            'raised_percent' => (int) $fundraiser->fundable->getPercentRaised(),
+            'donors_count'   => (int) $fundraiser->countDonors(),
             'banner'         => $fundraiser->banner ? image($fundraiser->banner->source) : null,
             'url'            => $fundraiser->url,
             'description'    => $fundraiser->description,
-            'expires_at'     => $fundraiser->expires_at ? $fundraiser->expires_at->toDateTimeString() : null,
+            'started_at'     => $fundraiser->started_at->toDateTimeString(),
+            'ended_at'       => $fundraiser->ended_at->toDateTimeString(),
             'created_at'     => $fundraiser->created_at->toDateTimeString(),
             'updated_at'     => $fundraiser->updated_at->toDateTimeString(),
             'links'          => [
@@ -46,6 +50,19 @@ class FundraiserTransformer extends TransformerAbstract
         ];
 
         return $array;
+    }
+
+    public function includeSponsor(Fundraiser $fundraiser)
+    {
+        $sponsor = $fundraiser->sponsor;
+
+        if(is_a($sponsor, User::class))
+            return $this->item($sponsor, new UserTransformer);
+
+        if(is_a($sponsor, Group::class))
+            return $this->item($sponsor, new GroupTransformer);
+
+        return null;
     }
 
 }

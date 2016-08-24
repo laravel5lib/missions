@@ -4,6 +4,8 @@
     <li><a href="/dashboard/settings"><i class="fa fa-cog"></i></a></li>
     <li><a href="/dashboard/reservations"><i class="fa fa-ticket"></i></a></li>
     <li><a href="/dashboard/records"><i class="fa fa-archive"></i></a></li>
+    @if(auth()->user()->managing()->count())
     <li><a href="/dashboard/groups"><i class="fa fa-users"></i></a></li>
+    @endif
   </ul>
 </div>

@@ -20,16 +20,20 @@ class FundraisersController extends Controller
     }
 
     /**
-     * Get the fundraiser page by it's url slug.
+     * Get the fundraiser page by it's url and it's sponsor's url.
      *
-     * @param $slug
+     * @param $sponsor_slug
+     * @param $fundraiser_slug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show($slug)
+    public function show($sponsor_slug, $fundraiser_slug)
     {
-        $fundraiser = $this->api->get('/fundraisers?url='.$slug);
+        $fundraiser = $this->api->get('fundraisers', [
+            'sponsor' => $sponsor_slug,
+            'url' => $fundraiser_slug
+        ])->first();
 
-        $fundraiser = $fundraiser->shift();
+        if (! $fundraiser) abort(404);
 
         return view('site.fundraisers.show', compact('fundraiser'));
     }

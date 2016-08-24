@@ -267,6 +267,9 @@ class Reservation extends Model
      */
     public function getPercentRaised()
     {
+        if( $this->getTotalRaised() === 0 or $this->getTotalCost() === 0 )
+            return 0;
+
         return round(($this->getTotalRaised()/$this->getTotalCost()) * 100);
     }
 

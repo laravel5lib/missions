@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import login from './components/login.vue';
 import topNav from './components/top-nav.vue';
+import actionTrigger from './components/action-trigger.vue';
 import donate from './components/donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
@@ -56,6 +57,7 @@ window._ = require('underscore');
 window.marked = require('marked');
 require('gsap');
 window.ScrollMagic = require('scrollmagic');
+require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
 // require('vue-strap/src/index.js');
 // window.VueStrap = require('vue-strap/dist/vue-strap.min');
 import VueStrap from 'vue-strap/dist/vue-strap.min';
@@ -238,6 +240,7 @@ new Vue({
         reservationsList,
         donationsList,
         topNav,
+        actionTrigger,
         donate,
 
         //dashboard components

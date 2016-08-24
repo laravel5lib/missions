@@ -25,6 +25,7 @@ import userSettings from './components/users/user-settings.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
 import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
 import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
+import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
 import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
 
 // admin components
@@ -256,6 +257,7 @@ new Vue({
         userProfileStories,
         userProfileFundraisers,
         userProfileFundraisersDonors,
+        userProfileFundraisersProgress,
 
         // admin components
         adminCampaignCreate,

@@ -16,6 +16,11 @@
             <li>Time Left: {{ $fundraiser->ended_at->diffForHumans() }}</li>
         </ul>
     </div>
+    <div class="row">
+        <user-profile-fundraisers-progress :now="{{ $fundraiser->fundable->getPercentRaised() }}"></user-profile-fundraisers-progress>
+    </div>
+
+
     <div>
         {% $fundraiser->description %}
     </div>

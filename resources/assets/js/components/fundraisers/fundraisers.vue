@@ -3,11 +3,11 @@
         <!-- Indicators -->
         <ol class="carousel-indicators">
             <!--<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>-->
-            <li data-target="#carousel-example-generic" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="fundraiser in fundraisers"></li>
+            <li data-target="#carousel-example-generic" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="fundraiser in featuredFundraisers"></li>
         </ol>
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
-            <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="fundraiser in fundraisers">
+            <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="fundraiser in featuredFundraisers">
                 <img :src="fundraiser.banner">
                 <div class="carousel-caption">
                     <h6 class="text-uppercase"><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h6>

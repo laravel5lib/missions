@@ -30,15 +30,23 @@
     </div><!-- end carousel -->
     <hr class="divider inv xlg">
     <div class="container">
-        <div class="col-xs-6">
+        <div class="col-xs-12">
             <h4>Current Fundraisers</h4>
         </div>
+        <div class="col-xs-6">
+            <div class="form-group form-group-sm">
+                <input type="text" class="form-control" placeholder="Search for..." v-model="search" debounce="250">
+                <!--<span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Go!</button>
+                </span>-->
+            </div><!-- /input-group -->
+        </div>
         <div class="col-xs-6 text-right">
-            <a v-if="fundraisers.length > 6 && fundraisersLimit == 6" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
+            <!--<a v-if="fundraisers.length > 6 && fundraisersLimit == 6" @click="seeAll" class="btn btn-primary btn-sm">See All</a>-->
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-4 col-md-offset-0 col-sm-3 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit">
+    <div class="container">
+        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit">
             <div class="panel panel-default">
                 <img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">
                 <div class="panel-body">
@@ -85,6 +93,7 @@
                 fundraisersLimit: 6,
 
                 // pagination vars
+                search: '',
                 page: 1,
                 per_page: 6,
                 pagination: {},
@@ -95,11 +104,15 @@
             'page': function (val, oldVal) {
                 this.searchFundraisers();
             },
+            'search': function (val, oldVal) {
+                this.searchFundraisers();
+            },
         },
         methods:{
             searchFundraisers(){
                 this.$http.get('fundraisers', {
                     // include: '',
+                    search: this.search,
                     per_page: this.per_page
                 }).then(function (response) {
                     this.fundraisers = response.data.data;

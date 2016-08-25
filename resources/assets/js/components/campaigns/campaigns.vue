@@ -304,7 +304,6 @@
                 this.campaigns = campaigns.data.data
             }).then(function () {
 
-
             });
         }
     }

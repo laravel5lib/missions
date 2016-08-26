@@ -3,9 +3,9 @@
 @section('content')
 <div class="vid-bg">
   <video muted autoplay loop poster="video/video-placeholder.png" class="vid-bg-video">
-    <source src="video/1n1d-bg-loop.webm" type="video/webm">
-    <source src="video/1n1d-bg-loop.mp4" type="video/mp4">
-    <source src="video/1n1d-bg-loop.ogv" type="video/ogg">
+    <source src="video/mm-homepage-bg.webm" type="video/webm">
+    <source src="video/mm-homepage-bg.mp4" type="video/mp4">
+    <source src="video/mm-homepage-bg.ogv" type="video/ogg">
   </video>
 </div>
 <div class="container">

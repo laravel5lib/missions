@@ -20,6 +20,8 @@ class CreateTransactionsTable extends Migration
             $table->boolean('anonymous')->default(false);
             $table->uuid('fund_id')->index();
             $table->uuid('donor_id')->nullable()->index();
+            $table->string('description');
+            $table->string('comment')->nullable();
             $table->timestamps();
         });
     }

@@ -57,6 +57,9 @@ $api->version('v1', [
     $api->resource('accommodations', 'AccommodationsController');
     $api->resource('accommodations.occupants', 'OccupantsController');
     $api->resource('stories', 'StoriesController');
+    $api->get('funds', 'FundsController@index');
+    $api->get('funds/{id}', 'FundsController@show');
+    $api->resource('transactions', 'TransactionsController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

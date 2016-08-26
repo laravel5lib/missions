@@ -64,6 +64,18 @@ class Fundraiser extends Model
     }
 
     /**
+     * Get all the fundraiser's stories.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function stories()
+    {
+        return $this->morphToMany(Story::class, 'publication', 'published_stories')
+            ->withPivot('published_at')
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
      * Get the donations made through the fundraiser.
      *
      * @return mixed

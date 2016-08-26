@@ -16,6 +16,7 @@ class CreatePublishedStoriesTable extends Migration
             $table->uuid('story_id');
             $table->uuid('publication_id');
             $table->string('publication_type');
+            $table->timestamp('published_at');
         });
     }
 

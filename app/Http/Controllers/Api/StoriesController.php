@@ -63,6 +63,8 @@ class StoriesController extends Controller
     {
         $story = $this->story->create($request->all());
 
+        $story->publish($request->get('publications'));
+
         return $this->response->item($story, new StoryTransformer);
     }
 

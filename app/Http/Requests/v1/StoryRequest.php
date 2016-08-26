@@ -27,7 +27,10 @@ class StoryRequest extends FormRequest
             'title' => 'required|string',
             'content' => 'required|string',
             'author_id' => 'required|string',
-            'author_type' => 'required|string|in:users,groups,fundraisers'
+            'author_type' => 'required|string|in:users,groups,fundraisers',
+            'publications' => 'required|array',
+            'publications.*.type' => 'required|in:users,groups,fundraisers',
+            'publications.*.id' => 'required|string'
         ];
     }
 }

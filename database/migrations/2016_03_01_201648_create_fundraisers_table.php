@@ -20,8 +20,7 @@ class CreateFundraisersTable extends Migration
             $table->integer('goal_amount')->default(0);
             $table->text('description')->nullable();
             $table->boolean('public')->default(false);
-            $table->uuid('fundable_id')->index();
-            $table->string('fundable_type');
+            $table->uuid('fund_id')->index();
             $table->uuid('sponsor_id')->index();
             $table->string('sponsor_type');
             $table->uuid('banner_upload_id')->nullable();

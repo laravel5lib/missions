@@ -54,13 +54,13 @@ class Fundraiser extends Model
     }
 
     /**
-     * Get all of the owning fundable models.
+     * Get the fund the fundraiser belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function fundable()
+    public function fund()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Fund::class);
     }
 
     /**
@@ -83,7 +83,7 @@ class Fundraiser extends Model
     public function donations()
     {
         // we limit the results by passing in the fundraiser dates.
-        return $this->fundable->fund->donations($this->started_at, $this->ended_at);
+        return $this->fund->donations($this->started_at, $this->ended_at);
     }
 
     /**
@@ -94,7 +94,7 @@ class Fundraiser extends Model
     public function donors()
     {
         // we limit the results by passing in the fundraiser dates.
-        return $this->fundable->fund->donors($this->started_at, $this->ended_at);
+        return $this->fund->donors($this->started_at, $this->ended_at);
     }
 
     /**

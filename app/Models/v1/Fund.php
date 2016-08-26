@@ -14,6 +14,16 @@ class Fund extends Model
     protected $fillable = ['name', 'balance', 'fundable_id', 'fundable_type'];
 
     /**
+     * Get all the fund's fundraisers.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function fundraisers()
+    {
+        return $this->hasMany(Fundraiser::class);
+    }
+
+    /**
      * Get all the models that can have a fund.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

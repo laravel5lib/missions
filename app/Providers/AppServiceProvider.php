@@ -71,7 +71,13 @@ class AppServiceProvider extends ServiceProvider
             $reservation->addTodos($reservation->trip->todos);
 
             $name = 'Send ' . $reservation->name . ' to ' . country($reservation->trip->country_code);
-            $reservation->fundraisers()->create([
+
+            $reservation->fund()->create([
+                'name' => generateFundName($reservation),
+                'balance' => 0
+            ]);
+
+            $reservation->fund->fundraisers()->create([
                 'name' => $name,
                 'url' => str_slug(country($reservation->trip->country_code)).'-'.$reservation->trip->started_at->format('Y').'-'.str_random(4),
                 'description' => file_get_contents(resource_path('assets/sample_fundraiser.md')),
@@ -85,11 +91,6 @@ class AppServiceProvider extends ServiceProvider
 
             $reservation->trip()->update([
                'spots' => $reservation->trip->spots - 1
-            ]);
-
-            $reservation->fund()->create([
-                'name' => generateFundName($reservation),
-                'balance' => 0
             ]);
 
             // todo: send confirmation email.

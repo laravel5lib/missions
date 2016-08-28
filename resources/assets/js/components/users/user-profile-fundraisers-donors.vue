@@ -4,7 +4,7 @@
             <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
                 <h5>
                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ donor.id }}" aria-expanded="true" aria-controls="collapseOne">
-                        {{ donor.name }} ({{donor.total_donated|currency}})
+                        {{ donor.name }} <span class="small text-success">{{donor.total_donated|currency}}</span>
                     </a>
                 </h5>
             </div>

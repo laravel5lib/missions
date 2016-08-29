@@ -14,7 +14,7 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     protected $fillable = [
-        'amount', 'type', 'payment', 'anonymous', 'fund_id', 'donor_id', 'description'
+        'amount', 'type', 'payment', 'fund_id', 'donor_id', 'description'
     ];
 
     public function setPaymentAttribute($value)
@@ -43,7 +43,7 @@ class Transaction extends Model
      */
     public function donor()
     {
-        return $this->hasOne(Donor::class);
+        return $this->belongsTo(Donor::class);
     }
 
     /**

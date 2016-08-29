@@ -3,8 +3,6 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Donor;
-use App\Models\v1\Group;
-use App\Models\v1\User;
 use League\Fractal\TransformerAbstract;
 
 class DonorTransformer extends TransformerAbstract

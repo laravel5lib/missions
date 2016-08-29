@@ -10,6 +10,9 @@ use App\Http\Controllers\Controller;
 class FundsController extends Controller
 {
 
+    // Funds can be held for future trips
+    // Deposits can never be transferred!
+
     /**
      * @var Fund
      */
@@ -34,6 +37,8 @@ class FundsController extends Controller
     public function show($id)
     {
         $fund = $this->fund->findOrFail($id);
+
+        return $fund->donors;
 
         return $this->response->item($fund, new FundTransformer);
     }

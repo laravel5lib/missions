@@ -11,7 +11,7 @@ class FundsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\v1\Transaction::class, 100)->create();
+        factory(App\Models\v1\Transaction::class, 'donation', 100)->create();
         factory(App\Models\v1\Transaction::class, 'transfer_to', 25)->create();
         factory(App\Models\v1\Transaction::class, 'transfer_from', 25)->create();
     }

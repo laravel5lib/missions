@@ -17,7 +17,6 @@ class CreateTransactionsTable extends Migration
             $table->integer('amount');
             $table->string('type');
             $table->json('payment')->nullable();
-            $table->boolean('anonymous')->default(false);
             $table->uuid('fund_id')->index();
             $table->uuid('donor_id')->nullable()->index();
             $table->string('description');

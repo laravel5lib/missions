@@ -21,7 +21,6 @@ class TransactionTransformer extends TransformerAbstract {
             'id'          => $transaction->id,
             'amount'      => (int) $transaction->amount,
             'type'        => $transaction->type,
-            'anonymous'   => (bool) $transaction->anonymous,
             'description' => $transaction->description,
             'payment'     => $transaction->payment,
             'created_at'  => $transaction->created_at->toDateTimeString(),

@@ -53,7 +53,7 @@ class Fund extends Model
     public function donations($started_at = null, $ended_at = null)
     {
         // we only want transactions that are donations.
-        $donations = $this->transactions()->type('donation');
+        $donations = $this->transactions()->type('donation')->latest();
 
         // we can limit the results by passing in a start date.
         if( ! is_null($started_at))
@@ -76,15 +76,18 @@ class Fund extends Model
     public function donors($started_at = null, $ended_at = null)
     {
         // we grab the transaction's created_at timestamp so we can run queries against it.
-        $donors = $this->belongsToMany(Donor::class, 'transactions')->withPivot('created_at');
+        $donors = $this->belongsToMany(Donor::class, 'transactions')
+            ->withPivot('created_at')
+            ->groupBy('name')
+            ->orderBy('name');
 
         // we can limit the results by passing in a start date.
         if( ! is_null($started_at))
-            $donors->wherePivot('created_at', '>=', $started_at);
+            $donors = $donors->wherePivot('created_at', '>=', $started_at);
 
         // we can limit the results by passing in an end date.
         if( ! is_null($ended_at))
-            $donors->wherePivot('created_at', '<=', $ended_at);
+            $donors = $donors->wherePivot('created_at', '<=', $ended_at);
 
         return $donors;
     }

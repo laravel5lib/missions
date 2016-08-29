@@ -13,7 +13,7 @@
 
 @section('content')
 
-    <div id="parallax1" class="prof-cover-photo">
+    <div id="parallax1" class="prof-cover-photo hidden-xs">
         <img src="{{ image($group->banner->source) }}" alt="{{ $group->name }}">
     </div><!-- end page-header-outer -->
     <div class="container">

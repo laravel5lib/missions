@@ -1,8 +1,19 @@
 @extends('site.layouts.default')
+@section('scripts')
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.14.2/TweenMax.min.js"></script>
+<script>
+    // init controller
+    var controller = new ScrollMagic.Controller({globalSceneOptions: {triggerHook: "onEnter", duration: "200%"}});
+    // build scenes
+    new ScrollMagic.Scene({triggerElement: "#parallax1"})
+        .setTween("#parallax1 > img", {y: "80%", ease: Linear.easeNone})
+        .addTo(controller);
+</script>
+@endsection
 
 @section('content')
 
-    <div id="parallax1" class="prof-cover-photo">
+    <div id="parallax1" class="prof-cover-photo hidden-xs">
         <img src="{{ image($group->banner->source) }}" alt="{{ $group->name }}">
     </div><!-- end page-header-outer -->
     <div class="container">

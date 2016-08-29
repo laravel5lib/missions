@@ -1,30 +1,48 @@
 @extends('site.layouts.default')
+@section('scripts')
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.14.2/TweenMax.min.js"></script>
+<script>
+    // init controller
+    var controller = new ScrollMagic.Controller({globalSceneOptions: {triggerHook: "onEnter", duration: "200%"}});
+    // build scenes
+    new ScrollMagic.Scene({triggerElement: "#parallax1"})
+        .setTween("#parallax1 > img", {y: "80%", ease: Linear.easeNone})
+        .addTo(controller);
+</script>
+@endsection
 
 @section('content')
-    <div>
-        @if($fundraiser->banner)
-            <img src="{{ image($fundraiser->banner->source) }}" class="img-responsive">
-        @endif
-    </div>
-    <h1>{{ $fundraiser->name }}</h1>
-    <div>
-        <ul>
-            <li>Goal Amount: ${{ $fundraiser->goal_amount }}</li>
-            <li>Raised Amount: ${{ $fundraiser->fundable->getTotalRaised() }}</li>
-            <li>Percent Raised: {{ $fundraiser->fundable->getPercentRaised() }}%</li>
-            <li>Deadline: {{ $fundraiser->ended_at->format('F j, Y h:i a') }}</li>
-            <li>Time Left: {{ $fundraiser->ended_at->diffForHumans() }}</li>
-        </ul>
-    </div>
-    <div class="row">
-        <user-profile-fundraisers-progress :now="{{ $fundraiser->fundable->getPercentRaised() }}"></user-profile-fundraisers-progress>
-    </div>
-
-
-    <div>
-        {% $fundraiser->description %}
-    </div>
-    <div class="row">
-        <user-profile-fundraisers-donors id="{{ $fundraiser->id }}"></user-profile-fundraisers-donors>
-    </div>
+    <div class="container">
+        <div class="row">
+            <hr class="divider inv xlg">
+            <h3 class="text-center">{{ $fundraiser->name }}</h3>
+            <h5 class="text-center">{{ $fundraiser->sponsor->name }}</h5>
+            <hr class="divider inv lg">
+            <div class="col-sm-8">
+                @if($fundraiser->banner)
+                    <img src="{{ image($fundraiser->banner->source) }}" class="img-responsive">
+                @endif
+                <div>
+                    {% $fundraiser->description %}
+                </div>
+            </div><!-- end col -->
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2 class="text-center text-success">${{ $fundraiser->fundable->getTotalRaised() }} <span style="font-size: 12px;">Raised</span></h2>
+                        <h5 class="text-center"><small class="text-uppercase">Goal Amount</small> ${{ $fundraiser->goal_amount }}</h5>
+                        <h6 class="text-center text-uppercase small text-muted"></h6>
+                        <h2 class="text-center">{{ $fundraiser->fundable->getPercentRaised() }}% <span style="font-size: 12px;">Percent Raised</span></h2>
+                        <hr class="divider lg">
+                        <h6 class="text-center small text-muted"><i class="fa fa-calendar"></i> Deadline is {{ $fundraiser->ended_at->format('F j, Y h:i a') }}</h6>
+                        <h6 class="text-center small text-muted">Ends {{ $fundraiser->ended_at->diffForHumans() }}</h6>
+                    </div>
+                </div>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <user-profile-fundraisers-donors id="{{ $fundraiser->id }}"></user-profile-fundraisers-donors>
+                </div><!-- end panel-group -->
+            </div>
+        </div>
+        <hr class="divider inv xlg">
+    </div><!-- end container -->
 @stop

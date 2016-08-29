@@ -1,22 +1,24 @@
 <template>
-    <div class="col-sm-6">
-        <div class="panel panel-default">
-            <table class="table">
-                <tbody>
-                <template v-for="donor in donors">
-                    <tr style="cursor:pointer;" type="button" data-toggle="collapse" data-target="#collapseDonor{{donor.id}}" aria-expanded="false" aria-controls="collapseDonor{{donor.id}}">
-                        <td>{{ donor.name }}</td>
-                        <td>{{ donor.total_donated|currency }}</td>
-                    </tr>
-                    <tr class="collapse" id="collapseDonor{{donor.id}}">
-                        <td colspan="2">
-                            <template v-for="donation in donor.donations.data">
-                                <h5 class="list-group-item-heading"><a :href="'@' + donor.account_url">{{ donor.name }}</a> <span>donated {{ donation.amount|currency }} on {{ donation.created_at|moment 'll'}}</span></h5>
-                                <p class="list-group-item-text" v-html="donation.message | marked"></p>
-                            </template>
-                        </td>
-                    </tr>
-                </template>
+    <div class="">
+        <div class="panel panel-default" v-for="donor in donors">
+            <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
+                <h5>
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ donor.id }}" aria-expanded="true" aria-controls="collapseOne">
+                        {{ donor.name }} <span class="small text-success">{{donor.total_donated|currency}}</span>
+                    </a>
+                </h5>
+            </div>
+            <div id="collapse-{{ donor.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ donor.id }}">
+                <ul class="list-group">
+                    <li class="list-group-item" v-for="donation in donor.donations.data">
+                        <h5 class="list-group-item-heading"><a :href="'@' + donor.account_holder_id">{{ donor.name }}</a> <small>donated {{ donation.amount|currency }} on {{ donation.created_at|moment 'll'}}</small></h5>
+                        <p class="list-group-item-text" v-html="donation.message | marked"></p>
+                    </li>
+                </ul>
+                <!--<div class="panel-body"></div>-->
+            </div>
+            <!--<div class="panel-footer"></div>-->
+        </div>
 
                 </tbody>
             </table>

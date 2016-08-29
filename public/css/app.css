@@ -7786,6 +7786,47 @@ fieldset[disabled] a.btn {
     color: #d8262e;
     background-color: #fff !important; }
 
+.btn-white-hollow {
+  color: #fff;
+  background-color: transparent;
+  border-color: #fff; }
+  .btn-white-hollow:focus, .btn-white-hollow.focus {
+    color: #fff;
+    background-color: transparent;
+    border-color: #bfbfbf; }
+  .btn-white-hollow:hover {
+    color: #fff;
+    background-color: transparent;
+    border-color: #e0e0e0; }
+  .btn-white-hollow:active, .btn-white-hollow.active,
+  .open > .btn-white-hollow.dropdown-toggle {
+    color: #fff;
+    background-color: transparent;
+    border-color: #e0e0e0; }
+    .btn-white-hollow:active:hover, .btn-white-hollow:active:focus, .btn-white-hollow:active.focus, .btn-white-hollow.active:hover, .btn-white-hollow.active:focus, .btn-white-hollow.active.focus,
+    .open > .btn-white-hollow.dropdown-toggle:hover,
+    .open > .btn-white-hollow.dropdown-toggle:focus,
+    .open > .btn-white-hollow.dropdown-toggle.focus {
+      color: #fff;
+      background-color: transparent;
+      border-color: #bfbfbf; }
+  .btn-white-hollow:active, .btn-white-hollow.active,
+  .open > .btn-white-hollow.dropdown-toggle {
+    background-image: none; }
+  .btn-white-hollow.disabled:hover, .btn-white-hollow.disabled:focus, .btn-white-hollow.disabled.focus, .btn-white-hollow[disabled]:hover, .btn-white-hollow[disabled]:focus, .btn-white-hollow[disabled].focus,
+  fieldset[disabled] .btn-white-hollow:hover,
+  fieldset[disabled] .btn-white-hollow:focus,
+  fieldset[disabled] .btn-white-hollow.focus {
+    background-color: transparent;
+    border-color: #fff; }
+  .btn-white-hollow .badge {
+    color: transparent;
+    background-color: #fff; }
+  .btn-white-hollow:hover, .btn-white-hollow:focus, .btn-white-hollow.focus {
+    color: #e6e6e6 !important;
+    border-color: #e6e6e6 !important;
+    text-decoration: none; }
+
 .btn-default-hollow {
   color: #242424;
   background-color: transparent;

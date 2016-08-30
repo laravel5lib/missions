@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\v1\Reservation;
+use App\Models\v1\Trip;
 use Carbon\Carbon;
 
 function country($code)
@@ -25,4 +27,34 @@ function carbon($date)
 function image($source)
 {
     return url('api/'.$source);
+}
+
+function generateFundName($data)
+{
+    if ($data instanceof Reservation) {
+        return generateFundNameFromReservation($data);
+    }
+
+    if ($data instanceof Trip) {
+        return generateFundNameFromTrip($data);
+    }
+}
+
+function generateFundNameFromReservation($reservation)
+{
+    $name = $reservation->name . '\'s';
+    $country = country($reservation->trip->country_code);
+    $year = $reservation->trip->started_at->format('Y');
+
+    return $name . ' Trip to ' . $country . ' ' . $year;
+}
+
+function generateFundNameFromTrip($trip)
+{
+    $name = $trip->group->name . '\'s';
+    $type = $trip->type;
+    $country = country($trip->country_code);
+    $year = $trip->started_at->format('Y');
+
+    return $name . ' ' . ucwords($type) . ' Trip to ' . $country . ' ' . $year;
 }

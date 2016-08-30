@@ -30,7 +30,7 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function transform(Reservation $reservation)
     {
-        $reservation->load('tagged', 'avatar');
+        $reservation->load('tagged', 'avatar', 'fund');
 
         return [
             'id'              => $reservation->id,
@@ -40,11 +40,12 @@ class ReservationTransformer extends TransformerAbstract
             'status'          => $reservation->status,
             'shirt_size'      => $reservation->shirt_size,
             'shirt_size_name' => implode(array_values(ShirtSize::get($reservation->shirt_size)), ''),
+            'age'             => $reservation->age,
             'birthday'        => $reservation->birthday->toDateString(),
             'companion_limit' => (int) $reservation->companions_limit,
             'avatar'          => $reservation->avatar ? image($reservation->avatar->source) : null,
             'total_cost'      => (int) $reservation->getTotalCost(),
-            'total_raised'    => (int) $reservation->getTotalRaised(),
+            'total_raised'    => (int) $reservation->fund->balance,
             'total_owed'      => (int) $reservation->getTotalOwed(),
             'created_at'      => $reservation->created_at->toDateTimeString(),
             'updated_at'      => $reservation->updated_at->toDateTimeString(),

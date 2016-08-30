@@ -166,7 +166,9 @@ class Group extends Model
      */
     public function stories()
     {
-        return $this->morphMany(Story::class, 'author');
+        return $this->morphToMany(Story::class, 'publication', 'published_stories')
+            ->withPivot('published_at')
+            ->orderBy('created_at', 'desc');
     }
 
     /**

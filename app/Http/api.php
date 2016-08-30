@@ -43,6 +43,7 @@ $api->version('v1', [
     $api->resource('assignments', 'AssignmentsController');
     $api->resource('fundraisers', 'FundraisersController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
+    $api->get('fundraisers/{id}/donations', 'FundraisersController@donations');
     $api->resource('donors', 'DonorsController');
     $api->resource('donations', 'DonationsController');
     $api->post('donations/authorize', 'DonationsController@authorizeCard');
@@ -57,6 +58,9 @@ $api->version('v1', [
     $api->resource('accommodations', 'AccommodationsController');
     $api->resource('accommodations.occupants', 'OccupantsController');
     $api->resource('stories', 'StoriesController');
+    $api->get('funds', 'FundsController@index');
+    $api->get('funds/{id}', 'FundsController@show');
+    $api->resource('transactions', 'TransactionsController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

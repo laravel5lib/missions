@@ -17,8 +17,8 @@
     <div class="col-md-6 col-md-offset-3 text-center">
       <h1 class="text-white">Where you can change the world.</h1>
       <hr class="divider inv">
-      <a href="#" class="btn btn-white-hollow btn-lg">Go On A Trip</a>
-      <a href="#" class="btn btn-white-hollow btn-lg">Fund A Cause</a>
+      <a href="/campaigns" class="btn btn-white-hollow btn-lg">Go On A Trip</a>
+      <a href="/fundraisers" class="btn btn-white-hollow btn-lg">Support A Cause</a>
       <hr class="divider inv xlg">
       <hr class="divider inv xlg">
       <hr class="divider inv xlg">

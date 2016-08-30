@@ -28,6 +28,7 @@ import userProfileFundraisers from './components/users/user-profile-fundraisers.
 import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
 import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
 import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
+import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -260,6 +261,7 @@ new Vue({
         userProfileFundraisers,
         userProfileFundraisersDonors,
         userProfileFundraisersProgress,
+        dashboardGroupTrips,
 
         // admin components
         adminCampaignCreate,

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStoriesTable extends Migration
+class CreateStoriesTables extends Migration
 {
     /**
      * Run the migrations.
@@ -21,6 +21,20 @@ class CreateStoriesTable extends Migration
             $table->boolean('featured')->default(false);
             $table->timestamps();
         });
+
+        Schema::create('published_stories', function(Blueprint $table) {
+            $table->uuid('story_id');
+            $table->uuid('publication_id');
+            $table->string('publication_type');
+            $table->timestamp('published_at');
+        });
+
+        Schema::table('published_stories', function($table)
+        {
+            $table->foreign('story_id')
+                ->references('id')->on('stories')
+                ->onDelete('cascade');
+        });
     }
 
     /**
@@ -30,6 +44,9 @@ class CreateStoriesTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::drop('stories');
+        Schema::drop('published_stories');
     }
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUploadsTable extends Migration
+class CreateUploadsTables extends Migration
 {
     /**
      * Run the migrations.
@@ -20,6 +20,19 @@ class CreateUploadsTable extends Migration
             $table->json('meta')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('uploadables', function (Blueprint $table) {
+            $table->uuid('upload_id')->index();
+            $table->uuid('uploadable_id')->index();
+            $table->uuid('uploadable_type')->index();
+        });
+
+        Schema::table('uploadables', function($table)
+        {
+            $table->foreign('upload_id')
+                ->references('id')->on('uploads')
+                ->onDelete('cascade');
+        });
     }
 
     /**
@@ -29,6 +42,9 @@ class CreateUploadsTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::drop('uploads');
+        Schema::drop('uploadables');
     }
 }

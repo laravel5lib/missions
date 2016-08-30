@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTripsTable extends Migration
+class CreateTripsTables extends Migration
 {
     /**
      * Run the migrations.
@@ -15,8 +15,7 @@ class CreateTripsTable extends Migration
         Schema::create('trips', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('group_id')->index();
-            $table->uuid('campaign_id')->index()->nullable();
-            $table->uuid('rep_id')->index();
+            $table->uuid('campaign_id')->index();
             $table->integer('spots')->default(0);
             $table->integer('companion_limit')->default(0);
             $table->string('country_code');
@@ -32,6 +31,36 @@ class CreateTripsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::table('trips', function($table)
+        {
+            $table->foreign('group_id')
+                ->references('id')->on('groups')
+                ->onDelete('cascade');
+
+            $table->foreign('campaign_id')
+                ->references('id')->on('campaigns')
+                ->onDelete('cascade');
+        });
+
+        Schema::create('facilitators', function (Blueprint $table) {
+            $table->uuid('trip_id')->index();
+            $table->uuid('user_id')->index();
+            $table->json('permissions')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::table('facilitators', function($table)
+        {
+            $table->foreign('trip_id')
+                ->references('id')->on('trips')
+                ->onDelete('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade');
+        });
+
     }
 
     /**
@@ -41,6 +70,9 @@ class CreateTripsTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+
+        Schema::drop('facilitators');
         Schema::drop('trips');
     }
 }

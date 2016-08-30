@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGroupsTable extends Migration
+class CreateGroupsTables extends Migration
 {
     /**
      * Run the migrations.
@@ -37,6 +37,24 @@ class CreateGroupsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::create('managers', function (Blueprint $table) {
+            $table->uuid('group_id')->index();
+            $table->uuid('user_id')->index();
+            $table->json('permissions')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::table('managers', function($table)
+        {
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade');
+
+            $table->foreign('group_id')
+                ->references('id')->on('groups')
+                ->onDelete('cascade');
+        });
     }
 
     /**
@@ -46,6 +64,9 @@ class CreateGroupsTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+
+        Schema::drop('managers');
         Schema::drop('groups');
     }
 }

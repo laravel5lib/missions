@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccommodationsTable extends Migration
+class CreateAccommodationsTables extends Migration
 {
     /**
      * Run the migrations.
@@ -31,6 +31,33 @@ class CreateAccommodationsTable extends Migration
             $table->timestamp('check_out_at')->nullable();
             $table->timestamps();
         });
+
+        Schema::table('accommodations', function($table)
+        {
+            $table->foreign('region_id')
+                ->references('id')->on('regions')
+                ->onDelete('cascade');
+        });
+
+        Schema::create('occupants', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('room_no');
+            $table->uuid('accommodation_id')->index();
+            $table->uuid('reservation_id')->index();
+            $table->boolean('room_leader')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::table('occupants', function($table)
+        {
+            $table->foreign('accommodation_id')
+                ->references('id')->on('accommodations')
+                ->onDelete('cascade');
+
+            $table->foreign('reservation_id')
+                ->references('id')->on('reservations')
+                ->onDelete('cascade');
+        });
     }
 
     /**
@@ -40,6 +67,9 @@ class CreateAccommodationsTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::drop('accommodations');
+        Schema::drop('occupants');
     }
 }

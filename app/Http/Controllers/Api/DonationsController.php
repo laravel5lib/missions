@@ -5,19 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\CardRequest;
 use App\Http\Requests\v1\DonationRequest;
-use App\Models\v1\Donation;
-use App\Http\Transformers\v1\DonationTransformer;
+use App\Models\v1\Transaction;
+use App\Http\Transformers\v1\TransactionTransformer;
 use App\Models\v1\Donor;
 use App\Services\PaymentGateway;
 use Dingo\Api\Contract\Http\Request;
 
 class DonationsController extends Controller
 {
-
-    /**
-     * @var Donation
-     */
-    private $donation;
 
     /**
      * @var PaymentGateway
@@ -28,17 +23,21 @@ class DonationsController extends Controller
      * @var Donor
      */
     private $donor;
+    /**
+     * @var Transaction
+     */
+    private $transaction;
 
     /**
      * DonationsController constructor.
      *
-     * @param Donation $donation
+     * @param Transaction $transaction
      * @param PaymentGateway $payment
      * @param Donor $donor
      */
-    public function __construct(Donation $donation, PaymentGateway $payment, Donor $donor)
+    public function __construct(Transaction $transaction, PaymentGateway $payment, Donor $donor)
     {
-        $this->donation = $donation;
+        $this->transaction = $transaction;
         $this->payment = $payment;
         $this->donor = $donor;
 
@@ -53,11 +52,11 @@ class DonationsController extends Controller
      */
     public function index(Request $request)
     {
-        $donations = $this->donation
+        $donations = $this->transaction
             ->filter($request->all())
             ->paginate($request->get('per_page', 10));
 
-        return $this->response->paginator($donations, new DonationTransformer);
+        return $this->response->paginator($donations, new TransactionTransformer);
     }
 
     /**
@@ -68,9 +67,9 @@ class DonationsController extends Controller
      */
     public function show($id)
     {
-        $donation = $this->donation->findOrFail($id);
+        $donation = $this->transaction->findOrFail($id);
 
-        return $this->response->item($donation, new DonationTransformer);
+        return $this->response->item($donation, new TransactionTransformer);
     }
 
     /**

@@ -29,10 +29,11 @@
             <div class="col-sm-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h2 class="text-center text-success">${{ $fundraiser->fundable->getTotalRaised() }} <span style="font-size: 12px;">Raised</span></h2>
+                        <h2 class="text-center text-success">${{ $fundraiser->raised() }} <span style="font-size: 12px;">Raised</span></h2>
                         <h5 class="text-center"><small class="text-uppercase">Goal Amount</small> ${{ $fundraiser->goal_amount }}</h5>
                         <h6 class="text-center text-uppercase small text-muted"></h6>
-                        <h2 class="text-center">{{ $fundraiser->fundable->getPercentRaised() }}% <span style="font-size: 12px;">Percent Raised</span></h2>
+                        <user-profile-fundraisers-progress :now="{{ $fundraiser->getPercentRaised() }}"></user-profile-fundraisers-progress>
+                        <h2 class="text-center">{{ $fundraiser->getPercentRaised() }}% <span style="font-size: 12px;">Percent Raised</span></h2>
                         <hr class="divider lg">
                         <h6 class="text-center small text-muted"><i class="fa fa-calendar"></i> Deadline is {{ $fundraiser->ended_at->format('F j, Y h:i a') }}</h6>
                         <h6 class="text-center small text-muted">Ends {{ $fundraiser->ended_at->diffForHumans() }}</h6>

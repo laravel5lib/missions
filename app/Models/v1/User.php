@@ -485,13 +485,15 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get all stories the user has authored.
+     * Get all the user's stories.
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function stories()
     {
-        return $this->morphMany(Story::class, 'author')->orderBy('created_at', 'desc');
+        return $this->morphToMany(Story::class, 'publication', 'published_stories')
+            ->withPivot('published_at')
+            ->orderBy('created_at', 'desc');
     }
 
     /**

@@ -13658,33 +13658,6 @@ a {
 .text-strike {
   text-decoration: line-through; }
 
-p.large-type {
-  max-width: 420px; }
-
-.dash-trailing:after {
-  background: #f6323e;
-  display: block;
-  content: '';
-  height: 4px;
-  margin: 15px 0;
-  width: 40px; }
-
-.dash-trailing-dark:after {
-  background: #89060e;
-  display: block;
-  content: '';
-  height: 4px;
-  margin: 15px 0;
-  width: 40px; }
-
-.dash-trailing-light:after {
-  background: #fff;
-  display: block;
-  content: '';
-  height: 4px;
-  margin: 15px 0;
-  width: 40px; }
-
 .footer {
   background-color: #f5f5f5;
   border-top: 1px solid #e7e7e7;

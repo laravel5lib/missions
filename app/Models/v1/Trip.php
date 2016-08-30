@@ -192,6 +192,11 @@ class Trip extends Model
         return $this->hasMany(Reservation::class);
     }
 
+    public function fund()
+    {
+        return $this->morphOne(Fund::class, 'fundable');
+    }
+
     /**
      * Set the trip's todos list.
      *

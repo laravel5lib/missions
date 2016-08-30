@@ -343,29 +343,35 @@
                                     <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    <div v-if="saved" class="alert alert-success" role="alert"><i class="fa fa-check"></i> Profile Updated</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div><!-- end col -->
                 <div class="col-sm-12 text-center">
                     <hr class="divider inv lg">
-                    <a href="/admin/users" class="btn btn-default">Cancel</a>
+                    <a href="/dashboard" class="btn btn-default">Cancel</a>
                     <a @click="submit()" class="btn btn-primary">Update</a>
                     <hr class="divider inv xlg">
                 </div><!-- end col -->
             </div><!-- end row -->
+            <alert :show.sync="saved" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+                <span class="icon-ok-circled alert-icon-float-left"></span>
+                <strong>Well Done!</strong>
+                <p>Profile updated successfully</p>
+            </alert>
         </form>
     </validator>
 </template>
+<style>
+    .alert.top, .alert.top-right {
+        top: 80px;
+    }
+</style>
 <script>
+    import VueStrap from 'vue-strap/dist/vue-strap.min';
     import vSelect from "vue-select";
     export default{
         name: 'user-settings',
-        components: {vSelect},
+        components: {vSelect, 'alert': VueStrap.alert},
         data(){
             return {
                 name: '',

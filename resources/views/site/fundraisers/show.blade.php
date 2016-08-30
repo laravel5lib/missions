@@ -25,6 +25,9 @@
                 <div>
                     {% $fundraiser->description %}
                 </div>
+                <div>
+                    <fundraisers-stories id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ auth()->check() ? auth()->id() : '' }}"></fundraisers-stories>
+                </div>
             </div><!-- end col -->
             <div class="col-sm-4">
                 <div class="panel panel-default">

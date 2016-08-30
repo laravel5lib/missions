@@ -57,7 +57,8 @@
         },
         methods:{
             searchStories(){
-                this.$http.get('stories?group=' + this.id, {
+                this.$http.get('stories', {
+                    group: this.id,
                     page: this.page,
                     per_page: this.per_page,
                 }).then(function(response) {

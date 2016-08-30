@@ -5,6 +5,7 @@ import actionTrigger from './components/action-trigger.vue';
 import donate from './components/donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import fundraisers from './components/fundraisers/fundraisers.vue';
+import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
 import groupProfileTrips from './components/groups/group-profile-trips.vue';
@@ -243,6 +244,7 @@ new Vue({
         tripRegWizard,
         reservationsList,
         donationsList,
+        fundraisersStories,
         topNav,
         actionTrigger,
         donate,

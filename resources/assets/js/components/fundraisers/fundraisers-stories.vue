@@ -1,6 +1,6 @@
 <template>
     <div>
-        <template v-if="authId">
+        <template v-if="isUser()">
         <div class="row hidden-xs">
             <div class="col-sm-8">
                 <h5>Share your amazing stories with the world!</h5>
@@ -37,6 +37,11 @@
                         <div class="collapse" :class="{ 'in': newMarkedContentToggle }">
                             <div class="well" v-html="selectedStory.content | marked"></div>
                         </div>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" v-model="includeProfile"> Post to profile
+                        </label>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-sm btn-default" type="button" @click="newMode = false">Cancel</button>
@@ -128,25 +133,32 @@
     import VueStrap from 'vue-strap/dist/vue-strap.min'
     var marked = require('marked');
     export default{
-        name: 'user-profile-stories',
+        name: 'fundraisers-stories',
         components: {'modal': VueStrap.modal},
-        props:['id', 'authId'],
+        props:['id', 'sponsorId', 'authId'],
         data(){
             return{
                 stories: [],
                 deleteModal: false,
                 selectedStory: {
                     title: '',
-                    content:''
+                    content:'',
+                    publications: [
+                        { type: 'fundraisers', id: this.id },
+                    ]
                 },
                 editMode: false,
                 editMarkedContentToggle: false,
+
                 newMode: false,
                 newMarkedContentToggle: false,
+                includeProfile: false,
+
                 // pagination vars
                 page: 1,
                 per_page: 5,
                 pagination: {},
+
 
             }
         },
@@ -160,7 +172,7 @@
         },
         methods:{
             isUser(){
-                return this.id === this.authId;
+                return this.sponsorId === this.authId;
             },
             removeStory(story){
                 if(story) {
@@ -177,6 +189,12 @@
                 if(story) {
                     story.author_id = this.authId;
                     story.author_type = 'users';
+                    story.publications = [{ type: 'fundraisers', id: this.id }];
+
+                    if (this.includeProfile) {
+                        story.publications.push({ type: 'users', id: this.authId });
+                    }
+
                     this.$http.put('stories/' + story.id, story).then(function (response) {
                         this.editMode = false;
                         this.resetData();
@@ -190,6 +208,10 @@
                     story.author_id = this.authId;
                     story.author_type = 'users';
 
+                    if (this.includeProfile) {
+                        story.publications.push({ type: 'users', id: this.authId });
+                    }
+
                     this.$http.post('stories', story).then(function (response) {
                         this.newMode = false;
                         this.resetData();
@@ -200,7 +222,8 @@
                 }
             },
             searchStories(){
-                this.$http.get('stories?user=' + this.id, {
+                this.$http.get('stories', {
+                    fundraiser: this.id,
                     page: this.page,
                     per_page: this.per_page,
                 }).then(function(response) {
@@ -211,8 +234,12 @@
             resetData(){
                 this.selectedStory =  {
                     title: '',
-                    content:''
+                    content:'',
+                    publications: [
+                        { type: 'fundraisers', id: this.id },
+                    ]
                 };
+                this.includeProfile = false;
             }
         },
         ready(){

@@ -29,7 +29,7 @@
 <script>
     export default{
         name: 'group-profile-fundraisers',
-        props: ['id'],
+        props: ['id', 'groupUrl'],
         data(){
             return{
                 fundraisers: [],
@@ -38,8 +38,8 @@
             }
         },
         ready(){
-            this.$http.get('groups/' + this.id, {
-                include: 'fundraisers',
+            this.$http.get('fundraisers/' + this.id, {
+                sponsor: this.groupUrl,
             }).then(function (response) {
                 this.fundraisers = response.data.data.fundraisers.data;
             })

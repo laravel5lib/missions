@@ -732,6 +732,8 @@ $factory->define(App\Models\v1\Story::class, function(Faker\Generator $faker)
     return [
         'title' => $faker->sentence,
         'content' => file_get_contents(resource_path('assets/sample_story.md')),
+        'author_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
+        'author_type' => 'users'
     ];
 });
 

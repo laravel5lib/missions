@@ -771,6 +771,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\
         'fund_id' => $fund['id'],
         'donor_id' => $donor['id'],
         'description' => 'Donation to ' . $fund['name'],
+        'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2),
         'type' => 'donation',
         'amount' => $faker->randomNumber(2),
         'payment' => [

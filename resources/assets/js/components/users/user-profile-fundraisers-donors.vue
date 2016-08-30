@@ -25,6 +25,7 @@
                 <h5>
                     <a :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a><br>
                     <small class="small text-success">donated {{ donation.amount|currency }} on {{ donation.created_at|moment 'll'}}</small>
+                    <br /><small>{{ donation.comment }}</small>
                 </h5>
             </div>
         </div>

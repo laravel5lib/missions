@@ -42,7 +42,7 @@ class CreateFinancialsTables extends Migration
             $table->uuid('fund_id')->index();
             $table->uuid('donor_id')->nullable()->index();
             $table->string('description');
-            $table->string('comment')->nullable();
+            $table->string('comment', 120)->nullable();
             $table->timestamps();
         });
 

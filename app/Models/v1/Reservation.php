@@ -162,7 +162,7 @@ class Reservation extends Model
      */
     public function fundraisers()
     {
-        return $this->morphMany(Fundraiser::class, 'fundable');
+        return $this->fund->fundraisers();
     }
 
     public function fund()

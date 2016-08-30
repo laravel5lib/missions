@@ -228,7 +228,7 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function includeFundraisers(Reservation $reservation)
     {
-        $fundraisers = $reservation->fundraisers;
+        $fundraisers = $reservation->fundraisers()->get();
 
         return $this->collection($fundraisers, new FundraiserTransformer);
     }

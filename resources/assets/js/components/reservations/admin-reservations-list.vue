@@ -264,11 +264,7 @@
                 <td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
                 <td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
                 <td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
-                <!--<td>
-                    <a href="/admin{{reservation.links[0].uri}}"><i class="fa fa-eye"></i></a>
-                    <a href="/admin{{campaignId + reservation.links[0].uri}}/edit"><i class="fa fa-pencil"></i></a>
-                </td>-->
-
+                <td><a href="/admin{{reservation.links[0].uri}}"><i class="fa fa-pencil"></i></a></td>
             </tr>
             </tbody>
             <tfoot>

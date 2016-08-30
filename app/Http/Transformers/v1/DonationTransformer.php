@@ -32,6 +32,7 @@ class DonationTransformer extends TransformerAbstract
             'amount'      => (int) $donation->amount,
             'type'        => $donation->type,
             'description' => $donation->description,
+            'comment'     => $donation->comment,
             'payment'     => $donation->payment,
             'created_at'  => $donation->created_at->toDateTimeString(),
             'updated_at'  => $donation->updated_at->toDateTimeString(),

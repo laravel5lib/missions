@@ -14,20 +14,23 @@ class StoryFilter extends ModelFilter
 
     public function group($id)
     {
-        return $this->where('author_id', $id)
-            ->where('author_type', 'groups');
+        return $this->whereHas('groups', function($group) use($id) {
+            $group->where('id', $id);
+        });
     }
 
     public function user($id)
     {
-        return $this->where('author_id', $id)
-            ->where('author_type', 'users');
+        return $this->whereHas('users', function($user) use($id) {
+            $user->where('id', $id);
+        });
     }
 
     public function fundraiser($id)
     {
-        return $this->where('author_id', $id)
-            ->where('author_type', 'fundraisers');
+        return $this->whereHas('fundraisers', function($fundraiser) use($id) {
+            $fundraiser->where('id', $id);
+        });
     }
 
     /**

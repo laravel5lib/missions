@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\v1\Transaction;
+use App\Models\v1\Trip;
 use App\Models\v1\User;
 use App\Models\v1\Reservation;
 use Illuminate\Support\Facades\Mail;
@@ -69,7 +71,13 @@ class AppServiceProvider extends ServiceProvider
             $reservation->addTodos($reservation->trip->todos);
 
             $name = 'Send ' . $reservation->name . ' to ' . country($reservation->trip->country_code);
-            $reservation->fundraisers()->create([
+
+            $reservation->fund()->create([
+                'name' => generateFundName($reservation),
+                'balance' => 0
+            ]);
+
+            $reservation->fund->fundraisers()->create([
                 'name' => $name,
                 'url' => str_slug(country($reservation->trip->country_code)).'-'.$reservation->trip->started_at->format('Y').'-'.str_random(4),
                 'description' => file_get_contents(resource_path('assets/sample_fundraiser.md')),
@@ -86,6 +94,19 @@ class AppServiceProvider extends ServiceProvider
             ]);
 
             // todo: send confirmation email.
+        });
+
+        Trip::created(function ($trip) {
+            $trip->fund()->create([
+                'name' => generateFundName($trip),
+                'balance' => 0
+            ]);
+        });
+
+        Transaction::created(function ($transaction) {
+            $balance = $transaction->fund->balance + $transaction->amount;
+            $transaction->fund->balance = $balance;
+            $transaction->fund->save();
         });
     }
 

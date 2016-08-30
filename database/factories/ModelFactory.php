@@ -112,7 +112,6 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
     return [
         'group_id'         => $faker->randomElement(App\Models\v1\Group::lists('id')->toArray()),
         'campaign_id'      => $campaign->id,
-        'rep_id'           => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
         'spots'            => random_int(0, 500),
         'companion_limit'  => random_int(0, 3),
         'country_code'     => $campaign->country_code,
@@ -393,15 +392,7 @@ $factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker)
         'name'                => $faker->name,
         'email'               => $faker->safeEmail,
         'phone'               => $faker->phoneNumber,
-        'company'             => $faker->optional(0.7)->company,
-        'address_one'         => $faker->streetAddress,
-        'address_two'         => $faker->buildingNumber,
-        'city'                => $faker->city,
-        'state'               => $faker->state,
-        'zip'                 => $faker->postcode,
-        'country_code'        => strtolower($faker->countryCode),
-        'account_holder_id'   => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
-        'account_holder_type' => 'users'
+        'company'             => $faker->optional(0.7)->company
     ];
 });
 
@@ -741,6 +732,8 @@ $factory->define(App\Models\v1\Story::class, function(Faker\Generator $faker)
     return [
         'title' => $faker->sentence,
         'content' => file_get_contents(resource_path('assets/sample_story.md')),
+        'author_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
+        'author_type' => 'users'
     ];
 });
 
@@ -756,5 +749,86 @@ $factory->define(App\Models\v1\Accolade::class, function(Faker\Generator $faker)
         'display_name' => 'Countries Visited',
         'name'         => 'countries_visited',
         'items'        => $faker->randomElements($countries, 4)
+    ];
+});
+
+$factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->sentence(4),
+        'balance' => $faker->randomNumber,
+        'fundable_id' => $faker->randomElement(App\Models\v1\Reservation::pluck('id')->toArray()),
+        'fundable_type' => 'reservations'
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\Generator $faker)
+{
+    $fund = $faker->randomElement(App\Models\v1\Fund::get()->toArray());
+    $donor = $faker->randomElement(App\Models\v1\Donor::get()->toArray());
+
+    return [
+        'fund_id' => $fund['id'],
+        'donor_id' => $donor['id'],
+        'description' => 'Donation to ' . $fund['name'],
+        'type' => 'donation',
+        'amount' => $faker->randomNumber(2),
+        'payment' => [
+            'type' => 'card',
+            'last_four', '1234',
+            'cardholder' => 'John Doe',
+            'zip' => '56789',
+            'brand' => 'visa'
+        ],
+        'created_at' => $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray()),
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Transaction::class, 'anonymous', function(Faker\Generator $faker)
+{
+    $fund = $faker->randomElement(App\Models\v1\Fund::all()->toArray());
+
+    return [
+        'fund_id' => key($fund),
+        'donor_id' => App\Models\v1\Donor::where('name', 'anonymous')->pluck('id'),
+        'description' => 'Donation to ' . $fund['name'],
+        'type' => 'donation',
+        'amount' => $faker->randomNumber(2),
+        'payment' => [
+            'type' => 'card',
+            'last_four', '1234',
+            'cardholder' => 'John Doe',
+            'zip' => '56789',
+            'brand' => 'visa'
+        ],
+        'created_at' => $faker->dateTimeThisYear
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Transaction::class, 'transfer_from', function(Faker\Generator $faker)
+{
+    $fund = $faker->randomElement(App\Models\v1\Fund::all()->toArray());
+
+    return [
+        'fund_id' => $fund['id'],
+        'description' => 'Transfer from ' . $fund['name'],
+        'donor_id' => null,
+        'type' => 'transfer',
+        'amount' => -$faker->randomNumber(2),
+        'payment' => null,
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Faker\Generator $faker)
+{
+    $fund = $faker->randomElement(App\Models\v1\Fund::all()->toArray());
+
+    return [
+        'fund_id' => $fund['id'],
+        'description' => 'Transfer to ' . $fund['name'],
+        'donor_id' => null,
+        'type' => 'transfer',
+        'amount' => -$faker->randomNumber(2),
+        'payment' => null,
     ];
 });

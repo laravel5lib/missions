@@ -2,7 +2,7 @@
 
 namespace App\Http\Transformers\v1;
 
-use App\Models\v1\Donation;
+use App\Models\v1\Transaction;
 use League\Fractal\TransformerAbstract;
 
 class DonationTransformer extends TransformerAbstract
@@ -19,25 +19,26 @@ class DonationTransformer extends TransformerAbstract
     /**
      * Turn this item object into a generic array
      *
-     * @param Donation $donation
+     * @param Transaction $donation
      * @return array
      */
-    public function transform(Donation $donation)
+    public function transform(Transaction $donation)
     {
+        $donation->load('donor');
+
         $array = [
-            'id'           => $donation->id,
-            'anonymous'    => (bool) $donation->anonymous,
-            'amount'       => (int) $donation->amount,
-            'currency'     => $donation->currency,
-            'payment_type' => $donation->payment_type,
-            'description'  => $donation->description,
-            'message'      => $donation->message,
-            'created_at'   => $donation->created_at->toDateTimeString(),
-            'updated_at'   => $donation->updated_at->toDateTimeString(),
-            'links'        => [
+            'id'          => $donation->id,
+            'name'        => $donation->donor->name,
+            'amount'      => (int) $donation->amount,
+            'type'        => $donation->type,
+            'description' => $donation->description,
+            'payment'     => $donation->payment,
+            'created_at'  => $donation->created_at->toDateTimeString(),
+            'updated_at'  => $donation->updated_at->toDateTimeString(),
+            'links'       => [
                 [
                     'rel' => 'self',
-                    'uri' => '/donations/' . $donation->id,
+                    'uri' => '/transactions/' . $donation->id,
                 ]
             ]
         ];
@@ -48,10 +49,10 @@ class DonationTransformer extends TransformerAbstract
     /**
      * Include Donor
      *
-     * @param Donation $donation
+     * @param Transaction $donation
      * @return \League\Fractal\Resource\Item
      */
-    public function includeDonor(Donation $donation)
+    public function includeDonor(Transaction $donation)
     {
         $donor = $donation->donor;
 

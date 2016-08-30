@@ -162,17 +162,22 @@ class Reservation extends Model
      */
     public function fundraisers()
     {
-        return $this->morphMany(Fundraiser::class, 'fundable');
+        return $this->fund->fundraisers();
     }
 
-    /**
-     * Get all of the reservation's donations.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
+    public function fund()
+    {
+        return $this->morphOne(Fund::class, 'fundable');
+    }
+
     public function donations()
     {
-        return $this->morphMany(Donation::class, 'designation');
+        return $this->fund()->donations();
+    }
+
+    public function donors()
+    {
+        return $this->fund()->donors();
     }
 
     /**
@@ -251,16 +256,6 @@ class Reservation extends Model
     }
 
     /**
-     * Get the total amount raised for the reservation.
-     *
-     * @return mixed
-     */
-    public function getTotalRaised()
-    {
-        return $this->donations()->sum('amount');
-    }
-
-    /**
      * Get the percentage of what was raised.
      *
      * @return float
@@ -280,7 +275,7 @@ class Reservation extends Model
      */
     public function getTotalOwed()
     {
-        return $this->getTotalCost() - $this->getTotalRaised();
+        return $this->getTotalCost() - $this->fund->balance;
     }
 
     /**

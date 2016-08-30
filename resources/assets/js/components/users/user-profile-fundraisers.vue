@@ -9,7 +9,7 @@
                         Expires: {{ fundraiser.expires_at | moment 'll'  }}
                     </h6>
                     <h3><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>
-                    <p><span>{{ fundraiser.raised_percent }}</span>% <small>Funded</small> / <span>0</span> <small>Donors</small></p>
+                    <p><span>{{ fundraiser.raised_percent }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: fundraiser.raised_percent + '%'}">
                             <span class="sr-only">{{ fundraiser.raised_percent }}% Complete (success)</span>

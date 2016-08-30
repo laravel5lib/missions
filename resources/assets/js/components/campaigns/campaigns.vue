@@ -121,6 +121,7 @@
                 <h6 class="text-uppercase text-center">A Trip For Everyone</h6>
                 <h1 class="text-center">Choose A Role</h1>
                 <hr class="divider red-small lg">
+                <hr class="divider inv lg">
               </div><!-- end col -->
             </div><!-- end row -->
             <div class="row">
@@ -186,19 +187,19 @@
       </div><!-- end content-section -->
       </div><!-- end container -->
     </div><!-- end gray-lighter-bg -->
-    <div class="bg-primary">
+    <div class="white-bg">
       <div class="container">
       <div class="content-section">
         <div class="row">
           <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <h6 class="text-uppercase text-primary-darker">It's So Easy</h6>
-            <h1 class="text-primary-darker">We've Got You</h1>
-            <p>Logistics, we got it covered. Missions.Me makes missions simple by taking care of all of your transportation, hotel, food, training, translators and ministry schedule needs.</p>
+            <h6 class="text-uppercase text-primary">It's So Easy</h6>
+            <h1 class="text-primary dash-trailing">We've Got You</h1>
+            <p class="large-type">Logistics, we got it covered. Missions.Me makes missions simple by taking care of all of your transportation, hotel, food, training, translators and ministry schedule needs.</p>
             <hr class="divider inv">
-            <a class="btn btn-primary-darker" href="#">Speak to a rep</a>
+            <a class="btn btn-primary" href="#">Speak to a rep</a>
           </div><!-- end col -->
           <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <img class="img-responsive" src="http://placehold.it/600x300" />
+            <img class="img-responsive" src="images/why-mm/staff.jpg" />
           </div><!-- end col -->
         </div><!-- end row -->
       </div><!-- end content-section-->
@@ -210,17 +211,7 @@
           <img class="img-responsive" src="images/why-mm/miami-lawn.jpg" alt="">
         </div>
         <div class="col-sm-6 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/miami-lawn2.jpg" alt="">
-        </div>
-      </div>
-    </div><!-- end white-bg -->
-    <div class="white-bg">
-      <div class="row row-no-margin">
-        <div class="col-sm-6 col-no-padding">
           <img class="img-responsive" src="images/why-mm/miami-conf.jpg" alt="">
-        </div>
-        <div class="col-sm-6 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/miami-conf2.jpg" alt="">
         </div>
       </div>
     </div><!-- end white-bg -->
@@ -229,11 +220,11 @@
       <div class="content-section">
         <div class="row">
           <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <h1 class="text-primary-darker">Level Of Impact</h1>
-            <p>We are interested in changing nations, communities, and individuals. Every outreach we organize deems to do just that. In just one week's time you and your team will be face to face with entire schools, neighborhoods, and churches. We believe a short-term team must serve a long-term and sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted.</p>
+            <h1 class="text-primary-darker dash-trailing-dark">Level Of Impact</h1>
+            <p class="large-type">We are interested in changing nations, communities, and individuals. Every outreach we organize deems to do just that. In just one week's time you and your team will be face to face with entire schools, neighborhoods, and churches. We believe a short-term team must serve a long-term and sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted.</p>
           </div><!-- end col -->
           <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <img class="img-responsive" src="http://placehold.it/600x300" />
+            <img class="img-responsive" src="images/why-mm/stadium-impact.jpg" />
           </div><!-- end col -->
         </div><!-- end row -->
       </div><!-- end content-section -->
@@ -243,9 +234,13 @@
       <div class="container">
       <div class="content-section">
         <div class="row">
-          <div class="col-sm-6 col-sm-offset-6 col-xs-10 col-xs-offset-1">
-            <h1 class="text-primary">Safety and Security</h1>
-            <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our leadership provides in depth training to create a safe experience for every missionary. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe. Multiple leaders care for each missionary and guidelines are faceted so that no person is ever alone. We also do background checks on all potential leaders. Missions.Me has a proven track record of safety and security that keeps our teams coming back.</p>
+          <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+            <img class="img-responsive" src="images/why-mm/group-security.jpg" />
+          </div><!-- end col -->
+          <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+            <h1 class="text-primary dash-trailing">Safety and Security</h1>
+            <!-- <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our leadership provides in depth training to create a safe experience for every missionary. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe. Multiple leaders care for each missionary and guidelines are faceted so that no person is ever alone. We also do background checks on all potential leaders. Missions.Me has a proven track record of safety and security that keeps our teams coming back.</p> -->
+            <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe.</p>
             <blockquote>"I have traveled with Missions.Me in many countries and have witnessed first-hand their organization and safety measures. I am completely confident sending my teens on a Missions.Me missions trip."
               <footer>Sue, Mother from Lancaster, PA</footer></blockquote>
           </div><!-- end col -->
@@ -260,6 +255,7 @@
           <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
             <h1 class="text-center">Trip Difficulty Ratings</h1>
             <hr class="divider red-small lg">
+            <hr class="divider inv lg">
           </div><!-- end col -->
         </div><!-- end row -->
         <div class="row text-center">
@@ -303,7 +299,6 @@
             this.resource.query().then(function(campaigns){
                 this.campaigns = campaigns.data.data
             }).then(function () {
-
 
             });
         }

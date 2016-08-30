@@ -102,6 +102,16 @@ a.btn {
 // -------------------------
 
 // Make a button that has a hollow background and border only
+.btn-white-hollow {
+  @include button-variant(#fff, transparent, #fff);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: darken(#fff, 10%) !important;
+    border-color: darken(#fff, 10%) !important;
+    text-decoration: none;
+  }
+}
 .btn-default-hollow {
   @include button-variant($gray-base, transparent, $btn-default-border);
   &:hover,

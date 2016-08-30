@@ -32,6 +32,11 @@ class StoryTransformer extends TransformerAbstract
             ]
         ];
 
+        if($story->pivot)
+        {
+            $array['published_at'] = $story->pivot->published_at->toDateTimeString();
+        }
+
         return $array;
     }
 }

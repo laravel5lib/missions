@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Transformers\v1\DonationTransformer;
 use App\Http\Transformers\v1\DonorTransformer;
+use App\Http\Transformers\v1\TransactionTransformer;
 use App\Models\v1\Donor;
 use App\Models\v1\Fundraiser;
 use App\Http\Requests\v1\FundraiserRequest;
@@ -24,7 +26,7 @@ class FundraisersController extends Controller
     {
         $this->fundraiser = $fundraiser;
 
-        $this->middleware('api.auth', ['except' => ['index','show', 'donors']]);
+        $this->middleware('api.auth', ['only' => ['store','update','destroy']]);
     }
 
     /**
@@ -64,23 +66,36 @@ class FundraisersController extends Controller
     {
         $fundraiser = $this->fundraiser->findOrFail($id);
 
-        // Filter donors by the fundraiser's designation
-        $designation = [str_singular($fundraiser->fundable_type) => $fundraiser->fundable_id];
-        $request->merge($designation);
+        $donors = $fundraiser->donors()
+            ->filter($request->all())
+            ->paginate($request->get('per_page', 10));
 
-        // Filter by fundraiser's start and end dates.
-        if( ! $request->has('starts'))
-            $request->merge(['starts' => $fundraiser->started_at]);
+        // In order to calculate the total amount donated for the fundraiser
+        // we have to pass in a fund id, a start date, and an end date.
+        return $this->response->paginator($donors, new DonorTransformer([
+            // These values will be used by the donation() method on the donor model.
+            'fund_id' => $fundraiser->fund_id,
+            'started_at' => $fundraiser->started_at,
+            'ended_at' => $fundraiser->ended_at
+        ]));
+    }
 
-        if( ! $request->has('ends'))
-            $request->merge(['ends' => $fundraiser->ended_at]);
+    /**
+     * Get a list of donations.
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function donations($id, Request $request)
+    {
+        $fundraiser = $this->fundraiser->findOrFail($id);
 
-        $donors = Donor::filter($request->all())
-            ->paginate($request->get('per_page'));
+        $donations = $fundraiser->donations()
+            ->filter($request->all())
+            ->paginate($request->get('per_page', 10));
 
-        // Pass the designation to the transformer to filter
-        // embedded relationships by designation.
-        return $this->response->paginator($donors, new DonorTransformer($designation));
+        return $this->response->paginator($donations, new DonationTransformer);
     }
 
     /**

@@ -4,6 +4,7 @@ import topNav from './components/top-nav.vue';
 import actionTrigger from './components/action-trigger.vue';
 import donate from './components/donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
+import fundraisers from './components/fundraisers/fundraisers.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
 import groupProfileTrips from './components/groups/group-profile-trips.vue';
@@ -25,7 +26,9 @@ import userSettings from './components/users/user-settings.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
 import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
 import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
+import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
 import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
+import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -228,6 +231,7 @@ new Vue({
     },
     components: [
         login,
+        fundraisers,
         campaigns,
         campaignGroups,
         groupTrips,
@@ -256,6 +260,8 @@ new Vue({
         userProfileStories,
         userProfileFundraisers,
         userProfileFundraisersDonors,
+        userProfileFundraisersProgress,
+        dashboardGroupTrips,
 
         // admin components
         adminCampaignCreate,

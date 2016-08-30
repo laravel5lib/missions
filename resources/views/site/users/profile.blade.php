@@ -160,7 +160,7 @@
                     <div role="tabpanel" class="row tab-pane" id="stories">
                         <div class="col-md-12 col-md-offset-0 col-xs-12">
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                <user-profile-stories id="{{ $user->id }}" user-url="@{{$user->url}}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-stories>
+                                <user-profile-stories id="{{ $user->id }}" user-url="{{ '@' . $user->url }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-stories>
                             </div>
                         </div>
                     </div><!-- end row tab -->

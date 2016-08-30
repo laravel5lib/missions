@@ -3,6 +3,7 @@ import login from './components/login.vue';
 import topNav from './components/top-nav.vue';
 import actionTrigger from './components/action-trigger.vue';
 import donate from './components/donate.vue';
+import modalDonate from './components/modal-donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import fundraisers from './components/fundraisers/fundraisers.vue';
 import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
@@ -248,6 +249,7 @@ new Vue({
         topNav,
         actionTrigger,
         donate,
+        modalDonate,
 
         //dashboard components
         recordsList,

@@ -2,31 +2,33 @@
     <div>
         <validator name="Donation">
             <form class="form-horizontal" name="DonationForm" novalidate v-show="donationState === 'form'">
-                <div class="row">
-                    <div class="col-sm-12 text-center">
+                <template v-if="isState('form', 1)">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
                             <label>Recipient</label>
                             <h4>{{ recipient }}</h4>
-                    </div>
-                </div>
-                <hr class="divider inv sm">
-                <div class="row">
-                    <div class="col-sm-12" :class="{ 'has-error': checkForError('amount')}">
-                        <label>Amount</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                            <input type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
                         </div>
                     </div>
-                </div>
-                <hr class="divider inv sm">
-                <div class="row">
-                    <div class="col-sm-12" :class="{ 'has-error': checkForError('donor')}">
+                    <hr class="divider inv sm">
+                    <div class="row">
+                        <div class="col-sm-12" :class="{ 'has-error': checkForError('amount')}">
+                            <label>Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="divider inv sm">
+                    <div class="row">
+                        <div class="col-sm-12" :class="{ 'has-error': checkForError('donor')}">
                             <label>Donor Or Company Name</label>
                             <input type="text" class="form-control" v-model="donor" v-validate:donor="{required: true}">
+                        </div>
                     </div>
-                </div>
-                <hr class="divider inv sm">
-                <!-- Credit Card -->
+                </template>
+                <template v-if="isState('form', 2)">
+                    <!-- Credit Card -->
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-groups" :class="{ 'has-error': checkForError('cardholdername') }">
@@ -109,7 +111,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                        <hr class="divider inv sm">
+                            <hr class="divider inv sm">
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" v-model="cardSave">Save payment details for next time
@@ -126,6 +128,7 @@
                             </div>
                         </div>
                     </div>
+                </template>
             </form>
             <div class="panel panel-primary" v-show="donationState === 'review'">
                 <div class="panel-heading">
@@ -185,7 +188,23 @@
             auth: {
                 type:String,
                 default: '0'
-            }
+            },
+            attemptSubmit: {
+                type: Boolean,
+                default: false
+            },
+            child: {
+                type: Boolean,
+                default: false
+            },
+            donationState: {
+                type: String,
+                default: 'form'
+            },
+            subState: {
+                type: Number,
+                default: 1
+            },
         },
         data(){
             return{
@@ -227,8 +246,9 @@
                 // needs to be on `this` scope to access in response callback
                 stripeDeferred: {},
                 attemptedCreateToken: false,
-                attemptSubmit: false,
-                donationState: 'form'
+                //attemptSubmit: false,
+                //donationState: 'form',
+                //subState:1
             }
         },
         validators: {
@@ -270,6 +290,13 @@
             }
         },
         methods: {
+            isState(major, minor) {
+                return this.donationState === major && this.subState === minor
+            },
+            toState(major, minor) {
+                this.donationState = major;
+                this.subState = minor
+            },
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$Donation[field].invalid && this.attemptSubmit;

@@ -30,6 +30,8 @@
                 </div>
             </div><!-- end col -->
             <div class="col-sm-4">
+                <modal-donate></modal-donate>
+
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h2 class="text-center text-success">${{ $fundraiser->raised() }} <span style="font-size: 12px;">Raised</span></h2>

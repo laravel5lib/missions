@@ -38,7 +38,7 @@
             }
         },
         ready(){
-            this.$http.get('fundraisers/' + this.id, {
+            this.$http.get('fundraisers', {
                 sponsor: this.groupUrl,
             }).then(function (response) {
                 this.fundraisers = response.data.data.fundraisers.data;

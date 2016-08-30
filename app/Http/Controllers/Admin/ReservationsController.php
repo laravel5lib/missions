@@ -46,7 +46,7 @@ class ReservationsController extends Controller
 
         $reservation = $this->api->get('reservations/'.$id, ['include' => '']);
 
-        return view('admin.reservations.show')->with('reservation', $reservation);
+        return view('admin.reservations.show', compact('reservation'));
     }
 
     /**

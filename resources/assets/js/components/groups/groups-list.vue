@@ -48,11 +48,31 @@
     export default{
         name: 'groups-list',
 //        components: {'group-edit': groupEdit},
-        props: ['userId', 'type', 'selectUi', 'groupId'],
+        props: {
+            userId: {
+                type: String,
+                default: ''
+            },
+            type: {
+                type: String,
+                default: ''
+            },
+            selectUi: {
+                type: Boolean,
+                default: false
+            },
+            groupId: {
+                type: String,
+                default: ''
+            },
+            currentGroup: {
+                type: String,
+                default: localStorage.currentGroup && localStorage.currentGroup !== 'undefined' ? localStorage.currentGroup : ''
+            }
+        },
         data(){
             return{
                 groups: [],
-                currentGroup: localStorage.currentGroup && localStorage.currentGroup !== 'undefined' ? localStorage.currentGroup : this
             }
         },
         methods: {
@@ -72,6 +92,8 @@
             },
         },
         ready(){
+
+
             this.getGroups();
         }
     }

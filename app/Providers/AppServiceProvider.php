@@ -2,17 +2,16 @@
 
 namespace App\Providers;
 
+use App\Events\UserWasCreated;
 use App\Models\v1\Transaction;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
 use App\Models\v1\Reservation;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use League\Glide\Server;
 use League\Glide\ServerFactory;
-use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,7 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Morph Map
         Relation::morphMap([
             'App\Models\v1\Fundraiser',
             'App\Models\v1\Group',
@@ -35,16 +33,7 @@ class AppServiceProvider extends ServiceProvider
             'App\Models\v1\Upload'
         ]);
 
-        // Send welcome emails when user is created.
-//        User::created(function ($user) {
-//            Mail::queue('emails.welcome', $user->toArray(), function ($message) use($user) {
-//                $message->from('mail@missions.me', 'Missions.Me');
-//                $message->sender('mail@missions.me', 'Missions.Me');
-//                $message->to($user->email, $user->name);
-//                $message->replyTo('go@missions.me', 'Missions.Me');
-//                $message->subject('Welcome to Missions.Me');
-//            });
-//        });
+        User::created(function ($user) { event(new UserWasCreated($user)); });
 
         Reservation::created(function ($reservation) {
 

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\ReservationWasCreated;
 use App\Events\UserWasCreated;
 use App\Models\v1\Transaction;
 use App\Models\v1\Trip;
@@ -82,7 +83,7 @@ class AppServiceProvider extends ServiceProvider
                'spots' => $reservation->trip->spots - 1
             ]);
 
-            // todo: send confirmation email.
+            event(new ReservationWasCreated($reservation));
         });
 
         Trip::created(function ($trip) {

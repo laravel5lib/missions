@@ -9,13 +9,13 @@
             </div>
         </div>
 
-        <hr class="divider sm">
+        <hr class="divider inv sm">
 
         <div class="panel panel-default" v-for="donor in donors" v-if="activeView==='donors'">
             <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
                 <h5>
                     <a role="button">
-                        {{ donor.name }} <span class="small text-success">{{donor.total_donated|currency}}</span>
+                        {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
                     </a>
                 </h5>
             </div>
@@ -23,8 +23,8 @@
         <div class="panel panel-default" v-for="donation in donations" v-if="activeView==='donations'">
             <div class="panel-heading" role="tab" id="heading-{{ donation.id }}">
                 <h5>
-                    <a :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a><br>
-                    <small class="small text-success">donated {{ donation.amount|currency }} on {{ donation.created_at|moment 'll'}}</small>
+                    <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
+                    <small class="small">by <a :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>
                     <br /><small>{{ donation.comment }}</small>
                 </h5>
             </div>

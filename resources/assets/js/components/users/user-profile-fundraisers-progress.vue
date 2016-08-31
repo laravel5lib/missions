@@ -1,5 +1,5 @@
 <template>
-    <progressbar :now="now" label type="success" striped animated style="max-width: 100%;"></progressbar>
+    <progressbar :now="now" label type="success" striped animated style="max-width: 100%;border-radius: 4px;"></progressbar>
 </template>
 <script>
     import VueStrap from 'vue-strap/dist/vue-strap.min';

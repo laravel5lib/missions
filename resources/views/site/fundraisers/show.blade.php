@@ -16,7 +16,7 @@
         <div class="row">
             <hr class="divider inv xlg">
             <h3 class="text-center">{{ $fundraiser->name }}</h3>
-            <h5 class="text-center">{{ $fundraiser->sponsor->name }}</h5>
+            <h5 class="text-center">by {{ $fundraiser->sponsor->name }}</h5>
             <hr class="divider inv lg">
             <div class="col-sm-8">
                 @if($fundraiser->banner)
@@ -29,7 +29,7 @@
             <div class="col-sm-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h2 class="text-center text-success">${{ $fundraiser->raised() }} <span style="font-size: 12px;">Raised</span></h2>
+                        <h1 class="text-center text-success">${{ $fundraiser->raised() }} <span style="font-size: 12px;">Raised</span></h1>
                         <h5 class="text-center"><small class="text-uppercase">Goal Amount</small> ${{ $fundraiser->goal_amount }}</h5>
                         <h6 class="text-center text-uppercase small text-muted"></h6>
                         {{--<h2 class="text-center">{{ $fundraiser->getPercentRaised() }}% <span style="font-size: 12px;">Percent Raised</span></h2>--}}

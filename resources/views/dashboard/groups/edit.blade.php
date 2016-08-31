@@ -7,6 +7,12 @@
             <div class="col-sm-12">
                 <h3>Edit Your Group</h3>
             </div>
+            <div class="col-sm-4">
+                <hr class="divider inv sm">
+                <a href="/dashboard/groups/{{ $group->id }}" class="btn btn-primary pull-right">
+                    Group Details
+                </a>
+            </div>
         </div>
     </div>
 </div>

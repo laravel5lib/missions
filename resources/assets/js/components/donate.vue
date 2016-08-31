@@ -277,10 +277,10 @@
                 this.$dispatch('payment-complete', val)
             },
             'donationState'(val) {
-                console.log(val);
+//                console.log(val);
             },
             'subState'(val) {
-                console.log(val);
+//                console.log(val);
             },
         },
         computed:{
@@ -387,8 +387,8 @@
                         save: this.cardSave,
                         email: this.cardEmail
                     };
-//                    this.$parent.upfrontTotal = this.upfrontTotal;
-//                    this.$parent.fundraisingGoal = this.fundraisingGoal;
+
+                    this.submit();
                     this.stripeDeferred.resolve(true);
                 }
             },
@@ -451,7 +451,12 @@
                 }
             },
             submit(){
-                this.$http.post('')
+//                this.$http.post('donations/authorize')
+                this.$http.post('donations', {
+                    donor: {
+
+                    }
+                });
             }
         },
         events: {

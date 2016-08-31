@@ -2,7 +2,7 @@
     <div>
 
 
-        <a class="btn btn-primary btn-block " @click="showModal=!showModal">Donate</a>
+        <a class="btn btn-primary btn-block " @click="launchDonate">Donate</a>
         <!--<a class="btn btn-primary btn-justified show-xs" @click="showRight=!showRight">Donate</a>-->
         <hr class="divider inv sm">
         <modal :title="'Donate to ' + recipient" :show.sync="showModal" effect="fade" width="800">
@@ -22,7 +22,16 @@
 
         <aside :show.sync="showRight" placement="right" header="Donate" :width="375">
             <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit"
-                    :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :recipient="recipient"></donate>        </aside>
+                    :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :recipient="recipient"></donate>
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
+                <button type="button" class="btn btn-default btn-xs" @click="prevState()" v-if="!isState('form', 1)">Back</button>
+
+                <button type="button" class="btn btn-primary btn-xs" @click="nextState()" v-if="isState('form', 1)">Next</button>
+                <button type="button" class="btn btn-primary btn-xs" @click="reviewDonation()" v-if="isState('form', 2)">Review Donation</button>
+                <button type="button" class="btn btn-primary btn-xs" @click="createToken" v-if="donationState==='review'">Donate</button>
+            </div>
+        </aside>
     </div>
 </template>
 <script>
@@ -65,6 +74,9 @@
                 attemptSubmit: false,
                 showModal: false,
                 showRight: false,
+                isMobile: true,
+                donateModalOpen: false,
+                mediaQuery: null
             }
         },
         watch: {
@@ -102,8 +114,27 @@
                         break;
                 }
             },
-            submit(){
+            widthChange(mq) {
+                if (this.mediaQuery.matches) {
+                    // window width is at most 767px
+                    this.isMobile = true;
+                    if (this.donateModalOpen) {
+                        this.showModal = false;
+                        this.showRight = true;
+                    }
+                } else {
+                    // window width is greater than 767px
+                    this.isMobile = false;
+                    if (this.donateModalOpen) {
+                        this.showModal = true;
+                        this.showRight = false;
+                    }
+                }
 
+            },
+            launchDonate(){
+                this.donateModalOpen = true;
+                this.widthChange();
             }
         },
         events: {
@@ -115,7 +146,12 @@
             }
         },
         ready: function () {
-
+            // media query event handler
+            if (matchMedia) {
+                this.mediaQuery = window.matchMedia("(max-width: 767px)");
+                this.mediaQuery.addListener(this.widthChange);
+                this.widthChange(this.mediaQuery);
+            }
         },
     }
 </script>

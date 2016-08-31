@@ -26,6 +26,18 @@
                             <input type="text" class="form-control" v-model="donor" v-validate:donor="{required: true}">
                         </div>
                     </div>
+                    <hr class="divider inv sm">
+                    <div class="row" v-if="!child">
+                        <div class="col-sm-12 text-center">
+                            <div class="form-group">
+                                <div class="">
+                                    <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
+                                    <a @click="nextState()" class="btn btn-primary">Next</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </template>
                 <template v-if="isState('form', 2)">
                     <!-- Credit Card -->
@@ -120,7 +132,7 @@
                         </div>
                     </div>
                     <hr class="divider inv sm">
-                    <div class="col-sm-12 text-center">
+                    <div class="col-sm-12 text-center" v-if="!child">
                         <div class="form-group">
                             <div class="">
                                 <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
@@ -129,6 +141,8 @@
                         </div>
                     </div>
                 </template>
+                <hr class="divider inv sm">
+
             </form>
             <div class="panel panel-primary" v-show="donationState === 'review'">
                 <div class="panel-heading">
@@ -155,7 +169,7 @@
                     <p class="list-group-item-text">Recipient: {{recipient}}</p>
                     <p class="list-group-item-text">Amount to be charged immediately: {{amount|currency}}</p>
                 </div>
-                <div class="panel-footer">
+                <div class="panel-footer" v-if="!child">
                     <a @click="goToState('form')" class="btn btn-default">Reset</a>
                     <a @click="createToken" class="btn btn-primary">Donate</a>
                 </div>
@@ -261,7 +275,13 @@
         watch: {
             'paymentComplete'(val, oldVal) {
                 this.$dispatch('payment-complete', val)
-            }
+            },
+            'donationState'(val) {
+//                console.log(val);
+            },
+            'subState'(val) {
+//                console.log(val);
+            },
         },
         computed:{
             yearList() {
@@ -367,8 +387,8 @@
                         save: this.cardSave,
                         email: this.cardEmail
                     };
-//                    this.$parent.upfrontTotal = this.upfrontTotal;
-//                    this.$parent.fundraisingGoal = this.fundraisingGoal;
+
+                    this.submit();
                     this.stripeDeferred.resolve(true);
                 }
             },
@@ -386,8 +406,57 @@
                         break;
                 }
             },
+            nextState(){
+                this.attemptSubmit = !0;
+                switch (this.donationState){
+                    case 'form':
+                        switch (this.subState) {
+                            case 1:
+                                if (this.$Donation.invalid) {
+                                    break;
+                                }
+                                this.subState = 2;
+                                this.attemptSubmit = !1;
+                                break;
+                            case 2:
+                                if (this.$Donation.invalid) {
+                                    break;
+                                }
+                                this.donationState = 'review';
+                                this.subState = 1;
+                                this.attemptSubmit = !1;
+                                break
+                        }
+                        break;
+                    case 'review':
+                        break;
+                }
+            },
+            prevState(){
+                switch (this.donationState){
+                    case 'form':
+                        switch (this.subState) {
+                            case 1:
+                                break;
+                            case 2:
+                                this.donationState = 'form';
+                                this.subState = 1;
+                                break
+                        }
+                        break;
+                    case 'review':
+                        this.donationState = 'form';
+                        this.subState = 2;
+                        break;
+                }
+            },
             submit(){
+//                this.$http.post('donations/authorize')
+                this.$http.post('donations', {
+                    donor: {
 
+                    }
+                });
             }
         },
         events: {
@@ -416,6 +485,24 @@
                     this.cardZip = response.data.data.zip
                 });
             }
+
+            //Listen to Event Bus
+            this.$root.$on('DonateForm:nextState', function () {
+                this.nextState();
+            }.bind(this));
+
+            this.$root.$on('DonateForm:prevState', function () {
+                this.prevState();
+            }.bind(this));
+
+            this.$root.$on('DonateForm:reviewDonation', function () {
+                this.goToState('review');
+            }.bind(this));
+
+            this.$root.$on('DonateForm:createToken', function () {
+                this.createToken();
+            }.bind(this));
+
         },
     }
 </script>

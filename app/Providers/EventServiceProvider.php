@@ -16,6 +16,10 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UserWasCreated' => [
             'App\Listeners\SendWelcomeEmail',
         ],
+        'App\Events\DonationWasMade' => [
+            'App\Listeners\EmailReceipt',
+//            'App\Listeners\NotifyRecipient'
+        ],
     ];
 
     /**

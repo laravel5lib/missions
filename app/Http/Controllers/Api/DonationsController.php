@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\DonationWasMade;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\CardRequest;
 use App\Http\Requests\v1\DonationRequest;
+use App\Http\Transformers\v1\DonationTransformer;
 use App\Models\v1\Transaction;
 use App\Http\Transformers\v1\TransactionTransformer;
 use App\Models\v1\Donor;
@@ -94,6 +96,8 @@ class DonationsController extends Controller
 
         $donor = $this->donor->firstOrCreate($request->get('donor'));
         $donation = $donor->donations()->create($request->except('donor'));
+
+        event(new DonationWasMade($donation, $donor));
 
         return $this->response->item($donation, new DonationTransformer);
     }

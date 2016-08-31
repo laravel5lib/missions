@@ -34,7 +34,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
     Route::get('groups/{id}/edit', function($id) use ($dispatcher) {
         if( ! auth()->user()->managing()->count()) abort(403);
         $group = $dispatcher->get('groups/' . $id);
-        return view('dashboard.groups.show', compact('group', 'id'));
+        return view('dashboard.groups.edit', compact('group', 'id'));
     });
 
     Route::get('groups/{groupId}/trips/{id}', function($groupId, $id) use ($dispatcher) {

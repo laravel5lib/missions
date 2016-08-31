@@ -48,11 +48,28 @@
     export default{
         name: 'groups-list',
 //        components: {'group-edit': groupEdit},
-        props: ['userId', 'type', 'selectUi', 'groupId'],
+        props: {
+            userId: {
+                type: String,
+                default: ''
+            },
+            type: {
+                type: String,
+                default: ''
+            },
+            selectUi: {
+                type: Boolean,
+                default: false
+            },
+            groupId: {
+                type: String,
+                default: ''
+            }
+        },
         data(){
             return{
                 groups: [],
-                currentGroup: localStorage.currentGroup && localStorage.currentGroup !== 'undefined' ? localStorage.currentGroup : this
+                currentGroup: this.groupId !== '' ? this.groupId : (localStorage.currentGroup && localStorage.currentGroup !== 'undefined') ? localStorage.currentGroup : ''
             }
         },
         methods: {
@@ -61,6 +78,10 @@
             },
             rememberSelection(){
                 localStorage.currentGroup = this.currentGroup;
+                if (this.groupId !== this.currentGroup) {
+                    var group = _.findWhere(this.groups, {id: this.currentGroup});
+                    location.pathname = '/' + location.pathname.split('/')[1] + group.links[0].uri;
+                }
             },
             getGroups(){
                 this.$http.get('users/me', {
@@ -72,6 +93,8 @@
             },
         },
         ready(){
+
+
             this.getGroups();
         }
     }

@@ -19,7 +19,7 @@
                 </div><!-- end panel-body -->
             </div><!-- end panel -->
         </div><!-- end col -->
-        <div class="col-sm-12 text-center">
+        <div v-if="trips.length" class="col-sm-12 text-center">
             <nav>
                 <ul class="pagination pagination-sm">
                     <li :class="{ 'disabled': pagination.current_page == 1 }">

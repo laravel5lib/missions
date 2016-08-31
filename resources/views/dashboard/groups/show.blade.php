@@ -28,7 +28,7 @@
     </div>
 </div>
 <hr class="divider inv lg">
-<groups-list user-id="{{ auth()->check() ? auth()->id() : null }}" current-group="{{ $group->id or '' }}" :select-ui="true"></groups-list>
+<groups-list user-id="{{ auth()->check() ? auth()->id() : null }}" group-id="{{ $group->id or '' }}" :select-ui="true"></groups-list>
 <hr class="divider inv lg">
     <div class="container">
         <div class="row">

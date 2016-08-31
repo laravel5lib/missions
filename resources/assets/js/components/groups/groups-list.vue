@@ -27,32 +27,32 @@
                 <!--<h4>{{ group.surname }}, {{ group.given_names }}</h4>-->
                 <h5 class="text-capitalize"> </h5>
                 <div class="btn-group btn-group-justified">
-                    <a class="btn btn-sm btn-info" href="/groups/{{ group.url }}"><i class="fa fa-eye"></i> View</a>
+                    <a v-if="group.public" class="btn btn-sm btn-info" href="/groups/{{ group.url }}"><i class="fa fa-eye"></i> View</a>
                     <a class="btn btn-sm btn-primary" href="/dashboard/groups/{{ group.id }}"><i class="fa fa-pencil"></i> Manage</a>
                 </div>
             </div>
         </div>
     </div>
     <div class="alert alert-info" v-if="!selectUi && groups.length < 1">No groups found</div>
-    <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+    <!--<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
         <div class="panel panel-default" v-if="currentGroup != null && currentGroup !== 'undefined'">
             <div class="panel-body">
                 <group-edit :group-id="currentGroup" :managing="true"></group-edit>
             </div>
         </div>
-    </div>
+    </div>-->
 </div>
 </template>
 <script>
-    import groupEdit from './admin-group-edit.vue';
+//    import groupEdit from './admin-group-edit.vue';
     export default{
         name: 'groups-list',
-        components: {'group-edit': groupEdit},
-        props: ['userId', 'type', 'selectUi'],
+//        components: {'group-edit': groupEdit},
+        props: ['userId', 'type', 'selectUi', 'groupId'],
         data(){
             return{
                 groups: [],
-                currentGroup: localStorage.currentGroup && localStorage.currentGroup !== 'undefined' ? localStorage.currentGroup : null
+                currentGroup: localStorage.currentGroup && localStorage.currentGroup !== 'undefined' ? localStorage.currentGroup : this
             }
         },
         methods: {

@@ -24,7 +24,3 @@
     </div>
 <hr class="divider inv xlg">
 @endsection
-
-@section('scripts')
-    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-@endsection

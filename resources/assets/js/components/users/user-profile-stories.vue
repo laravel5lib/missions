@@ -137,12 +137,18 @@
                 deleteModal: false,
                 selectedStory: {
                     title: '',
-                    content:''
+                    content:'',
+                    publications: [
+                        { type: 'users', id: this.id },
+                    ]
                 },
                 editMode: false,
                 editMarkedContentToggle: false,
+
                 newMode: false,
                 newMarkedContentToggle: false,
+                includeProfile: false,
+
                 // pagination vars
                 page: 1,
                 per_page: 5,
@@ -177,6 +183,8 @@
                 if(story) {
                     story.author_id = this.authId;
                     story.author_type = 'users';
+                    story.publications = [{ type: 'users', id: this.id }];
+
                     this.$http.put('stories/' + story.id, story).then(function (response) {
                         this.editMode = false;
                         this.resetData();
@@ -200,7 +208,8 @@
                 }
             },
             searchStories(){
-                this.$http.get('stories?user=' + this.id, {
+                this.$http.get('stories', {
+                    user: this.id,
                     page: this.page,
                     per_page: this.per_page,
                 }).then(function(response) {

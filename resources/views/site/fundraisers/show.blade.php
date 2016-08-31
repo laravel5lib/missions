@@ -25,8 +25,14 @@
                 <div>
                     {% $fundraiser->description %}
                 </div>
+                <div>
+                    <fundraisers-stories id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ auth()->check() ? auth()->id() : '' }}"></fundraisers-stories>
+                </div>
             </div><!-- end col -->
             <div class="col-sm-4">
+                <modal-donate title="{{ $fundraiser->name }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"
+                              type="{{ $type or '' }}" type-id="{{ $slug or '' }}" recipient="{{ $fundraiser->sponsor->name }}"></modal-donate>
+
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h1 class="text-center text-success">${{ $fundraiser->raised() }} <span style="font-size: 12px;">Raised</span></h1>

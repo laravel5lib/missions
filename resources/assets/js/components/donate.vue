@@ -165,9 +165,15 @@
                         <dt>Save Payment Method</dt>
                         <dd>{{cardSave ? 'Yes' : 'No'}}</dd>
                     </dl>
-                    <hr>
+                    <hr class="divider sm">
                     <p class="list-group-item-text">Recipient: {{recipient}}</p>
+                    <p class="list-group-item-text">Designation: {{title}}</p>
                     <p class="list-group-item-text">Amount to be charged immediately: {{amount|currency}}</p>
+                    <hr class="divider sm">
+                    <p class="list-group-item-text">
+                        <b>Disclaimer:</b>
+                        All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.
+                    </p>
                 </div>
                 <div class="panel-footer" v-if="!child">
                     <a @click="goToState('form')" class="btn btn-default">Reset</a>
@@ -219,6 +225,11 @@
                 type: Number,
                 default: 1
             },
+            title: {
+                type: String,
+                default: ''
+            }
+
         },
         data(){
             return{

@@ -11,24 +11,13 @@
             </div>
             <div class="col-sm-4">
                 <hr class="divider inv sm">
-                <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Actions <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        {{--<li><a href="create">New</a></li>--}}
-                        <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                        {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
-                        {{--<li role="separator" class="divider"></li>--}}
-                        {{--<li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>--}}
-                    </ul>
-                </div>
+                <a href="{{ $group->id }}/edit" class="btn btn-primary pull-right">
+                    Group Settings
+                </a>
             </div>
         </div>
     </div>
 </div>
-<hr class="divider inv lg">
-<groups-list user-id="{{ auth()->check() ? auth()->id() : null }}" group-id="{{ $group->id or '' }}" :select-ui="true"></groups-list>
 <hr class="divider inv lg">
     <div class="container">
         <div class="row">

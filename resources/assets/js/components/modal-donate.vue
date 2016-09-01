@@ -7,7 +7,7 @@
         <hr class="divider inv sm">
         <modal :title="'Donate to ' + recipient" :show.sync="showModal" effect="fade" width="800">
             <div slot="modal-body" class="modal-body">
-                <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit"
+                <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
                         :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :recipient="recipient"></donate>
             </div>
             <div slot="modal-footer" class="modal-footer">
@@ -21,7 +21,7 @@
         </modal>
 
         <aside :show.sync="showRight" placement="right" header="Donate" :width="375">
-            <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit"
+            <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
                     :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :recipient="recipient"></donate>
             <div class="modal-footer">
                 <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->

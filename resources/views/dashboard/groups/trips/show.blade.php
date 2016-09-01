@@ -14,19 +14,11 @@
             </div>
             <div class="col-sm-4">
                 <hr class="divider inv sm">
-                <hr class="divider inv">
-                <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Actions <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-{{--                        <li><a href="{{ Request::url() }}/edit">Edit</a></li>--}}
-                        {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
-                        {{--<li role="separator" class="divider"></li>--}}
-                        {{--<li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>--}}
-                    </ul>
-                </div>
+                <a href="/dashboard/groups/{{ $group->id }}" class="btn btn-primary pull-right">
+                    Group Details
+                </a>
             </div>
+
         </div>
     </div>
 </div>
@@ -52,8 +44,6 @@
                                 <a href="#pricing" class="list-group-item">Pricing</a>
                                 <a href="#requirements" class="list-group-item">Requirements</a>
                                 <a href="#deadlines" class="list-group-item">Deadlines</a>
-                                <a href="#todos" class="list-group-item">Todos</a>
-                                <a href="#notes" class="list-group-item">Notes</a>
                             </div>
                         </div>
                     </div>
@@ -259,37 +249,12 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div id="todos"></div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5>Todos</h5>
-                            </div>
-                            <div class="list-group">
-                                @foreach($trip->todos as $todo)
-                                <li class="list-group-item">{{$todo}}</li>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div id="notes"></div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h5>Description</h5>
                             </div>
                             <div class="panel-body">
                                 {% $trip->description %}
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5>Notes</h5>
-                            </div>
-                            <div class="list-group">
-                                @foreach($trip->notes as $note)
-                                <div class="list-group-item">
-                                    <div class="list-group-item-heading"><b>{{$note->subject}}</b> by <b>{{ $note->user->name }}</b> on <b>{{ $note->updated_at->format('F j, Y h:i:s a') }}</b></div>
-                                    <div class="list-group-item-text">{{ $note->content }}</div>
-                                </div>
-                                @endforeach
                             </div>
                         </div>
                     </div>

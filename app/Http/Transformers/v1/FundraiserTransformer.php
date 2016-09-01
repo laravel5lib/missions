@@ -30,6 +30,7 @@ class FundraiserTransformer extends TransformerAbstract
             'id'             => $fundraiser->id,
             'name'           => $fundraiser->name,
             'type'           => $fundraiser->type,
+            'fund_id'        => $fundraiser->fund_id,
             'goal_amount'    => (int) $fundraiser->goal_amount,
             'raised_amount'  => (int) $fundraiser->raised(),
             'raised_percent' => (int) $fundraiser->getPercentRaised(),

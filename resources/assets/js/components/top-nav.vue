@@ -7,7 +7,7 @@
 		</button>
 		<aside :show.sync="showRight" placement="right" header="Missions.Me" :width="275">
 			<ul class="nav navmenu-nav">
-				<li class="donate-nav"><a class="navDonate" href="/donate"><i class="fa fa-heart"></i> Donate To A Cause</a>
+				<li class="donate-nav"><a class="navDonate" href="/fundraisers"><i class="fa fa-heart"></i> Donate To A Cause</a>
 				</li>
 				<li v-if="auth" id="userMenu" class="dropdown-toggle visible-xs text-center" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false">
@@ -24,27 +24,28 @@
 				</ul>
 				<li v-if="!auth"><a href="#">Login</a></li>
 				<li v-if="!auth"><a href="#">Sign Up</a></li>
+				<li class="navlabel">Get Started</li>
+				<li><a href="/campaigns">Trips</a></li>
+				<li><a href="/fundraisers">Fundraisers</a></li>
+				<li><a href="/groups">Groups</a></li>
 				<li class="navlabel">1Nation1Day</li>
-				<li><a href="http://1nation1day.com/honduras">2013 Honduras</a></li>
+				<li><a href="http://1nation1day.com/">2017 Nicaragua</a></li>
 				<li><a href="http://1nation1day.com/dominican">2015 Dominican</a></li>
-				<li class="navlabel">Trips</li>
-				<li><a href="/campaigns">Campaigns</a></li>
-				<li class="navlabel">Projects</li>
-				<li><a href="why-mm.html">Clean Water</a></li>
-				<li><a href="index.html">Rescue Orphans</a></li>
-				<li><a href="index.html">Homes</a></li>
-				<li><a href="index.html">Trafficking Rescue</a></li>
-				<li><a href="index.html">Leadership Centers</a></li>
-				<li><a href="index.html">Sponsor A Project</a></li>
+				<li><a href="http://1nation1day.com/honduras">2013 Honduras</a></li>
+				<li class="navlabel">Causes</li>
+				<li><a href="#">Clean Water</a></li>
+				<li><a href="#">Rescue Orphans</a></li>
+				<li><a href="#">Homes</a></li>
+				<li><a href="#">Trafficking Rescue</a></li>
+				<li><a href="#">Leadership Centers</a></li>
+				<li><a href="#">Sponsor A Project</a></li>
 				<li class="navlabel">Train</li>
 				<li><a href="index.html">Missions.Me College</a></li>
 				<li><a href="index.html">Speakers</a></li>
 				<li class="navlabel">About</li>
-				<li class="active"><a href="about-mm.html">Missions.Me</a></li>
-				<li><a href="about-mm.html">Accountability</a></li>
-				<li><a href="about-mm.html">Contact Us</a></li>
-				<li><a href="about-mm.html">Jobs</a></li>
-				<li><a href="blog-post.html">Blog</a></li>
+				<li class="active"><a href="#">Missions.Me</a></li>
+				<li><a href="#">Accountability</a></li>
+				<li><a href="#">Contact Us</a></li>
 			</ul>
 		</aside>
 	</div>

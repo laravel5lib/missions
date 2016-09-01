@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\DonationWasMade;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\CardRequest;
 use App\Http\Requests\v1\DonationRequest;
+use App\Http\Transformers\v1\DonationTransformer;
 use App\Models\v1\Transaction;
 use App\Http\Transformers\v1\TransactionTransformer;
 use App\Models\v1\Donor;
@@ -80,20 +82,32 @@ class DonationsController extends Controller
      */
     public function store(DonationRequest $request)
     {
-        // has no charge object been created?
+        // has the card been authorized and a charge object created already?
+        // then only capture the charge
+        if($request->has('charge_id')) {
+            $this->payment->captureCharge($request->get('charge_id'));
+        }
+
+        // has no charge object been created? Then create and capture it.
         if($request->has('card')) {
             $this->payment->chargeAndCaptureCard($request->only(
                 'card', 'customer_id', 'amount', 'currency', 'description'
             ));
         }
 
-        // has the card been authorized and a charge object created already?
-        if($request->has('charge_id')) {
-            $this->payment->captureCharge($request->get('charge_id'));
+        // we can pass donor details to try and find a match
+        // or to create a new donor if a match isn't found.
+        if($request->has('donor')) {
+            $donor = $this->donor->firstOrCreate($request->get('donor'));
+        // Alternatively, we can use an existing donor by id.
+        } else {
+            $donor = $this->donor->findOrFail($request->get('donor_id'));
         }
 
-        $donor = $this->donor->firstOrCreate($request->get('donor'));
-        $donation = $donor->donations()->create($request->except('donor'));
+        // Create the donation for the donor.
+        $donation = $donor->donations()->create($request->all());
+
+        event(new DonationWasMade($donation, $donor));
 
         return $this->response->item($donation, new DonationTransformer);
     }

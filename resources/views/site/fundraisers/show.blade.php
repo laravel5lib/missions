@@ -30,7 +30,7 @@
                 </div>
             </div><!-- end col -->
             <div class="col-sm-4">
-                <modal-donate title="{{ $fundraiser->name }}" auth="{{ auth()->check() ? 1 : 0 }}" type="{{ $type or '' }}"
+                <modal-donate title="{{ $fundraiser->fund->name }}" auth="{{ auth()->check() ? 1 : 0 }}" type="{{ $type or '' }}"
                               type-id="{{ $slug or '' }}" fund-id="{{ $fundraiser->fund_id }}" recipient="{{ $fundraiser->sponsor->name }}"></modal-donate>
 
                 <div class="panel panel-default">

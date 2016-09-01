@@ -261,7 +261,7 @@
                 </div>
                 <div role="tabpanel" class="tab-pane" id="reservations">
                     <div class="col-xs-12">
-                        <admin-reservations-list trip-id="{{ $trip->id }}"></admin-reservations-list>
+                        <dashboard-group-reservations trip-id="{{ $trip->id }}"></dashboard-group-reservations>
                         {{--<admin-trip-reservations trip-id="{{ $trip->id }}"></admin-trip-reservations>--}}
                     </div>
                 </div>

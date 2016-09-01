@@ -26,7 +26,7 @@ class CardRequest extends FormRequest
         $required = [
             'card_id'   => 'required_without:number',
             'number'    => 'required_without:card_id|string',
-            'exp_month' => 'required_with:number|digits:2',
+            'exp_month' => 'required_with:string',
             'exp_year'  => 'required_with:number|digits:4',
             'cvc'       => 'required_with:number|digits_between:3,4',
         ];

@@ -25,9 +25,23 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.groups.index');
     });
 
-    Route::get('groups/{id}', function($id) {
+    Route::get('groups/{id}', function($id) use ($dispatcher) {
         if( ! auth()->user()->managing()->count()) abort(403);
-        return view('dashboard.groups.edit', compact('id'));
+        $group = $dispatcher->get('groups/' . $id);
+        return view('dashboard.groups.show', compact('group', 'id'));
+    });
+
+    Route::get('groups/{id}/edit', function($id) use ($dispatcher) {
+        if( ! auth()->user()->managing()->count()) abort(403);
+        $group = $dispatcher->get('groups/' . $id);
+        return view('dashboard.groups.edit', compact('group', 'id'));
+    });
+
+    Route::get('groups/{groupId}/trips/{id}', function($groupId, $id) use ($dispatcher) {
+        if( ! auth()->user()->managing()->count()) abort(403);
+        $group = $dispatcher->get('groups/' . $groupId);
+        $trip = $dispatcher->get('trips/' . $id);
+        return view('dashboard.groups.trips.show', compact('group', 'groupId', 'trip', 'id'));
     });
 
     Route::get('records', function () {

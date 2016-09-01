@@ -7,8 +7,8 @@
         <hr class="divider inv sm">
         <modal :title="'Donate to ' + recipient" :show.sync="showModal" effect="fade" width="800">
             <div slot="modal-body" class="modal-body">
-                <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit"
-                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :recipient="recipient"></donate>
+                <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
+                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" fund-id="fundId" :recipient="recipient"></donate>
             </div>
             <div slot="modal-footer" class="modal-footer">
                 <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
@@ -17,19 +17,24 @@
                 <button type="button" class="btn btn-primary" @click="nextState()" v-if="isState('form', 1)">Next</button>
                 <button type="button" class="btn btn-primary" @click="reviewDonation()" v-if="isState('form', 2)">Review</button>
                 <button type="button" class="btn btn-primary" @click="createToken" v-if="donationState==='review'">Donate</button>
+                <button type="button" class="btn btn-default btn-xs" @click="prevState()" v-if="!isState('form', 1)">Back</button>
+                <button type="button" class="btn btn-primary btn-xs" @click="nextState()" v-if="isState('form', 1)">Next</button>
+                <button type="button" class="btn btn-primary btn-xs" @click="reviewDonation()" v-if="isState('form', 2)">Review Donation</button>
+                <button type="button" class="btn btn-primary btn-xs" @click="createToken" v-if="donationState==='review'">Donate</button>
             </div>
         </modal>
 
         <aside :show.sync="showRight" placement="right" header="Donate" :width="375">
-            <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit"
-                    :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :recipient="recipient"></donate>
-            <div class="modal-footer">
-                <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
-                <button type="button" class="btn btn-default btn-xs" @click="prevState()" v-if="!isState('form', 1)">Back</button>
-
-                <button type="button" class="btn btn-primary btn-xs" @click="nextState()" v-if="isState('form', 1)">Next</button>
-                <button type="button" class="btn btn-primary btn-xs" @click="reviewDonation()" v-if="isState('form', 2)">Review Donation</button>
-                <button type="button" class="btn btn-primary btn-xs" @click="createToken" v-if="donationState==='review'">Donate</button>
+            <div class="col-sm-12">
+                <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
+                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" fund-id="fundId" :recipient="recipient"></donate>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
+                    <button type="button" class="btn btn-default btn-xs" @click="prevState()" v-if="!isState('form', 1)">Back</button>
+                    <button type="button" class="btn btn-primary btn-xs" @click="nextState()" v-if="isState('form', 1)">Next</button>
+                    <button type="button" class="btn btn-primary btn-xs" @click="reviewDonation()" v-if="isState('form', 2)">Review Donation</button>
+                    <button type="button" class="btn btn-primary btn-xs" @click="createToken" v-if="donationState==='review'">Donate</button>
+                </div>
             </div>
         </aside>
     </div>
@@ -47,6 +52,10 @@
                 default: null
             },
             typeId: {
+                type: String,
+                default: null
+            },
+            fundId: {
                 type: String,
                 default: null
             },

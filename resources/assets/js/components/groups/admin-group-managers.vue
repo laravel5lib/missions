@@ -92,16 +92,16 @@
 				this.attemptSubmit = true;
 				if (this.$AddManager.valid) {
 					var managersArr = this.managers;
-					managersArr.push({group_id: this.groupId, user_id: this.user_id});
-					this.group.managers = _.pluck(managersArr, 'user_id');
-					//this.group.managers = this.managers;
+					managersArr.push({id: this.user_id});
+					this.group.managers = _.pluck(managersArr, 'id');
 					this.updateGroup();
 				}
 			},
 			removeManager: function removeManager(manager) {
 				// Remove Manager
 				this.managers.$remove(manager);
-				this.group.managers = this.managers;
+				var managersArr = this.managers;
+				this.group.managers = _.pluck(managersArr, 'id');
 				this.updateGroup();
 			},
 			updateGroup: function updateGroup() {

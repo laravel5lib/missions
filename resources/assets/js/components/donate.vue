@@ -165,9 +165,15 @@
                         <dt>Save Payment Method</dt>
                         <dd>{{cardSave ? 'Yes' : 'No'}}</dd>
                     </dl>
-                    <hr>
+                    <hr class="divider sm">
                     <p class="list-group-item-text">Recipient: {{recipient}}</p>
+                    <p class="list-group-item-text">Designation: {{title}}</p>
                     <p class="list-group-item-text">Amount to be charged immediately: {{amount|currency}}</p>
+                    <hr class="divider sm">
+                    <p class="list-group-item-text">
+                        <b>Disclaimer:</b>
+                        All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.
+                    </p>
                 </div>
                 <div class="panel-footer" v-if="!child">
                     <a @click="goToState('form')" class="btn btn-default">Reset</a>
@@ -188,6 +194,10 @@
                 default: null
             },
             typeId: {
+                type: String,
+                default: null
+            },
+            fundId: {
                 type: String,
                 default: null
             },
@@ -219,6 +229,11 @@
                 type: Number,
                 default: 1
             },
+            title: {
+                type: String,
+                default: ''
+            }
+
         },
         data(){
             return{
@@ -240,7 +255,7 @@
 
                 // stripe vars
                 stripeError: null,
-                monthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                monthList: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
                 placeholders: {
                     year: 'Year',
                     month: 'Month',
@@ -292,7 +307,8 @@
                     var i, ref, ref1, results;
                     results = [];
                     for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
-                        results.push(num.toString().substr(2, 2));
+                        results.push(num);
+//                        results.push(num.toString().substr(2, 2));
                     }
                     return results;
                 })();
@@ -300,12 +316,12 @@
             },
             cardParams() {
                 return {
-                    name: this.cardHolderName,
+                    //name: this.cardHolderName,
                     number: this.cardNumber,
-                    expMonth: this.cardMonth,
-                    expYear: this.cardYear,
+                    exp_month: this.cardMonth,
+                    exp_year: this.cardYear,
                     cvc: this.cardCVC,
-                    address_zip: this.cardZip,
+//                    address_zip: this.cardZip,
                 };
             }
         },
@@ -349,8 +365,11 @@
                     this.attemptedCreateToken = true;
                     this.stripeDeferred.reject(false);
                 } else {
-                    Stripe.setPublishableKey(this.stripeKey);
-                    Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+                    // authorize card data
+                    console.log(this.cardParams);
+                    this.$http.post('donations/authorize', this.cardParams).then(this.createTokenCallback);
+                    // Stripe.setPublishableKey(this.stripeKey);
+                    // Stripe.card.createToken(this.cardParams, this.createTokenCallback);
                 }
                 return this.stripeDeferred.promise();
             },
@@ -451,17 +470,32 @@
                 }
             },
             submit(){
-//                this.$http.post('donations/authorize')
-                this.$http.post('donations', {
-                    donor: {
+                debugger;
+                var data = {
+                    amount: this.amount,
+                    currency: 'USD', // determined from card token
+                    description: '',
+                    comment: null,
+                    fund_id: this.typeId,
 
+                };
+                if (this.auth) {
+                    data.donor_id = this.donor.id;
+                } else {
+                    data.donor = {
+                        name: this.donor,
+                        email: this.cardEmail,
+                        phone: this.cardPhone,
+                        zip: this.cardZip,
+                        country_code: 'us' // needs UI
                     }
-                });
+                }
+                this.$http.post('donations', data);
             }
         },
         events: {
             'VueStripe::create-card-token': function () {
-                return this.createToken();
+                //return this.createToken();
             },
             'VueStripe::reset-form': function () {
                 return this.resetCaching();
@@ -472,8 +506,8 @@
             if (this.devMode) {
                 this.cardNumber = '4242424242424242';
                 this.cardCVC = '123';
-                this.cardYear = '19';
-                this.cardMonth = '1';
+                this.cardYear = '2019';
+                this.cardMonth = '01';
             }
 
             if (parseInt(this.auth)) {

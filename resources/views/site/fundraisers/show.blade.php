@@ -38,8 +38,8 @@
                 </div> <!-- end tab-content -->
             </div><!-- end col -->
             <div class="col-sm-4">
-                
-
+                <modal-donate title="{{ $fundraiser->fund->name }}" auth="{{ auth()->check() ? 1 : 0 }}" type="{{ $type or '' }}"
+                              type-id="{{ $slug or '' }}" fund-id="{{ $fundraiser->fund_id }}" recipient="{{ $fundraiser->sponsor->name }}"></modal-donate>
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h1 class="text-center text-success">${{ $fundraiser->raised() }} <span style="font-size: 18px;">Raised</span></h1>

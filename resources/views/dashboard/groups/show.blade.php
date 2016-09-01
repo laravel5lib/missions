@@ -1,4 +1,4 @@
-@extends('admin.layouts.default')
+@extends('dashboard.layouts.default')
 
 @section('content')
 <div class="white-header-bg">
@@ -11,18 +11,9 @@
             </div>
             <div class="col-sm-4">
                 <hr class="divider inv sm">
-                <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Action <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="create">New</a></li>
-                        <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                        {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
-                        {{--<li role="separator" class="divider"></li>--}}
-                        {{--<li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>--}}
-                    </ul>
-                </div>
+                <a href="{{ $group->id }}/edit" class="btn btn-primary pull-right">
+                    Group Settings
+                </a>
             </div>
         </div>
     </div>
@@ -87,6 +78,7 @@
                 	  </div>
                 </div>
                 <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
+                <dashboard-group-trips id="{{ $group->id }}"></dashboard-group-trips>
             </div>
         </div>
     </div>

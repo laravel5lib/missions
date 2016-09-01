@@ -16,7 +16,7 @@
             <div class="col-sm-4 col-sm-offset-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <donate stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}" type="{{ $type or '' }}" type-id="{{ $slug or '' }}"></donate>
+                        <donate auth="{{ auth()->check() ? 1 : 0 }}" type="{{ $type or '' }}" type-id="{{ $slug or '' }}"></donate>
                     </div>
                 </div>
             </div>

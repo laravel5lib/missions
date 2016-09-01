@@ -4,7 +4,7 @@
 <div class="white-header-bg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-8">
                 <h3>Edit Your Group</h3>
             </div>
             <div class="col-sm-4">
@@ -19,9 +19,6 @@
 <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
-                <groups-list user-id="{{ auth()->check() ? auth()->id() : null }}" :select-ui="true" current-group="{{ $id }}"></groups-list>
-            </div>
             <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             	<div class="panel panel-default">
             		<div class="panel-body">

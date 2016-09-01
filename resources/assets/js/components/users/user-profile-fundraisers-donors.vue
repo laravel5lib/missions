@@ -1,10 +1,10 @@
 <template>
-    <div class="">
-        <div class="btn-group btn-group-xs btn-group-justified" role="group" aria-label="...">
-            <div class="btn-group btn-group-xs" role="group">
+    <div>
+        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+            <div class="btn-group btn-group-sm" role="group">
                 <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donors'}" @click="toggleView('donors')">Donors</button>
             </div>
-            <div class="btn-group btn-group-xs" role="group">
+            <div class="btn-group btn-group-sm" role="group">
                 <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donations'}" @click="toggleView('donations')">Donations</button>
             </div>
         </div>

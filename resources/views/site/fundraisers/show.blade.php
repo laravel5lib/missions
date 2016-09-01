@@ -16,7 +16,7 @@
         <div class="row">
             <hr class="divider inv xlg">
             <h3 class="text-center">{{ $fundraiser->name }}</h3>
-            <h5 class="text-center">by {{ $fundraiser->sponsor->name }}</h5>
+            <h5 class="text-center">organized by {{ $fundraiser->sponsor->name }}</h5>
             <hr class="divider inv lg">
             <div class="col-sm-8">
                 @if($fundraiser->banner)

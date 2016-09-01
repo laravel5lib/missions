@@ -69,6 +69,10 @@ a {
   cursor: pointer;
 }
 
+.pagination > li > a:hover, .pagination > li > a:focus, .pagination > li > span:hover, .pagination > li > span:focus {
+    color: $gray-dark;
+}
+
 .text-strike {
   text-decoration: line-through;
 }

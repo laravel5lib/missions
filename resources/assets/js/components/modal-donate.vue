@@ -1,9 +1,9 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-
-
-        <a class="btn btn-primary btn-block " @click="launchDonate">Donate</a>
+        <div class="text-center">
+        <a class="btn btn-success" @click="launchDonate">Donate To The Cause</a>
         <!--<a class="btn btn-primary btn-justified show-xs" @click="showRight=!showRight">Donate</a>-->
+        </div>
         <hr class="divider inv sm">
         <modal :title="'Donate to ' + recipient" :show.sync="showModal" effect="fade" width="800">
             <div slot="modal-body" class="modal-body">
@@ -12,11 +12,11 @@
             </div>
             <div slot="modal-footer" class="modal-footer">
                 <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
-                <button type="button" class="btn btn-default btn-xs" @click="prevState()" v-if="!isState('form', 1)">Back</button>
+                <button type="button" class="btn btn-default" @click="prevState()" v-if="!isState('form', 1)">Back</button>
 
-                <button type="button" class="btn btn-primary btn-xs" @click="nextState()" v-if="isState('form', 1)">Next</button>
-                <button type="button" class="btn btn-primary btn-xs" @click="reviewDonation()" v-if="isState('form', 2)">Review Donation</button>
-                <button type="button" class="btn btn-primary btn-xs" @click="createToken" v-if="donationState==='review'">Donate</button>
+                <button type="button" class="btn btn-primary" @click="nextState()" v-if="isState('form', 1)">Next</button>
+                <button type="button" class="btn btn-primary" @click="reviewDonation()" v-if="isState('form', 2)">Review</button>
+                <button type="button" class="btn btn-primary" @click="createToken" v-if="donationState==='review'">Donate</button>
             </div>
         </modal>
 

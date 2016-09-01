@@ -8,19 +8,9 @@
 						   :debounce="250" placeholder="Tag, tag2, tag3...">
 				</div>
 				<div class="form-group">
-					<v-select class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-							  :value.sync="groupsArr" :options="groupsOptions" label="name"
-							  placeholder="Filter Groups"></v-select>
-				</div>
-				<div class="form-group">
 					<v-select class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
 							  :value.sync="usersArr" :options="usersOptions" label="name"
 							  placeholder="Filter Users"></v-select>
-				</div>
-				<div class="form-group" v-if="!tripId">
-					<v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-							  :value.sync="campaignObj" :options="campaignOptions" label="name"
-							  placeholder="Filter by Campaign"></v-select>
 				</div>
 				<div class="form-group">
 					<select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
@@ -350,7 +340,7 @@
 	import vSelect from "vue-select";
 	import VueStrap from 'vue-strap/dist/vue-strap.min';
 	export default{
-        name: 'admin-reservations-list',
+        name: 'dashboard-group-reservations',
 		components: {vSelect, 'aside': VueStrap.aside},
 		props:{
 			tripId: {

@@ -30,8 +30,8 @@
                 </div>
             </div><!-- end col -->
             <div class="col-sm-4">
-                <modal-donate title="{{ $fundraiser->fund->name }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"
-                              type="{{ $type or '' }}" type-id="{{ $slug or '' }}" recipient="{{ $fundraiser->sponsor->name }}"></modal-donate>
+                <modal-donate title="{{ $fundraiser->fund->name }}" auth="{{ auth()->check() ? 1 : 0 }}" type="{{ $type or '' }}"
+                              type-id="{{ $slug or '' }}" fund-id="{{ $fundraiser->fund_id }}" recipient="{{ $fundraiser->sponsor->name }}"></modal-donate>
 
                 <div class="panel panel-default">
                     <div class="panel-body">

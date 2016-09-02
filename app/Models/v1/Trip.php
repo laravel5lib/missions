@@ -163,7 +163,7 @@ class Trip extends Model
     /**
      * Get all the trip's facilitators
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function facilitators()
     {

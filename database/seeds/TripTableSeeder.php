@@ -2,6 +2,7 @@
 
 use App\Models\v1\Cost;
 use App\Models\v1\Payment;
+use App\Models\v1\User;
 use Illuminate\Database\Seeder;
 
 class TripTableSeeder extends Seeder
@@ -39,6 +40,8 @@ class TripTableSeeder extends Seeder
             $t->requirements()->saveMany(factory(App\Models\v1\Requirement::class, 4)->make());
 
             $t->notes()->save(factory(App\Models\v1\Note::class)->make());
+
+            $t->facilitators()->attach(User::where('email', 'admin@admin.com')->first()->id);
 
         });
     }

@@ -1,9 +1,6 @@
-@extends('emails.layouts.default)
+@extends('emails.layouts.default')
 
 @section('content')
-
-    <p>Hi {{ $facilitator->name }}</p>
-
     <p>{{ $reservation->name }} registered for the {{ $reservation->trip->campaign->name }} trip to {{ country($reservation->trip->country_code) }}. Some details about the reservation are listed below.</p>
 
     <table>

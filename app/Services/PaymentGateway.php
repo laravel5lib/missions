@@ -58,8 +58,6 @@ class PaymentGateway {
         // was an array of card details provided?
         if (is_array($params)) {
 
-            $this->validateParams(['number', 'exp_month', 'exp_year', 'cvc'], $params);
-
             $card = [
                 'card' => [
                     'number'    => $params['number'],
@@ -84,8 +82,6 @@ class PaymentGateway {
      */
     public function createCustomer(array $params, $card_token)
     {
-        $this->validateParams(['email'], $params);
-
         $customer = $this->stripe->customers()->create([
             'email' => $params['email'],
             'source' => $card_token
@@ -121,8 +117,6 @@ class PaymentGateway {
      */
     public function createCharge(array $params, $card_token, $customer_id = null)
     {
-        $this->validateParams(['currency', 'amount', 'description'], $params);
-
         $charge = $this->stripe->charges()->create([
             'customer' => $customer_id,
             'currency' => $params['currency'],
@@ -160,21 +154,6 @@ class PaymentGateway {
         $refund = $this->stripe->refunds()->create($charge_id, $amount);
 
         return $refund[id];
-    }
-
-    /**
-     * Check for valid parameters.
-     *
-     * @param array $required
-     * @param array $params
-     * @return bool
-     */
-    protected function validateParams(array $required, array $params)
-    {
-        if(empty(array_intersect($required, $params)))
-            abort(400, 'Invalid or missing parameters');
-
-        return true;
     }
 
 }

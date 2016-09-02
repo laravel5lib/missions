@@ -43,7 +43,7 @@ class DonationsController extends Controller
         $this->payment = $payment;
         $this->donor = $donor;
 
-        $this->middleware('api.auth');
+//        $this->middleware('api.auth');
     }
 
     /**

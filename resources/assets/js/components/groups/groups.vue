@@ -38,6 +38,24 @@
                         </div><!-- end panel-body -->
                 </div><!-- end panel -->
             </div><!-- end col -->
+        <div class="col-sm-12 text-center">
+            <nav>
+                <ul class="pagination pagination-sm">
+                    <li :class="{ 'disabled': pagination.current_page == 1 }">
+                        <a aria-label="Previous" @click="page=pagination.current_page-1">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
+                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
+                        <a aria-label="Next" @click="page=pagination.current_page+1">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
     </div>
     <hr class="divider inv xlg">
     <div class="white-bg">
@@ -296,7 +314,7 @@
                     per_page: this.per_page
                 }).then(function(groups){
                     this.groups = groups.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.pagination = groups.data.meta.pagination;
                 }).then(function () {
 
                 });

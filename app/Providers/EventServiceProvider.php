@@ -13,9 +13,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\UserWasCreated' => [
-            'App\Listeners\SendWelcomeEmail',
-        ],
         'App\Events\DonationWasMade' => [
             'App\Listeners\EmailReceipt',
 //            'App\Listeners\NotifyRecipient'

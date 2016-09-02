@@ -34,8 +34,6 @@ class AppServiceProvider extends ServiceProvider
             'App\Models\v1\Upload'
         ]);
 
-        User::created(function ($user) { event(new UserWasCreated($user)); });
-
         Reservation::created(function ($reservation) {
 
             $active = $reservation->trip->activeCosts()->with('payments')->get();
@@ -83,7 +81,7 @@ class AppServiceProvider extends ServiceProvider
                'spots' => $reservation->trip->spots - 1
             ]);
 
-            event(new ReservationWasCreated($reservation));
+//            event(new ReservationWasCreated($reservation));
         });
 
         Trip::created(function ($trip) {

@@ -48354,7 +48354,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0b3f2b04", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":180,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],120:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],120:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -48582,7 +48582,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-23ed330c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":180,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],122:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],122:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -49562,10 +49562,12 @@ exports.default = {
             this.$http.get('fundraisers', {
                 // include: '',
                 search: this.search,
+                page: this.page,
                 per_page: this.per_page
             }).then(function (response) {
                 this.fundraisers = response.data.data;
                 this.featuredFundraisers = _.first(this.fundraisers, 5);
+                this.pagination = response.data.meta.pagination;
             });
         },
         seeAll: function seeAll() {
@@ -50563,6 +50565,64 @@ if (module.hot) {(function () {  module.hot.accept()
 },{"vue":116,"vue-hot-reload-api":111}],143:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'groups',
+    data: function data() {
+        return {
+            groups: [],
+            groupsLimit: 3,
+            resource: this.$resource('groups?isPublic=yes'),
+
+            // pagination vars
+            search: '',
+            page: 1,
+            per_page: 6,
+            pagination: {}
+        };
+    },
+
+    watch: {
+        'search': function search(val) {
+            this.searchGroups();
+        }
+    },
+    methods: {
+        seeAll: function seeAll() {
+            this.groupsLimit = this.groups.length;
+        },
+        searchGroups: function searchGroups() {
+            this.resource.query({}, {
+                search: this.search,
+                page: this.page,
+                per_page: this.per_page
+            }).then(function (groups) {
+                this.groups = groups.data.data;
+                this.pagination = response.data.meta.pagination;
+            }).then(function () {});
+        }
+    },
+    ready: function ready() {
+        this.searchGroups();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <h4>Groups Partnered With Us</h4>\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <a v-if=\"groups.length > 3\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <div class=\"form-group form-group-sm\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\" v-model=\"search\" debounce=\"250\">\n            <!--<span class=\"input-group-btn\">\n                <button class=\"btn btn-default\" type=\"button\">Go!</button>\n            </span>-->\n        </div><!-- /input-group -->\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <!--<a v-if=\"fundraisers.length > 6 && fundraisersLimit == 6\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>-->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n        <div class=\"col-sm-6 col-md-4\" v-for=\"group in groups|limitBy groupsLimit\" style=\"display:flex\">\n            <div class=\"panel panel-default\">\n                <a :href=\"'/groups/' + group.url\" role=\"button\">\n                    <img :src=\"group.avatar\" :alt=\"group.name\" class=\"img-responsive\">\n                </a>\n                    <div style=\"min-height:220px;\" class=\"panel-body\">\n                        <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{group.country}}</h6>\n                        <a :href=\"'/groups/' + group.url\" role=\"button\">\n                            <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">{{group.name}}</h5>\n                        </a>\n                        <h6>{{group.started_at | moment 'll'}} - {{group.ended_at | moment 'll'}}</h6>\n                        <hr class=\"divider lg\">\n                        <p class=\"small\">{{group.description}}</p>\n                    </div><!-- end panel-body -->\n            </div><!-- end panel -->\n        </div><!-- end col -->\n</div>\n<hr class=\"divider inv xlg\">\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center\">\n        <h2 class=\"text-primary\">Missions.Me plans trips around you. We create experiences that will maximize your specific abilities and desires.</h2>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage1.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage3.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage4.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage5.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage8.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage9.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage10.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage12.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage13.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage14.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage15.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage18.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-xs-10 col-xs-offset-1\">\n        <div class=\"row\">\n          <div class=\"col-xs-10 col-xs-offset-1\">\n            <h6 class=\"text-uppercase text-center\">A Trip For Everyone</h6>\n            <h1 class=\"text-center\">Choose A Role</h1>\n            <hr class=\"divider red-small lg\">\n            <hr class=\"divider inv lg\">\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"missionary.html\"><h4 class=\"text-primary\">Missionary</h4></a>\n                <p class=\"small\">Anyone age 13+ can be an M.M missionary. Set out on the journey with your friend or family to bring a message of love and hope along with an unforgettable cultural experience.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"medical-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/medical-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"medical-missionary.html\"><h4>Medical Missionary</h4></a>\n                <p class=\"small\">Treat, diagnose, prescribe, and share the love of Jesus. Anyone in a medical field can serve, including students currently enrolled in school. Physicians, Dentists, Nurses, and all assistants needed.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"group-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/group-leader.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"group-leader.html\"><h4>Group Leader</h4></a>\n                <p class=\"small\">M.M specializes in organizing and creating turn-key group missions experiences for youth groups, college groups, and business groups. You bring passion; we take care of the rest.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"pastor-speaker.html\"><img class=\"img-responsive\" src=\"images/why-mm/speaker.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"pastor-speaker.html\"><h4>Pastor/Speaker</h4></a>\n                <p class=\"small\">Share your gift of leadership with the team by leading a morning devo then impart spiritual wisdom into local church leadership. Let us create a custom schedule that makes the most of your valuable time.</p>\n              </div><!-- end panel-body -->\n            </div><!-- end panel -->\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"business-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/business-person.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"business-leader.html\"><h4>Business Leader</h4></a>\n                <p class=\"small\">A shortened “Business Class” trip is available on select trips. You will experience conferences, stadium outreaches, street ministry, and connect with God in a whole new way. All trips will have you back on Sunday night, ready for Monday.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"media-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/media-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"media-missionary.html\"><h4>Media Missionary</h4></a>\n                <p class=\"small\">Tell the story of life change! M.M needs you to film, shoot, interview, edit, export, and be creative! Experience a whole new world through the lens of a camera while capturing the most exciting moments of the trip.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end gray-lighter-bg -->\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h6 class=\"text-uppercase text-primary\">It's So Easy</h6>\n        <h1 class=\"text-primary dash-trailing\">We've Got You</h1>\n        <p class=\"large-type\">Logistics, we got it covered. Missions.Me makes missions simple by taking care of all of your transportation, hotel, food, training, translators and ministry schedule needs.</p>\n        <hr class=\"divider inv\">\n        <a class=\"btn btn-primary\" href=\"#\">Speak to a rep</a>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/staff.jpg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section-->\n  </div><!-- end container -->\n</div><!-- end red-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-lawn.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-conf.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary-darker dash-trailing-dark\">Level Of Impact</h1>\n        <p class=\"large-type\">We are interested in changing nations, communities, and individuals. Every outreach we organize deems to do just that. In just one week's time you and your team will be face to face with entire schools, neighborhoods, and churches. We believe a short-term team must serve a long-term and sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted.</p>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/stadium-impact.jpg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/group-security.jpg\">\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary dash-trailing\">Safety and Security</h1>\n        <!-- <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our leadership provides in depth training to create a safe experience for every missionary. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe. Multiple leaders care for each missionary and guidelines are faceted so that no person is ever alone. We also do background checks on all potential leaders. Missions.Me has a proven track record of safety and security that keeps our teams coming back.</p> -->\n        <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe.</p>\n        <blockquote>\"I have traveled with Missions.Me in many countries and have witnessed first-hand their organization and safety measures. I am completely confident sending my teens on a Missions.Me missions trip.\"\n          <footer>Sue, Mother from Lancaster, PA</footer></blockquote>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-light-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-center\">Trip Difficulty Ratings</h1>\n        <hr class=\"divider red-small lg\">\n        <hr class=\"divider inv lg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n    <div class=\"row text-center\">\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level1.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>These trips are great for those just getting started in the world-changing business. First timers of all ages area welcome.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level2.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>If Level 1 proved to be a piece of cake, you’re ready for a Level 2 adventure. A little tougher, a little sweatier, but much more sweeter.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level3.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>Chuck Norris. Mr. T. Annie Oakley. Yep, they’re all level 3 missionaries. It may not be physically tough, but it’ll be a challenge.</p>\n      </div>\n    </div>\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-94e88304", module.exports)
+  } else {
+    hotAPI.update("_v-94e88304", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":116,"vue-hot-reload-api":111}],144:[function(require,module,exports){
+'use strict';
+
 var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
@@ -50722,7 +50782,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-036a9d78", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],144:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50875,7 +50935,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-140a9660", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./donate.vue":130,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],145:[function(require,module,exports){
+},{"./donate.vue":130,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51037,7 +51097,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b807f5a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":180,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],146:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],147:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51125,7 +51185,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2aa502b9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],147:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51162,7 +51222,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-384f8292", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],148:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],149:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -51470,7 +51530,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f7d35b42", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],149:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51521,7 +51581,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-a13fe9fe", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],150:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51577,7 +51637,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-49f0bb1d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],151:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51683,7 +51743,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-75d11b12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../passports/passport-create-update.vue":145,"vue":116,"vue-hot-reload-api":111}],152:[function(require,module,exports){
+},{"../passports/passport-create-update.vue":146,"vue":116,"vue-hot-reload-api":111}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51789,7 +51849,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-459f93c3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../visas/visa-create-update.vue":191,"vue":116,"vue-hot-reload-api":111}],153:[function(require,module,exports){
+},{"../visas/visa-create-update.vue":192,"vue":116,"vue-hot-reload-api":111}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51852,7 +51912,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-a231700c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],154:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],155:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -52010,7 +52070,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-469c8f94", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":161,"./create/details.vue":162,"./create/pricing.vue":163,"./create/requirements.vue":164,"./create/settings.vue":165,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],155:[function(require,module,exports){
+},{"./create/deadlines.vue":162,"./create/details.vue":163,"./create/pricing.vue":164,"./create/requirements.vue":165,"./create/settings.vue":166,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52046,7 +52106,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5e2d84c3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],156:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52139,7 +52199,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-66842823", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],157:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],158:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -52319,7 +52379,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8c08b4bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":166,"./edit/details.vue":167,"./edit/pricing.vue":168,"./edit/requirements.vue":169,"./edit/settings.vue":170,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],158:[function(require,module,exports){
+},{"./edit/deadlines.vue":167,"./edit/details.vue":168,"./edit/pricing.vue":169,"./edit/requirements.vue":170,"./edit/settings.vue":171,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52422,7 +52482,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-cc43e7c2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],159:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52495,7 +52555,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6bdfd31c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],160:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52566,7 +52626,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-23a3fbdd", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],161:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52644,7 +52704,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c9cbdc6c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],162:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],163:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 'use strict';
@@ -52758,7 +52818,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0a5fa131", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],163:[function(require,module,exports){
+},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52987,7 +53047,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3f362696", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],164:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53066,7 +53126,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-616b6831", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],165:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53121,7 +53181,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0f0f62c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],166:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53203,7 +53263,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1273c0d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],167:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53339,7 +53399,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-72548882", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-select":113}],168:[function(require,module,exports){
+},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-select":113}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53572,7 +53632,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c649f17a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],169:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53654,7 +53714,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4f05b663", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],170:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53714,7 +53774,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3d46cc14", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],171:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53760,7 +53820,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0109f388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],172:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53927,7 +53987,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-22c28071", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],173:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53984,7 +54044,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ddfdfb4e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],174:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54272,7 +54332,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5deab4a7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],175:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54317,7 +54377,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6a94c15c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],176:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54354,7 +54414,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-64f90a42", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],177:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54391,7 +54451,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-05de1c04", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],178:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54463,7 +54523,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5747c53b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],179:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],180:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -54710,7 +54770,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-906ca04e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":143,"./registration/additional-trip-options.vue":171,"./registration/basic-info.vue":172,"./registration/deadline-agreement.vue":173,"./registration/payment-details.vue":174,"./registration/review.vue":175,"./registration/roca.vue":176,"./registration/tos.vue":177,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],180:[function(require,module,exports){
+},{"../login.vue":144,"./registration/additional-trip-options.vue":172,"./registration/basic-info.vue":173,"./registration/deadline-agreement.vue":174,"./registration/payment-details.vue":175,"./registration/review.vue":176,"./registration/roca.vue":177,"./registration/tos.vue":178,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55039,7 +55099,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0b158eca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],181:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],182:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -55179,7 +55239,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8a802f56", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],182:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55304,7 +55364,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0bcd7c70", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],183:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55340,7 +55400,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-11aa36f7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],184:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55492,7 +55552,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-acb15654", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],185:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],186:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -55714,7 +55774,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-296e3329", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],186:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55778,7 +55838,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"\">\n    <div class=\"btn-group btn-group-xs btn-group-justified\" role=\"group\" aria-label=\"...\">\n        <div class=\"btn-group btn-group-xs\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-default\" :class=\"{'btn-primary': activeView === 'donors'}\" @click=\"toggleView('donors')\">Donors</button>\n        </div>\n        <div class=\"btn-group btn-group-xs\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-default\" :class=\"{'btn-primary': activeView === 'donations'}\" @click=\"toggleView('donations')\">Donations</button>\n        </div>\n    </div>\n\n    <hr class=\"divider inv sm\">\n\n    <div class=\"panel panel-default\" v-for=\"donor in donors\" v-if=\"activeView==='donors'\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ donor.id }}\">\n            <h5>\n                <a role=\"button\">\n                    {{ donor.name }} <span class=\"small\">{{donor.total_donated|currency}}</span>\n                </a>\n            </h5>\n        </div>\n    </div>\n    <div class=\"panel panel-default\" v-for=\"donation in donations\" v-if=\"activeView==='donations'\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ donation.id }}\">\n            <h5>\n                <span class=\"text-success\">{{ donation.amount|currency }}</span> was donated<br>\n                <small class=\"small\">by <a :href=\"'@' + donation.donor.data.account_url\">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>\n                <br><small>{{ donation.comment }}</small>\n            </h5>\n        </div>\n    </div>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12 text-center\">\n            <nav>\n                <ul class=\"pagination pagination-sm\">\n                    <li>\n                        <a>{{ pagination.total }} {{ activeView === 'donors' ? 'Donors' : 'Donations' }}</a>\n                    </li>\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                            <span aria-hidden=\"true\">« Back</span>\n                        </a>\n                    </li>\n                    <!--<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>-->\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                            <span aria-hidden=\"true\">Next »</span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"btn-group btn-group-sm\" role=\"group\" aria-label=\"...\">\n        <div class=\"btn-group btn-group-sm\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-default\" :class=\"{'btn-primary': activeView === 'donors'}\" @click=\"toggleView('donors')\">Donors</button>\n        </div>\n        <div class=\"btn-group btn-group-sm\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-default\" :class=\"{'btn-primary': activeView === 'donations'}\" @click=\"toggleView('donations')\">Donations</button>\n        </div>\n    </div>\n\n    <hr class=\"divider inv sm\">\n\n    <div class=\"panel panel-default\" v-for=\"donor in donors\" v-if=\"activeView==='donors'\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ donor.id }}\">\n            <h5>\n                <a role=\"button\">\n                    {{ donor.name }} <span class=\"small\">{{donor.total_donated|currency}}</span>\n                </a>\n            </h5>\n        </div>\n    </div>\n    <div class=\"panel panel-default\" v-for=\"donation in donations\" v-if=\"activeView==='donations'\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ donation.id }}\">\n            <h5>\n                <span class=\"text-success\">{{ donation.amount|currency }}</span> was donated<br>\n                <small class=\"small\">by <a :href=\"'@' + donation.donor.data.account_url\">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>\n                <br><small>{{ donation.comment }}</small>\n            </h5>\n        </div>\n    </div>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12 text-center\">\n            <nav>\n                <ul class=\"pagination pagination-sm\">\n                    <li>\n                        <a>{{ pagination.total }} {{ activeView === 'donors' ? 'Donors' : 'Donations' }}</a>\n                    </li>\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                            <span aria-hidden=\"true\">« Back</span>\n                        </a>\n                    </li>\n                    <!--<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>-->\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                            <span aria-hidden=\"true\">Next »</span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -55789,7 +55849,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7d5b1140", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":105,"vue":116,"vue-hot-reload-api":111}],187:[function(require,module,exports){
+},{"marked":105,"vue":116,"vue-hot-reload-api":111}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55827,7 +55887,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-96d25000", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],188:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],189:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55867,7 +55927,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0f4b0dca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],189:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55982,7 +56042,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <template v-if=\"isUser()\">\n    <div class=\"row hidden-xs\">\n        <div class=\"col-sm-8\">\n            <h5>Share your amazing stories with the world!</h5>\n        </div>\n        <div class=\"col-sm-4 text-right\">\n            <button class=\"btn btn-primary btn-sm\" @click=\"newMode=!newMode\">Post Story <i class=\"fa fa-plus\"></i></button>\n        </div>\n    </div>\n    <div class=\"row visible-xs\">\n        <div class=\"col-sm-12 text-center\">\n            <h5>Share your amazing stories with the world!</h5>\n        </div>\n        <div class=\"col-sm-12 text-center\">\n            <button class=\"btn btn-primary btn-sm\" @click=\"newMode=!newMode\">Post Story <i class=\"fa fa-plus\"></i></button>\n        </div>\n    </div>\n    <hr class=\"divider inv\">\n    </template>\n    <div class=\"panel panel-default\" v-if=\"newMode\">\n        <div class=\"panel-body\">\n            <form>\n                <div class=\"form-group\">\n                    <label for=\"newStoryTitle\">Story Title</label>\n                    <input type=\"text\" class=\"form-control\" id=\"newStoryTitle\" v-model=\"selectedStory.title\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"newStoryContent\">Content \n                        <button class=\"btn btn-default-hollow btn-sm\" type=\"button\" @click=\"newMarkedContentToggle = !newMarkedContentToggle\">\n                            <span v-show=\"!newMarkedContentToggle\">Preview</span>\n                            <span v-show=\"newMarkedContentToggle\">Edit</span>\n                        </button>\n                    </label>\n                    <textarea v-show=\"!newMarkedContentToggle\" class=\"form-control\" id=\"newStoryContent\" v-model=\"selectedStory.content\" minlength=\"1\" rows=\"10\"></textarea>\n                    <div class=\"collapse\" :class=\"{ 'in': newMarkedContentToggle }\">\n                        <div class=\"well\" v-html=\"selectedStory.content | marked\"></div>\n                    </div>\n                </div>\n                <div class=\"form-group\">\n                    <button class=\"btn btn-sm btn-default\" type=\"button\" @click=\"newMode = false\">Cancel</button>\n                    <button class=\"btn btn-sm btn-primary\" type=\"button\" @click=\"createStory(selectedStory)\">Publish</button>\n                </div>\n            </form>\n        </div>\n    </div>\n    <div class=\"panel panel-default\" v-for=\"story in stories\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ story.id }}\">\n            <h5>\n                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse-{{ story.id }}\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                    {{ story.title }}\n                </a>\n            </h5>\n        </div>\n        <div id=\"collapse-{{ story.id }}\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"heading-{{ story.id }}\">\n            <div class=\"panel-body\" v-if=\"editMode !== story.id\">\n            <div class=\"row\">\n                <div class=\"col-sm-8\">\n                    <h5 class=\"media-heading\" style=\"margin:4px 0 10px;\"><a href=\"#\">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>\n                </div>\n                <div class=\"col-sm-4\">\n                    <div style=\"padding: 0;\" v-if=\"isUser()\">\n                        <div role=\"group\" aria-label=\"...\">\n                            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"selectedStory = story,editMode = story.id\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"selectedStory = story,deleteModal = true\"><i class=\"fa fa-trash\"></i> Delete</a>\n                        </div>\n                    </div>\n                </div>\n            </div>\n                {{{ story.content | marked }}}\n            </div>\n            <div class=\"panel-body\" v-if=\"editMode === story.id\">\n                <form>\n                    <div class=\"form-group\">\n                        <label for=\"selectedStoryTitle\">Title</label>\n                        <input type=\"text\" class=\"form-control\" id=\"selectedStoryTitle\" v-model=\"selectedStory.title\">\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"selectedStoryContent\">Content\n                            <button class=\"btn btn-default-hollow btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#markdownPrev{{$index}}\" aria-expanded=\"false\" aria-controls=\"markdownPrev\" @click=\"editMarkedContentToggle = !editMarkedContentToggle\">\n                                <span v-show=\"!editMarkedContentToggle\">Preview</span>\n                                <span v-show=\"editMarkedContentToggle\">Edit</span>\n                            </button>\n                        </label>\n                        <textarea v-show=\"!editMarkedContentToggle\" class=\"form-control\" id=\"selectedStoryContent\" v-model=\"selectedStory.content\" minlength=\"1\" rows=\"20\"></textarea>\n                        <div class=\"collapse\" :class=\"{ 'in': editMarkedContentToggle }\">\n                            <div class=\"well\" v-html=\"selectedStory.content | marked\"></div>\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <button class=\"btn btn-sm btn-default\" type=\"button\" @click=\"editMode = null\">Cancel</button>\n                        <button class=\"btn btn-sm btn-primary\" type=\"button\" @click=\"updateStory(selectedStory)\">Update</button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n\n    <modal v-if=\"isUser()\" :show.sync=\"deleteModal\" title=\"Remove Passport\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body\">Are you sure you want to delete this Story?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removeStory(selectedStory)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <template v-if=\"isUser()\">\n    <div class=\"row hidden-xs\">\n        <div class=\"col-sm-8\">\n            <h5>Share your amazing stories with the world!</h5>\n        </div>\n        <div class=\"col-sm-4 text-right\">\n            <button class=\"btn btn-primary btn-sm\" @click=\"newMode=!newMode\">Post Story <i class=\"fa fa-plus\"></i></button>\n        </div>\n    </div>\n    <div class=\"row visible-xs\">\n        <div class=\"col-sm-12 text-center\">\n            <h5>Share your amazing stories with the world!</h5>\n        </div>\n        <div class=\"col-sm-12 text-center\">\n            <button class=\"btn btn-primary btn-sm\" @click=\"newMode=!newMode\">Post Story <i class=\"fa fa-plus\"></i></button>\n        </div>\n    </div>\n    <hr class=\"divider inv\">\n    </template>\n    <div class=\"panel panel-default\" v-if=\"newMode\">\n        <div class=\"panel-body\">\n            <form>\n                <div class=\"form-group\">\n                    <label for=\"newStoryTitle\">Story Title</label>\n                    <input type=\"text\" class=\"form-control\" id=\"newStoryTitle\" v-model=\"selectedStory.title\">\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"newStoryContent\">Content \n                        <button class=\"btn btn-default-hollow btn-sm\" type=\"button\" @click=\"newMarkedContentToggle = !newMarkedContentToggle\">\n                            <span v-show=\"!newMarkedContentToggle\">Preview</span>\n                            <span v-show=\"newMarkedContentToggle\">Edit</span>\n                        </button>\n                    </label>\n                    <textarea v-show=\"!newMarkedContentToggle\" class=\"form-control\" id=\"newStoryContent\" v-model=\"selectedStory.content\" minlength=\"1\" rows=\"10\"></textarea>\n                    <div class=\"collapse\" :class=\"{ 'in': newMarkedContentToggle }\">\n                        <div class=\"well\" v-html=\"selectedStory.content | marked\"></div>\n                    </div>\n                </div>\n                <div class=\"form-group\">\n                    <button class=\"btn btn-sm btn-default\" type=\"button\" @click=\"newMode = false\">Cancel</button>\n                    <button class=\"btn btn-sm btn-primary\" type=\"button\" @click=\"createStory(selectedStory)\">Publish</button>\n                </div>\n            </form>\n        </div>\n    </div>\n    <div class=\"panel panel-default\" v-for=\"story in stories\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ story.id }}\">\n            <h5>\n                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapse-{{ story.id }}\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                    {{ story.title }}\n                </a>\n            </h5>\n        </div>\n        <div id=\"collapse-{{ story.id }}\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"heading-{{ story.id }}\">\n            <div class=\"panel-body\" v-if=\"editMode !== story.id\">\n            <div class=\"row\">\n                <div class=\"col-sm-8\">\n                    <h5 class=\"media-heading\" style=\"margin:4px 0 10px;\"><a href=\"#\">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>\n                </div>\n                <div class=\"col-sm-4\">\n                    <div style=\"padding: 0;\" v-if=\"isUser()\">\n                        <div role=\"group\" aria-label=\"...\">\n                            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"selectedStory = story,editMode = story.id\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"selectedStory = story,deleteModal = true\"><i class=\"fa fa-trash\"></i> Delete</a>\n                        </div>\n                    </div>\n                </div>\n            </div>\n                {{{ story.content | marked }}}\n            </div>\n            <div class=\"panel-body\" v-if=\"editMode === story.id\">\n                <form>\n                    <div class=\"form-group\">\n                        <label for=\"selectedStoryTitle\">Title</label>\n                        <input type=\"text\" class=\"form-control\" id=\"selectedStoryTitle\" v-model=\"selectedStory.title\">\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"selectedStoryContent\">Content\n                            <button class=\"btn btn-default-hollow btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#markdownPrev{{$index}}\" aria-expanded=\"false\" aria-controls=\"markdownPrev\" @click=\"editMarkedContentToggle = !editMarkedContentToggle\">\n                                <span v-show=\"!editMarkedContentToggle\">Preview</span>\n                                <span v-show=\"editMarkedContentToggle\">Edit</span>\n                            </button>\n                        </label>\n                        <textarea v-show=\"!editMarkedContentToggle\" class=\"form-control\" id=\"selectedStoryContent\" v-model=\"selectedStory.content\" minlength=\"1\" rows=\"20\"></textarea>\n                        <div class=\"collapse\" :class=\"{ 'in': editMarkedContentToggle }\">\n                            <div class=\"well\" v-html=\"selectedStory.content | marked\"></div>\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <button class=\"btn btn-sm btn-default\" type=\"button\" @click=\"editMode = null\">Cancel</button>\n                        <button class=\"btn btn-sm btn-primary\" type=\"button\" @click=\"updateStory(selectedStory)\">Update</button>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n\n    <modal class=\"text-center\" v-if=\"isUser()\" :show.sync=\"deleteModal\" title=\"Delete Story\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Story?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removeStory(selectedStory)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -55993,7 +56053,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-63f13656", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],190:[function(require,module,exports){
+},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],191:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.alert.top, .alert.top-right {\n    top: 80px;\n}\n")
 'use strict';
@@ -56168,7 +56228,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ee234926", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],191:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56321,7 +56381,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-62eb7acc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":180,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],192:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56409,7 +56469,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d20a1352", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],193:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],194:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -56439,6 +56499,10 @@ var _modalDonate2 = _interopRequireDefault(_modalDonate);
 var _campaigns = require('./components/campaigns/campaigns.vue');
 
 var _campaigns2 = _interopRequireDefault(_campaigns);
+
+var _groups = require('./components/groups/groups.vue');
+
+var _groups2 = _interopRequireDefault(_groups);
 
 var _fundraisers = require('./components/fundraisers/fundraisers.vue');
 
@@ -56804,7 +56868,7 @@ new _vue2.default({
             public: false
         }
     },
-    components: [_login2.default, _fundraisers2.default, _campaigns2.default, _campaignGroups2.default, _groupTrips2.default, _groupProfileTrips2.default, _groupProfileStories2.default, _groupProfileFundraisers2.default, _groupsTripsSelectionWrapper2.default, _tripDetailsMissionaries2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _fundraisersStories2.default, _topNav2.default, _actionTrigger2.default, _donate2.default, _modalDonate2.default,
+    components: [_login2.default, _fundraisers2.default, _campaigns2.default, _groups2.default, _campaignGroups2.default, _groupTrips2.default, _groupProfileTrips2.default, _groupProfileStories2.default, _groupProfileFundraisers2.default, _groupsTripsSelectionWrapper2.default, _tripDetailsMissionaries2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _fundraisersStories2.default, _topNav2.default, _actionTrigger2.default, _donate2.default, _modalDonate2.default,
 
     //dashboard components
     _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default, _groupsList2.default, _visaCreateUpdate2.default, _reservationsPassportsManager2.default, _reservationsVisasManager2.default, _userSettings2.default, _userProfileStories2.default, _userProfileFundraisers2.default, _userProfileFundraisersDonors2.default, _userProfileFundraisersProgress2.default, _dashboardGroupTrips2.default, _dashboardGroupReservations2.default,
@@ -56831,6 +56895,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/action-trigger.vue":118,"./components/campaigns/admin-campaign-create.vue":119,"./components/campaigns/admin-campaign-details.vue":120,"./components/campaigns/admin-campaign-edit.vue":121,"./components/campaigns/campaign-groups.vue":122,"./components/campaigns/campaigns.vue":123,"./components/campaigns/group-trips.vue":128,"./components/campaigns/groups-trips-selection-wrapper.vue":129,"./components/donate.vue":130,"./components/fundraisers/fundraisers-stories.vue":131,"./components/fundraisers/fundraisers.vue":132,"./components/groups/admin-group-create.vue":133,"./components/groups/admin-group-edit.vue":134,"./components/groups/admin-group-managers.vue":135,"./components/groups/admin-groups-list.vue":136,"./components/groups/dashboard-group-reservations.vue":137,"./components/groups/dashboard-group-trips.vue":138,"./components/groups/group-profile-fundraisers.vue":139,"./components/groups/group-profile-stories.vue":140,"./components/groups/group-profile-trips.vue":141,"./components/groups/groups-list.vue":142,"./components/login.vue":143,"./components/modal-donate.vue":144,"./components/passports/passport-create-update.vue":145,"./components/passports/passports-list.vue":146,"./components/records/records-list.vue":147,"./components/reservations/admin-reservations-list.vue":148,"./components/reservations/donations-list.vue":149,"./components/reservations/reservations-list.vue":150,"./components/reservations/reservations-passports-manager.vue":151,"./components/reservations/reservations-visas-manager.vue":152,"./components/top-nav.vue":153,"./components/trips/admin-trip-create.vue":154,"./components/trips/admin-trip-delete.vue":155,"./components/trips/admin-trip-duplicate.vue":156,"./components/trips/admin-trip-edit.vue":157,"./components/trips/admin-trip-facilitators.vue":158,"./components/trips/admin-trip-reservations-list.vue":159,"./components/trips/admin-trips-list.vue":160,"./components/trips/trip-details-missionaries.vue":178,"./components/trips/trip-registration-wizard.vue":179,"./components/uploads/admin-upload-create-update.vue":180,"./components/uploads/admin-uploads-list.vue":181,"./components/users/admin-user-create.vue":182,"./components/users/admin-user-delete.vue":183,"./components/users/admin-user-edit.vue":184,"./components/users/admin-users-list.vue":185,"./components/users/user-profile-fundraisers-donors.vue":186,"./components/users/user-profile-fundraisers-progress.vue":187,"./components/users/user-profile-fundraisers.vue":188,"./components/users/user-profile-stories.vue":189,"./components/users/user-settings.vue":190,"./components/visas/visa-create-update.vue":191,"./components/visas/visas-list.vue":192,"bootstrap-sass":15,"gsap":102,"jquery":104,"jquery.cookie":103,"marked":105,"moment":106,"scrollmagic":108,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":109,"underscore":110,"vue":116,"vue-resource":112,"vue-strap/dist/vue-strap.min":114,"vue-validator":115}]},{},[193]);
+},{"./components/action-trigger.vue":118,"./components/campaigns/admin-campaign-create.vue":119,"./components/campaigns/admin-campaign-details.vue":120,"./components/campaigns/admin-campaign-edit.vue":121,"./components/campaigns/campaign-groups.vue":122,"./components/campaigns/campaigns.vue":123,"./components/campaigns/group-trips.vue":128,"./components/campaigns/groups-trips-selection-wrapper.vue":129,"./components/donate.vue":130,"./components/fundraisers/fundraisers-stories.vue":131,"./components/fundraisers/fundraisers.vue":132,"./components/groups/admin-group-create.vue":133,"./components/groups/admin-group-edit.vue":134,"./components/groups/admin-group-managers.vue":135,"./components/groups/admin-groups-list.vue":136,"./components/groups/dashboard-group-reservations.vue":137,"./components/groups/dashboard-group-trips.vue":138,"./components/groups/group-profile-fundraisers.vue":139,"./components/groups/group-profile-stories.vue":140,"./components/groups/group-profile-trips.vue":141,"./components/groups/groups-list.vue":142,"./components/groups/groups.vue":143,"./components/login.vue":144,"./components/modal-donate.vue":145,"./components/passports/passport-create-update.vue":146,"./components/passports/passports-list.vue":147,"./components/records/records-list.vue":148,"./components/reservations/admin-reservations-list.vue":149,"./components/reservations/donations-list.vue":150,"./components/reservations/reservations-list.vue":151,"./components/reservations/reservations-passports-manager.vue":152,"./components/reservations/reservations-visas-manager.vue":153,"./components/top-nav.vue":154,"./components/trips/admin-trip-create.vue":155,"./components/trips/admin-trip-delete.vue":156,"./components/trips/admin-trip-duplicate.vue":157,"./components/trips/admin-trip-edit.vue":158,"./components/trips/admin-trip-facilitators.vue":159,"./components/trips/admin-trip-reservations-list.vue":160,"./components/trips/admin-trips-list.vue":161,"./components/trips/trip-details-missionaries.vue":179,"./components/trips/trip-registration-wizard.vue":180,"./components/uploads/admin-upload-create-update.vue":181,"./components/uploads/admin-uploads-list.vue":182,"./components/users/admin-user-create.vue":183,"./components/users/admin-user-delete.vue":184,"./components/users/admin-user-edit.vue":185,"./components/users/admin-users-list.vue":186,"./components/users/user-profile-fundraisers-donors.vue":187,"./components/users/user-profile-fundraisers-progress.vue":188,"./components/users/user-profile-fundraisers.vue":189,"./components/users/user-profile-stories.vue":190,"./components/users/user-settings.vue":191,"./components/visas/visa-create-update.vue":192,"./components/visas/visas-list.vue":193,"bootstrap-sass":15,"gsap":102,"jquery":104,"jquery.cookie":103,"marked":105,"moment":106,"scrollmagic":108,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":109,"underscore":110,"vue":116,"vue-resource":112,"vue-strap/dist/vue-strap.min":114,"vue-validator":115}]},{},[194]);
 
 //# sourceMappingURL=main.js.map

@@ -271,8 +271,13 @@
             return{
                 groups:[],
                 groupsLimit: 3,
+                resource: this.$resource('groups?isPublic=yes'),
+
+                // pagination vars
                 search: '',
-                resource: this.$resource('groups?isPublic=yes')
+                page: 1,
+                per_page: 6,
+                pagination: {},
             }
         },
         watch: {
@@ -285,8 +290,13 @@
                 this.groupsLimit = this.groups.length
             },
             searchGroups(){
-                this.resource.query({}, {search: this.search}).then(function(groups){
-                    this.groups = groups.data.data
+                this.resource.query({}, {
+                    search: this.search,
+                    page: this.page,
+                    per_page: this.per_page
+                }).then(function(groups){
+                    this.groups = groups.data.data;
+                    this.pagination = response.data.meta.pagination;
                 }).then(function () {
 
                 });

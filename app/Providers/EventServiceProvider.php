@@ -18,7 +18,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'App\Events\DonationWasMade' => [
             'App\Listeners\EmailReceipt',
-//            'App\Listeners\NotifyRecipient'
+            'App\Listeners\NotifyRecipient'
         ],
         'App\Events\ReservationWasCreated' => [
             'App\Listeners\EmailReservationConfirmation',

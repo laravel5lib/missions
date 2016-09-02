@@ -37,7 +37,11 @@ class SendEmails extends Command
      */
     public function handle()
     {
-        $type = $this->choice('What type of email do you want to send?', ['Welcome Email', 'Reservation Confirmation']);
+        $type = $this->choice('What type of email do you want to send?', [
+            'Welcome Email',
+            'Reservation Confirmation',
+            'Donation Receipt'
+        ]);
 
         switch ($type) {
             case 'Welcome Email':
@@ -54,6 +58,17 @@ class SendEmails extends Command
                     $this->call('email:send-reservation-confirmation', ['id' => $id, '--notify' => true]);
                 } else {
                     $this->call('email:send-reservation-confirmation', ['id' => $id]);
+                }
+
+                break;
+
+            case 'Donation Receipt':
+                $id = $this->ask('Please enter the transaction ID of the donation.');
+
+                if ($this->confirm('Would you like to notify the recipient(s)? [y/n]')) {
+                    $this->call('email:send-receipt', ['id' => $id, '--notify' => true]);
+                } else {
+                    $this->call('email:send-receipt', ['id' => $id]);
                 }
 
                 break;

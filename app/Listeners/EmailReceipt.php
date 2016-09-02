@@ -3,28 +3,10 @@
 namespace App\Listeners;
 
 use App\Events\DonationWasMade;
-use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Jobs\Transactions\SendReceiptEmail;
 
-class EmailReceipt implements ShouldQueue
+class EmailReceipt
 {
-
-    /**
-     * @var Mailer
-     */
-    private $mailer;
-
-    /**
-     * Create the event listener.
-     *
-     * @param Mailer $mailer
-     */
-    public function __construct(Mailer $mailer)
-    {
-        $this->mailer = $mailer;
-    }
-
     /**
      * Handle the event.
      *
@@ -33,10 +15,8 @@ class EmailReceipt implements ShouldQueue
      */
     public function handle(DonationWasMade $event)
     {
-        $this->mailer->send('emails.donations.receipt', [
-            'donation' => $event->donation, 'donor' => $event->donor
-        ], function ($m) use ($event) {
-            $m->to($event->donor->email, $event->donor->name)->subject('Thanks for the donation!');
-        });
+        $donation = $event->donation;
+
+        dispatch(new SendReceiptEmail($donation));
     }
 }

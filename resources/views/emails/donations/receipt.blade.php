@@ -1,8 +1,8 @@
-@extends('emails.layouts.default)
+@extends('emails.layouts.default')
 
 @section('content')
 
-    <p>Hi {{ $donor->name }}</p>
+    <p>Hi {{ $donation->donor->name }}</p>
 
     <p>Thank you for your generous donation of ${{ $donation->amount }} to {{ $donation->fund->name }}</p>
 

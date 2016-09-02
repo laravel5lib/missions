@@ -1,10 +1,10 @@
-@extends('emails.layouts.default)
+@extends('emails.layouts.default')
 
 @section('content')
 
     <p>Hi {{ $recipient->name }}</p>
 
-    <p>{{ $donor->name }} donated ${{ $donation->amount }} to {{ $donation->fund->name }}</p>
+    <p>{{ $donation->donor->name }} donated ${{ $donation->amount }} to {{ $donation->fund->name }}</p>
 
     <p>You have successfully raised a total of ${{ $donation->fund->balance }}</p>
 

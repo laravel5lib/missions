@@ -82,19 +82,22 @@ class Fundraiser extends Model
      */
     public function donations()
     {
-        // we limit the results by passing in the fundraiser dates.
-        return $this->fund->donations($this->started_at, $this->ended_at);
+        return $this->fund->donations()
+                          ->from($this->started_at)
+                          ->to($this->ended_at);
     }
 
     /**
-     * Get the donors you gave through the fundraiser.
+     * Get the donors who gave through the fundraiser.
      *
      * @return mixed
      */
     public function donors()
     {
-        // we limit the results by passing in the fundraiser dates.
-        return $this->fund->donors($this->started_at, $this->ended_at);
+        return $this->fund
+                    ->donors()
+                    ->wherePivot('created_at', '>=', $this->started_at)
+                    ->wherePivot('created_at', '<=', $this->ended_at);
     }
 
     /**

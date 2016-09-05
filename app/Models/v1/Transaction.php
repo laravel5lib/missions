@@ -59,4 +59,27 @@ class Transaction extends Model
 
         return $query;
     }
+
+    /**
+     * Get transactions on or after the given date.
+     * @param $query
+     * @param $date
+     * @return mixed
+     */
+    public function scopeFrom($query, $date)
+    {
+       return $query->where('created_at', '>=', $date);
+    }
+
+    /**
+     * Get transactions on or before the given date.
+     *
+     * @param $query
+     * @param $date
+     * @return mixed
+     */
+    public function scopeTo($query, $date)
+    {
+        return $query->where('created_at', '<=', $date);
+    }
 }

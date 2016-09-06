@@ -86,11 +86,13 @@ class DonationsController extends Controller
         // if not, tokenize the card details.
         if( ! $request->has('token')) {
             $token = $this->payment->createCardToken($request->get('card'));
+        } else {
+            $token = $request->get('token');
         }
 
         // create customer with the token and donor details
         $customer_id = $this->payment
-            ->createCustomer($request->get('donor'), $request->get('token', $token));
+            ->createCustomer($request->get('donor'), $token);
 
         // merge the customer id with donor details
         $request['donor'] = $request->get('donor') + ['customer_id' => $customer_id];
@@ -98,7 +100,7 @@ class DonationsController extends Controller
         // create the charge with customer id, token, and donation details
         $charge = $this->payment->createCharge(
             $request->all(),
-            $request->get('token'),
+            $token,
             $customer_id
         );
 

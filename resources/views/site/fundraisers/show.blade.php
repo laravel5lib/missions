@@ -53,7 +53,7 @@
                         <h6 class="text-center small text-muted">Ends {{ $fundraiser->ended_at->diffForHumans() }}</h6>
                         <div>
                             <modal-donate title="{{ $fundraiser->fund->name }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"
-                              type="{{ $type or '' }}" type-id="{{ $slug or '' }}" recipient="{{ $fundraiser->sponsor->name }}"></modal-donate>
+                              type="{{ $type or '' }}" type-id="{{ $slug or '' }}" fund-id="{{ $fundraiser->fund->id }}" recipient="{{ $fundraiser->sponsor->name }}"></modal-donate>
                         </div>
                     </div>
                 </div>

@@ -246,8 +246,9 @@
 
         },
         data(){
-            return{
+            return{/**/
                 donor: '',
+                donor_id: null,
                 company_name: '',
                 amount: 1,
                 validateWith: 'email',
@@ -326,8 +327,23 @@
                 return years;
             },
             cardParams() {
+
+                if (parseInt(this.auth) && this.donor_id) {
+                    data.donor_id = this.donor_id;
+                } else {
+                    var donor =  {
+                        name: this.donor,
+                        company: this.company_name,
+                        email: this.cardEmail,
+                        phone: this.cardPhone,
+                        zip: this.cardZip,
+                        // country_code: 'us' // needs UI
+                    }
+                }
+
                 return {
                     cardholder: this.cardHolderName,
+                    email: this.cardEmail,
                     number: this.cardNumber,
                     exp_month: this.cardMonth,
                     exp_year: this.cardYear,
@@ -336,6 +352,7 @@
                     currency: 'USD', // determined from card token
                     description: 'Donation to ' + this.title,
     //                    address_zip: this.cardZip,
+                    donor: donor
                 };
             }
         },
@@ -390,10 +407,10 @@
                 }
                 return this.stripeDeferred.promise();
             },
-            createTokenCallback(status, resp) {
-                console.log(status);
+            createTokenCallback(resp) {
                 console.log(resp);
-                this.validationErrors = {
+                console.log(resp.status);
+                /*this.validationErrors = {
                     cardNumber: '',
                     cardCVC: '',
                     cardYear: '',
@@ -414,10 +431,9 @@
                         this.validationErrors.cardCVC = 'error';
                     }
                     this.stripeDeferred.reject(false);
-                }
-                if (status === 200) {
-                    this.submit(resp);
-                    this.stripeDeferred.resolve(true);
+                }*/
+                if (resp.status === 200) {
+                    this.submit(resp.data);
                 }
             },
             goToState(state){
@@ -482,20 +498,20 @@
                 var data = {
                     amount: this.amount,
                     currency: 'USD', // determined from card token
-                    description: '',
+                    description: 'Donation to ' + this.title,
                     comment: null,
-                    fund_id: this.typeId,
-                    charge_id: charge_id,
+                    fund_id: this.fundId,
                     payment: {
                         type: 'card',
                         brand: this.detectCardType(this.cardNumber),
                         last_four: this.cardNumber.substr(-4),
                         cardholder: this.cardHolderName,
+                        charge_id: charge_id,
                     }
 
                 };
-                if (this.auth) {
-                    data.donor_id = this.donor.id;
+                if (parseInt(this.auth) && this.donor_id) {
+                    data.donor_id = this.donor_id;
                 } else {
                     data.donor = {
                         name: this.donor,
@@ -503,10 +519,12 @@
                         email: this.cardEmail,
                         phone: this.cardPhone,
                         zip: this.cardZip,
-                        country_code: 'us' // needs UI
+                        // country_code: 'us' // needs UI
                     }
                 }
-                this.$http.post('donations', data);
+                this.$http.post('donations', data).then(function (response) {
+                    this.stripeDeferred.resolve(true);
+                });
             },
             detectCardType(number) {
                 // http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
@@ -551,6 +569,7 @@
             if (parseInt(this.auth)) {
                 this.$http.get('users/me').then(function (response) {
                     this.donor = response.data.data.name;
+                    this.donor_id = response.data.data.donor_id || null;
                     this.cardHolderName = response.data.data.name;
                     this.cardEmail = response.data.data.email;
                     this.cardPhone = response.data.data.phone_one;

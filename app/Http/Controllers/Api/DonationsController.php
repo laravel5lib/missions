@@ -82,17 +82,10 @@ class DonationsController extends Controller
      */
     public function store(DonationRequest $request)
     {
-        // has the card been authorized and a charge object created already?
-        // then only capture the charge
+        // is this a credit card donation?
+        // if so, look for a charge_id and capture the card
         if($request->has('charge_id')) {
             $this->payment->captureCharge($request->get('charge_id'));
-        }
-
-        // has no charge object been created? Then create and capture it.
-        if($request->has('card')) {
-            $this->payment->chargeAndCaptureCard($request->only(
-                'card', 'customer_id', 'amount', 'currency', 'description'
-            ));
         }
 
         // we can pass donor details to try and find a match
@@ -122,10 +115,12 @@ class DonationsController extends Controller
     {
         $token = $this->payment->createCardToken($request->all());
 
+        $customer_id = $this->payment->createCustomer($request->get('donor'), $token);
+
         return $this->payment->createCharge(
             $request->all(),
             $token,
-            $request->get('customer_id')
+            $customer_id
         );
     }
 }

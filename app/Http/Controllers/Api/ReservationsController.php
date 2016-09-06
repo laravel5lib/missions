@@ -89,8 +89,8 @@ class ReservationsController extends Controller
     {
         $reservation = Reservation::create($request->all());
 
-        // Eager load trip relationships for sync
-        $reservation->load('trip.costs', 'trip.requirements', 'trip.deadlines');
+        if ($request->has('costs'))
+            $reservation->syncCosts($request->get('costs'));
 
         if ($request->has('tags'))
             $reservation->tag($request->get('tags'));

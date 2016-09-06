@@ -17,6 +17,11 @@ class FundraiserFilter extends ModelFilter
         return $this->where('fundraisers.url', $slug);
     }
 
+    public function type($type)
+    {
+        return $this->where('sponsor_type', str_plural($type));
+    }
+
     public function sponsor($url)
     {
         if (starts_with($url, 'groups/')) {
@@ -35,6 +40,51 @@ class FundraiserFilter extends ModelFilter
                 $join->on('users.id', '=', 'fundraisers.sponsor_id')
                     ->where('users.url', '=', $url);
             })->select('fundraisers.*');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Find by search
+     *
+     * @param $search
+     * @return mixed
+     */
+    public function search($search)
+    {
+        return $this->where(function($q) use ($search)
+        {
+            return $q->where('name', 'LIKE', "%$search%");
+        });
+    }
+
+    /**
+     * Sort by fields
+     *
+     * @param $sort
+     * @return mixed
+     */
+    public function sort($sort)
+    {
+        $sortable = [
+            'new', 'popular'
+        ];
+
+        $param = preg_split('/\|+/', $sort);
+        $field = $param[0];
+        $direction = isset($param[1]) ? $param[1] : 'asc';
+
+        if ( in_array($field, $sortable) ) {
+
+            switch ($field) {
+                case 'new':
+                    return $this->latest();
+                    break;
+                case 'popular':
+                    return $this; // doesn't work yet :(
+                    break;
+            }
         }
 
         return $this;

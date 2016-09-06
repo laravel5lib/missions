@@ -82,18 +82,39 @@ class DonationsController extends Controller
      */
     public function store(DonationRequest $request)
     {
-        // has the card been authorized and a charge object created already?
-        // then only capture the charge
-        if($request->has('charge_id')) {
-            $this->payment->captureCharge($request->get('charge_id'));
+        // has a credit card token already been created and provided?
+        // if not, tokenize the card details.
+        if( ! $request->has('token')) {
+            $token = $this->payment->createCardToken($request->get('card'));
+        } else {
+            $token = $request->get('token');
         }
 
-        // has no charge object been created? Then create and capture it.
-        if($request->has('card')) {
-            $this->payment->chargeAndCaptureCard($request->only(
-                'card', 'customer_id', 'amount', 'currency', 'description'
-            ));
-        }
+        // create customer with the token and donor details
+        $customer = $this->payment
+            ->createCustomer($request->get('donor'), $token);
+
+        // merge the customer id with donor details
+        $request['donor'] = $request->get('donor') + ['customer_id' => $customer['id']];
+
+        // create the charge with customer id, token, and donation details
+        $charge = $this->payment->createCharge(
+            $request->all(),
+            $customer['default_source'],
+            $customer['id']
+        );
+
+        // capture the charge
+        $this->payment->captureCharge($charge['id']);
+
+        // rebuild the payment array with new details
+        $request['payment'] = [
+            'type' => 'card',
+            'charge_id' => $charge['id'],
+            'brand' => $charge['source']['brand'],
+            'last_four' => $charge['source']['last4'],
+            'cardholder' => $charge['source']['name'],
+        ];
 
         // we can pass donor details to try and find a match
         // or to create a new donor if a match isn't found.
@@ -120,12 +141,6 @@ class DonationsController extends Controller
      */
     public function authorizeCard(CardRequest $request)
     {
-        $token = $this->payment->createCardToken($request->all());
-
-        return $this->payment->createCharge(
-            $request->all(),
-            $token,
-            $request->get('customer_id')
-        );
+        return $this->payment->createCardToken($request->all());
     }
 }

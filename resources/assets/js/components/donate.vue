@@ -2,6 +2,7 @@
     <div>
         <validator name="Donation">
             <form class="form-horizontal" name="DonationForm" novalidate v-show="donationState === 'form'">
+                <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Validating"></spinner>
                 <template v-if="isState('form', 1)">
                     <div class="row">
                         <div class="col-sm-12 text-center">
@@ -22,8 +23,14 @@
                     <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-sm-12" :class="{ 'has-error': checkForError('donor')}">
-                            <label>Donor Or Company Name</label>
+                            <label>Donor Name</label>
                             <input type="text" class="form-control" v-model="donor" v-validate:donor="{required: true}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" :class="{ 'has-error': checkForError('donor')}">
+                            <label>Company Name</label>
+                            <input type="text" class="form-control" v-model="company_name">
                         </div>
                     </div>
                     <hr class="divider inv sm">
@@ -145,6 +152,7 @@
 
             </form>
             <div class="panel panel-primary" v-show="donationState === 'review'">
+                <spinner v-ref:donationSpinner size="xl" :fixed="false" text="Processing Donation"></spinner>
                 <div class="panel-heading">
                     <div class="panel-title">
                         <h5>Donation Details</h5>
@@ -180,14 +188,25 @@
                     <a @click="createToken" class="btn btn-primary">Donate</a>
                 </div>
             </div>
+            <div class="" v-show="donationState === 'confirmation'">
+                <div class="text-center">
+                    <h1><i class="fa fa-check-circle text-success success fa-3x"></i></h1>
+                    <h2>Donation Confirmed</h2>
+                    <h3>Thank you!</h3>
+                </div>
+                <!--<div class="panel-footer" v-if="!child">
+                    <a @click="done" class="btn btn-success">Close</a>
+                </div>-->
+            </div>
         </validator>
     </div>
 </template>
 <script>
     import vSelect from 'vue-select';
+    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'donate',
-        components:{ vSelect },
+        components:{ vSelect, 'spinner': VueStrap.spinner },
         props: {
             type: {
                 type: String,
@@ -232,14 +251,21 @@
             title: {
                 type: String,
                 default: ''
+            },
+            identifier: {
+                type: String,
+                defulat: null
             }
 
         },
         data(){
             return{
                 donor: '',
+                donor_id: null,
+                company_name: '',
                 amount: 1,
                 validateWith: 'email',
+                token: null,
 
                 //card vars
                 card: null,
@@ -271,13 +297,8 @@
                 showButton: true,
                 showLabels: true,
                 devMode: true,
-                // deferred variable used for card validation
-                // needs to be on `this` scope to access in response callback
                 stripeDeferred: {},
                 attemptedCreateToken: false,
-                //attemptSubmit: false,
-                //donationState: 'form',
-                //subState:1
             }
         },
         validators: {
@@ -308,7 +329,6 @@
                     results = [];
                     for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
                         results.push(num);
-//                        results.push(num.toString().substr(2, 2));
                     }
                     return results;
                 })();
@@ -316,12 +336,11 @@
             },
             cardParams() {
                 return {
-                    //name: this.cardHolderName,
+                    cardholder: this.cardHolderName,
                     number: this.cardNumber,
                     exp_month: this.cardMonth,
                     exp_year: this.cardYear,
                     cvc: this.cardCVC,
-//                    address_zip: this.cardZip,
                 };
             }
         },
@@ -367,16 +386,18 @@
                 } else {
                     // authorize card data
                     console.log(this.cardParams);
-                    this.$http.post('donations/authorize', this.cardParams).then(this.createTokenCallback);
-                    // Stripe.setPublishableKey(this.stripeKey);
-                    // Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+                    this.$refs.validationspinner.show();
+                    this.$http.post('donations/authorize', this.cardParams)
+                            .then(this.createTokenCallback,
+                                    function (error) {
+                                        this.$refs.validationspinner.hide();
+                                    });
                 }
                 return this.stripeDeferred.promise();
             },
-            createTokenCallback(status, resp) {
-                console.log(status);
+            createTokenCallback(resp) {
                 console.log(resp);
-                this.validationErrors = {
+                /*this.validationErrors = {
                     cardNumber: '',
                     cardCVC: '',
                     cardYear: '',
@@ -397,19 +418,58 @@
                         this.validationErrors.cardCVC = 'error';
                     }
                     this.stripeDeferred.reject(false);
+                }*/
+                if (resp.status === 200) {
+                    this.$refs.validationspinner.hide();
+                    this.token = resp.data;
+                    this.stripeDeferred.resolve(resp.data);
                 }
-                if (status === 200) {
-                    this.card = resp;
-                    // send payment data to parent
-                    this.paymentInfo = {
-                        token: resp,
-                        save: this.cardSave,
-                        email: this.cardEmail
-                    };
+            },
+            submit(){
+                this.$refs.donationspinner.show();
+                var data = {
+                    amount: this.amount,
+                    currency: 'USD', // determined from card token
+                    description: 'Donation to ' + this.title,
+                    comment: null,
+                    fund_id: this.fundId,
+                    token: this.token,
+                    payment: {
+                        type: 'card',
+                        brand: this.detectCardType(this.cardNumber),
+                        last_four: this.cardNumber.substr(-4),
+                        cardholder: this.cardHolderName,
+                    }
 
-                    this.submit();
-                    this.stripeDeferred.resolve(true);
+                };
+                if (parseInt(this.auth) && this.donor_id) {
+                    data.donor_id = this.donor_id;
+                } else {
+                    data.donor = {
+                        name: this.donor,
+                        company: this.company_name,
+                        email: this.cardEmail,
+                        phone: this.cardPhone,
+                        zip: this.cardZip,
+                        country_code: 'us' // needs UI
+                    }
                 }
+                this.$http.post('donations', data)
+                        .then(function (response) {
+                            this.stripeDeferred.resolve(true);
+                            this.$refs.donationspinner.hide();
+                            this.donationState = 'confirmation';
+                        },
+                        function (error) {
+                            this.$refs.donationspinner.hide();
+                        });
+            },
+            done(){
+                if (this.child) {
+                    this.$root.$emit('DonateForm:complete');
+                }/* else {
+                    window.location.href
+                }*/
             },
             goToState(state){
                 switch (state) {
@@ -434,6 +494,7 @@
                                 if (this.$Donation.invalid) {
                                     break;
                                 }
+
                                 this.subState = 2;
                                 this.attemptSubmit = !1;
                                 break;
@@ -469,34 +530,30 @@
                         break;
                 }
             },
-            submit(){
-                debugger;
-                var data = {
-                    amount: this.amount,
-                    currency: 'USD', // determined from card token
-                    description: '',
-                    comment: null,
-                    fund_id: this.typeId,
-
+            detectCardType(number) {
+                // http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
+                var re = {
+                    electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
+                    maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
+                    dankort: /^(5019)\d+$/,
+                    interpayment: /^(636)\d+$/,
+                    unionpay: /^(62|88)\d+$/,
+                    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+                    mastercard: /^5[1-5][0-9]{14}$/,
+                    amex: /^3[47][0-9]{13}$/,
+                    diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+                    discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+                    jcb: /^(?:2131|1800|35\d{3})\d{11}$/
                 };
-                if (this.auth) {
-                    data.donor_id = this.donor.id;
-                } else {
-                    data.donor = {
-                        name: this.donor,
-                        email: this.cardEmail,
-                        phone: this.cardPhone,
-                        zip: this.cardZip,
-                        country_code: 'us' // needs UI
+
+                for(var key in re) {
+                    if(re[key].test(number)) {
+                        return key
                     }
                 }
-                this.$http.post('donations', data);
             }
         },
         events: {
-            'VueStripe::create-card-token': function () {
-                //return this.createToken();
-            },
             'VueStripe::reset-form': function () {
                 return this.resetCaching();
             }
@@ -512,10 +569,11 @@
 
             if (parseInt(this.auth)) {
                 this.$http.get('users/me').then(function (response) {
-                    this.donor = response.data.data.name
-                    this.cardHolderName = response.data.data.name
-                    this.cardEmail = response.data.data.email
-                    this.cardPhone = response.data.data.phone_one
+                    this.donor = response.data.data.name;
+                    this.donor_id = response.data.data.donor_id || null;
+                    this.cardHolderName = response.data.data.name;
+                    this.cardEmail = response.data.data.email;
+                    this.cardPhone = response.data.data.phone_one;
                     this.cardZip = response.data.data.zip
                 });
             }
@@ -529,12 +587,26 @@
                 this.prevState();
             }.bind(this));
 
-            this.$root.$on('DonateForm:reviewDonation', function () {
-                this.goToState('review');
+            this.$root.$on('DonateForm:resetState', function () {
+                this.toState('form', 1);
             }.bind(this));
 
-            this.$root.$on('DonateForm:createToken', function () {
-                this.createToken();
+            this.$root.$on('DonateForm:reviewDonation', function (identifier) {
+                if (identifier !== this.identifier) {
+                    return false;
+                }
+
+                $.when(this.createToken(identifier)).then(function (response) {
+                    this.goToState('review');
+                }.bind(this));
+            }.bind(this));
+
+            this.$root.$on('DonateForm:donate', function (identifier) {
+                if (identifier !== this.identifier) {
+                    return false;
+                }
+
+                this.submit();
             }.bind(this));
 
         },

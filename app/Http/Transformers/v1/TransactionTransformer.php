@@ -38,11 +38,15 @@ class TransactionTransformer extends TransformerAbstract {
 
     public function includeFund(Transaction $transaction)
     {
-        //
+        $fund = $transaction->fund;
+
+        return $this->item($fund, new FundraiserTransformer);
     }
 
     public function includeDonor(Transaction $transaction)
     {
-        //
+        $donor = $transaction->donor;
+
+        return $this->item($donor, new DonorTransformer);
     }
 }

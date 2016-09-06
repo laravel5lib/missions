@@ -5,6 +5,7 @@ import actionTrigger from './components/action-trigger.vue';
 import donate from './components/donate.vue';
 import modalDonate from './components/modal-donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
+import groups from './components/groups/groups.vue';
 import fundraisers from './components/fundraisers/fundraisers.vue';
 import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
@@ -236,6 +237,7 @@ new Vue({
         login,
         fundraisers,
         campaigns,
+        groups,
         campaignGroups,
         groupTrips,
         groupProfileTrips,

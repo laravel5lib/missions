@@ -48401,7 +48401,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":180,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],120:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],120:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -48629,7 +48629,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":180,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],122:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],122:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -49070,11 +49070,15 @@ var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
 
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     name: 'donate',
-    components: { vSelect: _vueSelect2.default },
+    components: { vSelect: _vueSelect2.default, 'spinner': _vueStrap2.default.spinner },
     props: {
         type: {
             type: String,
@@ -49119,14 +49123,21 @@ exports.default = {
         title: {
             type: String,
             default: ''
+        },
+        identifier: {
+            type: String,
+            defulat: null
         }
 
     },
     data: function data() {
         return {
             donor: '',
+            donor_id: null,
+            company_name: '',
             amount: 1,
             validateWith: 'email',
+            token: null,
 
             //card vars
             card: null,
@@ -49158,8 +49169,6 @@ exports.default = {
             showButton: true,
             showLabels: true,
             devMode: true,
-            // deferred variable used for card validation
-            // needs to be on `this` scope to access in response callback
             stripeDeferred: {},
             attemptedCreateToken: false
         };
@@ -49191,7 +49200,6 @@ exports.default = {
                 results = [];
                 for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
                     results.push(num);
-                    //                        results.push(num.toString().substr(2, 2));
                 }
                 return results;
             }();
@@ -49199,7 +49207,7 @@ exports.default = {
         },
         cardParams: function cardParams() {
             return {
-                //name: this.cardHolderName,
+                cardholder: this.cardHolderName,
                 number: this.cardNumber,
                 exp_month: this.cardMonth,
                 exp_year: this.cardYear,
@@ -49250,16 +49258,16 @@ exports.default = {
             } else {
                 // authorize card data
                 console.log(this.cardParams);
-                this.$http.post('donations/authorize', this.cardParams).then(this.createTokenCallback);
-                // Stripe.setPublishableKey(this.stripeKey);
-                // Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+                this.$refs.validationspinner.show();
+                this.$http.post('donations/authorize', this.cardParams).then(this.createTokenCallback, function (error) {
+                    this.$refs.validationspinner.hide();
+                });
             }
             return this.stripeDeferred.promise();
         },
-        createTokenCallback: function createTokenCallback(status, resp) {
-            console.log(status);
+        createTokenCallback: function createTokenCallback(resp) {
             console.log(resp);
-            this.validationErrors = {
+            /*this.validationErrors = {
                 cardNumber: '',
                 cardCVC: '',
                 cardYear: '',
@@ -49280,19 +49288,56 @@ exports.default = {
                     this.validationErrors.cardCVC = 'error';
                 }
                 this.stripeDeferred.reject(false);
+            }*/
+            if (resp.status === 200) {
+                this.$refs.validationspinner.hide();
+                this.token = resp.data;
+                this.stripeDeferred.resolve(resp.data);
             }
-            if (status === 200) {
-                this.card = resp;
-                // send payment data to parent
-                this.paymentInfo = {
-                    token: resp,
-                    save: this.cardSave,
-                    email: this.cardEmail
-                };
+        },
+        submit: function submit() {
+            this.$refs.donationspinner.show();
+            var data = {
+                amount: this.amount,
+                currency: 'USD', // determined from card token
+                description: 'Donation to ' + this.title,
+                comment: null,
+                fund_id: this.fundId,
+                token: this.token,
+                payment: {
+                    type: 'card',
+                    brand: this.detectCardType(this.cardNumber),
+                    last_four: this.cardNumber.substr(-4),
+                    cardholder: this.cardHolderName
+                }
 
-                this.submit();
-                this.stripeDeferred.resolve(true);
+            };
+            if (parseInt(this.auth) && this.donor_id) {
+                data.donor_id = this.donor_id;
+            } else {
+                data.donor = {
+                    name: this.donor,
+                    company: this.company_name,
+                    email: this.cardEmail,
+                    phone: this.cardPhone,
+                    zip: this.cardZip,
+                    country_code: 'us' // needs UI
+                };
             }
+            this.$http.post('donations', data).then(function (response) {
+                this.stripeDeferred.resolve(true);
+                this.$refs.donationspinner.hide();
+                this.donationState = 'confirmation';
+            }, function (error) {
+                this.$refs.donationspinner.hide();
+            });
+        },
+        done: function done() {
+            if (this.child) {
+                this.$root.$emit('DonateForm:complete');
+            } /* else {
+                 window.location.href
+              }*/
         },
         goToState: function goToState(state) {
             switch (state) {
@@ -49317,6 +49362,7 @@ exports.default = {
                             if (this.$Donation.invalid) {
                                 break;
                             }
+
                             this.subState = 2;
                             this.attemptSubmit = !1;
                             break;
@@ -49352,34 +49398,30 @@ exports.default = {
                     break;
             }
         },
-        submit: function submit() {
-            debugger;
-            var data = {
-                amount: this.amount,
-                currency: 'USD', // determined from card token
-                description: '',
-                comment: null,
-                fund_id: this.typeId
-
+        detectCardType: function detectCardType(number) {
+            // http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
+            var re = {
+                electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
+                maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
+                dankort: /^(5019)\d+$/,
+                interpayment: /^(636)\d+$/,
+                unionpay: /^(62|88)\d+$/,
+                visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+                mastercard: /^5[1-5][0-9]{14}$/,
+                amex: /^3[47][0-9]{13}$/,
+                diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+                discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+                jcb: /^(?:2131|1800|35\d{3})\d{11}$/
             };
-            if (this.auth) {
-                data.donor_id = this.donor.id;
-            } else {
-                data.donor = {
-                    name: this.donor,
-                    email: this.cardEmail,
-                    phone: this.cardPhone,
-                    zip: this.cardZip,
-                    country_code: 'us' // needs UI
-                };
+
+            for (var key in re) {
+                if (re[key].test(number)) {
+                    return key;
+                }
             }
-            this.$http.post('donations', data);
         }
     },
     events: {
-        'VueStripe::create-card-token': function VueStripeCreateCardToken() {
-            //return this.createToken();
-        },
         'VueStripe::reset-form': function VueStripeResetForm() {
             return this.resetCaching();
         }
@@ -49396,6 +49438,7 @@ exports.default = {
         if (parseInt(this.auth)) {
             this.$http.get('users/me').then(function (response) {
                 this.donor = response.data.data.name;
+                this.donor_id = response.data.data.donor_id || null;
                 this.cardHolderName = response.data.data.name;
                 this.cardEmail = response.data.data.email;
                 this.cardPhone = response.data.data.phone_one;
@@ -49412,17 +49455,31 @@ exports.default = {
             this.prevState();
         }.bind(this));
 
-        this.$root.$on('DonateForm:reviewDonation', function () {
-            this.goToState('review');
+        this.$root.$on('DonateForm:resetState', function () {
+            this.toState('form', 1);
         }.bind(this));
 
-        this.$root.$on('DonateForm:createToken', function () {
-            this.createToken();
+        this.$root.$on('DonateForm:reviewDonation', function (identifier) {
+            if (identifier !== this.identifier) {
+                return false;
+            }
+
+            $.when(this.createToken(identifier)).then(function (response) {
+                this.goToState('review');
+            }.bind(this));
+        }.bind(this));
+
+        this.$root.$on('DonateForm:donate', function (identifier) {
+            if (identifier !== this.identifier) {
+                return false;
+            }
+
+            this.submit();
         }.bind(this));
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <validator name=\"Donation\">\n        <form class=\"form-horizontal\" name=\"DonationForm\" novalidate=\"\" v-show=\"donationState === 'form'\">\n            <template v-if=\"isState('form', 1)\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12 text-center\">\n                        <label>Recipient</label>\n                        <h4>{{ recipient }}</h4>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\" :class=\"{ 'has-error': checkForError('amount')}\">\n                        <label>Amount</label>\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">$</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"amount\" min=\"1\" v-validate:amount=\"{required: true, min: 1}\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\" :class=\"{ 'has-error': checkForError('donor')}\">\n                        <label>Donor Or Company Name</label>\n                        <input type=\"text\" class=\"form-control\" v-model=\"donor\" v-validate:donor=\"{required: true}\">\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\" v-if=\"!child\">\n                    <div class=\"col-sm-12 text-center\">\n                        <div class=\"form-group\">\n                            <div class=\"\">\n                                <!--<a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>-->\n                                <a @click=\"nextState()\" class=\"btn btn-primary\">Next</a>\n                            </div>\n                        </div>\n                    </div>\n\n                </div>\n            </template>\n            <template v-if=\"isState('form', 2)\">\n                <!-- Credit Card -->\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-groups\" :class=\"{ 'has-error': checkForError('cardholdername') }\">\n                            <label for=\"cardHolderName\">Card Holder's Name</label>\n                            <div class=\"input-group\">\n                                <span class=\"input-group-addon input\"><span class=\"fa fa-user\"></span></span>\n                                <input type=\"text\" class=\"form-control input\" id=\"cardHolderName\" placeholder=\"Name on card\" v-model=\"cardHolderName\" v-validate:cardholdername=\"{ required: true }\" autofocus=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-groups\" :class=\"{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }\">\n                            <label for=\"cardNumber\">Card Number</label>\n                            <div class=\"input-group\">\n                                <span class=\"input-group-addon input\"><span class=\"fa fa-lock\"></span></span>\n                                <input type=\"text\" class=\"form-control input\" id=\"cardNumber\" placeholder=\"Valid Card Number\" v-model=\"cardNumber\" v-validate:cardnumber=\"{ required: true, maxlength: 19 }\" @keyup=\"formatCard($event)\" maxlength=\"19\">\n                            </div>\n                            <span class=\"help-block\" v-if=\"validationErrors.cardNumber=='error'\">{{stripeError.message}}</span>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <label style=\"display:block;margin-left: 10px;\" for=\"expiryMonth\">EXPIRY DATE</label>\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('month') || validationErrors.cardMonth }\">\n                            <select v-model=\"cardMonth\" class=\"form-control input\" id=\"expiryMonth\" v-validate:month=\"{ required: true }\">\n                                <option v-for=\"month in monthList\" value=\"{{month}}\">{{month}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('year') || validationErrors.cardYear }\">\n                            <select v-model=\"cardYear\" class=\"form-control input\" id=\"expiryYear\" v-validate:year=\"{ required: true }\">\n                                <option v-for=\"year in yearList\" value=\"{{year}}\">{{year}}</option>\n                            </select>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('code') || validationErrors.cardCVC }\">\n                            <label for=\"cvCode\">\n                                CV CODE</label>\n                            <input type=\"text\" class=\"form-control input\" id=\"cvCode\" maxlength=\"3\" v-model=\"cardCVC\" placeholder=\"CV\" v-validate:code=\"{ required: true, minlength: 3, maxlength: 3 }\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div :class=\"{ 'has-error': checkForError('email') }\">\n                            <label for=\"infoEmailAddress\">Billing Email</label>\n                            <input type=\"text\" class=\"form-control input\" v-model=\"cardEmail\" v-validate:email=\"['oneOrOther']\" id=\"infoEmailAddress\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('phone') }\">\n                            <label for=\"infoPhone\">Billing Phone</label>\n                            <input type=\"tel\" class=\"form-control input\" v-model=\"cardPhone | phone\" v-validate:phone=\"['oneOrOther']\" id=\"infoPhone\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('zip') }\">\n                            <label for=\"infoZip\">ZIP</label>\n                            <input type=\"text\" class=\"form-control input\" v-model=\"cardZip\" v-validate:zip=\"{ required: true }\" id=\"infoZip\" placeholder=\"12345\">\n                        </div>\n                    </div>\n                </div>\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <hr class=\"divider inv sm\">\n                        <div class=\"checkbox\">\n                            <label>\n                                <input type=\"checkbox\" v-model=\"cardSave\">Save payment details for next time\n                            </label>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"col-sm-12 text-center\" v-if=\"!child\">\n                    <div class=\"form-group\">\n                        <div class=\"\">\n                            <!--<a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>-->\n                            <a @click=\"goToState('review')\" class=\"btn btn-primary\">Review Donation</a>\n                        </div>\n                    </div>\n                </div>\n            </template>\n            <hr class=\"divider inv sm\">\n\n        </form>\n        <div class=\"panel panel-primary\" v-show=\"donationState === 'review'\">\n            <div class=\"panel-heading\">\n                <div class=\"panel-title\">\n                    <h5>Donation Details</h5>\n                </div>\n            </div>\n            <div class=\"panel-body\">\n                <dl class=\"dl-horizontal\">\n                    <dt>Card Holder Name</dt>\n                    <dd>{{cardHolderName}}</dd>\n                    <dt>Card Number</dt>\n                    <dd>{{cardNumber}}</dd>\n                    <dt>Card Expiration</dt>\n                    <dd>{{cardMonth}}/{{cardYear}}</dd>\n                    <dt>Billing Email</dt>\n                    <dd>{{cardEmail}}</dd>\n                    <dt>Billing Zip</dt>\n                    <dd>{{cardZip}}</dd>\n                    <dt>Save Payment Method</dt>\n                    <dd>{{cardSave ? 'Yes' : 'No'}}</dd>\n                </dl>\n                <hr class=\"divider sm\">\n                <p class=\"list-group-item-text\">Recipient: {{recipient}}</p>\n                <p class=\"list-group-item-text\">Designation: {{title}}</p>\n                <p class=\"list-group-item-text\">Amount to be charged immediately: {{amount|currency}}</p>\n                <hr class=\"divider sm\">\n                <p class=\"list-group-item-text\">\n                    <b>Disclaimer:</b>\n                    All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.\n                </p>\n            </div>\n            <div class=\"panel-footer\" v-if=\"!child\">\n                <a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>\n                <a @click=\"createToken\" class=\"btn btn-primary\">Donate</a>\n            </div>\n        </div>\n    </validator>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <validator name=\"Donation\">\n        <form class=\"form-horizontal\" name=\"DonationForm\" novalidate=\"\" v-show=\"donationState === 'form'\">\n            <spinner v-ref:validationspinner=\"\" size=\"xl\" :fixed=\"false\" text=\"Validating\"></spinner>\n            <template v-if=\"isState('form', 1)\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12 text-center\">\n                        <label>Recipient</label>\n                        <h4>{{ recipient }}</h4>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\" :class=\"{ 'has-error': checkForError('amount')}\">\n                        <label>Amount</label>\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">$</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"amount\" min=\"1\" v-validate:amount=\"{required: true, min: 1}\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\" :class=\"{ 'has-error': checkForError('donor')}\">\n                        <label>Donor Name</label>\n                        <input type=\"text\" class=\"form-control\" v-model=\"donor\" v-validate:donor=\"{required: true}\">\n                    </div>\n                </div>\n                <div class=\"row\">\n                    <div class=\"col-sm-12\" :class=\"{ 'has-error': checkForError('donor')}\">\n                        <label>Company Name</label>\n                        <input type=\"text\" class=\"form-control\" v-model=\"company_name\">\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\" v-if=\"!child\">\n                    <div class=\"col-sm-12 text-center\">\n                        <div class=\"form-group\">\n                            <div class=\"\">\n                                <!--<a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>-->\n                                <a @click=\"nextState()\" class=\"btn btn-primary\">Next</a>\n                            </div>\n                        </div>\n                    </div>\n\n                </div>\n            </template>\n            <template v-if=\"isState('form', 2)\">\n                <!-- Credit Card -->\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-groups\" :class=\"{ 'has-error': checkForError('cardholdername') }\">\n                            <label for=\"cardHolderName\">Card Holder's Name</label>\n                            <div class=\"input-group\">\n                                <span class=\"input-group-addon input\"><span class=\"fa fa-user\"></span></span>\n                                <input type=\"text\" class=\"form-control input\" id=\"cardHolderName\" placeholder=\"Name on card\" v-model=\"cardHolderName\" v-validate:cardholdername=\"{ required: true }\" autofocus=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-groups\" :class=\"{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }\">\n                            <label for=\"cardNumber\">Card Number</label>\n                            <div class=\"input-group\">\n                                <span class=\"input-group-addon input\"><span class=\"fa fa-lock\"></span></span>\n                                <input type=\"text\" class=\"form-control input\" id=\"cardNumber\" placeholder=\"Valid Card Number\" v-model=\"cardNumber\" v-validate:cardnumber=\"{ required: true, maxlength: 19 }\" @keyup=\"formatCard($event)\" maxlength=\"19\">\n                            </div>\n                            <span class=\"help-block\" v-if=\"validationErrors.cardNumber=='error'\">{{stripeError.message}}</span>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <label style=\"display:block;margin-left: 10px;\" for=\"expiryMonth\">EXPIRY DATE</label>\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('month') || validationErrors.cardMonth }\">\n                            <select v-model=\"cardMonth\" class=\"form-control input\" id=\"expiryMonth\" v-validate:month=\"{ required: true }\">\n                                <option v-for=\"month in monthList\" value=\"{{month}}\">{{month}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('year') || validationErrors.cardYear }\">\n                            <select v-model=\"cardYear\" class=\"form-control input\" id=\"expiryYear\" v-validate:year=\"{ required: true }\">\n                                <option v-for=\"year in yearList\" value=\"{{year}}\">{{year}}</option>\n                            </select>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('code') || validationErrors.cardCVC }\">\n                            <label for=\"cvCode\">\n                                CV CODE</label>\n                            <input type=\"text\" class=\"form-control input\" id=\"cvCode\" maxlength=\"3\" v-model=\"cardCVC\" placeholder=\"CV\" v-validate:code=\"{ required: true, minlength: 3, maxlength: 3 }\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div :class=\"{ 'has-error': checkForError('email') }\">\n                            <label for=\"infoEmailAddress\">Billing Email</label>\n                            <input type=\"text\" class=\"form-control input\" v-model=\"cardEmail\" v-validate:email=\"['oneOrOther']\" id=\"infoEmailAddress\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('phone') }\">\n                            <label for=\"infoPhone\">Billing Phone</label>\n                            <input type=\"tel\" class=\"form-control input\" v-model=\"cardPhone | phone\" v-validate:phone=\"['oneOrOther']\" id=\"infoPhone\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('zip') }\">\n                            <label for=\"infoZip\">ZIP</label>\n                            <input type=\"text\" class=\"form-control input\" v-model=\"cardZip\" v-validate:zip=\"{ required: true }\" id=\"infoZip\" placeholder=\"12345\">\n                        </div>\n                    </div>\n                </div>\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <hr class=\"divider inv sm\">\n                        <div class=\"checkbox\">\n                            <label>\n                                <input type=\"checkbox\" v-model=\"cardSave\">Save payment details for next time\n                            </label>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"col-sm-12 text-center\" v-if=\"!child\">\n                    <div class=\"form-group\">\n                        <div class=\"\">\n                            <!--<a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>-->\n                            <a @click=\"goToState('review')\" class=\"btn btn-primary\">Review Donation</a>\n                        </div>\n                    </div>\n                </div>\n            </template>\n            <hr class=\"divider inv sm\">\n\n        </form>\n        <div class=\"panel panel-primary\" v-show=\"donationState === 'review'\">\n            <spinner v-ref:donationspinner=\"\" size=\"xl\" :fixed=\"false\" text=\"Processing Donation\"></spinner>\n            <div class=\"panel-heading\">\n                <div class=\"panel-title\">\n                    <h5>Donation Details</h5>\n                </div>\n            </div>\n            <div class=\"panel-body\">\n                <dl class=\"dl-horizontal\">\n                    <dt>Card Holder Name</dt>\n                    <dd>{{cardHolderName}}</dd>\n                    <dt>Card Number</dt>\n                    <dd>{{cardNumber}}</dd>\n                    <dt>Card Expiration</dt>\n                    <dd>{{cardMonth}}/{{cardYear}}</dd>\n                    <dt>Billing Email</dt>\n                    <dd>{{cardEmail}}</dd>\n                    <dt>Billing Zip</dt>\n                    <dd>{{cardZip}}</dd>\n                    <dt>Save Payment Method</dt>\n                    <dd>{{cardSave ? 'Yes' : 'No'}}</dd>\n                </dl>\n                <hr class=\"divider sm\">\n                <p class=\"list-group-item-text\">Recipient: {{recipient}}</p>\n                <p class=\"list-group-item-text\">Designation: {{title}}</p>\n                <p class=\"list-group-item-text\">Amount to be charged immediately: {{amount|currency}}</p>\n                <hr class=\"divider sm\">\n                <p class=\"list-group-item-text\">\n                    <b>Disclaimer:</b>\n                    All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.\n                </p>\n            </div>\n            <div class=\"panel-footer\" v-if=\"!child\">\n                <a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>\n                <a @click=\"createToken\" class=\"btn btn-primary\">Donate</a>\n            </div>\n        </div>\n        <div class=\"\" v-show=\"donationState === 'confirmation'\">\n            <div class=\"text-center\">\n                <h1><i class=\"fa fa-check-circle text-success success fa-3x\"></i></h1>\n                <h2>Donation Confirmed</h2>\n                <h3>Thank you!</h3>\n            </div>\n            <!--<div class=\"panel-footer\" v-if=\"!child\">\n                <a @click=\"done\" class=\"btn btn-success\">Close</a>\n            </div>-->\n        </div>\n    </validator>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -49433,7 +49490,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-52666078", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],131:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],131:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -49605,10 +49662,12 @@ exports.default = {
             this.$http.get('fundraisers', {
                 // include: '',
                 search: this.search,
+                page: this.page,
                 per_page: this.per_page
             }).then(function (response) {
                 this.fundraisers = response.data.data;
                 this.featuredFundraisers = _.first(this.fundraisers, 5);
+                this.pagination = response.data.meta.pagination;
             });
         },
         seeAll: function seeAll() {
@@ -50604,6 +50663,64 @@ if (module.hot) {(function () {  module.hot.accept()
 },{"vue":116,"vue-hot-reload-api":111}],143:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'groups',
+    data: function data() {
+        return {
+            groups: [],
+            groupsLimit: 3,
+            resource: this.$resource('groups?isPublic=yes'),
+
+            // pagination vars
+            search: '',
+            page: 1,
+            per_page: 6,
+            pagination: {}
+        };
+    },
+
+    watch: {
+        'search': function search(val) {
+            this.searchGroups();
+        }
+    },
+    methods: {
+        seeAll: function seeAll() {
+            this.groupsLimit = this.groups.length;
+        },
+        searchGroups: function searchGroups() {
+            this.resource.query({}, {
+                search: this.search,
+                page: this.page,
+                per_page: this.per_page
+            }).then(function (groups) {
+                this.groups = groups.data.data;
+                this.pagination = groups.data.meta.pagination;
+            }).then(function () {});
+        }
+    },
+    ready: function ready() {
+        this.searchGroups();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <h4>Groups Partnered With Us</h4>\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <a v-if=\"groups.length > 3\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <div class=\"form-group form-group-sm\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\" v-model=\"search\" debounce=\"250\">\n            <!--<span class=\"input-group-btn\">\n                <button class=\"btn btn-default\" type=\"button\">Go!</button>\n            </span>-->\n        </div><!-- /input-group -->\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <!--<a v-if=\"fundraisers.length > 6 && fundraisersLimit == 6\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>-->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\n\n    <div class=\"col-sm-6 col-md-4\" v-for=\"group in groups|limitBy groupsLimit\" style=\"display:flex\" v-if=\"groups.length\">\n        <div class=\"panel panel-default\">\n            <a :href=\"'/groups/' + group.url\" role=\"button\">\n                <img :src=\"group.avatar\" :alt=\"group.name\" class=\"img-responsive\">\n            </a>\n                <div style=\"min-height:220px;\" class=\"panel-body\">\n                    <!--<h6 class=\"text-uppercase\"><i class=\"fa fa-users\"></i> {{group.type}} Group</h6>-->\n                    <a :href=\"'/groups/' + group.url\" role=\"button\">\n                        <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">{{group.name}}</h5>\n                    </a>\n                    <h6 class=\"text-uppercase\">{{group.type}} Group</h6>\n                    <hr class=\"divider lg\">\n                    <p class=\"small\">{{group.description}}</p>\n                </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div class=\"col-sm-12 text-center\" v-if=\"groups.length\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n\n</div>\n<hr class=\"divider inv xlg\">\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center\">\n        <h2 class=\"text-primary\">Missions.Me plans trips around you. We create experiences that will maximize your specific abilities and desires.</h2>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage1.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage3.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage4.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage5.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage8.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage9.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage10.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage12.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage13.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage14.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage15.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage18.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-xs-10 col-xs-offset-1\">\n        <div class=\"row\">\n          <div class=\"col-xs-10 col-xs-offset-1\">\n            <h6 class=\"text-uppercase text-center\">A Trip For Everyone</h6>\n            <h1 class=\"text-center\">Choose A Role</h1>\n            <hr class=\"divider red-small lg\">\n            <hr class=\"divider inv lg\">\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"missionary.html\"><h4 class=\"text-primary\">Missionary</h4></a>\n                <p class=\"small\">Anyone age 13+ can be an M.M missionary. Set out on the journey with your friend or family to bring a message of love and hope along with an unforgettable cultural experience.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"medical-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/medical-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"medical-missionary.html\"><h4>Medical Missionary</h4></a>\n                <p class=\"small\">Treat, diagnose, prescribe, and share the love of Jesus. Anyone in a medical field can serve, including students currently enrolled in school. Physicians, Dentists, Nurses, and all assistants needed.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"group-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/group-leader.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"group-leader.html\"><h4>Group Leader</h4></a>\n                <p class=\"small\">M.M specializes in organizing and creating turn-key group missions experiences for youth groups, college groups, and business groups. You bring passion; we take care of the rest.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"pastor-speaker.html\"><img class=\"img-responsive\" src=\"images/why-mm/speaker.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"pastor-speaker.html\"><h4>Pastor/Speaker</h4></a>\n                <p class=\"small\">Share your gift of leadership with the team by leading a morning devo then impart spiritual wisdom into local church leadership. Let us create a custom schedule that makes the most of your valuable time.</p>\n              </div><!-- end panel-body -->\n            </div><!-- end panel -->\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"business-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/business-person.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"business-leader.html\"><h4>Business Leader</h4></a>\n                <p class=\"small\">A shortened “Business Class” trip is available on select trips. You will experience conferences, stadium outreaches, street ministry, and connect with God in a whole new way. All trips will have you back on Sunday night, ready for Monday.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"media-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/media-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"media-missionary.html\"><h4>Media Missionary</h4></a>\n                <p class=\"small\">Tell the story of life change! M.M needs you to film, shoot, interview, edit, export, and be creative! Experience a whole new world through the lens of a camera while capturing the most exciting moments of the trip.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end gray-lighter-bg -->\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h6 class=\"text-uppercase text-primary\">It's So Easy</h6>\n        <h1 class=\"text-primary dash-trailing\">We've Got You</h1>\n        <p class=\"large-type\">Logistics, we got it covered. Missions.Me makes missions simple by taking care of all of your transportation, hotel, food, training, translators and ministry schedule needs.</p>\n        <hr class=\"divider inv\">\n        <a class=\"btn btn-primary\" href=\"#\">Speak to a rep</a>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/staff.jpg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section-->\n  </div><!-- end container -->\n</div><!-- end red-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-lawn.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-conf.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary-darker dash-trailing-dark\">Level Of Impact</h1>\n        <p class=\"large-type\">We are interested in changing nations, communities, and individuals. Every outreach we organize deems to do just that. In just one week's time you and your team will be face to face with entire schools, neighborhoods, and churches. We believe a short-term team must serve a long-term and sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted.</p>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/stadium-impact.jpg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/group-security.jpg\">\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary dash-trailing\">Safety and Security</h1>\n        <!-- <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our leadership provides in depth training to create a safe experience for every missionary. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe. Multiple leaders care for each missionary and guidelines are faceted so that no person is ever alone. We also do background checks on all potential leaders. Missions.Me has a proven track record of safety and security that keeps our teams coming back.</p> -->\n        <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe.</p>\n        <blockquote>\"I have traveled with Missions.Me in many countries and have witnessed first-hand their organization and safety measures. I am completely confident sending my teens on a Missions.Me missions trip.\"\n          <footer>Sue, Mother from Lancaster, PA</footer></blockquote>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-light-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-center\">Trip Difficulty Ratings</h1>\n        <hr class=\"divider red-small lg\">\n        <hr class=\"divider inv lg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n    <div class=\"row text-center\">\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level1.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>These trips are great for those just getting started in the world-changing business. First timers of all ages area welcome.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level2.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>If Level 1 proved to be a piece of cake, you’re ready for a Level 2 adventure. A little tougher, a little sweatier, but much more sweeter.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level3.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>Chuck Norris. Mr. T. Annie Oakley. Yep, they’re all level 3 missionaries. It may not be physically tough, but it’ll be a challenge.</p>\n      </div>\n    </div>\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-cf6ec6ac", module.exports)
+  } else {
+    hotAPI.update("_v-cf6ec6ac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":116,"vue-hot-reload-api":111}],144:[function(require,module,exports){
+'use strict';
+
 var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
@@ -50763,7 +50880,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7dce67a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],144:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50845,11 +50962,14 @@ exports.default = {
         prevState: function prevState() {
             this.$root.$emit('DonateForm:prevState');
         },
-        reviewDonation: function reviewDonation() {
-            this.$root.$emit('DonateForm:reviewDonation');
+        resetState: function resetState() {
+            this.$root.$emit('DonateForm:resetState');
         },
-        createToken: function createToken() {
-            this.$root.$emit('DonateForm:createToken');
+        reviewDonation: function reviewDonation(identifier) {
+            this.$root.$emit('DonateForm:reviewDonation', identifier);
+        },
+        donate: function donate(identifier) {
+            this.$root.$emit('DonateForm:donate', identifier);
         },
         goToState: function goToState(state) {
             switch (state) {
@@ -50885,14 +51005,11 @@ exports.default = {
         launchDonate: function launchDonate() {
             this.donateModalOpen = true;
             this.widthChange();
-        }
-    },
-    events: {
-        'VueStripe::create-card-token': function VueStripeCreateCardToken() {
-            return this.createToken();
         },
-        'VueStripe::reset-form': function VueStripeResetForm() {
-            return this.resetCaching();
+        done: function done() {
+            this.donateModalOpen = false;
+            this.showModal = false;
+            this.showRight = false;
         }
     },
     ready: function ready() {
@@ -50905,7 +51022,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"text-center\">\n    <a class=\"btn btn-success\" @click=\"launchDonate\">Donate To The Cause</a>\n    <!--<a class=\"btn btn-primary btn-justified show-xs\" @click=\"showRight=!showRight\">Donate</a>-->\n    </div>\n    <hr class=\"divider inv sm\">\n    <modal :title=\"'Donate to ' + recipient\" :show.sync=\"showModal\" effect=\"fade\" width=\"500\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <donate :donation-state.sync=\"donationState\" :sub-state.sync=\"subState\" :attempt-submit=\"attemptSubmit\" :title=\"title\" :child=\"true\" :stripe-key=\"stripeKey\" :auth=\"auth\" :type=\"type\" type-id=\"typeId\" fund-id=\"fundId\" :recipient=\"recipient\"></donate>\n        </div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <!--<button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"donationState='form',subState=1\" v-if=\"!isState('form', 1)\">Reset</button>-->\n            <button type=\"button\" class=\"btn btn-default\" @click=\"prevState()\" v-if=\"!isState('form', 1)\">Back</button>\n\n            <button type=\"button\" class=\"btn btn-primary\" @click=\"nextState()\" v-if=\"isState('form', 1)\">Next</button>\n            <button type=\"button\" class=\"btn btn-primary\" @click=\"reviewDonation()\" v-if=\"isState('form', 2)\">Review</button>\n            <button type=\"button\" class=\"btn btn-primary\" @click=\"createToken\" v-if=\"donationState==='review'\">Donate</button>\n        </div>\n    </modal>\n\n    <aside :show.sync=\"showRight\" placement=\"right\" header=\"Donate\" :width=\"375\">\n        <div class=\"col-sm-12\">\n            <donate :donation-state.sync=\"donationState\" :sub-state.sync=\"subState\" :attempt-submit=\"attemptSubmit\" :title=\"title\" :child=\"true\" :stripe-key=\"stripeKey\" :auth=\"auth\" :type=\"type\" type-id=\"typeId\" fund-id=\"fundId\" :recipient=\"recipient\"></donate>\n            <div class=\"modal-footer\">\n                <!--<button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"donationState='form',subState=1\" v-if=\"!isState('form', 1)\">Reset</button>-->\n                <button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"prevState()\" v-if=\"!isState('form', 1)\">Back</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"nextState()\" v-if=\"isState('form', 1)\">Next</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"reviewDonation()\" v-if=\"isState('form', 2)\">Review Donation</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"createToken\" v-if=\"donationState==='review'\">Donate</button>\n            </div>\n        </div>\n    </aside>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"text-center\">\n    <a class=\"btn btn-success\" @click=\"launchDonate\">Donate To The Cause</a>\n    <!--<a class=\"btn btn-primary btn-justified show-xs\" @click=\"showRight=!showRight\">Donate</a>-->\n    </div>\n    <hr class=\"divider inv sm\">\n    <modal :title=\"'Donate to ' + title\" :show.sync=\"showModal\" effect=\"fade\" width=\"500\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <donate :donation-state.sync=\"donationState\" :sub-state.sync=\"subState\" :attempt-submit=\"attemptSubmit\" :title=\"title\" :child=\"true\" :stripe-key=\"stripeKey\" :auth=\"auth\" :type=\"type\" type-id=\"typeId\" :fund-id=\"fundId\" :recipient=\"recipient\" identifier=\"modal\"></donate>\n        </div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <!--<button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"donationState='form',subState=1\" v-if=\"!isState('form', 1)\">Reset</button>-->\n            <button type=\"button\" class=\"btn btn-default\" @click=\"prevState()\" v-if=\"!isState('form', 1)\">Back</button>\n\n            <button type=\"button\" class=\"btn btn-primary\" @click=\"nextState()\" v-if=\"isState('form', 1)\">Next</button>\n            <button type=\"button\" class=\"btn btn-primary\" @click=\"reviewDonation('modal')\" v-if=\"isState('form', 2)\">Review</button>\n            <button type=\"button\" class=\"btn btn-primary\" @click=\"donate('modal')\" v-if=\"donationState==='review'\">Donate</button>\n            <button type=\"button\" class=\"btn btn-success\" @click=\"done\" v-if=\"donationState==='confirmation'\">Close</button>\n        </div>\n    </modal>\n\n    <aside :show.sync=\"showRight\" placement=\"right\" header=\"Donate\" :width=\"375\">\n        <div class=\"col-sm-12\">\n            <donate :donation-state.sync=\"donationState\" :sub-state.sync=\"subState\" :attempt-submit=\"attemptSubmit\" :title=\"title\" :child=\"true\" :stripe-key=\"stripeKey\" :auth=\"auth\" :type=\"type\" type-id=\"typeId\" :fund-id=\"fundId\" :recipient=\"recipient\" identifier=\"aside\"></donate>\n            <div class=\"modal-footer\">\n                <!--<button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"donationState='form',subState=1\" v-if=\"!isState('form', 1)\">Reset</button>-->\n                <button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"prevState()\" v-if=\"!isState('form', 1) &amp;&amp; donationState!=='confirmation'\">Back</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"nextState()\" v-if=\"isState('form', 1)\">Next</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"reviewDonation('aside')\" v-if=\"isState('form', 2)\">Review Donation</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"donate('aside')\" v-if=\"donationState==='review'\">Donate</button>\n                <button type=\"button\" class=\"btn btn-success btn-xs\" @click=\"done\" v-if=\"donationState==='confirmation'\">Close</button>\n            </div>\n        </div>\n    </aside>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -50916,7 +51033,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1e536124", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./donate.vue":130,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],145:[function(require,module,exports){
+},{"./donate.vue":130,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51078,7 +51195,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-17773f82", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":180,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],146:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],147:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51165,7 +51282,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4b4c5de6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],147:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51202,7 +51319,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-558d51ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],148:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],149:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -51510,7 +51627,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],149:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51561,7 +51678,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],150:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51617,7 +51734,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],151:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51722,7 +51839,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5d37e43e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../passports/passport-create-update.vue":145,"vue":116,"vue-hot-reload-api":111}],152:[function(require,module,exports){
+},{"../passports/passport-create-update.vue":146,"vue":116,"vue-hot-reload-api":111}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51827,7 +51944,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1bd1d2ef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../visas/visa-create-update.vue":191,"vue":116,"vue-hot-reload-api":111}],153:[function(require,module,exports){
+},{"../visas/visa-create-update.vue":192,"vue":116,"vue-hot-reload-api":111}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51890,7 +52007,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],154:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],155:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -52048,7 +52165,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":161,"./create/details.vue":162,"./create/pricing.vue":163,"./create/requirements.vue":164,"./create/settings.vue":165,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],155:[function(require,module,exports){
+},{"./create/deadlines.vue":162,"./create/details.vue":163,"./create/pricing.vue":164,"./create/requirements.vue":165,"./create/settings.vue":166,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52084,7 +52201,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],156:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52177,7 +52294,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],157:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],158:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -52357,7 +52474,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":166,"./edit/details.vue":167,"./edit/pricing.vue":168,"./edit/requirements.vue":169,"./edit/settings.vue":170,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],158:[function(require,module,exports){
+},{"./edit/deadlines.vue":167,"./edit/details.vue":168,"./edit/pricing.vue":169,"./edit/requirements.vue":170,"./edit/settings.vue":171,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52460,7 +52577,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],159:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52533,7 +52650,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],160:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52604,7 +52721,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],161:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52682,7 +52799,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],162:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],163:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 'use strict';
@@ -52795,7 +52912,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],163:[function(require,module,exports){
+},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53024,7 +53141,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],164:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53103,7 +53220,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],165:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53158,7 +53275,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],166:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53240,7 +53357,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],167:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53376,7 +53493,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-select":113}],168:[function(require,module,exports){
+},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-select":113}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53609,7 +53726,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],169:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53691,7 +53808,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],170:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53751,7 +53868,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],171:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53797,7 +53914,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],172:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53964,7 +54081,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],173:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54021,7 +54138,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],174:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54309,7 +54426,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],175:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54354,7 +54471,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],176:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54391,7 +54508,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],177:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54428,7 +54545,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],178:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54499,7 +54616,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c5dc1f32", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],179:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],180:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -54746,7 +54863,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":143,"./registration/additional-trip-options.vue":171,"./registration/basic-info.vue":172,"./registration/deadline-agreement.vue":173,"./registration/payment-details.vue":174,"./registration/review.vue":175,"./registration/roca.vue":176,"./registration/tos.vue":177,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],180:[function(require,module,exports){
+},{"../login.vue":144,"./registration/additional-trip-options.vue":172,"./registration/basic-info.vue":173,"./registration/deadline-agreement.vue":174,"./registration/payment-details.vue":175,"./registration/review.vue":176,"./registration/roca.vue":177,"./registration/tos.vue":178,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55075,7 +55192,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],181:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],182:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -55215,7 +55332,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],182:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55340,7 +55457,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],183:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55376,7 +55493,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],184:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55528,7 +55645,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],185:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],186:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -55750,7 +55867,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],186:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55825,7 +55942,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-69badce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":105,"vue":116,"vue-hot-reload-api":111}],187:[function(require,module,exports){
+},{"marked":105,"vue":116,"vue-hot-reload-api":111}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55863,7 +55980,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ea6dd1a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],188:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],189:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55903,7 +56020,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-718e65c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111}],189:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56029,7 +56146,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-63c1ee29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],190:[function(require,module,exports){
+},{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],191:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.alert.top, .alert.top-right {\n    top: 80px;\n}\n")
 'use strict';
@@ -56204,7 +56321,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2d9ee899", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],191:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56357,7 +56474,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-12a04920", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":180,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],192:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56444,7 +56561,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4fbd58ab", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],193:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],194:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -56474,6 +56591,10 @@ var _modalDonate2 = _interopRequireDefault(_modalDonate);
 var _campaigns = require('./components/campaigns/campaigns.vue');
 
 var _campaigns2 = _interopRequireDefault(_campaigns);
+
+var _groups = require('./components/groups/groups.vue');
+
+var _groups2 = _interopRequireDefault(_groups);
 
 var _fundraisers = require('./components/fundraisers/fundraisers.vue');
 
@@ -56839,7 +56960,7 @@ new _vue2.default({
             public: false
         }
     },
-    components: [_login2.default, _fundraisers2.default, _campaigns2.default, _campaignGroups2.default, _groupTrips2.default, _groupProfileTrips2.default, _groupProfileStories2.default, _groupProfileFundraisers2.default, _groupsTripsSelectionWrapper2.default, _tripDetailsMissionaries2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _fundraisersStories2.default, _topNav2.default, _actionTrigger2.default, _donate2.default, _modalDonate2.default,
+    components: [_login2.default, _fundraisers2.default, _campaigns2.default, _groups2.default, _campaignGroups2.default, _groupTrips2.default, _groupProfileTrips2.default, _groupProfileStories2.default, _groupProfileFundraisers2.default, _groupsTripsSelectionWrapper2.default, _tripDetailsMissionaries2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _fundraisersStories2.default, _topNav2.default, _actionTrigger2.default, _donate2.default, _modalDonate2.default,
 
     //dashboard components
     _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default, _groupsList2.default, _visaCreateUpdate2.default, _reservationsPassportsManager2.default, _reservationsVisasManager2.default, _userSettings2.default, _userProfileStories2.default, _userProfileFundraisers2.default, _userProfileFundraisersDonors2.default, _userProfileFundraisersProgress2.default, _dashboardGroupTrips2.default, _dashboardGroupReservations2.default,
@@ -56866,6 +56987,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/action-trigger.vue":118,"./components/campaigns/admin-campaign-create.vue":119,"./components/campaigns/admin-campaign-details.vue":120,"./components/campaigns/admin-campaign-edit.vue":121,"./components/campaigns/campaign-groups.vue":122,"./components/campaigns/campaigns.vue":123,"./components/campaigns/group-trips.vue":128,"./components/campaigns/groups-trips-selection-wrapper.vue":129,"./components/donate.vue":130,"./components/fundraisers/fundraisers-stories.vue":131,"./components/fundraisers/fundraisers.vue":132,"./components/groups/admin-group-create.vue":133,"./components/groups/admin-group-edit.vue":134,"./components/groups/admin-group-managers.vue":135,"./components/groups/admin-groups-list.vue":136,"./components/groups/dashboard-group-reservations.vue":137,"./components/groups/dashboard-group-trips.vue":138,"./components/groups/group-profile-fundraisers.vue":139,"./components/groups/group-profile-stories.vue":140,"./components/groups/group-profile-trips.vue":141,"./components/groups/groups-list.vue":142,"./components/login.vue":143,"./components/modal-donate.vue":144,"./components/passports/passport-create-update.vue":145,"./components/passports/passports-list.vue":146,"./components/records/records-list.vue":147,"./components/reservations/admin-reservations-list.vue":148,"./components/reservations/donations-list.vue":149,"./components/reservations/reservations-list.vue":150,"./components/reservations/reservations-passports-manager.vue":151,"./components/reservations/reservations-visas-manager.vue":152,"./components/top-nav.vue":153,"./components/trips/admin-trip-create.vue":154,"./components/trips/admin-trip-delete.vue":155,"./components/trips/admin-trip-duplicate.vue":156,"./components/trips/admin-trip-edit.vue":157,"./components/trips/admin-trip-facilitators.vue":158,"./components/trips/admin-trip-reservations-list.vue":159,"./components/trips/admin-trips-list.vue":160,"./components/trips/trip-details-missionaries.vue":178,"./components/trips/trip-registration-wizard.vue":179,"./components/uploads/admin-upload-create-update.vue":180,"./components/uploads/admin-uploads-list.vue":181,"./components/users/admin-user-create.vue":182,"./components/users/admin-user-delete.vue":183,"./components/users/admin-user-edit.vue":184,"./components/users/admin-users-list.vue":185,"./components/users/user-profile-fundraisers-donors.vue":186,"./components/users/user-profile-fundraisers-progress.vue":187,"./components/users/user-profile-fundraisers.vue":188,"./components/users/user-profile-stories.vue":189,"./components/users/user-settings.vue":190,"./components/visas/visa-create-update.vue":191,"./components/visas/visas-list.vue":192,"bootstrap-sass":15,"gsap":102,"jquery":104,"jquery.cookie":103,"marked":105,"moment":106,"scrollmagic":108,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":109,"underscore":110,"vue":116,"vue-resource":112,"vue-strap/dist/vue-strap.min":114,"vue-validator":115}]},{},[193]);
+},{"./components/action-trigger.vue":118,"./components/campaigns/admin-campaign-create.vue":119,"./components/campaigns/admin-campaign-details.vue":120,"./components/campaigns/admin-campaign-edit.vue":121,"./components/campaigns/campaign-groups.vue":122,"./components/campaigns/campaigns.vue":123,"./components/campaigns/group-trips.vue":128,"./components/campaigns/groups-trips-selection-wrapper.vue":129,"./components/donate.vue":130,"./components/fundraisers/fundraisers-stories.vue":131,"./components/fundraisers/fundraisers.vue":132,"./components/groups/admin-group-create.vue":133,"./components/groups/admin-group-edit.vue":134,"./components/groups/admin-group-managers.vue":135,"./components/groups/admin-groups-list.vue":136,"./components/groups/dashboard-group-reservations.vue":137,"./components/groups/dashboard-group-trips.vue":138,"./components/groups/group-profile-fundraisers.vue":139,"./components/groups/group-profile-stories.vue":140,"./components/groups/group-profile-trips.vue":141,"./components/groups/groups-list.vue":142,"./components/groups/groups.vue":143,"./components/login.vue":144,"./components/modal-donate.vue":145,"./components/passports/passport-create-update.vue":146,"./components/passports/passports-list.vue":147,"./components/records/records-list.vue":148,"./components/reservations/admin-reservations-list.vue":149,"./components/reservations/donations-list.vue":150,"./components/reservations/reservations-list.vue":151,"./components/reservations/reservations-passports-manager.vue":152,"./components/reservations/reservations-visas-manager.vue":153,"./components/top-nav.vue":154,"./components/trips/admin-trip-create.vue":155,"./components/trips/admin-trip-delete.vue":156,"./components/trips/admin-trip-duplicate.vue":157,"./components/trips/admin-trip-edit.vue":158,"./components/trips/admin-trip-facilitators.vue":159,"./components/trips/admin-trip-reservations-list.vue":160,"./components/trips/admin-trips-list.vue":161,"./components/trips/trip-details-missionaries.vue":179,"./components/trips/trip-registration-wizard.vue":180,"./components/uploads/admin-upload-create-update.vue":181,"./components/uploads/admin-uploads-list.vue":182,"./components/users/admin-user-create.vue":183,"./components/users/admin-user-delete.vue":184,"./components/users/admin-user-edit.vue":185,"./components/users/admin-users-list.vue":186,"./components/users/user-profile-fundraisers-donors.vue":187,"./components/users/user-profile-fundraisers-progress.vue":188,"./components/users/user-profile-fundraisers.vue":189,"./components/users/user-profile-stories.vue":190,"./components/users/user-settings.vue":191,"./components/visas/visa-create-update.vue":192,"./components/visas/visas-list.vue":193,"bootstrap-sass":15,"gsap":102,"jquery":104,"jquery.cookie":103,"marked":105,"moment":106,"scrollmagic":108,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":109,"underscore":110,"vue":116,"vue-resource":112,"vue-strap/dist/vue-strap.min":114,"vue-validator":115}]},{},[194]);
 
 //# sourceMappingURL=main.js.map

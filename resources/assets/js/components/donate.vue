@@ -327,7 +327,7 @@
             },
             cardParams() {
                 return {
-                    cardholder: this.cardHolderName,
+                    //name: this.cardHolderName,
                     number: this.cardNumber,
                     exp_month: this.cardMonth,
                     exp_year: this.cardYear,
@@ -479,6 +479,7 @@
                 }
             },
             submit(charge_id){
+                debugger;
                 var data = {
                     amount: this.amount,
                     currency: 'USD', // determined from card token
@@ -490,7 +491,7 @@
                         type: 'card',
                         brand: this.detectCardType(this.cardNumber),
                         last_four: this.cardNumber.substr(-4),
-                        cardholder: this.cardHolderName,
+                        cardholder: this.cardholder,
                     }
 
                 };
@@ -509,7 +510,6 @@
                 this.$http.post('donations', data);
             },
             detectCardType(number) {
-                // http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
                 var re = {
                     electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
                     maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,

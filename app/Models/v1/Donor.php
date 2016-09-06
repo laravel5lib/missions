@@ -14,7 +14,8 @@ class Donor extends Model
 
     protected $fillable = [
         'name', 'email', 'phone', 'company', 'zip',
-        'country_code', 'account_id', 'account_type'
+        'country_code', 'account_id', 'account_type',
+        'customer_id'
     ];
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];

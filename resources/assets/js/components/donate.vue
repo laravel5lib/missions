@@ -22,8 +22,14 @@
                     <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-sm-12" :class="{ 'has-error': checkForError('donor')}">
-                            <label>Donor Or Company Name</label>
+                            <label>Donor Name</label>
                             <input type="text" class="form-control" v-model="donor" v-validate:donor="{required: true}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" :class="{ 'has-error': checkForError('donor')}">
+                            <label>Company Name</label>
+                            <input type="text" class="form-control" v-model="company_name">
                         </div>
                     </div>
                     <hr class="divider inv sm">
@@ -238,6 +244,7 @@
         data(){
             return{
                 donor: '',
+                company_name: '',
                 amount: 1,
                 validateWith: 'email',
 
@@ -321,7 +328,10 @@
                     exp_month: this.cardMonth,
                     exp_year: this.cardYear,
                     cvc: this.cardCVC,
-//                    address_zip: this.cardZip,
+                    amount: this.amount,
+                    currency: 'USD', // determined from card token
+                    description: 'Donation to ' + this.title,
+    //                    address_zip: this.cardZip,
                 };
             }
         },
@@ -484,6 +494,7 @@
                 } else {
                     data.donor = {
                         name: this.donor,
+                        company: this.company_name,
                         email: this.cardEmail,
                         phone: this.cardPhone,
                         zip: this.cardZip,

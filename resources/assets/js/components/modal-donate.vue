@@ -5,7 +5,7 @@
         <!--<a class="btn btn-primary btn-justified show-xs" @click="showRight=!showRight">Donate</a>-->
         </div>
         <hr class="divider inv sm">
-        <modal :title="'Donate to ' + recipient" :show.sync="showModal" effect="fade" width="500">
+        <modal :title="'Donate to ' + title" :show.sync="showModal" effect="fade" width="500">
             <div slot="modal-body" class="modal-body">
                 <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
                         :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" fund-id="fundId" :recipient="recipient"></donate>
@@ -140,14 +140,6 @@
             launchDonate(){
                 this.donateModalOpen = true;
                 this.widthChange();
-            }
-        },
-        events: {
-            'VueStripe::create-card-token': function () {
-                return this.createToken();
-            },
-            'VueStripe::reset-form': function () {
-                return this.resetCaching();
             }
         },
         ready: function () {

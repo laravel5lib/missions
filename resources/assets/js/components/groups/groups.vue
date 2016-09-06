@@ -22,23 +22,25 @@
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-            <div class="col-sm-6 col-md-4" v-for="group in groups|limitBy groupsLimit" style="display:flex">
-                <div class="panel panel-default">
-                    <a :href="'/groups/' + group.url" role="button">
-                        <img :src="group.avatar" :alt="group.name" class="img-responsive">
-                    </a>
-                        <div style="min-height:220px;" class="panel-body">
-                            <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{group.country}}</h6>
-                            <a :href="'/groups/' + group.url" role="button">
-                                <h5 style="text-transform:capitalize;" class="text-primary">{{group.name}}</h5>
-                            </a>
-                            <h6>{{group.started_at | moment 'll'}} - {{group.ended_at | moment 'll'}}</h6>
-                            <hr class="divider lg" />
-                            <p class="small">{{group.description}}</p>
-                        </div><!-- end panel-body -->
-                </div><!-- end panel -->
-            </div><!-- end col -->
-        <div class="col-sm-12 text-center">
+
+
+        <div class="col-sm-6 col-md-4" v-for="group in groups|limitBy groupsLimit" style="display:flex" v-if="groups.length">
+            <div class="panel panel-default">
+                <a :href="'/groups/' + group.url" role="button">
+                    <img :src="group.avatar" :alt="group.name" class="img-responsive">
+                </a>
+                    <div style="min-height:220px;" class="panel-body">
+                        <!--<h6 class="text-uppercase"><i class="fa fa-users"></i> {{group.type}} Group</h6>-->
+                        <a :href="'/groups/' + group.url" role="button">
+                            <h5 style="text-transform:capitalize;" class="text-primary">{{group.name}}</h5>
+                        </a>
+                        <h6 class="text-uppercase">{{group.type}} Group</h6>
+                        <hr class="divider lg" />
+                        <p class="small">{{group.description}}</p>
+                    </div><!-- end panel-body -->
+            </div><!-- end panel -->
+        </div><!-- end col -->
+        <div class="col-sm-12 text-center" v-if="groups.length">
             <nav>
                 <ul class="pagination pagination-sm">
                     <li :class="{ 'disabled': pagination.current_page == 1 }">

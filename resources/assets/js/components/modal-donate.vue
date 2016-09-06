@@ -8,7 +8,7 @@
         <modal :title="'Donate to ' + title" :show.sync="showModal" effect="fade" width="500">
             <div slot="modal-body" class="modal-body">
                 <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
-                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" fund-id="fundId" :recipient="recipient" identifier="modal"></donate>
+                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :fund-id="fundId" :recipient="recipient" identifier="modal"></donate>
             </div>
             <div slot="modal-footer" class="modal-footer">
                 <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
@@ -23,7 +23,7 @@
         <aside :show.sync="showRight" placement="right" header="Donate" :width="375">
             <div class="col-sm-12">
                 <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
-                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" fund-id="fundId" :recipient="recipient" identifier="aside"></donate>
+                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :fund-id="fundId" :recipient="recipient" identifier="aside"></donate>
                 <div class="modal-footer">
                     <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
                     <button type="button" class="btn btn-default btn-xs" @click="prevState()" v-if="!isState('form', 1)">Back</button>

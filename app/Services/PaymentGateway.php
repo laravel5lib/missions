@@ -118,12 +118,13 @@ class PaymentGateway {
     public function createCharge(array $params, $card_token, $customer_id = null)
     {
         $charge = $this->stripe->charges()->create([
-            'customer' => $customer_id,
-            'currency' => $params['currency'],
-            'amount'   => $params['amount'],
-            'source'   => $card_token,
+            'name'        => $params['cardholder'],
+            'customer'    => $customer_id,
+            'currency'    => $params['currency'],
+            'amount'      => $params['amount'],
+            'source'      => $card_token,
             'description' => $params['description'],
-            'capture'  => false
+            'capture'     => false
         ]);
 
         return $charge['id'];

@@ -123,7 +123,6 @@ class PaymentGateway {
             'amount'   => $params['amount'],
             'source'   => $card_token,
             'description' => $params['description'],
-            'statement_description' => $params['description'],
             'capture'  => false
         ]);
 

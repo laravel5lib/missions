@@ -24,13 +24,15 @@ class CardRequest extends FormRequest
     public function rules()
     {
         $required = [
+            'cardholder' => 'required',
             'card_id'   => 'required_without:number',
             'number'    => 'required_without:card_id|string',
             'exp_month' => 'required_with:string',
             'exp_year'  => 'required_with:number|digits:4',
             'cvc'       => 'required_with:number|digits_between:3,4',
             'amount'    => 'required',
-            'currency'  => 'required'
+            'currency'  => 'required',
+            'description' => 'required'
         ];
 
         if ($this->isMethod('put'))

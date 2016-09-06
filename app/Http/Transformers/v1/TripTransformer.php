@@ -116,7 +116,7 @@ class TripTransformer extends TransformerAbstract
      * Include Costs
      *
      * @param Trip $trip
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeCosts(Trip $trip, ParamBag $params = null)
     {

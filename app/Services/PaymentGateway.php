@@ -60,6 +60,7 @@ class PaymentGateway {
 
             $card = [
                 'card' => [
+                    'name'      => $params['cardholder'],
                     'number'    => $params['number'],
                     'exp_month' => $params['exp_month'],
                     'exp_year'  => $params['exp_year'],
@@ -118,7 +119,6 @@ class PaymentGateway {
     public function createCharge(array $params, $card_token, $customer_id = null)
     {
         $charge = $this->stripe->charges()->create([
-            'name'        => $params['cardholder'],
             'customer'    => $customer_id,
             'currency'    => $params['currency'],
             'amount'      => $params['amount'],

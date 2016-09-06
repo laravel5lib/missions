@@ -2,6 +2,7 @@
     <div>
         <validator name="Donation">
             <form class="form-horizontal" name="DonationForm" novalidate v-show="donationState === 'form'">
+                <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Validating"></spinner>
                 <template v-if="isState('form', 1)">
                     <div class="row">
                         <div class="col-sm-12 text-center">
@@ -151,6 +152,7 @@
 
             </form>
             <div class="panel panel-primary" v-show="donationState === 'review'">
+                <spinner v-ref:donationSpinner size="xl" :fixed="false" text="Processing Donation"></spinner>
                 <div class="panel-heading">
                     <div class="panel-title">
                         <h5>Donation Details</h5>
@@ -186,14 +188,25 @@
                     <a @click="createToken" class="btn btn-primary">Donate</a>
                 </div>
             </div>
+            <div class="" v-show="donationState === 'confirmation'">
+                <div class="text-center">
+                    <h1><i class="fa fa-check-circle text-success success fa-3x"></i></h1>
+                    <h2>Donation Confirmed</h2>
+                    <h3>Thank you!</h3>
+                </div>
+                <!--<div class="panel-footer" v-if="!child">
+                    <a @click="done" class="btn btn-success">Close</a>
+                </div>-->
+            </div>
         </validator>
     </div>
 </template>
 <script>
     import vSelect from 'vue-select';
+    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'donate',
-        components:{ vSelect },
+        components:{ vSelect, 'spinner': VueStrap.spinner },
         props: {
             type: {
                 type: String,
@@ -246,12 +259,13 @@
 
         },
         data(){
-            return{/**/
+            return{
                 donor: '',
                 donor_id: null,
                 company_name: '',
                 amount: 1,
                 validateWith: 'email',
+                token: null,
 
                 //card vars
                 card: null,
@@ -283,13 +297,8 @@
                 showButton: true,
                 showLabels: true,
                 devMode: true,
-                // deferred variable used for card validation
-                // needs to be on `this` scope to access in response callback
                 stripeDeferred: {},
                 attemptedCreateToken: false,
-                //attemptSubmit: false,
-                //donationState: 'form',
-                //subState:1
             }
         },
         validators: {
@@ -320,39 +329,18 @@
                     results = [];
                     for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
                         results.push(num);
-//                        results.push(num.toString().substr(2, 2));
                     }
                     return results;
                 })();
                 return years;
             },
             cardParams() {
-
-                if (parseInt(this.auth) && this.donor_id) {
-                    data.donor_id = this.donor_id;
-                } else {
-                    var donor =  {
-                        name: this.donor,
-                        company: this.company_name,
-                        email: this.cardEmail,
-                        phone: this.cardPhone,
-                        zip: this.cardZip,
-                        // country_code: 'us' // needs UI
-                    }
-                }
-
                 return {
                     cardholder: this.cardHolderName,
-                    email: this.cardEmail,
                     number: this.cardNumber,
                     exp_month: this.cardMonth,
                     exp_year: this.cardYear,
                     cvc: this.cardCVC,
-                    amount: this.amount,
-                    currency: 'USD', // determined from card token
-                    description: 'Donation to ' + this.title,
-    //                    address_zip: this.cardZip,
-                    donor: donor
                 };
             }
         },
@@ -389,10 +377,7 @@
                     }
                 }
             },
-            createToken(identifier) {
-                if (identifier !== this.identifier) {
-                    return false;
-                }
+            createToken() {
                 this.stripeDeferred = $.Deferred();
 
                 if (this.$Donation.invalid) {
@@ -401,15 +386,17 @@
                 } else {
                     // authorize card data
                     console.log(this.cardParams);
-                    this.$http.post('donations/authorize', this.cardParams).then(this.createTokenCallback);
-                    // Stripe.setPublishableKey(this.stripeKey);
-                    // Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+                    this.$refs.validationspinner.show();
+                    this.$http.post('donations/authorize', this.cardParams)
+                            .then(this.createTokenCallback,
+                                    function (error) {
+                                        this.$refs.validationspinner.hide();
+                                    });
                 }
                 return this.stripeDeferred.promise();
             },
             createTokenCallback(resp) {
                 console.log(resp);
-                console.log(resp.status);
                 /*this.validationErrors = {
                     cardNumber: '',
                     cardCVC: '',
@@ -433,8 +420,56 @@
                     this.stripeDeferred.reject(false);
                 }*/
                 if (resp.status === 200) {
-                    this.submit(resp.data);
+                    this.$refs.validationspinner.hide();
+                    this.token = resp.data;
+                    this.stripeDeferred.resolve(resp.data);
                 }
+            },
+            submit(){
+                this.$refs.donationspinner.show();
+                var data = {
+                    amount: this.amount,
+                    currency: 'USD', // determined from card token
+                    description: 'Donation to ' + this.title,
+                    comment: null,
+                    fund_id: this.fundId,
+                    token: this.token,
+                    payment: {
+                        type: 'card',
+                        brand: this.detectCardType(this.cardNumber),
+                        last_four: this.cardNumber.substr(-4),
+                        cardholder: this.cardHolderName,
+                    }
+
+                };
+                if (parseInt(this.auth) && this.donor_id) {
+                    data.donor_id = this.donor_id;
+                } else {
+                    data.donor = {
+                        name: this.donor,
+                        company: this.company_name,
+                        email: this.cardEmail,
+                        phone: this.cardPhone,
+                        zip: this.cardZip,
+                        country_code: 'us' // needs UI
+                    }
+                }
+                this.$http.post('donations', data)
+                        .then(function (response) {
+                            this.stripeDeferred.resolve(true);
+                            this.$refs.donationspinner.hide();
+                            this.donationState = 'confirmation';
+                        },
+                        function (error) {
+                            this.$refs.donationspinner.hide();
+                        });
+            },
+            done(){
+                if (this.child) {
+                    this.$root.$emit('DonateForm:complete');
+                }/* else {
+                    window.location.href
+                }*/
             },
             goToState(state){
                 switch (state) {
@@ -459,6 +494,7 @@
                                 if (this.$Donation.invalid) {
                                     break;
                                 }
+
                                 this.subState = 2;
                                 this.attemptSubmit = !1;
                                 break;
@@ -494,38 +530,6 @@
                         break;
                 }
             },
-            submit(charge_id){
-                var data = {
-                    amount: this.amount,
-                    currency: 'USD', // determined from card token
-                    description: 'Donation to ' + this.title,
-                    comment: null,
-                    fund_id: this.fundId,
-                    payment: {
-                        type: 'card',
-                        brand: this.detectCardType(this.cardNumber),
-                        last_four: this.cardNumber.substr(-4),
-                        cardholder: this.cardHolderName,
-                        charge_id: charge_id,
-                    }
-
-                };
-                if (parseInt(this.auth) && this.donor_id) {
-                    data.donor_id = this.donor_id;
-                } else {
-                    data.donor = {
-                        name: this.donor,
-                        company: this.company_name,
-                        email: this.cardEmail,
-                        phone: this.cardPhone,
-                        zip: this.cardZip,
-                        // country_code: 'us' // needs UI
-                    }
-                }
-                this.$http.post('donations', data).then(function (response) {
-                    this.stripeDeferred.resolve(true);
-                });
-            },
             detectCardType(number) {
                 // http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
                 var re = {
@@ -550,9 +554,6 @@
             }
         },
         events: {
-            'VueStripe::create-card-token': function () {
-                //return this.createToken();
-            },
             'VueStripe::reset-form': function () {
                 return this.resetCaching();
             }
@@ -586,12 +587,26 @@
                 this.prevState();
             }.bind(this));
 
-            this.$root.$on('DonateForm:reviewDonation', function () {
-                this.goToState('review');
+            this.$root.$on('DonateForm:resetState', function () {
+                this.toState('form', 1);
             }.bind(this));
 
-            this.$root.$on('DonateForm:createToken', function (identifier) {
-                this.createToken(identifier);
+            this.$root.$on('DonateForm:reviewDonation', function (identifier) {
+                if (identifier !== this.identifier) {
+                    return false;
+                }
+
+                $.when(this.createToken(identifier)).then(function (response) {
+                    this.goToState('review');
+                }.bind(this));
+            }.bind(this));
+
+            this.$root.$on('DonateForm:donate', function (identifier) {
+                if (identifier !== this.identifier) {
+                    return false;
+                }
+
+                this.submit();
             }.bind(this));
 
         },

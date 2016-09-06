@@ -15,8 +15,9 @@
                 <button type="button" class="btn btn-default" @click="prevState()" v-if="!isState('form', 1)">Back</button>
 
                 <button type="button" class="btn btn-primary" @click="nextState()" v-if="isState('form', 1)">Next</button>
-                <button type="button" class="btn btn-primary" @click="reviewDonation()" v-if="isState('form', 2)">Review</button>
-                <button type="button" class="btn btn-primary" @click="createToken('modal')" v-if="donationState==='review'">Donate</button>
+                <button type="button" class="btn btn-primary" @click="reviewDonation('modal')" v-if="isState('form', 2)">Review</button>
+                <button type="button" class="btn btn-primary" @click="donate('modal')" v-if="donationState==='review'">Donate</button>
+                <button type="button" class="btn btn-success" @click="done" v-if="donationState==='confirmation'">Close</button>
             </div>
         </modal>
 
@@ -26,10 +27,11 @@
                         :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :fund-id="fundId" :recipient="recipient" identifier="aside"></donate>
                 <div class="modal-footer">
                     <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
-                    <button type="button" class="btn btn-default btn-xs" @click="prevState()" v-if="!isState('form', 1)">Back</button>
+                    <button type="button" class="btn btn-default btn-xs" @click="prevState()" v-if="!isState('form', 1) && donationState!=='confirmation'">Back</button>
                     <button type="button" class="btn btn-primary btn-xs" @click="nextState()" v-if="isState('form', 1)">Next</button>
-                    <button type="button" class="btn btn-primary btn-xs" @click="reviewDonation()" v-if="isState('form', 2)">Review Donation</button>
-                    <button type="button" class="btn btn-primary btn-xs" @click="createToken('aside')" v-if="donationState==='review'">Donate</button>
+                    <button type="button" class="btn btn-primary btn-xs" @click="reviewDonation('aside')" v-if="isState('form', 2)">Review Donation</button>
+                    <button type="button" class="btn btn-primary btn-xs" @click="donate('aside')" v-if="donationState==='review'">Donate</button>
+                    <button type="button" class="btn btn-success btn-xs" @click="done" v-if="donationState==='confirmation'">Close</button>
                 </div>
             </div>
         </aside>
@@ -99,11 +101,14 @@
             prevState(){
                 this.$root.$emit('DonateForm:prevState');
             },
-            reviewDonation(){
-                this.$root.$emit('DonateForm:reviewDonation');
+            resetState(){
+                this.$root.$emit('DonateForm:resetState');
             },
-            createToken(identifier){
-                this.$root.$emit('DonateForm:createToken', identifier);
+            reviewDonation(identifier){
+                this.$root.$emit('DonateForm:reviewDonation', identifier);
+            },
+            donate(identifier){
+                this.$root.$emit('DonateForm:donate', identifier);
             },
             goToState(state){
                 switch (state) {
@@ -140,6 +145,11 @@
             launchDonate(){
                 this.donateModalOpen = true;
                 this.widthChange();
+            },
+            done(){
+                this.donateModalOpen = false;
+                this.showModal = false;
+                this.showRight = false;
             }
         },
         ready: function () {

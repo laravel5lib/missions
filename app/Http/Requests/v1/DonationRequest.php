@@ -45,7 +45,7 @@ class DonationRequest extends FormRequest
             'payment.number'     => 'required_if:payment.type,check|string',
             'token' => 'required_without:card|string',
             'card' => 'required_without:token|array',
-            'card.card_id'   => 'required_with:card|required_without:card.number|string',
+            'card.card_id'   => 'string',
             'card.cardholder' => 'required_with:card|string',
             'card.number'    => 'required_with:card|string',
             'card.exp_month' => 'required_with:card|string',

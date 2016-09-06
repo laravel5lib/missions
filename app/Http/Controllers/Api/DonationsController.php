@@ -91,17 +91,17 @@ class DonationsController extends Controller
         }
 
         // create customer with the token and donor details
-        $customer_id = $this->payment
+        $customer = $this->payment
             ->createCustomer($request->get('donor'), $token);
 
         // merge the customer id with donor details
-        $request['donor'] = $request->get('donor') + ['customer_id' => $customer_id];
+        $request['donor'] = $request->get('donor') + ['customer_id' => $customer['id']];
 
         // create the charge with customer id, token, and donation details
         $charge = $this->payment->createCharge(
             $request->all(),
-            $token,
-            $customer_id
+            $customer['default_source'],
+            $customer['id']
         );
 
         // capture the charge

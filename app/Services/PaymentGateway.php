@@ -88,7 +88,7 @@ class PaymentGateway {
             'source' => $card_token
         ]);
 
-        return $customer['id'];
+        return $customer;
     }
 
     /**
@@ -113,16 +113,16 @@ class PaymentGateway {
      *
      * @param array $params
      * @param null $customer_id
-     * @param null $card_token
+     * @param null $card_id
      * @return mixed
      */
-    public function createCharge(array $params, $card_token, $customer_id = null)
+    public function createCharge(array $params, $card_id, $customer_id = null)
     {
         $charge = $this->stripe->charges()->create([
             'customer'    => $customer_id,
             'currency'    => $params['currency'],
             'amount'      => $params['amount'],
-            'source'      => $card_token,
+            'source'      => $card_id,
             'description' => $params['description'],
             'capture'     => false
         ]);

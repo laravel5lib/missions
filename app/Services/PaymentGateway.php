@@ -127,7 +127,7 @@ class PaymentGateway {
             'capture'     => false
         ]);
 
-        return $charge['id'];
+        return $charge;
     }
 
     /**

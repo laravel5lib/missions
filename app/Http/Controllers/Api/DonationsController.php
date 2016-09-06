@@ -82,11 +82,31 @@ class DonationsController extends Controller
      */
     public function store(DonationRequest $request)
     {
-        // is this a credit card donation?
-        // if so, look for a charge_id and capture the card
-        if($request->has('charge_id')) {
-            $this->payment->captureCharge($request->get('charge_id'));
+        // is this a credit card donation and do we have token?
+        if( ! $request->has('token')) {
+            $token = $this->payment->createCardToken($request->get('card'));
         }
+
+        $customer_id = $this->payment
+            ->createCustomer($request->get('donor'), $request->get('token', $token));
+
+        $request['donor'] = $request->get('donor') + ['customer_id' => $customer_id];
+
+        $charge = $this->payment->createCharge(
+            $request->all(),
+            $request->get('token'),
+            $customer_id
+        );
+
+        $this->payment->captureCharge($charge['id']);
+
+        $request['payment'] = [
+            'type' => 'card',
+            'charge_id' => $charge['id'],
+            'brand' => $charge['source']['brand'],
+            'last_four' => $charge['source']['last4'],
+            'cardholder' => $charge['source']['name'],
+        ];
 
         // we can pass donor details to try and find a match
         // or to create a new donor if a match isn't found.
@@ -113,14 +133,6 @@ class DonationsController extends Controller
      */
     public function authorizeCard(CardRequest $request)
     {
-        $token = $this->payment->createCardToken($request->all());
-
-        $customer_id = $this->payment->createCustomer($request->get('donor'), $token);
-
-        return $this->payment->createCharge(
-            $request->all(),
-            $token,
-            $customer_id
-        );
+        return $this->payment->createCardToken($request->all());
     }
 }

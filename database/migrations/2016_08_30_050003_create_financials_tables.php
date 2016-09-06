@@ -19,8 +19,10 @@ class CreateFinancialsTables extends Migration
             $table->string('email', 60)->nullable();
             $table->string('phone', 60)->nullable();
             $table->string('zip', 10)->nullable();
+            $table->string('country_code')->nullable();
             $table->uuid('account_id')->nullable();
             $table->string('account_type')->nullable();
+            $table->string('customer_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

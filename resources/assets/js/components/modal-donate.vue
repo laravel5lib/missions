@@ -8,7 +8,7 @@
         <modal :title="'Donate to ' + title" :show.sync="showModal" effect="fade" width="500">
             <div slot="modal-body" class="modal-body">
                 <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
-                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" fund-id="fundId" :recipient="recipient"></donate>
+                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" fund-id="fundId" :recipient="recipient" identifier="modal"></donate>
             </div>
             <div slot="modal-footer" class="modal-footer">
                 <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
@@ -16,20 +16,20 @@
 
                 <button type="button" class="btn btn-primary" @click="nextState()" v-if="isState('form', 1)">Next</button>
                 <button type="button" class="btn btn-primary" @click="reviewDonation()" v-if="isState('form', 2)">Review</button>
-                <button type="button" class="btn btn-primary" @click="createToken" v-if="donationState==='review'">Donate</button>
+                <button type="button" class="btn btn-primary" @click="createToken('modal')" v-if="donationState==='review'">Donate</button>
             </div>
         </modal>
 
         <aside :show.sync="showRight" placement="right" header="Donate" :width="375">
             <div class="col-sm-12">
                 <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
-                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" fund-id="fundId" :recipient="recipient"></donate>
+                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" fund-id="fundId" :recipient="recipient" identifier="aside"></donate>
                 <div class="modal-footer">
                     <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
                     <button type="button" class="btn btn-default btn-xs" @click="prevState()" v-if="!isState('form', 1)">Back</button>
                     <button type="button" class="btn btn-primary btn-xs" @click="nextState()" v-if="isState('form', 1)">Next</button>
                     <button type="button" class="btn btn-primary btn-xs" @click="reviewDonation()" v-if="isState('form', 2)">Review Donation</button>
-                    <button type="button" class="btn btn-primary btn-xs" @click="createToken" v-if="donationState==='review'">Donate</button>
+                    <button type="button" class="btn btn-primary btn-xs" @click="createToken('aside')" v-if="donationState==='review'">Donate</button>
                 </div>
             </div>
         </aside>
@@ -102,8 +102,8 @@
             reviewDonation(){
                 this.$root.$emit('DonateForm:reviewDonation');
             },
-            createToken(){
-                this.$root.$emit('DonateForm:createToken');
+            createToken(identifier){
+                this.$root.$emit('DonateForm:createToken', identifier);
             },
             goToState(state){
                 switch (state) {

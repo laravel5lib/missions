@@ -238,6 +238,10 @@
             title: {
                 type: String,
                 default: ''
+            },
+            identifier: {
+                type: String,
+                defulat: null
             }
 
         },
@@ -368,7 +372,10 @@
                     }
                 }
             },
-            createToken() {
+            createToken(identifier) {
+                if (identifier !== this.identifier) {
+                    return false;
+                }
                 this.stripeDeferred = $.Deferred();
 
                 if (this.$Donation.invalid) {
@@ -409,15 +416,7 @@
                     this.stripeDeferred.reject(false);
                 }
                 if (status === 200) {
-                    this.card = resp;
-                    // send payment data to parent
-                    this.paymentInfo = {
-                        token: resp,
-                        save: this.cardSave,
-                        email: this.cardEmail
-                    };
-
-                    this.submit();
+                    this.submit(resp);
                     this.stripeDeferred.resolve(true);
                 }
             },
@@ -479,7 +478,7 @@
                         break;
                 }
             },
-            submit(){
+            submit(charge_id){
                 debugger;
                 var data = {
                     amount: this.amount,
@@ -487,6 +486,13 @@
                     description: '',
                     comment: null,
                     fund_id: this.typeId,
+                    charge_id: charge_id,
+                    payment: {
+                        type: 'card',
+                        brand: this.detectCardType(this.cardNumber),
+                        last_four: this.cardNumber.substr(-4),
+                        cardholder: this.cardholder,
+                    }
 
                 };
                 if (this.auth) {
@@ -502,6 +508,27 @@
                     }
                 }
                 this.$http.post('donations', data);
+            },
+            detectCardType(number) {
+                var re = {
+                    electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
+                    maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
+                    dankort: /^(5019)\d+$/,
+                    interpayment: /^(636)\d+$/,
+                    unionpay: /^(62|88)\d+$/,
+                    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+                    mastercard: /^5[1-5][0-9]{14}$/,
+                    amex: /^3[47][0-9]{13}$/,
+                    diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+                    discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+                    jcb: /^(?:2131|1800|35\d{3})\d{11}$/
+                };
+
+                for(var key in re) {
+                    if(re[key].test(number)) {
+                        return key
+                    }
+                }
             }
         },
         events: {
@@ -523,10 +550,10 @@
 
             if (parseInt(this.auth)) {
                 this.$http.get('users/me').then(function (response) {
-                    this.donor = response.data.data.name
-                    this.cardHolderName = response.data.data.name
-                    this.cardEmail = response.data.data.email
-                    this.cardPhone = response.data.data.phone_one
+                    this.donor = response.data.data.name;
+                    this.cardHolderName = response.data.data.name;
+                    this.cardEmail = response.data.data.email;
+                    this.cardPhone = response.data.data.phone_one;
                     this.cardZip = response.data.data.zip
                 });
             }
@@ -544,8 +571,8 @@
                 this.goToState('review');
             }.bind(this));
 
-            this.$root.$on('DonateForm:createToken', function () {
-                this.createToken();
+            this.$root.$on('DonateForm:createToken', function (identifier) {
+                this.createToken(identifier);
             }.bind(this));
 
         },

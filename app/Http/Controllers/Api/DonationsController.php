@@ -82,24 +82,30 @@ class DonationsController extends Controller
      */
     public function store(DonationRequest $request)
     {
-        // is this a credit card donation and do we have token?
+        // has a credit card token already been created and provided?
+        // if not, tokenize the card details.
         if( ! $request->has('token')) {
             $token = $this->payment->createCardToken($request->get('card'));
         }
 
+        // create customer with the token and donor details
         $customer_id = $this->payment
             ->createCustomer($request->get('donor'), $request->get('token', $token));
 
+        // merge the customer id with donor details
         $request['donor'] = $request->get('donor') + ['customer_id' => $customer_id];
 
+        // create the charge with customer id, token, and donation details
         $charge = $this->payment->createCharge(
             $request->all(),
             $request->get('token'),
             $customer_id
         );
 
+        // capture the charge
         $this->payment->captureCharge($charge['id']);
 
+        // rebuild the payment array with new details
         $request['payment'] = [
             'type' => 'card',
             'charge_id' => $charge['id'],

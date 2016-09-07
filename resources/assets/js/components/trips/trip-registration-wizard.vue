@@ -193,7 +193,8 @@
 					amount: this.fundraisingGoal,
 					user_id: this.userData.id,
 					trip_id: this.tripId,
-					companion_limit: this.companion_limit
+					companion_limit: this.companion_limit,
+					costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static)
 				}).then(function (response) {
 					// Charge Card
 					var data = {

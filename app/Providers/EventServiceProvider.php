@@ -20,7 +20,7 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\EmailReceipt',
             'App\Listeners\NotifyRecipient'
         ],
-        'App\Events\ReservationWasCreated' => [
+        'App\Events\ReservationWasProcessed' => [
             'App\Listeners\EmailReservationConfirmation',
             'App\Listeners\NotifyFacilitatorsOfNewReservation'
         ]
@@ -51,13 +51,14 @@ class EventServiceProvider extends ServiceProvider
 
         Reservation::created(function ($reservation) {
             // generate dues based on assigned costs
-            $dues = $reservation->costs->with('payments')->flatMap(function ($cost) {
+            $dues = $reservation->costs()->with('payments')->get()->flatMap(function ($cost) {
                 $cost->payments->map(function ($payment) {
                    return [
                        'payment_id' => $payment->id,
                        'due_at' => $payment->due_at,
                        'grace_period' => $payment->grace_period,
-                       'outsanding_balance' => $payment->amount_owed];
+                       'outsanding_balance' => $payment->amount_owed
+                   ];
                 });
             });
 

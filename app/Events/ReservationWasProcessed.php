@@ -7,14 +7,13 @@ use App\Models\v1\Reservation;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ReservationWasCreated extends Event
+class ReservationWasProcessed extends Event
 {
     use SerializesModels;
-
     /**
      * @var Reservation
      */
-    public $reservation;
+    private $reservation;
 
     /**
      * Create a new event instance.

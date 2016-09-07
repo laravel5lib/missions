@@ -53971,7 +53971,7 @@ exports.default = {
 			return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
 		},
 		dobYear: function dobYear() {
-			return this.currentYear - 100 + this.dobYearCalc;
+			return this.currentYear - 100 + parseInt(this.dobYearCalc);
 		},
 		height: function height() {
 			return this.heightA + ' ft. ' + this.heightB + ' in.';
@@ -54208,7 +54208,7 @@ exports.default = {
 		if (this.devMode) {
 			this.cardNumber = '4242424242424242';
 			this.cardCVC = '123';
-			this.cardYear = '19';
+			this.cardYear = '2019';
 			return this.cardMonth = '1';
 		}
 	},
@@ -54310,7 +54310,7 @@ exports.default = {
 				var i, ref, ref1, results;
 				results = [];
 				for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
-					results.push(num.toString().substr(2, 2));
+					results.push(num);
 				}
 				return results;
 			}();
@@ -54318,12 +54318,11 @@ exports.default = {
 		},
 		cardParams: function cardParams() {
 			return {
-				name: this.cardHolderName,
+				cardholder: this.cardHolderName,
 				number: this.cardNumber,
-				expMonth: this.cardMonth,
-				expYear: this.cardYear,
-				cvc: this.cardCVC,
-				address_zip: this.cardZip
+				exp_month: this.cardMonth,
+				exp_year: this.cardYear,
+				cvc: this.cardCVC
 			};
 		}
 	},
@@ -54369,13 +54368,18 @@ exports.default = {
 				this.attemptedCreateToken = true;
 				this.stripeDeferred.reject(false);
 			} else {
-				Stripe.setPublishableKey(this.stripeKey);
-				Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+				//					Stripe.setPublishableKey(this.stripeKey);
+				//					Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+				this.$parent.$refs.validationspinner.show();
+
+				this.$http.post('donations/authorize', this.cardParams).then(this.createTokenCallback, function (error) {
+					this.$parent.$refs.validationspinner.hide();
+				});
 			}
 			return this.stripeDeferred.promise();
 		},
-		createTokenCallback: function createTokenCallback(status, resp) {
-			console.log(status);
+		createTokenCallback: function createTokenCallback(resp) {
+			//console.log(status);
 			console.log(resp);
 			this.validationErrors = {
 				cardNumber: '',
@@ -54399,13 +54403,15 @@ exports.default = {
 				}
 				this.stripeDeferred.reject(false);
 			}
-			if (status === 200) {
-				this.card = resp;
+			if (resp.status === 200) {
+				this.card = this.cardParams;
 				// send payment data to parent
 				this.$parent.paymentInfo = {
 					token: resp,
+					card: this.cardParams,
 					save: this.cardSave,
-					email: this.cardEmail
+					email: this.cardEmail,
+					address_zip: this.cardZip
 				};
 				this.$parent.upfrontTotal = this.upfrontTotal;
 				this.$parent.fundraisingGoal = this.fundraisingGoal;
@@ -54460,7 +54466,7 @@ exports.default = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<h4>Review</h4>\n\t\t<div class=\"panel panel-primary\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<div class=\"panel-title\">\n\t\t\t\t\t<h5>Basic Traveler Information</h5>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<address>\n\t\t\t\t\t<strong>{{userInfo.firstName}} {{userInfo.middleName}} {{userInfo.lastName}}</strong><br>\n\t\t\t\t\t{{userInfo.address}}<br>\n\t\t\t\t\t{{userInfo.city}}, {{userInfo.state}} {{userInfo.zipCode}}<br>\n\t\t\t\t\t{{userInfo.country | uppercase}}<br>\n\t\t\t\t\t<br>\n\t\t\t\t\tDate of Birth: {{userInfo.dob}}<br>\n\t\t\t\t\tGender: {{userInfo.gender|capitalize}}<br>\n\t\t\t\t\tRelationship Status: {{userInfo.relationshipStatus|capitalize}}<br>\n\t\t\t\t\tHeight: {{userInfo.height}}<br>\n\t\t\t\t\tWeight: {{userInfo.weight}} lbs.<br>\n\t\t\t\t\t<br>\n\t\t\t\t\t<abbr title=\"Phone\"><span class=\"fa fa-phone\"></span></abbr> {{userInfo.phone}}<br>\n\t\t\t\t\t<abbr title=\"Mobile\"><span class=\"fa fa-mobile\"></span></abbr> {{userInfo.mobile}}<br>\n\t\t\t\t\t<abbr title=\"Email\"><span class=\"fa fa-envelope\"></span></abbr> {{userInfo.email}}<br>\n\t\t\t\t</address>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"panel panel-primary\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<div class=\"panel-title\">\n\t\t\t\t\t<h5>Payment Details</h5>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<dl class=\"dl-horizontal\" v-if=\"paymentInfo\">\n\t\t\t\t\t<dt>Card Holder Name</dt>\n\t\t\t\t\t<dd>{{paymentInfo.token.card.name}}</dd>\n\t\t\t\t\t<dt>Card Number</dt>\n\t\t\t\t\t<dd>···· ···· ···· {{paymentInfo.token.card.last4}}</dd>\n\t\t\t\t\t<dt>Card Expiration</dt>\n\t\t\t\t\t<dd>{{paymentInfo.token.card.exp_month}}/{{paymentInfo.token.card.exp_year}}</dd>\n\t\t\t\t\t<dt>Billing Email</dt>\n\t\t\t\t\t<dd>{{paymentInfo.email}}</dd>\n\t\t\t\t\t<dt>Billing Zip</dt>\n\t\t\t\t\t<dd>{{paymentInfo.token.card.address_zip}}</dd>\n\t\t\t\t\t<dt>Save Payment Method</dt>\n\t\t\t\t\t<dd>{{paymentInfo.save ? 'Yes' : 'No'}}</dd>\n\t\t\t\t</dl>\n\t\t\t\t<hr>\n\t\t\t\t<p class=\"list-group-item-text\">Amount to be charged immediately: {{upfrontTotal|currency}}</p>\n\t\t\t</div>\n\t\t</div>\n\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<hr>\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<div class=\"checkbox\">\n\t\t\t<label>\n\t\t\t\t<input type=\"checkbox\" v-model=\"review\">\n\t\t\t\tI have reviewed and verified that all information provided is correct.\n\t\t\t</label>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<h4>Review</h4>\n\t\t<div class=\"panel panel-primary\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<div class=\"panel-title\">\n\t\t\t\t\t<h5>Basic Traveler Information</h5>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<address>\n\t\t\t\t\t<strong>{{userInfo.firstName}} {{userInfo.middleName}} {{userInfo.lastName}}</strong><br>\n\t\t\t\t\t{{userInfo.address}}<br>\n\t\t\t\t\t{{userInfo.city}}, {{userInfo.state}} {{userInfo.zipCode}}<br>\n\t\t\t\t\t{{userInfo.country | uppercase}}<br>\n\t\t\t\t\t<br>\n\t\t\t\t\tDate of Birth: {{userInfo.dob}}<br>\n\t\t\t\t\tGender: {{userInfo.gender|capitalize}}<br>\n\t\t\t\t\tRelationship Status: {{userInfo.relationshipStatus|capitalize}}<br>\n\t\t\t\t\tHeight: {{userInfo.height}}<br>\n\t\t\t\t\tWeight: {{userInfo.weight}} lbs.<br>\n\t\t\t\t\t<br>\n\t\t\t\t\t<abbr title=\"Phone\"><span class=\"fa fa-phone\"></span></abbr> {{userInfo.phone}}<br>\n\t\t\t\t\t<abbr title=\"Mobile\"><span class=\"fa fa-mobile\"></span></abbr> {{userInfo.mobile}}<br>\n\t\t\t\t\t<abbr title=\"Email\"><span class=\"fa fa-envelope\"></span></abbr> {{userInfo.email}}<br>\n\t\t\t\t</address>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"panel panel-primary\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<div class=\"panel-title\">\n\t\t\t\t\t<h5>Payment Details</h5>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<dl class=\"dl-horizontal\" v-if=\"paymentInfo\">\n\t\t\t\t\t<dt>Card Holder Name</dt>\n\t\t\t\t\t<dd>{{paymentInfo.card.cardholder}}</dd>\n\t\t\t\t\t<dt>Card Number</dt>\n\t\t\t\t\t<dd>···· ···· ···· {{paymentInfo.card.number.substr(-4)}}</dd>\n\t\t\t\t\t<dt>Card Expiration</dt>\n\t\t\t\t\t<dd>{{paymentInfo.card.exp_month}}/{{paymentInfo.card.exp_year}}</dd>\n\t\t\t\t\t<dt>Billing Email</dt>\n\t\t\t\t\t<dd>{{paymentInfo.email}}</dd>\n\t\t\t\t\t<dt>Billing Zip</dt>\n\t\t\t\t\t<dd>{{paymentInfo.address_zip}}</dd>\n\t\t\t\t\t<dt>Save Payment Method</dt>\n\t\t\t\t\t<dd>{{paymentInfo.save ? 'Yes' : 'No'}}</dd>\n\t\t\t\t</dl>\n\t\t\t\t<hr>\n\t\t\t\t<p class=\"list-group-item-text\">Amount to be charged immediately: {{upfrontTotal|currency}}</p>\n\t\t\t</div>\n\t\t</div>\n\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<hr>\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<div class=\"checkbox\">\n\t\t\t<label>\n\t\t\t\t<input type=\"checkbox\" v-model=\"review\">\n\t\t\t\tI have reviewed and verified that all information provided is correct.\n\t\t\t</label>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -54657,6 +54663,10 @@ var _review = require('./registration/review.vue');
 
 var _review2 = _interopRequireDefault(_review);
 
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -54724,11 +54734,11 @@ exports.default = {
 					this.$children.forEach(function (child) {
 						if (child.hasOwnProperty('$PaymentDetails')) thisChild = child;
 					});
-					var self = this;
 					// promise needed to wait for async response from stripe
 					$.when(thisChild.createToken()).done(function (success) {
-						self.nextStepCallback();
-					});
+						this.$refs.validationspinner.hide();
+						this.nextStepCallback();
+					}.bind(this));
 					break;
 				default:
 					this.nextStepCallback();
@@ -54743,11 +54753,8 @@ exports.default = {
 			}, this);
 		},
 		finish: function finish() {
-			// 1. Create customer with stripe
-			// 2. if they chose to save data, save card to customer
-			// 3. charge card
-			// 4. update user account with customer id
-			// 5. create reservation
+			this.$refs.reservationspinner.show();
+
 			this.$http.post('reservations', {
 				given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
 				surname: this.userInfo.lastName,
@@ -54758,12 +54765,74 @@ exports.default = {
 				amount: this.fundraisingGoal,
 				user_id: this.userData.id,
 				trip_id: this.tripId,
-				companion_limit: this.companion_limit
+				companion_limit: this.companion_limit,
+				costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static)
 			}).then(function (response) {
-				window.location.href = '/dashboard' + response.data.data.links[0].uri;
+				// Charge Card
+				var data = {
+					amount: this.upfrontTotal,
+					currency: 'USD', // determined from card token
+					description: 'Donation to ' + this.title,
+					comment: null,
+					token: this.paymentInfo.token,
+					payment: {
+						type: 'card',
+						brand: this.detectCardType(this.paymentInfo.card.number) || 'visa',
+						last_four: this.paymentInfo.card.number.substr(-4),
+						cardholder: this.paymentInfo.card.cardholder
+					}
+
+				};
+				if (parseInt(this.auth) && this.donor_id) {
+					data.donor_id = this.donor_id;
+				} else {
+					data.donor = {
+						name: this.userInfo.firstName + ' ' + this.userInfo.lastName,
+						company: '',
+						email: this.userInfo.email,
+						phodzne: this.cardPhone,
+						zip: this.userInfo.zipCode,
+						country_code: this.userInfo.country || 'us' // needs UI
+					};
+				}
+				this.$http.post('donations', data).then(function (response) {
+					this.stripeDeferred.resolve(true);
+					this.$refs.donationspinner.hide();
+					this.donationState = 'confirmation';
+					this.$refs.reservationspinner.hide();
+
+					window.location.href = '/dashboard' + response.data.data.links[0].uri;
+				}, function (error) {
+					this.$refs.reservationspinner.hide();
+				});
+
+				this.$refs.reservationspinner.hide();
 			}, function (response) {
 				console.log(response);
+				this.$refs.reservationspinner.hide();
 			});
+		},
+		detectCardType: function detectCardType(number) {
+			// http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
+			var re = {
+				electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
+				maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
+				dankort: /^(5019)\d+$/,
+				interpayment: /^(636)\d+$/,
+				unionpay: /^(62|88)\d+$/,
+				visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+				mastercard: /^5[1-5][0-9]{14}$/,
+				amex: /^3[47][0-9]{13}$/,
+				diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+				discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+				jcb: /^(?:2131|1800|35\d{3})\d{11}$/
+			};
+
+			for (var key in re) {
+				if (re[key].test(number)) {
+					return key;
+				}
+			}
 		}
 	},
 	components: {
@@ -54774,8 +54843,8 @@ exports.default = {
 		'step5': _additionalTripOptions2.default,
 		'step6': _paymentDetails2.default,
 		'step7': _deadlineAgreement2.default,
-		'step8': _review2.default
-
+		'step8': _review2.default,
+		'spinner': _vueStrap2.default.spinner
 	},
 	created: function created() {
 		// login component skipped for now
@@ -54848,7 +54917,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h5>{{ trip.country_name }} Trip Registration</h5>\n\t</div>\n\t<div class=\"panel-body\">\n\t\t<div class=\"row visible-xs-block\">\n\t\t\t<div class=\"col-xs-12\">\n\t\t\t\t<div class=\"btn-group btn-group-justified btn-group-xs\" style=\"display:block;\" role=\"group\" aria-label=\"...\">\n\t\t\t\t\t<a @click=\"backStep()\" class=\"btn btn-default\" :class=\"{'disabled': currentStep.view === 'step1' }\" role=\"button\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-left\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<div class=\"btn-group\" role=\"group\">\n\t\t\t\t\t\t<a class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t\t\t\t{{ currentStep.name }} <span class=\"caret\"></span>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<ul class=\"dropdown-menu dropdown-menu-right\">\n\t\t\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n\t\t\t\t\t</div>\n\t\t\t\t\t<!--<a class=\"btn btn-default\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-right\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">\n\t\t\t\t\t\t<i class=\"fa fa-check\"></i>\n\t\t\t\t\t</a>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr class=\"divider visible-xs\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-5 col-md-4 hidden-xs\">\n\t\t\t\t<ul class=\"nav nav-pills nav-stacked\">\n\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</li>\n\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t\t<div class=\"col-sm-7 col-md-8 {{currentStep.view}}\">\n\t\t\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t\t\t</component>\n\t\t\t</div>\n\n\t\t</div>\n\t</div>\n\t<div class=\"panel-footer text-right\">\n\t\t<div class=\"btn-group btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<!--<a class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</a>-->\n\t\t\t<a class=\"btn btn-default\" @click=\"backStep()\" :class=\"{'disabled': currentStep.view === 'step1' }\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h5>{{ trip.country_name }} Trip Registration</h5>\n\t</div>\n\t<div class=\"panel-body\">\n\t\t<div class=\"row visible-xs-block\">\n\t\t\t<div class=\"col-xs-12\">\n\t\t\t\t<div class=\"btn-group btn-group-justified btn-group-xs\" style=\"display:block;\" role=\"group\" aria-label=\"...\">\n\t\t\t\t\t<a @click=\"backStep()\" class=\"btn btn-default\" :class=\"{'disabled': currentStep.view === 'step1' }\" role=\"button\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-left\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<div class=\"btn-group\" role=\"group\">\n\t\t\t\t\t\t<a class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t\t\t\t{{ currentStep.name }} <span class=\"caret\"></span>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<ul class=\"dropdown-menu dropdown-menu-right\">\n\t\t\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n\t\t\t\t\t</div>\n\t\t\t\t\t<!--<a class=\"btn btn-default\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-right\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">\n\t\t\t\t\t\t<i class=\"fa fa-check\"></i>\n\t\t\t\t\t</a>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr class=\"divider visible-xs\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-5 col-md-4 hidden-xs\">\n\t\t\t\t<ul class=\"nav nav-pills nav-stacked\">\n\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</li>\n\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t\t<div class=\"col-sm-7 col-md-8 {{currentStep.view}}\">\n\t\t\t\t<spinner v-ref:validationspinner=\"\" size=\"xl\" :fixed=\"false\" text=\"Validating\"></spinner>\n\t\t\t\t<spinner v-ref:reservationspinner=\"\" size=\"xl\" :fixed=\"true\" text=\"Creating Reservation\"></spinner>\n\t\t\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t\t\t</component>\n\t\t\t</div>\n\n\t\t</div>\n\t</div>\n\t<div class=\"panel-footer text-right\">\n\t\t<div class=\"btn-group btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<!--<a class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</a>-->\n\t\t\t<a class=\"btn btn-default\" @click=\"backStep()\" :class=\"{'disabled': currentStep.view === 'step1' }\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -54863,7 +54932,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":144,"./registration/additional-trip-options.vue":172,"./registration/basic-info.vue":173,"./registration/deadline-agreement.vue":174,"./registration/payment-details.vue":175,"./registration/review.vue":176,"./registration/roca.vue":177,"./registration/tos.vue":178,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],181:[function(require,module,exports){
+},{"../login.vue":144,"./registration/additional-trip-options.vue":172,"./registration/basic-info.vue":173,"./registration/deadline-agreement.vue":174,"./registration/payment-details.vue":175,"./registration/review.vue":176,"./registration/roca.vue":177,"./registration/tos.vue":178,"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

@@ -13,7 +13,11 @@ class ReservationEventListener {
      */
     public function onReservationCreated($event) {
 
-        dispatch(new ProcessReservation($event->reservation, $event->request));
+        dispatch(new ProcessReservation(
+            $event->reservation,
+            $event->request->get('costs'),
+            $event->request->get('tags')
+        ));
 
         dispatch(new SetupFunding($event->reservation));
 

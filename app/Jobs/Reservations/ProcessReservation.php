@@ -17,21 +17,20 @@ class ProcessReservation extends Job implements ShouldQueue
      * @var Reservation
      */
     private $reservation;
-    /**
-     * @var Request
-     */
-    private $request;
+    private $costs;
+    private $tags;
 
     /**
      * Create a new job instance.
-     *
      * @param Reservation $reservation
-     * @param Request $request
+     * @param null $costs
+     * @param null $tags
      */
-    public function __construct(Reservation $reservation, Request $request)
+    public function __construct(Reservation $reservation, $costs = null, $tags = null)
     {
         $this->reservation = $reservation;
-        $this->request = $request;
+        $this->costs = $costs;
+        $this->tags = $tags;
     }
 
     /**
@@ -41,8 +40,8 @@ class ProcessReservation extends Job implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->request->has('costs')) {
-            $this->reservation->syncCosts($this->request->get('costs'));
+        if ($this->costs) {
+            $this->reservation->syncCosts($this->costs);
         } else {
             $active = $this->reservation->trip->activeCosts()->get();
 
@@ -56,8 +55,8 @@ class ProcessReservation extends Job implements ShouldQueue
             $this->reservation->syncCosts($costs);
         }
 
-        if ($this->request->has('tags'))
-            $this->reservation->tag($this->request->get('tags'));
+        if ($this->tags)
+            $this->reservation->tag($this->tags);
 
         $this->reservation->syncRequirements($this->reservation->trip->requirements);
         $this->reservation->syncDeadlines($this->reservation->trip->deadlines);

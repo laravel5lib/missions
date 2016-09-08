@@ -438,7 +438,7 @@
 					this.card = this.cardParams;
 					// send payment data to parent
 					this.$parent.paymentInfo = {
-						token: resp,
+						token: resp.data,
 						card: this.cardParams,
 						save: this.cardSave,
 						email: this.cardEmail,

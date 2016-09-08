@@ -20,7 +20,7 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\EmailReceipt',
             'App\Listeners\NotifyRecipient'
         ],
-        'App\Events\ReservationWasCreated' => [
+        'App\Events\ReservationWasProcessed' => [
             'App\Listeners\EmailReservationConfirmation',
             'App\Listeners\NotifyFacilitatorsOfNewReservation'
         ]
@@ -50,22 +50,16 @@ class EventServiceProvider extends ServiceProvider
         });
 
         Reservation::created(function ($reservation) {
-
-            $active = $reservation->trip->activeCosts()->with('payments')->get();
-
-            $maxDate = $active->where('type', 'incremental')->max('active_at');
-
-            $dues = $active->reject(function ($value) use($maxDate) {
-                return $value->type == 'incremental' && $value->active_at < $maxDate;
-            })->flatMap(function ($cost) {
-                return $cost->payments->map(function ($payment) {
-                    return [
-                        'payment_id' => $payment->id,
-                        'due_at' => $payment->due_at,
-                        'grace_period' => $payment->grace_period,
-                        'outstanding_balance' => $payment->amount_owed,
-                    ];
-                })->all();
+            // generate dues based on assigned costs
+            $dues = $reservation->costs()->with('payments')->get()->flatMap(function ($cost) {
+                $cost->payments->map(function ($payment) {
+                   return [
+                       'payment_id' => $payment->id,
+                       'due_at' => $payment->due_at,
+                       'grace_period' => $payment->grace_period,
+                       'outsanding_balance' => $payment->amount_owed
+                   ];
+                });
             });
 
             $reservation->addDues($dues);

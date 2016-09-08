@@ -2,12 +2,10 @@
 
 @section('content')
 
-    <p>Hi {{ $recipient->name }}</p>
+    <h3 style="color: #242424;font-family:Helvetica, Arial, sans-serif;color:#242424;">Hi {{ $recipient->name }},</h3>
 
-    <p>{{ $donation->donor->name }} donated ${{ $donation->amount }} to {{ $donation->fund->name }}</p>
+    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;"><span style="color:#3e3e3e;font-weight:bold;">{{ $donation->donor->name }}</span> donated <span style="color:#05ce7b;font-weight:bold;">${{ $donation->amount }}</span> to <span style="color:#3e3e3e;font-weight:bold;">{{ $donation->fund->name }}</span></p>
 
-    <p>You have successfully raised a total of ${{ $donation->fund->balance }}</p>
-
-    <p><small>All Missions.Me donations are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.</small></p>
+    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;">You have successfully raised a total of <span style="color:#05ce7b;font-weight:bold;">${{ $donation->fund->balance }}</span></p>
 
 @stop

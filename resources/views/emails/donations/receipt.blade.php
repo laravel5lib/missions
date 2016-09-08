@@ -1,11 +1,8 @@
 @extends('emails.layouts.default')
 
 @section('content')
+	<h3 style="color: #242424;font-family:Helvetica, Arial, sans-serif;color:#242424;">Hey {{ $donation->donor->name }},</h3>
 
-    <p>Hi {{ $donation->donor->name }}</p>
-
-    <p>Thank you for your generous donation of ${{ $donation->amount }} to {{ $donation->fund->name }}</p>
-
-    <p><small>All Missions.Me donations are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.</small></p>
+	<p style="color: #242424;font-family:Helvetica, Arial, sans-serif;">Thank you for your generous donation of <span style="color:#05ce7b;font-weight:bold;">${{ $donation->amount }}</span> to <span style="color:#3e3e3e;font-weight:bold;">{{ $donation->fund->name }}</span></p>
 
 @stop

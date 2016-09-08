@@ -2874,6 +2874,7 @@ var createDict = function(){
   // Thrash, waste and sodomy: IE GC bug
   var iframe = require('./_dom-create')('iframe')
     , i      = enumBugKeys.length
+    , lt     = '<'
     , gt     = '>'
     , iframeDocument;
   iframe.style.display = 'none';
@@ -2883,7 +2884,7 @@ var createDict = function(){
   // html.removeChild(iframe);
   iframeDocument = iframe.contentWindow.document;
   iframeDocument.open();
-  iframeDocument.write('<script>document.F=Object</script' + gt);
+  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
   iframeDocument.close();
   createDict = iframeDocument.F;
   while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
@@ -2901,6 +2902,7 @@ module.exports = Object.create || function create(O, Properties){
   } else result = createDict();
   return Properties === undefined ? result : dPs(result, Properties);
 };
+
 },{"./_an-object":31,"./_dom-create":38,"./_enum-bug-keys":39,"./_html":46,"./_object-dps":60,"./_shared-key":73}],59:[function(require,module,exports){
 var anObject       = require('./_an-object')
   , IE8_DOM_DEFINE = require('./_ie8-dom-define')
@@ -31820,7 +31822,8 @@ function restoreState (vm, state, isRoot) {
 }
 
 function format (id) {
-  return id.match(/[^\/]+\.vue$/)[0]
+  var match = id.match(/[^\/]+\.vue$/)
+  return match ? match[0] : id
 }
 
 },{}],112:[function(require,module,exports){
@@ -35518,7 +35521,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 },{}],115:[function(require,module,exports){
 (function (process){
 /*!
- * vue-validator v2.1.5
+ * vue-validator v2.1.6
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -35943,13 +35946,14 @@ function Override (Vue) {
 }
 
 var VALIDATE_UPDATE = '__vue-validator-validate-update__';
-var PRIORITY_VALIDATE = 16;
+var PRIORITY_VALIDATE = 4096;
 var PRIORITY_VALIDATE_CLASS = 32;
 var REGEX_FILTER = /[^|]\|[^|]/;
 var REGEX_VALIDATE_DIRECTIVE = /^v-validate(?:$|:(.*)$)/;
 var REGEX_EVENT = /^v-on:|^@/;
 
 var classId = 0; // ID for validation class
+
 
 function ValidateClass (Vue) {
   var vIf = Vue.directive('if');
@@ -36029,7 +36033,6 @@ function ValidateClass (Vue) {
 }
 
 function Validate (Vue) {
-  var vIf = Vue.directive('if');
   var FragmentFactory = Vue.FragmentFactory;
   var parseDirective = Vue.parsers.directive.parseDirective;
   var _Vue$util = Vue.util;
@@ -36062,7 +36065,7 @@ function Validate (Vue) {
   Vue.directive('validate', {
     deep: true,
     terminal: true,
-    priority: vIf.priority + PRIORITY_VALIDATE,
+    priority: PRIORITY_VALIDATE,
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
 
     paramWatchers: {
@@ -36780,7 +36783,7 @@ var BaseValidation = function () {
   BaseValidation.prototype._invokeValidator = function _invokeValidator(vm, validator, val, arg, cb) {
     var future = validator.call(this, val, arg);
     if (typeof future === 'function') {
-      // function
+      // function 
       future(function () {
         // resolve
         cb(true);
@@ -37440,7 +37443,7 @@ var Validator$1 = function () {
     var validation = this._getValidationFrom(field);
     var validations = this._groupValidations[group];
 
-    validations && ! ~indexOf(validations, validation) && validations.push(validation);
+    validations && !~indexOf(validations, validation) && validations.push(validation);
   };
 
   Validator.prototype.removeGroupValidation = function removeGroupValidation(group, field) {
@@ -38123,7 +38126,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.1.5';
+plugin.version = '2.1.6';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
@@ -38134,7 +38137,7 @@ module.exports = plugin;
 },{"_process":107}],116:[function(require,module,exports){
 (function (process,global){
 /*!
- * Vue.js v1.0.24
+ * Vue.js v1.0.26
  * (c) 2016 Evan You
  * Released under the MIT License.
  */
@@ -38533,10 +38536,15 @@ var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
 // UA sniffing for working around browser-specific quirks
 var UA = inBrowser && window.navigator.userAgent.toLowerCase();
+var isIE = UA && UA.indexOf('trident') > 0;
 var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
 var isAndroid = UA && UA.indexOf('android') > 0;
 var isIos = UA && /(iphone|ipad|ipod|ios)/i.test(UA);
-var isWechat = UA && UA.indexOf('micromessenger') > 0;
+var iosVersionMatch = isIos && UA.match(/os ([\d_]+)/);
+var iosVersion = iosVersionMatch && iosVersionMatch[1].split('_');
+
+// detecting iOS UIWebView by indexedDB
+var hasMutationObserverBug = iosVersion && Number(iosVersion[0]) >= 9 && Number(iosVersion[1]) >= 3 && !window.indexedDB;
 
 var transitionProp = undefined;
 var transitionEndEvent = undefined;
@@ -38577,7 +38585,7 @@ var nextTick = (function () {
   }
 
   /* istanbul ignore if */
-  if (typeof MutationObserver !== 'undefined' && !(isWechat && isIos)) {
+  if (typeof MutationObserver !== 'undefined' && !hasMutationObserverBug) {
     var counter = 1;
     var observer = new MutationObserver(nextTickHandler);
     var textNode = document.createTextNode(counter);
@@ -38649,12 +38657,12 @@ var p = Cache.prototype;
 
 p.put = function (key, value) {
   var removed;
-  if (this.size === this.limit) {
-    removed = this.shift();
-  }
 
   var entry = this.get(key, true);
   if (!entry) {
+    if (this.size === this.limit) {
+      removed = this.shift();
+    }
     entry = {
       key: key
     };
@@ -38899,7 +38907,7 @@ function compileRegex() {
   var unsafeOpen = escapeRegex(config.unsafeDelimiters[0]);
   var unsafeClose = escapeRegex(config.unsafeDelimiters[1]);
   tagRE = new RegExp(unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '|' + open + '((?:.|\\n)+?)' + close, 'g');
-  htmlRE = new RegExp('^' + unsafeOpen + '.*' + unsafeClose + '$');
+  htmlRE = new RegExp('^' + unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '$');
   // reset cache
   cache = new Cache(1000);
 }
@@ -39686,7 +39694,8 @@ if (process.env.NODE_ENV !== 'production') {
       return (/HTMLUnknownElement/.test(el.toString()) &&
         // Chrome returns unknown for several HTML5 elements.
         // https://code.google.com/p/chromium/issues/detail?id=540526
-        !/^(data|time|rtc|rb)$/.test(tag)
+        // Firefox returns unknown for some "Interactive elements."
+        !/^(data|time|rtc|rb|details|dialog|summary)$/.test(tag)
       );
     }
   };
@@ -40022,7 +40031,9 @@ function mergeOptions(parent, child, vm) {
   }
   if (child.mixins) {
     for (var i = 0, l = child.mixins.length; i < l; i++) {
-      parent = mergeOptions(parent, child.mixins[i], vm);
+      var mixin = child.mixins[i];
+      var mixinOptions = mixin.prototype instanceof Vue ? mixin.options : mixin;
+      parent = mergeOptions(parent, mixinOptions, vm);
     }
   }
   for (key in parent) {
@@ -40450,10 +40461,13 @@ var util = Object.freeze({
 	hasProto: hasProto,
 	inBrowser: inBrowser,
 	devtools: devtools,
+	isIE: isIE,
 	isIE9: isIE9,
 	isAndroid: isAndroid,
 	isIos: isIos,
-	isWechat: isWechat,
+	iosVersionMatch: iosVersionMatch,
+	iosVersion: iosVersion,
+	hasMutationObserverBug: hasMutationObserverBug,
 	get transitionProp () { return transitionProp; },
 	get transitionEndEvent () { return transitionEndEvent; },
 	get animationProp () { return animationProp; },
@@ -40941,7 +40955,9 @@ var saveRE = /[\{,]\s*[\w\$_]+\s*:|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\
 var restoreRE = /"(\d+)"/g;
 var pathTestRE = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/;
 var identRE = /[^\w$\.](?:[A-Za-z_$][\w$]*)/g;
-var booleanLiteralRE = /^(?:true|false)$/;
+var literalValueRE$1 = /^(?:true|false|null|undefined|Infinity|NaN)$/;
+
+function noop() {}
 
 /**
  * Save / Rewrite / Restore
@@ -41023,7 +41039,7 @@ function compileGetter(exp) {
   // save strings and object literal keys
   var body = exp.replace(saveRE, save).replace(wsRE, '');
   // rewrite all paths
-  // pad 1 space here becaue the regex matches 1 extra char
+  // pad 1 space here because the regex matches 1 extra char
   body = (' ' + body).replace(identRE, rewrite).replace(restoreRE, restore);
   return makeGetterFn(body);
 }
@@ -41044,7 +41060,15 @@ function makeGetterFn(body) {
     return new Function('scope', 'return ' + body + ';');
     /* eslint-enable no-new-func */
   } catch (e) {
-    process.env.NODE_ENV !== 'production' && warn('Invalid expression. ' + 'Generated function body: ' + body);
+    if (process.env.NODE_ENV !== 'production') {
+      /* istanbul ignore if */
+      if (e.toString().match(/unsafe-eval|CSP/)) {
+        warn('It seems you are using the default build of Vue.js in an environment ' + 'with Content Security Policy that prohibits unsafe-eval. ' + 'Use the CSP-compliant build instead: ' + 'http://vuejs.org/guide/installation.html#CSP-compliant-build');
+      } else {
+        warn('Invalid expression. ' + 'Generated function body: ' + body);
+      }
+    }
+    return noop;
   }
 }
 
@@ -41106,8 +41130,8 @@ function parseExpression(exp, needSet) {
 
 function isSimplePath(exp) {
   return pathTestRE.test(exp) &&
-  // don't treat true/false as paths
-  !booleanLiteralRE.test(exp) &&
+  // don't treat literal values as paths
+  !literalValueRE$1.test(exp) &&
   // Math constants e.g. Math.PI, Math.E etc.
   exp.slice(0, 5) !== 'Math.';
 }
@@ -41523,7 +41547,7 @@ function traverse(val, seen) {
   }
   var isA = isArray(val);
   var isO = isObject(val);
-  if (isA || isO) {
+  if ((isA || isO) && Object.isExtensible(val)) {
     if (val.__ob__) {
       var depId = val.__ob__.dep.id;
       if (seen.has(depId)) {
@@ -41586,6 +41610,7 @@ function isRealTemplate(node) {
 
 var tagRE$1 = /<([\w:-]+)/;
 var entityRE = /&#?\w+?;/;
+var commentRE = /<!--/;
 
 /**
  * Convert a string template to a DocumentFragment.
@@ -41608,8 +41633,9 @@ function stringToFragment(templateString, raw) {
   var frag = document.createDocumentFragment();
   var tagMatch = templateString.match(tagRE$1);
   var entityMatch = entityRE.test(templateString);
+  var commentMatch = commentRE.test(templateString);
 
-  if (!tagMatch && !entityMatch) {
+  if (!tagMatch && !entityMatch && !commentMatch) {
     // text only, return a single text node.
     frag.appendChild(document.createTextNode(templateString));
   } else {
@@ -42576,7 +42602,7 @@ var vFor = {
    * the filters. This is passed to and called by the watcher.
    *
    * It is necessary for this to be called during the
-   * wathcer's dependency collection phase because we want
+   * watcher's dependency collection phase because we want
    * the v-for to update when the source Object is mutated.
    */
 
@@ -42919,7 +42945,10 @@ var text$2 = {
   },
 
   update: function update(value) {
-    this.el.value = _toString(value);
+    // #3029 only update when the value changes. This prevent
+    // browsers from overwriting values like selectionStart
+    value = _toString(value);
+    if (value !== this.el.value) this.el.value = value;
   },
 
   unbind: function unbind() {
@@ -42968,6 +42997,8 @@ var radio = {
 var select = {
 
   bind: function bind() {
+    var _this = this;
+
     var self = this;
     var el = this.el;
 
@@ -42999,7 +43030,12 @@ var select = {
     // selectedIndex with value -1 to 0 when the element
     // is appended to a new parent, therefore we have to
     // force a DOM update whenever that happens...
-    this.vm.$on('hook:attached', this.forceUpdate);
+    this.vm.$on('hook:attached', function () {
+      nextTick(_this.forceUpdate);
+    });
+    if (!inDoc(el)) {
+      nextTick(this.forceUpdate);
+    }
   },
 
   update: function update(value) {
@@ -44269,7 +44305,7 @@ function processPropValue(vm, prop, rawValue, fn) {
   if (value === undefined) {
     value = getPropDefaultValue(vm, prop);
   }
-  value = coerceProp(prop, value);
+  value = coerceProp(prop, value, vm);
   var coerced = value !== rawValue;
   if (!assertProp(prop, value, vm)) {
     value = undefined;
@@ -44388,13 +44424,17 @@ function assertProp(prop, value, vm) {
  * @return {*}
  */
 
-function coerceProp(prop, value) {
+function coerceProp(prop, value, vm) {
   var coerce = prop.options.coerce;
   if (!coerce) {
     return value;
   }
-  // coerce is a function
-  return coerce(value);
+  if (typeof coerce === 'function') {
+    return coerce(value);
+  } else {
+    process.env.NODE_ENV !== 'production' && warn('Invalid coerce for prop "' + prop.name + '": expected function, got ' + typeof coerce + '.', vm);
+    return value;
+  }
 }
 
 /**
@@ -44926,10 +44966,9 @@ var transition$1 = {
     // resolve on owner vm
     var hooks = resolveAsset(this.vm.$options, 'transitions', id);
     id = id || 'v';
+    oldId = oldId || 'v';
     el.__v_trans = new Transition(el, id, hooks, this.vm);
-    if (oldId) {
-      removeClass(el, oldId + '-transition');
-    }
+    removeClass(el, oldId + '-transition');
     addClass(el, id + '-transition');
   }
 };
@@ -45354,7 +45393,7 @@ function makeTextNodeLinkFn(tokens, frag) {
           if (token.html) {
             replace(node, parseTemplate(value, true));
           } else {
-            node.data = value;
+            node.data = _toString(value);
           }
         } else {
           vm._bindDir(token.descriptor, node, host, scope);
@@ -46338,7 +46377,7 @@ function eventsMixin (Vue) {
   };
 }
 
-function noop() {}
+function noop$1() {}
 
 /**
  * A directive links a DOM element with a piece of data,
@@ -46437,7 +46476,7 @@ Directive.prototype._bind = function () {
         }
       };
     } else {
-      this._update = noop;
+      this._update = noop$1;
     }
     var preProcess = this._preProcess ? bind(this._preProcess, this) : null;
     var postProcess = this._postProcess ? bind(this._postProcess, this) : null;
@@ -47875,7 +47914,7 @@ var filters = {
 
   json: {
     read: function read(value, indent) {
-      return typeof value === 'string' ? value : JSON.stringify(value, null, Number(indent) || 2);
+      return typeof value === 'string' ? value : JSON.stringify(value, null, arguments.length > 1 ? indent : 2);
     },
     write: function write(value) {
       try {
@@ -47948,7 +47987,13 @@ var filters = {
 
   pluralize: function pluralize(value) {
     var args = toArray(arguments, 1);
-    return args.length > 1 ? args[value % 10 - 1] || args[args.length - 1] : args[0] + (value === 1 ? '' : 's');
+    var length = args.length;
+    if (length > 1) {
+      var index = value % 10 - 1;
+      return index in args ? args[index] : args[length - 1];
+    } else {
+      return args[0] + (value === 1 ? '' : 's');
+    }
   },
 
   /**
@@ -48133,7 +48178,9 @@ function installGlobalAPI (Vue) {
           }
         }
         if (type === 'component' && isPlainObject(definition)) {
-          definition.name = id;
+          if (!definition.name) {
+            definition.name = id;
+          }
           definition = Vue.extend(definition);
         }
         this.options[type + 's'][id] = definition;
@@ -48148,7 +48195,7 @@ function installGlobalAPI (Vue) {
 
 installGlobalAPI(Vue);
 
-Vue.version = '1.0.24';
+Vue.version = '1.0.26';
 
 // devtools global hook
 /* istanbul ignore next */
@@ -48223,9 +48270,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-94beedbc", module.exports)
+    hotAPI.createRecord("_v-2a7f7076", module.exports)
   } else {
-    hotAPI.update("_v-94beedbc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2a7f7076", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],119:[function(require,module,exports){
@@ -48349,9 +48396,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0b3f2b04", module.exports)
+    hotAPI.createRecord("_v-402a95aa", module.exports)
   } else {
-    hotAPI.update("_v-0b3f2b04", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],120:[function(require,module,exports){
@@ -48424,9 +48471,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0edb47a0", module.exports)
+    hotAPI.createRecord("_v-6c0d9684", module.exports)
   } else {
-    hotAPI.update("_v-0edb47a0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6c0d9684", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./details/details.vue":124,"./details/regions.vue":125,"./details/transports.vue":126,"./details/trips.vue":127,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],121:[function(require,module,exports){
@@ -48577,9 +48624,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-23ed330c", module.exports)
+    hotAPI.createRecord("_v-3a603938", module.exports)
   } else {
-    hotAPI.update("_v-23ed330c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],122:[function(require,module,exports){
@@ -48650,9 +48697,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-a06e71d8", module.exports)
+    hotAPI.createRecord("_v-12a47980", module.exports)
   } else {
-    hotAPI.update("_v-a06e71d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-12a47980", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],123:[function(require,module,exports){
@@ -48689,9 +48736,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-97adfaf4", module.exports)
+    hotAPI.createRecord("_v-58d98fb2", module.exports)
   } else {
-    hotAPI.update("_v-97adfaf4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-58d98fb2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],124:[function(require,module,exports){
@@ -48730,9 +48777,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-57ded358", module.exports)
+    hotAPI.createRecord("_v-c27860f8", module.exports)
   } else {
-    hotAPI.update("_v-57ded358", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-c27860f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],125:[function(require,module,exports){
@@ -48765,9 +48812,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-74bf7295", module.exports)
+    hotAPI.createRecord("_v-88b7227e", module.exports)
   } else {
-    hotAPI.update("_v-74bf7295", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-88b7227e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],126:[function(require,module,exports){
@@ -48799,9 +48846,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-115c23c4", module.exports)
+    hotAPI.createRecord("_v-2299a818", module.exports)
   } else {
-    hotAPI.update("_v-115c23c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2299a818", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],127:[function(require,module,exports){
@@ -48873,9 +48920,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-f096f8f8", module.exports)
+    hotAPI.createRecord("_v-19c29ab0", module.exports)
   } else {
-    hotAPI.update("_v-f096f8f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-19c29ab0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],128:[function(require,module,exports){
@@ -48949,9 +48996,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-91c337fa", module.exports)
+    hotAPI.createRecord("_v-1c3f53a2", module.exports)
   } else {
-    hotAPI.update("_v-91c337fa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1c3f53a2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],129:[function(require,module,exports){
@@ -49007,9 +49054,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-752828b2", module.exports)
+    hotAPI.createRecord("_v-94fcdc0a", module.exports)
   } else {
-    hotAPI.update("_v-752828b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-94fcdc0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./campaign-groups.vue":122,"./group-trips.vue":128,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],130:[function(require,module,exports){
@@ -49023,11 +49070,15 @@ var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
 
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     name: 'donate',
-    components: { vSelect: _vueSelect2.default },
+    components: { vSelect: _vueSelect2.default, 'spinner': _vueStrap2.default.spinner },
     props: {
         type: {
             type: String,
@@ -49072,14 +49123,21 @@ exports.default = {
         title: {
             type: String,
             default: ''
+        },
+        identifier: {
+            type: String,
+            defulat: null
         }
 
     },
     data: function data() {
         return {
             donor: '',
+            donor_id: null,
+            company_name: '',
             amount: 1,
             validateWith: 'email',
+            token: null,
 
             //card vars
             card: null,
@@ -49111,15 +49169,10 @@ exports.default = {
             showButton: true,
             showLabels: true,
             devMode: true,
-            // deferred variable used for card validation
-            // needs to be on `this` scope to access in response callback
             stripeDeferred: {},
             attemptedCreateToken: false
         };
     },
-    //attemptSubmit: false,
-    //donationState: 'form',
-    //subState:1
 
     validators: {
         oneOrOther: function oneOrOther(val) {
@@ -49147,7 +49200,6 @@ exports.default = {
                 results = [];
                 for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
                     results.push(num);
-                    //                        results.push(num.toString().substr(2, 2));
                 }
                 return results;
             }();
@@ -49155,7 +49207,7 @@ exports.default = {
         },
         cardParams: function cardParams() {
             return {
-                //name: this.cardHolderName,
+                cardholder: this.cardHolderName,
                 number: this.cardNumber,
                 exp_month: this.cardMonth,
                 exp_year: this.cardYear,
@@ -49163,7 +49215,6 @@ exports.default = {
             };
         }
     },
-    //                    address_zip: this.cardZip,
     methods: {
         isState: function isState(major, minor) {
             return this.donationState === major && this.subState === minor;
@@ -49207,16 +49258,16 @@ exports.default = {
             } else {
                 // authorize card data
                 console.log(this.cardParams);
-                this.$http.post('donations/authorize', this.cardParams).then(this.createTokenCallback);
-                // Stripe.setPublishableKey(this.stripeKey);
-                // Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+                this.$refs.validationspinner.show();
+                this.$http.post('donations/authorize', this.cardParams).then(this.createTokenCallback, function (error) {
+                    this.$refs.validationspinner.hide();
+                });
             }
             return this.stripeDeferred.promise();
         },
-        createTokenCallback: function createTokenCallback(status, resp) {
-            console.log(status);
+        createTokenCallback: function createTokenCallback(resp) {
             console.log(resp);
-            this.validationErrors = {
+            /*this.validationErrors = {
                 cardNumber: '',
                 cardCVC: '',
                 cardYear: '',
@@ -49237,19 +49288,56 @@ exports.default = {
                     this.validationErrors.cardCVC = 'error';
                 }
                 this.stripeDeferred.reject(false);
+            }*/
+            if (resp.status === 200) {
+                this.$refs.validationspinner.hide();
+                this.token = resp.data;
+                this.stripeDeferred.resolve(resp.data);
             }
-            if (status === 200) {
-                this.card = resp;
-                // send payment data to parent
-                this.paymentInfo = {
-                    token: resp,
-                    save: this.cardSave,
-                    email: this.cardEmail
-                };
+        },
+        submit: function submit() {
+            this.$refs.donationspinner.show();
+            var data = {
+                amount: this.amount,
+                currency: 'USD', // determined from card token
+                description: 'Donation to ' + this.title,
+                comment: null,
+                fund_id: this.fundId,
+                token: this.token,
+                payment: {
+                    type: 'card',
+                    brand: this.detectCardType(this.cardNumber),
+                    last_four: this.cardNumber.substr(-4),
+                    cardholder: this.cardHolderName
+                }
 
-                this.submit();
-                this.stripeDeferred.resolve(true);
+            };
+            if (parseInt(this.auth) && this.donor_id) {
+                data.donor_id = this.donor_id;
+            } else {
+                data.donor = {
+                    name: this.donor,
+                    company: this.company_name,
+                    email: this.cardEmail,
+                    phone: this.cardPhone,
+                    zip: this.cardZip,
+                    country_code: 'us' // needs UI
+                };
             }
+            this.$http.post('donations', data).then(function (response) {
+                this.stripeDeferred.resolve(true);
+                this.$refs.donationspinner.hide();
+                this.donationState = 'confirmation';
+            }, function (error) {
+                this.$refs.donationspinner.hide();
+            });
+        },
+        done: function done() {
+            if (this.child) {
+                this.$root.$emit('DonateForm:complete');
+            } /* else {
+                 window.location.href
+              }*/
         },
         goToState: function goToState(state) {
             switch (state) {
@@ -49274,6 +49362,7 @@ exports.default = {
                             if (this.$Donation.invalid) {
                                 break;
                             }
+
                             this.subState = 2;
                             this.attemptSubmit = !1;
                             break;
@@ -49309,34 +49398,30 @@ exports.default = {
                     break;
             }
         },
-        submit: function submit() {
-            debugger;
-            var data = {
-                amount: this.amount,
-                currency: 'USD', // determined from card token
-                description: '',
-                comment: null,
-                fund_id: this.typeId
-
+        detectCardType: function detectCardType(number) {
+            // http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
+            var re = {
+                electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
+                maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
+                dankort: /^(5019)\d+$/,
+                interpayment: /^(636)\d+$/,
+                unionpay: /^(62|88)\d+$/,
+                visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+                mastercard: /^5[1-5][0-9]{14}$/,
+                amex: /^3[47][0-9]{13}$/,
+                diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+                discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+                jcb: /^(?:2131|1800|35\d{3})\d{11}$/
             };
-            if (this.auth) {
-                data.donor_id = this.donor.id;
-            } else {
-                data.donor = {
-                    name: this.donor,
-                    email: this.cardEmail,
-                    phone: this.cardPhone,
-                    zip: this.cardZip,
-                    country_code: 'us' // needs UI
-                };
+
+            for (var key in re) {
+                if (re[key].test(number)) {
+                    return key;
+                }
             }
-            this.$http.post('donations', data);
         }
     },
     events: {
-        'VueStripe::create-card-token': function VueStripeCreateCardToken() {
-            //return this.createToken();
-        },
         'VueStripe::reset-form': function VueStripeResetForm() {
             return this.resetCaching();
         }
@@ -49353,6 +49438,7 @@ exports.default = {
         if (parseInt(this.auth)) {
             this.$http.get('users/me').then(function (response) {
                 this.donor = response.data.data.name;
+                this.donor_id = response.data.data.donor_id || null;
                 this.cardHolderName = response.data.data.name;
                 this.cardEmail = response.data.data.email;
                 this.cardPhone = response.data.data.phone_one;
@@ -49369,28 +49455,42 @@ exports.default = {
             this.prevState();
         }.bind(this));
 
-        this.$root.$on('DonateForm:reviewDonation', function () {
-            this.goToState('review');
+        this.$root.$on('DonateForm:resetState', function () {
+            this.toState('form', 1);
         }.bind(this));
 
-        this.$root.$on('DonateForm:createToken', function () {
-            this.createToken();
+        this.$root.$on('DonateForm:reviewDonation', function (identifier) {
+            if (identifier !== this.identifier) {
+                return false;
+            }
+
+            $.when(this.createToken(identifier)).then(function (response) {
+                this.goToState('review');
+            }.bind(this));
+        }.bind(this));
+
+        this.$root.$on('DonateForm:donate', function (identifier) {
+            if (identifier !== this.identifier) {
+                return false;
+            }
+
+            this.submit();
         }.bind(this));
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <validator name=\"Donation\">\n        <form class=\"form-horizontal\" name=\"DonationForm\" novalidate=\"\" v-show=\"donationState === 'form'\">\n            <template v-if=\"isState('form', 1)\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12 text-center\">\n                        <label>Recipient</label>\n                        <h4>{{ recipient }}</h4>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\" :class=\"{ 'has-error': checkForError('amount')}\">\n                        <label>Amount</label>\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">$</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"amount\" min=\"1\" v-validate:amount=\"{required: true, min: 1}\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\" :class=\"{ 'has-error': checkForError('donor')}\">\n                        <label>Donor Or Company Name</label>\n                        <input type=\"text\" class=\"form-control\" v-model=\"donor\" v-validate:donor=\"{required: true}\">\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\" v-if=\"!child\">\n                    <div class=\"col-sm-12 text-center\">\n                        <div class=\"form-group\">\n                            <div class=\"\">\n                                <!--<a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>-->\n                                <a @click=\"nextState()\" class=\"btn btn-primary\">Next</a>\n                            </div>\n                        </div>\n                    </div>\n\n                </div>\n            </template>\n            <template v-if=\"isState('form', 2)\">\n                <!-- Credit Card -->\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-groups\" :class=\"{ 'has-error': checkForError('cardholdername') }\">\n                            <label for=\"cardHolderName\">Card Holder's Name</label>\n                            <div class=\"input-group\">\n                                <span class=\"input-group-addon input\"><span class=\"fa fa-user\"></span></span>\n                                <input type=\"text\" class=\"form-control input\" id=\"cardHolderName\" placeholder=\"Name on card\" v-model=\"cardHolderName\" v-validate:cardholdername=\"{ required: true }\" autofocus=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-groups\" :class=\"{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }\">\n                            <label for=\"cardNumber\">Card Number</label>\n                            <div class=\"input-group\">\n                                <span class=\"input-group-addon input\"><span class=\"fa fa-lock\"></span></span>\n                                <input type=\"text\" class=\"form-control input\" id=\"cardNumber\" placeholder=\"Valid Card Number\" v-model=\"cardNumber\" v-validate:cardnumber=\"{ required: true, maxlength: 19 }\" @keyup=\"formatCard($event)\" maxlength=\"19\">\n                            </div>\n                            <span class=\"help-block\" v-if=\"validationErrors.cardNumber=='error'\">{{stripeError.message}}</span>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <label style=\"display:block;margin-left: 10px;\" for=\"expiryMonth\">EXPIRY DATE</label>\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('month') || validationErrors.cardMonth }\">\n                            <select v-model=\"cardMonth\" class=\"form-control input\" id=\"expiryMonth\" v-validate:month=\"{ required: true }\">\n                                <option v-for=\"month in monthList\" value=\"{{month}}\">{{month}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('year') || validationErrors.cardYear }\">\n                            <select v-model=\"cardYear\" class=\"form-control input\" id=\"expiryYear\" v-validate:year=\"{ required: true }\">\n                                <option v-for=\"year in yearList\" value=\"{{year}}\">{{year}}</option>\n                            </select>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('code') || validationErrors.cardCVC }\">\n                            <label for=\"cvCode\">\n                                CV CODE</label>\n                            <input type=\"text\" class=\"form-control input\" id=\"cvCode\" maxlength=\"3\" v-model=\"cardCVC\" placeholder=\"CV\" v-validate:code=\"{ required: true, minlength: 3, maxlength: 3 }\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div :class=\"{ 'has-error': checkForError('email') }\">\n                            <label for=\"infoEmailAddress\">Billing Email</label>\n                            <input type=\"text\" class=\"form-control input\" v-model=\"cardEmail\" v-validate:email=\"['oneOrOther']\" id=\"infoEmailAddress\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('phone') }\">\n                            <label for=\"infoPhone\">Billing Phone</label>\n                            <input type=\"tel\" class=\"form-control input\" v-model=\"cardPhone | phone\" v-validate:phone=\"['oneOrOther']\" id=\"infoPhone\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('zip') }\">\n                            <label for=\"infoZip\">ZIP</label>\n                            <input type=\"text\" class=\"form-control input\" v-model=\"cardZip\" v-validate:zip=\"{ required: true }\" id=\"infoZip\" placeholder=\"12345\">\n                        </div>\n                    </div>\n                </div>\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <hr class=\"divider inv sm\">\n                        <div class=\"checkbox\">\n                            <label>\n                                <input type=\"checkbox\" v-model=\"cardSave\">Save payment details for next time\n                            </label>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"col-sm-12 text-center\" v-if=\"!child\">\n                    <div class=\"form-group\">\n                        <div class=\"\">\n                            <!--<a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>-->\n                            <a @click=\"goToState('review')\" class=\"btn btn-primary\">Review Donation</a>\n                        </div>\n                    </div>\n                </div>\n            </template>\n            <hr class=\"divider inv sm\">\n\n        </form>\n        <div class=\"panel panel-primary\" v-show=\"donationState === 'review'\">\n            <div class=\"panel-heading\">\n                <div class=\"panel-title\">\n                    <h5>Donation Details</h5>\n                </div>\n            </div>\n            <div class=\"panel-body\">\n                <dl class=\"dl-horizontal\">\n                    <dt>Card Holder Name</dt>\n                    <dd>{{cardHolderName}}</dd>\n                    <dt>Card Number</dt>\n                    <dd>{{cardNumber}}</dd>\n                    <dt>Card Expiration</dt>\n                    <dd>{{cardMonth}}/{{cardYear}}</dd>\n                    <dt>Billing Email</dt>\n                    <dd>{{cardEmail}}</dd>\n                    <dt>Billing Zip</dt>\n                    <dd>{{cardZip}}</dd>\n                    <dt>Save Payment Method</dt>\n                    <dd>{{cardSave ? 'Yes' : 'No'}}</dd>\n                </dl>\n                <hr class=\"divider sm\">\n                <p class=\"list-group-item-text\">Recipient: {{recipient}}</p>\n                <p class=\"list-group-item-text\">Designation: {{title}}</p>\n                <p class=\"list-group-item-text\">Amount to be charged immediately: {{amount|currency}}</p>\n                <hr class=\"divider sm\">\n                <p class=\"list-group-item-text\">\n                    <b>Disclaimer:</b>\n                    All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.\n                </p>\n            </div>\n            <div class=\"panel-footer\" v-if=\"!child\">\n                <a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>\n                <a @click=\"createToken\" class=\"btn btn-primary\">Donate</a>\n            </div>\n        </div>\n    </validator>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <validator name=\"Donation\">\n        <form class=\"form-horizontal\" name=\"DonationForm\" novalidate=\"\" v-show=\"donationState === 'form'\">\n            <spinner v-ref:validationspinner=\"\" size=\"xl\" :fixed=\"false\" text=\"Validating\"></spinner>\n            <template v-if=\"isState('form', 1)\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12 text-center\">\n                        <label>Recipient</label>\n                        <h4>{{ recipient }}</h4>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\" :class=\"{ 'has-error': checkForError('amount')}\">\n                        <label>Amount</label>\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">$</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"amount\" min=\"1\" v-validate:amount=\"{required: true, min: 1}\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\" :class=\"{ 'has-error': checkForError('donor')}\">\n                        <label>Donor Name</label>\n                        <input type=\"text\" class=\"form-control\" v-model=\"donor\" v-validate:donor=\"{required: true}\">\n                    </div>\n                </div>\n                <div class=\"row\">\n                    <div class=\"col-sm-12\" :class=\"{ 'has-error': checkForError('donor')}\">\n                        <label>Company Name</label>\n                        <input type=\"text\" class=\"form-control\" v-model=\"company_name\">\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\" v-if=\"!child\">\n                    <div class=\"col-sm-12 text-center\">\n                        <div class=\"form-group\">\n                            <div class=\"\">\n                                <!--<a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>-->\n                                <a @click=\"nextState()\" class=\"btn btn-primary\">Next</a>\n                            </div>\n                        </div>\n                    </div>\n\n                </div>\n            </template>\n            <template v-if=\"isState('form', 2)\">\n                <!-- Credit Card -->\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-groups\" :class=\"{ 'has-error': checkForError('cardholdername') }\">\n                            <label for=\"cardHolderName\">Card Holder's Name</label>\n                            <div class=\"input-group\">\n                                <span class=\"input-group-addon input\"><span class=\"fa fa-user\"></span></span>\n                                <input type=\"text\" class=\"form-control input\" id=\"cardHolderName\" placeholder=\"Name on card\" v-model=\"cardHolderName\" v-validate:cardholdername=\"{ required: true }\" autofocus=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-groups\" :class=\"{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }\">\n                            <label for=\"cardNumber\">Card Number</label>\n                            <div class=\"input-group\">\n                                <span class=\"input-group-addon input\"><span class=\"fa fa-lock\"></span></span>\n                                <input type=\"text\" class=\"form-control input\" id=\"cardNumber\" placeholder=\"Valid Card Number\" v-model=\"cardNumber\" v-validate:cardnumber=\"{ required: true, maxlength: 19 }\" @keyup=\"formatCard($event)\" maxlength=\"19\">\n                            </div>\n                            <span class=\"help-block\" v-if=\"validationErrors.cardNumber=='error'\">{{stripeError.message}}</span>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <label style=\"display:block;margin-left: 10px;\" for=\"expiryMonth\">EXPIRY DATE</label>\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('month') || validationErrors.cardMonth }\">\n                            <select v-model=\"cardMonth\" class=\"form-control input\" id=\"expiryMonth\" v-validate:month=\"{ required: true }\">\n                                <option v-for=\"month in monthList\" value=\"{{month}}\">{{month}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('year') || validationErrors.cardYear }\">\n                            <select v-model=\"cardYear\" class=\"form-control input\" id=\"expiryYear\" v-validate:year=\"{ required: true }\">\n                                <option v-for=\"year in yearList\" value=\"{{year}}\">{{year}}</option>\n                            </select>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-xs-6 col-md-6\">\n                        <div :class=\"{ 'has-error': checkForError('code') || validationErrors.cardCVC }\">\n                            <label for=\"cvCode\">\n                                CV CODE</label>\n                            <input type=\"text\" class=\"form-control input\" id=\"cvCode\" maxlength=\"3\" v-model=\"cardCVC\" placeholder=\"CV\" v-validate:code=\"{ required: true, minlength: 3, maxlength: 3 }\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div :class=\"{ 'has-error': checkForError('email') }\">\n                            <label for=\"infoEmailAddress\">Billing Email</label>\n                            <input type=\"text\" class=\"form-control input\" v-model=\"cardEmail\" v-validate:email=\"['oneOrOther']\" id=\"infoEmailAddress\">\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('phone') }\">\n                            <label for=\"infoPhone\">Billing Phone</label>\n                            <input type=\"tel\" class=\"form-control input\" v-model=\"cardPhone | phone\" v-validate:phone=\"['oneOrOther']\" id=\"infoPhone\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('zip') }\">\n                            <label for=\"infoZip\">ZIP</label>\n                            <input type=\"text\" class=\"form-control input\" v-model=\"cardZip\" v-validate:zip=\"{ required: true }\" id=\"infoZip\" placeholder=\"12345\">\n                        </div>\n                    </div>\n                </div>\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <hr class=\"divider inv sm\">\n                        <div class=\"checkbox\">\n                            <label>\n                                <input type=\"checkbox\" v-model=\"cardSave\">Save payment details for next time\n                            </label>\n                        </div>\n                    </div>\n                </div>\n                <hr class=\"divider inv sm\">\n                <div class=\"col-sm-12 text-center\" v-if=\"!child\">\n                    <div class=\"form-group\">\n                        <div class=\"\">\n                            <!--<a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>-->\n                            <a @click=\"goToState('review')\" class=\"btn btn-primary\">Review Donation</a>\n                        </div>\n                    </div>\n                </div>\n            </template>\n            <hr class=\"divider inv sm\">\n\n        </form>\n        <div class=\"panel panel-primary\" v-show=\"donationState === 'review'\">\n            <spinner v-ref:donationspinner=\"\" size=\"xl\" :fixed=\"false\" text=\"Processing Donation\"></spinner>\n            <div class=\"panel-heading\">\n                <div class=\"panel-title\">\n                    <h5>Donation Details</h5>\n                </div>\n            </div>\n            <div class=\"panel-body\">\n                <dl class=\"dl-horizontal\">\n                    <dt>Card Holder Name</dt>\n                    <dd>{{cardHolderName}}</dd>\n                    <dt>Card Number</dt>\n                    <dd>{{cardNumber}}</dd>\n                    <dt>Card Expiration</dt>\n                    <dd>{{cardMonth}}/{{cardYear}}</dd>\n                    <dt>Billing Email</dt>\n                    <dd>{{cardEmail}}</dd>\n                    <dt>Billing Zip</dt>\n                    <dd>{{cardZip}}</dd>\n                    <dt>Save Payment Method</dt>\n                    <dd>{{cardSave ? 'Yes' : 'No'}}</dd>\n                </dl>\n                <hr class=\"divider sm\">\n                <p class=\"list-group-item-text\">Recipient: {{recipient}}</p>\n                <p class=\"list-group-item-text\">Designation: {{title}}</p>\n                <p class=\"list-group-item-text\">Amount to be charged immediately: {{amount|currency}}</p>\n                <hr class=\"divider sm\">\n                <p class=\"list-group-item-text\">\n                    <b>Disclaimer:</b>\n                    All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.\n                </p>\n            </div>\n            <div class=\"panel-footer\" v-if=\"!child\">\n                <a @click=\"goToState('form')\" class=\"btn btn-default\">Reset</a>\n                <a @click=\"createToken\" class=\"btn btn-primary\">Donate</a>\n            </div>\n        </div>\n        <div class=\"\" v-show=\"donationState === 'confirmation'\">\n            <div class=\"text-center\">\n                <h1><i class=\"fa fa-check-circle text-success success fa-3x\"></i></h1>\n                <h2>Donation Confirmed</h2>\n                <h3>Thank you!</h3>\n            </div>\n            <!--<div class=\"panel-footer\" v-if=\"!child\">\n                <a @click=\"done\" class=\"btn btn-success\">Close</a>\n            </div>-->\n        </div>\n    </validator>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-04b75470", module.exports)
+    hotAPI.createRecord("_v-52666078", module.exports)
   } else {
-    hotAPI.update("_v-04b75470", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-52666078", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],131:[function(require,module,exports){
+},{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],131:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -49520,9 +49620,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-01a99cd6", module.exports)
+    hotAPI.createRecord("_v-4773c802", module.exports)
   } else {
-    hotAPI.update("_v-01a99cd6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4773c802", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],132:[function(require,module,exports){
@@ -49585,9 +49685,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3dcec450", module.exports)
+    hotAPI.createRecord("_v-60464908", module.exports)
   } else {
-    hotAPI.update("_v-3dcec450", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-60464908", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],133:[function(require,module,exports){
@@ -49632,7 +49732,6 @@ exports.default = {
             timezones: []
         };
     },
-    //timezoneObj: null,
 
     computed: {
         country_code: function country_code() {
@@ -49693,9 +49792,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6ef1dd1c", module.exports)
+    hotAPI.createRecord("_v-0f6c0d9e", module.exports)
   } else {
-    hotAPI.update("_v-6ef1dd1c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0f6c0d9e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],134:[function(require,module,exports){
@@ -49742,7 +49841,6 @@ exports.default = {
             timezones: []
         };
     },
-    //timezoneObj: null,
 
     computed: {
         country_code: function country_code() {
@@ -49828,9 +49926,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-35b90700", module.exports)
+    hotAPI.createRecord("_v-7071c3a8", module.exports)
   } else {
-    hotAPI.update("_v-35b90700", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7071c3a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],135:[function(require,module,exports){
@@ -49929,9 +50027,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1ea3db48", module.exports)
+    hotAPI.createRecord("_v-1244b388", module.exports)
   } else {
-    hotAPI.update("_v-1ea3db48", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1244b388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],136:[function(require,module,exports){
@@ -50004,9 +50102,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1f92c63f", module.exports)
+    hotAPI.createRecord("_v-6170d6da", module.exports)
   } else {
-    hotAPI.update("_v-1f92c63f", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6170d6da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],137:[function(require,module,exports){
@@ -50312,9 +50410,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c7c44690", module.exports)
+    hotAPI.createRecord("_v-4d4691e4", module.exports)
   } else {
-    hotAPI.update("_v-c7c44690", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4d4691e4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":1,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],138:[function(require,module,exports){
@@ -50360,9 +50458,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-04b4c32d", module.exports)
+    hotAPI.createRecord("_v-15f24781", module.exports)
   } else {
-    hotAPI.update("_v-04b4c32d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-15f24781", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],139:[function(require,module,exports){
@@ -50396,9 +50494,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-9e3256c8", module.exports)
+    hotAPI.createRecord("_v-24620ef0", module.exports)
   } else {
-    hotAPI.update("_v-9e3256c8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-24620ef0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],140:[function(require,module,exports){
@@ -50450,9 +50548,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-242b64a7", module.exports)
+    hotAPI.createRecord("_v-3568e8fb", module.exports)
   } else {
-    hotAPI.update("_v-242b64a7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3568e8fb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],141:[function(require,module,exports){
@@ -50483,9 +50581,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-bae2227c", module.exports)
+    hotAPI.createRecord("_v-38497816", module.exports)
   } else {
-    hotAPI.update("_v-bae2227c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-38497816", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],142:[function(require,module,exports){
@@ -50557,9 +50655,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-199fdb3d", module.exports)
+    hotAPI.createRecord("_v-a95a0ede", module.exports)
   } else {
-    hotAPI.update("_v-199fdb3d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-a95a0ede", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],143:[function(require,module,exports){
@@ -50609,15 +50707,15 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <h4>Groups Partnered With Us</h4>\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <a v-if=\"groups.length > 3\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <div class=\"form-group form-group-sm\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\" v-model=\"search\" debounce=\"250\">\n            <!--<span class=\"input-group-btn\">\n                <button class=\"btn btn-default\" type=\"button\">Go!</button>\n            </span>-->\n        </div><!-- /input-group -->\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <!--<a v-if=\"fundraisers.length > 6 && fundraisersLimit == 6\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>-->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n        <div class=\"col-sm-6 col-md-4\" v-for=\"group in groups|limitBy groupsLimit\" style=\"display:flex\">\n            <div class=\"panel panel-default\">\n                <a :href=\"'/groups/' + group.url\" role=\"button\">\n                    <img :src=\"group.avatar\" :alt=\"group.name\" class=\"img-responsive\">\n                </a>\n                    <div style=\"min-height:220px;\" class=\"panel-body\">\n                        <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{group.country}}</h6>\n                        <a :href=\"'/groups/' + group.url\" role=\"button\">\n                            <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">{{group.name}}</h5>\n                        </a>\n                        <h6>{{group.started_at | moment 'll'}} - {{group.ended_at | moment 'll'}}</h6>\n                        <hr class=\"divider lg\">\n                        <p class=\"small\">{{group.description}}</p>\n                    </div><!-- end panel-body -->\n            </div><!-- end panel -->\n        </div><!-- end col -->\n    <div class=\"col-sm-12 text-center\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n\n</div>\n<hr class=\"divider inv xlg\">\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center\">\n        <h2 class=\"text-primary\">Missions.Me plans trips around you. We create experiences that will maximize your specific abilities and desires.</h2>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage1.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage3.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage4.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage5.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage8.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage9.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage10.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage12.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage13.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage14.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage15.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage18.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-xs-10 col-xs-offset-1\">\n        <div class=\"row\">\n          <div class=\"col-xs-10 col-xs-offset-1\">\n            <h6 class=\"text-uppercase text-center\">A Trip For Everyone</h6>\n            <h1 class=\"text-center\">Choose A Role</h1>\n            <hr class=\"divider red-small lg\">\n            <hr class=\"divider inv lg\">\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"missionary.html\"><h4 class=\"text-primary\">Missionary</h4></a>\n                <p class=\"small\">Anyone age 13+ can be an M.M missionary. Set out on the journey with your friend or family to bring a message of love and hope along with an unforgettable cultural experience.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"medical-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/medical-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"medical-missionary.html\"><h4>Medical Missionary</h4></a>\n                <p class=\"small\">Treat, diagnose, prescribe, and share the love of Jesus. Anyone in a medical field can serve, including students currently enrolled in school. Physicians, Dentists, Nurses, and all assistants needed.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"group-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/group-leader.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"group-leader.html\"><h4>Group Leader</h4></a>\n                <p class=\"small\">M.M specializes in organizing and creating turn-key group missions experiences for youth groups, college groups, and business groups. You bring passion; we take care of the rest.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"pastor-speaker.html\"><img class=\"img-responsive\" src=\"images/why-mm/speaker.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"pastor-speaker.html\"><h4>Pastor/Speaker</h4></a>\n                <p class=\"small\">Share your gift of leadership with the team by leading a morning devo then impart spiritual wisdom into local church leadership. Let us create a custom schedule that makes the most of your valuable time.</p>\n              </div><!-- end panel-body -->\n            </div><!-- end panel -->\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"business-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/business-person.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"business-leader.html\"><h4>Business Leader</h4></a>\n                <p class=\"small\">A shortened “Business Class” trip is available on select trips. You will experience conferences, stadium outreaches, street ministry, and connect with God in a whole new way. All trips will have you back on Sunday night, ready for Monday.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"media-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/media-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"media-missionary.html\"><h4>Media Missionary</h4></a>\n                <p class=\"small\">Tell the story of life change! M.M needs you to film, shoot, interview, edit, export, and be creative! Experience a whole new world through the lens of a camera while capturing the most exciting moments of the trip.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end gray-lighter-bg -->\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h6 class=\"text-uppercase text-primary\">It's So Easy</h6>\n        <h1 class=\"text-primary dash-trailing\">We've Got You</h1>\n        <p class=\"large-type\">Logistics, we got it covered. Missions.Me makes missions simple by taking care of all of your transportation, hotel, food, training, translators and ministry schedule needs.</p>\n        <hr class=\"divider inv\">\n        <a class=\"btn btn-primary\" href=\"#\">Speak to a rep</a>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/staff.jpg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section-->\n  </div><!-- end container -->\n</div><!-- end red-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-lawn.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-conf.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary-darker dash-trailing-dark\">Level Of Impact</h1>\n        <p class=\"large-type\">We are interested in changing nations, communities, and individuals. Every outreach we organize deems to do just that. In just one week's time you and your team will be face to face with entire schools, neighborhoods, and churches. We believe a short-term team must serve a long-term and sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted.</p>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/stadium-impact.jpg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/group-security.jpg\">\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary dash-trailing\">Safety and Security</h1>\n        <!-- <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our leadership provides in depth training to create a safe experience for every missionary. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe. Multiple leaders care for each missionary and guidelines are faceted so that no person is ever alone. We also do background checks on all potential leaders. Missions.Me has a proven track record of safety and security that keeps our teams coming back.</p> -->\n        <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe.</p>\n        <blockquote>\"I have traveled with Missions.Me in many countries and have witnessed first-hand their organization and safety measures. I am completely confident sending my teens on a Missions.Me missions trip.\"\n          <footer>Sue, Mother from Lancaster, PA</footer></blockquote>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-light-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-center\">Trip Difficulty Ratings</h1>\n        <hr class=\"divider red-small lg\">\n        <hr class=\"divider inv lg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n    <div class=\"row text-center\">\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level1.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>These trips are great for those just getting started in the world-changing business. First timers of all ages area welcome.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level2.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>If Level 1 proved to be a piece of cake, you’re ready for a Level 2 adventure. A little tougher, a little sweatier, but much more sweeter.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level3.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>Chuck Norris. Mr. T. Annie Oakley. Yep, they’re all level 3 missionaries. It may not be physically tough, but it’ll be a challenge.</p>\n      </div>\n    </div>\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <h4>Groups Partnered With Us</h4>\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <a v-if=\"groups.length > 3\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <div class=\"form-group form-group-sm\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\" v-model=\"search\" debounce=\"250\">\n            <!--<span class=\"input-group-btn\">\n                <button class=\"btn btn-default\" type=\"button\">Go!</button>\n            </span>-->\n        </div><!-- /input-group -->\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <!--<a v-if=\"fundraisers.length > 6 && fundraisersLimit == 6\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>-->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\n\n    <div class=\"col-sm-6 col-md-4\" v-for=\"group in groups|limitBy groupsLimit\" style=\"display:flex\" v-if=\"groups.length\">\n        <div class=\"panel panel-default\">\n            <a :href=\"'/groups/' + group.url\" role=\"button\">\n                <img :src=\"group.avatar\" :alt=\"group.name\" class=\"img-responsive\">\n            </a>\n                <div style=\"min-height:220px;\" class=\"panel-body\">\n                    <!--<h6 class=\"text-uppercase\"><i class=\"fa fa-users\"></i> {{group.type}} Group</h6>-->\n                    <a :href=\"'/groups/' + group.url\" role=\"button\">\n                        <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">{{group.name}}</h5>\n                    </a>\n                    <h6 class=\"text-uppercase\">{{group.type}} Group</h6>\n                    <hr class=\"divider lg\">\n                    <p class=\"small\">{{group.description}}</p>\n                </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div class=\"col-sm-12 text-center\" v-if=\"groups.length\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n\n</div>\n<hr class=\"divider inv xlg\">\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center\">\n        <h2 class=\"text-primary\">Missions.Me plans trips around you. We create experiences that will maximize your specific abilities and desires.</h2>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage1.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage3.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage4.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage5.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage8.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage9.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage10.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage12.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage13.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage14.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage15.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-2 col-xs-4 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/collage/collage18.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-xs-10 col-xs-offset-1\">\n        <div class=\"row\">\n          <div class=\"col-xs-10 col-xs-offset-1\">\n            <h6 class=\"text-uppercase text-center\">A Trip For Everyone</h6>\n            <h1 class=\"text-center\">Choose A Role</h1>\n            <hr class=\"divider red-small lg\">\n            <hr class=\"divider inv lg\">\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"missionary.html\"><h4 class=\"text-primary\">Missionary</h4></a>\n                <p class=\"small\">Anyone age 13+ can be an M.M missionary. Set out on the journey with your friend or family to bring a message of love and hope along with an unforgettable cultural experience.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"medical-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/medical-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"medical-missionary.html\"><h4>Medical Missionary</h4></a>\n                <p class=\"small\">Treat, diagnose, prescribe, and share the love of Jesus. Anyone in a medical field can serve, including students currently enrolled in school. Physicians, Dentists, Nurses, and all assistants needed.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"group-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/group-leader.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"group-leader.html\"><h4>Group Leader</h4></a>\n                <p class=\"small\">M.M specializes in organizing and creating turn-key group missions experiences for youth groups, college groups, and business groups. You bring passion; we take care of the rest.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n        <div class=\"row\">\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"pastor-speaker.html\"><img class=\"img-responsive\" src=\"images/why-mm/speaker.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"pastor-speaker.html\"><h4>Pastor/Speaker</h4></a>\n                <p class=\"small\">Share your gift of leadership with the team by leading a morning devo then impart spiritual wisdom into local church leadership. Let us create a custom schedule that makes the most of your valuable time.</p>\n              </div><!-- end panel-body -->\n            </div><!-- end panel -->\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"business-leader.html\"><img class=\"img-responsive\" src=\"images/why-mm/business-person.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"business-leader.html\"><h4>Business Leader</h4></a>\n                <p class=\"small\">A shortened “Business Class” trip is available on select trips. You will experience conferences, stadium outreaches, street ministry, and connect with God in a whole new way. All trips will have you back on Sunday night, ready for Monday.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n          <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n            <div class=\"panel\">\n              <a href=\"media-missionary.html\"><img class=\"img-responsive\" src=\"images/why-mm/media-missionary.jpg\" alt=\"\"></a>\n              <div class=\"panel-body\">\n                <a href=\"media-missionary.html\"><h4>Media Missionary</h4></a>\n                <p class=\"small\">Tell the story of life change! M.M needs you to film, shoot, interview, edit, export, and be creative! Experience a whole new world through the lens of a camera while capturing the most exciting moments of the trip.</p>\n              </div>\n            </div>\n          </div><!-- end col -->\n        </div><!-- end row -->\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end gray-lighter-bg -->\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h6 class=\"text-uppercase text-primary\">It's So Easy</h6>\n        <h1 class=\"text-primary dash-trailing\">We've Got You</h1>\n        <p class=\"large-type\">Logistics, we got it covered. Missions.Me makes missions simple by taking care of all of your transportation, hotel, food, training, translators and ministry schedule needs.</p>\n        <hr class=\"divider inv\">\n        <a class=\"btn btn-primary\" href=\"#\">Speak to a rep</a>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/staff.jpg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section-->\n  </div><!-- end container -->\n</div><!-- end red-bg -->\n<div class=\"white-bg\">\n  <div class=\"row row-no-margin\">\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-lawn.jpg\" alt=\"\">\n    </div>\n    <div class=\"col-sm-6 col-no-padding\">\n      <img class=\"img-responsive\" src=\"images/why-mm/miami-conf.jpg\" alt=\"\">\n    </div>\n  </div>\n</div><!-- end white-bg -->\n<div class=\"bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary-darker dash-trailing-dark\">Level Of Impact</h1>\n        <p class=\"large-type\">We are interested in changing nations, communities, and individuals. Every outreach we organize deems to do just that. In just one week's time you and your team will be face to face with entire schools, neighborhoods, and churches. We believe a short-term team must serve a long-term and sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted.</p>\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/stadium-impact.jpg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-lighter-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-responsive\" src=\"images/why-mm/group-security.jpg\">\n      </div><!-- end col -->\n      <div class=\"col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-primary dash-trailing\">Safety and Security</h1>\n        <!-- <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our leadership provides in depth training to create a safe experience for every missionary. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe. Multiple leaders care for each missionary and guidelines are faceted so that no person is ever alone. We also do background checks on all potential leaders. Missions.Me has a proven track record of safety and security that keeps our teams coming back.</p> -->\n        <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe.</p>\n        <blockquote>\"I have traveled with Missions.Me in many countries and have witnessed first-hand their organization and safety measures. I am completely confident sending my teens on a Missions.Me missions trip.\"\n          <footer>Sue, Mother from Lancaster, PA</footer></blockquote>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n<div class=\"gray-light-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1\">\n        <h1 class=\"text-center\">Trip Difficulty Ratings</h1>\n        <hr class=\"divider red-small lg\">\n        <hr class=\"divider inv lg\">\n      </div><!-- end col -->\n    </div><!-- end row -->\n    <div class=\"row text-center\">\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level1.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>These trips are great for those just getting started in the world-changing business. First timers of all ages area welcome.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level2.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>If Level 1 proved to be a piece of cake, you’re ready for a Level 2 adventure. A little tougher, a little sweatier, but much more sweeter.</p>\n      </div>\n      <div class=\"col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1\">\n        <img class=\"img-lg\" src=\"images/why-mm/level3.png\" alt=\"\">\n        <hr class=\"divider inv\">\n        <p>Chuck Norris. Mr. T. Annie Oakley. Yep, they’re all level 3 missionaries. It may not be physically tough, but it’ll be a challenge.</p>\n      </div>\n    </div>\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end dark-bg-primary -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-94e88304", module.exports)
+    hotAPI.createRecord("_v-cf6ec6ac", module.exports)
   } else {
-    hotAPI.update("_v-94e88304", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-cf6ec6ac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],144:[function(require,module,exports){
@@ -50777,9 +50875,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-036a9d78", module.exports)
+    hotAPI.createRecord("_v-7dce67a4", module.exports)
   } else {
-    hotAPI.update("_v-036a9d78", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7dce67a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],145:[function(require,module,exports){
@@ -50864,11 +50962,14 @@ exports.default = {
         prevState: function prevState() {
             this.$root.$emit('DonateForm:prevState');
         },
-        reviewDonation: function reviewDonation() {
-            this.$root.$emit('DonateForm:reviewDonation');
+        resetState: function resetState() {
+            this.$root.$emit('DonateForm:resetState');
         },
-        createToken: function createToken() {
-            this.$root.$emit('DonateForm:createToken');
+        reviewDonation: function reviewDonation(identifier) {
+            this.$root.$emit('DonateForm:reviewDonation', identifier);
+        },
+        donate: function donate(identifier) {
+            this.$root.$emit('DonateForm:donate', identifier);
         },
         goToState: function goToState(state) {
             switch (state) {
@@ -50904,14 +51005,11 @@ exports.default = {
         launchDonate: function launchDonate() {
             this.donateModalOpen = true;
             this.widthChange();
-        }
-    },
-    events: {
-        'VueStripe::create-card-token': function VueStripeCreateCardToken() {
-            return this.createToken();
         },
-        'VueStripe::reset-form': function VueStripeResetForm() {
-            return this.resetCaching();
+        done: function done() {
+            this.donateModalOpen = false;
+            this.showModal = false;
+            this.showRight = false;
         }
     },
     ready: function ready() {
@@ -50924,15 +51022,15 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <a class=\"btn btn-primary btn-block \" @click=\"launchDonate\">Donate</a>\n    <hr class=\"divider inv sm\">\n    <modal :title=\"'Donate to ' + recipient\" :show.sync=\"showModal\" effect=\"fade\" width=\"800\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <donate :donation-state.sync=\"donationState\" :sub-state.sync=\"subState\" :attempt-submit=\"attemptSubmit\" :title=\"title\" :child=\"true\" :stripe-key=\"stripeKey\" :auth=\"auth\" :type=\"type\" type-id=\"typeId\" fund-id=\"fundId\" :recipient=\"recipient\"></donate>\n        </div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <!--<button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"donationState='form',subState=1\" v-if=\"!isState('form', 1)\">Reset</button>-->\n            <button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"prevState()\" v-if=\"!isState('form', 1)\">Back</button>\n            <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"nextState()\" v-if=\"isState('form', 1)\">Next</button>\n            <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"reviewDonation()\" v-if=\"isState('form', 2)\">Review Donation</button>\n            <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"createToken\" v-if=\"donationState==='review'\">Donate</button>\n        </div>\n    </modal>\n\n    <aside :show.sync=\"showRight\" placement=\"right\" header=\"Donate\" :width=\"375\">\n        <div class=\"col-sm-12\">\n            <donate :donation-state.sync=\"donationState\" :sub-state.sync=\"subState\" :attempt-submit=\"attemptSubmit\" :title=\"title\" :child=\"true\" :stripe-key=\"stripeKey\" :auth=\"auth\" :type=\"type\" type-id=\"typeId\" fund-id=\"fundId\" :recipient=\"recipient\"></donate>\n            <div class=\"modal-footer\">\n                <!--<button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"donationState='form',subState=1\" v-if=\"!isState('form', 1)\">Reset</button>-->\n                <button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"prevState()\" v-if=\"!isState('form', 1)\">Back</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"nextState()\" v-if=\"isState('form', 1)\">Next</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"reviewDonation()\" v-if=\"isState('form', 2)\">Review Donation</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"createToken\" v-if=\"donationState==='review'\">Donate</button>\n            </div>\n        </div>\n    </aside>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"text-center\">\n    <a class=\"btn btn-success\" @click=\"launchDonate\">Donate To The Cause</a>\n    <!--<a class=\"btn btn-primary btn-justified show-xs\" @click=\"showRight=!showRight\">Donate</a>-->\n    </div>\n    <hr class=\"divider inv sm\">\n    <modal :title=\"'Donate to ' + title\" :show.sync=\"showModal\" effect=\"fade\" width=\"500\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <donate :donation-state.sync=\"donationState\" :sub-state.sync=\"subState\" :attempt-submit=\"attemptSubmit\" :title=\"title\" :child=\"true\" :stripe-key=\"stripeKey\" :auth=\"auth\" :type=\"type\" type-id=\"typeId\" :fund-id=\"fundId\" :recipient=\"recipient\" identifier=\"modal\"></donate>\n        </div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <!--<button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"donationState='form',subState=1\" v-if=\"!isState('form', 1)\">Reset</button>-->\n            <button type=\"button\" class=\"btn btn-default\" @click=\"prevState()\" v-if=\"!isState('form', 1)\">Back</button>\n\n            <button type=\"button\" class=\"btn btn-primary\" @click=\"nextState()\" v-if=\"isState('form', 1)\">Next</button>\n            <button type=\"button\" class=\"btn btn-primary\" @click=\"reviewDonation('modal')\" v-if=\"isState('form', 2)\">Review</button>\n            <button type=\"button\" class=\"btn btn-primary\" @click=\"donate('modal')\" v-if=\"donationState==='review'\">Donate</button>\n            <button type=\"button\" class=\"btn btn-success\" @click=\"done\" v-if=\"donationState==='confirmation'\">Close</button>\n        </div>\n    </modal>\n\n    <aside :show.sync=\"showRight\" placement=\"right\" header=\"Donate\" :width=\"375\">\n        <div class=\"col-sm-12\">\n            <donate :donation-state.sync=\"donationState\" :sub-state.sync=\"subState\" :attempt-submit=\"attemptSubmit\" :title=\"title\" :child=\"true\" :stripe-key=\"stripeKey\" :auth=\"auth\" :type=\"type\" type-id=\"typeId\" :fund-id=\"fundId\" :recipient=\"recipient\" identifier=\"aside\"></donate>\n            <div class=\"modal-footer\">\n                <!--<button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"donationState='form',subState=1\" v-if=\"!isState('form', 1)\">Reset</button>-->\n                <button type=\"button\" class=\"btn btn-default btn-xs\" @click=\"prevState()\" v-if=\"!isState('form', 1) &amp;&amp; donationState!=='confirmation'\">Back</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"nextState()\" v-if=\"isState('form', 1)\">Next</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"reviewDonation('aside')\" v-if=\"isState('form', 2)\">Review Donation</button>\n                <button type=\"button\" class=\"btn btn-primary btn-xs\" @click=\"donate('aside')\" v-if=\"donationState==='review'\">Donate</button>\n                <button type=\"button\" class=\"btn btn-success btn-xs\" @click=\"done\" v-if=\"donationState==='confirmation'\">Close</button>\n            </div>\n        </div>\n    </aside>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-140a9660", module.exports)
+    hotAPI.createRecord("_v-1e536124", module.exports)
   } else {
-    hotAPI.update("_v-140a9660", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1e536124", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./donate.vue":130,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],146:[function(require,module,exports){
@@ -51092,9 +51190,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-b807f5a4", module.exports)
+    hotAPI.createRecord("_v-17773f82", module.exports)
   } else {
-    hotAPI.update("_v-b807f5a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-17773f82", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],147:[function(require,module,exports){
@@ -51143,7 +51241,6 @@ exports.default = {
     },
     methods: {
         // emulate pagination
-
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -51180,9 +51277,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2aa502b9", module.exports)
+    hotAPI.createRecord("_v-4b4c5de6", module.exports)
   } else {
-    hotAPI.update("_v-2aa502b9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4b4c5de6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],148:[function(require,module,exports){
@@ -51217,9 +51314,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-384f8292", module.exports)
+    hotAPI.createRecord("_v-558d51ea", module.exports)
   } else {
-    hotAPI.update("_v-384f8292", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-558d51ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],149:[function(require,module,exports){
@@ -51525,9 +51622,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-f7d35b42", module.exports)
+    hotAPI.createRecord("_v-0ff77a9a", module.exports)
   } else {
-    hotAPI.update("_v-f7d35b42", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":1,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],150:[function(require,module,exports){
@@ -51576,9 +51673,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-a13fe9fe", module.exports)
+    hotAPI.createRecord("_v-5e12a7a6", module.exports)
   } else {
-    hotAPI.update("_v-a13fe9fe", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],151:[function(require,module,exports){
@@ -51632,9 +51729,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-49f0bb1d", module.exports)
+    hotAPI.createRecord("_v-01de7a71", module.exports)
   } else {
-    hotAPI.update("_v-49f0bb1d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],152:[function(require,module,exports){
@@ -51692,7 +51789,6 @@ exports.default = {
     },
     methods: {
         // emulate pagination
-
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -51738,9 +51834,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-75d11b12", module.exports)
+    hotAPI.createRecord("_v-5d37e43e", module.exports)
   } else {
-    hotAPI.update("_v-75d11b12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5d37e43e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../passports/passport-create-update.vue":146,"vue":116,"vue-hot-reload-api":111}],153:[function(require,module,exports){
@@ -51798,7 +51894,6 @@ exports.default = {
     },
     methods: {
         // emulate pagination
-
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -51844,9 +51939,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-459f93c3", module.exports)
+    hotAPI.createRecord("_v-1bd1d2ef", module.exports)
   } else {
-    hotAPI.update("_v-459f93c3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1bd1d2ef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../visas/visa-create-update.vue":192,"vue":116,"vue-hot-reload-api":111}],154:[function(require,module,exports){
@@ -51907,9 +52002,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-a231700c", module.exports)
+    hotAPI.createRecord("_v-1f813726", module.exports)
   } else {
-    hotAPI.update("_v-a231700c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],155:[function(require,module,exports){
@@ -52065,9 +52160,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-469c8f94", module.exports)
+    hotAPI.createRecord("_v-4eaab280", module.exports)
   } else {
-    hotAPI.update("_v-469c8f94", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./create/deadlines.vue":162,"./create/details.vue":163,"./create/pricing.vue":164,"./create/requirements.vue":165,"./create/settings.vue":166,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],156:[function(require,module,exports){
@@ -52101,9 +52196,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5e2d84c3", module.exports)
+    hotAPI.createRecord("_v-1f88c822", module.exports)
   } else {
-    hotAPI.update("_v-5e2d84c3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],157:[function(require,module,exports){
@@ -52194,9 +52289,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-66842823", module.exports)
+    hotAPI.createRecord("_v-07829d12", module.exports)
   } else {
-    hotAPI.update("_v-66842823", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],158:[function(require,module,exports){
@@ -52374,9 +52469,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-8c08b4bc", module.exports)
+    hotAPI.createRecord("_v-1684d064", module.exports)
   } else {
-    hotAPI.update("_v-8c08b4bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./edit/deadlines.vue":167,"./edit/details.vue":168,"./edit/pricing.vue":169,"./edit/requirements.vue":170,"./edit/settings.vue":171,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],159:[function(require,module,exports){
@@ -52477,9 +52572,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-cc43e7c2", module.exports)
+    hotAPI.createRecord("_v-9f5ddb6a", module.exports)
   } else {
-    hotAPI.update("_v-cc43e7c2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],160:[function(require,module,exports){
@@ -52550,9 +52645,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6bdfd31c", module.exports)
+    hotAPI.createRecord("_v-25146f20", module.exports)
   } else {
-    hotAPI.update("_v-6bdfd31c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],161:[function(require,module,exports){
@@ -52621,9 +52716,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-23a3fbdd", module.exports)
+    hotAPI.createRecord("_v-41204f31", module.exports)
   } else {
-    hotAPI.update("_v-23a3fbdd", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],162:[function(require,module,exports){
@@ -52699,9 +52794,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c9cbdc6c", module.exports)
+    hotAPI.createRecord("_v-8ed335c4", module.exports)
   } else {
-    hotAPI.update("_v-c9cbdc6c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],163:[function(require,module,exports){
@@ -52775,7 +52870,6 @@ exports.default = {
 				ended_at: this.ended_at
 			});
 		},
-		//rep_id: this.rep_id,
 		getGroups: function getGroups(search, loading) {
 			loading(true);
 			this.$http.get('groups', { search: search }).then(function (response) {
@@ -52813,9 +52907,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0a5fa131", module.exports)
+    hotAPI.createRecord("_v-087e8cf6", module.exports)
   } else {
-    hotAPI.update("_v-0a5fa131", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],164:[function(require,module,exports){
@@ -53042,9 +53136,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3f362696", module.exports)
+    hotAPI.createRecord("_v-5c73f5ee", module.exports)
   } else {
-    hotAPI.update("_v-3f362696", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],165:[function(require,module,exports){
@@ -53121,9 +53215,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-616b6831", module.exports)
+    hotAPI.createRecord("_v-af5f3746", module.exports)
   } else {
-    hotAPI.update("_v-616b6831", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],166:[function(require,module,exports){
@@ -53176,9 +53270,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0f0f62c4", module.exports)
+    hotAPI.createRecord("_v-49d154f0", module.exports)
   } else {
-    hotAPI.update("_v-0f0f62c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],167:[function(require,module,exports){
@@ -53258,9 +53352,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1273c0d8", module.exports)
+    hotAPI.createRecord("_v-03d4d92c", module.exports)
   } else {
-    hotAPI.update("_v-1273c0d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],168:[function(require,module,exports){
@@ -53394,9 +53488,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-72548882", module.exports)
+    hotAPI.createRecord("_v-5888d913", module.exports)
   } else {
-    hotAPI.update("_v-72548882", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-select":113}],169:[function(require,module,exports){
@@ -53627,9 +53721,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c649f17a", module.exports)
+    hotAPI.createRecord("_v-2e8e2497", module.exports)
   } else {
-    hotAPI.update("_v-c649f17a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],170:[function(require,module,exports){
@@ -53709,9 +53803,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4f05b663", module.exports)
+    hotAPI.createRecord("_v-3dd864e2", module.exports)
   } else {
-    hotAPI.update("_v-4f05b663", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],171:[function(require,module,exports){
@@ -53769,9 +53863,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3d46cc14", module.exports)
+    hotAPI.createRecord("_v-f3e5b1bc", module.exports)
   } else {
-    hotAPI.update("_v-3d46cc14", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],172:[function(require,module,exports){
@@ -53815,9 +53909,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0109f388", module.exports)
+    hotAPI.createRecord("_v-424f54dc", module.exports)
   } else {
-    hotAPI.update("_v-0109f388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],173:[function(require,module,exports){
@@ -53877,7 +53971,7 @@ exports.default = {
 			return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
 		},
 		dobYear: function dobYear() {
-			return this.currentYear - 100 + this.dobYearCalc;
+			return this.currentYear - 100 + parseInt(this.dobYearCalc);
 		},
 		height: function height() {
 			return this.heightA + ' ft. ' + this.heightB + ' in.';
@@ -53982,9 +54076,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-22c28071", module.exports)
+    hotAPI.createRecord("_v-3935869d", module.exports)
   } else {
-    hotAPI.update("_v-22c28071", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],174:[function(require,module,exports){
@@ -54039,9 +54133,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ddfdfb4e", module.exports)
+    hotAPI.createRecord("_v-ca5dc6f6", module.exports)
   } else {
-    hotAPI.update("_v-ddfdfb4e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],175:[function(require,module,exports){
@@ -54114,7 +54208,7 @@ exports.default = {
 		if (this.devMode) {
 			this.cardNumber = '4242424242424242';
 			this.cardCVC = '123';
-			this.cardYear = '19';
+			this.cardYear = '2019';
 			return this.cardMonth = '1';
 		}
 	},
@@ -54216,7 +54310,7 @@ exports.default = {
 				var i, ref, ref1, results;
 				results = [];
 				for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
-					results.push(num.toString().substr(2, 2));
+					results.push(num);
 				}
 				return results;
 			}();
@@ -54224,12 +54318,11 @@ exports.default = {
 		},
 		cardParams: function cardParams() {
 			return {
-				name: this.cardHolderName,
+				cardholder: this.cardHolderName,
 				number: this.cardNumber,
-				expMonth: this.cardMonth,
-				expYear: this.cardYear,
-				cvc: this.cardCVC,
-				address_zip: this.cardZip
+				exp_month: this.cardMonth,
+				exp_year: this.cardYear,
+				cvc: this.cardCVC
 			};
 		}
 	},
@@ -54275,13 +54368,18 @@ exports.default = {
 				this.attemptedCreateToken = true;
 				this.stripeDeferred.reject(false);
 			} else {
-				Stripe.setPublishableKey(this.stripeKey);
-				Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+				//					Stripe.setPublishableKey(this.stripeKey);
+				//					Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+				this.$parent.$refs.validationspinner.show();
+
+				this.$http.post('donations/authorize', this.cardParams).then(this.createTokenCallback, function (error) {
+					this.$parent.$refs.validationspinner.hide();
+				});
 			}
 			return this.stripeDeferred.promise();
 		},
-		createTokenCallback: function createTokenCallback(status, resp) {
-			console.log(status);
+		createTokenCallback: function createTokenCallback(resp) {
+			//console.log(status);
 			console.log(resp);
 			this.validationErrors = {
 				cardNumber: '',
@@ -54305,13 +54403,15 @@ exports.default = {
 				}
 				this.stripeDeferred.reject(false);
 			}
-			if (status === 200) {
-				this.card = resp;
+			if (resp.status === 200) {
+				this.card = this.cardParams;
 				// send payment data to parent
 				this.$parent.paymentInfo = {
 					token: resp,
+					card: this.cardParams,
 					save: this.cardSave,
-					email: this.cardEmail
+					email: this.cardEmail,
+					address_zip: this.cardZip
 				};
 				this.$parent.upfrontTotal = this.upfrontTotal;
 				this.$parent.fundraisingGoal = this.fundraisingGoal;
@@ -54327,9 +54427,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5deab4a7", module.exports)
+    hotAPI.createRecord("_v-40feac0a", module.exports)
   } else {
-    hotAPI.update("_v-5deab4a7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],176:[function(require,module,exports){
@@ -54366,15 +54466,15 @@ exports.default = {
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<h4>Review</h4>\n\t\t<div class=\"panel panel-primary\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<div class=\"panel-title\">\n\t\t\t\t\t<h5>Basic Traveler Information</h5>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<address>\n\t\t\t\t\t<strong>{{userInfo.firstName}} {{userInfo.middleName}} {{userInfo.lastName}}</strong><br>\n\t\t\t\t\t{{userInfo.address}}<br>\n\t\t\t\t\t{{userInfo.city}}, {{userInfo.state}} {{userInfo.zipCode}}<br>\n\t\t\t\t\t{{userInfo.country | uppercase}}<br>\n\t\t\t\t\t<br>\n\t\t\t\t\tDate of Birth: {{userInfo.dob}}<br>\n\t\t\t\t\tGender: {{userInfo.gender|capitalize}}<br>\n\t\t\t\t\tRelationship Status: {{userInfo.relationshipStatus|capitalize}}<br>\n\t\t\t\t\tHeight: {{userInfo.height}}<br>\n\t\t\t\t\tWeight: {{userInfo.weight}} lbs.<br>\n\t\t\t\t\t<br>\n\t\t\t\t\t<abbr title=\"Phone\"><span class=\"fa fa-phone\"></span></abbr> {{userInfo.phone}}<br>\n\t\t\t\t\t<abbr title=\"Mobile\"><span class=\"fa fa-mobile\"></span></abbr> {{userInfo.mobile}}<br>\n\t\t\t\t\t<abbr title=\"Email\"><span class=\"fa fa-envelope\"></span></abbr> {{userInfo.email}}<br>\n\t\t\t\t</address>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"panel panel-primary\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<div class=\"panel-title\">\n\t\t\t\t\t<h5>Payment Details</h5>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<dl class=\"dl-horizontal\" v-if=\"paymentInfo\">\n\t\t\t\t\t<dt>Card Holder Name</dt>\n\t\t\t\t\t<dd>{{paymentInfo.token.card.name}}</dd>\n\t\t\t\t\t<dt>Card Number</dt>\n\t\t\t\t\t<dd>···· ···· ···· {{paymentInfo.token.card.last4}}</dd>\n\t\t\t\t\t<dt>Card Expiration</dt>\n\t\t\t\t\t<dd>{{paymentInfo.token.card.exp_month}}/{{paymentInfo.token.card.exp_year}}</dd>\n\t\t\t\t\t<dt>Billing Email</dt>\n\t\t\t\t\t<dd>{{paymentInfo.email}}</dd>\n\t\t\t\t\t<dt>Billing Zip</dt>\n\t\t\t\t\t<dd>{{paymentInfo.token.card.address_zip}}</dd>\n\t\t\t\t\t<dt>Save Payment Method</dt>\n\t\t\t\t\t<dd>{{paymentInfo.save ? 'Yes' : 'No'}}</dd>\n\t\t\t\t</dl>\n\t\t\t\t<hr>\n\t\t\t\t<p class=\"list-group-item-text\">Amount to be charged immediately: {{upfrontTotal|currency}}</p>\n\t\t\t</div>\n\t\t</div>\n\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<hr>\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<div class=\"checkbox\">\n\t\t\t<label>\n\t\t\t\t<input type=\"checkbox\" v-model=\"review\">\n\t\t\t\tI have reviewed and verified that all information provided is correct.\n\t\t\t</label>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<h4>Review</h4>\n\t\t<div class=\"panel panel-primary\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<div class=\"panel-title\">\n\t\t\t\t\t<h5>Basic Traveler Information</h5>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<address>\n\t\t\t\t\t<strong>{{userInfo.firstName}} {{userInfo.middleName}} {{userInfo.lastName}}</strong><br>\n\t\t\t\t\t{{userInfo.address}}<br>\n\t\t\t\t\t{{userInfo.city}}, {{userInfo.state}} {{userInfo.zipCode}}<br>\n\t\t\t\t\t{{userInfo.country | uppercase}}<br>\n\t\t\t\t\t<br>\n\t\t\t\t\tDate of Birth: {{userInfo.dob}}<br>\n\t\t\t\t\tGender: {{userInfo.gender|capitalize}}<br>\n\t\t\t\t\tRelationship Status: {{userInfo.relationshipStatus|capitalize}}<br>\n\t\t\t\t\tHeight: {{userInfo.height}}<br>\n\t\t\t\t\tWeight: {{userInfo.weight}} lbs.<br>\n\t\t\t\t\t<br>\n\t\t\t\t\t<abbr title=\"Phone\"><span class=\"fa fa-phone\"></span></abbr> {{userInfo.phone}}<br>\n\t\t\t\t\t<abbr title=\"Mobile\"><span class=\"fa fa-mobile\"></span></abbr> {{userInfo.mobile}}<br>\n\t\t\t\t\t<abbr title=\"Email\"><span class=\"fa fa-envelope\"></span></abbr> {{userInfo.email}}<br>\n\t\t\t\t</address>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"panel panel-primary\">\n\t\t\t<div class=\"panel-heading\">\n\t\t\t\t<div class=\"panel-title\">\n\t\t\t\t\t<h5>Payment Details</h5>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"panel-body\">\n\t\t\t\t<dl class=\"dl-horizontal\" v-if=\"paymentInfo\">\n\t\t\t\t\t<dt>Card Holder Name</dt>\n\t\t\t\t\t<dd>{{paymentInfo.card.cardholder}}</dd>\n\t\t\t\t\t<dt>Card Number</dt>\n\t\t\t\t\t<dd>···· ···· ···· {{paymentInfo.card.number.substr(-4)}}</dd>\n\t\t\t\t\t<dt>Card Expiration</dt>\n\t\t\t\t\t<dd>{{paymentInfo.card.exp_month}}/{{paymentInfo.card.exp_year}}</dd>\n\t\t\t\t\t<dt>Billing Email</dt>\n\t\t\t\t\t<dd>{{paymentInfo.email}}</dd>\n\t\t\t\t\t<dt>Billing Zip</dt>\n\t\t\t\t\t<dd>{{paymentInfo.address_zip}}</dd>\n\t\t\t\t\t<dt>Save Payment Method</dt>\n\t\t\t\t\t<dd>{{paymentInfo.save ? 'Yes' : 'No'}}</dd>\n\t\t\t\t</dl>\n\t\t\t\t<hr>\n\t\t\t\t<p class=\"list-group-item-text\">Amount to be charged immediately: {{upfrontTotal|currency}}</p>\n\t\t\t</div>\n\t\t</div>\n\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<hr>\n\t</div>\n\t<div class=\"col-sm-12\">\n\t\t<div class=\"checkbox\">\n\t\t\t<label>\n\t\t\t\t<input type=\"checkbox\" v-model=\"review\">\n\t\t\t\tI have reviewed and verified that all information provided is correct.\n\t\t\t</label>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6a94c15c", module.exports)
+    hotAPI.createRecord("_v-9d0c84f0", module.exports)
   } else {
-    hotAPI.update("_v-6a94c15c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],177:[function(require,module,exports){
@@ -54409,9 +54509,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-64f90a42", module.exports)
+    hotAPI.createRecord("_v-5f91920b", module.exports)
   } else {
-    hotAPI.update("_v-64f90a42", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],178:[function(require,module,exports){
@@ -54446,9 +54546,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-05de1c04", module.exports)
+    hotAPI.createRecord("_v-235a6f58", module.exports)
   } else {
-    hotAPI.update("_v-05de1c04", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],179:[function(require,module,exports){
@@ -54493,7 +54593,6 @@ exports.default = {
     },
     methods: {
         // emulate pagination
-
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -54518,9 +54617,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5747c53b", module.exports)
+    hotAPI.createRecord("_v-c5dc1f32", module.exports)
   } else {
-    hotAPI.update("_v-5747c53b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-c5dc1f32", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],180:[function(require,module,exports){
@@ -54563,6 +54662,10 @@ var _deadlineAgreement2 = _interopRequireDefault(_deadlineAgreement);
 var _review = require('./registration/review.vue');
 
 var _review2 = _interopRequireDefault(_review);
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -54631,11 +54734,11 @@ exports.default = {
 					this.$children.forEach(function (child) {
 						if (child.hasOwnProperty('$PaymentDetails')) thisChild = child;
 					});
-					var self = this;
 					// promise needed to wait for async response from stripe
 					$.when(thisChild.createToken()).done(function (success) {
-						self.nextStepCallback();
-					});
+						this.$refs.validationspinner.hide();
+						this.nextStepCallback();
+					}.bind(this));
 					break;
 				default:
 					this.nextStepCallback();
@@ -54650,11 +54753,8 @@ exports.default = {
 			}, this);
 		},
 		finish: function finish() {
-			// 1. Create customer with stripe
-			// 2. if they chose to save data, save card to customer
-			// 3. charge card
-			// 4. update user account with customer id
-			// 5. create reservation
+			this.$refs.reservationspinner.show();
+
 			this.$http.post('reservations', {
 				given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
 				surname: this.userInfo.lastName,
@@ -54665,12 +54765,74 @@ exports.default = {
 				amount: this.fundraisingGoal,
 				user_id: this.userData.id,
 				trip_id: this.tripId,
-				companion_limit: this.companion_limit
+				companion_limit: this.companion_limit,
+				costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static)
 			}).then(function (response) {
-				window.location.href = '/dashboard' + response.data.data.links[0].uri;
+				// Charge Card
+				var data = {
+					amount: this.upfrontTotal,
+					currency: 'USD', // determined from card token
+					description: 'Donation to ' + this.title,
+					comment: null,
+					token: this.paymentInfo.token,
+					payment: {
+						type: 'card',
+						brand: this.detectCardType(this.paymentInfo.card.number) || 'visa',
+						last_four: this.paymentInfo.card.number.substr(-4),
+						cardholder: this.paymentInfo.card.cardholder
+					}
+
+				};
+				if (parseInt(this.auth) && this.donor_id) {
+					data.donor_id = this.donor_id;
+				} else {
+					data.donor = {
+						name: this.userInfo.firstName + ' ' + this.userInfo.lastName,
+						company: '',
+						email: this.userInfo.email,
+						phodzne: this.cardPhone,
+						zip: this.userInfo.zipCode,
+						country_code: this.userInfo.country || 'us' // needs UI
+					};
+				}
+				this.$http.post('donations', data).then(function (response) {
+					this.stripeDeferred.resolve(true);
+					this.$refs.donationspinner.hide();
+					this.donationState = 'confirmation';
+					this.$refs.reservationspinner.hide();
+
+					window.location.href = '/dashboard' + response.data.data.links[0].uri;
+				}, function (error) {
+					this.$refs.reservationspinner.hide();
+				});
+
+				this.$refs.reservationspinner.hide();
 			}, function (response) {
 				console.log(response);
+				this.$refs.reservationspinner.hide();
 			});
+		},
+		detectCardType: function detectCardType(number) {
+			// http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
+			var re = {
+				electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
+				maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
+				dankort: /^(5019)\d+$/,
+				interpayment: /^(636)\d+$/,
+				unionpay: /^(62|88)\d+$/,
+				visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+				mastercard: /^5[1-5][0-9]{14}$/,
+				amex: /^3[47][0-9]{13}$/,
+				diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+				discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+				jcb: /^(?:2131|1800|35\d{3})\d{11}$/
+			};
+
+			for (var key in re) {
+				if (re[key].test(number)) {
+					return key;
+				}
+			}
 		}
 	},
 	components: {
@@ -54681,8 +54843,8 @@ exports.default = {
 		'step5': _additionalTripOptions2.default,
 		'step6': _paymentDetails2.default,
 		'step7': _deadlineAgreement2.default,
-		'step8': _review2.default
-
+		'step8': _review2.default,
+		'spinner': _vueStrap2.default.spinner
 	},
 	created: function created() {
 		// login component skipped for now
@@ -54755,7 +54917,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h5>{{ trip.country_name }} Trip Registration</h5>\n\t</div>\n\t<div class=\"panel-body\">\n\t\t<div class=\"row visible-xs-block\">\n\t\t\t<div class=\"col-xs-12\">\n\t\t\t\t<div class=\"btn-group btn-group-justified btn-group-xs\" style=\"display:block;\" role=\"group\" aria-label=\"...\">\n\t\t\t\t\t<a @click=\"backStep()\" class=\"btn btn-default\" :class=\"{'disabled': currentStep.view === 'step1' }\" role=\"button\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-left\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<div class=\"btn-group\" role=\"group\">\n\t\t\t\t\t\t<a class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t\t\t\t{{ currentStep.name }} <span class=\"caret\"></span>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<ul class=\"dropdown-menu dropdown-menu-right\">\n\t\t\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n\t\t\t\t\t</div>\n\t\t\t\t\t<!--<a class=\"btn btn-default\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-right\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">\n\t\t\t\t\t\t<i class=\"fa fa-check\"></i>\n\t\t\t\t\t</a>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr class=\"divider visible-xs\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-5 col-md-4 hidden-xs\">\n\t\t\t\t<ul class=\"nav nav-pills nav-stacked\">\n\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</li>\n\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t\t<div class=\"col-sm-7 col-md-8 {{currentStep.view}}\">\n\t\t\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t\t\t</component>\n\t\t\t</div>\n\n\t\t</div>\n\t</div>\n\t<div class=\"panel-footer text-right\">\n\t\t<div class=\"btn-group btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<!--<a class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</a>-->\n\t\t\t<a class=\"btn btn-default\" @click=\"backStep()\" :class=\"{'disabled': currentStep.view === 'step1' }\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h5>{{ trip.country_name }} Trip Registration</h5>\n\t</div>\n\t<div class=\"panel-body\">\n\t\t<div class=\"row visible-xs-block\">\n\t\t\t<div class=\"col-xs-12\">\n\t\t\t\t<div class=\"btn-group btn-group-justified btn-group-xs\" style=\"display:block;\" role=\"group\" aria-label=\"...\">\n\t\t\t\t\t<a @click=\"backStep()\" class=\"btn btn-default\" :class=\"{'disabled': currentStep.view === 'step1' }\" role=\"button\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-left\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<div class=\"btn-group\" role=\"group\">\n\t\t\t\t\t\t<a class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t\t\t\t{{ currentStep.name }} <span class=\"caret\"></span>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<ul class=\"dropdown-menu dropdown-menu-right\">\n\t\t\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n\t\t\t\t\t</div>\n\t\t\t\t\t<!--<a class=\"btn btn-default\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">\n\t\t\t\t\t\t<i class=\"fa fa-chevron-right\"></i>\n\t\t\t\t\t</a>\n\t\t\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">\n\t\t\t\t\t\t<i class=\"fa fa-check\"></i>\n\t\t\t\t\t</a>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr class=\"divider visible-xs\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-5 col-md-4 hidden-xs\">\n\t\t\t\t<ul class=\"nav nav-pills nav-stacked\">\n\t\t\t\t\t<li role=\"step\" v-for=\"step in stepList\" :class=\"{'active': currentStep.view === step.view, 'disabled': currentStep.view !== step.view &amp;&amp; !step.complete}\">\n\t\t\t\t\t\t<a @click=\"toStep(step)\">\n\t\t\t\t\t\t\t<span class=\"fa\" :class=\"{'fa-chevron-right':!step.complete, 'fa-check': step.complete}\"></span>\n\t\t\t\t\t\t\t{{step.name}}\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</li>\n\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t\t<div class=\"col-sm-7 col-md-8 {{currentStep.view}}\">\n\t\t\t\t<spinner v-ref:validationspinner=\"\" size=\"xl\" :fixed=\"false\" text=\"Validating\"></spinner>\n\t\t\t\t<spinner v-ref:reservationspinner=\"\" size=\"xl\" :fixed=\"true\" text=\"Creating Reservation\"></spinner>\n\t\t\t\t<component :is=\"currentStep.view\" transition=\"fade\" transition-mode=\"out-in\" keep-alive=\"\">\n\n\t\t\t\t</component>\n\t\t\t</div>\n\n\t\t</div>\n\t</div>\n\t<div class=\"panel-footer text-right\">\n\t\t<div class=\"btn-group btn-group\" role=\"group\" aria-label=\"...\">\n\t\t\t<!--<a class=\"btn btn-link\" data-dismiss=\"modal\">Cancel</a>-->\n\t\t\t<a class=\"btn btn-default\" @click=\"backStep()\" :class=\"{'disabled': currentStep.view === 'step1' }\">Back</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"!wizardComplete\" :class=\"{'disabled': !canContinue }\" @click=\"nextStep()\">Continue</a>\n\t\t\t<a class=\"btn btn-primary\" v-if=\"wizardComplete\" @click=\"finish()\">Finish</a>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -54765,12 +54927,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-906ca04e", module.exports)
+    hotAPI.createRecord("_v-6fb76f2d", module.exports)
   } else {
-    hotAPI.update("_v-906ca04e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":144,"./registration/additional-trip-options.vue":172,"./registration/basic-info.vue":173,"./registration/deadline-agreement.vue":174,"./registration/payment-details.vue":175,"./registration/review.vue":176,"./registration/roca.vue":177,"./registration/tos.vue":178,"vue":116,"vue-hot-reload-api":111,"vueify/lib/insert-css":117}],181:[function(require,module,exports){
+},{"../login.vue":144,"./registration/additional-trip-options.vue":172,"./registration/basic-info.vue":173,"./registration/deadline-agreement.vue":174,"./registration/payment-details.vue":175,"./registration/review.vue":176,"./registration/roca.vue":177,"./registration/tos.vue":178,"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55094,9 +55256,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0b158eca", module.exports)
+    hotAPI.createRecord("_v-e6a8f7c4", module.exports)
   } else {
-    hotAPI.update("_v-0b158eca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],182:[function(require,module,exports){
@@ -55234,9 +55396,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-8a802f56", module.exports)
+    hotAPI.createRecord("_v-507a71a9", module.exports)
   } else {
-    hotAPI.update("_v-8a802f56", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],183:[function(require,module,exports){
@@ -55359,9 +55521,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0bcd7c70", module.exports)
+    hotAPI.createRecord("_v-e7b14e18", module.exports)
   } else {
-    hotAPI.update("_v-0bcd7c70", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],184:[function(require,module,exports){
@@ -55395,9 +55557,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-11aa36f7", module.exports)
+    hotAPI.createRecord("_v-b88f63ba", module.exports)
   } else {
-    hotAPI.update("_v-11aa36f7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],185:[function(require,module,exports){
@@ -55547,9 +55709,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-acb15654", module.exports)
+    hotAPI.createRecord("_v-372d71fc", module.exports)
   } else {
-    hotAPI.update("_v-acb15654", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113}],186:[function(require,module,exports){
@@ -55769,9 +55931,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-296e3329", module.exports)
+    hotAPI.createRecord("_v-46ea867d", module.exports)
   } else {
-    hotAPI.update("_v-296e3329", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":1,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vueify/lib/insert-css":117}],187:[function(require,module,exports){
@@ -55844,9 +56006,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7d5b1140", module.exports)
+    hotAPI.createRecord("_v-69badce8", module.exports)
   } else {
-    hotAPI.update("_v-7d5b1140", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-69badce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":105,"vue":116,"vue-hot-reload-api":111}],188:[function(require,module,exports){
@@ -55882,9 +56044,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-96d25000", module.exports)
+    hotAPI.createRecord("_v-ea6dd1a8", module.exports)
   } else {
-    hotAPI.update("_v-96d25000", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ea6dd1a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],189:[function(require,module,exports){
@@ -55922,9 +56084,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0f4b0dca", module.exports)
+    hotAPI.createRecord("_v-718e65c4", module.exports)
   } else {
-    hotAPI.update("_v-0f4b0dca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-718e65c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111}],190:[function(require,module,exports){
@@ -56048,9 +56210,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-63f13656", module.exports)
+    hotAPI.createRecord("_v-63c1ee29", module.exports)
   } else {
-    hotAPI.update("_v-63f13656", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-63c1ee29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":105,"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],191:[function(require,module,exports){
@@ -56223,9 +56385,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ee234926", module.exports)
+    hotAPI.createRecord("_v-2d9ee899", module.exports)
   } else {
-    hotAPI.update("_v-ee234926", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2d9ee899", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114,"vueify/lib/insert-css":117}],192:[function(require,module,exports){
@@ -56376,9 +56538,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-62eb7acc", module.exports)
+    hotAPI.createRecord("_v-12a04920", module.exports)
   } else {
-    hotAPI.update("_v-62eb7acc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-12a04920", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../components/uploads/admin-upload-create-update.vue":181,"vue":116,"vue-hot-reload-api":111,"vue-select":113,"vue-strap/dist/vue-strap.min":114}],193:[function(require,module,exports){
@@ -56427,7 +56589,6 @@ exports.default = {
     },
     methods: {
         // emulate pagination
-
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -56464,9 +56625,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-d20a1352", module.exports)
+    hotAPI.createRecord("_v-4fbd58ab", module.exports)
   } else {
-    hotAPI.update("_v-d20a1352", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4fbd58ab", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":116,"vue-hot-reload-api":111,"vue-strap/dist/vue-strap.min":114}],194:[function(require,module,exports){

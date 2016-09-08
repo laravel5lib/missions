@@ -144,7 +144,7 @@
                         <div class="form-group">
                             <div class="">
                                 <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
-                                <a @click="goToState('review')" class="btn btn-primary">Review Donation</a>
+                                <a @click="createToken" class="btn btn-primary">Review Donation</a>
                             </div>
                         </div>
                     </div>
@@ -186,7 +186,7 @@
                 </div>
                 <div class="panel-footer" v-if="!child">
                     <a @click="goToState('form')" class="btn btn-default">Reset</a>
-                    <a @click="createToken" class="btn btn-primary">Donate</a>
+                    <a @click="submit" class="btn btn-primary">Donate</a>
                 </div>
             </div>
             <div class="" v-show="donationState === 'confirmation'">
@@ -255,7 +255,7 @@
             },
             identifier: {
                 type: String,
-                defulat: null
+                default: null
             }
 
         },
@@ -440,6 +440,10 @@
                     this.token = resp.data;
                     this.stripeDeferred.resolve(resp.data);
                 }
+
+                if (!this.child) {
+                    this.goToState('review');
+                }
             },
             submit(){
                 this.$refs.donationspinner.show();
@@ -614,7 +618,7 @@
                     return false;
                 }
 
-                $.when(this.createToken(identifier)).then(function (response) {
+                $.when(this.createToken()).then(function (response) {
                     this.goToState('review');
                 }.bind(this));
             }.bind(this));

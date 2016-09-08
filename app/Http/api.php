@@ -39,7 +39,7 @@ $api->version('v1', [
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
     $api->resource('reservations', 'ReservationsController');
-    $api->get('reservations/{id}/donors', 'ReservationsController@donors');
+//    $api->get('reservations/{id}/donors', 'ReservationsController@donors');
     $api->resource('assignments', 'AssignmentsController');
     $api->resource('fundraisers', 'FundraisersController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');

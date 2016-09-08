@@ -33,6 +33,6 @@ class SyncPaymentsDue extends Job implements ShouldQueue
      */
     public function handle()
     {
-        $this->reservation->syncPaymentsDue($this->reservation->costs);
+        $this->reservation->payments()->sync($this->reservation->costs);
     }
 }

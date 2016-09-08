@@ -18,7 +18,7 @@ class TransactionEventListener {
         $transaction->fund->balance = $balance;
         $transaction->fund->save();
 
-        if($transaction->type === 'donation') {
+        if($transaction->type == 'donation') {
             event(new DonationWasMade($transaction, $transaction->donor));
         }
     }

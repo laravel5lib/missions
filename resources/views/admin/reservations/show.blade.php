@@ -107,7 +107,7 @@
                                 <small>{{ country($reservation->trip->campaign->country_code) }}</small>
                             </h3>
                             <h4>
-                                Details
+                                Costs
 
                             </h4>
                         </div>
@@ -129,7 +129,7 @@
                                 <small>{{ country($reservation->trip->campaign->country_code) }}</small>
                             </h3>
                             <h4>
-                                Details
+                                Deadlines
 
                             </h4>
                         </div>

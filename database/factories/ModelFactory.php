@@ -185,7 +185,7 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
         'country_code'     => strtolower($faker->countryCode),
         'phone_one'        => $faker->optional(0.5)->phoneNumber,
         'phone_two'        => $faker->optional(0.5)->phoneNumber,
-        'email'            => $faker->optional(0.5)->companyEmail,
+        'email'            => $faker->safeEmail,
         'public'           => $faker->boolean(50),
         'url'              => $faker->userName,
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),

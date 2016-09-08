@@ -1,40 +1,40 @@
 @extends('emails.layouts.default')
 
 @section('content')
-    <p>{{ $reservation->name }} registered for the {{ $reservation->trip->campaign->name }} trip to {{ country($reservation->trip->country_code) }}. Some details about the reservation are listed below.</p>
+    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;"><span style="color:#242424;font-weight:bold;">{{ $reservation->name }}</span> registered for the <span style="color:#242424;font-weight:bold;">{{ $reservation->trip->campaign->name }}</span> trip to <span style="color:#242424;font-weight:bold;">{{ country($reservation->trip->country_code) }}</span>. Some details about the reservation are listed below.</p>
 
-    <table>
+    <table style="border-collapse: collapse;font-size:12px;color: #242424;font-family:Helvetica, Arial, sans-serif;border: 2px solid #e6e6e6;">
         <tbody>
         <tr>
-            <td>Name on Reservation:</td>
-            <td>{{ $reservation->name }}</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Name on Reservation</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $reservation->name }}</td>
         </tr>
         <tr>
-            <td>Age:</td>
-            <td>{{ $reservation->age }}</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Age</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $reservation->age }}</td>
         </tr>
         <tr>
-            <td>Gender:</td>
-            <td>{{ $reservation->gender }}</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Gender</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $reservation->gender }}</td>
         </tr>
         <tr>
-            <td>Status:</td>
-            <td>{{ $reservation->status }}</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Status</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $reservation->status }}</td>
         </tr>
         <tr>
-            <td>Shirt Size:</td>
-            <td>{{ $reservation->shirt_size }}</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Shirt Size</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $reservation->shirt_size }}</td>
         </tr>
         <tr>
-            <td>Travel Group:</td>
-            <td>{{ $reservation->trip->group->name }}</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Travel Group</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $reservation->trip->group->name }}</td>
         </tr>
         <tr>
-            <td>Campaign Registered For:</td>
-            <td>{{ $reservation->trip->campaign->name }}</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Campaign Registered For</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $reservation->trip->campaign->name }}</td>
         </tr>
         <tr>
-            <td>Trip Type</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Trip Type</td>
             <td>{{ ucwords($reservation->trip->type) }} Trip</td>
         </tr>
         </tbody>

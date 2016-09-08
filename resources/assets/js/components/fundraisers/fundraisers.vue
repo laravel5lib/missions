@@ -50,7 +50,7 @@
                 <img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">
                 <div class="panel-body">
                     <h4>{{ fundraiser.name }}</h4>
-                    <h6>Expires: {{ fundraiser.expires_at | moment 'll'  }}</h6>
+                    <h6>Expires: {{ fundraiser.ended_at | moment 'll'  }}</h6>
                     <h3><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>
                     <p><span>{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100)|number 1 }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>
                     <div class="progress">
@@ -109,7 +109,7 @@
         },
         methods:{
             searchFundraisers(){
-                this.$http.get('fundraisers', {
+                this.$http.get('fundraisers?active=true', {
                     // include: '',
                     search: this.search,
                     page: this.page,

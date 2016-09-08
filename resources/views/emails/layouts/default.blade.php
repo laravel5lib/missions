@@ -6,7 +6,7 @@
 </head>
 <body style="background:#f7f7f7;">
 	<div style="margin:20px 20px 0px;background:#fff;border-radius: 4px 4px 0px 0px;">
-		<img style="padding:20px 30px 12px;width:150px;height:37px;" src="<?php echo $message->embed('public/images/logo-main.png'); ?>">
+		<img style="padding:20px 30px 12px;width:150px;height:37px;" src="<?php echo $message->embed(public_path('images/logo-main.png')); ?>">
 	</div>
 	<div style="margin:0px 20px 0px;background:#fff;border-top:1px solid #f7f7f7;border-bottom:1px solid #f7f7f7;padding: 40px 80px;">
    		@yield('content')

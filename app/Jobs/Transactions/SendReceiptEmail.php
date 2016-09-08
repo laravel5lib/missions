@@ -36,11 +36,13 @@ class SendReceiptEmail extends Job implements ShouldQueue
     {
         $donation = $this->donation;
 
-        $mailer->send('emails.donations.receipt', [
-            'donation' => $donation
-        ], function ($m) use ($donation) {
-            $m->to($donation->donor->email, $donation->donor->name)
-                ->subject('Thanks for the donation!');
-        });
+        if($donation->donor->email) {
+            $mailer->send('emails.donations.receipt', [
+                'donation' => $donation
+            ], function ($m) use ($donation) {
+                $m->to($donation->donor->email, $donation->donor->name)
+                    ->subject('Thanks for the donation!');
+            });
+        }
     }
 }

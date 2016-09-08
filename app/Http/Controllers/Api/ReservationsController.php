@@ -65,18 +65,18 @@ class ReservationsController extends Controller
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function donors($id, Request $request)
-    {
-        // Filter donors by reservation
-        $request->merge(['reservation' => $id]);
-
-        $donors = Donor::filter($request->all())
-            ->paginate($request->get('per_page'));
-
-        // Pass the reservation to the transformer to filter
-        // embedded relationships by designation.
-        return $this->response->paginator($donors, new DonorTransformer(['reservation' => $id]));
-    }
+//    public function donors($id, Request $request)
+//    {
+//        // Filter donors by reservation
+//        $request->merge(['reservation' => $id]);
+//
+//        $donors = Donor::filter($request->all())
+//            ->paginate($request->get('per_page'));
+//
+//        // Pass the reservation to the transformer to filter
+//        // embedded relationships by designation.
+//        return $this->response->paginator($donors, new DonorTransformer(['reservation' => $id]));
+//    }
 
     /**
      * Store a reservation.

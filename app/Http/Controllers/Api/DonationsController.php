@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\DonationWasMade;
+use App\Events\TransactionWasCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\CardRequest;
 use App\Http\Requests\v1\DonationRequest;
@@ -126,9 +127,10 @@ class DonationsController extends Controller
         }
 
         // Create the donation for the donor.
+        $request->merge(['type' => 'donation']);
         $donation = $donor->donations()->create($request->all());
 
-        event(new DonationWasMade($donation, $donor));
+        event(new TransactionWasCreated($donation));
 
         return $this->response->item($donation, new DonationTransformer);
     }

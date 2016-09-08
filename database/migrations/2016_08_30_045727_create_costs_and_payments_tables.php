@@ -41,12 +41,14 @@ class CreateCostsAndPaymentsTables extends Migration
         });
 
         Schema::create('dues', function(Blueprint $table) {
+            $table->increments('id');
             $table->uuid('payment_id')->index();
             $table->uuid('payable_id')->index();
             $table->uuid('payable_type')->index();
             $table->integer('outstanding_balance')->default(0);
             $table->dateTime('due_at');
             $table->integer('grace_period');
+            $table->unique(['payment_id', 'payable_id', 'payable_type']);
         });
 
         Schema::table('dues', function($table)

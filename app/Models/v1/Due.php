@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Due extends Model
 {
-    protected $primaryKey = null;
+//    protected $primaryKey = 'id';
 
     public $incrementing = false;
 
     protected $table = 'dues';
 
     protected $fillable = [
-        'reservation_id', 'payment_id', 'due_at', 'grace_period', 'outstanding_balance'
+        'payable_id', 'payable_type', 'payment_id', 'due_at', 'grace_period', 'outstanding_balance'
     ];
 
     protected $dates = ['due_at'];
@@ -64,8 +64,31 @@ class Due extends Model
     {
         $new_balance = $this->outstanding_balance - $payment_amount;
 
-        $this->save(['outstanding_balance' => $new_balance]);
+        $this->outstanding_balance = $new_balance;
+        $this->save();
 
         return $this;
+    }
+
+    /**
+     * Return dues with a balance.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeWithBalance($query)
+    {
+        return $query->where('outstanding_balance', '>', 0);
+    }
+
+    /**
+     * Sort by most recent due dates.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeSortRecent($query)
+    {
+        return $query->orderBy('due_at', 'asc');
     }
 }

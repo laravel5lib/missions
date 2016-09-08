@@ -299,54 +299,13 @@ class Reservation extends Model
     }
 
     /**
-     * Synchronize all the reservation's due payments.
-     */
-    public function syncPaymentsDue()
-    {
-        if($this->has('dues')) $this->dues()->delete();
-
-        $this->addDues($this->calculateDues());
-    }
-
-    /**
-     * Calculate the reservation's due payments.
+     * Manage a Reservation's Payments.
      *
-     * @return mixed
+     * @return ReservationPayment
      */
-    public function calculateDues()
+    public function payments()
     {
-        // generate dues based on assigned costs
-        $dues = $this->costs()->with('payments')->get()->flatMap(function ($cost) {
-            return $cost->payments->map(function ($payment) {
-                return [
-                    'payment_id' => $payment->id,
-                    'due_at' => $payment->due_at,
-                    'grace_period' => $payment->grace_period,
-                    'outstanding_balance' => $payment->amount_owed
-                ];
-            })->all();
-        });
-
-        return $dues;
-    }
-
-    /**
-     * Add dues to the reservation.
-     *
-     * @param $dues
-     */
-    public function addDues($dues)
-    {
-        if ( ! $dues) return;
-
-        if ( ! $dues instanceof Collection)
-            $dues = collect($dues);
-
-        $data = $dues->map(function($due) {
-            return new Due($due);
-        })->all();
-
-        $this->dues()->saveMany($data);
+        return new ReservationPayment($this);
     }
 
     /**

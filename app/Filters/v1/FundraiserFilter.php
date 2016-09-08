@@ -1,5 +1,6 @@
 <?php namespace App\Filters\v1;
 
+use Carbon\Carbon;
 use EloquentFilter\ModelFilter;
 
 class FundraiserFilter extends ModelFilter
@@ -11,6 +12,11 @@ class FundraiserFilter extends ModelFilter
     * @var array
     */
     public $relations = [];
+
+    public function active()
+    {
+        return $this->where('ended_at', '>=', Carbon::now());
+    }
 
     public function url($slug)
     {

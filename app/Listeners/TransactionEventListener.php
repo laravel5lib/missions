@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\DonationWasMade;
 use App\Models\v1\Reservation;
 
 class TransactionEventListener {
@@ -16,6 +17,10 @@ class TransactionEventListener {
         $balance = $transaction->fund->balance + $transaction->amount;
         $transaction->fund->balance = $balance;
         $transaction->fund->save();
+
+        if($transaction->type === 'donation') {
+            event(new DonationWasMade($transaction, $transaction->donor));
+        }
     }
 
     /**

@@ -1,6 +1,8 @@
 <?php
 
+use App\Events\ReservationWasCreated;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\Request;
 
 class ReservationTableSeeder extends Seeder
 {
@@ -18,6 +20,8 @@ class ReservationTableSeeder extends Seeder
             $r->notes()->save(factory(App\Models\v1\Note::class)->make());
 
             $r->tag(['vip', 'missionary']);
+
+            event(new ReservationWasCreated($r, new Request));
         });
 
         // Give the admin user at least one reservation.
@@ -30,6 +34,8 @@ class ReservationTableSeeder extends Seeder
             $r->notes()->save(factory(App\Models\v1\Note::class)->make());
 
             $r->tag(['vip', 'missionary']);
+
+            event(new ReservationWasCreated($r, new Request));
         });
     }
 }

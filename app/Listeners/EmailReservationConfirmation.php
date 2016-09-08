@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\ReservationWasCreated;
+use App\Events\ReservationWasProcessed;
 use App\Jobs\Reservations\SendConfirmationEmail;
 
 class EmailReservationConfirmation
@@ -10,10 +10,10 @@ class EmailReservationConfirmation
     /**
      * Handle the event.
      *
-     * @param  ReservationWasCreated  $event
+     * @param  ReservationWasProcessed  $event
      * @return void
      */
-    public function handle(ReservationWasCreated $event)
+    public function handle(ReservationWasProcessed $event)
     {
         $reservation = $event->reservation;
 

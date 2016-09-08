@@ -336,4 +336,11 @@ class Trip extends Model
 
         return $status;
     }
+
+    public function updateSpots($number = -1)
+    {
+        $this->spots = $this->spots + $number;
+
+        $this->save();
+    }
 }

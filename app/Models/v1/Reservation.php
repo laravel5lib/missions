@@ -2,6 +2,7 @@
 
 namespace App\Models\v1;
 
+use App\Jobs\Reservations\SyncPaymentsDue;
 use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
@@ -279,7 +280,7 @@ class Reservation extends Model
     }
 
     /**
-     * Syncronize all the trip's costs.
+     * Synchronize all the reservation's costs.
      *
      * @param $costs
      */
@@ -293,8 +294,47 @@ class Reservation extends Model
         $data = $costs->pluck('id')->all();
         
         $this->costs()->sync($data);
+
+        dispatch(new SyncPaymentsDue($this));
     }
 
+    /**
+     * Synchronize all the reservation's due payments.
+     */
+    public function syncPaymentsDue()
+    {
+        if($this->has('dues')) $this->dues()->delete();
+
+        $this->addDues($this->calculateDues());
+    }
+
+    /**
+     * Calculate the reservation's due payments.
+     *
+     * @return mixed
+     */
+    public function calculateDues()
+    {
+        // generate dues based on assigned costs
+        $dues = $this->costs()->with('payments')->get()->flatMap(function ($cost) {
+            return $cost->payments->map(function ($payment) {
+                return [
+                    'payment_id' => $payment->id,
+                    'due_at' => $payment->due_at,
+                    'grace_period' => $payment->grace_period,
+                    'outstanding_balance' => $payment->amount_owed
+                ];
+            })->all();
+        });
+
+        return $dues;
+    }
+
+    /**
+     * Add dues to the reservation.
+     *
+     * @param $dues
+     */
     public function addDues($dues)
     {
         if ( ! $dues) return;
@@ -310,7 +350,7 @@ class Reservation extends Model
     }
 
     /**
-     * Syncronize all the reservation's requirements.
+     * Synchronize all the reservation's requirements.
      *
      * @param $requirements
      */
@@ -333,7 +373,7 @@ class Reservation extends Model
     }
 
     /**
-     * Syncronize all the reservation's deadlines.
+     * Synchronize all the reservation's deadlines.
      *
      * @param $deadlines
      */
@@ -370,7 +410,7 @@ class Reservation extends Model
     }
 
     /**
-     * Syncronize all the reservation's todos.
+     * Synchronize all the reservation's todos.
      *
      * @param $todos
      */

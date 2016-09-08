@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\v1\Fund;
 use App\Models\v1\Reservation;
 use App\Models\v1\Transaction;
 use App\Models\v1\Trip;
@@ -21,9 +22,18 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\NotifyRecipient'
         ],
         'App\Events\ReservationWasProcessed' => [
-            'App\Listeners\EmailReservationConfirmation',
-            'App\Listeners\NotifyFacilitatorsOfNewReservation'
+//            'App\Listeners\EmailReservationConfirmation',
+//            'App\Listeners\NotifyFacilitatorsOfNewReservation'
         ]
+    ];
+
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        'App\Listeners\ReservationEventListener',
     ];
 
     /**
@@ -40,6 +50,32 @@ class EventServiceProvider extends ServiceProvider
             $balance = $transaction->fund->balance + $transaction->amount;
             $transaction->fund->balance = $balance;
             $transaction->fund->save();
+
+            if($transaction->fund->fundable instanceof Reservation)
+            {
+                $amount = $transaction->amount;
+                while ($amount > 0)
+                {
+                    $due = $transaction->fund->fundable->dues()
+                        ->where('outstanding_balance', '>', 0)
+                        ->orderBy('due_at', 'asc')
+                        ->first();
+
+                    $difference = $due->outstanding_balance - $amount;
+
+                    if ($difference < 0)
+                    {
+                        $due->outstanding_balance = 0;
+                        $amount = ($amount * -1); // make positive
+                    } else
+                    {
+                        $due->outstanding_balance = $difference;
+                        $amount = $amount - $difference;
+                    }
+
+                    $due->save();
+                }
+            }
         });
 
         Trip::created(function ($trip) {
@@ -47,50 +83,6 @@ class EventServiceProvider extends ServiceProvider
                 'name' => generateFundName($trip),
                 'balance' => 0
             ]);
-        });
-
-        Reservation::created(function ($reservation) {
-            // generate dues based on assigned costs
-            $dues = $reservation->costs()->with('payments')->get()->flatMap(function ($cost) {
-                $cost->payments->map(function ($payment) {
-                   return [
-                       'payment_id' => $payment->id,
-                       'due_at' => $payment->due_at,
-                       'grace_period' => $payment->grace_period,
-                       'outsanding_balance' => $payment->amount_owed
-                   ];
-                });
-            });
-
-            $reservation->addDues($dues);
-            $reservation->syncRequirements($reservation->trip->requirements);
-            $reservation->syncDeadlines($reservation->trip->deadlines);
-            $reservation->addTodos($reservation->trip->todos);
-
-            $name = 'Send ' . $reservation->name . ' to ' . country($reservation->trip->country_code);
-
-            $reservation->fund()->create([
-                'name' => generateFundName($reservation),
-                'balance' => 0
-            ]);
-
-            $reservation->fund->fundraisers()->create([
-                'name' => $name,
-                'url' => str_slug(country($reservation->trip->country_code)).'-'.$reservation->trip->started_at->format('Y').'-'.str_random(4),
-                'description' => file_get_contents(resource_path('assets/sample_fundraiser.md')),
-                'sponsor_type' => 'users',
-                'sponsor_id' => $reservation->user_id,
-                'goal_amount' => $reservation->getTotalCost(),
-                'started_at' => $reservation->created_at,
-                'ended_at' => $reservation->trip->started_at,
-                'banner_upload_id' => $reservation->trip->campaign->banner->id
-            ]);
-
-            $reservation->trip()->update([
-                'spots' => $reservation->trip->spots - 1
-            ]);
-
-//            event(new ReservationWasCreated($reservation));
         });
     }
 }

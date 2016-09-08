@@ -58,3 +58,24 @@ function generateFundNameFromTrip($trip)
 
     return $name . ' ' . ucwords($type) . ' Trip to ' . $country . ' ' . $year;
 }
+
+function generateFundraiserName($data)
+{
+    if ($data instanceof Reservation) {
+        return generateFundraiserNameFromReservation($data);
+    }
+
+    if ($data instanceof Trip) {
+        return generateFundraiserNameFromTrip($data);
+    }
+}
+
+function generateFundraiserNameFromReservation($reservation)
+{
+   return 'Send ' . $reservation->name . ' to ' . country($reservation->trip->country_code);
+}
+
+function generateFundraiserNameFromTrip($trip)
+{
+    return 'Send ' . $trip->group->name . ' to ' . country($trip->country_code);
+}

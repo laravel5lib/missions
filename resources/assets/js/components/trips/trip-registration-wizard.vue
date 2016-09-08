@@ -183,61 +183,52 @@
 			finish(){
 				this.$refs.reservationspinner.show();
 
-				this.$http.post('reservations', {
+				var data = {
+					// reservation data
 					given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
 					surname: this.userInfo.lastName,
 					gender: this.userInfo.gender,
 					status: this.userInfo.relationshipStatus,
 					shirt_size: this.userInfo.size,
 					birthday: moment().set({year: this.userInfo.dobYear, month: this.userInfo.dobMonth, day: this.userInfo.dobDay}).format('YYYY-MM-DD'),
-					amount: this.fundraisingGoal,
+					// amount: this.fundraisingGoal,
 					user_id: this.userData.id,
 					trip_id: this.tripId,
 					companion_limit: this.companion_limit,
-					costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static)
-				}).then(function (response) {
-					// Charge Card
-					var data = {
-						amount: this.upfrontTotal,
-						currency: 'USD', // determined from card token
-						description: 'Donation to ' + this.title,
-						comment: null,
-						token: this.paymentInfo.token,
-						payment: {
-							type: 'card',
-							brand: this.detectCardType(this.paymentInfo.card.number) || 'visa',
-							last_four: this.paymentInfo.card.number.substr(-4),
-							cardholder: this.paymentInfo.card.cardholder,
-						}
+					costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static),
 
-					};
-					if (parseInt(this.auth) && this.donor_id) {
-						data.donor_id = this.donor_id;
-					} else {
-						data.donor = {
-							name: this.userInfo.firstName + ' ' + this.userInfo.lastName,
-							company: '',
-							email: this.userInfo.email,
-							phodzne: this.cardPhone,
-							zip: this.userInfo.zipCode,
-							country_code: this.userInfo.country || 'us' // needs UI
-						}
+					// payment data
+					amount: this.upfrontTotal,
+					token: this.paymentInfo.token,
+					description: 'Reservation payment',
+					currency: 'USD', // determined from card token
+					payment: {
+						type: 'card',
+						brand: this.detectCardType(this.paymentInfo.card.number) || 'visa',
+						last_four: this.paymentInfo.card.number.substr(-4),
+						cardholder: this.paymentInfo.card.cardholder,
 					}
-					this.$http.post('donations', data)
-							.then(function (response) {
-										this.stripeDeferred.resolve(true);
-										this.$refs.donationspinner.hide();
-										this.donationState = 'confirmation';
-										this.$refs.reservationspinner.hide();
+				};
 
-										window.location.href = '/dashboard' + response.data.data.links[0].uri;
+				if (this.userData && this.userData.donor_id) {
+					data.donor_id = this.donor_id;
+				} else {
+					data.donor = {
+						name: this.userInfo.firstName + ' ' + this.userInfo.lastName,
+						company: '',
+						email: this.userInfo.email,
+						phone: this.userInfo.phone,
+						zip: this.userInfo.zipCode,
+						country_code: this.userInfo.country || 'us'
+					}
+				}
 
-									},
-									function (error) {
-										this.$refs.reservationspinner.hide();
-									});
 
+				this.$http.post('reservations', data).then(function (response) {
+					this.stripeDeferred.resolve(true);
+					this.$refs.reservationspinner.hide();
 
+					window.location.href = '/dashboard' + response.data.data.links[0].uri;
 					this.$refs.reservationspinner.hide();
 				}, function (response) {
 					console.log(response);

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ReservationWasCreated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
-use App\Http\Transformers\v1\DonationTransformer;
 use App\Http\Transformers\v1\DonorTransformer;
 use App\Models\v1\Donor;
 use App\Models\v1\Reservation;
@@ -87,13 +86,11 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        $reservation = Reservation::create($request->all());
+        $reservation = $this->reservation->create($request->all());
 
-        if ($request->has('costs'))
-            $reservation->syncCosts($request->get('costs'));
+        // Charge and capture deposit
 
-        if ($request->has('tags'))
-            $reservation->tag($request->get('tags'));
+        event(new ReservationWasCreated($reservation, $request));
 
         return $this->response->item($reservation, new ReservationTransformer);
     }

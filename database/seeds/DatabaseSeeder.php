@@ -12,6 +12,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        config(['mail.driver' => 'log']);
+
         $this->call(BouncerSeeder::class);
         $this->call(UploadSeeder::class);
         $this->call(UserTableSeeder::class);
@@ -34,5 +36,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TransportSeeder::class);
         $this->call(AccommodationSeeder::class);
         $this->call(StoriesTableSeeder::class);
+
+        config(['mail.driver' => 'smtp']);
     }
 }

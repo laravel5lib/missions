@@ -6,7 +6,7 @@
 </head>
 <body style="background:#f7f7f7;">
 	<div style="margin:20px 20px 0px;background:#fff;border-radius: 4px 4px 0px 0px;">
-		<h3 style="margin-bottom:0;padding:20px 30px;font-family:Helvetica, Arial, sans-serif;color:#f6323e;">Missions.Me <span style="text-transform:uppercase;vertical-align:middle;color: #242424;font-size:10px;letter-spacing:1px;">Where you can change the world.</span></h3>
+		<img style="padding:20px 30px 12px;width:150px;height:37px;" src="<?php echo $message->embed('public/images/logo-main.png'); ?>">
 	</div>
 	<div style="margin:0px 20px 0px;background:#fff;border-top:1px solid #f7f7f7;border-bottom:1px solid #f7f7f7;padding: 40px 80px;">
    		@yield('content')

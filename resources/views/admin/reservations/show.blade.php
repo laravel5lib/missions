@@ -266,7 +266,7 @@
                                     @endforeach
 
                                     </tbody>
-                                    <tfoot style="border-top: 2px solid #000000">
+                                    {{--<tfoot style="border-top: 2px solid #000000">
                                     <tr>
                                         <th>Total Amount Due</th>
                                         <th></th>
@@ -282,7 +282,7 @@
                                         <th></th>
                                         <th>${{ $totalAmountDue - $totalAmountRaised > 0 ? number_format($totalAmountDue - $totalAmountRaised, 2) : number_format(0, 2) }}</th>
                                     </tr>
-                                    </tfoot>
+                                    </tfoot>--}}
                                 </table>
                             </div>
                         </div>
@@ -316,30 +316,34 @@
 
 
                         <div class="col-sm-12">
-                            <h4>Fundraisers</h4>
+                            <h4>Fund Transaction</h4>
                             <hr>
                         </div>
-                        @foreach($reservation->fundraisers as $fundraiser)
                             <div class="col-sm-12">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        {{ $fundraiser->name }}
-                                        <span class="pull-right">Ends: {{ carbon($fundraiser->expires_at)->toFormattedDateString() }}</span>
+                                        {{ $reservation->fund->name }}
+{{--                                        <span class="pull-right">Ends: {{ carbon($reservation->fund->created_at)->toFormattedDateString() }}</span>--}}
                                     </div>
                                     <div class="panel-body">
                                         {{--<p>{{ $fundraiser->description or 'No Description'}}</p>--}}
                                         <h6>
-                                            Amount Raised
-                                            <span class="pull-right">Goal: ${{ number_format($fundraiser->goal_amount, 2) }}</span>
+                                            Amount in fund
+                                            <span class="pull-right">Total: ${{ number_format($reservation->fund->balance, 2) }}</span>
                                         </h6>
-                                        <div class="progress">
-                                            <?php $fundraiser->raised_percent = (($fundraiser->raised() /100) > $fundraiser->goal_amount) ? 100 : $fundraiser->raised() /100 ?>
-                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ $fundraiser->raised_percent }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{ $fundraiser->raised_percent }}%;">
-                                                ${{ number_format($fundraiser->raised() / 100, 2) }}
-                                            </div>
-                                        </div>
 
-                                        <donations-list fundraiser-id="{{ $fundraiser->id }}" donations="{{ json_encode($fundraiser->donations) }}"></donations-list>
+                                        <ul class="list-group">
+                                        @foreach($reservation->fund->transactions as $transaction)
+                                        	<li class="list-group-item">
+                                                <h4 class="list-group-item-heading">${{ $transaction->amount }} {{ $transaction->type }}</h4>
+                                                <div class="list-group-item-text">
+                                                    {{ $transaction->comment }}
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                        </ul>
+
+                                        {{--<donations-list fundraiser-id="{{ $fundraiser->id }}" donations="{{ json_encode($fundraiser->donations) }}"></donations-list>--}}
 
                                     </div>
                                     {{--<div class="panel-footer">
@@ -348,7 +352,6 @@
                                     </div>--}}
                                 </div>
                             </div>
-                        @endforeach
                     </div>
                 </div>
                 </div>

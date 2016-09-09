@@ -91,7 +91,7 @@ class TripFilter extends ModelFilter
      * Find by reservations.
      *
      * @param $reservations
-     * @return $this
+     * @return mixed
      */
     public function reservations($reservations)
     {
@@ -244,8 +244,12 @@ class TripFilter extends ModelFilter
     {
         return $this->where(function($q) use ($search)
         {
+            // type
+            $q->where('type', 'LIKE', "%$search%"
+            // prospects
+            )->orWhere('prospects', 'LIKE', "%$search%"
             // group name
-            $q->whereHas('group', function ($g) use ($search)
+            )->orWhereHas('group', function ($g) use ($search)
             {
                 return $g->where('name', 'LIKE', "%$search%");
             }

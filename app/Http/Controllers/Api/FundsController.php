@@ -38,8 +38,6 @@ class FundsController extends Controller
     {
         $fund = $this->fund->findOrFail($id);
 
-        return $fund->donors;
-
         return $this->response->item($fund, new FundTransformer);
     }
 }

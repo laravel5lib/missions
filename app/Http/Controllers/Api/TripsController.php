@@ -37,6 +37,7 @@ class TripsController extends Controller
     public function index(Request $request)
     {
         $trips = $this->trip
+                      ->withCount('reservations')
                       ->filter($request->all())
                       ->paginate($request->get('per_page', 10));
 
@@ -51,7 +52,7 @@ class TripsController extends Controller
      */
     public function show($id)
     {
-        $trip = $this->trip->findOrFail($id);
+        $trip = $this->trip->withCount('reservations')->findOrFail($id);
 
         return $this->response->item($trip, new TripTransformer);
     }

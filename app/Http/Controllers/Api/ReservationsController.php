@@ -86,7 +86,7 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        $reservation = $this->reservation->create($request->all());
+        $reservation = $this->reservation->create($request->except('costs', 'donor', 'payment'));
 
         // Charge and capture deposit
 

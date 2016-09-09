@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
         <validator name="Donation">
-            <form class="form-horizontal" name="DonationForm" novalidate v-show="donationState === 'form'">
+            <form class="" name="DonationForm" novalidate v-show="donationState === 'form'">
                 <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Validating"></spinner>
                 <template v-if="isState('form', 1)">
                     <div class="row">
@@ -47,10 +47,11 @@
                     </div>
                 </template>
                 <template v-if="isState('form', 2)">
+                    <div class="alert alert-danger" role="alert" v-if="cardError" v-text="cardError"></div>
                     <!-- Credit Card -->
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-groups" :class="{ 'has-error': checkForError('cardholdername') }">
+                            <div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
                                 <label for="cardHolderName">Card Holder's Name</label>
                                 <div class="input-group">
                                     <span class="input-group-addon input"><span class="fa fa-user"></span></span>
@@ -63,7 +64,7 @@
                     <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-groups" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
+                            <div class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
                                 <label for="cardNumber">Card Number</label>
                                 <div class="input-group">
                                     <span class="input-group-addon input"><span class="fa fa-lock"></span></span>
@@ -143,7 +144,7 @@
                         <div class="form-group">
                             <div class="">
                                 <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
-                                <a @click="goToState('review')" class="btn btn-primary">Review Donation</a>
+                                <a @click="createToken" class="btn btn-primary">Review Donation</a>
                             </div>
                         </div>
                     </div>
@@ -185,7 +186,7 @@
                 </div>
                 <div class="panel-footer" v-if="!child">
                     <a @click="goToState('form')" class="btn btn-default">Reset</a>
-                    <a @click="createToken" class="btn btn-primary">Donate</a>
+                    <a @click="submit" class="btn btn-primary">Donate</a>
                 </div>
             </div>
             <div class="" v-show="donationState === 'confirmation'">
@@ -254,7 +255,7 @@
             },
             identifier: {
                 type: String,
-                defulat: null
+                default: null
             }
 
         },
@@ -278,6 +279,7 @@
                 cardPhone: null,
                 cardZip: null,
                 cardSave: false,
+                cardError: null,
 
                 // stripe vars
                 stripeError: null,
@@ -384,26 +386,40 @@
                     this.attemptedCreateToken = true;
                     this.stripeDeferred.reject(false);
                 } else {
+                    // reset errors
+                    this.cardError = null;
+                    this.validationErrors = {
+                        cardNumber: '',
+                        cardCVC: '',
+                        cardYear: '',
+                        cardMonth: ''
+                    };
+
                     // authorize card data
                     console.log(this.cardParams);
                     this.$refs.validationspinner.show();
                     this.$http.post('donations/authorize', this.cardParams)
                             .then(this.createTokenCallback,
                                     function (error) {
+                                        this.cardError = error.data.message;
                                         this.$refs.validationspinner.hide();
+
+
+                                        switch (error.data.message) {
+                                            case 'Your card number is incorrect.':
+                                                this.stripeError = error.data;
+                                                this.validationErrors.cardNumber = 'error';
+                                                break;
+                                        }
+
+                                        this.stripeDeferred.reject(error.data.code);
                                     });
                 }
                 return this.stripeDeferred.promise();
             },
             createTokenCallback(resp) {
                 console.log(resp);
-                /*this.validationErrors = {
-                    cardNumber: '',
-                    cardCVC: '',
-                    cardYear: '',
-                    cardMonth: ''
-                };
-                this.stripeError = resp.error;
+                 /*
                 if (this.stripeError) {
                     if (this.stripeError.param === 'number') {
                         this.validationErrors.cardNumber = 'error';
@@ -423,6 +439,10 @@
                     this.$refs.validationspinner.hide();
                     this.token = resp.data;
                     this.stripeDeferred.resolve(resp.data);
+                }
+
+                if (!this.child) {
+                    this.goToState('review');
                 }
             },
             submit(){
@@ -462,6 +482,8 @@
                         },
                         function (error) {
                             this.$refs.donationspinner.hide();
+                            this.cardError = error.data.message;
+                            this.toState('form', 2);
                         });
             },
             done(){
@@ -596,7 +618,7 @@
                     return false;
                 }
 
-                $.when(this.createToken(identifier)).then(function (response) {
+                $.when(this.createToken()).then(function (response) {
                     this.goToState('review');
                 }.bind(this));
             }.bind(this));

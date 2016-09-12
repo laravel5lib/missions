@@ -20,6 +20,13 @@ class CreateReservationsTables extends Migration
             $table->string('status');
             $table->string('shirt_size');
             $table->date('birthday');
+            $table->string('phone_one', 20)->nullable();
+            $table->string('phone_two', 20)->nullable();
+            $table->string('address', 100);
+            $table->string('city', 100);
+            $table->string('state', 100);
+            $table->string('zip', 15);
+            $table->string('country_code', 2)->default('us');
             $table->uuid('user_id')->index();
             $table->uuid('trip_id')->index();
             $table->uuid('rep_id')->index()->nullable();

@@ -241,7 +241,7 @@
 						$.extend(this, resp.data.data);
 						window.location.href = '/admin/campaigns/'
 					}, function (error) {
-						self.errors = error.data.errors;
+						this.errors = error.data.errors;
 					});
 				}
 			},

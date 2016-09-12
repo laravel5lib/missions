@@ -152,39 +152,51 @@
                 <hr class="divider inv sm">
 
             </form>
-            <div class="panel panel-primary" v-show="donationState === 'review'">
+            <div v-show="donationState === 'review'">
                 <spinner v-ref:donationSpinner size="xl" :fixed="false" text="Processing Donation"></spinner>
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <h5>Donation Details</h5>
+                <h4 class="text-center">Donation Details</h4>
+                <hr class="divider lg">
+                <div class="col-sm-12">
+                    <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Card Holder Name</h6>
+                    <h5>{{cardHolderName}}</h5>
+                    <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Card Number</h6>
+                    <h5>{{cardNumber}}</h5>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Card Exp</h6>
+                            <h5>{{cardMonth}}/{{cardYear}}</h5>
+                        </div>
+                        <div class="col-xs-8">
+                            <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Billing Email</h6>
+                            <h5>{{cardEmail}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Billing Zip</h6>
+                            <h5>{{cardZip}}</h5>
+                        </div>
+                        <div class="col-xs-8">
+                            <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Save Payment Method</h6>
+                            <h5>{{cardSave ? 'Yes' : 'No'}}</h5>
+                        </div>
                     </div>
                 </div>
-                <div class="panel-body">
-                    <dl class="dl-horizontal">
-                        <dt>Card Holder Name</dt>
-                        <dd>{{cardHolderName}}</dd>
-                        <dt>Card Number</dt>
-                        <dd>{{cardNumber}}</dd>
-                        <dt>Card Expiration</dt>
-                        <dd>{{cardMonth}}/{{cardYear}}</dd>
-                        <dt>Billing Email</dt>
-                        <dd>{{cardEmail}}</dd>
-                        <dt>Billing Zip</dt>
-                        <dd>{{cardZip}}</dd>
-                        <dt>Save Payment Method</dt>
-                        <dd>{{cardSave ? 'Yes' : 'No'}}</dd>
-                    </dl>
-                    <hr class="divider sm">
-                    <p class="list-group-item-text">Recipient: {{recipient}}</p>
-                    <p class="list-group-item-text">Designation: {{title}}</p>
-                    <p class="list-group-item-text">Amount to be charged immediately: {{amount|currency}}</p>
-                    <hr class="divider sm">
-                    <p class="list-group-item-text">
-                        <b>Disclaimer:</b>
-                        All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.
-                    </p>
+                <div class="col-sm-12">
+                    <div class="well">
+                        <p class="list-group-item-text"><span style="text-transform:uppercase;font-size:9px;font-weight:bold;display:block;letter-spacing:1px;">Recipient:</span> {{recipient}}</p>
+                        <hr class="divider inv sm">
+                        <p class="list-group-item-text"><span style="text-transform:uppercase;font-size:9px;font-weight:bold;display:block;letter-spacing:1px;">Designation:</span> {{title}}</p>
+                        <hr class="divider inv sm">
+                        <p class="list-group-item-text"><span style="text-transform:uppercase;font-size:9px;font-weight:bold;display:block;letter-spacing:1px;">Amount to be charged:</span> {{amount|currency}}</p>
+                        <hr class="divider sm">
+                        <p style="color:#808080;font-size:9px;" class="list-group-item-text">
+                            <b>Disclaimer:</b>
+                            All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.
+                        </p>
+                    </div>
                 </div>
-                <div class="panel-footer" v-if="!child">
+                <div class="text-center" v-if="!child">
                     <a @click="goToState('form')" class="btn btn-default">Reset</a>
                     <a @click="submit" class="btn btn-primary">Donate</a>
                 </div>

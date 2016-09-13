@@ -35,6 +35,17 @@ class TripTableSeeder extends Seeder
                 ]);
             });
 
+            $staticCost = $t->costs()->save(factory(App\Models\v1\Cost::class, 'static')->make());
+
+            $staticCost->payments()->save(
+                factory(App\Models\v1\Payment::class)->make([
+                    'due_at' => null,
+                    'amount_owed' => $staticCost->amount,
+                    'percent_owed' => 100,
+                    'upfront' => true
+                ])
+            );
+
             $t->deadlines()->saveMany(factory(App\Models\v1\Deadline::class, 2)->make());
 
             $t->requirements()->saveMany(factory(App\Models\v1\Requirement::class, 4)->make());

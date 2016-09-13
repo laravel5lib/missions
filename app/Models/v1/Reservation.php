@@ -31,7 +31,7 @@ class Reservation extends Model
         'shirt_size', 'birthday', 'phone_one', 'phone_two',
         'address', 'city', 'state', 'zip', 'country_code',
         'trip_id', 'rep_id', 'todos', 'companions', 'costs',
-        'passport_id'
+        'passport_id', 'user_id'
     ];
 
     /**

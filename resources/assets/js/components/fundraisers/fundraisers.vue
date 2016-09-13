@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="container">
-        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit">
+        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
             <div class="panel panel-default">
                 <img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">
                 <div class="panel-body">

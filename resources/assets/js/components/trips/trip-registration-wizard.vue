@@ -191,9 +191,15 @@
 					status: this.userInfo.relationshipStatus,
 					shirt_size: this.userInfo.size,
 					birthday: moment().set({year: this.userInfo.dobYear, month: this.userInfo.dobMonth, day: this.userInfo.dobDay}).format('YYYY-MM-DD'),
-					// amount: this.fundraisingGoal,
+					address: this.userInfo.address,
+					city: this.userInfo.city,
+					state: this.userInfo.state,
+					zip: this.userInfo.zipCode,
+					country_code: this.userInfo.country,
+					phone_one: this.userInfo.phone,
+					phone_two: this.userInfo.mobile,
 					user_id: this.userData.id,
-					trip_id: this.tripId,
+//					trip_id: this.tripId,
 					companion_limit: this.companion_limit,
 					costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static),
 
@@ -224,7 +230,7 @@
 				}
 
 
-				this.$http.post('reservations', data).then(function (response) {
+				this.$http.post('trips/' + this.tripId + '/register', data).then(function (response) {
 					this.stripeDeferred.resolve(true);
 					this.$refs.reservationspinner.hide();
 

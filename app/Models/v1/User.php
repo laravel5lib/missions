@@ -28,7 +28,7 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name', 'email', 'password', 'alt_email',
         'phone_one', 'phone_two', 'gender', 'status',
-        'birthday', 'street', 'city', 'zip', 'country_code',
+        'birthday', 'address', 'city', 'zip', 'country_code',
         'state', 'timezone', 'url', 'public', 'bio',
         'stripe_id', 'card_brand', 'card_last_four'
     ];
@@ -513,16 +513,6 @@ class User extends Authenticatable implements JWTSubject
         $accolade = $this->accolades()->where('name', 'countries_visited')->first();
 
         return $accolade->items;
-    }
-
-    /**
-     * Check if user is an admin.
-     *
-     * @return bool
-     */
-    public function isAdmin()
-    {
-        return $this->admin;
     }
 
     public function withAvailableRegions()

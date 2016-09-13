@@ -44,13 +44,13 @@
             <!--<a v-if="fundraisers.length > 6 && fundraisersLimit == 6" @click="seeAll" class="btn btn-primary btn-sm">See All</a>-->
         </div>
     </div>
-    <div class="container">
-        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit">
+    <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+        <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex">
             <div class="panel panel-default">
                 <img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">
                 <div class="panel-body">
-                    <h4>{{ fundraiser.name }}</h4>
-                    <h6>Expires: {{ fundraiser.ended_at | moment 'll'  }}</h6>
+                    <h5>{{ fundraiser.name }}</h5>
+                    <h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;">Expires: {{ fundraiser.ended_at | moment 'll'  }}</h6>
                     <h3><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>
                     <p><span>{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100)|number 1 }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>
                     <div class="progress">

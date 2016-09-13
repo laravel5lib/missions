@@ -1,4 +1,24 @@
 <template>
+    <div class="content-page-header">
+      <img class="img-responsive" src="images/groups/groups-header.jpg" alt="">
+      <div class="c-page-header-text">
+        <h1 class="text-uppercase dash-trailing">Groups</h1>
+      </div><!-- end c-page-header-content -->
+    </div><!-- end c-page-header -->
+    <div class="white-bg">
+      <div class="container">
+      <div class="content-section">
+        <div class="row">
+          <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center">
+            <h2 class="text-primary">Group trips is what we do!</h2>
+            <p>Missions.Me specializes in taking groups around the world on life-changing missions experiences.  If you are interested in partnering with one of our missions campaigns or trips, please fill out the form.  Missions.Me can provide your group with its own profile, URL and custom missions trips created especially for your group.</p>
+            <hr class="divider inv">
+            <a href="#" class="btn btn-primary btn-lg">Take Your Group</a>
+          </div><!-- end col -->
+        </div><!-- end row -->
+      </div><!-- end content-section -->
+      </div><!-- end container -->
+    </div><!-- end white-bg -->
     <hr class="divider inv xlg">
     <div class="container">
         <div class="col-xs-6">
@@ -22,19 +42,17 @@
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-
-
-        <div class="col-sm-6 col-md-4" v-for="group in groups|limitBy groupsLimit" style="display:flex" v-if="groups.length">
+        <div class="col-sm-6 col-md-3" v-for="group in groups|limitBy groupsLimit" v-if="groups.length" style="display:flex">
             <div class="panel panel-default">
                 <a :href="'/groups/' + group.url" role="button">
                     <img :src="group.avatar" :alt="group.name" class="img-responsive">
                 </a>
                     <div style="min-height:220px;" class="panel-body">
-                        <!--<h6 class="text-uppercase"><i class="fa fa-users"></i> {{group.type}} Group</h6>-->
+                        <!--<h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;"><i class="fa fa-users"></i> {{group.type}} Group</h6>-->
                         <a :href="'/groups/' + group.url" role="button">
                             <h5 style="text-transform:capitalize;" class="text-primary">{{group.name}}</h5>
                         </a>
-                        <h6 class="text-uppercase">{{group.type}} Group</h6>
+                        <h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;">{{group.type}} Group</h6>
                         <hr class="divider lg" />
                         <p class="small">{{group.description}}</p>
                     </div><!-- end panel-body -->
@@ -57,231 +75,120 @@
                 </ul>
             </nav>
         </div>
-
     </div>
-    <hr class="divider inv xlg">
-    <div class="white-bg">
+    <div class="dark-bg-primary">
       <div class="container">
       <div class="content-section">
         <div class="row">
-          <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center">
-            <h2 class="text-primary">Missions.Me plans trips around you. We create experiences that will maximize your specific abilities and desires.</h2>
-          </div><!-- end col -->
-        </div><!-- end row -->
-      </div><!-- end content-section -->
-      </div><!-- end container -->
-    </div><!-- end white-bg -->
-    <div class="white-bg">
-      <div class="row row-no-margin">
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage1.jpg" alt="">
-        </div>
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage3.jpg" alt="">
-        </div>
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage4.jpg" alt="">
-        </div>
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage5.jpg" alt="">
-        </div>
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage8.jpg" alt="">
-        </div>
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage9.jpg" alt="">
-        </div>
-      </div>
-    </div><!-- end white-bg -->
-    <div class="white-bg">
-      <div class="row row-no-margin">
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage10.jpg" alt="">
-        </div>
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage12.jpg" alt="">
-        </div>
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage13.jpg" alt="">
-        </div>
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage14.jpg" alt="">
-        </div>
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage15.jpg" alt="">
-        </div>
-        <div class="col-sm-2 col-xs-4 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/collage/collage18.jpg" alt="">
-        </div>
-      </div>
-    </div><!-- end white-bg -->
-    <div class="gray-lighter-bg">
-      <div class="container">
-      <div class="content-section">
-        <div class="row">
-          <div class="col-xs-10 col-xs-offset-1">
-            <div class="row">
-              <div class="col-xs-10 col-xs-offset-1">
-                <h6 class="text-uppercase text-center">A Trip For Everyone</h6>
-                <h1 class="text-center">Choose A Role</h1>
-                <hr class="divider red-small lg">
-                <hr class="divider inv lg">
-              </div><!-- end col -->
-            </div><!-- end row -->
-            <div class="row">
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-                <div class="panel">
-                  <a href="missionary.html"><img class="img-responsive" src="images/why-mm/missionary.jpg" alt=""></a>
+          <h1 class="dash-trailing-light">Group Leader Or Youth Pastor</h1>
+          <div class="col-sm-6">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h6 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Is this going to be a logistical nightmare?
+                    </a>
+                  </h6>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                   <div class="panel-body">
-                    <a href="missionary.html"><h4 class="text-primary">Missionary</h4></a>
-                    <p class="small">Anyone age 13+ can be an M.M missionary. Set out on the journey with your friend or family to bring a message of love and hope along with an unforgettable cultural experience.</p>
+                    <p>Missions.Me specializes in bringing youth groups, college groups, business groups, or any other types of groups you've created. We take care of all of your transportation, hotel, food and ministry schedule. As a leader, fund-raising and team building is all you'll need to focus on.</p>
                   </div>
                 </div>
-              </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-                <div class="panel">
-                  <a href="medical-missionary.html"><img class="img-responsive" src="images/why-mm/medical-missionary.jpg" alt=""></a>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingTwo">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      International travel with teens?!
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="panel-body">
-                    <a href="medical-missionary.html"><h4>Medical Missionary</h4></a>
-                    <p class="small">Treat, diagnose, prescribe, and share the love of Jesus. Anyone in a medical field can serve, including students currently enrolled in school. Physicians, Dentists, Nurses, and all assistants needed.</p>
+                    <p>Don't freak out.</p>
+                    <p>Missions.Me will provide you with the flight itineraries, prepay baggage fees and be there waiting with pizza in hand when your group arrives. We dare you to find an easier missions experience.</p>
                   </div>
                 </div>
-              </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-                <div class="panel">
-                  <a href="group-leader.html"><img class="img-responsive" src="images/why-mm/group-leader.jpg" alt=""></a>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingThree">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      Will my team be eating bugs and sleeping in the jungle?
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                   <div class="panel-body">
-                    <a href="group-leader.html"><h4>Group Leader</h4></a>
-                    <p class="small">M.M specializes in organizing and creating turn-key group missions experiences for youth groups, college groups, and business groups. You bring passion; we take care of the rest.</p>
+                    <p>It is the vision of Missions.Me to always give our best to the people we're ministering to. To achieve that, our missionaries need to be well rested and well fed. The conditions will vary from state to state, but keep in mind that the farther your team travels from a major city, the less available "higher standard" accommodations become.</p>
+
+                    <p>HOTEL: Every hotel we stay in is inspected by a staff member prior to the trip. We guarantee that your hotel will be equipped with air conditioning and high speed internet.</p>
+
+                    <p>FOOD: All restaurants are tested and approved by a staff member. You will eat at widely-known American restaurants (i.e. McDonald's, Wendy's, Pizza Hut) whenever possible. You will also be given the opportunity to partake in the local cuisine.</p>
                   </div>
                 </div>
-              </div><!-- end col -->
-            </div><!-- end row -->
-            <div class="row">
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-                <div class="panel">
-                  <a href="pastor-speaker.html"><img class="img-responsive" src="images/why-mm/speaker.jpg" alt=""></a>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingFour">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                      How will my leadership fit with Missions.Me?
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
                   <div class="panel-body">
-                    <a href="pastor-speaker.html"><h4>Pastor/Speaker</h4></a>
-                    <p class="small">Share your gift of leadership with the team by leading a morning devo then impart spiritual wisdom into local church leadership. Let us create a custom schedule that makes the most of your valuable time.</p>
-                  </div><!-- end panel-body -->
-                </div><!-- end panel -->
-              </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-                <div class="panel">
-                  <a href="business-leader.html"><img class="img-responsive" src="images/why-mm/business-person.jpg" alt=""></a>
-                  <div class="panel-body">
-                    <a href="business-leader.html"><h4>Business Leader</h4></a>
-                    <p class="small">A shortened “Business Class” trip is available on select trips. You will experience conferences, stadium outreaches, street ministry, and connect with God in a whole new way. All trips will have you back on Sunday night, ready for Monday.</p>
+                    <p>If you've ever been on a trip before, you know nothing gets done without organization and good leadership.From scheduling ministry sites, pick-ups, drop-offs, meals, translators and communicating with in-country contacts, our leaders handle everything and relay to you and your leadership the necessary information.</p>
+                    <a href="#" class="btn btn-primary btn-sm">Sample Weekly Schedule</a>
+                    <hr class="divider inv">
+                    <p>Our leaders or "project directors" number one job is to take care of you (the team leader) so that you can properly take care of your group (team). Most importantly, we strive to create a culture of leadership on our trips that creates new leaders and takes your student leaders to the next level.</p>
+                    <a href="#" class="btn btn-primary btn-sm">Sample Leadership Flow Chart</a>
                   </div>
                 </div>
-              </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-                <div class="panel">
-                  <a href="media-missionary.html"><img class="img-responsive" src="images/why-mm/media-missionary.jpg" alt=""></a>
+              </div><!-- end panel -->
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingFive">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                      How will I recruit?
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
                   <div class="panel-body">
-                    <a href="media-missionary.html"><h4>Media Missionary</h4></a>
-                    <p class="small">Tell the story of life change! M.M needs you to film, shoot, interview, edit, export, and be creative! Experience a whole new world through the lens of a camera while capturing the most exciting moments of the trip.</p>
+                    <p>Missions.Me specializes in not only bringing a message of hope to nations around the world but also a missional message to the American church. Every year, Missions.Me holds several Missions Nights in churches and generational services around the U.S. The service is packed with video, a powerful message from one of our Missions.Me Project Directors and a call to the mission field. The Missions.Me team comes prepared with applications, training instructions and fundraising ideas to make your church groups trip preparation process so easy. That night following the powerful missions service, those who responded will meet and together, we will launch your group with everything they will need to change the world.</p>
                   </div>
                 </div>
-              </div><!-- end col -->
-            </div><!-- end row -->
-          </div><!-- end col -->
-        </div><!-- end row -->
-      </div><!-- end content-section -->
-      </div><!-- end container -->
-    </div><!-- end gray-lighter-bg -->
-    <div class="white-bg">
-      <div class="container">
-      <div class="content-section">
-        <div class="row">
-          <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <h6 class="text-uppercase text-primary">It's So Easy</h6>
-            <h1 class="text-primary dash-trailing">We've Got You</h1>
-            <p class="large-type">Logistics, we got it covered. Missions.Me makes missions simple by taking care of all of your transportation, hotel, food, training, translators and ministry schedule needs.</p>
-            <hr class="divider inv">
-            <a class="btn btn-primary" href="#">Speak to a rep</a>
-          </div><!-- end col -->
-          <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <img class="img-responsive" src="images/why-mm/staff.jpg" />
-          </div><!-- end col -->
-        </div><!-- end row -->
-      </div><!-- end content-section-->
-      </div><!-- end container -->
-    </div><!-- end red-bg -->
-    <div class="white-bg">
-      <div class="row row-no-margin">
-        <div class="col-sm-6 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/miami-lawn.jpg" alt="">
-        </div>
-        <div class="col-sm-6 col-no-padding">
-          <img class="img-responsive" src="images/why-mm/miami-conf.jpg" alt="">
-        </div>
-      </div>
-    </div><!-- end white-bg -->
-    <div class="bg-primary">
-      <div class="container">
-      <div class="content-section">
-        <div class="row">
-          <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <h1 class="text-primary-darker dash-trailing-dark">Level Of Impact</h1>
-            <p class="large-type">We are interested in changing nations, communities, and individuals. Every outreach we organize deems to do just that. In just one week's time you and your team will be face to face with entire schools, neighborhoods, and churches. We believe a short-term team must serve a long-term and sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted.</p>
-          </div><!-- end col -->
-          <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <img class="img-responsive" src="images/why-mm/stadium-impact.jpg" />
-          </div><!-- end col -->
-        </div><!-- end row -->
-      </div><!-- end content-section -->
-      </div><!-- end container -->
-    </div><!-- end dark-bg-primary -->
-    <div class="gray-lighter-bg">
-      <div class="container">
-      <div class="content-section">
-        <div class="row">
-          <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <img class="img-responsive" src="images/why-mm/group-security.jpg" />
-          </div><!-- end col -->
-          <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <h1 class="text-primary dash-trailing">Safety and Security</h1>
-            <!-- <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our leadership provides in depth training to create a safe experience for every missionary. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe. Multiple leaders care for each missionary and guidelines are faceted so that no person is ever alone. We also do background checks on all potential leaders. Missions.Me has a proven track record of safety and security that keeps our teams coming back.</p> -->
-            <p>Missions.Me's first priority is safety. Our partners have successfully hosted thousands of American missionaries for over 25 years. Our projects are managed in cooperation with the local police and hired security so that each ministry context is safe.</p>
-            <blockquote>"I have traveled with Missions.Me in many countries and have witnessed first-hand their organization and safety measures. I am completely confident sending my teens on a Missions.Me missions trip."
-              <footer>Sue, Mother from Lancaster, PA</footer></blockquote>
-          </div><!-- end col -->
-        </div><!-- end row -->
-      </div><!-- end content-section -->
-      </div><!-- end container -->
-    </div><!-- end dark-bg-primary -->
-    <div class="gray-light-bg">
-      <div class="container">
-      <div class="content-section">
-        <div class="row">
-          <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
-            <h1 class="text-center">Trip Difficulty Ratings</h1>
-            <hr class="divider red-small lg">
-            <hr class="divider inv lg">
-          </div><!-- end col -->
-        </div><!-- end row -->
-        <div class="row text-center">
-          <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <img class="img-lg" src="images/why-mm/level1.png" alt="">
-            <hr class="divider inv">
-            <p>These trips are great for those just getting started in the world-changing business. First timers of all ages area welcome.</p>
+              </div><!-- end panel -->
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingSix">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                      How will I train my group?
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                  <div class="panel-body">
+                    <p>Missions.Me gives you everything you need to hold successful training meetings. You set your own dates and times for training, we do the rest.</p>
+                  </div>
+                </div>
+              </div><!-- end panel -->
+            </div>
           </div>
-          <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <img class="img-lg" src="images/why-mm/level2.png" alt="">
-            <hr class="divider inv">
-            <p>If Level 1 proved to be a piece of cake, you’re ready for a Level 2 adventure. A little tougher, a little sweatier, but much more sweeter.</p>
-          </div>
-          <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <img class="img-lg" src="images/why-mm/level3.png" alt="">
-            <hr class="divider inv">
-            <p>Chuck Norris. Mr. T. Annie Oakley. Yep, they’re all level 3 missionaries. It may not be physically tough, but it’ll be a challenge.</p>
+          <div class="col-sm-6">
+            <div class="video-outer">
+              <div class="video-inner">
+                <iframe src="https://player.vimeo.com/video/109034302" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+              </div>
+            </div>
           </div>
         </div>
-      </div><!-- end content-section -->
-      </div><!-- end container -->
-    </div><!-- end dark-bg-primary -->
+      </div>
+      </div>
+    </div>
 </template>
 
 <script>

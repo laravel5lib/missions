@@ -38,19 +38,19 @@
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-            <div class="col-sm-6 col-md-4" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
+            <div class="col-sm-6 col-md-3" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
                 <div class="panel panel-default">
                     <a :href="'/campaigns/' + campaign.page_url" role="button">
                         <img :src="campaign.avatar" :alt="campaign.name" class="img-responsive">
                     </a>
                         <div style="min-height:220px;" class="panel-body">
-                            <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{campaign.country}}</h6>
+                            <h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;"><i class="fa fa-map-marker"></i> {{campaign.country}}</h6>
                             <a :href="'/campaigns/' + campaign.page_url" role="button">
                                 <h5 style="text-transform:capitalize;" class="text-primary">{{campaign.name}}</h5>
                             </a>
-                            <h6>{{campaign.started_at | moment 'll'}} - {{campaign.ended_at | moment 'll'}}</h6>
+                            <h6 style="font-size:12px;">{{campaign.started_at | moment 'll'}} - {{campaign.ended_at | moment 'll'}}</h6>
                             <hr class="divider lg" />
-                            <p class="small">{{campaign.description}}</p>
+                            <p style="font-size:12px;" class="small">{{campaign.description}}</p>
                         </div><!-- end panel-body -->
                 </div><!-- end panel -->
             </div><!-- end col -->

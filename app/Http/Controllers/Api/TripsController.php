@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\RegisteredForTrip;
+use App\Events\ReservationWasCreated;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\TripRegistrationRequest;
+use App\Http\Transformers\v1\ReservationTransformer;
 use App\Models\v1\Trip;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\TripRequest;
@@ -120,5 +124,17 @@ class TripsController extends Controller
 
         if ($request->has('tags'))
             $trip->retag($request->get('tags'));
+    }
+
+    public function register(TripRegistrationRequest $request)
+    {
+        return $request->all();
+
+        $reservation = $this->trip->reservation()
+            ->create($request->except('costs', 'donor', 'payment'));
+
+        event(new RegisteredForTrip($reservation, $request));
+
+        return $this->response->item($reservation, new ReservationTransformer);
     }
 }

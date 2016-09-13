@@ -88,8 +88,6 @@ class ReservationsController extends Controller
     {
         $reservation = $this->reservation->create($request->except('costs', 'donor', 'payment'));
 
-        // Charge and capture deposit
-
         event(new ReservationWasCreated($reservation, $request));
 
         return $this->response->item($reservation, new ReservationTransformer);

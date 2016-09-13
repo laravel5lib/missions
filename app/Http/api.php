@@ -38,8 +38,8 @@ $api->version('v1', [
     $api->resource('groups', 'GroupsController');
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
+    $api->post('trips/{id}/register', 'TripsController@register');
     $api->resource('reservations', 'ReservationsController');
-//    $api->get('reservations/{id}/donors', 'ReservationsController@donors');
     $api->resource('assignments', 'AssignmentsController');
     $api->resource('fundraisers', 'FundraisersController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');

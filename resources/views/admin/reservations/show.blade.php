@@ -41,7 +41,7 @@
                 <ul class="nav nav-pills nav-stacked" role="tablist">
                     <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
                     <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab">Costs</a></li>
-                    <li role="presentation"><a href="#deadlines" aria-controls="deadlines" role="tab" data-toggle="tab">Due Dates</a></li>
+                    <li role="presentation"><a href="#deadlines" aria-controls="deadlines" role="tab" data-toggle="tab">Due Dates / Deadlines</a></li>
                     <li role="presentation"><a href="#requirements" aria-controls="requirements" role="tab" data-toggle="tab">Requirements</a></li>
                     <li role="presentation"><a href="#funding" aria-controls="funding" role="tab" data-toggle="tab">Funding</a></li>
                     {{--<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>--}}
@@ -114,9 +114,67 @@
                     </div>
                     <hr class="divider">
                     {{--            {{ $reservation->costs }}--}}
-                    @foreach($reservation->costs() as $cost)
-                        {{ $cost }}
-                    @endforeach
+                    <div class="panel panel-default">
+                        <table class="table table-striped table-hover">
+                            <caption>Breakdown</caption>
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Due Date</th>
+                                <th>Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($reservation->costs as $cost)
+                                <tr style="border-top: 2px solid #cccccc">
+                                    <td>{{ $cost->name }}</td>
+                                    <td></td>
+                                    <td><b>${{ number_format($cost->amount, 2) }}</b></td>
+                                </tr>
+                                @foreach($cost->payments as $payment)
+                                    <tr class="@if($cost->type === 'incremental' && $payment->upfront){{'success'}}@endif">
+                                        <td>
+                                            @if($cost->type === 'incremental' && $payment->upfront)
+                                                <small class="badge badge-success">Paid</small>
+                                            @endif
+                                            @if($cost->type === 'incremental' && !$payment->upfront && $payment->due_next)
+                                                <small class="badge badge-danger">Next Defaulting Amount</small>
+                                            @endif
+                                            @if($cost->type === 'incremental' && $payment->due_at->between(now()->startOfMonth(), now()->endOfMonth()))
+                                                <small class="badge badge-info">Due this month</small>
+                                            @endif
+                                            @if($cost->type === 'incremental' && $payment->due_at->between(now()->addMonth()->startOfMonth(),now()->addMonth()->endOfMonth()))
+                                                <small class="badge badge-warning">Due next month</small>
+                                            @endif
+                                        </td>
+                                        <td>{{ carbon($payment->due_at)->toFormattedDateString() }}</td>
+                                        <td>${{ number_format($payment->amount_owed) }}</td>
+                                    </tr>
+                                    {{--<li class="list-group-item">{{ $payment->amount_owed }}</li>--}}
+                                @endforeach
+                            @endforeach
+
+                            </tbody>
+                            {{--<tfoot style="border-top: 2px solid #000000">
+                            <tr>
+                                <th>Total Amount Due</th>
+                                <th></th>
+                                <th>${{ number_format($totalAmountDue, 2) }}</th>
+                            </tr>
+                            <tr>
+                                <th>Total Amount Raised</th>
+                                <th></th>
+                                <th>${{ number_format($totalAmountRaised, 2) }}</th>
+                            </tr>
+                            <tr>
+                                <th>Total Amount Remaining</th>
+                                <th></th>
+                                <th>${{ $totalAmountDue - $totalAmountRaised > 0 ? number_format($totalAmountDue - $totalAmountRaised, 2) : number_format(0, 2) }}</th>
+                            </tr>
+                            </tfoot>--}}
+                        </table>
+                    </div>
+
                 </div>
                 <div role="tabpanel" class="tab-pane" id="deadlines">
                     <div class="media">
@@ -135,7 +193,8 @@
                         </div>
                     </div>
                     <hr class="divider">
-                    @foreach($reservation->deadlines as $deadline)
+                    <admin-reservation-deadlines id="{{ $reservation->id }}"></admin-reservation-deadlines>
+                    {{--@foreach($reservation->deadlines as $deadline)
                     <ul class="list-group">
                     	<li class="list-group-item">
                             <h4 class="list-group-item-heading">
@@ -145,7 +204,7 @@
                             </h4>
                         </li>
                     </ul>
-                    @endforeach
+                    @endforeach--}}
                     {{--{{ $reservation->deadlines }}--}}
                 </div>
                 <div role="tabpanel" class="tab-pane" id="requirements">
@@ -209,7 +268,6 @@
                             </h3>
                             <h4>
                                 Funding
-
                             </h4>
                         </div>
                     </div>
@@ -224,66 +282,6 @@
                                 <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{--{{ ($totalAmountRaised/$totalAmountDue) * 100 }}--}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{--{{ ($totalAmountRaised/$totalAmountDue) * 100 }}--}}%;">
                                     {{--{{ number_format(($totalAmountRaised/$totalAmountDue) * 100, 2) }}--}}% of ${{ number_format($totalAmountDue,2) }} Raised
                                 </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <table class="table table-striped table-hover">
-                                    <caption>Breakdown</caption>
-                                    <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Due Date</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($reservation->costs as $cost)
-                                        <tr style="border-top: 2px solid #cccccc">
-                                            <td>{{ $cost->name }}</td>
-                                            <td></td>
-                                            <td><b>${{ number_format($cost->amount, 2) }}</b></td>
-                                        </tr>
-                                        @foreach($cost->payments as $payment)
-                                            <tr class="@if($cost->type === 'incremental' && $payment->upfront){{'success'}}@endif">
-                                                <td>
-                                                    @if($cost->type === 'incremental' && $payment->upfront)
-                                                        <small class="badge badge-success">Paid</small>
-                                                    @endif
-                                                    @if($cost->type === 'incremental' && !$payment->upfront && $payment->due_next)
-                                                        <small class="badge badge-danger">Next Defaulting Amount</small>
-                                                    @endif
-                                                    @if($cost->type === 'incremental' && $payment->due_at->between(now()->startOfMonth(), now()->endOfMonth()))
-                                                        <small class="badge badge-info">Due this month</small>
-                                                    @endif
-                                                    @if($cost->type === 'incremental' && $payment->due_at->between(now()->addMonth()->startOfMonth(),now()->addMonth()->endOfMonth()))
-                                                        <small class="badge badge-warning">Due next month</small>
-                                                    @endif
-                                                </td>
-                                                <td>{{ carbon($payment->due_at)->toFormattedDateString() }}</td>
-                                                <td>${{ number_format($payment->amount_owed) }}</td>
-                                            </tr>
-                                            {{--<li class="list-group-item">{{ $payment->amount_owed }}</li>--}}
-                                        @endforeach
-                                    @endforeach
-
-                                    </tbody>
-                                    {{--<tfoot style="border-top: 2px solid #000000">
-                                    <tr>
-                                        <th>Total Amount Due</th>
-                                        <th></th>
-                                        <th>${{ number_format($totalAmountDue, 2) }}</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Total Amount Raised</th>
-                                        <th></th>
-                                        <th>${{ number_format($totalAmountRaised, 2) }}</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Total Amount Remaining</th>
-                                        <th></th>
-                                        <th>${{ $totalAmountDue - $totalAmountRaised > 0 ? number_format($totalAmountDue - $totalAmountRaised, 2) : number_format(0, 2) }}</th>
-                                    </tr>
-                                    </tfoot>--}}
-                                </table>
                             </div>
                         </div>
 

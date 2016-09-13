@@ -36,7 +36,7 @@ class DeadlineTransformer extends TransformerAbstract
         if($deadline->pivot)
         {
             $array = [
-                'id'           => $deadline->pivot->id,
+                'id'           => $deadline->id,
                 'name'         => $deadline->name,
                 'date'         => $deadline->date->toDateTimeString(),
                 'grace_period' => $deadline->pivot->grace_period,

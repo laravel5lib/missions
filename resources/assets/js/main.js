@@ -51,6 +51,7 @@ import adminGroupEdit from './components/groups/admin-group-edit.vue';
 import adminGroupManagers from './components/groups/admin-group-managers.vue';
 import adminReservations from './components/reservations/admin-reservations-list.vue';
 import adminReservationEdit from './components/reservations/admin-reservation-edit.vue';
+import adminReservationDeadlines from './components/reservations/admin-reservation-deadlines.vue';
 import adminUsers from './components/users/admin-users-list.vue';
 import adminUserCreate from './components/users/admin-user-create.vue';
 import adminUserEdit from './components/users/admin-user-edit.vue';
@@ -289,6 +290,7 @@ new Vue({
         adminGroupManagers,
         adminReservations,
         adminReservationEdit,
+        adminReservationDeadlines,
         adminUsers,
         adminUserCreate,
         adminUserEdit,

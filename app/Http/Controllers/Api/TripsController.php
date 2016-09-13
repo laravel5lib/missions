@@ -126,11 +126,11 @@ class TripsController extends Controller
             $trip->retag($request->get('tags'));
     }
 
-    public function register(TripRegistrationRequest $request)
+    public function register($id, TripRegistrationRequest $request)
     {
-        return $request->all();
+        $trip = $this->trip->findOrFail($id);
 
-        $reservation = $this->trip->reservation()
+        $reservation = $trip->reservations()
             ->create($request->except('costs', 'donor', 'payment'));
 
         event(new RegisteredForTrip($reservation, $request));

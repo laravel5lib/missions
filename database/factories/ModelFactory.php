@@ -16,7 +16,7 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
         'phone_one'        => $faker->optional(0.5)->phoneNumber,
         'phone_two'        => $faker->optional(0.5)->phoneNumber,
-        'street'           => $faker->optional(0.5)->streetAddress,
+        'address'          => $faker->optional(0.5)->streetAddress,
         'city'             => $faker->optional(0.5)->city,
         'state'            => $faker->optional(0.5)->state,
         'zip'              => $faker->optional(0.5)->postcode,
@@ -42,8 +42,7 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
         'name'     => 'Admin',
         'url'      => 'admin',
         'email'    => 'admin@admin.com',
-        'password' => 'secret',
-        'admin'    => true
+        'password' => 'secret'
     ]);
 });
 
@@ -57,8 +56,7 @@ $factory->defineAs(App\Models\v1\User::class, 'joe', function (Faker\Generator $
     return array_merge($user, [
         'name'     => 'Joe',
         'email'    => 'joe@example.com',
-        'password' => 'secret',
-        'admin'    => true
+        'password' => 'secret'
     ]);
 });
 
@@ -75,6 +73,12 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
         'shirt_size'       => $faker->randomElement(array_keys(App\Utilities\v1\ShirtSize::all())),
         'user_id'          => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
+        'address'          => $faker->address,
+        'city'             => $faker->city,
+        'zip'              => $faker->postcode,
+        'country_code'     => $faker->countryCode,
+        'phone_one'        => $faker->phoneNumber,
+        'phone_two'        => $faker->phoneNumber,
         'trip_id'          => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
         'companion_limit'  => random_int(0, 3),
         'passport_id'      => $faker->randomElement(App\Models\v1\Passport::lists('id')->toArray()),

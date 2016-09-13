@@ -20,6 +20,7 @@ class CreateReservationsTables extends Migration
             $table->string('status');
             $table->string('shirt_size');
             $table->date('birthday');
+            $table->string('email')->nullable();
             $table->string('phone_one', 20)->nullable();
             $table->string('phone_two', 20)->nullable();
             $table->string('address', 100);

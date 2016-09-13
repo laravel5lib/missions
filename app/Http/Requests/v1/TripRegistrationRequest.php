@@ -38,6 +38,7 @@ class TripRegistrationRequest extends Request
             'zip'                => 'required|string',
             'city'               => 'required|string',
             'country_code'       => 'required',
+            'email'              => 'required|email',
             'phone_one'          => 'required_without:phone_two',
             'phone_two'          => 'required_without:phone_one',
             'donor'              => 'required_without:donor_id|array',

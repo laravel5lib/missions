@@ -31,7 +31,7 @@ class Reservation extends Model
         'shirt_size', 'birthday', 'phone_one', 'phone_two',
         'address', 'city', 'state', 'zip', 'country_code',
         'trip_id', 'rep_id', 'todos', 'companions', 'costs',
-        'passport_id', 'user_id'
+        'passport_id', 'user_id', 'email'
     ];
 
     /**
@@ -110,7 +110,8 @@ class Reservation extends Model
 
     public function dues()
     {
-        return $this->morphMany(Due::class, 'payable');
+        return $this->morphMany(Due::class, 'payable')
+                    ->orderBy('due_at', 'desc');
     }
 
     /**
@@ -122,7 +123,8 @@ class Reservation extends Model
     {
         return $this->belongsToMany(Deadline::class, 'reservation_deadlines')
                     ->withPivot('grace_period')
-                    ->withTimestamps();
+                    ->withTimestamps()
+                    ->orderBy('date', 'desc');
     }
 
     /**
@@ -154,7 +156,8 @@ class Reservation extends Model
     {
         return $this->belongsToMany(Requirement::class, 'reservation_requirements')
                     ->withPivot('grace_period', 'status', 'completed_at')
-                    ->withTimestamps();
+                    ->withTimestamps()
+                    ->orderBy('due_at', 'desc');
     }
 
     /**

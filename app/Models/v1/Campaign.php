@@ -162,9 +162,26 @@ class Campaign extends Model
         return $this->belongsTo(Upload::class, 'banner_upload_id');
     }
 
+    /**
+     * Get public campaigns.
+     *
+     * @param $query
+     * @return mixed
+     */
     public function scopePublic($query)
     {
         return $query->whereDate('published_at', '<=', date('Y-m-d'));
+    }
+
+    /**
+     * Get active campaigns.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeActive($query)
+    {
+        return $query->whereDate('ended_at', '>=', date('Y-m-d'));
     }
 
 }

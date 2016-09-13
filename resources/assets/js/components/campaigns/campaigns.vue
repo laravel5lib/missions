@@ -287,7 +287,7 @@
             return{
                 campaigns:[],
                 campaignsLimit: 3,
-                resource: this.$resource('campaigns?published=true')
+                resource: this.$resource('campaigns?published=true&current=true')
             }
         },
         methods:{

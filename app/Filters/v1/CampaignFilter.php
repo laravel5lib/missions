@@ -38,6 +38,16 @@ class CampaignFilter extends ModelFilter
     }
 
     /**
+     * Show Only Current Campaigns
+     *
+     * @return mixed
+     */
+    public function current()
+    {
+        return $this->active();
+    }
+
+    /**
      * Filter by country
      *
      * @param $country

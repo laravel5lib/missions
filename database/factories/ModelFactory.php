@@ -139,7 +139,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
  */
 $factory->defineAs(App\Models\v1\Campaign::class, 'active', function (Faker\Generator $faker)
 {
-    $startDate = $faker->dateTimeBetween('+ 6 months', '+ 1 year');
+    $startDate = $faker->dateTimeBetween('6 months', '1 year');
 
     return [
         'name'             => $faker->catchPhrase,

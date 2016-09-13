@@ -194,18 +194,6 @@
                     </div>
                     <hr class="divider">
                     <admin-reservation-deadlines id="{{ $reservation->id }}"></admin-reservation-deadlines>
-                    {{--@foreach($reservation->deadlines as $deadline)
-                    <ul class="list-group">
-                    	<li class="list-group-item">
-                            <h4 class="list-group-item-heading">
-                                <i class="fa {{ now()->gt(carbon($deadline['due_at'])) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}"></i>&nbsp;
-                            {{ !empty($deadline['name']) ? $deadline['name'] : (!empty($deadline['cost_name']) ? $deadline['cost_name'] : $deadline['item'] . ' Submission') }}
-                                <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> {{ carbon($deadline['due_at'])->toFormattedDateString() }}</small>
-                            </h4>
-                        </li>
-                    </ul>
-                    @endforeach--}}
-                    {{--{{ $reservation->deadlines }}--}}
                 </div>
                 <div role="tabpanel" class="tab-pane" id="requirements">
                     <div class="media">

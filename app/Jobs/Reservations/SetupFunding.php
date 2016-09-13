@@ -33,12 +33,6 @@ class SetupFunding extends Job implements ShouldQueue
      */
     public function handle()
     {
-        // create fund
-        $this->reservation->fund()->create([
-            'name' => generateFundName($this->reservation),
-            'balance' => 0
-        ]);
-
         // create fundraiser
         $this->reservation->fund->fundraisers()->create([
             'name' => generateFundraiserName($this->reservation),

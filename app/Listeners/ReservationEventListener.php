@@ -2,40 +2,70 @@
 
 namespace App\Listeners;
 
+use App\Jobs\MakeDeposit;
 use App\Jobs\Reservations\ProcessReservation;
 use App\Jobs\Reservations\SetupFunding;
 
 class ReservationEventListener {
 
     /**
-     * Handle reservation created events.
+     * Register for the Trip.
+     *
      * @param $event
      */
-    public function onReservationCreated($event) {
+    public function register($event)
+    {
+        $this->process($event);
+        $fund = $this->setupFunding($event);
 
+        $params = $event->request->only(
+            'donor', 'payment', 'token', 'amount', 'donor_id',
+            'currency', 'description'
+        ) + ['fund_id', $fund->id];
+
+        dispatch(new MakeDeposit($params));
+    }
+
+    /**
+     * Handle reservation processing.
+     * @param $event
+     */
+    public function process($event)
+    {
         dispatch(new ProcessReservation(
             $event->reservation,
             $event->request->get('costs'),
             $event->request->get('tags')
         ));
-
-        dispatch(new SetupFunding($event->reservation));
-
-        // close a spot
-        $event->reservation->trip->updateSpots(-1);
     }
 
     /**
-     * Handle reservation updated events.
+     * Setup funding for the reservation.
+     *
      * @param $event
+     * @return mixed
      */
-    public function onReservationUpdated($event) {}
+    public function setupFunding($event)
+    {
+        $fund = $event->reservation->fund()->create([
+            'name' => generateFundName($event->reservation),
+            'balance' => 0
+        ]);
+
+        dispatch(new SetupFunding($event->reservation));
+
+        return $fund;
+    }
 
     /**
-     * Handle reservation dropped events.
+     * Close a spot on the trip.
+     *
      * @param $event
      */
-    public function onReservationDropped($event) {}
+    public function updateSpotsAvailable($event)
+    {
+        $event->reservation->trip->updateSpots(-1);
+    }
 
     /**
      * Register the listeners for the subscriber.
@@ -46,12 +76,22 @@ class ReservationEventListener {
     {
         $events->listen(
             'App\Events\ReservationWasCreated',
-            'App\Listeners\ReservationEventListener@onReservationCreated'
+            'App\Listeners\ReservationEventListener@setupFunding'
         );
 
         $events->listen(
-            'App\Events\ReservationWasDropped',
-            'App\Listeners\ReservationEventListener@onReservationDropped'
+            'App\Events\ReservationWasCreated',
+            'App\Listeners\ReservationEventListener@process'
+        );
+
+        $events->listen(
+            'App\Events\ReservationWasCreated',
+            'App\Listeners\ReservationEventListener@updateSpotsAvailable'
+        );
+
+        $events->listen(
+            'App\Events\RegisteredForTrip',
+            'App\Listeners\ReservationEventListener@register'
         );
     }
 

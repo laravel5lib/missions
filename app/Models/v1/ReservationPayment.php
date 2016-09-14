@@ -3,6 +3,9 @@
 namespace App\Models\v1;
 
 
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+
 class ReservationPayment {
 
     /**
@@ -67,6 +70,8 @@ class ReservationPayment {
             $dues = collect($dues);
 
         $data = $dues->map(function($due) {
+            is_null($due['due_at']) ? $due['due_at'] = Carbon::now() : $due['due_at'];
+
             return new Due($due);
         })->all();
 

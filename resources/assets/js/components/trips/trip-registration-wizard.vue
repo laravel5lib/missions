@@ -196,6 +196,7 @@
 					state: this.userInfo.state,
 					zip: this.userInfo.zipCode,
 					country_code: this.userInfo.country,
+					email: this.userInfo.email,
 					phone_one: this.userInfo.phone,
 					phone_two: this.userInfo.mobile,
 					user_id: this.userData.id,
@@ -231,7 +232,7 @@
 
 
 				this.$http.post('trips/' + this.tripId + '/register', data).then(function (response) {
-					this.stripeDeferred.resolve(true);
+//					this.stripeDeferred.resolve(true);
 					this.$refs.reservationspinner.hide();
 
 					window.location.href = '/dashboard' + response.data.data.links[0].uri;

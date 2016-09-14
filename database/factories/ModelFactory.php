@@ -77,6 +77,7 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         'city'             => $faker->city,
         'zip'              => $faker->postcode,
         'country_code'     => $faker->countryCode,
+        'email'            => $faker->safeEmail,
         'phone_one'        => $faker->phoneNumber,
         'phone_two'        => $faker->phoneNumber,
         'trip_id'          => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
@@ -139,7 +140,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
  */
 $factory->defineAs(App\Models\v1\Campaign::class, 'active', function (Faker\Generator $faker)
 {
-    $startDate = $faker->dateTimeBetween('6 months', '1 year');
+    $startDate = $faker->dateTimeBetween('+6 months', '+1 year');
 
     return [
         'name'             => $faker->catchPhrase,

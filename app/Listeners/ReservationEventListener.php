@@ -21,7 +21,7 @@ class ReservationEventListener {
         $params = $event->request->only(
             'donor', 'payment', 'token', 'amount', 'donor_id',
             'currency', 'description'
-        ) + ['fund_id', $fund->id];
+        ) + ['fund_id' => $fund->id];
 
         dispatch(new MakeDeposit($params));
     }

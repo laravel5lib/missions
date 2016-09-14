@@ -153,13 +153,13 @@
 											<input type="text" class="form-control input-sm" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
 										</div>
 									</div>
-									<div class="col-sm-12">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="cardSave">Save payment details for next time.
-											</label>
-										</div>
-									</div>
+									<!--<div class="col-sm-12">-->
+										<!--<div class="checkbox">-->
+											<!--<label>-->
+												<!--<input type="checkbox" v-model="cardSave">Save payment details for next time.-->
+											<!--</label>-->
+										<!--</div>-->
+									<!--</div>-->
 								</div>
 
 								<p class="help-block text-success">Your card will be charged for the upfront fees
@@ -364,7 +364,11 @@
 				//this.$dispatch('payment-complete', true)
 			},
 			toDate(date){
-				return moment(date).format('LL');
+				if(date) {
+					return moment(date).format('LL');
+				} else {
+					return 'Due Now';
+				}
 			},
 			resetCaching() {
 				console.log('resetting');

@@ -113,7 +113,8 @@
                         </div>
                     </div>
                     <hr class="divider">
-                    {{--            {{ $reservation->costs }}--}}
+                    <admin-reservation-costs id="{{ $reservation->id }}"></admin-reservation-costs>
+
                     <div class="panel panel-default">
                         <table class="table table-striped table-hover">
                             <caption>Breakdown</caption>
@@ -272,34 +273,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        {{--<div class="col-sm-12">
-                            <h4>Costs</h4>
-                            <hr>
-                        </div>
-                        @foreach($reservation->costs as $cost)
-                        <div class="col-sm-12 col-md-6">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    {{ $cost->name }}
-                                    <span class="pull-right">Ends: {{ carbon($cost->expires_at)->toFormattedDateString() }}</span>
-                                </div>
-                                <div class="panel-body">
-                                    --}}{{--{{ $cost }}--}}{{--
-                                    {{ $cost->description or 'No Description'}}
-                                    <ul class="list-group">
-                                        @foreach($cost->payments as $payment)
-                                            <li class="list-group-item">{{ $payment->amount_owed }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                                <div class="panel-footer">
-
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach--}}
-
 
                         <div class="col-sm-12">
                             <h4>Fund Transaction</h4>

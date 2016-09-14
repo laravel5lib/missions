@@ -1,9 +1,9 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <button class="btn btn-primary btn-xs" @click="showAddModal=!showAddModal"><span
+        <button class="btn btn-primary btn-xs" @click="add"><span
                 class="fa fa-plus"></span> Add Existing
         </button>
-        <button class="btn btn-primary btn-xs" @click="showNewModal=!showNewModal"><span
+        <button class="btn btn-primary btn-xs" @click="new"><span
                 class="fa fa-plus"></span> Create New
         </button>
 
@@ -179,8 +179,18 @@
             isPast(date){
                 return moment().isAfter(date);
             },
+            add(){
+                this.attemptSubmit = false;
+                this.showAddModal = true;
+            },
+            new(){
+                this.attemptSubmit = false;
+                this.showNewModal = true;
+
+            },
             edit(deadline){
                 this.editedDeadline = deadline;
+                this.attemptSubmit = false;
                 this.showEditModal = true;
             },
             update(deadline){

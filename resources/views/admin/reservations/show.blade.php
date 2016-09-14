@@ -359,6 +359,7 @@
                     <table class="table table-hover">
                     	<thead>
                     		<tr>
+                    			<th>Status</th>
                     			<th>Outstanding Balance</th>
                     			<th>Grace Period</th>
                     			<th>Due</th>
@@ -367,6 +368,17 @@
                     	<tbody>
                         @foreach($reservation->dues as $due)
                     		<tr>
+                                <td>
+                                    @if ($due->outstanding_balance > 0)
+                                        @if(now()->gt(carbon($due->due_at)))
+                                            <span class="badge badge-danger">Past Due</span>
+                                        @else
+                                            <span class="badge badge-info">Due in {{ now()->diffForHumans($due->due_at, true) }}</span>
+                                        @endif
+                                    @else
+                                    <span class="badge badge-success">Paid</span>
+                                    @endif
+                                </td>
                     			<td>${{ $due->outstanding_balance }}</td>
                     			<td>{{ $due->grace_period }}</td>
                     			<td>{{ carbon($due->due_at)->toFormattedDateString() }}</td>

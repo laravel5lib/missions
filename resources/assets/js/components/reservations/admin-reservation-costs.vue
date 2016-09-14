@@ -3,7 +3,7 @@
         <button class="btn btn-primary btn-xs" @click="add"><span
                 class="fa fa-plus"></span> Add Existing
         </button>
-        <button class="btn btn-primary btn-xs" @click="new"><span
+        <button class="btn btn-primary btn-xs" @click="addNew"><span
                 class="fa fa-plus"></span> Create New
         </button>
 
@@ -185,7 +185,7 @@
                 this.attemptSubmit = false;
                 this.showAddModal = true;
             },
-            new(){
+            addNew(){
                 this.attemptSubmit = false;
                 this.showNewModal = true;
 
@@ -196,7 +196,7 @@
                 this.showEditModal = true;
             },
             update(cost){
-//                this.resource.delete()
+            //    this.resource.delete()
             },
             remove(cost){
                 var reservation = this.preppedReservation;

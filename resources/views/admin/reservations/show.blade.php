@@ -70,6 +70,8 @@
                     </div>
                     <hr class="divider">
                     <dl class="dl-horizontal">
+                        <dt>Managing User</dt>
+                        <dd><a href="{{ url('admin/users/' . $reservation->user->id) }}">{{ $reservation->user->name }}</a></dd>
                         <dt>Reservation ID</dt>
                         <dd>{{ $reservation->id }}</dd>
                         <dt>Surname</dt>
@@ -84,6 +86,26 @@
                         <dd>{{ $reservation->shirt_size }}</dd>
                         <dt>Age</dt>
                         <dd>{{ $reservation->birthday->age }}</dd>
+                        <dt>Birthday</dt>
+                        <dd>{{ $reservation->birthday->format('F j, Y') }}</dd>
+
+                        <dt>Email</dt>
+                        <dd>{{ $reservation->email }}</dd>
+                        <dt>Home Phone</dt>
+                        <dd>{{ $reservation->phone_one }}</dd>
+                        <dt>Mobile Phone</dt>
+                        <dd>{{ $reservation->phone_two }}</dd>
+                        <dt>Address</dt>
+                        <dd>{{ $reservation->address }}</dd>
+                        <dt>City</dt>
+                        <dd>{{ $reservation->city }}</dd>
+                        <dt>State/Providence</dt>
+                        <dd>{{ $reservation->state }}</dd>
+                        <dt>Zip/Postal Code</dt>
+                        <dd>{{ $reservation->zip }}</dd>
+                        <dt>Country</dt>
+                        <dd>{{ country($reservation->country_code) }}</dd>
+
                         <dt>Group</dt>
                         <dd>{{ $reservation->trip->group->name }}</dd>
                         <dt>Trip Type</dt>

@@ -44,7 +44,7 @@
                     <li role="presentation"><a href="#deadlines" aria-controls="deadlines" role="tab" data-toggle="tab">Due Dates / Deadlines</a></li>
                     <li role="presentation"><a href="#requirements" aria-controls="requirements" role="tab" data-toggle="tab">Requirements</a></li>
                     <li role="presentation"><a href="#funding" aria-controls="funding" role="tab" data-toggle="tab">Funding</a></li>
-                    <li role="presentation"><a href="#dues" aria-controls="settings" role="tab" data-toggle="tab">Dues</a></li>
+                    <li role="presentation"><a href="#dues" aria-controls="dues" role="tab" data-toggle="tab">Dues</a></li>
                     {{--<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>--}}
                 </ul>
             </div><!-- end panel -->
@@ -340,9 +340,40 @@
                             </div>
                     </div>
                 </div>
-                </div>
                 <div role="tabpanel" class="tab-pane" id="dues">
-
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <img class="media-object" style="width:100px; height:100px" src="{{ image($reservation->trip->campaign->avatar->source . "?w=200") }}" alt="{{ $reservation->trip->campaign->name }}">
+                        </a>
+                        <div class="media-body">
+                            <h3 class="media-heading">
+                                {{ $reservation->trip->campaign->name }}
+                                <small>{{ country($reservation->trip->campaign->country_code) }}</small>
+                            </h3>
+                            <h4>
+                                Dues
+                            </h4>
+                        </div>
+                    </div>
+                    <hr class="divider">
+                    <table class="table table-hover">
+                    	<thead>
+                    		<tr>
+                    			<th>Outstanding Balance</th>
+                    			<th>Grace Period</th>
+                    			<th>Due</th>
+                    		</tr>
+                    	</thead>
+                    	<tbody>
+                        @foreach($reservation->dues as $due)
+                    		<tr>
+                    			<td>${{ $due->outstanding_balance }}</td>
+                    			<td>{{ $due->grace_period }}</td>
+                    			<td>{{ carbon($due->due_at)->toFormattedDateString() }}</td>
+                    		</tr>
+                        @endforeach
+                    	</tbody>
+                    </table>
                 </div>
                 {{--<div role="tabpanel" class="tab-pane" id="settings">
 

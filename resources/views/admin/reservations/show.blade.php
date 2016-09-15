@@ -110,6 +110,24 @@
                     </div><!-- end panel -->
                 </div><!-- end tab -->
                 <div role="tabpanel" class="tab-pane" id="costs">
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <img class="media-object" style="width:100px; height:100px" src="{{ image($reservation->trip->campaign->avatar->source . "?w=200") }}" alt="{{ $reservation->trip->campaign->name }}">
+                        </a>
+                        <div class="media-body">
+                            <h3 class="media-heading">
+                                {{ $reservation->trip->campaign->name }}
+                                <small>{{ country($reservation->trip->campaign->country_code) }}</small>
+                            </h3>
+                            <h4>
+                                Costs
+
+                            </h4>
+                        </div>
+                    </div>
+                    <hr class="divider">
+                    <admin-reservation-costs id="{{ $reservation->id }}"></admin-reservation-costs>
+
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h5>Costs Breakdown</h5>
@@ -289,6 +307,22 @@
                                                     Amount in fund
                                                     <span class="pull-right">Total: ${{ number_format($reservation->fund->balance, 2) }}</span>
                                                 </h6>
+                        <div class="col-sm-12">
+                            <h4>Fund Transaction</h4>
+                            <hr>
+                        </div>
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        {{ $reservation->fund->name }}
+{{--                                        <span class="pull-right">Ends: {{ carbon($reservation->fund->created_at)->toFormattedDateString() }}</span>--}}
+                                    </div>
+                                    <div class="panel-body">
+                                        {{--<p>{{ $fundraiser->description or 'No Description'}}</p>--}}
+                                        <h6>
+                                            Amount in fund
+                                            <span class="pull-right">Total: ${{ number_format($reservation->fund->balance, 2) }}</span>
+                                        </h6>
 
                                                 <ul class="list-group">
                                                 @foreach($reservation->fund->transactions as $transaction)

@@ -262,51 +262,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                {{--<div class="col-sm-12">
-                                    <h4>Costs</h4>
-                                    <hr>
-                                </div>
-                                @foreach($reservation->costs as $cost)
-                                <div class="col-sm-12 col-md-6">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            {{ $cost->name }}
-                                            <span class="pull-right">Ends: {{ carbon($cost->expires_at)->toFormattedDateString() }}</span>
-                                        </div>
-                                        <div class="panel-body">
-                                            --}}{{--{{ $cost }}--}}{{--
-                                            {{ $cost->description or 'No Description'}}
-                                            <ul class="list-group">
-                                                @foreach($cost->payments as $payment)
-                                                    <li class="list-group-item">{{ $payment->amount_owed }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                        <div class="panel-footer">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach--}}
-
-
-                                    <div class="col-sm-12">
-                                    <h4>Fund Transaction</h4>
-                                    <hr>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                {{ $reservation->fund->name }}
-                                                {{-- <span class="pull-right">Ends: {{ carbon($reservation->fund->created_at)->toFormattedDateString() }}</span>--}}
-                                            </div>
-                                            <div class="panel-body">
-                                                {{--<p>{{ $fundraiser->description or 'No Description'}}</p>--}}
-                                                <h6>
-                                                    Amount in fund
-                                                    <span class="pull-right">Total: ${{ number_format($reservation->fund->balance, 2) }}</span>
-                                                </h6>
                         <div class="col-sm-12">
                             <h4>Fund Transaction</h4>
                             <hr>
@@ -349,6 +304,7 @@
                     </div><!-- end panel -->
                 </div><!-- end tab -->
                 <div role="tabpanel" class="tab-pane" id="dues">
+
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h5>Dues</h5>
@@ -356,18 +312,28 @@
                         <div class="panel-body">
                             <table class="table table-hover">
                                 <thead>
-                                    <tr>
-                                        <th>Outstanding Balance</th>
-                                        <th>Grace Period</th>
-                                        <th>Due</th>
-                                    </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Outstanding Balance</th>
+                                    <th>Grace Period</th>
+                                    <th>Due</th>
+                                </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($reservation->dues as $due)
                                     <tr>
+                                        <td>
+                                            @if ($due->getStatus() == 'late')
+                                                <span class="badge badge-danger">Past Due</span>
+                                            @elseif($due->getStatus() == 'paid')
+                                                <span class="badge badge-success">Paid</span>
+                                            @else
+                                                <span class="badge badge-info">Due in {{ $due->due_at->diffForHumans(null, true) }}</span>
+                                            @endif
+                                        </td>
                                         <td>${{ $due->outstanding_balance }}</td>
                                         <td>{{ $due->grace_period }}</td>
-                                        <td>{{ carbon($due->due_at)->toFormattedDateString() }}</td>
+                                        <td>{{ $due->due_at->toFormattedDateString() }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -375,9 +341,11 @@
                         </div><!-- end panel-body -->
                     </div><!-- end panel -->
                 </div><!-- end tab -->
-                {{--<div role="tabpanel" class="tab-pane" id="settings"></div>--}}
+
+                </div>
             </div>
         </div>
     </div>
 </div>
+</div></div>
 @endsection

@@ -59,11 +59,6 @@ class ReservationsController extends Controller
                 }
             }
         }
-        // Calculate total raised
-        $totalAmountRaised = 0;
-        foreach($reservation->fundraisers as $fundraiser) {
-            $totalAmountRaised = $fundraiser->raised() / 100;
-        }
 
 
         return view('admin.reservations.show', compact('reservation', 'totalAmountDue', 'totalAmountRaised'));

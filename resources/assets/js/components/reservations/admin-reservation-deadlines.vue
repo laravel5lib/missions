@@ -225,11 +225,9 @@
             getDeadlines(search, loading){
                 loading(true);
 
-            }
-        },
-        ready(){
-            this.resource.get().then(function (response) {
-                this.reservation = response.data.data;
+            },
+            setReservationData(reservation){
+                this.reservation = reservation;
                 this.preppedReservation = {
                     given_names: this.reservation.given_names,
                     surname: this.reservation.surname,
@@ -242,7 +240,14 @@
                 };
 
                 // get available deadlines intersect with current
-                this.availableDeadlines = _.intersection(response.data.data.trip.data.deadlines.data, response.data.data.deadlines.data);
+                this.availableDeadlines = _.filter(reservation.trip.data.deadlines.data, function (cost) {
+                    return !_.findWhere(reservation.deadlines.data, {cost_id: cost.id})
+                });
+            }
+        },
+        ready(){
+            this.resource.get().then(function (response) {
+                this.setReservationData(response.data.data)
             });
 
         }

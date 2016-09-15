@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\Jobs\Reservations\SyncPaymentsDue;
+use App\Models\v1\User;
 use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;

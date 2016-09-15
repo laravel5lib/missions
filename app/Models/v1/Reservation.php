@@ -112,7 +112,7 @@ class Reservation extends Model
     public function dues()
     {
         return $this->morphMany(Due::class, 'payable')
-                    ->orderBy('due_at', 'desc');
+                    ->orderBy('due_at', 'asc');
     }
 
     /**

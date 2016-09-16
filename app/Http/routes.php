@@ -299,3 +299,6 @@ Route::get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')->w
 Route::get('/', function () {
     return view('site.index');
 });
+Route::get('/speakers', function () {
+    return view('site.speakers');
+});

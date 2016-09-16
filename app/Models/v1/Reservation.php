@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\Jobs\Reservations\SyncPaymentsDue;
+use App\Models\v1\User;
 use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
@@ -111,7 +112,7 @@ class Reservation extends Model
     public function dues()
     {
         return $this->morphMany(Due::class, 'payable')
-                    ->orderBy('due_at', 'desc');
+                    ->orderBy('due_at', 'asc');
     }
 
     /**

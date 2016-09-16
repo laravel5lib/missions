@@ -3,7 +3,7 @@
         <button class="btn btn-primary btn-xs" @click="add"><span
                 class="fa fa-plus"></span> Add Existing
         </button>
-        <button class="btn btn-primary btn-xs" @click="new"><span
+        <button class="btn btn-primary btn-xs" @click="addNew"><span
                 class="fa fa-plus"></span> Create New
         </button>
 
@@ -12,36 +12,38 @@
             <thead>
             <tr>
                 <th>Name</th>
-                <th>Name</th>
+                <th>Due Date</th>
+                <th>Amount</th>
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
             <tbody v-if="reservation">
-            <tr v-for="deadline in reservation.deadlines.data">
+            <tr v-for="cost in reservation.costs.data">
                 <td>
-                    <i class="fa {{ isPast(deadline.due_at) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}"></i>&nbsp;
-                    {{ deadline.name ? deadline.name : !deadline.cost_name ? deadline.cost_name : deadline.item  + ' Submission' }}
+                    <i class="fa {{ isPast(cost.due_at) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}"></i>&nbsp;
+                    {{ cost.name ? cost.name : !cost.cost_name ? cost.cost_name : cost.item  + ' Submission' }}
                 </td>
-                <td>{{ deadline.due_at| moment 'll' }}</td>
+                <td>{{ cost.due_at| moment 'll' }}</td>
+                <td>{{ cost.amount| currency }}</td>
                 <td>
-                    <a class="btn btn-default btn-xs" @click="edit(deadline)"><i class="fa fa-pencil"></i></a>
-                    <a class="btn btn-danger btn-xs" @click="remove(deadline)"><i class="fa fa-times"></i></a>
+                    <a class="btn btn-default btn-xs" @click="edit(cost)"><i class="fa fa-pencil"></i></a>
+                    <a class="btn btn-danger btn-xs" @click="remove(cost)"><i class="fa fa-times"></i></a>
                 </td>
             </tr>
             </tbody>
         </table>
 
-        <modal title="Add Deadlines" :show.sync="showAddModal" effect="fade" width="800" :callback="addDeadlines">
+        <modal title="Add Costs" :show.sync="showAddModal" effect="fade" width="800" :callback="addCosts">
             <div slot="modal-body" class="modal-body">
-                <validator name="AddDeadline">
+                <validator name="AddCost">
                     <form class="form-horizontal" novalidate>
-                        <div class="form-group" :class="{ 'has-error': checkForError('deadlines') }"><label
-                                class="col-sm-2 control-label">Available Deadlines</label>
+                        <div class="form-group" :class="{ 'has-error': checkForError('costs') }"><label
+                                class="col-sm-2 control-label">Available Costs</label>
                             <div class="col-sm-10">
-                                <v-select class="form-control" id="user" multiple :value.sync="selectedDeadlines" :options="availableDeadlines"
+                                <v-select class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
                                           label="name"></v-select>
-                                <select hidden="" v-model="user_id" v-validate:deadlines="{ required: true }" multiple>
-                                    <option :value="deadline.id" v-for="deadline in deadlines">{{deadline.name}}</option>
+                                <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
+                                    <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
                                 </select></div>
                         </div>
                     </form>
@@ -49,16 +51,16 @@
             </div>
         </modal>
 
-        <modal title="Edit Deadline" :show.sync="showEditModal" effect="fade" width="800" :callback="update(editedDeadline)">
+        <modal title="Edit Cost" :show.sync="showEditModal" effect="fade" width="800" :callback="update(editedCost)">
             <div slot="modal-body" class="modal-body">
-                <validator name="EditDeadline">
+                <validator name="EditCost">
                     <form class="form" novalidate>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForEditDeadlineError('grace') }">
+                                <div class="form-group" :class="{'has-error': checkForEditCostError('grace') }">
                                     <label for="grace_period">Grace Period</label>
-                                    <div class="input-group input-group-sm" :class="{'has-error': checkForEditDeadlineError('grace') }">
-                                        <input id="grace_period" type="number" class="form-control" number v-model="editedDeadline.grace_period"
+                                    <div class="input-group input-group-sm" :class="{'has-error': checkForEditCostError('grace') }">
+                                        <input id="grace_period" type="number" class="form-control" number v-model="editedCost.grace_period"
                                                v-validate:grace="{required: true, min:0}">
                                         <span class="input-group-addon">Days</span>
                                     </div>
@@ -70,33 +72,33 @@
             </div>
         </modal>
 
-        <modal title="New Deadline" :show.sync="showNewModal" effect="fade" width="800" :callback="update(editedDeadline)">
+        <modal title="New Cost" :show.sync="showNewModal" effect="fade" width="800" :callback="update(editedCost)">
             <div slot="modal-body" class="modal-body">
-                <validator name="NewDeadline">
+                <validator name="NewCost">
                     <form class="form" novalidate>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForNewDeadlineError('name')}">
+                                <div class="form-group" :class="{'has-error': checkForNewCostError('name')}">
                                     <label for="name">Name</label>
-                                    <input type="text" id="name" v-model="newDeadline.name" v-validate:name="{require:true}" class="form-control input-sm">
+                                    <input type="text" id="name" v-model="newCost.name" v-validate:name="{require:true}" class="form-control input-sm">
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForNewDeadlineError('grace') }">
+                                        <div class="form-group" :class="{'has-error': checkForNewCostError('grace') }">
                                             <label for="grace_period">Grace Period</label>
-                                            <div class="input-group input-group-sm" :class="{'has-error': checkForNewDeadlineError('grace') }">
-                                                <input id="grace_period" type="number" class="form-control" number v-model="newDeadline.grace_period"
+                                            <div class="input-group input-group-sm" :class="{'has-error': checkForNewCostError('grace') }">
+                                                <input id="grace_period" type="number" class="form-control" number v-model="newCost.grace_period"
                                                        v-validate:grace="{required: true, min:0}">
                                                 <span class="input-group-addon">Days</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForNewDeadlineError('due')}">
+                                        <div class="form-group" :class="{'has-error': checkForNewCostError('due')}">
                                             <label for="due_at">Due</label>
                                             <input type="date" id="due_at" class="form-control input-sm"
-                                                   v-model="newDeadline.due_at" v-validate:due="{required: true}">
+                                                   v-model="newCost.due_at" v-validate:due="{required: true}">
                                         </div>
 
                                     </div>
@@ -105,7 +107,7 @@
                                 <br>
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" v-model="newDeadline.enforced">
+                                        <input type="checkbox" v-model="newCost.enforced">
                                         Enforced?
                                     </label>
                                 </div>
@@ -122,29 +124,29 @@
     import vSelect from 'vue-select';
     import VueStrap from 'vue-strap/dist/vue-strap.min'
     export default{
-        name: 'admin-reservation-deadlines',
+        name: 'admin-reservation-costs',
         props: ['id'],
         components:{ vSelect, 'modal': VueStrap.modal},
         data(){
             return{
                 reservation: null,
-                reservationsDeadlines:[],
-                deadlines:[],
-                selectedDeadlines: [],
-                availableDeadlines: [],
-                editedDeadline: {
+                reservationsCosts:[],
+                costs:[],
+                selectedCosts: [],
+                availableCosts: [],
+                editedCost: {
                     name: '',
                     date: null,
                     grace_period: 0,
                     enforced: false,
                 },
-                newDeadline: {
+                newCost: {
                     name: '',
                     date: null,
                     grace_period: 0,
                     enforced: false,
                 },
-                resource: this.$resource('reservations/' + this.id, { include: 'deadlines,trip.deadlines' }),
+                resource: this.$resource('reservations/' + this.id, { include: 'costs,trip.costs' }),
                 showAddModal: false,
                 showNewModal: false,
                 showEditModal: false,
@@ -157,18 +159,18 @@
         methods: {
             checkForError(field) {
                 // if user clicked submit button while the field is invalid trigger error styles
-                return this.$AddDeadline[field].invalid && this.attemptSubmit;
+                return this.$AddCost[field].invalid && this.attemptSubmit;
             },
-            checkForEditDeadlineError(field) {
+            checkForEditCostError(field) {
                 // if user clicked submit button while the field is invalid trigger error styles
-                return this.$EditDeadline[field].invalid && this.attemptSubmit;
+                return this.$EditCost[field].invalid && this.attemptSubmit;
             },
-            checkForNewDeadlineError(field) {
+            checkForNewCostError(field) {
                 // if user clicked submit button while the field is invalid trigger error styles
-                return this.$NewDeadline[field].invalid && this.attemptSubmit;
+                return this.$NewCost[field].invalid && this.attemptSubmit;
             },
-            resetDeadline(){
-                this.newDeadline = {
+            resetCost(){
+                this.newCost = {
                     item: '',
                     item_type: '',
                     due_at: null,
@@ -183,53 +185,66 @@
                 this.attemptSubmit = false;
                 this.showAddModal = true;
             },
-            new(){
+            addNew(){
                 this.attemptSubmit = false;
                 this.showNewModal = true;
 
             },
-            edit(deadline){
-                this.editedDeadline = deadline;
+            edit(cost){
+                this.editedCost = cost;
                 this.attemptSubmit = false;
                 this.showEditModal = true;
             },
-            update(deadline){
-//                this.resource.delete()
+            update(cost){
+            //    this.resource.delete()
             },
-            remove(deadline){
+            remove(cost){
                 var reservation = this.preppedReservation;
-                reservation.deadlines = _.reject(this.reservation.deadlines.data, function (dl) {
-                    return dl.id === deadline.id
+                reservation.costs = [];
+                _.each(this.reservation.costs.data, function (cs) {
+                    if (cs.cost_id !== cost.cost_id) {
+                        reservation.costs.push({ id: cs.cost_id/*, locked: cs.locked*/})
+                    }
+                });
+                console.log(reservation.costs);
+
+                return this.doUpdate(reservation);
+            },
+            addCosts(){
+                // prep current costs
+                var currentCostIds = [];
+                _.each(this.costs, function (cost) {
+                    currentCostIds.push({ id: cost.id })
                 });
 
-                return this.doUpdate(reservation);
-            },
-            addDeadlines(){
-                var currentDeadlineIds = _.isArray(this.deadlines) ? _.pluck(this.deadlines, 'id') : [];
-                var selectedDeadlineIds = _.pluck(this.selectedDeadlines, 'id') || [];
-                var newDeadlines = _.union(currentDeadlineIds, selectedDeadlineIds);
-                newDeadlines = _.uniq(newDeadlines);
+                // prep added costs
+                var selectedCostIds = [];
+                _.each(this.selectedCosts, function (cost) {
+                    selectedCostIds.push({ id: cost.id })
+                });
+
+                // merge arrays
+                var newCosts = _.union(currentCostIds, selectedCostIds);
+                // filter possible duplicates
+                newCosts = _.uniq(newCosts);
 
                 var reservation = this.preppedReservation;
-                reservation.deadlines = newDeadlines;
+                reservation.costs = newCosts;
 
                 return this.doUpdate(reservation);
+            },
+            getCosts(search, loading){
+                loading(true);
+
             },
             doUpdate(reservation){
                 return this.resource.update(reservation).then(function (response) {
-                    debugger;
-                    // console.log(response);
-                    this.selectedDeadlines = [];
+                    this.setReservationData(response.data.data);
+                    this.selectedCosts = [];
                 });
             },
-            getDeadlines(search, loading){
-                loading(true);
-
-            }
-        },
-        ready(){
-            this.resource.get().then(function (response) {
-                this.reservation = response.data.data;
+            setReservationData(reservation){
+                this.reservation = reservation;
                 this.preppedReservation = {
                     given_names: this.reservation.given_names,
                     surname: this.reservation.surname,
@@ -241,8 +256,16 @@
                     trip_id: this.reservation.trip_id,
                 };
 
-                // get available deadlines intersect with current
-                this.availableDeadlines = _.intersection(response.data.data.trip.data.deadlines.data, response.data.data.deadlines.data);
+                // get available costs intersect with current
+                this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
+                    return !_.findWhere(reservation.costs.data, {cost_id: cost.id})
+                });
+                console.log(this.availableCosts);
+            }
+        },
+        ready(){
+            this.resource.get().then(function (response) {
+                this.setReservationData(response.data.data)
             });
 
         }

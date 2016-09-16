@@ -288,7 +288,12 @@ Route::get('{type}/{slug?}/donate', function ($type, $slug) {
 Route::get('/donate', function () {
     return view('site.donate');
 });
-
+Route::get('/speakers', function () {
+    return view('site.speakers');
+});
+Route::get('/water', function () {
+    return view('site.water');
+});
 
 Route::get('/{slug}', function ($slug) {
     return $slug;
@@ -298,7 +303,4 @@ Route::get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')->w
 
 Route::get('/', function () {
     return view('site.index');
-});
-Route::get('/speakers', function () {
-    return view('site.speakers');
 });

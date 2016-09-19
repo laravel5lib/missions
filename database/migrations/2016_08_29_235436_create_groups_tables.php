@@ -29,6 +29,7 @@ class CreateGroupsTables extends Migration
             $table->string('phone_one')->nullable();
             $table->string('phone_two')->nullable();
             $table->string('email')->nullable();
+            $table->string('status');
             $table->string('stripe_id')->nullable();
             $table->string('card_brand')->nullable();
             $table->string('card_last_four')->nullable();

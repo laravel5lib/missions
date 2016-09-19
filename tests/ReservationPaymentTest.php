@@ -39,7 +39,7 @@ class ReservationPaymentTest extends TestCase
     {
         $reservation = $this->makeReservation();
 
-        $due = $reservation->dues()->withBalance()->sortRecent()->first();
+        $due = $reservation->dues()->withBalance()->first();
         $old_balance = $due->outstanding_balance;
 
         $this->makeDonation([

@@ -13,7 +13,8 @@ class GroupTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'trips', 'managers', 'facilitators', 'fundraisers', 'uploads', 'social'
+        'trips', 'managers', 'facilitators', 'fundraisers',
+        'uploads', 'social', 'notes'
     ];
 
     /**
@@ -28,6 +29,7 @@ class GroupTransformer extends TransformerAbstract
 
         return [
             'id'           => $group->id,
+            'status'       => $group->status,
             'name'         => $group->name,
             'type'         => $group->type,
             'timezone'     => $group->timezone,
@@ -129,4 +131,16 @@ class GroupTransformer extends TransformerAbstract
         return $this->collection($uploads, new UploadTransformer);
     }
 
+    /**
+     * Include most recent notes.
+     *
+     * @param Group $group
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeNotes(Group $group)
+    {
+        $notes = $group->notes()->latest()->limit(3)->get();
+
+        return $this->collection($notes, new NoteTransformer);
+    }
 }

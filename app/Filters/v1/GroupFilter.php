@@ -20,10 +20,7 @@ class GroupFilter extends ModelFilter
      */
     public function setup()
     {
-//        if( ! app(Auth::class)->user() or ! app(Auth::class)->user()->isAdmin())
-//        {
-//            $this->onlyPublicGroups();
-//        }
+        if ( ! $this->input('pending')) $this->approved();
     }
 
 
@@ -137,6 +134,26 @@ class GroupFilter extends ModelFilter
     public function url($url)
     {
         return $this->where('url', $url);
+    }
+
+    /**
+     * Find approved groups.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function approved()
+    {
+        return $this->orWhere('status', 'approved');
+    }
+
+    /**
+     * Find pending groups.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function pending()
+    {
+        return $this->orWhere('status', 'pending');
     }
 
 }

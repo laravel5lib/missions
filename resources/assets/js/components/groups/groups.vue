@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div class="content-page-header">
       <img class="img-responsive" src="images/groups/groups-header.jpg" alt="">
       <div class="c-page-header-text">
@@ -145,7 +145,7 @@
             <h4>Groups Partnered With Us</h4>
         </div>
         <div class="col-xs-6 text-right">
-            <a v-if="groups.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
+            <!--<a v-if="groups.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>-->
         </div>
     </div>
     <div class="container">
@@ -158,7 +158,7 @@
             </div><!-- /input-group -->
         </div>
         <div class="col-xs-6 text-right">
-            <!--<a v-if="fundraisers.length > 6 && fundraisersLimit == 6" @click="seeAll" class="btn btn-primary btn-sm">See All</a>-->
+            <!--<a v-if="groups.length > 8 && groups == 8" @click="seeAll" class="btn btn-primary btn-sm">See All</a>-->
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
@@ -312,32 +312,42 @@
 </template>
 
 <script>
+    import vSelect from 'vue-select';
     export default{
 		name: 'groups',
+        components: { vSelect },
         data(){
             return{
                 groups:[],
-                groupsLimit: 3,
+                groupsLimit: 8,
                 resource: this.$resource('groups?isPublic=yes'),
 
                 // pagination vars
                 search: '',
                 page: 1,
-                per_page: 6,
+                per_page: 8,
                 pagination: {},
             }
         },
         watch: {
+            'page': function (val, oldVal) {
+                this.pagination.current_page = val;
+                this.searchGroups();
+            },
             'search': function (val) {
                 this.searchGroups();
             }
         },
         methods:{
-            seeAll(){
-                this.groupsLimit = this.groups.length
+            checkForError(field){
+                // if user clicked submit button while the field is invalid trigger error styles 
+                return this.$CreateGroup[field].invalid && this.attemptSubmit;
             },
+            /*seeAll(){
+					this.groupsLimit = this.groups.length
+				},*/
             searchGroups(){
-                this.resource.query({}, {
+                this.resource.query(null, {
                     search: this.search,
                     page: this.page,
                     per_page: this.per_page

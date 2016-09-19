@@ -190,6 +190,16 @@ class Group extends Model
     }
 
     /**
+     * Get the group's notes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
+
+    /**
      * Get public groups.
      *
      * @param $query

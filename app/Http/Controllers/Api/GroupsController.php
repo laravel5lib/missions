@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Transformers\v1\NoteTransformer;
 use App\Models\v1\Group;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\GroupRequest;
@@ -23,7 +24,7 @@ class GroupsController extends Controller
      */
     public function __construct(Group $group)
     {
-         $this->middleware('api.auth', ['except' => ['index','show']]);
+         $this->middleware('api.auth', ['only' => ['store','update','destroy']]);
         // $this->middleware('jwt.refresh', ['except' => ['index','show']]);
         $this->group = $group;
     }
@@ -53,6 +54,22 @@ class GroupsController extends Controller
         $group = $this->group->findOrFail($id);
 
         return $this->response->item($group, new GroupTransformer);
+    }
+
+    /**
+     * Get all the group's notes.
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function notes($id, Request $request)
+    {
+        $group = $this->group->findOrFail($id);
+
+        $notes = $group->notes()->paginate($request->get('per_page', 25));
+
+        return $this->response->paginator($notes, new NoteTransformer);
     }
 
     /**

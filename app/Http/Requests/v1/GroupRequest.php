@@ -31,7 +31,7 @@ class GroupRequest extends FormRequest {
             'url'          => 'required_if:public,true',
             'type'         => 'required|in:church,business,nonprofit,youth,other',
             'timezone'     => 'required|timezone',
-            'country_code' => 'required|in:' . Country::codes()
+            'country_code' => 'required|in:' . Country::codes(),
         ];
 
         if ($this->isMethod('put'))
@@ -41,7 +41,8 @@ class GroupRequest extends FormRequest {
                 'url'          => 'sometimes|required_if:public,true',
                 'type'         => 'sometimes|required|in:church,business,nonprofit,youth,other',
                 'timezone'     => 'sometimes|required|timezone',
-                'country_code' => 'sometimes|required|in:' . Country::codes()
+                'country_code' => 'sometimes|required|in:' . Country::codes(),
+                'status'       => 'required|in:pending,approved'
             ];
         }
 
@@ -59,7 +60,8 @@ class GroupRequest extends FormRequest {
             'managers'         => 'array',
             'tags'             => 'array',
             'avatar_upload_id' => 'string|exists:uploads',
-            'banner_upload_id' => 'string|exists:uploads'
+            'banner_upload_id' => 'string|exists:uploads',
+            'status'           => 'in:pending,approved'
         ];
 
         return $rules = $required + $optional;

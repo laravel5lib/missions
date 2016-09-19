@@ -33,18 +33,17 @@
 				<li><a href="http://1nation1day.com/dominican">2015 Dominican</a></li>
 				<li><a href="http://1nation1day.com/honduras">2013 Honduras</a></li>
 				<li class="navlabel">Causes</li>
-				<li><a href="#">Clean Water</a></li>
+				<li><a href="/water">Clean Water</a></li>
 				<li><a href="#">Rescue Orphans</a></li>
-				<li><a href="#">Homes</a></li>
-				<li><a href="#">Trafficking Rescue</a></li>
-				<li><a href="#">Leadership Centers</a></li>
-				<li><a href="#">Sponsor A Project</a></li>
+				<!--<li><a href="#">Homes</a></li>-->
+				<!--<li><a href="#">Trafficking Rescue</a></li>-->
+				<!--<li><a href="#">Leadership Centers</a></li>-->
+				<!--<li><a href="#">Sponsor A Project</a></li>-->
 				<li class="navlabel">Train</li>
 				<li><a href="index.html">Missions.Me College</a></li>
-				<li><a href="index.html">Speakers</a></li>
+				<li><a href="/speakers">Speakers</a></li>
 				<li class="navlabel">About</li>
-				<li class="active"><a href="#">Missions.Me</a></li>
-				<li><a href="#">Accountability</a></li>
+				<li><a href="#">Missions.Me</a></li>
 				<li><a href="#">Contact Us</a></li>
 			</ul>
 		</aside>

@@ -102,6 +102,7 @@
                                     CV CODE</label>
                                 <input type="text" class="form-control input" id="cvCode" maxlength="3" v-model="cardCVC"
                                        placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 3 }"/>
+                                <span class="help-block" v-if="checkForError('code') || validationErrors.cardCVC">{{stripeError ? stripeError.message : 'Invalid CVC number'}}</span>
                             </div>
                         </div>
                     </div>
@@ -394,9 +395,9 @@
             },
             createToken() {
                 this.stripeDeferred = $.Deferred();
-
                 if (this.$Donation.invalid) {
-                    this.attemptedCreateToken = true;
+                    this.attemptSubmit = !0;
+                    this.attemptedCreateToken = !0;
                     this.stripeDeferred.reject(false);
                 } else {
                     // reset errors
@@ -534,6 +535,7 @@
                                 this.attemptSubmit = !1;
                                 break;
                             case 2:
+                                this.attemptedCreateToken = !0;
                                 if (this.$Donation.invalid) {
                                     break;
                                 }

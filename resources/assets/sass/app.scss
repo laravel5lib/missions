@@ -52,6 +52,18 @@ $fa-font-path: "~font-awesome/fonts/";*/
 @import "components/tabs";
 
 /*
+ * Google Translate
+ */
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+/*
  * Misc.
  */
 

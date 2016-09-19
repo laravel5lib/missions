@@ -28,6 +28,7 @@ class GroupTransformer extends TransformerAbstract
 
         return [
             'id'           => $group->id,
+            'status'       => $group->status,
             'name'         => $group->name,
             'type'         => $group->type,
             'timezone'     => $group->timezone,

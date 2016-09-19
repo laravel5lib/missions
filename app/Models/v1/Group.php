@@ -30,7 +30,8 @@ class Group extends Model
         'address_one', 'address_two',
         'city', 'state', 'zip', 'country', 'phone_one',
         'phone_two', 'email', 'description',
-        'stripe_id', 'card_brand', 'card_last_four'
+        'stripe_id', 'card_brand', 'card_last_four',
+        'status'
     ];
 
     /**
@@ -56,6 +57,23 @@ class Group extends Model
      * @var array
      */
     protected $casts = [];
+
+    /**
+     * Set default values.
+     *
+     * @var array
+     */
+    protected $attributes = ['status' => 'approved'];
+
+    /**
+     * Set the status attribute.
+     *
+     * @param $value
+     */
+    public function setStatusAttribute($value)
+    {
+        $this->attributes['status'] = strtolower(trim($value));
+    }
 
     /**
      * Get all the group's trips.

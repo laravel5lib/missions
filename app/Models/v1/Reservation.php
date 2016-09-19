@@ -261,6 +261,16 @@ class Reservation extends Model
     }
 
     /**
+     * Get the total of what was raised.
+     *
+     * @return float
+     */
+    public function getTotalRaised()
+    {
+        return $this->fund->donations()->sum('amount');
+    }
+
+    /**
      * Get the percentage of what was raised.
      *
      * @return float

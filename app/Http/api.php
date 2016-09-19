@@ -36,6 +36,8 @@ $api->version('v1', [
     $api->resource('users', 'UsersController');
     $api->resource('users.contacts', 'ContactsController');
     $api->resource('groups', 'GroupsController');
+    $api->get('groups/{id}/notes', 'GroupsController@notes');
+    $api->post('groups/submit', 'GroupsController@submit');
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
     $api->post('trips/{id}/register', 'TripsController@register');

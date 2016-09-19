@@ -61,7 +61,7 @@ class ReservationsController extends Controller
         }
 
 
-        return view('admin.reservations.show', compact('reservation', 'totalAmountDue', 'totalAmountRaised'));
+        return view('admin.reservations.show', compact('reservation', 'totalAmountDue'));
     }
 
     /**

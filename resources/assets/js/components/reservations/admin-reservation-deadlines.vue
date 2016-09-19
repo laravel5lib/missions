@@ -1,10 +1,10 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <button class="btn btn-primary btn-xs" @click="add"><span
-                class="fa fa-plus"></span> Add Existing
+        <button class="btn btn-primary btn-xs" @click="add">
+            <span class="fa fa-plus"></span> Add Existing
         </button>
-        <button class="btn btn-primary btn-xs" @click="new"><span
-                class="fa fa-plus"></span> Create New
+        <button class="btn btn-primary btn-xs" @click="new">
+            <span class="fa fa-plus"></span> Create New
         </button>
 
         <hr class="divider sm">
@@ -49,7 +49,7 @@
             </div>
         </modal>
 
-        <modal title="Edit Deadline" :show.sync="showEditModal" effect="fade" width="800" :callback="update(editedDeadline)">
+        <modal title="Edit Deadline" :show.sync="showEditModal" effect="fade" width="800" :callback="update">
             <div slot="modal-body" class="modal-body">
                 <validator name="EditDeadline">
                     <form class="form" novalidate>
@@ -70,7 +70,7 @@
             </div>
         </modal>
 
-        <modal title="New Deadline" :show.sync="showNewModal" effect="fade" width="800" :callback="update(editedDeadline)">
+        <modal title="New Deadline" :show.sync="showNewModal" effect="fade" width="800" :callback="addNew">
             <div slot="modal-body" class="modal-body">
                 <validator name="NewDeadline">
                     <form class="form" novalidate>
@@ -96,7 +96,7 @@
                                         <div class="form-group" :class="{'has-error': checkForNewDeadlineError('due')}">
                                             <label for="due_at">Due</label>
                                             <input type="date" id="due_at" class="form-control input-sm"
-                                                   v-model="newDeadline.due_at" v-validate:due="{required: true}">
+                                                   v-model="newDeadline.date" v-validate:due="{required: true}">
                                         </div>
 
                                     </div>
@@ -193,8 +193,19 @@
                 this.attemptSubmit = false;
                 this.showEditModal = true;
             },
-            update(deadline){
-//                this.resource.delete()
+            update(){
+                // prep current deadlines
+                var currentDeadlineIds = [];
+                _.some(this.reservation.deadlines.data, function (dl) {
+                    if (dl.id === this.editedDeadline.id) {
+                        return dl = this.editedDeadline;
+                    }
+                }.bind(this));
+
+                var reservation = this.preppedReservation;
+                reservation.deadlines = this.reservation.deadlines.data;
+
+                return this.doUpdate(reservation);
             },
             remove(deadline){
                 var reservation = this.preppedReservation;
@@ -205,9 +216,20 @@
                 return this.doUpdate(reservation);
             },
             addDeadlines(){
-                var currentDeadlineIds = _.isArray(this.deadlines) ? _.pluck(this.deadlines, 'id') : [];
-                var selectedDeadlineIds = _.pluck(this.selectedDeadlines, 'id') || [];
+                // prep current deadlines
+                var currentDeadlineIds = [];
+                _.each(this.reservation.deadlines.data, function (dl) {
+                    currentDeadlineIds.push({ id: dl.id, grace_period: dl.grace_period })
+                });
+                // prep added deadlines
+                var selectedDeadlineIds = [];
+                _.each(this.selectedDeadlines, function (dl) {
+                    selectedDeadlineIds.push({ id: dl.id, grace_period: dl.grace_period })
+                });
+
+                // merge arrays
                 var newDeadlines = _.union(currentDeadlineIds, selectedDeadlineIds);
+                // filter possible duplicates
                 newDeadlines = _.uniq(newDeadlines);
 
                 var reservation = this.preppedReservation;
@@ -215,11 +237,37 @@
 
                 return this.doUpdate(reservation);
             },
+            addNew(){
+                // get trip object
+                var trip = this.reservation.trip.data;
+
+                // get only ids of current deadlines so we don't change anything
+                trip.deadlines = [];
+                _.each(this.reservation.trip.data.deadlines.data, function (dl) {
+                    trip.deadlines.push({id: dl.id});
+                });
+                trip.deadlines.push(this.newDeadline);
+                // remove tranformer modified values
+                delete trip.difficulty;
+                delete trip.rep_id;
+
+                this.$http.put('trips/' + trip.id, trip).then(function (response) {
+                    var thisTrip = response.data.data;
+                    this.selectedDeadlines = new Array(this.newDeadline);
+
+                    return this.addDeadlines();
+
+                });
+            },
             doUpdate(reservation){
                 return this.resource.update(reservation).then(function (response) {
-                    debugger;
-                    // console.log(response);
+                    this.setReservationData(response.data.data);
                     this.selectedDeadlines = [];
+
+                    // close modals
+                    this.showAddModal = false;
+                    this.showEditModal = false;
+                    this.showNewModal = false;
                 });
             },
             getDeadlines(search, loading){
@@ -240,8 +288,9 @@
                 };
 
                 // get available deadlines intersect with current
-                this.availableDeadlines = _.filter(reservation.trip.data.deadlines.data, function (cost) {
-                    return !_.findWhere(reservation.deadlines.data, {cost_id: cost.id})
+                this.availableDeadlines = _.filter(reservation.trip.data.deadlines.data, function (dl) {
+                    return !_.findWhere(reservation.deadlines.data, {id: dl.id})
+
                 });
             }
         },

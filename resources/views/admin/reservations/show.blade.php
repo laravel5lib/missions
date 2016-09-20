@@ -171,47 +171,31 @@
                                     @endforeach
                                 @endforeach
 
-                                </tbody>
-                                {{--<tfoot style="border-top: 2px solid #000000">
-                                <tr>
-                                    <th>Total Amount Due</th>
-                                    <th></th>
-                                    <th>${{ number_format($totalAmountDue, 2) }}</th>
-                                </tr>
-                                <tr>
-                                    <th>Total Amount Raised</th>
-                                    <th></th>
-                                    <th>${{ number_format($totalAmountRaised, 2) }}</th>
-                                </tr>
-                                <tr>
-                                    <th>Total Amount Remaining</th>
-                                    <th></th>
-                                    <th>${{ $totalAmountDue - $totalAmountRaised > 0 ? number_format($totalAmountDue - $totalAmountRaised, 2) : number_format(0, 2) }}</th>
-                                </tr>
-                                </tfoot>--}}
-                            </table>
-                        </div>
-                    </div><!-- end panel -->
-                    {{--            {{ $reservation->costs }}--}}
-                </div><!-- end tab -->
-                <div role="tabpanel" class="tab-pane" id="deadlines">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h5>Deadlines</h5>
-                        </div>
-                        <div class="panel-body">
-                            <admin-reservation-deadlines id="{{ $reservation->id }}"></admin-reservation-deadlines>
-                        </div>
-                    </div><!-- end panel -->
-                </div>
-                <div role="tabpanel" class="tab-pane" id="requirements">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h5>Requirements</h5>
-                        </div>
-                        <div class="panel-body">
-                            <ul class="list-group">
-                                @foreach($reservation->requirements as $requirement)
+                                    </tbody>
+
+                                </table>--}}
+                            </div>
+                        </div><!-- end panel -->
+                        {{--            {{ $reservation->costs }}--}}
+                    </div><!-- end tab -->
+                    <div role="tabpanel" class="tab-pane" id="deadlines">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h5>Deadlines</h5>
+                            </div>
+                            <div class="panel-body">
+                                <admin-reservation-deadlines id="{{ $reservation->id }}"></admin-reservation-deadlines>
+                            </div>
+                        </div><!-- end panel -->
+                    </div><!-- end tab -->
+                    <div role="tabpanel" class="tab-pane" id="requirements">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h5>Requirements</h5>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    @foreach($reservation->requirements as $requirement)
 
                                     <h4>
                                         {{ $requirement->item }} <small> Due: {{ carbon($requirement->due_at)->toFormattedDateString() }} <i class="fa fa-calendar"></i></small>
@@ -231,12 +215,12 @@
                                         </reservations-passports-manager>
                                     @endif
 
-                                    @if($requirement->item === 'Visa')
-                                        <reservations-visas-manager
-                                                reservation-id="{{ $reservation->id }}"
-                                                visa-id="{{ $reservation->passport_id }}">
-                                        </reservations-visas-manager>
-                                    @endif
+                                        @if($requirement->item === 'Visa')
+                                            <reservations-visas-manager
+                                                    reservation-id="{{ $reservation->id }}"
+                                                    visa-id="{{ $reservation->passport_id }}">
+                                            </reservations-visas-manager>
+                                        @endif
 
                                     <hr />
                                 @endforeach
@@ -254,11 +238,11 @@
                                 <div class="col-sm-12">
                                     <h4>
                                         Funding Progress
-                                        {{--<span class="pull-right">${{ number_format($totalAmountDue,2) }}</span>--}}
+                                        {{--<span class="pull-right">${{ number_format($$reservation->getTotalOwed(),2) }}</span>--}}
                                     </h4>
                                     <div class="progress">
-                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{--{{ ($totalAmountRaised/$totalAmountDue) * 100 }}--}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{--{{ ($totalAmountRaised/$totalAmountDue) * 100 }}--}}%;">
-                                            {{--{{ number_format(($totalAmountRaised/$totalAmountDue) * 100, 2) }}--}}% of ${{ number_format($totalAmountDue,2) }} Raised
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ $reservation->getPercentRaised() }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{ $reservation->getPercentRaised() }}%;">
+                                            {{ $reservation->getPercentRaised() }}% of ${{ $reservation->getTotalCost() }} Raised
                                         </div>
                                     </div>
                                 </div>
@@ -280,14 +264,20 @@
                                         </h6>
 
                                                 <ul class="list-group">
-                                                @foreach($reservation->fund->transactions as $transaction)
-                                                	<li class="list-group-item">
-                                                        <h4 class="list-group-item-heading">${{ $transaction->amount }} {{ $transaction->type }}</h4>
-                                                        <div class="list-group-item-text">
-                                                            {{ $transaction->comment }}
-                                                        </div>
-                                                    </li>
-                                                @endforeach
+                                                    @foreach($reservation->fund->transactions as $transaction)
+                                                        <li class="list-group-item">
+                                                            <h4 class="list-group-item-heading">
+                                                                ${{ $transaction->amount }} {{ $transaction->type }}</h4>
+                                                            <div class="list-group-item-text">
+                                                                <b>Description:</b><br>
+                                                                {{ $transaction->description }}
+                                                            </div>
+                                                            <div class="list-group-item-text">
+                                                                <b>Comment:</b><br>
+                                                                {{ $transaction->comment }}
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
                                                 </ul>
 
                                                 {{--<donations-list fundraiser-id="{{ $fundraiser->id }}" donations="{{ json_encode($fundraiser->donations) }}"></donations-list>--}}

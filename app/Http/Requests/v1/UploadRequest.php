@@ -38,24 +38,6 @@ class UploadRequest extends FormRequest
             'tags.*' => 'in:Campaign,User,Group,Fundraiser'
         ];
 
-        if($this->method('put'))
-        {
-            $rules = [
-                'file'   => 'sometimes|required_unless:type,video',
-                'path'   => 'sometimes|required_unless:type,video|string',
-                'url'    => 'sometimes|required_if:type,video',
-                'name'   => 'string',
-                'meta'   => 'array',
-                'type'   => 'required|in:other,banner,file,avatar,video',
-                'x_axis' => 'numeric',
-                'y_axis' => 'numeric',
-                'width'  => 'numeric',
-                'height' => 'numeric',
-                'tags'   => 'required|array',
-                'tags.*' => 'in:Campaign,User,Group,Fundraiser'
-            ];
-        }
-
         return $rules;
     }
 }

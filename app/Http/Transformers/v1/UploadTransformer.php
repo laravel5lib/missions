@@ -19,7 +19,7 @@ class UploadTransformer extends TransformerAbstract {
 
         return [
             'id'         => $upload->id,
-            'source'     => image($upload->source),
+            'source'     => $upload->type == 'video' ? $upload->source : image($upload->source),
             'name'       => $upload->name,
             'type'       => $upload->type,
             'meta'       => $upload->meta,

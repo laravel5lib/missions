@@ -69,6 +69,9 @@ class ReleasesController extends Controller
      */
     public function store(ReleaseRequest $request)
     {
+        if ( ! empty($request->get('conditons')))
+            $request->merge(['is_risk' => true]);
+
         $release = $this->release->create($request->all());
 
         return $this->response->item($release, new ReleaseTransformer);

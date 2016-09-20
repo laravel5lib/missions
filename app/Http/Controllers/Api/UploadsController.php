@@ -59,6 +59,16 @@ class UploadsController extends Controller
      */
     public function store(UploadRequest $request)
     {
+        if ($request->get('type') == 'video') {
+            $upload = $this->upload->create([
+                'name' => $request->get('name'),
+                'type' => 'video',
+                'source' => $request->get('url')
+            ]);
+
+            return $this->response->item($upload, new UploadTransformer);
+        }
+
         $stream = $this->process($request);
 
         $source = $this->upload($stream, $request->only('path', 'name', 'file'));

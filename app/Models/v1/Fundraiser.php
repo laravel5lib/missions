@@ -129,4 +129,15 @@ class Fundraiser extends Model
     {
         return $this->belongsTo(Upload::class, 'banner_upload_id');
     }
+
+    /**
+     * Get the fundraiser's uploads.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function uploads()
+    {
+        return $this->morphToMany(Upload::class, 'uploadable');
+    }
+
 }

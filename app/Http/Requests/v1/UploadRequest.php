@@ -24,11 +24,12 @@ class UploadRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'file'   => 'required',
-            'path'   => 'required|string',
+            'file'   => 'required_unless:type,video',
+            'path'   => 'required_unless:type,video|string',
+            'url'    => 'required_if:type,video|url',
             'name'   => 'string',
             'meta'   => 'array',
-            'type'   => 'required|in:other,banner,file,avatar',
+            'type'   => 'required|in:other,banner,file,avatar,video',
             'x_axis' => 'numeric',
             'y_axis' => 'numeric',
             'width'  => 'numeric',
@@ -36,23 +37,6 @@ class UploadRequest extends FormRequest
             'tags'   => 'required|array',
             'tags.*' => 'in:Campaign,User,Group,Fundraiser'
         ];
-
-        if($this->method('put'))
-        {
-            $rules = [
-                'file'   => 'sometimes|required',
-                'path'   => 'sometimes|required|string',
-                'name'   => 'string',
-                'meta'   => 'array',
-                'type'   => 'required|in:other,banner,file,avatar',
-                'x_axis' => 'numeric',
-                'y_axis' => 'numeric',
-                'width'  => 'numeric',
-                'height' => 'numeric',
-                'tags'   => 'required|array',
-                'tags.*' => 'in:Campaign,User,Group,Fundraiser'
-            ];
-        }
 
         return $rules;
     }

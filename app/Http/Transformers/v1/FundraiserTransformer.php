@@ -14,7 +14,7 @@ class FundraiserTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected $availableIncludes = ['sponsor', 'fund'];
+    protected $availableIncludes = ['sponsor', 'fund', 'uploads'];
 
     /**
      * Turn this item object into a generic array
@@ -83,6 +83,19 @@ class FundraiserTransformer extends TransformerAbstract
         $fund = $fundraiser->fund;
 
         return $this->item($fund, new FundTransformer);
+    }
+
+    /**
+     * Include the uploads associated with the fundraiser.
+     *
+     * @param Fundraiser $fundraiser
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeUploads(Fundraiser $fundraiser)
+    {
+        $uploads = $fundraiser->uploads;
+
+        return $this->collection($uploads, new UploadTransformer);
     }
 
 }

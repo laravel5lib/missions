@@ -25,9 +25,9 @@
 	</div>
 	</div><!-- end container -->
 </div><!-- end white-bg -->
-<div class="content-page-header">
+<div class="content-page-bg">
 	<img class="img-responsive" src="images/water/water-crisis-bg.jpg" alt="Water Crisis">
-		<div class="c-page-header-text">
+		<div class="c-page-bg-text">
 			<div class="col-sm-8">
 				<h1 class="text-info dash-trailing dash-trailing-info">The water crisis touches every continent.</h1>
 			</div>
@@ -50,9 +50,9 @@
 	</div>
 	</div>
 </div><!-- end white-bg -->
-<div class="content-page-header">
+<div class="content-page-bg">
 	<img class="img-responsive" src="images/water/well-location-bg.jpg" alt="Well Locations">
-		<div class="c-page-header-text">
+		<div class="c-page-bg-text">
 			<div class="col-sm-6">
 				<h2 class="dash-trailing dash-trailing-info">Project Locations</h2>
 				<p>Well project locations are specifically chosen based upon areas prone to drought. Communities will go weeks and months without fresh water causing them to have to travel even farther than usual to obtain water.</p>
@@ -109,9 +109,9 @@
 	</div>
 	</div>
 </div><!-- end white-bg -->
-<div class="content-page-header">
+<div class="content-page-bg">
 	<img class="img-responsive" src="images/water/guana-well.jpg" alt="Well Locations">
-		<div class="c-page-header-text">
+		<div class="c-page-bg-text">
 			<div class="col-sm-8 col-sm-offset-2 text-center">
 				<h2>A generation will never know what it’s like to drink dirty, filthy, transport-in-a-bucket water ever again.</h2>
 				<p><a class="btn btn-info btn-lg" href="#">Sponsor A Well</a></p>

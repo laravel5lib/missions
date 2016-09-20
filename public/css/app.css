@@ -5916,6 +5916,12 @@ small,
 .small {
   font-size: 86%; }
 
+.text-hero {
+  font-size: 58.5px; }
+  @media (max-width: 767px) {
+    .text-hero {
+      font-size: 30px; } }
+
 mark,
 .mark {
   background-color: transparent;
@@ -7787,27 +7793,27 @@ fieldset[disabled] a.btn {
     background-color: #fff !important; }
 
 .btn-white-hollow {
-  color: #fff;
+  color: #fff !important;
   background-color: transparent;
   border-color: #fff; }
   .btn-white-hollow:focus, .btn-white-hollow.focus {
-    color: #fff;
+    color: #fff !important;
     background-color: transparent;
     border-color: #bfbfbf; }
   .btn-white-hollow:hover {
-    color: #fff;
+    color: #fff !important;
     background-color: transparent;
     border-color: #e0e0e0; }
   .btn-white-hollow:active, .btn-white-hollow.active,
   .open > .btn-white-hollow.dropdown-toggle {
-    color: #fff;
+    color: #fff !important;
     background-color: transparent;
     border-color: #e0e0e0; }
     .btn-white-hollow:active:hover, .btn-white-hollow:active:focus, .btn-white-hollow:active.focus, .btn-white-hollow.active:hover, .btn-white-hollow.active:focus, .btn-white-hollow.active.focus,
     .open > .btn-white-hollow.dropdown-toggle:hover,
     .open > .btn-white-hollow.dropdown-toggle:focus,
     .open > .btn-white-hollow.dropdown-toggle.focus {
-      color: #fff;
+      color: #fff !important;
       background-color: transparent;
       border-color: #bfbfbf; }
   .btn-white-hollow:active, .btn-white-hollow.active,
@@ -7821,7 +7827,7 @@ fieldset[disabled] a.btn {
     border-color: #fff; }
   .btn-white-hollow .badge {
     color: transparent;
-    background-color: #fff; }
+    background-color: #fff !important; }
   .btn-white-hollow:hover, .btn-white-hollow:focus, .btn-white-hollow.focus {
     color: #e6e6e6 !important;
     border-color: #e6e6e6 !important;
@@ -13642,6 +13648,15 @@ $fa-font-path: "~font-awesome/fonts/";*/
     background-color: white; }
 
 /*
+ * Google Translate
+ */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important; }
+
+body {
+  top: 0px !important; }
+
+/*
  * Misc.
  */
 html {
@@ -13717,10 +13732,11 @@ body {
 .content-page-header {
   position: relative;
   overflow: hidden;
-  width: 100%; }
+  width: 100%;
+  max-height: 400px; }
   .content-page-header img {
     display: block;
-    max-width: 100%;
+    width: 100%;
     height: auto;
     line-height: 1; }
   .content-page-header .c-page-header-text {
@@ -13744,6 +13760,41 @@ body {
       @media screen and (max-width: 767px) {
         .content-page-header .c-page-header-text h1 {
           font-size: 1.3em; } }
+
+.content-page-bg {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-height: 600px; }
+  .content-page-bg img {
+    display: block;
+    width: 100%;
+    height: auto;
+    line-height: 1; }
+  .content-page-bg .c-page-bg-text {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    z-index: 10;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #fff;
+    text-shadow: none; }
+    .content-page-bg .c-page-bg-text h1 {
+      font-size: 3.5em; }
+      @media screen and (max-width: 991px) {
+        .content-page-bg .c-page-bg-text h1 {
+          font-size: 2.5em; } }
+      @media screen and (max-width: 767px) {
+        .content-page-bg .c-page-bg-text h1 {
+          font-size: 1.3em; } }
+    @media screen and (max-width: 767px) {
+      .content-page-bg .c-page-bg-text {
+        left: 5%;
+        right: 5%;
+        bottom: 5%;
+        padding-bottom: 0px; } }
 
 .prof-cover-photo {
   height: 400px;
@@ -14061,6 +14112,10 @@ li.av-nav > a {
 .img-lg {
   max-height: 100px;
   max-width: 100px; }
+
+.img-xlg {
+  max-height: 160px;
+  max-width: 160px; }
 
 .av-left {
   margin-right: 10px; }

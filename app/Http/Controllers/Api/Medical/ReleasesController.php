@@ -26,7 +26,7 @@ class ReleasesController extends Controller
     {
         $this->release = $release;
 
-        $this->middleware('api.auth');
+        $this->middleware('api.auth',  ['only' => ['store','update','destroy']]);
 //        $this->middleware('jwt.refresh');
     }
 
@@ -71,9 +71,7 @@ class ReleasesController extends Controller
     {
         $release = $this->release->create($request->all());
 
-        $location = url('/medical/releases/' . $release->id);
-
-        return $this->response->created($location);
+        return $this->response->item($release, new ReleaseTransformer);
     }
 
     /**

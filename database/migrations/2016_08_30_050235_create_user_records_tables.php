@@ -70,6 +70,7 @@ class CreateUserRecordsTables extends Migration
             $table->string('ins_policy_no')->nullable();
             $table->json('conditions')->nullable(); // name, medication
             $table->json('allergies')->nullable(); // name, medication
+            $table->json('emergency_contact')->nullable();
             $table->boolean('is_risk')->default(false);
             $table->timestamps();
         });

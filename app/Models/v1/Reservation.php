@@ -358,10 +358,7 @@ class Reservation extends Model
             $deadlines = collect($deadlines);
 
         $data = $deadlines->keyBy('id')->map(function($item, $key) {
-            // I believe when mapping, $item is an array
-            // $item = $item collect($item); // could work with the commented code below
             return [
-                //'grace_period' => $item->grace_period
                 'grace_period' => $item['grace_period']
             ];
         })->toArray();

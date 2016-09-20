@@ -18,18 +18,41 @@
             </tr>
             </thead>
             <tbody v-if="reservation">
-            <tr v-for="cost in reservation.costs.data">
-                <td>
-                    <i class="fa {{ isPast(cost.due_at) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}"></i>&nbsp;
-                    {{ cost.name ? cost.name : !cost.cost_name ? cost.cost_name : cost.item  + ' Submission' }}
-                </td>
-                <td>{{ cost.due_at| moment 'll' }}</td>
-                <td>{{ cost.amount| currency }}</td>
-                <td>
-                    <a class="btn btn-default btn-xs" @click="edit(cost)"><i class="fa fa-pencil"></i></a>
-                    <a class="btn btn-danger btn-xs" @click="remove(cost)"><i class="fa fa-times"></i></a>
-                </td>
-            </tr>
+            <template v-for="due in reservation.dues.data">
+                <tr>
+                    <td>
+                        <i class="fa {{ isPast(due.due_at) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}"></i>&nbsp;
+                        {{ due.cost }}
+                    </td>
+                    <td>{{ due.due_at| moment 'll' }}</td>
+                    <td>{{ due.amount| currency }}</td>
+                    <td>
+                        <a class="btn btn-default btn-xs" @click="edit(cost)"><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-danger btn-xs" @click="remove(cost)"><i class="fa fa-times"></i></a>
+                    </td>
+                </tr>
+                <!--<tr v-for="payment in cost.payments.data">
+                    <td>
+                        <template v-if="cost.type === 'incremental' && payment.upfront">
+                            <small class="badge badge-success">Paid</small>
+                        </template>
+                        <template v-if="cost.type === 'incremental' && !payment.upfront && (payment.due_next || false)">
+                            <small class="badge badge-danger">Next Defaulting Amount</small>
+                        </template>
+                        <template v-if="cost.type === 'incremental' && dateIsBetween(payment.due_at, 0)">
+                            <small class="badge badge-info">Due this month</small>
+                        </template>
+                        <template v-if="cost.type === 'incremental' && dateIsBetween(payment.due_at, 1)">
+                            <small class="badge badge-warning">Due next month</small>
+                        </template>
+                    </td>
+                    <td>{{ payment.due_at | moment 'll' }}</td>
+                    <td>{{ payment.amount_owed | currency }}</td>
+                    <td></td>
+                </tr>-->
+                <!--<tr></tr>-->
+            </template>
+
             </tbody>
         </table>
 
@@ -37,21 +60,22 @@
             <div slot="modal-body" class="modal-body">
                 <validator name="AddCost">
                     <form class="form-horizontal" novalidate>
-                        <div class="form-group" :class="{ 'has-error': checkForError('costs') }"><label
-                                class="col-sm-2 control-label">Available Costs</label>
+                        <div class="form-group" :class="{ 'has-error': checkForError('costs') }">
+                            <label class="col-sm-2 control-label">Available Costs</label>
                             <div class="col-sm-10">
                                 <v-select class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
                                           label="name"></v-select>
                                 <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
                                     <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
-                                </select></div>
+                                </select>
+                            </div>
                         </div>
                     </form>
                 </validator>
             </div>
         </modal>
 
-        <modal title="Edit Cost" :show.sync="showEditModal" effect="fade" width="800" :callback="update(editedCost)">
+        <modal title="Edit Cost" :show.sync="showEditModal" effect="fade" width="800" :callback="update">
             <div slot="modal-body" class="modal-body">
                 <validator name="EditCost">
                     <form class="form" novalidate>
@@ -72,7 +96,7 @@
             </div>
         </modal>
 
-        <modal title="New Cost" :show.sync="showNewModal" effect="fade" width="800" :callback="update(editedCost)">
+        <modal title="New Cost" :show.sync="showNewModal" effect="fade" width="800" :callback="addNew">
             <div slot="modal-body" class="modal-body">
                 <validator name="NewCost">
                     <form class="form" novalidate>
@@ -146,7 +170,7 @@
                     grace_period: 0,
                     enforced: false,
                 },
-                resource: this.$resource('reservations/' + this.id, { include: 'costs,trip.costs' }),
+                resource: this.$resource('reservations/' + this.id, { include: 'dues,costs.payments,trip.costs.payments' }),
                 showAddModal: false,
                 showNewModal: false,
                 showEditModal: false,
@@ -157,6 +181,12 @@
         },
         computed:{},
         methods: {
+            dateIsBetween(a, b){
+                    var start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
+                var stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
+                console.log(moment(a).isBetween(start, stop));
+                return moment(a).isBetween(start, stop);
+            },
             checkForError(field) {
                 // if user clicked submit button while the field is invalid trigger error styles
                 return this.$AddCost[field].invalid && this.attemptSubmit;
@@ -176,6 +206,7 @@
                     due_at: null,
                     grace_period: 0,
                     enforced: false,
+
                 };
             },
             isPast(date){
@@ -196,7 +227,18 @@
                 this.showEditModal = true;
             },
             update(cost){
-            //    this.resource.delete()
+                // prep current costs
+                var currentDeadlineIds = [];
+                _.some(this.reservation.costs.data, function (cost) {
+                    if (cost.id === this.editedCost.cost_id) {
+                        return cost = this.editedCost;
+                    }
+                }.bind(this));
+
+                var reservation = this.preppedReservation;
+                reservation.costs = this.reservation.costs.data;
+
+                return this.doUpdate(reservation);
             },
             remove(cost){
                 var reservation = this.preppedReservation;
@@ -233,6 +275,29 @@
 
                 return this.doUpdate(reservation);
             },
+            addNew(){
+                // get trip object
+                var trip = this.reservation.trip.data;
+
+                // get only ids of current costs so we don't change anything
+                trip.costs = [];
+                _.each(this.reservation.trip.data.costs.data, function (dl) {
+                    trip.costs.push({id: dl.id});
+                });
+                trip.costs.push(this.newDeadline);
+                // remove tranformer modified values
+                delete trip.difficulty;
+                delete trip.rep_id;
+
+                this.$http.put('trips/' + trip.id, trip).then(function (response) {
+                    var thisTrip = response.data.data;
+                    this.selectedcosts = new Array(this.newDeadline);
+
+                    return this.addcosts();
+
+                });
+            },
+
             getCosts(search, loading){
                 loading(true);
 
@@ -260,7 +325,16 @@
                 this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
                     return !_.findWhere(reservation.costs.data, {cost_id: cost.id})
                 });
-                console.log(this.availableCosts);
+
+                /*_.some(this.availableCosts, function (cost) {
+                    if (cost.type === 'incremental') {
+                        _.some(cost.payments.data, function (payment) {
+                            if (moment(payment.due_at).isAfter()){
+                                return payment.due_next = true;
+                            }
+                        });
+                    }
+                });*/
             }
         },
         ready(){

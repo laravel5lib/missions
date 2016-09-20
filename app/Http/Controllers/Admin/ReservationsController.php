@@ -46,27 +46,7 @@ class ReservationsController extends Controller
 
         $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments']);
 
-        // Calculate total due
-        $totalAmountDue = 0;
-        foreach ($reservation->costs as $cost) {
-            $totalAmountDue += $cost->amount;
-            if($cost->type === 'incremental') {
-                foreach ($cost->payments as $payment) {
-                    if($payment->due_at->gt(now())){
-                        $payment->due_next = true;
-                        break;
-                    }
-                }
-            }
-        }
-        // Calculate total raised
-        $totalAmountRaised = 0;
-        foreach($reservation->fundraisers as $fundraiser) {
-            $totalAmountRaised = $fundraiser->raised() / 100;
-        }
-
-
-        return view('admin.reservations.show', compact('reservation', 'totalAmountDue', 'totalAmountRaised'));
+        return view('admin.reservations.show', compact('reservation'));
     }
 
     /**

@@ -103,7 +103,7 @@ a.btn {
 
 // Make a button that has a hollow background and border only
 .btn-white-hollow {
-  @include button-variant(#fff, transparent, #fff);
+  @include button-variant(#fff !important, transparent, #fff);
   &:hover,
   &:focus,
   &.focus {

@@ -300,6 +300,9 @@ Route::get('/orphans', function () {
 Route::get('/college', function () {
     return view('site.college');
 });
+Route::get('/college-financial', function () {
+    return view('site.college-financial');
+});
 
 Route::get('/{slug}', function ($slug) {
     return $slug;

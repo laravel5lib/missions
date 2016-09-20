@@ -26,7 +26,7 @@ class UploadRequest extends FormRequest
         $rules = [
             'file'   => 'required_unless:type,video',
             'path'   => 'required_unless:type,video|string',
-            'url'    => 'required_if:type,video',
+            'url'    => 'required_if:type,video|url',
             'name'   => 'string',
             'meta'   => 'array',
             'type'   => 'required|in:other,banner,file,avatar,video',

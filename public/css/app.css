@@ -13717,10 +13717,11 @@ body {
 .content-page-header {
   position: relative;
   overflow: hidden;
-  width: 100%; }
+  width: 100%;
+  max-height: 400px; }
   .content-page-header img {
     display: block;
-    max-width: 100%;
+    width: 100%;
     height: auto;
     line-height: 1; }
   .content-page-header .c-page-header-text {
@@ -13744,6 +13745,41 @@ body {
       @media screen and (max-width: 767px) {
         .content-page-header .c-page-header-text h1 {
           font-size: 1.3em; } }
+
+.content-page-bg {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-height: 600px; }
+  .content-page-bg img {
+    display: block;
+    width: 100%;
+    height: auto;
+    line-height: 1; }
+  .content-page-bg .c-page-bg-text {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    z-index: 10;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #fff;
+    text-shadow: none; }
+    .content-page-bg .c-page-bg-text h1 {
+      font-size: 3.5em; }
+      @media screen and (max-width: 991px) {
+        .content-page-bg .c-page-bg-text h1 {
+          font-size: 2.5em; } }
+      @media screen and (max-width: 767px) {
+        .content-page-bg .c-page-bg-text h1 {
+          font-size: 1.3em; } }
+    @media screen and (max-width: 767px) {
+      .content-page-bg .c-page-bg-text {
+        left: 5%;
+        right: 5%;
+        bottom: 5%;
+        padding-bottom: 0px; } }
 
 .prof-cover-photo {
   height: 400px;
@@ -14061,6 +14097,10 @@ li.av-nav > a {
 .img-lg {
   max-height: 100px;
   max-width: 100px; }
+
+.img-xlg {
+  max-height: 160px;
+  max-width: 160px; }
 
 .av-left {
   margin-right: 10px; }

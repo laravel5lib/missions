@@ -60,14 +60,7 @@ class UploadsController extends Controller
     public function store(UploadRequest $request)
     {
         if ($request->get('type') == 'video') {
-            $upload = $this->upload->create([
-                'name' => $request->get('name'),
-                'type' => 'video',
-                'source' => $request->get('url'),
-                'meta' => [
-                    'format' => $this->getVideoFormat($request->get('url'))
-                ]
-            ]);
+            $upload = $this->saveVideo($request);
 
             return $this->response->item($upload, new UploadTransformer);
         }
@@ -253,5 +246,23 @@ class UploadsController extends Controller
         }
 
         return 'other';
+    }
+
+    /**
+     * Save Video.
+     *
+     * @param $request
+     * @return Upload
+     */
+    private function saveVideo($request)
+    {
+        return $this->upload->create([
+            'name' => $request->get('name'),
+            'type' => 'video',
+            'source' => $request->get('url'),
+            'meta' => [
+                'format' => $this->getVideoFormat($request->get('url'))
+            ]
+        ]);
     }
 }

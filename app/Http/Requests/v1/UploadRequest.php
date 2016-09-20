@@ -24,11 +24,12 @@ class UploadRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'file'   => 'required',
-            'path'   => 'required|string',
+            'file'   => 'required_unless:type,video',
+            'path'   => 'required_unless:type,video|string',
+            'url'    => 'required_if:type,video',
             'name'   => 'string',
             'meta'   => 'array',
-            'type'   => 'required|in:other,banner,file,avatar',
+            'type'   => 'required|in:other,banner,file,avatar,video',
             'x_axis' => 'numeric',
             'y_axis' => 'numeric',
             'width'  => 'numeric',
@@ -40,11 +41,12 @@ class UploadRequest extends FormRequest
         if($this->method('put'))
         {
             $rules = [
-                'file'   => 'sometimes|required',
-                'path'   => 'sometimes|required|string',
+                'file'   => 'sometimes|required_unless:type,video',
+                'path'   => 'sometimes|required_unless:type,video|string',
+                'url'    => 'sometimes|required_if:type,video',
                 'name'   => 'string',
                 'meta'   => 'array',
-                'type'   => 'required|in:other,banner,file,avatar',
+                'type'   => 'required|in:other,banner,file,avatar,video',
                 'x_axis' => 'numeric',
                 'y_axis' => 'numeric',
                 'width'  => 'numeric',

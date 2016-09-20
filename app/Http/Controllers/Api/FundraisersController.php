@@ -26,7 +26,7 @@ class FundraisersController extends Controller
     {
         $this->fundraiser = $fundraiser;
 
-        $this->middleware('api.auth', ['only' => ['store','update','destroy']]);
+//        $this->middleware('api.auth', ['only' => ['store','update','destroy']]);
     }
 
     /**
@@ -106,13 +106,13 @@ class FundraisersController extends Controller
      */
     public function store(FundraiserRequest $request)
     {
-        $fundraiser = new Fundraiser($request->all());
+        $fundraiser = $this->fundraiser->create($request->all());
 
-        $fundraiser->save();
+        if ($request->has('upload_ids')) {
+            $fundraiser->uploads()->attach($request->get('upload_ids'));
+        }
 
-        $location = url('/fundraisers/' . $fundraiser->id);
-
-        return $this->response->created($location);
+        return $this->response->item($fundraiser, new FundraiserTransformer);
     }
 
     /**
@@ -127,6 +127,10 @@ class FundraisersController extends Controller
         $fundraiser = $this->fundraiser->findOrFail($id);
 
         $fundraiser->update($request->all());
+
+        if ($request->has('upload_ids')) {
+            $fundraiser->uploads()->sync($request->get('upload_ids'));
+        }
 
         return $this->response->item($fundraiser, new FundraiserTransformer);
     }

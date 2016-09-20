@@ -63,7 +63,10 @@ class UploadsController extends Controller
             $upload = $this->upload->create([
                 'name' => $request->get('name'),
                 'type' => 'video',
-                'source' => $request->get('url')
+                'source' => $request->get('url'),
+                'meta' => [
+                    'format' => $this->getVideoFormat($request->get('url'))
+                ]
             ]);
 
             return $this->response->item($upload, new UploadTransformer);
@@ -231,5 +234,24 @@ class UploadsController extends Controller
             $new->tag($request->get('tags'));
 
         return $new;
+    }
+
+    /**
+     * Get video format from source url.
+     *
+     * @param $url
+     * @return string
+     */
+    private function getVideoFormat($url)
+    {
+        if (str_contains($url, 'youtube')) {
+            return 'youtube';
+        }
+
+        if (str_contains($url, 'vimeo')) {
+            return 'vimeo';
+        }
+
+        return 'other';
     }
 }

@@ -267,7 +267,7 @@ class Reservation extends Model
      */
     public function getTotalRaised()
     {
-        return $this->fund->donations()->sum('amount');
+        return $this->fund->balance;
     }
 
     /**

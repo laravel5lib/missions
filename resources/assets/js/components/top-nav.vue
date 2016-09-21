@@ -22,8 +22,8 @@
 					<li v-if="admin" class="text-center"><a href="/admin">Admin</a></li>
 					<li class="text-center"><a href="/logout">Sign Out</a></li>
 				</ul>
-				<li v-if="!auth"><a href="#">Login</a></li>
-				<li v-if="!auth"><a href="#">Sign Up</a></li>
+				<li v-if="!auth"><a href="/login">Login</a></li>
+				<li v-if="!auth"><a href="/login">Sign Up</a></li>
 				<li class="navlabel">Get Started</li>
 				<li><a href="/campaigns">Trips</a></li>
 				<li><a href="/fundraisers">Fundraisers</a></li>
@@ -34,13 +34,13 @@
 				<li><a href="http://1nation1day.com/honduras">2013 Honduras</a></li>
 				<li class="navlabel">Causes</li>
 				<li><a href="/water">Clean Water</a></li>
-				<li><a href="#">Rescue Orphans</a></li>
+				<li><a href="/orphans">Rescue Orphans</a></li>
 				<!--<li><a href="#">Homes</a></li>-->
 				<!--<li><a href="#">Trafficking Rescue</a></li>-->
 				<!--<li><a href="#">Leadership Centers</a></li>-->
 				<!--<li><a href="#">Sponsor A Project</a></li>-->
 				<li class="navlabel">Train</li>
-				<li><a href="index.html">Missions.Me College</a></li>
+				<li><a href="/college">Missions.Me College</a></li>
 				<li><a href="/speakers">Speakers</a></li>
 				<li class="navlabel">About</li>
 				<li><a href="#">Missions.Me</a></li>

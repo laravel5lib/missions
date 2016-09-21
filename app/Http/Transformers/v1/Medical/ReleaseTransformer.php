@@ -28,18 +28,18 @@ class ReleaseTransformer extends TransformerAbstract
     public function transform(Release $release)
     {
         $array = [
-            'id'            => (int) $release->id,
-            'user_id'       => (int) $release->user_id,
-            'name'          => $release->name,
-            'has_insurance' => (bool) $release->has_insurance,
-            'ins_provider'  => $release->ins_provider,
-            'ins_policy_no' => $release->ins_policy_number,
-            'is_risk'       => (bool) $release->is_risk,
-            'conditions'    => $release->conditions,
-            'allergies'     => $release->allergies,
-            'created_at'    => $release->created_at->toDateTimeString(),
-            'updated_at'    => $release->updated_at->toDateTimeString(),
-            'links'         => [
+            'id'                => (int) $release->id,
+            'user_id'           => (int) $release->user_id,
+            'name'              => $release->name,
+            'ins_provider'      => $release->ins_provider,
+            'ins_policy_no'     => $release->ins_policy_no,
+            'is_risk'           => (bool) $release->is_risk,
+            'conditions'        => $release->conditions,
+            'allergies'         => $release->allergies,
+            'emergency_contact' => $release->emergency_contact,
+            'created_at'        => $release->created_at->toDateTimeString(),
+            'updated_at'        => $release->updated_at->toDateTimeString(),
+            'links'             => [
                 [
                     'rel' => 'self',
                     'uri' => '/medical/releases/' . $release->id,

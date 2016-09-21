@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="content-page-header">
-    <img class="img-responsive" src="images/water/water-header.jpg" alt="Speakers">
+    <img class="img-responsive" src="images/orphans/orphans-header.jpg" alt="Orphans">
     <div class="c-page-header-text">
     	<h1 class="text-uppercase dash-trailing">Rescue Orphans</h1>
     </div><!-- end c-page-header-content -->
@@ -17,7 +17,7 @@
 				<hr class="divider inv">
 				<h4 class="text-uppercase">It's A Child</h4>
 				<hr class="divider inv">
-				<img class="img-responsive" src="images/water/dirty-water.jpg" alt="Water Crisis">
+				<img class="img-responsive" src="images/orphans/orphans.jpg" alt="Orphans">
 				<hr class="divider inv">
 				<h4 class="text-uppercase text-primary">And that child is an orphan.</h4>
 			</div>
@@ -26,7 +26,7 @@
 	</div><!-- end container -->
 </div><!-- end white-bg -->
 <div class="content-page-header">
-	<img class="img-responsive" src="images/water/well-location-bg.jpg" alt="Well Locations">
+	<img class="img-responsive" src="images/orphans/orphans-in-india.jpg" alt="Orphans In India">
 		<div class="c-page-header-text">
 			<div class="col-sm-6">
 				<h2 class="dash-trailing">The orphan crisis in India affects 31 million Children.</h2>
@@ -145,7 +145,7 @@
 	</div>
 </div><!-- end white-bg -->
 <div class="content-page-header">
-	<img class="img-responsive" src="images/water/guana-well.jpg" alt="Well Locations">
+	<img class="img-responsive" src="images/orphans/angel-house-built.jpg" alt="Angel House Built">
 		<div class="c-page-header-text">
 			<div class="col-sm-8 col-sm-offset-2 text-center">
 				<h2>Start funding a project to build an Angel House or donate towards an existing one.</h2>

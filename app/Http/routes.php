@@ -303,6 +303,9 @@ Route::get('/college', function () {
 Route::get('/college-financial', function () {
     return view('site.college-financial');
 });
+Route::get('/support', function () {
+    return view('site.support');
+});
 
 Route::get('/{slug}', function ($slug) {
     return $slug;

@@ -66,25 +66,26 @@ $factory->defineAs(App\Models\v1\User::class, 'joe', function (Faker\Generator $
 $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $faker)
 {
     return [
-        'given_names'      => $faker->firstName . ' ' . $faker->firstName,
-        'surname'          => $faker->lastName,
-        'gender'           => $faker->randomElement(['male', 'female']),
-        'status'           => $faker->randomElement(['single', 'married']),
-        'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
-        'shirt_size'       => $faker->randomElement(array_keys(App\Utilities\v1\ShirtSize::all())),
-        'user_id'          => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
-        'address'          => $faker->address,
-        'city'             => $faker->city,
-        'zip'              => $faker->postcode,
-        'country_code'     => $faker->countryCode,
-        'email'            => $faker->safeEmail,
-        'phone_one'        => $faker->phoneNumber,
-        'phone_two'        => $faker->phoneNumber,
-        'trip_id'          => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
-        'companion_limit'  => random_int(0, 3),
-        'passport_id'      => $faker->randomElement(App\Models\v1\Passport::lists('id')->toArray()),
-        'visa_id'          => $faker->randomElement(App\Models\v1\Visa::lists('id')->toArray()),
-        'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray())
+        'given_names'        => $faker->firstName . ' ' . $faker->firstName,
+        'surname'            => $faker->lastName,
+        'gender'             => $faker->randomElement(['male', 'female']),
+        'status'             => $faker->randomElement(['single', 'married']),
+        'birthday'           => $faker->dateTimeBetween('-60 years', '-12 years'),
+        'shirt_size'         => $faker->randomElement(array_keys(App\Utilities\v1\ShirtSize::all())),
+        'user_id'            => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
+        'address'            => $faker->address,
+        'city'               => $faker->city,
+        'zip'                => $faker->postcode,
+        'country_code'       => $faker->countryCode,
+        'email'              => $faker->safeEmail,
+        'phone_one'          => $faker->phoneNumber,
+        'phone_two'          => $faker->phoneNumber,
+        'trip_id'            => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
+        'companion_limit'    => random_int(0, 3),
+        'passport_id'        => $faker->randomElement(App\Models\v1\Passport::lists('id')->toArray()),
+        'visa_id'            => $faker->randomElement(App\Models\v1\Visa::lists('id')->toArray()),
+        'medical_release_id' => $faker->randomElement(App\Models\v1\Medical\Release::lists('id')->toArray()),
+        'avatar_upload_id'   => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray())
     ];
 });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Transformers\v1;
 
+use App\Http\Transformers\v1\Medical\ReleaseTransformer;
 use App\Models\v1\Reservation;
 use App\Utilities\v1\ShirtSize;
 use League\Fractal\ParamBag;
@@ -19,7 +20,8 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'member', 'passport', 'visa', 'dues'
+        'fundraisers', 'member', 'passport', 'visa', 'dues',
+        'medicalRelease'
     ];
 
     /**
@@ -259,6 +261,8 @@ class ReservationTransformer extends TransformerAbstract
     {
         $passport = $reservation->passport;
 
+        if ( ! $passport) return null;
+
         return $this->item($passport, new PassportTransformer);
     }
 
@@ -266,7 +270,18 @@ class ReservationTransformer extends TransformerAbstract
     {
         $visa = $reservation->visa;
 
+        if ( ! $visa) return null;
+
         return $this->item($visa, new VisaTransformer);
+    }
+
+    public function includeMedicalRelease(Reservation $reservation)
+    {
+        $release = $reservation->medicalRelease;
+
+        if ( ! $release) return null;
+
+        return $this->item($release, new ReleaseTransformer);
     }
 
     private function validateParams($params)

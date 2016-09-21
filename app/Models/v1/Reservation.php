@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\Jobs\Reservations\SyncPaymentsDue;
+use App\Models\v1\Medical\Release;
 use App\Models\v1\User;
 use App\UuidForKey;
 use Conner\Tagging\Taggable;
@@ -204,6 +205,17 @@ class Reservation extends Model
     {
         return $this->belongsTo(Visa::class);
     }
+
+    /**
+     * Get the reservation's medical release.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function medicalRelease()
+    {
+        return $this->belongsTo(Release::class);
+    }
+
 
     /**
      * Get the reservation's team member details

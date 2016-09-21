@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserTableSeeder::class);
         $this->call(PassportTableSeeder::class);
         $this->call(VisaTableSeeder::class);
+        $this->call(MedicalReleaseSeeder::class);
         $this->call(GroupTableSeeder::class);
         $this->call(CampaignTableSeeder::class);
         $this->call(TripTableSeeder::class);
@@ -27,7 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FundsTableSeeder::class);
         $this->call(AssignmentTableSeeder::class);
         $this->call(ContactTableSeeder::class);
-        $this->call(MedicalReleaseSeeder::class);
         $this->call(RegionSeeder::class);
         $this->call(TeamMemberSeeder::class);
         $this->call(DecisionTableSeeder::class);

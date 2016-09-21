@@ -33,6 +33,7 @@ class CreateReservationsTables extends Migration
             $table->uuid('rep_id')->index()->nullable();
             $table->uuid('passport_id')->index()->nullable();
             $table->uuid('visa_id')->index()->nullable();
+            $table->uuid('medical_release_id')->index()->nullable();
             $table->uuid('avatar_upload_id')->nullable();
             $table->integer('companion_limit')->unsigned()->default(0);
             $table->timestamps();

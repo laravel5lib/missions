@@ -28,8 +28,8 @@ class ReleaseTransformer extends TransformerAbstract
     public function transform(Release $release)
     {
         $array = [
-            'id'                => (int) $release->id,
-            'user_id'           => (int) $release->user_id,
+            'id'                => $release->id,
+            'user_id'           => $release->user_id,
             'name'              => $release->name,
             'ins_provider'      => $release->ins_provider,
             'ins_policy_no'     => $release->ins_policy_no,

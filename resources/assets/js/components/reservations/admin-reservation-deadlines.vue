@@ -251,9 +251,9 @@
                 delete trip.difficulty;
                 delete trip.rep_id;
 
-                this.$http.put('trips/' + trip.id, trip).then(function (response) {
+                this.$http.put('trips/' + trip.id + '?include=deadlines', trip).then(function (response) {
                     var thisTrip = response.data.data;
-                    this.selectedDeadlines = new Array(this.newDeadline);
+                    this.selectedDeadlines = new Array(_.findWhere(response.data.data.deadlines.data, { name: this.newDeadline.name }));
 
                     return this.addDeadlines();
 

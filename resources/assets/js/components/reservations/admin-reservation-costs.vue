@@ -3,14 +3,15 @@
         <button class="btn btn-primary btn-xs" @click="add"><span
                 class="fa fa-plus"></span> Add Existing
         </button>
-        <button class="btn btn-primary btn-xs" @click="addNew"><span
+        <!--<button class="btn btn-primary btn-xs" @click="addNew"><span
                 class="fa fa-plus"></span> Create New
-        </button>
+        </button>-->
 
         <hr class="divider sm">
         <table class="table table-hover">
             <thead>
             <tr>
+                <th>Status</th>
                 <th>Name</th>
                 <th>Due Date</th>
                 <th>Amount</th>
@@ -20,37 +21,19 @@
             <tbody v-if="reservation">
             <template v-for="due in reservation.dues.data">
                 <tr>
+                    <td class="text-center">
+						<small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
+					</td>
                     <td>
-                        <i class="fa {{ isPast(due.due_at) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}"></i>&nbsp;
                         {{ due.cost }}
                     </td>
                     <td>{{ due.due_at| moment 'll' }}</td>
                     <td>{{ due.amount| currency }}</td>
                     <td>
-                        <a class="btn btn-default btn-xs" @click="edit(cost)"><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger btn-xs" @click="remove(cost)"><i class="fa fa-times"></i></a>
+                        <a class="btn btn-default btn-xs" @click="edit(due)"><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-danger btn-xs" @click="remove(due)"><i class="fa fa-times"></i></a>
                     </td>
                 </tr>
-                <!--<tr v-for="payment in cost.payments.data">
-                    <td>
-                        <template v-if="cost.type === 'incremental' && payment.upfront">
-                            <small class="badge badge-success">Paid</small>
-                        </template>
-                        <template v-if="cost.type === 'incremental' && !payment.upfront && (payment.due_next || false)">
-                            <small class="badge badge-danger">Next Defaulting Amount</small>
-                        </template>
-                        <template v-if="cost.type === 'incremental' && dateIsBetween(payment.due_at, 0)">
-                            <small class="badge badge-info">Due this month</small>
-                        </template>
-                        <template v-if="cost.type === 'incremental' && dateIsBetween(payment.due_at, 1)">
-                            <small class="badge badge-warning">Due next month</small>
-                        </template>
-                    </td>
-                    <td>{{ payment.due_at | moment 'll' }}</td>
-                    <td>{{ payment.amount_owed | currency }}</td>
-                    <td></td>
-                </tr>-->
-                <!--<tr></tr>-->
             </template>
 
             </tbody>
@@ -241,6 +224,7 @@
                 return this.doUpdate(reservation);
             },
             remove(cost){
+                debugger
                 var reservation = this.preppedReservation;
                 reservation.costs = [];
                 _.each(this.reservation.costs.data, function (cs) {
@@ -255,8 +239,8 @@
             addCosts(){
                 // prep current costs
                 var currentCostIds = [];
-                _.each(this.costs, function (cost) {
-                    currentCostIds.push({ id: cost.id })
+                _.each(this.reservation.costs.data, function (cost) {
+                    currentCostIds.push({ id: cost.id || cost.cost_id, locked: cost.locked })
                 });
 
                 // prep added costs
@@ -325,16 +309,6 @@
                 this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
                     return !_.findWhere(reservation.costs.data, {cost_id: cost.id})
                 });
-
-                /*_.some(this.availableCosts, function (cost) {
-                    if (cost.type === 'incremental') {
-                        _.some(cost.payments.data, function (payment) {
-                            if (moment(payment.due_at).isAfter()){
-                                return payment.due_next = true;
-                            }
-                        });
-                    }
-                });*/
             }
         },
         ready(){

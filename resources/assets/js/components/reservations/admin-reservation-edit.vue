@@ -72,51 +72,51 @@
                 </div>
             </div>
 
-            <div class="row form-group" :class="{ 'has-error': checkForError('phoneone') ||  checkForError('phonetwo') }">
+            <div class="row form-group">
                 <div class="col-sm-6">
                     <label for="infoPhone">Phone 1</label>
-                    <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" v-validate:phoneone="{ required: true }" placeholder="123-456-7890">
+                    <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
                 </div>
                 <div class="col-sm-6">
                     <label for="infoMobile">Phone 2</label>
-                    <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" v-validate:phonetwo="{ required: true }" placeholder="123-456-7890">
+                    <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
                 </div>
             </div>
 
             <div class="row form-group" :class="{ 'has-error': checkForError('email') }">
                 <div class="col-sm-12">
                     <label for="infoEmail">Email</label>
-                    <input type="email" class="form-control" v-model="email" id="infoEmail" v-validate:email="{ required: true, minlength:1, maxlength:100 }" placeholder="Email˚">
+                    <input type="email" class="form-control" v-model="email" id="infoEmail" v-validate:email="['email']" placeholder="Email˚">
                 </div>
             </div>
-            <div class="row form-group" :class="{ 'has-error': checkForError('address') }">
+            <div class="row form-group">
                 <div class="col-sm-12">
                     <label for="infoAddress">Address 1</label>
-                    <input type="text" class="form-control" v-model="address" id="infoAddress" v-validate:address="{ required: true }" placeholder="Street Address 1">
+                    <input type="text" class="form-control" v-model="address" id="infoAddress" placeholder="Street Address 1">
                 </div>
             </div>
 
             <div class="row">
-                <div class="form-group col-sm-6" :class="{ 'has-error': checkForError('city') }">
+                <div class="form-group col-sm-6">
                     <label for="infoCity">City</label>
-                    <input type="text" class="form-control" v-model="city" id="infoCity" v-validate:city="{ required: true }" placeholder="City">
+                    <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
                 </div>
-                <div class="form-group col-sm-6" :class="{ 'has-error': checkForError('state') }">
+                <div class="form-group col-sm-6">
                     <label for="infoState">State/Prov.</label>
-                    <input type="text" class="form-control" v-model="state" id="infoState" v-validate:state="{ required: true }" placeholder="State/Province">
+                    <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
                 </div>
             </div>
 
             <div class="row">
-                <div class="form-group col-sm-4" :class="{ 'has-error': checkForError('zip') }">
+                <div class="form-group col-sm-4">
                     <label for="infoZip">ZIP/Postal Code</label>
-                    <input type="text" class="form-control" v-model="zip" id="infoZip" v-validate:zip="{ required: true }" placeholder="12345">
+                    <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
                 </div>
                 <div class="col-sm-8">
-                    <div class="form-group" :class="{ 'has-error': checkForError('country') }">
+                    <div class="form-group">
                         <label for="country">Country</label>
                         <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-                        <select hidden name="country" id="country" class="" v-model="country_code" v-validate:country="{ required: true }" >
+                        <select hidden name="country" id="country" class="" v-model="country_code">
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
                     </div>
@@ -171,10 +171,16 @@
                     <br>
                     <a href="/admin/reservations/{{id}}" class="btn btn-default">Cancel</a>
                     <a @click="update" class="btn btn-primary">Update</a>
+                    <a href="/admin/reservations/{{id}}" class="btn btn-success">Finish</a>
                 </div>
             </div>
 
         </form>
+        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <span class="icon-ok-circled alert-icon-float-left"></span>
+            <strong>Awesome!</strong>
+            <p>Reservation updated!</p>
+        </alert>
     </validator>
 </template>
 <script>
@@ -184,7 +190,7 @@
     export default{
         name: 'admin-reservation-edit',
         props: ['id'],
-        components: { vSelect, 'datepicker': VueStrap.datepicker, 'upload-create-update': adminUploadCreateUpdate },
+        components: { vSelect, 'datepicker': VueStrap.datepicker, 'alert': VueStrap.alert, 'upload-create-update': adminUploadCreateUpdate },
         data(){
             return{
                 given_names: '',
@@ -216,6 +222,7 @@
                 userObj: null,
                 errors: [],
                 countries: [],
+				showSuccess: false
             }
         },
         computed:{
@@ -266,6 +273,7 @@
                         user_id: this.user_id,
                     }).then(function (response) {
                         $.extend(this, response.data.data);
+						this.showSuccess = true;
 
                     }, function (error) {
                         this.errors = error.data.errors;

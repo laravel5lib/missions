@@ -2,7 +2,6 @@
 
 namespace App\Http\Transformers\v1;
 
-use App\Http\Transformers\v1\Medical\ReleaseTransformer;
 use App\Models\v1\Reservation;
 use App\Utilities\v1\ShirtSize;
 use League\Fractal\ParamBag;
@@ -130,7 +129,7 @@ class ReservationTransformer extends TransformerAbstract
     {
         $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
 
-        return $this->item($rep, new RepTransformer);
+        return $this->item($rep, new UserTransformer);
     }
 
     /**
@@ -281,7 +280,7 @@ class ReservationTransformer extends TransformerAbstract
 
         if ( ! $release) return null;
 
-        return $this->item($release, new ReleaseTransformer);
+        return $this->item($release, new MedicalReleaseTransformer);
     }
 
     private function validateParams($params)

@@ -62,26 +62,6 @@ class CreateUserRecordsTables extends Migration
                 ->onDelete('set null');
         });
 
-        Schema::create('medical_releases', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('user_id')->index();
-            $table->string('name');
-            $table->string('ins_provider')->nullable();
-            $table->string('ins_policy_no')->nullable();
-            $table->json('conditions')->nullable(); // name, medication
-            $table->json('allergies')->nullable(); // name, medication
-            $table->json('emergency_contact')->nullable();
-            $table->boolean('is_risk')->default(false);
-            $table->timestamps();
-        });
-
-        Schema::table('medical_releases', function($table)
-        {
-            $table->foreign('user_id')
-                ->references('id')->on('users')
-                ->onDelete('cascade');
-        });
-
         Schema::create('referrals', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
@@ -139,10 +119,9 @@ class CreateUserRecordsTables extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::drop('passports');
-        Schema::drop('visas');
-        Schema::drop('medical_releases');
-        Schema::drop('referrals');
-        Schema::drop('contacts');
+        Schema::dropIfExists('passports');
+        Schema::dropIfExists('visas');
+        Schema::dropIfExists('referrals');
+        Schema::dropIfExists('contacts');
     }
 }

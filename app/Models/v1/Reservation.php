@@ -3,8 +3,6 @@
 namespace App\Models\v1;
 
 use App\Jobs\Reservations\SyncPaymentsDue;
-use App\Models\v1\Medical\Release;
-use App\Models\v1\User;
 use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
@@ -213,7 +211,7 @@ class Reservation extends Model
      */
     public function medicalRelease()
     {
-        return $this->belongsTo(Release::class);
+        return $this->belongsTo(MedicalRelease::class);
     }
 
 

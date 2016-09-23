@@ -84,7 +84,7 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         'companion_limit'    => random_int(0, 3),
         'passport_id'        => $faker->randomElement(App\Models\v1\Passport::lists('id')->toArray()),
         'visa_id'            => $faker->randomElement(App\Models\v1\Visa::lists('id')->toArray()),
-        'medical_release_id' => $faker->randomElement(App\Models\v1\Medical\Release::lists('id')->toArray()),
+        'medical_release_id' => $faker->randomElement(App\Models\v1\MedicalRelease::lists('id')->toArray()),
         'avatar_upload_id'   => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray())
     ];
 });
@@ -463,46 +463,38 @@ $factory->define(App\Models\v1\Contact::class, function (Faker\Generator $faker)
 /**
  * Medical Release Factory
  */
-$factory->define(App\Models\v1\Medical\Release::class, function (Faker\Generator $faker)
+$factory->define(App\Models\v1\MedicalRelease::class, function (Faker\Generator $faker)
 {
-    $conditions = [
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Condition::all()),
-            "medication" => $faker->realText(120)
-        ],
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Condition::all()),
-            "medication" => "none"
-        ],
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Condition::all()),
-            "medication" => $faker->realText(120)
-        ]
-    ];
-
-    $allergies = [
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Allergy::all()),
-            "medication" => $faker->realText(120)
-        ],
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Allergy::all()),
-            "medication" => "none"
-        ],
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Allergy::all()),
-            "medication" => $faker->realText(120)
-        ]
-    ];
-
     return [
         'user_id'       => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
         'name'          => $faker->firstName . ' ' . $faker->lastName,
-        'conditions'    => $faker->randomElements($conditions, 1),
-        'allergies'     => $faker->randomElements($allergies, 2),
         'ins_provider'  => $faker->company,
         'ins_policy_no' => $faker->ean8,
         'is_risk'       => $faker->boolean(50)
+    ];
+});
+
+/**
+ * Medical Condition Factory
+ */
+$factory->define(App\Models\v1\MedicalCondition::class, function (Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->randomElement(App\Models\v1\MedicalCondition::available()),
+        'medication' => $faker->boolean(),
+        'diagnosed' => $faker->boolean()
+    ];
+});
+
+/**
+ * Medical Allergy Factory
+ */
+$factory->define(App\Models\v1\MedicalAllergy::class, function (Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->randomElement(App\Models\v1\MedicalAllergy::available()),
+        'medication' => $faker->boolean(),
+        'diagnosed' => $faker->boolean()
     ];
 });
 

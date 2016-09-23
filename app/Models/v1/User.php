@@ -415,6 +415,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get all the user's medical releases.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function medicalReleases()
+    {
+        return $this->hasMany(MedicalRelease::class);
+    }
+
+    /**
      * Get all the user's contacts.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

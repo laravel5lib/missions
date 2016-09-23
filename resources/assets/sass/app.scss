@@ -152,9 +152,10 @@ body {
   position: relative;
   overflow: hidden;
   width: 100%;
+  max-height: 400px;
   img {
     display: block;
-    max-width: 100%;
+    width: 100%;
     height: auto;
     line-height: 1;
   }
@@ -179,6 +180,44 @@ body {
       @media screen and (max-width: 767px) {
         font-size: 1.3em;
       }
+    }
+  }
+}
+.content-page-bg {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-height: 600px;
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    line-height: 1;
+  }
+  .c-page-bg-text {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    z-index: 10;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #fff;
+    text-shadow: none;
+    h1 {
+      font-size: 3.5em;
+      @media screen and (max-width: 991px) {
+        font-size: 2.5em;
+      }
+      @media screen and (max-width: 767px) {
+        font-size: 1.3em;
+      }
+    }
+    @media screen and (max-width: 767px) {
+      left: 5%;
+      right: 5%;
+      bottom: 5%; 
+      padding-bottom: 0px;
     }
   }
 }
@@ -528,6 +567,10 @@ $img-base-size: 40px;
 .img-lg {
   max-height: $img-base-size*2.5;
   max-width: $img-base-size*2.5;
+}
+.img-xlg {
+  max-height: $img-base-size*4;
+  max-width: $img-base-size*4;
 }
 .av-left {
   margin-right: 10px;

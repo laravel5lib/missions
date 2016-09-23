@@ -1,6 +1,30 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="UpdateReservation">
         <form id="UpdateReservation" novalidate class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="media">
+                        <div class="media-left">
+                            <a href="#">
+                                <img class="media-object" :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100" :alt="selectedAvatar ? selectedAvatar.name : ''">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
+                            <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
+                                Set Avatar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collapse" id="avatarCollapse">
+                        <div class="well">
+                            <upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
+                        </div>
+                    </div>
+                </div><!-- end col -->
+            </div>
+
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group" :class="{ 'has-error': checkForError('givennames') }">
@@ -126,7 +150,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group" :class="{ 'has-error': checkForError('user') }">
-                        <label for="manager">Manager</label>
+                        <label for="manager">Managing User</label>
                         <v-select class="form-control" :value.sync="userObj" :options="users" :debounce="250"
                                     :on-search="searchUsers" label="name"></v-select>
                         <select id="manager" hidden class="form-control hidden" v-model="user_id" v-validate:user="{require:true}">
@@ -140,30 +164,6 @@
                         <input type="number" class="form-control" v-validate:companions="{ require: true }" v-model="companion_limit" id="companions">
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="media">
-                        <div class="media-left">
-                            <a href="#">
-                                <img class="media-object" :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100" :alt="selectedAvatar ? selectedAvatar.name : ''">
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
-                            <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
-                                Set Avatar
-                            </button>
-                        </div>
-                    </div>
-                    <div class="collapse" id="avatarCollapse">
-                        <div class="well">
-                            <upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
-                        </div>
-                    </div>
-                </div><!-- end col -->
-
             </div>
 
             <div class="form-group">

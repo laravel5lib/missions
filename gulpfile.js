@@ -18,6 +18,7 @@ elixir(function(mix) {
     mix.sass('app.scss');
     // compile js
     mix.browserify('main.js');
+    mix.copy('resources/assets/js/vendor.js', 'public/js/vendor.js')
     // move fonts to public folder
     mix.copy('node_modules/font-awesome/fonts', 'public/fonts');
 });

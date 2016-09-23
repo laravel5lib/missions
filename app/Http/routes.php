@@ -294,6 +294,18 @@ Route::get('/speakers', function () {
 Route::get('/water', function () {
     return view('site.water');
 });
+Route::get('/orphans', function () {
+    return view('site.orphans');
+});
+Route::get('/college', function () {
+    return view('site.college');
+});
+Route::get('/college-financial', function () {
+    return view('site.college-financial');
+});
+Route::get('/support', function () {
+    return view('site.support');
+});
 
 Route::get('/{slug}', function ($slug) {
     return $slug;

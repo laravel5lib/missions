@@ -224,7 +224,6 @@
                 return this.doUpdate(reservation);
             },
             remove(cost){
-                debugger
                 var reservation = this.preppedReservation;
                 reservation.costs = [];
                 _.each(this.reservation.costs.data, function (cs) {
@@ -307,7 +306,7 @@
 
                 // get available costs intersect with current
                 this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
-                    return !_.findWhere(reservation.costs.data, {cost_id: cost.id})
+                    return !_.findWhere(reservation.costs.data, {cost_id: cost.id, type: 'incremental'})
                 });
             }
         },

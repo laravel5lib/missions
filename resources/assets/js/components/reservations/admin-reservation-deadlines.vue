@@ -3,16 +3,16 @@
         <button class="btn btn-primary btn-xs" @click="add">
             <span class="fa fa-plus"></span> Add Existing
         </button>
-        <button class="btn btn-primary btn-xs" @click="new">
+        <!--<button class="btn btn-primary btn-xs" @click="new">
             <span class="fa fa-plus"></span> Create New
-        </button>
+        </button>-->
 
         <hr class="divider sm">
         <table class="table table-hover">
             <thead>
             <tr>
                 <th>Name</th>
-                <th>Name</th>
+                <th>Due Date</th>
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
@@ -124,7 +124,7 @@
     export default{
         name: 'admin-reservation-deadlines',
         props: ['id'],
-        components:{ vSelect, 'modal': VueStrap.modal},
+        components:{ vSelect, 'modal': VueStrap.modal, 'alert': VueStrap.alert},
         data(){
             return{
                 reservation: null,

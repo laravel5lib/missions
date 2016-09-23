@@ -12,7 +12,7 @@
             <thead>
             <tr>
                 <th>Name</th>
-                <th>Name</th>
+                <th>Due Date</th>
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>

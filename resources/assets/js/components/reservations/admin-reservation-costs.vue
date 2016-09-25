@@ -42,16 +42,14 @@
         <modal title="Add Costs" :show.sync="showAddModal" effect="fade" width="800" :callback="addCosts">
             <div slot="modal-body" class="modal-body">
                 <validator name="AddCost">
-                    <form class="form-horizontal" novalidate>
+                    <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': checkForError('costs') }">
-                            <label class="col-sm-2 control-label">Available Costs</label>
-                            <div class="col-sm-10">
-                                <v-select class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
-                                          label="name"></v-select>
-                                <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
-                                    <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
-                                </select>
-                            </div>
+                            <label class="control-label">Available Costs</label>
+                            <v-select class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
+                                      label="name"></v-select>
+                            <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
+                                <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
+                            </select>
                         </div>
                     </form>
                 </validator>
@@ -64,13 +62,24 @@
                     <form class="form" novalidate>
                         <div class="row">
                             <div class="col-sm-12">
+
+                                <div class="form-group" :class="{'has-error': checkForEditCostError('locked') }" v-if="editedCost.type = 'incremental'">
+                                    <label for="locked">Locked</label>
+                                    <input id="locked" type="checkbox" class="form-control" v-model="editedCost.locked"
+                                           v-validate:locked="{required: true, min:false}">
+                                </div>
+
                                 <div class="form-group" :class="{'has-error': checkForEditCostError('grace') }">
                                     <label for="grace_period">Grace Period</label>
                                     <div class="input-group input-group-sm" :class="{'has-error': checkForEditCostError('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedCost.grace_period"
-                                               v-validate:grace="{required: true, min:0}">
+                                               v-validate:grace="{required: { rule: true }}">
                                         <span class="input-group-addon">Days</span>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="due_date">Due Date</label>
+                                    <input id="due_date" type="datetime-local" class="form-control" v-model="editedCost.due_date">
                                 </div>
                             </div>
                         </div>
@@ -306,7 +315,7 @@
 
                 // get available costs intersect with current
                 this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
-                    return !_.findWhere(reservation.costs.data, {cost_id: cost.id, type: 'incremental'})
+                    return !_.findWhere(reservation.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
                 });
             }
         },

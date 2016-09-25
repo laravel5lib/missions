@@ -93,14 +93,25 @@
             <div class="form-group">
                 <label for="status" class="col-sm-2 control-label">Status</label>
                 <div class="col-sm-10">
+                    <select class="form-control" name="status" id="status" v-model="status">
+                        <option value="approved">Approved</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="public" class="col-sm-2 control-label">Visibility</label>
+                <div class="col-sm-10">
                     <label class="radio-inline">
-                        <input type="radio" name="status" id="status" :value="true" v-model="public"> Public
+                        <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="status2" id="status2" :value="false" v-model="public"> Private
+                        <input type="radio" name="public2" id="public2" :value="false" v-model="public"> Private
                     </label>
                 </div>
             </div>
+
             <template v-if="!!public">
                 <div class="form-group" :class="{ 'has-error': checkForError('url') }">
                     <label for="url" class="col-sm-2 control-label">Url Slug</label>
@@ -117,16 +128,24 @@
                 <div class="col-sm-12 text-center">
                     <a href="/admin/groups" class="btn btn-default">Cancel</a>
                     <a @click="submit()" class="btn btn-primary">Update</a>
+                    <a href="/admin/groups" class="btn btn-success">Finished</a>
                 </div>
             </div>
+
+            <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+                <span class="icon-ok-circled alert-icon-float-left"></span>
+                <strong>Awesome!</strong>
+                <p>Group updated!</p>
+            </alert>
         </form>
     </validator>
 </template>
 <script>
     import vSelect from "vue-select";
+    import VueStrap from "vue-strap/dist/vue-strap.min";
     export default{
         name: 'group-edit',
-        components: {vSelect},
+        components: { vSelect, 'alert': VueStrap.alert },
         props: ['groupId', 'managing'],
         data(){
             return {
@@ -143,11 +162,13 @@
                 state: '',
                 zip: '',
                 public: false,
+                status: '',
                 url: '',
                 email: '',
 
                 // logic variables
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
+                showSuccess: false,
                 attemptSubmit: false,
                 resource: this.$resource('groups{/id}'),
                 countries: [],
@@ -172,7 +193,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$UpdateGroup.valid) {
-                    var formData = this.data
+                    var formData = this.data;
                     this.resource.update({id: this.groupId}, {
                         name: this.name,
                         description: this.description,
@@ -187,12 +208,11 @@
                         state: this.state,
                         zip: this.zip,
                         public: this.public,
+                        status: this.status,
                         url: this.url,
                         email: this.email
                     }).then(function (resp) {
-                        if (!this.managing) {
-                            window.location.href = '/' + location.pathname.split('/')[1] + '/' + resp.data.data.links[0].uri;
-                        }
+                        this.showSuccess = true;
                     }, function (error) {
                         console.log(error);
                         debugger;
@@ -225,6 +245,7 @@
                 this.state = group.state;
                 this.zip = group.zip;
                 this.public = group.public;
+                this.status = group.status;
                 this.url = group.url;
                 this.email = group.email;
             }, function (response) {

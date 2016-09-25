@@ -1,0 +1,73 @@
+<template>
+    <div>
+        <p v-if="trips.length < 1" class="text-center text-muted lead">
+            This group does not have any trips yet. Please check back soon!
+        </p>
+        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips">
+            <div class="panel panel-default">
+                <img :src="trip.campaign.data.avatar" alt="{{ trip.campaign.data.name }}" class="img-responsive">
+                <div class="panel-body">
+                    <h6><span class="label label-default">{{ trip.campaign.data.name }}</span></h6>
+                    <h4>{{ trip.country_name }} {{ trip.started_at|moment 'YYYY' }}</h4>
+                    <h6>{{ trip.type|capitalize }} Trip</h6>
+                    <h6>{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</h6>
+                    <ul class="list-inline">
+                        <li data-toggle="tooltip" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</li>
+                        <li data-toggle="tooltip" title="Registration Open" class="pull-right"><i class="fa fa-sign-in"></i></li>
+                    </ul>
+                    <p><a class="btn btn-primary btn-lg btn-block" :href="id + trip.links[0].uri">Details</a></p>
+                </div><!-- end panel-body -->
+            </div><!-- end panel -->
+        </div><!-- end col -->
+        <div v-if="trips.length" class="col-sm-12 text-center">
+            <nav>
+                <ul class="pagination pagination-sm">
+                    <li :class="{ 'disabled': pagination.current_page == 1 }">
+                        <a aria-label="Previous" @click="page=pagination.current_page-1">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
+                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
+                        <a aria-label="Next" @click="page=pagination.current_page+1">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</template>
+<script>
+    export default{
+        name: 'dashboard-group-trips',
+        props: ['id'],
+        data(){
+            return {
+                trips:[],
+                resource: this.$resource('trips?include=campaign&onlyPublished=true&groups[]=' + this.id),
+                pagination: {},
+                page: 1,
+                per_page: 3,
+            }
+        },
+        watch: {
+            'page': function (val, oldVal) {
+                this.searchTrips();
+            },
+        },
+        methods:{
+            searchTrips(){
+                this.resource.query().then(function(response){
+                    this.trips = response.data.data;
+                    this.pagination = response.data.meta.pagination;
+                }).then(function () {
+
+                });
+            }
+        },
+        ready(){
+            this.searchTrips();
+        }
+    }
+</script>

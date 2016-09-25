@@ -24,10 +24,15 @@ class FundraiserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'goal_amount' => 'required|min:1|numeric',
-            'description' => 'string',
-            'expires_at' => 'required|date'
+            'name'             => 'required|string',
+            'fund_id'          => 'required|exists:funds,id',
+            'goal_amount'      => 'required|min:1|numeric',
+            'description'      => 'string',
+            'banner_upload_id' => 'string|exists:uploads,id',
+            'upload_ids'       => 'array',
+            'upload_ids.*'     => 'required|exists:uploads,id',
+            'started_at'       => 'required|date|before:ended_at',
+            'ended_at'         => 'required|date|after:started_at'
         ];
     }
 }

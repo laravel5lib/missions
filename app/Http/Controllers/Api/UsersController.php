@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
+use App\Jobs\SendWelcomeEmail;
 use App\Models\v1\User;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\UserRequest;
@@ -18,8 +18,8 @@ class UsersController extends Controller
      */
     public function __construct(User $user)
     {
-        $this->middleware('api.auth', ['except' => ['show']]);
-        $this->middleware('jwt.refresh', ['except' => ['show']]);
+        $this->middleware('api.auth', ['only' => ['update', 'destroy']]);
+//        $this->middleware('jwt.refresh', ['except' => ['show']]);
         $this->user = $user;
     }
 
@@ -51,19 +51,11 @@ class UsersController extends Controller
         if($id)
         {
             $user = $this->user->findOrFail($id);
-
-//            if ( ! $user->public)
-//            {
-//                if ($user->id !== $this->auth->user()->id and ! $this->auth->user()->isAdmin())
-//                {
-//                    abort(403);
-//                }
-//            }
         }
         else
         {
             $user = $this->auth->user();
-            if(! $user) return $this->response->errorNotFound();
+            if(! $user) return $this->response->errorUnauthorized();
         }
 
         return $this->response->item($user, new UserTransformer());
@@ -83,6 +75,8 @@ class UsersController extends Controller
         $user->url = $request->get('url', str_random(10));
         $user->save();
 
+        $this->dispatch(new SendWelcomeEmail($user));
+
         return $this->response->item($user, new UserTransformer);
     }
 
@@ -99,10 +93,6 @@ class UsersController extends Controller
             $user = $this->user->findOrFail($id);
         else
             $user = $this->auth()->user();
-
-        if ( $user->id !== $this->auth->user()->id or ! $this->auth->user()->isAdmin()) {
-            abort(403);
-        }
 
         $user->update($request->all());
 

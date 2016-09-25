@@ -33,6 +33,7 @@
 					</div>
 				</div>
 			</div>
+			<hr class="divider visible-xs">
 			<div class="row">
 				<div class="col-sm-5 col-md-4 hidden-xs">
 					<ul class="nav nav-pills nav-stacked">
@@ -46,6 +47,8 @@
 					</ul>
 				</div>
 				<div class="col-sm-7 col-md-8 {{currentStep.view}}">
+					<spinner v-ref:validationSpinner size="xl" :fixed="false" text="Validating"></spinner>
+					<spinner v-ref:reservationspinner size="xl" :fixed="true" text="Creating Reservation"></spinner>
 					<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 					</component>
@@ -83,6 +86,7 @@
 	import paymentDetails from './registration/payment-details.vue';
 	import deadlineAgreement from './registration/deadline-agreement.vue';
 	import review from './registration/review.vue';
+	import VueStrap from 'vue-strap/dist/vue-strap.min';
 	export default{
 		name: 'trip-registration-wizard',
 		props: ['tripId', 'stripeKey'],
@@ -157,12 +161,12 @@
 							if (child.hasOwnProperty('$PaymentDetails'))
 								thisChild = child;
 						});
-						var self = this;
 							// promise needed to wait for async response from stripe
 						$.when(thisChild.createToken())
 								.done(function (success) {
-									self.nextStepCallback();
-								});
+									this.$refs.validationspinner.hide();
+									this.nextStepCallback();
+								}.bind(this));
 						break;
 					default:
 						this.nextStepCallback();
@@ -177,29 +181,90 @@
 				}, this);
 			},
 			finish(){
-				// 1. Create customer with stripe
-				// 2. if they chose to save data, save card to customer
-				// 3. charge card
-				// 4. update user account with customer id
-				// 5. create reservation
-				this.$http.post('reservations', {
+				this.$refs.reservationspinner.show();
+
+				var data = {
+					// reservation data
 					given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
 					surname: this.userInfo.lastName,
 					gender: this.userInfo.gender,
 					status: this.userInfo.relationshipStatus,
 					shirt_size: this.userInfo.size,
 					birthday: moment().set({year: this.userInfo.dobYear, month: this.userInfo.dobMonth, day: this.userInfo.dobDay}).format('YYYY-MM-DD'),
-					amount: this.fundraisingGoal,
+					address: this.userInfo.address,
+					city: this.userInfo.city,
+					state: this.userInfo.state,
+					zip: this.userInfo.zipCode,
+					country_code: this.userInfo.country,
+					email: this.userInfo.email,
+					phone_one: this.userInfo.phone,
+					phone_two: this.userInfo.mobile,
 					user_id: this.userData.id,
-					trip_id: this.tripId,
-					companion_limit: this.companion_limit
-				}).then(function (response) {
+//					trip_id: this.tripId,
+					companion_limit: this.companion_limit,
+					costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static),
+
+					// payment data
+					amount: this.upfrontTotal,
+					token: this.paymentInfo.token,
+					description: 'Reservation payment',
+					currency: 'USD', // determined from card token
+					payment: {
+						type: 'card',
+						brand: this.detectCardType(this.paymentInfo.card.number) || 'visa',
+						last_four: this.paymentInfo.card.number.substr(-4),
+						cardholder: this.paymentInfo.card.cardholder,
+					}
+				};
+
+				if (this.userData && this.userData.donor_id) {
+					data.donor_id = this.donor_id;
+				} else {
+					data.donor = {
+						name: this.userInfo.firstName + ' ' + this.userInfo.lastName,
+						company: '',
+						email: this.userInfo.email,
+						phone: this.userInfo.phone,
+						zip: this.userInfo.zipCode,
+						country_code: this.userInfo.country || 'us'
+					}
+				}
+
+
+				this.$http.post('trips/' + this.tripId + '/register', data).then(function (response) {
+//					this.stripeDeferred.resolve(true);
+					this.$refs.reservationspinner.hide();
+
 					window.location.href = '/dashboard' + response.data.data.links[0].uri;
+					this.$refs.reservationspinner.hide();
 				}, function (response) {
 					console.log(response);
+					this.$refs.reservationspinner.hide();
 				});
 
 
+			},
+			detectCardType(number) {
+				// http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
+				var re = {
+					electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
+					maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
+					dankort: /^(5019)\d+$/,
+					interpayment: /^(636)\d+$/,
+					unionpay: /^(62|88)\d+$/,
+					visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+					mastercard: /^5[1-5][0-9]{14}$/,
+					amex: /^3[47][0-9]{13}$/,
+					diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+					discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+					jcb: /^(?:2131|1800|35\d{3})\d{11}$/
+				};
+
+				for(var key in re) {
+					if(re[key].test(number)) {
+						return key
+					}
+				}
 			}
 		},
 		components: {
@@ -210,8 +275,8 @@
 			'step5': additionalOptions,
 			'step6': paymentDetails,
 			'step7': deadlineAgreement,
-			'step8': review
-
+			'step8': review,
+			'spinner': VueStrap.spinner
 		},
 		created(){
 			// login component skipped for now

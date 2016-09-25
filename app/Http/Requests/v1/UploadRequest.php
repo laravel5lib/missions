@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\v1;
 
-use App\Http\Requests\Request;
+use Dingo\Api\Http\FormRequest;
 
-class UploadRequest extends Request
+class UploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,15 +23,21 @@ class UploadRequest extends Request
      */
     public function rules()
     {
-        return [
-            'file'   => 'required',
-            'path'   => 'required|string',
+        $rules = [
+            'file'   => 'required_unless:type,video',
+            'path'   => 'required_unless:type,video|string',
+            'url'    => 'required_if:type,video|url',
             'name'   => 'string',
-            'type'   => 'required|in:photo,banner,thumbnail,file',
+            'meta'   => 'array',
+            'type'   => 'required|in:other,banner,file,avatar,video',
             'x_axis' => 'numeric',
             'y_axis' => 'numeric',
             'width'  => 'numeric',
-            'height' => 'numeric'
+            'height' => 'numeric',
+            'tags'   => 'required|array',
+            'tags.*' => 'in:Campaign,User,Group,Fundraiser'
         ];
+
+        return $rules;
     }
 }

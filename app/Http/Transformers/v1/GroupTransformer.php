@@ -13,7 +13,8 @@ class GroupTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'trips', 'managers', 'facilitators', 'fundraisers'
+        'trips', 'managers', 'facilitators', 'fundraisers',
+        'uploads', 'social', 'notes'
     ];
 
     /**
@@ -24,8 +25,11 @@ class GroupTransformer extends TransformerAbstract
      */
     public function transform(Group $group)
     {
+        $group->load('avatar', 'banner');
+
         return [
             'id'           => $group->id,
+            'status'       => $group->status,
             'name'         => $group->name,
             'type'         => $group->type,
             'timezone'     => $group->timezone,
@@ -42,6 +46,8 @@ class GroupTransformer extends TransformerAbstract
             'phone_one'    => $group->phone_one,
             'phone_two'    => $group->phone_two,
             'email'        => $group->email,
+            'avatar'       => $group->avatar ? image($group->avatar->source) : null,
+            'banner'       => $group->banner ? image($group->banner->source) : null,
             'created_at'   => $group->created_at->toDateTimeString(),
             'updated_at'   => $group->updated_at->toDateTimeString(),
             'links'        => [
@@ -51,6 +57,13 @@ class GroupTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    public function includeSocial(Group $group)
+    {
+        $links = $group->social;
+
+        return $this->collection($links, new LinkTransformer);
     }
 
     /**
@@ -105,4 +118,29 @@ class GroupTransformer extends TransformerAbstract
         return $this->collection($fundraisers, new FundraiserTransformer);
     }
 
+    /**
+     * Include Uploads
+     *
+     * @param Group $group
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeUploads(Group $group)
+    {
+        $uploads = $group->uploads;
+
+        return $this->collection($uploads, new UploadTransformer);
+    }
+
+    /**
+     * Include most recent notes.
+     *
+     * @param Group $group
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeNotes(Group $group)
+    {
+        $notes = $group->notes()->latest()->limit(3)->get();
+
+        return $this->collection($notes, new NoteTransformer);
+    }
 }

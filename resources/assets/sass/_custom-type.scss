@@ -79,6 +79,12 @@ small,
 .small {
   font-size: floor((100% * $font-size-small / $font-size-base));
 }
+.text-hero {
+  font-size: $font-size-h1 * 1.5;
+  @media (max-width: 767px) {
+    font-size: 30px;
+  }
+}
 
 mark,
 .mark {
@@ -114,6 +120,9 @@ mark,
 }
 .text-primary-lighter {
   color: $text-primary-lighter;
+}
+.text-white {
+  color: #fff !important;
 }
 
 @include text-emphasis-variant('.text-primary', $brand-primary);

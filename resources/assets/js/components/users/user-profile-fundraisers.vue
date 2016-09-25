@@ -1,0 +1,48 @@
+<template>
+    <div>
+        <div class="col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
+            <div class="panel panel-default">
+                <img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">
+                <div class="panel-body">
+                    <h4>{{ fundraiser.name }}</h4>
+                    <h6>
+                        Expires: {{ fundraiser.expires_at | moment 'll'  }}
+                    </h6>
+                    <h3><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>
+                    <p><span>{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100)|number 1 }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: (fundraiser.raised_amount/fundraiser.goal_amount * 100) + '%'}">
+                            <span class="sr-only">{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100) }}% Complete (success)</span>
+                        </div>
+                    </div>
+                    <p><a class="btn btn-primary btn-block" :href="pathName + '/' + fundraiser.url">Details</a></p>
+                </div><!-- end panel-body -->
+            </div><!-- end panel -->
+        </div><!-- end col -->
+    </div>
+</template>
+<script>
+    export default{
+        name: 'user-profile-fundraisers',
+        props: ['id', 'userUrl', 'authId'],
+        data(){
+            return{
+                fundraisers: [],
+
+                pathName: window.location.pathname
+            }
+        },
+        ready(){
+            this.$http.get('fundraisers', {
+                sponsor: this.userUrl,
+                per_page: 100
+            }).then(function (response) {
+                this.fundraisers = response.data.data;
+                /*_.each(response.data.data, function (reservation) {
+                    this.fundraisers = _.union(this.fundraisers, reservation.fundraisers.data);
+                }, this)*/
+            })
+        }
+
+    }
+</script>

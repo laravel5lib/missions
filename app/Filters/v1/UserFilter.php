@@ -4,19 +4,6 @@ use EloquentFilter\ModelFilter;
 
 class UserFilter extends ModelFilter
 {
-
-    // https://laravel.com/docs/5.2/queries#json-where-clauses
-
-    /**
-    * Related Models that have ModelFilters as well as the method on the ModelFilter
-    * As [relatedModel => [method1, method2]]
-    *
-    * @var array
-    */
-    public $relations = [
-        'tags' => ['tags']
-    ];
-
     /**
      * Find by public or private
      *
@@ -28,6 +15,13 @@ class UserFilter extends ModelFilter
         return $isPublic == 'yes' ?
             $this->where('public', true) :
             $this->where('public', false);
+    }
+
+    public function isAdmin($isAdmin)
+    {
+        return $isAdmin == 'yes' ?
+            $this->where('admin', true) :
+            $this->where('admin', false);
     }
 
     public function gender($gender)
@@ -43,6 +37,18 @@ class UserFilter extends ModelFilter
     public function country($countries)
     {
         return $this->whereIn('country_code', $countries);
+    }
+
+    public function url($url)
+    {
+        return $this->where('url', $url);
+    }
+
+    public function fundraiser($url)
+    {
+        return $this->whereHas('fundraisers', function($fundraiser) use($url) {
+           $fundraiser->where('url', $url);
+        });
     }
 
     /**

@@ -74,7 +74,7 @@
 								<td class="text-danger text-right">{{-upfrontTotal | currency}}</td>
 							</tr>
 							<tr>
-								<td style="border-top:2px solid #000000;"><h5 class="text-right">Total to Raise</h5></td>
+								<td style="border-top:2px solid #000000;"><h5>Total to Raise</h5></td>
 								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{fundraisingGoal | currency}}</h5></td>
 							</tr>
 
@@ -153,13 +153,13 @@
 											<input type="text" class="form-control input-sm" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
 										</div>
 									</div>
-									<div class="col-sm-12">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="cardSave">Save payment details for next time.
-											</label>
-										</div>
-									</div>
+									<!--<div class="col-sm-12">-->
+										<!--<div class="checkbox">-->
+											<!--<label>-->
+												<!--<input type="checkbox" v-model="cardSave">Save payment details for next time.-->
+											<!--</label>-->
+										<!--</div>-->
+									<!--</div>-->
 								</div>
 
 								<p class="help-block text-success">Your card will be charged for the upfront fees
@@ -236,7 +236,7 @@
 			if (this.devMode) {
 				this.cardNumber = '4242424242424242';
 				this.cardCVC = '123';
-				this.cardYear = '19';
+				this.cardYear = '2019';
 				return this.cardMonth = '1';
 			}
 		},
@@ -339,7 +339,7 @@
 					var i, ref, ref1, results;
 					results = [];
 					for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
-						results.push(num.toString().substr(2, 2));
+						results.push(num);
 					}
 					return results;
 				})();
@@ -347,12 +347,11 @@
 			},
 			cardParams() {
 				return {
-					name: this.cardHolderName,
+					cardholder: this.cardHolderName,
 					number: this.cardNumber,
-					expMonth: this.cardMonth,
-					expYear: this.cardYear,
+					exp_month: this.cardMonth,
+					exp_year: this.cardYear,
 					cvc: this.cardCVC,
-					address_zip: this.cardZip,
 				};
 			}
 		},
@@ -365,7 +364,11 @@
 				//this.$dispatch('payment-complete', true)
 			},
 			toDate(date){
-				return moment(date).format('LL');
+				if(date) {
+					return moment(date).format('LL');
+				} else {
+					return 'Due Now';
+				}
 			},
 			resetCaching() {
 				console.log('resetting');
@@ -398,13 +401,20 @@
 					this.attemptedCreateToken = true;
 					this.stripeDeferred.reject(false);
 				} else {
-					Stripe.setPublishableKey(this.stripeKey);
-					Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+//					Stripe.setPublishableKey(this.stripeKey);
+//					Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+					this.$parent.$refs.validationspinner.show();
+
+					this.$http.post('donations/authorize', this.cardParams)
+							.then(this.createTokenCallback,
+									function (error) {
+										this.$parent.$refs.validationspinner.hide();
+									});
 				}
 				return this.stripeDeferred.promise();
 			},
-			createTokenCallback(status, resp) {
-				console.log(status);
+			createTokenCallback(resp) {
+				//console.log(status);
 				console.log(resp);
 				this.validationErrors = {
 					cardNumber: '',
@@ -428,13 +438,15 @@
 					}
 					this.stripeDeferred.reject(false);
 				}
-				if (status === 200) {
-					this.card = resp;
+				if (resp.status === 200) {
+					this.card = this.cardParams;
 					// send payment data to parent
 					this.$parent.paymentInfo = {
-						token: resp,
+						token: resp.data,
+						card: this.cardParams,
 						save: this.cardSave,
-						email: this.cardEmail
+						email: this.cardEmail,
+						address_zip: this.cardZip
 					};
 					this.$parent.upfrontTotal = this.upfrontTotal;
 					this.$parent.fundraisingGoal = this.fundraisingGoal;

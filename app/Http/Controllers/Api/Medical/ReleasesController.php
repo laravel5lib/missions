@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\Medical;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\Medical\ReleaseRequest;
-use App\Http\Transformers\v1\Medical\ReleaseTransformer;
-use App\Models\v1\Medical\Release;
+use App\Http\Transformers\v1\ReleaseTransformer;
+use App\Models\v1\MedicalRelease;
 
 use App\Http\Requests;
 use Dingo\Api\Contract\Http\Request;
@@ -14,20 +14,20 @@ class ReleasesController extends Controller
 {
 
     /**
-     * @var Release
+     * @var MedicalRelease
      */
     private $release;
 
     /**
      * ReleasesController constructor.
-     * @param Release $release
+     * @param MedicalRelease $release
      */
-    public function __construct(Release $release)
+    public function __construct(MedicalRelease $release)
     {
         $this->release = $release;
 
-        $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+        $this->middleware('api.auth',  ['only' => ['store','update','destroy']]);
+//        $this->middleware('jwt.refresh');
     }
 
     /**
@@ -69,11 +69,12 @@ class ReleasesController extends Controller
      */
     public function store(ReleaseRequest $request)
     {
+        if ( ! empty($request->get('conditons')))
+            $request->merge(['is_risk' => true]);
+
         $release = $this->release->create($request->all());
 
-        $location = url('/medical/releases/' . $release->id);
-
-        return $this->response->created($location);
+        return $this->response->item($release, new ReleaseTransformer);
     }
 
     /**

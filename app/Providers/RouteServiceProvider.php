@@ -41,11 +41,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map(Router $router)
     {
-        $this->mapWebRoutes($router);
-
-        $this->mapAdminRoutes($router);
-
         $this->mapApiRoutes($router);
+        $this->mapAdminRoutes($router);
+        $this->mapWebRoutes($router);
     }
 
     /**
@@ -77,7 +75,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $router->group([
             'prefix' => 'admin',
-            'namespace' => $this->adminNamespace, 'middleware' => ['web','auth'],
+            'namespace' => $this->adminNamespace, 'middleware' => ['web','auth', 'can:view-admin'],
         ], function ($router) {
             require app_path('Http/admin.php');
         });

@@ -12,7 +12,7 @@
 					<div class="form-group" :class="{ 'has-error': checkForError('group') }">
 						<label class="col-sm-2 control-label">Group</label>
 						<div class="col-sm-10">
-							<v-select class="form-controls" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
+							<v-select class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
 									  label="name"></v-select>
 							<select hidden v-model="group_id" v-validate:group="{ required: true}">
 								<option :value="group.id" v-for="group in groups">{{group.name}}</option>
@@ -21,11 +21,26 @@
 					</div>
 
 					<div class="form-group" :class="{ 'has-error': checkForError('description') }">
-						<label for="description" class="col-sm-2 control-label">Description</label>
+						<label for="description" class="col-sm-2 control-label">
+							Description
+							<button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev" aria-expanded="false" aria-controls="markdownPrev">
+								Preview
+							</button>
+
+						</label>
 						<div class="col-sm-10">
-							<textarea name="description" id="description" rows="2" v-model="description"
-									  class="form-control"
-									  v-validate:description="{ required: true}"></textarea>
+							<div class="row">
+								<div class="col-sm-12">
+									<textarea name="description" id="description" rows="5" v-model="description"
+											  class="form-control"
+											  v-validate:description="{ required: true}"></textarea>
+								</div>
+								<div class="col-sm-12 collapse" id="markdownPrev">
+									<br>
+									<div class="well" v-html="description | marked"></div>
+								</div>
+							</div>
+
 						</div>
 					</div>
 
@@ -46,7 +61,7 @@
 					<div class="form-group" :class="{ 'has-error': checkForError('prospects') }">
 						<label class="col-sm-2 control-label">Perfect For</label>
 						<div class="col-sm-10">
-							<v-select multiple class="form-controls" id="group" :value.sync="prospectsObj"
+							<v-select multiple class="form-control" id="group" :value.sync="prospectsObj"
 									  :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
 							<select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
 								<option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
@@ -109,7 +124,7 @@
 					<div class="form-group" :class="{ 'has-error': checkForError('rep') }">
 						<label class="col-sm-2 control-label">Trip Rep.</label>
 						<div class="col-sm-10">
-							<v-select multiple class="form-controls" id="rep" :value.sync="repObj" :options="reps"
+							<v-select multiple class="form-control" id="rep" :value.sync="repObj" :options="reps"
 									  label="name"></v-select>
 							<!--v-validate:rep="{ required: false}"-->
 							<select hidden v-model="rep_id">
@@ -130,6 +145,7 @@
 	}
 </style>
 <script>
+	var marked = require('marked');
 	import vSelect from "vue-select"
 	export default{
 		name: 'trip-details',
@@ -192,6 +208,9 @@
 			prospects(){
 				return _.pluck(this.prospectsObj, 'value');
 			}
+		},
+		filters: {
+			marked: marked,
 		},
 		methods: {
 			populateWizardData(onValid){

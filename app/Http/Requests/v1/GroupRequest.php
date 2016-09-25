@@ -7,8 +7,8 @@ use App\Utilities\v1\Country;
 use Dingo\Api\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class GroupRequest extends FormRequest
-{
+class GroupRequest extends FormRequest {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -16,17 +16,7 @@ class GroupRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($this->isMethod('put'))
-        {
-            $groupId = $this->route('groups');
-
-            return Gate::allows('update', Group::findOrFail($groupId));
-        }
-
-        if ($this->isMethod('post'))
-        {
-            return $this->user()->isAdmin();
-        }
+        return true;
     }
 
     /**
@@ -41,7 +31,7 @@ class GroupRequest extends FormRequest
             'url'          => 'required_if:public,true',
             'type'         => 'required|in:church,business,nonprofit,youth,other',
             'timezone'     => 'required|timezone',
-            'country_code' => 'required|in:' . Country::codes()
+            'country_code' => 'required|in:' . Country::codes(),
         ];
 
         if ($this->isMethod('put'))
@@ -51,23 +41,27 @@ class GroupRequest extends FormRequest
                 'url'          => 'sometimes|required_if:public,true',
                 'type'         => 'sometimes|required|in:church,business,nonprofit,youth,other',
                 'timezone'     => 'sometimes|required|timezone',
-                'country_code' => 'sometimes|required|in:' . Country::codes()
+                'country_code' => 'sometimes|required|in:' . Country::codes(),
+                'status'       => 'required|in:pending,approved'
             ];
         }
 
         $optional = [
-            'description' => 'string|max:120',
-            'address_one' => 'string',
-            'address_two' => 'string',
-            'city'        => 'string',
-            'state'       => 'string',
-            'zip'         => 'string',
-            'phone_one'   => 'string',
-            'phone_two'   => 'string',
-            'email'       => 'email',
-            'public'      => 'boolean',
-            'managers'    => 'array',
-            'tags'        => 'array'
+            'description'      => 'string|max:120',
+            'address_one'      => 'string',
+            'address_two'      => 'string',
+            'city'             => 'string',
+            'state'            => 'string',
+            'zip'              => 'string',
+            'phone_one'        => 'string',
+            'phone_two'        => 'string',
+            'email'            => 'email',
+            'public'           => 'boolean',
+            'managers'         => 'array',
+            'tags'             => 'array',
+            'avatar_upload_id' => 'string|exists:uploads',
+            'banner_upload_id' => 'string|exists:uploads',
+            'status'           => 'in:pending,approved'
         ];
 
         return $rules = $required + $optional;

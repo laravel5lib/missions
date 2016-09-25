@@ -1,31 +1,56 @@
 <template>
-	<div class="row">
-		<h4>{{ group.name }}</h4>
-		<table class="table table-hover">
-			<thead>
-			<tr>
-				<th>Trip Type</th>
-				<th>Trip Starting Cost</th>
-				<th>Spots Available</th>
-				<th>Ideal For</th>
-				<th></th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr v-for="trip in trips">
-				<td style="text-transform: capitalize;">{{ trip.type }}</td>
-				<td>{{ trip.lowest | currency }}</td>
-				<td>{{ trip.spots }}</td>
-				<td>
-					<span v-for="prospect in trip.prospects">
-						{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
-					</span>
-				</td>
-				<td><a href="/trips/{{ trip.id }}" class="btn btn-primary btn-sm">Select</a></td>
-			</tr>
-			</tbody>
-		</table>
+	<div class="dark-bg-primary">
+	<div class="container">
+		<hr class="divider inv xlg">
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center">
+				<a :href="'/groups/' + group.url"><img class="img-circle img-lg" src="{{ group.avatar }}"></a>
+				<h3>{{ group.name }}</h3>
+			</div>
+		</div>
+		<hr class="divider inv lg">
 	</div>
+	</div>
+	<div class="container">
+		<hr class="divider inv lg">
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<h2>Choose A Trip</h2>
+				<hr class="divider red-small lg">
+			</div>
+			<div class="col-xs-12">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>Type</th>
+					<th>Dates</th>
+					<th>Starting Cost</th>
+					<th>Spots Left</th>
+					<th>Ideal For</th>
+					<th>Status</th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr v-for="trip in trips" style="border-bottom: 1px solid #e6e6e6">
+					<td style="vertical-align:middle;">{{ trip.type | capitalize }}</td>
+					<td style="vertical-align:middle;">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</td>
+					<td style="vertical-align:middle;">{{ trip.starting_cost | currency }}</td>
+					<td style="vertical-align:middle;">{{ trip.spots }}</td>
+					<td style="vertical-align:middle;">
+						<span v-for="prospect in trip.prospects">
+							{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
+						</span>
+					</td>
+					<td style="vertical-align:middle;">{{ trip.status | capitalize }}</td>
+					<td class="text-right"><a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a></td>
+				</tr>
+				</tbody>
+			</table>
+			</div>
+		</div><!-- end row -->
+		<hr class="divider inv xlg">
+	</div><!-- end container -->
 </template>
 <script>
 	export default{

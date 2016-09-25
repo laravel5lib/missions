@@ -26,7 +26,7 @@ class DecisionsController extends Controller
         $this->decision = $decision;
 
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     public function index(Request $request)

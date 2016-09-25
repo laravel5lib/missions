@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\RegisteredForTrip;
+use App\Events\ReservationWasCreated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
+use App\Http\Requests\v1\TripRegistrationRequest;
+use App\Http\Transformers\v1\ReservationTransformer;
 use App\Models\v1\Trip;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\TripRequest;
@@ -25,7 +28,7 @@ class TripsController extends Controller
     {
         $this->middleware('internal', ['only' => ['store', 'update', 'destroy']]);
         $this->middleware('api.auth', ['only' => ['store', 'update', 'destroy']]);
-        $this->middleware('jwt.refresh', ['only' => ['store', 'update', 'destroy']]);
+//        $this->middleware('jwt.refresh', ['only' => ['store', 'update', 'destroy']]);
         $this->trip = $trip;
     }
 
@@ -38,6 +41,7 @@ class TripsController extends Controller
     public function index(Request $request)
     {
         $trips = $this->trip
+                      ->withCount('reservations')
                       ->filter($request->all())
                       ->paginate($request->get('per_page', 10));
 
@@ -52,7 +56,7 @@ class TripsController extends Controller
      */
     public function show($id)
     {
-        $trip = $this->trip->findOrFail($id);
+        $trip = $this->trip->withCount('reservations')->findOrFail($id);
 
         return $this->response->item($trip, new TripTransformer);
     }
@@ -68,6 +72,9 @@ class TripsController extends Controller
         $trip = $this->trip->create($request->except('deadlines', 'requirements', 'costs'));
 
         $this->syncResources($trip, $request);
+
+        if ($request->has('tags'))
+            $trip->tag($request->get('tags'));
 
         return $this->response->item($trip, new TripTransformer);
     }
@@ -86,6 +93,9 @@ class TripsController extends Controller
         $trip->update($request->except('deadlines', 'requirements', 'costs'));
 
         $this->syncResources($trip, $request);
+
+        if ($request->has('tags'))
+            $trip->retag($request->get('tags'));
 
         return $this->response->item($trip, new TripTransformer);
     }
@@ -114,5 +124,17 @@ class TripsController extends Controller
 
         if ($request->has('tags'))
             $trip->retag($request->get('tags'));
+    }
+
+    public function register($id, TripRegistrationRequest $request)
+    {
+        $trip = $this->trip->findOrFail($id);
+
+        $reservation = $trip->reservations()
+            ->create($request->except('costs', 'donor', 'payment'));
+
+        event(new RegisteredForTrip($reservation, $request));
+
+        return $this->response->item($reservation, new ReservationTransformer);
     }
 }

@@ -11,6 +11,28 @@ $active-icon-color: #6CC94D;
 /*$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "~font-awesome/fonts/";*/
 
+/* Vue Elements */
+.v-select {
+  &.form-control {
+    padding: 6px 12px;
+    height: inherit;
+  }
+  .dropdown-toggle {
+    border: none !important;
+  }
+  .selected-tag {
+    font-size: 13px;
+  }
+  &.form-control .dropdown-toggle .form-control {
+    font-size: 14px;
+    min-height: 40px !important;
+    height: 100%;
+  }
+  .open-indicator {
+    line-height: 1.8;
+  }
+}
+
 /**
  * Elements
  */
@@ -30,6 +52,18 @@ $fa-font-path: "~font-awesome/fonts/";*/
 @import "components/tabs";
 
 /*
+ * Google Translate
+ */
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+/*
  * Misc.
  */
 
@@ -45,6 +79,42 @@ body {
 
 a {
   cursor: pointer;
+}
+
+.pagination > li > a:hover, .pagination > li > a:focus, .pagination > li > span:hover, .pagination > li > span:focus {
+    color: $gray-dark;
+}
+
+.text-strike {
+  text-decoration: line-through;
+}
+
+p.large-type {
+  max-width: 420px;
+}
+
+.dash-trailing:after {
+    background: $brand-primary;
+    display: block;
+    content: '';
+    height: 4px;
+    margin: 15px 0;
+    width: 40px;
+}
+.dash-trailing-dark:after {
+    background: $text-primary-darker;
+}
+.dash-trailing-light:after {
+    background: #fff;
+}
+.dash-trailing-info:after {
+  background: $brand-info;
+}
+.dash-trailing-success:after {
+  background: $brand-success;
+}
+.dash-trailing-warning:after {
+  background: $brand-warning;
 }
 
 .footer {
@@ -78,8 +148,81 @@ body {
   /* The html and body elements cannot have any padding or margin. */
 }
 /* Parallax Headers */
+.content-page-header {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-height: 400px;
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    line-height: 1;
+  }
+  .c-page-header-text {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    z-index: 10;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #fff;
+    text-shadow: none;
+      @media screen and (max-width: 767px) {
+        padding-bottom: 0px;
+      }
+    h1 {
+      font-size: 3.5em;
+      @media screen and (max-width: 991px) {
+        font-size: 2.5em;
+      }
+      @media screen and (max-width: 767px) {
+        font-size: 1.3em;
+      }
+    }
+  }
+}
+.content-page-bg {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-height: 600px;
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    line-height: 1;
+  }
+  .c-page-bg-text {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    z-index: 10;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #fff;
+    text-shadow: none;
+    h1 {
+      font-size: 3.5em;
+      @media screen and (max-width: 991px) {
+        font-size: 2.5em;
+      }
+      @media screen and (max-width: 767px) {
+        font-size: 1.3em;
+      }
+    }
+    @media screen and (max-width: 767px) {
+      left: 5%;
+      right: 5%;
+      bottom: 5%; 
+      padding-bottom: 0px;
+    }
+  }
+}
 .prof-cover-photo {
-  height: 55vh;
+  height: 400px;
   overflow: hidden;
 }
 .cover-overlay {
@@ -92,9 +235,10 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 ); /* IE6-9 */
 }
 .prof-cover-photo > img {
-  height: 89%;
+  height: 100%;
+  width: 100%; // added temp
   position: relative;
-  top: -16%;
+  top: -36%;
 }
 .p-head-title {
   color: #fff;
@@ -136,6 +280,38 @@ body {
   /* Pad bottom by footer height */
   padding: 0 0 200px;
   padding-top: 65px;
+}
+#dash-page-wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -200px;
+  /* Pad bottom by footer height */
+  padding: 0 0 200px;
+  padding-top: 65px;
+  & > .container {
+    padding-left: 40px !important;
+    @media screen and (max-width: 767px) {
+      padding-left: 10px !important;
+    }
+  }
+}
+#admin-page-wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto 20px;
+  /* Pad bottom by footer height */
+  padding: 0 0 20px;
+  padding-top: 65px;
+  & > .container {
+    padding-left: 40px !important;
+    @media screen and (max-width: 767px) {
+      padding-left: 10px !important;
+    }
+  }
 }
 #footer-mm {
   color: $gray-light;
@@ -199,21 +375,74 @@ body {
 }
 
 /* MM main nav styles */
-.mm-main-navbar {
-  box-shadow: 0 0 8px rgba(0,0,0,.4);
-  border-bottom: none;
-  @media screen and (min-width: 767px) { 
+.navbar-toggle {
+  display: inline;
+}
+@media screen and (min-width: 767px) { 
     .navbar-toggle {
-      display: block;
+      display: inline;
+      padding: 10px 10px;
+      margin: 15.5px 15px;
     }
-  }
+}
+@media screen and (max-width: 767px) { 
+    .navbar-toggle {
+      display: inline;
+      padding: 9px 10px;
+      margin: 16.5px 5px;
+    }
 }
 li.av-nav > a {
     padding-top: 13.5px;
     padding-bottom: 13.5px;
 }
 
+/* Aside Nav Styles */
+.aside {
+    background: #3e3e3e !important;
+  }
+.aside .aside-dialog .aside-header {
+    border-bottom: 1px solid #242424 !important;
+    background: #242424 !important;
+    color: #f5f5f5 !important;
+}
+.aside .aside-dialog .aside-body {
+  padding: 0 !important;
+  background: #3e3e3e;
+  color: #e6e6e6;
+  ul.nav {
+    margin-bottom: 100px;
+    li > a {
+      font-size: .9em;
+      color: #e6e6e6;
+      padding: 5px 20px !important;
+      &:hover, &:focus {
+        color: #f6323e;
+      }
+    }
+  }
+}
+.aside .aside-dialog .aside-body ul.nav li.donate-nav a {
+  text-align: center;
+  padding: 10px 20px !important;
+  color: #fff;
+  background: $brand-primary;
+}
+.aside-body ul.nav > li.navlabel {
+  font-size: .7em;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  color: #808080;
+  background: #242424;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
 /* Offcanvas nav */
+.aside-backdrop {
+  z-index: 1020 !important;
+}
 .navmenu.mm-offcanvas-width {
   width: 200px;
   .nav > li {
@@ -250,8 +479,8 @@ li.av-nav > a {
   margin-bottom:0;
 }
 .db-brand-xs {
-  padding: 3px;
-  margin: 7px 10px;
+  padding: 0px;
+  margin: 4px 0px;
 }
 
 // -- Section Backgrounds -- //
@@ -282,6 +511,12 @@ li.av-nav > a {
   color: $text-color;
   background: #fff;
 }
+.white-header-bg {
+  padding: 5px 0;
+  color: $text-color;
+  background: #fff;
+  border-bottom: 1px solid $gray-light;
+}
 .gray-lighter-bg {
   color: $gray-dark;
   background-color: $gray-lighter;
@@ -306,6 +541,14 @@ li.av-nav > a {
   color: #fff;
   background-color: $gray-base;
 }
+.row-no-margin {
+    margin-left: 0;
+    margin-right: 0;
+}
+.col-no-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
 
 // -- Custom Image Sizes -- //
 $img-base-size: 40px;
@@ -325,6 +568,10 @@ $img-base-size: 40px;
   max-height: $img-base-size*2.5;
   max-width: $img-base-size*2.5;
 }
+.img-xlg {
+  max-height: $img-base-size*4;
+  max-width: $img-base-size*4;
+}
 .av-left {
   margin-right: 10px;
 }
@@ -332,7 +579,7 @@ $img-base-size: 40px;
   margin-left: 10px;
 }
 .profile-pic-panel {
-  margin-top: -130px;
+  margin-top: -215px;
   @media screen and (max-width: 767px) {
     margin-top: 40px;
   }
@@ -342,6 +589,133 @@ $img-base-size: 40px;
 .max-panel-height {
   max-height: 390px;
   overflow: scroll;
+}
+
+// -- Video Wrappers -- //
+/* Video Responsiveness */
+.video-outer {
+  max-width: 100%;
+}
+
+.video-inner {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.video-inner iframe,  
+.video-inner object,  
+.video-inner embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+// -- Video Background -- //
+.vid-bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: -100;
+}
+
+.vid-bg-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: auto;
+    min-width: 100%;
+    min-height: 100%;
+    -webkit-transform: translate(-50%, -50%);
+       -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+}
+
+@media (max-width: 767px) {
+    .vid-bg {
+        background: url('images/video/video-placeholder.png') center center / cover no-repeat;
+    }
+
+    .vid-bg-video {
+        display: none;
+    }
+}
+
+/*=========================
+  Icons
+ ================= */
+
+/* footer social icons */
+ul.social-network {
+  list-style: none;
+  display: inline;
+  margin-left:0 !important;
+  padding: 0;
+  li {
+    display: inline;
+    margin: 0 1px;
+  }
+}
+
+/* footer social icons */
+.social-network a:hover {
+  background-color: $brand-primary;
+  i {
+    color:#fff;
+  }
+}
+a.socialIcon:hover, .socialHoverClass {
+  color:$brand-primary;
+}
+
+.social-circle {
+  li a {
+    display:inline-block;
+    position:relative;
+    margin:0 auto 0 auto;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    border-radius:50%;
+    text-align:center;
+    width:25px;
+    height:25px;
+    font-size:12px;
+    background: $gray-dark;
+  }
+  li i {
+    margin:0;
+    line-height:25px;
+    text-align: center;
+  }
+}
+
+.social-circle li a:hover i, .triggeredHover {
+  -moz-transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+  -ms--transform: rotate(360deg);
+  transform: rotate(360deg);
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.social-circle i {
+  color: #fff;
+  -webkit-transition: all 0.8s;
+  -moz-transition: all 0.8s;
+  -o-transition: all 0.8s;
+  -ms-transition: all 0.8s;
+  transition: all 0.8s;
 }
 
 // -- Trip Rep Bubble -- //
@@ -362,6 +736,12 @@ $divider-base-size: 10px;
   border-top: 1px solid $gray-light;
   margin-top: $divider-base-size;
   margin-bottom: $divider-base-size;
+  &.red-small {
+    width: 60px;
+    height: 3px;
+    border-top: 1px solid transparent;
+    background-color: #f6323e;
+  }
   &.p-head {
     margin-bottom: 15px;
       width: 60px;

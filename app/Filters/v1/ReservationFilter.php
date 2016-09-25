@@ -12,9 +12,7 @@ class ReservationFilter extends ModelFilter
     * @var array
     */
     public $relations = [
-        'trip' => ['groups', 'campaign'],
-        'todos' => ['task', 'outstandingTasks'],
-        'tags' => ['tags']
+        'trip' => ['groups', 'campaign']
     ];
 
     public function user($ids)
@@ -74,6 +72,11 @@ class ReservationFilter extends ModelFilter
         return $hasPassport == 'yes' ?
             $this->whereNotNull('passport_id') :
             $this->whereNull('passport_id');
+    }
+
+    public function tags($tags)
+    {
+        $this->withAllTag($tags)->get();
     }
 
     /**

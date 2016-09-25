@@ -1,16 +1,15 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title"> Managers
+				<h5>Managers
 				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddManagerModal"><span
 						class="fa fa-plus"></span> New
-				</button>
-			</h3>
+				</button></h5>
 		</div>
 		<div>
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="manager in managers" track-by="id">
 				<div class="thumbnail">
-					<img src="http://lorempixel.com/300/300" alt="">
+					<img :src="manager.avatar" alt="{{ manager.name }}">
 					<div class="caption">
 						<h5 v-text="manager.name"></h5>
 
@@ -28,14 +27,14 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-						<h4 class="modal-title">Modal title</h4></div>
+						<h4 class="modal-title">Add Manager</h4></div>
 					<div class="modal-body">
 						<validator name="AddManager">
 							<form class="form-horizontal" novalidate>
 								<div class="form-group" :class="{ 'has-error': checkForError('user') }"><label
 										class="col-sm-2 control-label">User</label>
 									<div class="col-sm-10">
-										<v-select class="form-controls" id="user" :value.sync="userObj" :options="users"
+										<v-select class="form-control" id="user" :value.sync="userObj" :options="users"
 												  :on-search="getUsers" label="name"></v-select>
 										<select hidden="" v-model="user_id" v-validate:user="{ required: true}">
 											<option :value="user.id" v-for="user in users">{{user.name}}</option>
@@ -65,7 +64,7 @@
 				users: [],
 				group: null,
 				userObj: null,
-				resource: this.$resource('groups{/id}', {include: 'managers.user'}),
+				resource: this.$resource('groups{/id}', {include: 'managers'}),
 				attemptSubmit: false
 			};
 		},
@@ -93,16 +92,16 @@
 				this.attemptSubmit = true;
 				if (this.$AddManager.valid) {
 					var managersArr = this.managers;
-					managersArr.push({group_id: this.groupId, user_id: this.user_id});
-					this.group.managers = _.pluck(managersArr, 'user_id');
-					//this.group.managers = this.managers;
+					managersArr.push({id: this.user_id});
+					this.group.managers = _.pluck(managersArr, 'id');
 					this.updateGroup();
 				}
 			},
 			removeManager: function removeManager(manager) {
 				// Remove Manager
 				this.managers.$remove(manager);
-				this.group.managers = this.managers;
+				var managersArr = this.managers;
+				this.group.managers = _.pluck(managersArr, 'id');
 				this.updateGroup();
 			},
 			updateGroup: function updateGroup() {

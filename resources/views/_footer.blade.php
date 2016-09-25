@@ -1,3 +1,5 @@
+
+
 <footer id="footer-mm-last">
   <div class="container">
     <div class="row">
@@ -12,6 +14,9 @@
           <li><a href="#">Sitemap</a></li>
           <hr class="divider inv sm visible-xs">
           <li>Missions.Me is a 501(c)3 &copy; 2015</li>
+          <li>
+            @include('_google_translate')
+          </li>
         </ul>
       </div><!-- end col -->
     </div><!-- end row -->

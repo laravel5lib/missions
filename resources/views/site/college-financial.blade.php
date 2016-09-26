@@ -1,5 +1,11 @@
 @extends('site.layouts.default')
 
+@section('scripts')
+<script>
+    $('ul.scrollNav li a').easyScroller({ scrollDownSpeed: 500 })
+</script>
+@endsection
+
 @section('content')
 <div class="content-page-header">
     <img class="img-responsive" src="images/college/college-header.jpg" alt="College">

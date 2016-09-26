@@ -1,5 +1,11 @@
 @extends('site.layouts.default')
 
+@section('scripts')
+<script>
+    $('.scrollNav').easyScroller();
+</script>
+@endsection
+
 @section('content')
 <div class="vid-bg">
   <video muted autoplay loop poster="images/college/home-placeholder.png" class="vid-bg-video">
@@ -33,12 +39,12 @@
 <div class="darker-bg-primary">
 	<div class="white-bg">
 		<ul class="nav nav-tabs">
-		    <li class="active"><a href="#who-we-are">Who We Are</a></li>
-		    <li><a href="#academics">Academics</a></li>
-		    <li><a href="#community">Community</a></li>
-		    <li><a href="#students">Prospective Students</a></li>
-		    <li><a href="/college-financial">Financial Aid</a></li>
-		    <li><a href="#academics">Missions</a></li>
+		    <li class="active"><a class="scrollNav" href="#who-we-are">Who We Are</a></li>
+		    <li><a class="scrollNav" href="#academics">Academics</a></li>
+		    <li><a class="scrollNav" href="#community">Community</a></li>
+		    <li><a class="scrollNav" href="#students">Prospective Students</a></li>
+		    <li><a class="scrollNav" href="/college-financial">Financial Aid</a></li>
+		    <li><a class="scrollNav" href="#academics">Missions</a></li>
 		    <li><a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
 		</ul>
 	</div><!-- end white-bg -->

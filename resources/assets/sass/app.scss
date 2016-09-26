@@ -650,6 +650,95 @@ $img-base-size: 40px;
     }
 }
 
+/* Partner Panels */
+.partner-equals-panel {
+  height: 250px;
+  width: 250px;
+  background-color: $text-primary-dark;
+  text-align: center;
+  margin: 15px 0;
+  overflow: hidden;
+  cursor: default;
+  position: relative;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  .equals-icon {
+    height: 250px;
+    width: 250px;
+    padding: 15px;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    position: absolute;
+    background-color: #fff;
+    -o-transform: translateX(-250px);
+    -ms-transform: translateX(-250px);
+    -moz-transform: translateX(-250px);
+    -webkit-transform: translateX(-250px);
+    opacity: 1;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -ms-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+    img {
+      margin-top: 40px;
+    }
+    h4 {
+      margin-top: 15px;
+      font-family: "ProximaNova-Semibold", "Montserrat", Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      text-rendering: optimizeLegibility;
+      font-size: 1.2em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #555555;
+    }
+  }
+  .view {
+    height: 250px;
+    width: 250px;
+    display: block;
+    position: relative;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    h4 {
+      font-family: "ProximaNova-Semibold", "Montserrat", Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      text-rendering: optimizeLegibility;
+      font-size: 1.2em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #fff;
+      margin-top: 100px;
+      span {
+        font-size: 1.8em;
+        margin-top: 15px;
+        display: block;
+      }
+    }
+  }
+  &:hover .equals-icon { 
+    -o-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -webkit-transform: translateX(0px);
+  }
+  &:hover .view { 
+    -o-transform: translateX(250px);
+    -ms-transform: translateX(250px);
+    -moz-transform: translateX(250px);
+    -webkit-transform: translateX(250px);
+    transition-delay: 0.1s;
+  }
+}
+
 /*=========================
   Icons
  ================= */

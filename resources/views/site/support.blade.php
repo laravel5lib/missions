@@ -33,7 +33,8 @@
 				<h3>Why Partnership?</h3>
 				<p>Missions.Me is passionate about helping the less fortunate around the world. We can’t do this alone. It takes a team, and it takes a relationship that goes far deeper than just a pocket full of cash. When someone partners with Missions.Me, we take it seriously. We value the personal relationship</p>
 			</div>
-			<div class="row hidden-sm hidden-xs">
+		</div>
+		<div class="row hidden-sm hidden-xs">
           <div class="col-md-6">
             <div class="partner-equals-panel pull-right">
               <div class="view">
@@ -259,8 +260,8 @@
 	</div><!-- end container -->
 </div><!-- end dark-bg-primary -->
 <div class="gray-lighter-bg">
-     <div class="container">
-      <div class="content-section">
+    <div class="container">
+    <div class="content-section">
         <div class="row">
           <div class="col-md-12 text-center">
             <h1>Other Ways To Give</h1>
@@ -305,7 +306,7 @@
             <p>Praying for Missions.Me is the most important way you can support our work.</p>
           </div>
         </div>
-      </div>
+    </div>
     </div>
 </div><!-- end white-bg -->
 <div class="dark-bg-primary">

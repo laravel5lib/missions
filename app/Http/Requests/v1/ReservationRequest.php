@@ -40,7 +40,8 @@ class ReservationRequest extends FormRequest
             'visa_id'            => 'string|exists:visas,id',
             'medical_release_id' => 'string|exists:medical_releases,id',
             'todos'              => 'array',
-            'tags'               => 'array'
+            'tags'               => 'array',
+            'companion_limit'    => 'numeric'
         ];
 
         if ($this->isMethod('put')) {
@@ -59,7 +60,8 @@ class ReservationRequest extends FormRequest
                 'visa_id'            => 'string|exists:visas,id',
                 'medical_release_id' => 'string|exists:medical_releases,id',
                 'todos'              => 'array',
-                'tags'               => 'array'
+                'tags'               => 'array',
+                'companion_limit'    => 'numeric'
             ];
         }
 

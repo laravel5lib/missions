@@ -30,7 +30,7 @@ class Reservation extends Model
         'given_names', 'surname', 'gender', 'status',
         'shirt_size', 'birthday', 'phone_one', 'phone_two',
         'address', 'city', 'state', 'zip', 'country_code',
-        'trip_id', 'rep_id', 'todos', 'companions', 'costs',
+        'trip_id', 'rep_id', 'todos', 'companion_limit', 'costs',
         'passport_id', 'user_id', 'email'
     ];
 

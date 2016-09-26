@@ -59,27 +59,22 @@
 			</div>
 		</div>
 		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
-			<form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent">
+			<form id="CreateUploadForm" class="form" novalidate @submit="prevent">
 				<div class="form-group" :class="{ 'has-error': checkForError('name') }" v-show="!uiLocked">
-					<label for="name" class="col-sm-2 control-label">Name</label>
-					<div class="col-sm-10">
+					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
 							   placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
 							   maxlength="100" minlength="1" required>
-					</div>
 				</div>
 				<div class="form-group" :class="{ 'has-error': checkForError('tags') }" v-show="!uiLocked" >
-					<label for="tags" class="col-sm-2 control-label">Tags</label>
-					<div class="col-sm-10">
+					<label for="tags" class="control-label">Tags</label>
 						<v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
 						<select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
 							<option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
 						</select>
-					</div>
 				</div>
 				<div class="form-group" :class="{ 'has-error': checkForError('type') }" v-show="!uiLocked" >
-					<label for="type" class="col-sm-2 control-label">Type</label>
-					<div class="col-sm-10">
+					<label for="type" class="control-label">Type</label>
 						<select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
 							<option :value="">-- select type --</option>
 							<option value="avatar">Image (Avatar) - 1280 x 1280</option>
@@ -87,10 +82,9 @@
 							<option value="other">Image (other) - no set dimensions</option>
 							<option value="file">File</option>
 						</select>
-					</div>
 				</div>
 
-				<div class="row col-sm-offset-2" v-if="type && type === 'other'">
+				<div class="row" v-if="type && type === 'other'">
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" v-model="constrained">
@@ -119,14 +113,12 @@
 				</div>
 
 				<div class="form-group">
-					<label for="file" class="col-sm-2 control-label">File</label>
-					<div class="col-sm-10">
+					<label for="file" class="control-label">File</label>
 						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="form-control">
 						<!--<h5>Coords: {{coords|json}}</h5>-->
-					</div>
 				</div>
 
-				<div class="row col-sm-offset-2" v-if="type && type !== 'file' && file && isSmall()">
+				<div class="row2" v-if="type && type !== 'file' && file && isSmall()">
 					<div class="alert alert-warning" role="alert">
 						The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
 						The current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.
@@ -134,8 +126,8 @@
 				</div>
 
 				<div class="form-group" v-if="file" v-show="type !== 'file'">
-					<label for="file" class="col-sm-2 control-label">Crop Image</label>
-					<div id="crop-wrapper" class="col-sm-10">
+					<label for="file" class="control-label">Crop Image</label>
+					<div id="crop-wrapper" class="col-sm-12">
 						<img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"
 							 v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>
 						<!--<hr>-->
@@ -146,11 +138,9 @@
 				<br>
 
 				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
 						<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
 						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Create</a>
 						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Update</a>
-					</div>
 				</div>
 
 			</form>
@@ -224,12 +214,12 @@
 				coords: 'Try to move/resize the selection',
 				constrained: true,
 				vueCropApi: null,
-				scaledWidth: 600,
-				scaledHeight: 600,
-				imageMaxWidth: 600,
-				imageMaxHeight: 600,
-				imageWidth: 600,
-				imageHeight: 600,
+				scaledWidth: 400,
+				scaledHeight: 400,
+				imageMaxWidth: 400,
+				imageMaxHeight: 400,
+				imageWidth: 400,
+				imageHeight: 400,
 				imageAspectRatio: null,
 				aspectRatio: this.width/this.height,
 				fileA: null,
@@ -302,6 +292,20 @@
 			'vueCrop-api':function (api) {
 				// make api available on scope
 				window.vueCropApi = this.vueCropApi = api;
+			},
+			'uploads-complete'(data){
+				switch(data.type){
+					case 'avatar':
+						this.selectedAvatar = data;
+						this.avatar_upload_id = data.id;
+						jQuery('#avatarCollapse').collapse('hide');
+						break;
+					case 'banner':
+						this.selectedBanner = data;
+						this.banner_upload_id = data.id;
+						jQuery('#bannerCollapse').collapse('hide');
+						break;
+				}
 			}
 		},
         methods: {

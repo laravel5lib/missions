@@ -17,7 +17,7 @@
                                             </a>
                                         </div>
                                         <div class="media-body">
-                                            <a @click="submit()" class="btn btn-primary"><i class="fa fa-camera"></i> Upload</a><br>
+                                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button><br>
                                             <small>Max file size: 2mb</small>
                                         </div>
                                     </div>
@@ -30,8 +30,20 @@
                                             </a>
                                         </div>
                                         <div class="media-body">
-                                            <a @click="submit()" class="btn btn-primary"><i class="fa fa-camera"></i> Cover</a>
+                                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button>
                                             <small>Max file size: 2mb</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="collapse" id="avatarCollapse">
+                                        <div class="well">
+                                            <upload-create-update type="avatar" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['user']"></upload-create-update>
+                                        </div>
+                                    </div>
+                                    <div class="collapse" id="bannerCollapse">
+                                        <div class="well">
+                                            <upload-create-update type="banner" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['user']"></upload-create-update>
                                         </div>
                                     </div>
                                 </div>
@@ -398,9 +410,10 @@
 <script>
     import VueStrap from 'vue-strap/dist/vue-strap.min';
     import vSelect from "vue-select";
+    import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'user-settings',
-        components: {vSelect, 'alert': VueStrap.alert},
+        components: {vSelect, uploadCreateUpdate, 'alert': VueStrap.alert},
         data(){
             return {
                 avatar: '',
@@ -442,6 +455,12 @@
                 resource: this.$resource('users/me'),
                 errors: {},
                 saved: false,
+
+                selectedAvatar: null,
+                avatar_upload_id: null,
+                selectedBanner: null,
+                banner_upload_id: null,
+
             }
         },
         computed: {
@@ -486,6 +505,8 @@
                         gender: this.gender,
                         public: this.public,
                         url: this.public ? this.url : undefined,
+                        avatar_upload_id: this.avatar_upload_id,
+                        banner_upload_id: this.banner_upload_id,
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                         this.saved = true;

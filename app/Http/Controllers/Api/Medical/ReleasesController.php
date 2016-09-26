@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\Medical;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\Medical\ReleaseRequest;
-use App\Http\Transformers\v1\Medical\ReleaseTransformer;
-use App\Models\v1\Medical\Release;
+use App\Http\Transformers\v1\ReleaseTransformer;
+use App\Models\v1\MedicalRelease;
 
 use App\Http\Requests;
 use Dingo\Api\Contract\Http\Request;
@@ -14,15 +14,15 @@ class ReleasesController extends Controller
 {
 
     /**
-     * @var Release
+     * @var MedicalRelease
      */
     private $release;
 
     /**
      * ReleasesController constructor.
-     * @param Release $release
+     * @param MedicalRelease $release
      */
-    public function __construct(Release $release)
+    public function __construct(MedicalRelease $release)
     {
         $this->release = $release;
 

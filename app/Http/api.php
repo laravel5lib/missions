@@ -67,6 +67,12 @@ $api->version('v1', [
     $api->group(['prefix' => 'medical'], function($api)
     {
         $api->resource('releases', 'Medical\ReleasesController');
+        $api->get('conditions', function() {
+           return ['data' => \App\Models\v1\MedicalCondition::available()];
+        });
+        $api->get('allergies', function() {
+            return ['data' => \App\Models\v1\MedicalAllergy::available()];
+        });
     });
 
     $api->group(['prefix' => 'utilities'], function ($api) {

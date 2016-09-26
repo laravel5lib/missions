@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Models\v1\Medical;
+namespace App\Models\v1;
 
-use App\Models\v1\Note;
-use App\Models\v1\Reservation;
-use App\Models\v1\User;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
-class Release extends Model
+class MedicalRelease extends Model
 {
     use Filterable, UuidForKey;
 
@@ -26,8 +23,8 @@ class Release extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'ins_provider', 'ins_policy_no', 'conditions',
-        'allergies', 'is_risk', 'name', 'emergency_contact'
+        'user_id', 'ins_provider', 'ins_policy_no',
+        'is_risk', 'name', 'emergency_contact'
     ];
 
     /**
@@ -59,8 +56,6 @@ class Release extends Model
      * @var array
      */
     protected $casts = [
-        'conditions' => 'array',
-        'allergies' => 'array',
         'emergency_contact' => 'array'
     ];
 
@@ -102,13 +97,23 @@ class Release extends Model
     }
 
     /**
-     * Set the conditions.
+     * Medical conditions listed on the release.
      *
-     * @param $value
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function setConditionsAttribute($value)
+    public function conditions()
     {
-        $this->attributes['conditions'] = json_encode($value);
+        return $this->hasMany(MedicalCondition::class);
+    }
+
+    /**
+     * Medical allergies listed on the release.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function allergies()
+    {
+        return $this->hasMany(MedicalAllergy::class);
     }
 
     /**
@@ -119,16 +124,6 @@ class Release extends Model
     public function setEmergencyContactAttribute($value)
     {
         $this->attributes['emergency_contact'] = json_encode($value);
-    }
-
-    /**
-     * Set the allergies.
-     *
-     * @param $value
-     */
-    public function setAllergiesAttribute($value)
-    {
-        $this->attributes['allergies'] = json_encode($value);
     }
 
 }

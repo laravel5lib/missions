@@ -8,6 +8,35 @@
                             <h5>Account</h5>
                         </div>
                         <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object img-rounded" :src="avatar" :alt="name" width="64">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <a @click="submit()" class="btn btn-primary"><i class="fa fa-camera"></i> Upload</a><br>
+                                            <small>Max file size: 2mb</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object img-rounded" :src="banner" :alt="name" width="64">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <a @click="submit()" class="btn btn-primary"><i class="fa fa-camera"></i> Cover</a>
+                                            <small>Max file size: 2mb</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group" :class="{ 'has-error': checkForError('name') }">
                                 <div class="col-sm-12">
                                     <label for="name">Name</label>
@@ -343,34 +372,39 @@
                                     <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    <a href="/admin/users" class="btn btn-default">Cancel</a>
-                                    <a @click="submit()" class="btn btn-primary">Update</a>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    <div v-if="saved" class="alert alert-success" role="alert"><i class="fa fa-check"></i> Profile Updated</div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
+                </div><!-- end col -->
+                <div class="col-sm-12 text-center">
+                    <hr class="divider inv lg">
+                    <a href="/dashboard" class="btn btn-default">Cancel</a>
+                    <a @click="submit()" class="btn btn-primary">Update</a>
+                    <hr class="divider inv xlg">
+                </div><!-- end col -->
             </div><!-- end row -->
-            </div>
+            <alert :show.sync="saved" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+                <span class="icon-ok-circled alert-icon-float-left"></span>
+                <strong>Well Done!</strong>
+                <p>Profile updated successfully</p>
+            </alert>
         </form>
     </validator>
 </template>
+<style>
+    .alert.top, .alert.top-right {
+        top: 80px;
+    }
+</style>
 <script>
+    import VueStrap from 'vue-strap/dist/vue-strap.min';
     import vSelect from "vue-select";
     export default{
         name: 'user-settings',
-        components: {vSelect},
+        components: {vSelect, 'alert': VueStrap.alert},
         data(){
             return {
+                avatar: '',
+                banner: '',
                 name: '',
                 email: '',
                 alt_email: '',
@@ -476,6 +510,8 @@
 
             this.resource.get().then(function (response) {
                 var user = response.data.data;
+                this.avatar = user.avatar;
+                this.banner = user.banner;
                 this.name = user.name;
                 this.bio = user.bio;
                 this.type = user.type;

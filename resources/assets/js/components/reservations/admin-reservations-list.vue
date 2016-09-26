@@ -112,7 +112,7 @@
                     </div>
                     <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Sort By
+                        Fields
                         <span class="caret"></span>
                         </button>
 						<ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -425,11 +425,11 @@
 			},
 			'groupsArr': function (val) {
 				this.filters.groups = _.pluck(val, 'id')||'';
-				this.searchReservations();
+//				this.searchReservations();
 			},
 			'usersArr': function (val) {
 				this.filters.user = _.pluck(val, 'id')||'';
-				this.searchReservations();
+//				this.searchReservations();
 			},
 			'tagsString': function (val) {
 				var tags = val.split(/[\s,]+/);
@@ -451,21 +451,18 @@
 				this.updateConfig();
 			},
             'search': function (val, oldVal) {
-				this.updateConfig();
 				this.page = 1;
                 this.searchReservations();
             },
             'page': function (val, oldVal) {
-				this.updateConfig();
 				this.searchReservations();
             },
             'per_page': function (val, oldVal) {
-				this.updateConfig();
 				this.searchReservations();
             },
-			'groups':function () {
+			/*'groups':function () {
 				this.searchReservations();
-			}
+			}*/
         },
         methods: {
 			consoleCallback (val) {
@@ -494,6 +491,8 @@
 						hasPassport: this.filters.hasPassport,
 					}
 				});
+
+				console.log('Filters Saved');
 			},
 			isActive(field){
 				return _.contains(this.activeFields, field);
@@ -502,8 +501,8 @@
 				return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields
 			},
             setOrderByField(field){
-                return this.orderByField = field, this.direction = 1;
-            },
+                return this.orderByField = field, this.direction = 1, this.searchReservations();
+			},
             resetFilter(){
                 this.orderByField = 'surname';
                 this.direction = 1;
@@ -555,6 +554,7 @@
 					search: this.search,
 					per_page: this.per_page,
 					page: this.page,
+					sort: this.orderByField + ' ' + this.direction ? 'asc' : 'desc'
 				};
 
 				$.extend(params, this.filters);
@@ -569,7 +569,9 @@
                     }, this);
                     this.reservations = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                })
+                }).then(function () {
+					this.updateConfig();
+				})
             },
 			getGroups(search, loading){
 				loading ? loading(true) : void 0;
@@ -599,6 +601,7 @@
 				var config = JSON.parse(localStorage.AdminReservationsListConfig);
 				this.activeFields = config.activeFields;
 				this.maxActiveFields = config.maxActiveFields;
+				this.filters = config.filters;
 			}
 			// populate
             this.getGroups();

@@ -22,18 +22,20 @@
             <validator name="CreateGroup">
               <form id="CreateGroupForm" class="form-horizontal" novalidate>
                   <div class="form-group">
-                      <div class="col-sm-6">
+                      <div class="col-sm-6" :class="{ 'has-error': checkForError('name') }">
                           <label for="name">Name</label>
                           <input type="text" class="form-control" name="name" id="name" v-model="name"
                                  placeholder="Group Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
                                  maxlength="100" minlength="1" required>
+                          <p class="help-block" v-if="errors.name" v-text="errors.name"></p>
                       </div>
-                      <div class="col-sm-6">
-                          <label for="type">Which Campaign are you interested in?</label>
-                          <select name="type" id="type" class="form-control" v-model="type" v-validate:type="{ required: true }" required>
+                      <div class="col-sm-6" :class="{ 'has-error': checkForError('campaign') }">
+                          <label for="campaign">Which Campaign are you interested in?</label>
+                          <select name="type" id="campaign" class="form-control" v-model="campaign" v-validate:campaign="{ required: true }" required>
                               <option value="">-- please select --</option>
-                              <option :value="option" v-for="option in typeOptions">{{option|capitalize}}</option>
+                              <option :value="campaign.id" v-for="campaign in campaigns">{{campaign.name}}</option>
                           </select>
+                          <p class="help-block" v-if="errors.campaign" v-text="errors.campaign"></p>
                       </div>
                   </div>
                   <div class="form-group">
@@ -51,14 +53,17 @@
                       <div class="col-sm-4">
                               <label for="infoCity">City</label>
                               <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
+                          <p class="help-block" v-if="errors.city" v-text="errors.city"></p>
                       </div>
                       <div class="col-sm-4">
                               <label for="infoState">State/Prov.</label>
                               <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
+                            <p class="help-block" v-if="errors.state" v-text="errors.state"></p>
                       </div>
                       <div class="col-sm-4">
                               <label for="infoZip">ZIP/Postal Code</label>
                               <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
+                          <p class="help-block" v-if="errors.zip" v-text="errors.zip"></p>
                       </div>
                   </div>
 
@@ -72,7 +77,7 @@
                               </select>
                           </div>
                       </div>
-                      <div class="col-sm-6">
+                      <div class="col-sm-6" :class="{ 'has-error': checkForError('type') }">
                           <label for="type">Type</label>
                           <select name="type" id="type" class="form-control" v-model="type" v-validate:type="{ required: true }" required>
                               <option value="">-- please select --</option>
@@ -89,9 +94,10 @@
                               <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                           </select>
                       </div>
-                      <div class="col-sm-4">
+                      <div class="col-sm-4" :class="{ 'has-error': checkForError('phone') }">
                           <label for="infoPhone">Phone 1</label>
-                          <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
+                          <input type="text" class="form-control" v-model="phone_one | phone" v-validate:phone="{ require: true, minlength:9 }" id="infoPhone" placeholder="123-456-7890">
+                          <p class="help-block" v-if="errors.phone_one" v-text="errors.phone_one"></p>
                       </div>
                       <div class="col-sm-4">
                           <label for="infoMobile">Phone 2</label>
@@ -100,38 +106,47 @@
                   </div>
 
                   <div class="form-group">
-                      <div class="col-sm-4">
-                          <label for="description">Your Name</label>
-                          <input type="text" class="form-control" name="" id="" v-model=""
-                                 placeholder="John Smith" v-validate:type="{ required: true, minlength:1, maxlength:100 }"
+                      <div class="col-sm-4" :class="{ 'has-error': checkForError('contact') }">
+                          <label for="contact">Your Name</label>
+                          <input type="text" class="form-control" name="contact" id="contact" v-model="contact"
+                                 placeholder="John Smith" v-validate:contact="{ required: true, minlength:1, maxlength:100 }"
                                  maxlength="100" minlength="1" required>
+                          <p class="help-block" v-if="errors.contact" v-text="errors.contact"></p>
                       </div>
-                      <div class="col-sm-4">
-                          <label for="name">Email</label>
-                          <input type="text" class="form-control" name="email" id="email" v-model="email">
+                      <div class="col-sm-4" :class="{ 'has-error': checkForError('email') }">
+                          <label for="email">Email</label>
+                          <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate:email="['email','require']">
+                          <p class="help-block" v-if="errors.email" v-text="errors.email"></p>
                       </div>
-                      <div class="col-sm-4">
-                          <label for="name">Your Position</label>
-                          <input type="text" class="form-control" name="position" id="position" v-model="position">
+                      <div class="col-sm-4" :class="{ 'has-error': checkForError('position') }">
+                          <label for="position">Your Position</label>
+                          <input type="text" class="form-control" name="position" id="position" v-model="position" v-validate:position="{ require: true, minlength:1 }">
+                          <p class="help-block" v-if="errors.position" v-text="errors.position"></p>
                       </div>
                   </div>
 
-                  <div class="form-group">
+                  <div class="form-group" :class="{ 'has-error': checkForError('spoken') }">
                       <label for="status" class="col-sm-8 control-label">Have you spoken with a Missions.Me representative?</label>
                       <div class="col-sm-4">
                           <label class="radio-inline">
-                              <input type="radio" name="status" id="status" :value="true" v-model="public"> Yes
+                              <input type="radio" name="status" id="status" value="yes" v-model="spoke_to_rep" v-validate:spoken="{ require: { rule: true } }"> Yes
                           </label>
                           <label class="radio-inline">
-                              <input type="radio" name="status2" id="status2" :value="false" v-model="public"> No
+                              <input type="radio" name="status2" id="status2" value="no" v-model="spoke_to_rep" v-validate:spoken=""> No
                           </label>
                       </div>
                   </div>
                   <div class="form-group">
                       <div class="col-sm-12 text-center">
-                          <a @click="submit()" class="btn btn-primary">Send Request</a>
+                          <a @click="submit" class="btn btn-primary">Send Request</a>
                       </div>
                   </div>
+                  <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+                      <span class="icon-ok-circled alert-icon-float-left"></span>
+                      <strong>Awesome!</strong>
+                      <p>Group request sent</p>
+                  </alert>
+
               </form>
           </validator>
           </div><!-- end col -->
@@ -313,14 +328,44 @@
 
 <script>
     import vSelect from 'vue-select';
+    import VueStrap from 'vue-strap/dist/vue-strap.min'
     export default{
 		name: 'groups',
-        components: { vSelect },
+        components: { vSelect, 'alert': VueStrap.alert },
         data(){
             return{
+                // logic vars
+                campaigns:[],
                 groups:[],
                 groupsLimit: 8,
+                attemptSubmit: false,
                 resource: this.$resource('groups?isPublic=yes'),
+                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
+                countries: [],
+                countryCodeObj: null,
+                timezones: [],
+                errors: {},
+                showSuccess: false,
+
+                // form vars
+                name: '',
+                type: '',
+                country_code: null,
+                description: '',
+                timezone: null,
+                phone_one: '',
+                phone_two: '',
+                address_one: '',
+                address_two: '',
+                city: '',
+                state: '',
+                zip: '',
+                url: '',
+                campaign: '',
+                contact: '',
+                position: '',
+                email: '',
+                spoke_to_rep: undefined,
 
                 // pagination vars
                 search: '',
@@ -357,10 +402,74 @@
                 }).then(function () {
 
                 });
+            },
+            resetForm() {
+                this.name ='';
+                this.type ='';
+                this.country_code = null;
+                this.description ='';
+                this.timezone = null;
+                this.phone_one ='';
+                this.phone_two ='';
+                this.address_one ='';
+                this.address_two ='';
+                this.this.city ='';
+                this.this.state ='';
+                this.zip ='';
+                this.url ='';
+                this.campaign ='';
+                this.contact ='';
+                this.position ='';
+                this.email ='';
+                this.spoke_to_rep = undefined;
+
+            },
+            submit(){
+                this.attemptSubmit = true;
+                if (this.$CreateGroup.valid) {
+                    this.$http.post('groups/submit', {
+                        name: this.name,
+                        type: this.type,
+                        country_code: this.country_code,
+                        description: this.description,
+                        timezone: this.timezone,
+                        phone_one: this.phone_one,
+                        phone_two: this.phone_two,
+                        address_one: this.address_one,
+                        address_two: this.address_two,
+                        city: this.city,
+                        state: this.state,
+                        zip: this.zip,
+                        url: this.url,
+                        campaign: this.campaign,
+                        contact: this.contact,
+                        position: this.position,
+                        email: this.email,
+                        spoke_to_rep: this.spoke_to_rep,
+                    }).then(function (response) {
+                        console.log(response);
+                        this.showSuccess = true;
+                        this.resetForm();
+                    }, function (error) {
+                        this.errors = error.data.errors
+                    });
+                }
             }
         },
         ready(){
             this.searchGroups();
+
+            this.$http.get('utilities/countries').then(function (response) {
+                this.countries = response.data.countries;
+            });
+
+            this.$http.get('utilities/timezones').then(function (response) {
+                this.timezones = response.data.timezones;
+            });
+
+            this.$http.get('campaigns').then(function (response) {
+                this.campaigns = response.data.data;
+            })
         }
     }
 </script>

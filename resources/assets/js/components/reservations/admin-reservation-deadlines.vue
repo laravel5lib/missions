@@ -13,6 +13,7 @@
             <tr>
                 <th>Name</th>
                 <th>Due Date</th>
+                <th>Grace Period</th>
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
@@ -23,6 +24,7 @@
                     {{ deadline.name ? deadline.name : !deadline.cost_name ? deadline.cost_name : deadline.item  + ' Submission' }}
                 </td>
                 <td>{{ deadline.due_at| moment 'll' }}</td>
+                <td>{{ deadline.grace_period }} {{ deadline.grace_period | pluralize 'day' }}</td>
                 <td>
                     <a class="btn btn-default btn-xs" @click="edit(deadline)"><i class="fa fa-pencil"></i></a>
                     <a class="btn btn-danger btn-xs" @click="remove(deadline)"><i class="fa fa-times"></i></a>

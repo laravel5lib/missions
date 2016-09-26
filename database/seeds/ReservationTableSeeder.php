@@ -1,6 +1,8 @@
 <?php
 
+use App\Events\ReservationWasCreated;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\Request;
 
 class ReservationTableSeeder extends Seeder
 {
@@ -19,11 +21,7 @@ class ReservationTableSeeder extends Seeder
 
             $r->tag(['vip', 'missionary']);
 
-            $r->donations()->saveMany([
-                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addDay()]),
-                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addWeek()]),
-                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addMonth()])
-            ]);
+            event(new ReservationWasCreated($r, new Request));
         });
 
         // Give the admin user at least one reservation.
@@ -37,11 +35,7 @@ class ReservationTableSeeder extends Seeder
 
             $r->tag(['vip', 'missionary']);
 
-            $r->donations()->saveMany([
-                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addDay()]),
-                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addWeek()]),
-                factory(App\Models\v1\Donation::class)->make(['created_at' => $r->created_at->addMonth()])
-            ]);
+            event(new ReservationWasCreated($r, new Request));
         });
     }
 }

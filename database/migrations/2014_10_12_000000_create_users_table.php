@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->date('birthday')->nullable();
             $table->string('phone_one', 20)->nullable();
             $table->string('phone_two', 20)->nullable();
-            $table->string('street', 100)->nullable();
+            $table->string('address', 100)->nullable();
             $table->string('city', 100)->nullable();
             $table->string('state', 100)->nullable();
             $table->string('zip', 15)->nullable();
@@ -32,7 +32,6 @@ class CreateUsersTable extends Migration
             $table->string('bio', 120)->nullable();
             $table->string('url', 60)->unique();
             $table->boolean('public')->default(false);
-            $table->boolean('admin')->default(false);
             $table->string('stripe_id')->nullable();
             $table->string('card_brand')->nullable();
             $table->string('card_last_four')->nullable();

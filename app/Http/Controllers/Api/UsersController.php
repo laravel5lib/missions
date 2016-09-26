@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendWelcomeEmail;
 use App\Models\v1\User;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\UserRequest;
@@ -50,14 +51,6 @@ class UsersController extends Controller
         if($id)
         {
             $user = $this->user->findOrFail($id);
-
-//            if ( ! $user->public)
-//            {
-//                if ($user->id !== $this->auth->user()->id and ! $this->auth->user()->isAdmin())
-//                {
-//                    abort(403);
-//                }
-//            }
         }
         else
         {
@@ -81,6 +74,8 @@ class UsersController extends Controller
         $user = new User($request->all());
         $user->url = $request->get('url', str_random(10));
         $user->save();
+
+        $this->dispatch(new SendWelcomeEmail($user));
 
         return $this->response->item($user, new UserTransformer);
     }

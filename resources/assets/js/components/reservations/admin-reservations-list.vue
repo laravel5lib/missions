@@ -1,6 +1,101 @@
 <template>
     <div>
-        <div class="row">
+		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+			<hr class="divider inv sm">
+			<form class="col-sm-12">
+				<div class="form-group">
+					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
+						   :debounce="250" placeholder="Tag, tag2, tag3...">
+				</div>
+				<div class="form-group">
+					<v-select class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+							  :value.sync="groupsArr" :options="groupsOptions" label="name"
+							  placeholder="Filter Groups"></v-select>
+				</div>
+				<div class="form-group">
+					<v-select class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
+							  :value.sync="usersArr" :options="usersOptions" label="name"
+							  placeholder="Filter Users"></v-select>
+				</div>
+				<div class="form-group" v-if="!tripId">
+					<v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
+							  :value.sync="campaignObj" :options="campaignOptions" label="name"
+							  placeholder="Filter by Campaign"></v-select>
+				</div>
+				<div class="form-group">
+					<select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
+						<option value="">Any Genders</option>
+						<option value="male">Male</option>
+						<option value="female">Female</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<select class="form-control input-sm" v-model="filters.status" style="width:100%;">
+						<option value="">Any Status</option>
+						<option value="single">Single</option>
+						<option value="married">Married</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<v-select class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+							  :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
+				</div>
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Age Min</span>
+								<input type="number" class="form-control" number v-model="ageMin" min="0">
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Max</span>
+								<input type="number" class="form-control" number v-model="ageMax" max="120">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group" style="padding: 3px 20px;">
+					<label class="control-label small">Travel Companions</label>
+					<div>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions1" v-model="filters.hasCompanions" :value="null"> Any
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions2" v-model="filters.hasCompanions" value="yes"> Yes
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions3" v-model="filters.hasCompanions" value="no"> No
+						</label>
+					</div>
+				</div>
+
+				<div class="form-group" style="padding: 3px 20px;">
+					<label class="control-label small">Passport</label>
+					<div>
+						<label class="radio-inline">
+							<input type="radio" name="passports" id="passports1" v-model="filters.hasPassport" :value="null"> Any
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="passports" id="passports2" v-model="filters.hasPassport" value="yes"> Yes
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="passports" id="passports3" v-model="filters.hasPassport" value="no"> No
+						</label>
+					</div>
+				</div>
+
+				<hr class="divider inv sm">
+				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+			</form>
+		</aside>
+
+		<div class="row">
             <div class="col-sm-12">
                 <form class="form-inline text-right" novalidate>
                 	<div class="form-inline" style="display: inline-block;">
@@ -92,108 +187,55 @@
 							</li>
 						</ul>
                     </div>
-                    <div id="toggleFilters" class="form-toggle-menu dropdown" style="display: inline-block;">
-                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Filters
-                        <span class="caret"></span>
-                        </button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width:300px; max-height: 575px; padding: 10px 20px; overflow: scroll;">
-							<li>
-								<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
-									   :debounce="250" placeholder="Tag, tag2, tag3...">
-							</li>
-							<li>
-								<v-select class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups()"
-										  :value.sync="groupsArr" :options="groupsOptions" label="name"
-										  placeholder="Filter Groups"></v-select>
-							</li>
-							<li>
-								<v-select class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers()"
-										  :value.sync="usersArr" :options="usersOptions" label="name"
-										  placeholder="Filter Users"></v-select>
-							</li>
-							<li>
-								<v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns()"
-										  :value.sync="campaignObj" :options="campaignOptions" label="name"
-										  placeholder="Filter by Campaign"></v-select>
-							</li>
-							<li>
-								<select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
-									<option value="">Any Genders</option>
-									<option value="male">Male</option>
-									<option value="female">Female</option>
-								</select>
-							</li>
-
-							<li>
-								<select class="form-control input-sm" v-model="filters.status" style="width:100%;">
-									<option value="">Any Status</option>
-									<option value="single">Single</option>
-									<option value="married">Married</option>
-								</select>
-							</li>
-
-							<li>
-								<v-select class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
-										  :options="shirtSizeOptions" label="name" placeholder="Filter Sizes"></v-select>
-							</li>
-
-							<li>
-								<div class="row">
-									<div class="col-xs-6">
-										<div class="input-group input-group-sm">
-											<span class="input-group-addon">Age Min</span>
-											<input type="number" class="form-control" number v-model="ageMin" min="0">
-										</div>
-									</div>
-									<div class="col-xs-6">
-										<div class="input-group input-group-sm">
-											<span class="input-group-addon">Max</span>
-											<input type="number" class="form-control" number v-model="ageMax" max="120">
-										</div>
-									</div>
-								</div>
-							</li>
-
-							<li style="padding: 3px 20px;">
-								<label class="control-label small">Travel Companions</label>
-								<div>
-									<label class="radio-inline">
-										<input type="radio" name="companions" id="companions1" v-model="filters.hasCompanions" :value="null"> Any
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="companions" id="companions2" v-model="filters.hasCompanions" value="yes"> Yes
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="companions" id="companions3" v-model="filters.hasCompanions" value="no"> No
-									</label>
-								</div>
-							</li>
-
-							<li style="padding: 3px 20px;">
-								<label class="control-label small">Passport</label>
-								<div>
-									<label class="radio-inline">
-										<input type="radio" name="passports" id="passports1" v-model="filters.hasPassport" :value="null"> Any
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="passports" id="passports2" v-model="filters.hasPassport" value="yes"> Yes
-									</label>
-									<label class="radio-inline">
-										<input type="radio" name="passports" id="passports3" v-model="filters.hasPassport" value="no"> No
-									</label>
-								</div>
-							</li>
-
-							<li role="separator" class="divider"></li>
-							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
-						</ul>
-                    </div>
+					<button class="btn btn-default btn-sm " type="button" @click="showFilters=!showFilters">
+						Filters
+						<span class="caret"></span>
+					</button>
                     <!--<a class="btn btn-primary btn-sm" href="reservations/create">New <i class="fa fa-plus"></i> </a>-->
                 </form>
             </div>
         </div>
-        <hr>
+        <hr class="divider sm">
+		<div>
+			Active Filters:
+			<button type="button"class="btn btn-xs btn-default" v-show="filters.tags.length" @click="filters.tags = []" >
+				Tags
+				<span class="badge">x</span>
+			</button>
+			<button type="button"class="btn btn-xs btn-default" v-show="filters.user.length" @click="filters.user = []" >
+				Users
+				<span class="badge">x</span>
+			</button>
+			<button type="button"class="btn btn-xs btn-default" v-show="filters.groups.length" @click="filters.groups = []" >
+				Groups
+				<span class="badge">x</span>
+			</button>
+			<button type="button"class="btn btn-xs btn-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
+				Campaign
+				<span class="badge">x</span>
+			</button>
+			<button type="button"class="btn btn-xs btn-default" v-show="filters.gender.length" @click="filters.gender = ''" >
+				Gender
+				<span class="badge">x</span>
+			</button>
+			<button type="button"class="btn btn-xs btn-default" v-show="filters.status.length" @click="filters.status = ''" >
+				Status
+				<span class="badge">x</span>
+			</button>
+			<button type="button"class="btn btn-xs btn-default" v-show="filters.shirtSize.length" @click="filters.shirtSize = ''" >
+				Shirt Size
+				<span class="badge">x</span>
+			</button>
+			<button type="button"class="btn btn-xs btn-default" v-show="filters.hasCompanions !== null" @click="filters.hasCompanions = null" >
+				Companions
+				<span class="badge">x</span>
+			</button>
+			<button type="button"class="btn btn-xs btn-default" v-show="filters.hasPassport !== null" @click="filters.hasPassport = null" >
+				Passport
+				<span class="badge">x</span>
+			</button>
+		</div>
+        <hr class="divider sm">
         <table class="table table-hover">
             <thead>
             <tr>
@@ -264,11 +306,7 @@
                 <td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
                 <td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
                 <td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
-                <!--<td>
-                    <a href="/admin{{reservation.links[0].uri}}"><i class="fa fa-eye"></i></a>
-                    <a href="/admin{{campaignId + reservation.links[0].uri}}/edit"><i class="fa fa-pencil"></i></a>
-                </td>-->
-
+                <td><a href="/admin{{reservation.links[0].uri}}"><i class="fa fa-pencil"></i></a></td>
             </tr>
             </tbody>
             <tfoot>
@@ -301,12 +339,19 @@
 	#toggleFilters li {
 		margin-bottom: 3px;
 	}
+
+	@media (min-width: 991px) {
+		.aside.left {
+			left: 55px;
+		}
+	}
 </style>
 <script>
 	import vSelect from "vue-select";
+	import VueStrap from 'vue-strap/dist/vue-strap.min';
 	export default{
         name: 'admin-reservations-list',
-		components: {vSelect},
+		components: {vSelect, 'aside': VueStrap.aside},
 		props:{
 			tripId: {
 				type: String,
@@ -357,7 +402,8 @@
 					shirtSize: [],
 					hasCompanions:null,
 					hasPassport:null,
-				}
+				},
+				showFilters: false
             }
         },
 		computed: {

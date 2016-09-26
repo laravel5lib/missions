@@ -9,10 +9,10 @@
                         Expires: {{ fundraiser.expires_at | moment 'll'  }}
                     </h6>
                     <h3><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>
-                    <p><span>{{ fundraiser.raised_percent }}</span>% <small>Funded</small> / <span>0</span> <small>Donors</small></p>
+                    <p><span>{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100)|number 1 }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: fundraiser.raised_percent + '%'}">
-                            <span class="sr-only">{{ fundraiser.raised_percent }}% Complete (success)</span>
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: (fundraiser.raised_amount/fundraiser.goal_amount * 100) + '%'}">
+                            <span class="sr-only">{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100) }}% Complete (success)</span>
                         </div>
                     </div>
                     <p><a class="btn btn-primary btn-block" :href="pathName + '/' + fundraiser.url">Details</a></p>
@@ -24,7 +24,7 @@
 <script>
     export default{
         name: 'user-profile-fundraisers',
-        props: ['id', 'authId'],
+        props: ['id', 'userUrl', 'authId'],
         data(){
             return{
                 fundraisers: [],
@@ -33,14 +33,14 @@
             }
         },
         ready(){
-            this.$http.get('reservations', {
-                user: new Array(this.id),
-                include: 'fundraisers',
+            this.$http.get('fundraisers', {
+                sponsor: this.userUrl,
                 per_page: 100
             }).then(function (response) {
-                _.each(response.data.data, function (reservation) {
+                this.fundraisers = response.data.data;
+                /*_.each(response.data.data, function (reservation) {
                     this.fundraisers = _.union(this.fundraisers, reservation.fundraisers.data);
-                }, this)
+                }, this)*/
             })
         }
 

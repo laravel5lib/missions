@@ -6,10 +6,11 @@
 			<div class="row">
 				<div class="col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-0">
 					<hr class="divider inv">
-					<h6 class="text-center text-uppercase">Which group would you like to travel with?</h6>
-					<input type="text" class="form-control" v-model="searchText" debounce="500" placeholder="Search for a group">
+					<h6 class="text-center text-uppercase">Find the trip that's right for you.</h6>
+					<!--<h6 class="text-center text-uppercase">Which group would you like to travel with?</h6>-->
+					<input type="text" class="form-control" v-model="searchText" debounce="500" placeholder="Search anything .. (i.e. medical, teens, oakland church)">
 					<hr class="divider inv sm">
-					<p class="small text-center">Don't See Your Group?</p>
+					<p class="small text-center">Then select a participating travel group below.</p>
 					<hr class="divider inv">
 				</div>
 			</div>
@@ -31,6 +32,7 @@
 	</div>
 	<div class="container text-center" v-else>
 		<p class="lead">Sorry, we couldn't find any participating groups.</p>
+		<p><a href="#">Don't see your group?</a></p>
 	</div>
 	<div class="container">
 			<div class="col-sm-12 text-center">
@@ -78,6 +80,7 @@
 			searchGroups() {
 				var resource = this.$resource('trips', {
 					include: "group",
+					onlyPublished: true,
 					campaign: this.id,
 					per_page: 8,
 					search: this.searchText,

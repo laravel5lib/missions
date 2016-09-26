@@ -20,10 +20,7 @@ class GroupFilter extends ModelFilter
      */
     public function setup()
     {
-        if( ! app(Auth::class)->user() or ! app(Auth::class)->user()->isAdmin())
-        {
-            $this->onlyPublicGroups();
-        }
+        if ( ! $this->input('pending')) $this->approved();
     }
 
 
@@ -84,12 +81,15 @@ class GroupFilter extends ModelFilter
         return $this->where(function($q) use ($search)
         {
             return $q->where('name', 'LIKE', "%$search%")
+                ->orWhere('type', 'LIKE', "%$search%")
                 ->orWhere('email', 'LIKE', "%$search%")
                 ->orWhere('city', 'LIKE', "%$search%")
                 ->orWhere('state', 'LIKE', "%$search%")
                 ->orWhere('phone_one', 'LIKE', "$search%")
                 ->orWhere('phone_two', 'LIKE', "$search%")
                 ->orWhere('zip', 'LIKE', "$search%");
+
+            // ->orWhereHas('trips', function($trip) { $trip->orWhere('type', $type) });
         });
     }
 
@@ -134,6 +134,26 @@ class GroupFilter extends ModelFilter
     public function url($url)
     {
         return $this->where('url', $url);
+    }
+
+    /**
+     * Find approved groups.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function approved()
+    {
+        return $this->orWhere('status', 'approved');
+    }
+
+    /**
+     * Find pending groups.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function pending()
+    {
+        return $this->orWhere('status', 'pending');
     }
 
 }

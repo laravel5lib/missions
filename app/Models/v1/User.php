@@ -28,7 +28,7 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name', 'email', 'password', 'alt_email',
         'phone_one', 'phone_two', 'gender', 'status',
-        'birthday', 'street', 'city', 'zip', 'country_code',
+        'birthday', 'address', 'city', 'zip', 'country_code',
         'state', 'timezone', 'url', 'public', 'bio',
         'stripe_id', 'card_brand', 'card_last_four'
     ];
@@ -415,6 +415,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get all the user's medical releases.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function medicalReleases()
+    {
+        return $this->hasMany(MedicalRelease::class);
+    }
+
+    /**
      * Get all the user's contacts.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -485,13 +495,15 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get all stories the user has authored.
+     * Get all the user's stories.
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function stories()
     {
-        return $this->morphMany(Story::class, 'author')->orderBy('created_at', 'desc');
+        return $this->morphToMany(Story::class, 'publication', 'published_stories')
+            ->withPivot('published_at')
+            ->orderBy('created_at', 'desc');
     }
 
     /**
@@ -511,16 +523,6 @@ class User extends Authenticatable implements JWTSubject
         $accolade = $this->accolades()->where('name', 'countries_visited')->first();
 
         return $accolade->items;
-    }
-
-    /**
-     * Check if user is an admin.
-     *
-     * @return bool
-     */
-    public function isAdmin()
-    {
-        return $this->admin;
     }
 
     public function withAvailableRegions()

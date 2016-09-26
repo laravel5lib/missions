@@ -163,7 +163,7 @@ class Trip extends Model
     /**
      * Get all the trip's facilitators
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function facilitators()
     {
@@ -190,6 +190,11 @@ class Trip extends Model
     public function reservations()
     {
         return $this->hasMany(Reservation::class);
+    }
+
+    public function fund()
+    {
+        return $this->morphOne(Fund::class, 'fundable');
     }
 
     /**
@@ -330,5 +335,12 @@ class Trip extends Model
         $status = is_null($this->published_at) ? 'draft' : $status;
 
         return $status;
+    }
+
+    public function updateSpots($number = -1)
+    {
+        $this->spots = $this->spots + $number;
+
+        $this->save();
     }
 }

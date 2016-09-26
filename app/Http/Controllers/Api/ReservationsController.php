@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ReservationWasCreated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
-use App\Http\Transformers\v1\DonationTransformer;
 use App\Http\Transformers\v1\DonorTransformer;
 use App\Models\v1\Donor;
 use App\Models\v1\Reservation;
@@ -66,18 +65,18 @@ class ReservationsController extends Controller
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function donors($id, Request $request)
-    {
-        // Filter donors by reservation
-        $request->merge(['reservation' => $id]);
-
-        $donors = Donor::filter($request->all())
-            ->paginate($request->get('per_page'));
-
-        // Pass the reservation to the transformer to filter
-        // embedded relationships by designation.
-        return $this->response->paginator($donors, new DonorTransformer(['reservation' => $id]));
-    }
+//    public function donors($id, Request $request)
+//    {
+//        // Filter donors by reservation
+//        $request->merge(['reservation' => $id]);
+//
+//        $donors = Donor::filter($request->all())
+//            ->paginate($request->get('per_page'));
+//
+//        // Pass the reservation to the transformer to filter
+//        // embedded relationships by designation.
+//        return $this->response->paginator($donors, new DonorTransformer(['reservation' => $id]));
+//    }
 
     /**
      * Store a reservation.
@@ -87,13 +86,9 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        $reservation = Reservation::create($request->all());
+        $reservation = $this->reservation->create($request->except('costs', 'donor', 'payment'));
 
-        // Eager load trip relationships for sync
-        $reservation->load('trip.costs', 'trip.requirements', 'trip.deadlines');
-
-        if ($request->has('tags'))
-            $reservation->tag($request->get('tags'));
+        event(new ReservationWasCreated($reservation, $request));
 
         return $this->response->item($reservation, new ReservationTransformer);
     }

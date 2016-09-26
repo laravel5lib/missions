@@ -2,6 +2,7 @@
 
 use App\Models\v1\Cost;
 use App\Models\v1\Payment;
+use App\Models\v1\User;
 use Illuminate\Database\Seeder;
 
 class TripTableSeeder extends Seeder
@@ -34,11 +35,24 @@ class TripTableSeeder extends Seeder
                 ]);
             });
 
+            $staticCost = $t->costs()->save(factory(App\Models\v1\Cost::class, 'static')->make());
+
+            $staticCost->payments()->save(
+                factory(App\Models\v1\Payment::class)->make([
+                    'due_at' => null,
+                    'amount_owed' => $staticCost->amount,
+                    'percent_owed' => 100,
+                    'upfront' => true
+                ])
+            );
+
             $t->deadlines()->saveMany(factory(App\Models\v1\Deadline::class, 2)->make());
 
             $t->requirements()->saveMany(factory(App\Models\v1\Requirement::class, 4)->make());
 
             $t->notes()->save(factory(App\Models\v1\Note::class)->make());
+
+            $t->facilitators()->attach(User::where('email', 'admin@admin.com')->first()->id);
 
         });
     }

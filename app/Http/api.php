@@ -36,13 +36,16 @@ $api->version('v1', [
     $api->resource('users', 'UsersController');
     $api->resource('users.contacts', 'ContactsController');
     $api->resource('groups', 'GroupsController');
+    $api->get('groups/{id}/notes', 'GroupsController@notes');
+    $api->post('groups/submit', 'GroupsController@submit');
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
+    $api->post('trips/{id}/register', 'TripsController@register');
     $api->resource('reservations', 'ReservationsController');
-    $api->get('reservations/{id}/donors', 'ReservationsController@donors');
     $api->resource('assignments', 'AssignmentsController');
     $api->resource('fundraisers', 'FundraisersController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
+    $api->get('fundraisers/{id}/donations', 'FundraisersController@donations');
     $api->resource('donors', 'DonorsController');
     $api->resource('donations', 'DonationsController');
     $api->post('donations/authorize', 'DonationsController@authorizeCard');
@@ -57,10 +60,19 @@ $api->version('v1', [
     $api->resource('accommodations', 'AccommodationsController');
     $api->resource('accommodations.occupants', 'OccupantsController');
     $api->resource('stories', 'StoriesController');
+    $api->get('funds', 'FundsController@index');
+    $api->get('funds/{id}', 'FundsController@show');
+    $api->resource('transactions', 'TransactionsController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {
         $api->resource('releases', 'Medical\ReleasesController');
+        $api->get('conditions', function() {
+           return ['data' => \App\Models\v1\MedicalCondition::available()];
+        });
+        $api->get('allergies', function() {
+            return ['data' => \App\Models\v1\MedicalAllergy::available()];
+        });
     });
 
     $api->group(['prefix' => 'utilities'], function ($api) {

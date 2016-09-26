@@ -25,9 +25,23 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.groups.index');
     });
 
-    Route::get('groups/{id}', function($id) {
+    Route::get('groups/{id}', function($id) use ($dispatcher) {
         if( ! auth()->user()->managing()->count()) abort(403);
-        return view('dashboard.groups.edit', compact('id'));
+        $group = $dispatcher->get('groups/' . $id);
+        return view('dashboard.groups.show', compact('group', 'id'));
+    });
+
+    Route::get('groups/{id}/edit', function($id) use ($dispatcher) {
+        if( ! auth()->user()->managing()->count()) abort(403);
+        $group = $dispatcher->get('groups/' . $id);
+        return view('dashboard.groups.edit', compact('group', 'id'));
+    });
+
+    Route::get('groups/{groupId}/trips/{id}', function($groupId, $id) use ($dispatcher) {
+        if( ! auth()->user()->managing()->count()) abort(403);
+        $group = $dispatcher->get('groups/' . $groupId);
+        $trip = $dispatcher->get('trips/' . $id);
+        return view('dashboard.groups.trips.show', compact('group', 'groupId', 'trip', 'id'));
     });
 
     Route::get('records', function () {
@@ -256,6 +270,9 @@ Route::post('/register', 'Auth\AuthController@register');
 Route::get('/logout', 'Auth\AuthController@logout');
 
 Route::get('/fundraisers', 'FundraisersController@index');
+Route::get('/groups', function() {
+    return view('site.groups.index');
+});
 Route::get('/groups/{slug}', 'GroupsController@profile');
 Route::get('/profiles/{slug}', 'UsersController@profile');
 Route::get('/@{slug}', 'UsersController@profile');
@@ -271,7 +288,24 @@ Route::get('{type}/{slug?}/donate', function ($type, $slug) {
 Route::get('/donate', function () {
     return view('site.donate');
 });
-
+Route::get('/speakers', function () {
+    return view('site.speakers');
+});
+Route::get('/water', function () {
+    return view('site.water');
+});
+Route::get('/orphans', function () {
+    return view('site.orphans');
+});
+Route::get('/college', function () {
+    return view('site.college');
+});
+Route::get('/college-financial', function () {
+    return view('site.college-financial');
+});
+Route::get('/support', function () {
+    return view('site.support');
+});
 
 Route::get('/{slug}', function ($slug) {
     return $slug;

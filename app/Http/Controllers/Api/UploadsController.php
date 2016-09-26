@@ -59,6 +59,12 @@ class UploadsController extends Controller
      */
     public function store(UploadRequest $request)
     {
+        if ($request->get('type') == 'video') {
+            $upload = $this->saveVideo($request);
+
+            return $this->response->item($upload, new UploadTransformer);
+        }
+
         $stream = $this->process($request);
 
         $source = $this->upload($stream, $request->only('path', 'name', 'file'));
@@ -221,5 +227,42 @@ class UploadsController extends Controller
             $new->tag($request->get('tags'));
 
         return $new;
+    }
+
+    /**
+     * Get video format from source url.
+     *
+     * @param $url
+     * @return string
+     */
+    private function getVideoFormat($url)
+    {
+        if (str_contains($url, 'youtube')) {
+            return 'youtube';
+        }
+
+        if (str_contains($url, 'vimeo')) {
+            return 'vimeo';
+        }
+
+        return 'other';
+    }
+
+    /**
+     * Save Video.
+     *
+     * @param $request
+     * @return Upload
+     */
+    private function saveVideo($request)
+    {
+        return $this->upload->create([
+            'name' => $request->get('name'),
+            'type' => 'video',
+            'source' => $request->get('url'),
+            'meta' => [
+                'format' => $this->getVideoFormat($request->get('url'))
+            ]
+        ]);
     }
 }

@@ -115,10 +115,10 @@
             </nav>
         </div>
 
-        <modal v-if="isUser()" :show.sync="deleteModal" title="Remove Passport" small="true">
-            <div slot="modal-body" class="modal-body">Are you sure you want to delete this Story?</div>
+        <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Delete Story" small="true">
+            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete this Story?</div>
             <div slot="modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeStory(selectedStory)'>Confirm</button>
             </div>
         </modal>
@@ -137,12 +137,18 @@
                 deleteModal: false,
                 selectedStory: {
                     title: '',
-                    content:''
+                    content:'',
+                    publications: [
+                        { type: 'users', id: this.id },
+                    ]
                 },
                 editMode: false,
                 editMarkedContentToggle: false,
+
                 newMode: false,
                 newMarkedContentToggle: false,
+                includeProfile: false,
+
                 // pagination vars
                 page: 1,
                 per_page: 5,
@@ -177,6 +183,8 @@
                 if(story) {
                     story.author_id = this.authId;
                     story.author_type = 'users';
+                    story.publications = [{ type: 'users', id: this.id }];
+
                     this.$http.put('stories/' + story.id, story).then(function (response) {
                         this.editMode = false;
                         this.resetData();
@@ -200,7 +208,8 @@
                 }
             },
             searchStories(){
-                this.$http.get('stories?user=' + this.id, {
+                this.$http.get('stories', {
+                    user: this.id,
                     page: this.page,
                     per_page: this.per_page,
                 }).then(function(response) {

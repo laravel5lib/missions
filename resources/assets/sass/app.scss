@@ -52,6 +52,18 @@ $fa-font-path: "~font-awesome/fonts/";*/
 @import "components/tabs";
 
 /*
+ * Google Translate
+ */
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+/*
  * Misc.
  */
 
@@ -69,8 +81,40 @@ a {
   cursor: pointer;
 }
 
+.pagination > li > a:hover, .pagination > li > a:focus, .pagination > li > span:hover, .pagination > li > span:focus {
+    color: $gray-dark;
+}
+
 .text-strike {
   text-decoration: line-through;
+}
+
+p.large-type {
+  max-width: 420px;
+}
+
+.dash-trailing:after {
+    background: $brand-primary;
+    display: block;
+    content: '';
+    height: 4px;
+    margin: 15px 0;
+    width: 40px;
+}
+.dash-trailing-dark:after {
+    background: $text-primary-darker;
+}
+.dash-trailing-light:after {
+    background: #fff;
+}
+.dash-trailing-info:after {
+  background: $brand-info;
+}
+.dash-trailing-success:after {
+  background: $brand-success;
+}
+.dash-trailing-warning:after {
+  background: $brand-warning;
 }
 
 .footer {
@@ -104,6 +148,79 @@ body {
   /* The html and body elements cannot have any padding or margin. */
 }
 /* Parallax Headers */
+.content-page-header {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-height: 400px;
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    line-height: 1;
+  }
+  .c-page-header-text {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    z-index: 10;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #fff;
+    text-shadow: none;
+      @media screen and (max-width: 767px) {
+        padding-bottom: 0px;
+      }
+    h1 {
+      font-size: 3.5em;
+      @media screen and (max-width: 991px) {
+        font-size: 2.5em;
+      }
+      @media screen and (max-width: 767px) {
+        font-size: 1.3em;
+      }
+    }
+  }
+}
+.content-page-bg {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-height: 600px;
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    line-height: 1;
+  }
+  .c-page-bg-text {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    z-index: 10;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #fff;
+    text-shadow: none;
+    h1 {
+      font-size: 3.5em;
+      @media screen and (max-width: 991px) {
+        font-size: 2.5em;
+      }
+      @media screen and (max-width: 767px) {
+        font-size: 1.3em;
+      }
+    }
+    @media screen and (max-width: 767px) {
+      left: 5%;
+      right: 5%;
+      bottom: 5%; 
+      padding-bottom: 0px;
+    }
+  }
+}
 .prof-cover-photo {
   height: 400px;
   overflow: hidden;
@@ -118,10 +235,10 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 ); /* IE6-9 */
 }
 .prof-cover-photo > img {
-  height: 120%;
+  height: 100%;
   width: 100%; // added temp
   position: relative;
-  top: -20%;
+  top: -36%;
 }
 .p-head-title {
   color: #fff;
@@ -451,6 +568,10 @@ $img-base-size: 40px;
   max-height: $img-base-size*2.5;
   max-width: $img-base-size*2.5;
 }
+.img-xlg {
+  max-height: $img-base-size*4;
+  max-width: $img-base-size*4;
+}
 .av-left {
   margin-right: 10px;
 }
@@ -468,6 +589,30 @@ $img-base-size: 40px;
 .max-panel-height {
   max-height: 390px;
   overflow: scroll;
+}
+
+// -- Video Wrappers -- //
+/* Video Responsiveness */
+.video-outer {
+  max-width: 100%;
+}
+
+.video-inner {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.video-inner iframe,  
+.video-inner object,  
+.video-inner embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 // -- Video Background -- //
@@ -503,6 +648,74 @@ $img-base-size: 40px;
     .vid-bg-video {
         display: none;
     }
+}
+
+/*=========================
+  Icons
+ ================= */
+
+/* footer social icons */
+ul.social-network {
+  list-style: none;
+  display: inline;
+  margin-left:0 !important;
+  padding: 0;
+  li {
+    display: inline;
+    margin: 0 1px;
+  }
+}
+
+/* footer social icons */
+.social-network a:hover {
+  background-color: $brand-primary;
+  i {
+    color:#fff;
+  }
+}
+a.socialIcon:hover, .socialHoverClass {
+  color:$brand-primary;
+}
+
+.social-circle {
+  li a {
+    display:inline-block;
+    position:relative;
+    margin:0 auto 0 auto;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    border-radius:50%;
+    text-align:center;
+    width:25px;
+    height:25px;
+    font-size:12px;
+    background: $gray-dark;
+  }
+  li i {
+    margin:0;
+    line-height:25px;
+    text-align: center;
+  }
+}
+
+.social-circle li a:hover i, .triggeredHover {
+  -moz-transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+  -ms--transform: rotate(360deg);
+  transform: rotate(360deg);
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.social-circle i {
+  color: #fff;
+  -webkit-transition: all 0.8s;
+  -moz-transition: all 0.8s;
+  -o-transition: all 0.8s;
+  -ms-transition: all 0.8s;
+  transition: all 0.8s;
 }
 
 // -- Trip Rep Bubble -- //

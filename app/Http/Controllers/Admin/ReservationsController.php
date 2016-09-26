@@ -44,9 +44,9 @@ class ReservationsController extends Controller
     {
         $this->authorize('view', $this->reservation);
 
-        $reservation = $this->api->get('reservations/'.$id, ['include' => '']);
+        $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments']);
 
-        return view('admin.reservations.show')->with('reservation', $reservation);
+        return view('admin.reservations.show', compact('reservation'));
     }
 
     /**

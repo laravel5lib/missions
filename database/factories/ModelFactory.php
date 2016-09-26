@@ -16,7 +16,7 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
         'phone_one'        => $faker->optional(0.5)->phoneNumber,
         'phone_two'        => $faker->optional(0.5)->phoneNumber,
-        'street'           => $faker->optional(0.5)->streetAddress,
+        'address'          => $faker->optional(0.5)->streetAddress,
         'city'             => $faker->optional(0.5)->city,
         'state'            => $faker->optional(0.5)->state,
         'zip'              => $faker->optional(0.5)->postcode,
@@ -42,8 +42,7 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
         'name'     => 'Admin',
         'url'      => 'admin',
         'email'    => 'admin@admin.com',
-        'password' => 'secret',
-        'admin'    => true
+        'password' => 'secret'
     ]);
 });
 
@@ -57,8 +56,7 @@ $factory->defineAs(App\Models\v1\User::class, 'joe', function (Faker\Generator $
     return array_merge($user, [
         'name'     => 'Joe',
         'email'    => 'joe@example.com',
-        'password' => 'secret',
-        'admin'    => true
+        'password' => 'secret'
     ]);
 });
 
@@ -68,18 +66,26 @@ $factory->defineAs(App\Models\v1\User::class, 'joe', function (Faker\Generator $
 $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $faker)
 {
     return [
-        'given_names'      => $faker->firstName . ' ' . $faker->firstName,
-        'surname'          => $faker->lastName,
-        'gender'           => $faker->randomElement(['male', 'female']),
-        'status'           => $faker->randomElement(['single', 'married']),
-        'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
-        'shirt_size'       => $faker->randomElement(array_keys(App\Utilities\v1\ShirtSize::all())),
-        'user_id'          => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
-        'trip_id'          => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
-        'companion_limit'  => random_int(0, 3),
-        'passport_id'      => $faker->randomElement(App\Models\v1\Passport::lists('id')->toArray()),
-        'visa_id'          => $faker->randomElement(App\Models\v1\Visa::lists('id')->toArray()),
-        'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray())
+        'given_names'        => $faker->firstName . ' ' . $faker->firstName,
+        'surname'            => $faker->lastName,
+        'gender'             => $faker->randomElement(['male', 'female']),
+        'status'             => $faker->randomElement(['single', 'married']),
+        'birthday'           => $faker->dateTimeBetween('-60 years', '-12 years'),
+        'shirt_size'         => $faker->randomElement(array_keys(App\Utilities\v1\ShirtSize::all())),
+        'user_id'            => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
+        'address'            => $faker->address,
+        'city'               => $faker->city,
+        'zip'                => $faker->postcode,
+        'country_code'       => $faker->countryCode,
+        'email'              => $faker->safeEmail,
+        'phone_one'          => $faker->phoneNumber,
+        'phone_two'          => $faker->phoneNumber,
+        'trip_id'            => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
+        'companion_limit'    => random_int(0, 3),
+        'passport_id'        => $faker->randomElement(App\Models\v1\Passport::lists('id')->toArray()),
+        'visa_id'            => $faker->randomElement(App\Models\v1\Visa::lists('id')->toArray()),
+        'medical_release_id' => $faker->randomElement(App\Models\v1\MedicalRelease::lists('id')->toArray()),
+        'avatar_upload_id'   => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray())
     ];
 });
 
@@ -112,7 +118,6 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
     return [
         'group_id'         => $faker->randomElement(App\Models\v1\Group::lists('id')->toArray()),
         'campaign_id'      => $campaign->id,
-        'rep_id'           => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
         'spots'            => random_int(0, 500),
         'companion_limit'  => random_int(0, 3),
         'country_code'     => $campaign->country_code,
@@ -136,7 +141,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
  */
 $factory->defineAs(App\Models\v1\Campaign::class, 'active', function (Faker\Generator $faker)
 {
-    $startDate = $faker->dateTimeBetween('+ 6 months', '+ 1 year');
+    $startDate = $faker->dateTimeBetween('+6 months', '+1 year');
 
     return [
         'name'             => $faker->catchPhrase,
@@ -186,7 +191,7 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
         'country_code'     => strtolower($faker->countryCode),
         'phone_one'        => $faker->optional(0.5)->phoneNumber,
         'phone_two'        => $faker->optional(0.5)->phoneNumber,
-        'email'            => $faker->optional(0.5)->companyEmail,
+        'email'            => $faker->safeEmail,
         'public'           => $faker->boolean(50),
         'url'              => $faker->userName,
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
@@ -393,15 +398,7 @@ $factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker)
         'name'                => $faker->name,
         'email'               => $faker->safeEmail,
         'phone'               => $faker->phoneNumber,
-        'company'             => $faker->optional(0.7)->company,
-        'address_one'         => $faker->streetAddress,
-        'address_two'         => $faker->buildingNumber,
-        'city'                => $faker->city,
-        'state'               => $faker->state,
-        'zip'                 => $faker->postcode,
-        'country_code'        => strtolower($faker->countryCode),
-        'account_holder_id'   => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
-        'account_holder_type' => 'users'
+        'company'             => $faker->optional(0.7)->company
     ];
 });
 
@@ -466,46 +463,38 @@ $factory->define(App\Models\v1\Contact::class, function (Faker\Generator $faker)
 /**
  * Medical Release Factory
  */
-$factory->define(App\Models\v1\Medical\Release::class, function (Faker\Generator $faker)
+$factory->define(App\Models\v1\MedicalRelease::class, function (Faker\Generator $faker)
 {
-    $conditions = [
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Condition::all()),
-            "medication" => $faker->realText(120)
-        ],
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Condition::all()),
-            "medication" => "none"
-        ],
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Condition::all()),
-            "medication" => $faker->realText(120)
-        ]
-    ];
-
-    $allergies = [
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Allergy::all()),
-            "medication" => $faker->realText(120)
-        ],
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Allergy::all()),
-            "medication" => "none"
-        ],
-        [
-            "name"       => $faker->randomElement(App\Utilities\v1\Allergy::all()),
-            "medication" => $faker->realText(120)
-        ]
-    ];
-
     return [
         'user_id'       => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
         'name'          => $faker->firstName . ' ' . $faker->lastName,
-        'conditions'    => $faker->randomElements($conditions, 1),
-        'allergies'     => $faker->randomElements($allergies, 2),
         'ins_provider'  => $faker->company,
         'ins_policy_no' => $faker->ean8,
         'is_risk'       => $faker->boolean(50)
+    ];
+});
+
+/**
+ * Medical Condition Factory
+ */
+$factory->define(App\Models\v1\MedicalCondition::class, function (Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->randomElement(App\Models\v1\MedicalCondition::available()),
+        'medication' => $faker->boolean(),
+        'diagnosed' => $faker->boolean()
+    ];
+});
+
+/**
+ * Medical Allergy Factory
+ */
+$factory->define(App\Models\v1\MedicalAllergy::class, function (Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->randomElement(App\Models\v1\MedicalAllergy::available()),
+        'medication' => $faker->boolean(),
+        'diagnosed' => $faker->boolean()
     ];
 });
 
@@ -741,6 +730,8 @@ $factory->define(App\Models\v1\Story::class, function(Faker\Generator $faker)
     return [
         'title' => $faker->sentence,
         'content' => file_get_contents(resource_path('assets/sample_story.md')),
+        'author_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
+        'author_type' => 'users'
     ];
 });
 
@@ -756,5 +747,87 @@ $factory->define(App\Models\v1\Accolade::class, function(Faker\Generator $faker)
         'display_name' => 'Countries Visited',
         'name'         => 'countries_visited',
         'items'        => $faker->randomElements($countries, 4)
+    ];
+});
+
+$factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->sentence(4),
+        'balance' => $faker->randomNumber,
+        'fundable_id' => $faker->randomElement(App\Models\v1\Reservation::pluck('id')->toArray()),
+        'fundable_type' => 'reservations'
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\Generator $faker)
+{
+    $fund = $faker->randomElement(App\Models\v1\Fund::get()->toArray());
+    $donor = $faker->randomElement(App\Models\v1\Donor::get()->toArray());
+
+    return [
+        'fund_id' => $fund['id'],
+        'donor_id' => $donor['id'],
+        'description' => 'Donation to ' . $fund['name'],
+        'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2),
+        'type' => 'donation',
+        'amount' => $faker->randomNumber(2),
+        'payment' => [
+            'type' => 'card',
+            'last_four', '1234',
+            'cardholder' => 'John Doe',
+            'zip' => '56789',
+            'brand' => 'visa'
+        ],
+        'created_at' => $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray()),
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Transaction::class, 'anonymous', function(Faker\Generator $faker)
+{
+    $fund = $faker->randomElement(App\Models\v1\Fund::all()->toArray());
+
+    return [
+        'fund_id' => key($fund),
+        'donor_id' => App\Models\v1\Donor::where('name', 'anonymous')->pluck('id'),
+        'description' => 'Donation to ' . $fund['name'],
+        'type' => 'donation',
+        'amount' => $faker->randomNumber(2),
+        'payment' => [
+            'type' => 'card',
+            'last_four', '1234',
+            'cardholder' => 'John Doe',
+            'zip' => '56789',
+            'brand' => 'visa'
+        ],
+        'created_at' => $faker->dateTimeThisYear
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Transaction::class, 'transfer_from', function(Faker\Generator $faker)
+{
+    $fund = $faker->randomElement(App\Models\v1\Fund::all()->toArray());
+
+    return [
+        'fund_id' => $fund['id'],
+        'description' => 'Transfer from ' . $fund['name'],
+        'donor_id' => null,
+        'type' => 'transfer',
+        'amount' => -$faker->randomNumber(2),
+        'payment' => null,
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Faker\Generator $faker)
+{
+    $fund = $faker->randomElement(App\Models\v1\Fund::all()->toArray());
+
+    return [
+        'fund_id' => $fund['id'],
+        'description' => 'Transfer to ' . $fund['name'],
+        'donor_id' => null,
+        'type' => 'transfer',
+        'amount' => -$faker->randomNumber(2),
+        'payment' => null,
     ];
 });

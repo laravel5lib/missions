@@ -38,7 +38,7 @@ class UserTransformer extends TransformerAbstract
             'birthday'     => $user->birthday ? $user->birthday->toDateString() : null,
             'phone_one'    => $user->phone_one,
             'phone_two'    => $user->phone_two,
-            'street'       => $user->street,
+            'street'       => $user->address,
             'city'         => $user->city,
             'state'        => $user->state,
             'zip'          => $user->zip,

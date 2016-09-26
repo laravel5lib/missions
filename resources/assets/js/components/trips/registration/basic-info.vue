@@ -313,7 +313,7 @@
 				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
 			},
 			dobYear(){
-				return (this.currentYear - 100 + this.dobYearCalc);
+				return (this.currentYear - 100 + parseInt(this.dobYearCalc));
 			},
 			height(){
 				return this.heightA + ' ft. ' + this.heightB + ' in.';

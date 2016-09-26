@@ -37,15 +37,15 @@
 				<div class="panel-body">
 					<dl class="dl-horizontal" v-if="paymentInfo">
 						<dt>Card Holder Name</dt>
-						<dd>{{paymentInfo.token.card.name}}</dd>
+						<dd>{{paymentInfo.card.cardholder}}</dd>
 						<dt>Card Number</dt>
-						<dd>&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; {{paymentInfo.token.card.last4}}</dd>
+						<dd>&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; {{paymentInfo.card.number.substr(-4)}}</dd>
 						<dt>Card Expiration</dt>
-						<dd>{{paymentInfo.token.card.exp_month}}/{{paymentInfo.token.card.exp_year}}</dd>
+						<dd>{{paymentInfo.card.exp_month}}/{{paymentInfo.card.exp_year}}</dd>
 						<dt>Billing Email</dt>
 						<dd>{{paymentInfo.email}}</dd>
 						<dt>Billing Zip</dt>
-						<dd>{{paymentInfo.token.card.address_zip}}</dd>
+						<dd>{{paymentInfo.address_zip}}</dd>
 						<dt>Save Payment Method</dt>
 						<dd>{{paymentInfo.save ? 'Yes' : 'No'}}</dd>
 					</dl>

@@ -36,7 +36,6 @@
                 this.trips = trips.data.data
             }).then(function () {
 
-
             });
         }
     }

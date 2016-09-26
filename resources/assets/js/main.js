@@ -3,7 +3,11 @@ import login from './components/login.vue';
 import topNav from './components/top-nav.vue';
 import actionTrigger from './components/action-trigger.vue';
 import donate from './components/donate.vue';
+import modalDonate from './components/modal-donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
+import groups from './components/groups/groups.vue';
+import fundraisers from './components/fundraisers/fundraisers.vue';
+import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
 import groupProfileTrips from './components/groups/group-profile-trips.vue';
@@ -25,7 +29,10 @@ import userSettings from './components/users/user-settings.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
 import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
 import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
+import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
 import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
+import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
+import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -43,6 +50,9 @@ import adminGroupCreate from './components/groups/admin-group-create.vue';
 import adminGroupEdit from './components/groups/admin-group-edit.vue';
 import adminGroupManagers from './components/groups/admin-group-managers.vue';
 import adminReservations from './components/reservations/admin-reservations-list.vue';
+import adminReservationEdit from './components/reservations/admin-reservation-edit.vue';
+import adminReservationCosts from './components/reservations/admin-reservation-costs.vue';
+import adminReservationDeadlines from './components/reservations/admin-reservation-deadlines.vue';
 import adminUsers from './components/users/admin-users-list.vue';
 import adminUserCreate from './components/users/admin-user-create.vue';
 import adminUserEdit from './components/users/admin-user-edit.vue';
@@ -96,24 +106,12 @@ Vue.http.interceptors.push({
 
     response: function (response) {
         if (response.status && response.status === 401) {
-            Vue.http.post('/api/refresh').then(
-                function (response) {
-                    $.cookie('api_token', response.data.token);
-                    window.location.reload();
-                },
-                function (response) {
-                    if (response.status && response.status === 401 || response.status && response.status === 500) {
-                        $.removeCookie('api_token');
-                        window.location.replace('/logout');
-                    };
-                }
-            )
-
+            $.removeCookie('api_token');
+            console.log('not logged in');
+            // window.location.replace('/logout');
         }
         if (response.status && response.status === 500) {
-            alert('Oops! Something went wrong with the server.')
-            // $.removeCookie('api_token');
-            // window.location.replace('/logout');
+            console.log('Oops! Something went wrong with the server.')
         }
         if (response.headers && response.headers('Authorization')) {
             $.cookie('api_token', response.headers('Authorization'));
@@ -228,7 +226,9 @@ new Vue({
     },
     components: [
         login,
+        fundraisers,
         campaigns,
+        groups,
         campaignGroups,
         groupTrips,
         groupProfileTrips,
@@ -239,9 +239,11 @@ new Vue({
         tripRegWizard,
         reservationsList,
         donationsList,
+        fundraisersStories,
         topNav,
         actionTrigger,
         donate,
+        modalDonate,
 
         //dashboard components
         recordsList,
@@ -256,6 +258,9 @@ new Vue({
         userProfileStories,
         userProfileFundraisers,
         userProfileFundraisersDonors,
+        userProfileFundraisersProgress,
+        dashboardGroupTrips,
+        dashboardGroupReservations,
 
         // admin components
         adminCampaignCreate,
@@ -273,6 +278,9 @@ new Vue({
         adminGroupEdit,
         adminGroupManagers,
         adminReservations,
+        adminReservationEdit,
+        adminReservationCosts,
+        adminReservationDeadlines,
         adminUsers,
         adminUserCreate,
         adminUserEdit,

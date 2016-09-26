@@ -126,4 +126,27 @@ class MedicalRelease extends Model
         $this->attributes['emergency_contact'] = json_encode($value);
     }
 
+    /**
+     * Synchronize medical conditions.
+     *
+     * @param array $conditions
+     */
+    public function syncConditions($conditions)
+    {
+        if ( ! $conditions) return $this->conditions()->delete();
+
+        $names = $this->conditions()->lists('name', 'name');
+
+        foreach($conditions as $condition)
+        {
+            array_forget($names, $condition['name']);
+
+            $this->conditions()->updateOrCreate(['name' => $condition['name']], $condition);
+        }
+
+        if( ! $names->isEmpty()) $this->conditions()
+                                    ->whereIn('name', $names)
+                                    ->delete();
+    }
+
 }

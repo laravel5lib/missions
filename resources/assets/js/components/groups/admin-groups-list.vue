@@ -88,17 +88,37 @@
                     <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th :class="{'text-primary': orderByField === 'country_name'}">
-                    Location
-                    <!--<i @click="setOrderByField('campaign.data.name')" v-if="orderByField !== 'campaign.data.name'" class="fa fa-sort pull-right"></i>-->
-                    <!--<i @click="direction=direction*-1" v-if="orderByField === 'campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>-->
-                </th>
-                <th :class="{'text-primary': orderByField === 'public'}">
-                    Status
-                    <i @click="setOrderByField('public')" v-if="orderByField !== 'public'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'public'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th>Active Trips</th>
+                <template v-if="pending">
+                    <th :class="{'text-primary': orderByField === 'notes.data[0].content'}">
+                        Contact Person Name
+                        <i @click="setOrderByField('notes.data[0].content')" v-if="orderByField !== 'notes.data[0].content'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'notes.data[0].content'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'phone_one'}">
+                        Phone One
+                        <i @click="setOrderByField('public')" v-if="orderByField !== 'public'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'public'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'email'}">
+                        Email
+                        <i @click="setOrderByField('email')" v-if="orderByField !== 'email'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                </template>
+                <template v-else>
+                    <th :class="{'text-primary': orderByField === 'country_name'}">
+                        Location
+                        <!--<i @click="setOrderByField('campaign.data.name')" v-if="orderByField !== 'campaign.data.name'" class="fa fa-sort pull-right"></i>-->
+                        <!--<i @click="direction=direction*-1" v-if="orderByField === 'campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>-->
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'public'}">
+                        Status
+                        <i @click="setOrderByField('public')" v-if="orderByField !== 'public'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'public'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th>Active Trips</th>
+                </template>
+
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
@@ -106,9 +126,16 @@
             <tr v-for="group in groups|filterBy search|orderBy orderByField direction|filterBy status in 'public'|filterBy type in 'type'">
                 <td>{{group.name}}</td>
                 <td>{{group.type|capitalize}}</td>
-                <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>
-                <td>{{group.public ? 'Public' : 'Private'}}</td>
-                <td>{{group.trips.data.length}}</td>
+                <template v-if="pending">
+                    <td>{{group.notes.data[0].content}}</td>
+                    <td>{{group.phone_one}}</td>
+                    <td>{{group.email}}</td>
+                </template>
+                <template v-else>
+                    <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>
+                    <td>{{group.public ? 'Public' : 'Private'}}</td>
+                    <td>{{group.trips.data.length}}</td>
+                </template>
                 <td>
                     <a data-toggle="tooltip" data-placement="top" title="Manage" href="/admin{{group.links[0].uri}}"><i class="fa fa-gear"></i></a>
                 </td>
@@ -143,6 +170,12 @@
 <script>
     export default{
         name: 'admin-groups',
+        props: {
+            pending: {
+                type: Boolean,
+                default: false
+            }
+        },
         data(){
             return{
                 groups: [],
@@ -183,10 +216,11 @@
             },
             searchGroups(){
                 this.$http.get('groups', {
-                    include:'trips:onlyPublished',
+                    include:'trips:onlyPublished,notes',
                     search: this.searchText,
                     per_page: this.per_page,
-                    page: this.page
+                    page: this.page,
+                    pending: this.pending ? true : null
                 }).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.groups = response.data.data;

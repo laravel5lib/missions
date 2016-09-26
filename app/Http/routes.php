@@ -306,6 +306,12 @@ Route::get('/college-financial', function () {
 Route::get('/support', function () {
     return view('site.support');
 });
+Route::get('/medical', function () {
+    return view('site.medical');
+});
+Route::get('/about-mm', function () {
+    return view('site.about-mm');
+});
 
 Route::get('/{slug}', function ($slug) {
     return $slug;

@@ -14178,6 +14178,78 @@ li.av-nav > a {
   .vid-bg-video {
     display: none; } }
 
+/* Partner Panels */
+.partner-equals-panel {
+  height: 250px;
+  width: 250px;
+  background-color: #ba0813;
+  text-align: center;
+  margin: 15px 0;
+  overflow: hidden;
+  cursor: default;
+  position: relative;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px; }
+  .partner-equals-panel .equals-icon {
+    height: 250px;
+    width: 250px;
+    padding: 15px;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    position: absolute;
+    background-color: #fff;
+    -o-transform: translateX(-250px);
+    -ms-transform: translateX(-250px);
+    -moz-transform: translateX(-250px);
+    -webkit-transform: translateX(-250px);
+    opacity: 1;
+    transition: all 0.4s ease-in-out; }
+    .partner-equals-panel .equals-icon img {
+      margin-top: 40px; }
+    .partner-equals-panel .equals-icon h4 {
+      margin-top: 15px;
+      font-family: "ProximaNova-Semibold", "Montserrat", Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      text-rendering: optimizeLegibility;
+      font-size: 1.2em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #555555; }
+  .partner-equals-panel .view {
+    height: 250px;
+    width: 250px;
+    display: block;
+    position: relative;
+    transition: all 0.3s ease-in-out; }
+    .partner-equals-panel .view h4 {
+      font-family: "ProximaNova-Semibold", "Montserrat", Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      text-rendering: optimizeLegibility;
+      font-size: 1.2em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #fff;
+      margin-top: 100px; }
+      .partner-equals-panel .view h4 span {
+        font-size: 1.8em;
+        margin-top: 15px;
+        display: block; }
+  .partner-equals-panel:hover .equals-icon {
+    -o-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    -webkit-transform: translateX(0px); }
+  .partner-equals-panel:hover .view {
+    -o-transform: translateX(250px);
+    -ms-transform: translateX(250px);
+    -moz-transform: translateX(250px);
+    -webkit-transform: translateX(250px);
+    transition-delay: 0.1s; }
+
 /*=========================
   Icons
  ================= */

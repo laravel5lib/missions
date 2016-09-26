@@ -412,6 +412,7 @@
             resetForm() {
                 this.name ='';
                 this.type ='';
+                this.countryCodeObj = null;
                 this.country_code = null;
                 this.description ='';
                 this.timezone = null;
@@ -419,8 +420,8 @@
                 this.phone_two ='';
                 this.address_one ='';
                 this.address_two ='';
-                this.this.city ='';
-                this.this.state ='';
+                this.city ='';
+                this.state ='';
                 this.zip ='';
                 this.url ='';
                 this.campaign ='';

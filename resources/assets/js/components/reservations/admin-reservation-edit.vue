@@ -47,7 +47,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Date of Birth</label>
-                    <datepicker v-if="loaded" :value.sync="birthday" format="YYYY-MM-DD" :clear-button="true" placeholder="Date of Birth"></datepicker>
+                    <datepicker v-if="loaded" :value.sync="birthday" format="yyyy-MM-dd" :clear-button="true" placeholder="Date of Birth"></datepicker>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group" :class="{ 'has-error': checkForError('size') }">
@@ -161,7 +161,7 @@
                 <div class="col-sm-6">
                     <div class="form-group" :class="{ 'has-error': checkForError('companions') }">
                         <label for="companions">Companions</label>
-                        <input type="number" class="form-control" v-validate:companions="{ require: true }" v-model="companion_limit" id="companions">
+                        <input type="number" number class="form-control" v-validate:companions="{ require: true }" v-model="companion_limit" id="companions">
                     </div>
                 </div>
             </div>
@@ -186,11 +186,11 @@
 <script>
     import vSelect from 'vue-select';
     import VueStrap from 'vue-strap/dist/vue-strap.min'
-    import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
+    import uploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
     export default{
         name: 'admin-reservation-edit',
         props: ['id'],
-        components: { vSelect, 'datepicker': VueStrap.datepicker, 'alert': VueStrap.alert, 'upload-create-update': adminUploadCreateUpdate },
+        components: { vSelect, 'datepicker': VueStrap.datepicker, 'alert': VueStrap.alert, 'upload-create-update': uploadCreateUpdate },
         data(){
             return{
                 given_names: '',
@@ -227,7 +227,7 @@
         },
         computed:{
             user_id(){
-                return _.isObject(this.userObj) ? this.userObj.code : null;
+                return _.isObject(this.userObj) ? this.userObj.id : null;
             },
             country_code() {
                 if (_.isObject(this.countryCodeObj)) {
@@ -267,6 +267,7 @@
                         phone_two: this.phone_two,
                         city: this.city,
                         state: this.state,
+                        zip: this.zip,
                         country_code: this.country_code,
                         companion_limit: this.companion_limit,
                         avatar_upload_id: this.avatar_upload_id,

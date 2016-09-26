@@ -149,4 +149,27 @@ class MedicalRelease extends Model
                                     ->delete();
     }
 
+    /**
+     * Synchronize medical allergies.
+     *
+     * @param array $allergies
+     */
+    public function syncAllergies($allergies)
+    {
+        if ( ! $allergies) return $this->allergies()->delete();
+
+        $names = $this->allergies()->lists('name', 'name');
+
+        foreach($allergies as $allergy)
+        {
+            array_forget($names, $allergy['name']);
+
+            $this->allergies()->updateOrCreate(['name' => $allergy['name']], $allergy);
+        }
+
+        if( ! $names->isEmpty()) $this->allergies()
+            ->whereIn('name', $names)
+            ->delete();
+    }
+
 }

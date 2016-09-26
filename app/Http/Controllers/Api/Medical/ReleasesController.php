@@ -73,6 +73,8 @@ class ReleasesController extends Controller
 
         $release->syncConditions($request->get('conditions'));
 
+        $release->syncAllergies($request->get('allergies'));
+
         return $this->response->item($release, new MedicalReleaseTransformer);
     }
 
@@ -93,6 +95,8 @@ class ReleasesController extends Controller
         $release->update($request->all());
 
         $release->syncConditions($request->get('conditions'));
+
+        $release->syncAllergies($request->get('allergies'));
 
         return $this->response->item($release, new MedicalReleaseTransformer);
     }

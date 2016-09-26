@@ -14178,6 +14178,31 @@ li.av-nav > a {
   .vid-bg-video {
     display: none; } }
 
+.college-vid-bg {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: -100; }
+
+.college-vid-bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  height: auto;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%); }
+
+@media (max-width: 767px) {
+  .college-vid-bg {
+    background: url("images/college/home-placeholder.jpg") center center/cover no-repeat; }
+  .college-vid-bg-video {
+    display: none; } }
+
 /* Partner Panels */
 .partner-equals-panel {
   height: 250px;

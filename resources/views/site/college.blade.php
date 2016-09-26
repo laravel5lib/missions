@@ -7,8 +7,8 @@
 @endsection
 
 @section('content')
-<div class="vid-bg">
-  <video muted autoplay loop poster="images/college/home-placeholder.png" class="vid-bg-video">
+<div class="college-vid-bg">
+  <video muted autoplay loop poster="images/college/home-placeholder.jpg" class="college-vid-bg-video">
     <source src="images/college/mmc-vid-bg.webm" type="video/webm">
     <source src="images/college/mmc-vid-bg.mp4" type="video/mp4">
     <source src="images/college/mmc-vid-bg.ogv" type="video/ogg">
@@ -85,7 +85,7 @@
 	<div class="container">
 	<div class="content-section">
 		<div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-					<div class="col-xs-6 col-sm-4" style="display:flex">
+					<div class="col-sm-4" style="display:flex">
 						<div class="panel panel-default">
 							<div class="panel-body">
 								<h5 class="text-primary">Vision</h5>
@@ -93,7 +93,7 @@
 							</div><!-- end panel-body -->
 						</div><!-- end panel -->
 					</div><!-- end col -->
-					<div class="col-xs-6 col-sm-4" style="display:flex">
+					<div class="col-sm-4" style="display:flex">
 						<div class="panel panel-default">
 							<div class="panel-body">
 								<h5 class="text-primary">Grow</h5>
@@ -101,7 +101,7 @@
 							</div><!-- end panel-body -->
 						</div><!-- end panel -->
 					</div><!-- end col -->
-					<div class="col-xs-6 col-sm-4" style="display:flex">
+					<div class="col-sm-4" style="display:flex">
 						<div class="panel panel-default">
 							<div class="panel-body">
 								<h5 class="text-primary">Serve</h5>
@@ -111,7 +111,7 @@
 					</div><!-- end col -->
 		</div><!-- end row -->
 		<div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-					<div class="col-xs-6 col-sm-4 col-sm-offset-2 col-xs-offset-0" style="display:flex">
+					<div class="col-sm-4 col-sm-offset-2 col-xs-offset-0" style="display:flex">
 						<div class="panel panel-default">
 							<div class="panel-body">
 								<h5 class="text-primary">Lead</h5>
@@ -119,7 +119,7 @@
 							</div><!-- end panel-body -->
 						</div><!-- end panel -->
 					</div><!-- end col -->
-					<div class="col-xs-6 col-sm-4" style="display:flex">
+					<div class="col-sm-4" style="display:flex">
 						<div class="panel panel-default">
 							<div class="panel-body">
 								<h5 class="text-primary">Go</h5>
@@ -177,7 +177,7 @@
 			<div class="col-sm-12">
 				<h1 class="dash-trailing">Student Testimonials</h1>
 				<div class="row">
-					<div class="col-xs-6 col-sm-4">
+					<div class="col-sm-4">
 						<div class="panel panel-default">
 							<img class="img-responsive" src="images/college/students/jessica.jpg" alt="Jessica">
 							<div class="panel-body">
@@ -186,7 +186,7 @@
 							</div><!-- end panel-body -->
 						</div><!-- end panel -->
 					</div><!-- end col -->
-					<div class="col-xs-6 col-sm-4">
+					<div class="col-sm-4">
 						<div class="panel panel-default">
 							<img class="img-responsive" src="images/college/students/samuel.jpg" alt="Samuel">
 							<div class="panel-body">
@@ -195,7 +195,7 @@
 							</div><!-- end panel-body -->
 						</div><!-- end panel -->
 					</div><!-- end col -->
-					<div class="col-xs-6 col-sm-4">
+					<div class="col-sm-4">
 						<div class="panel panel-default">
 							<img class="img-responsive" src="images/college/students/jasmine.jpg" alt="Jasmine">
 							<div class="panel-body">
@@ -242,7 +242,8 @@
 				<p>There’s nothing like getting a letter in the mail with “Congratulations!” in big bold font across the letterhead. We want to get you to that point as quickly as possible. Sometimes application processes are painful, but not this one. Fill out this form and we’ll let you know. <a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></p>
 				<h3 class="text-primary">Application Deadline</h3>
 				<h2 class="text-center">Winter Class of 2017</h2>
-				<a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/" class="btn btn-lg btn-block btn-primary">Application Deadline: December 1, 2016</a>
+				<h5 class="text-uppercase text-center">Application Deadline</h5>
+				<a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/" class="btn btn-lg btn-block btn-primary">December 1, 2016</a>
 			</div><!-- end col -->
 			<div class="col-sm-6">
 				<h3 class="text-primary">F.A.Q.</h3>

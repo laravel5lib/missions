@@ -135,4 +135,13 @@ class ReservationsController extends Controller
 
         return $this->response->noContent();
     }
+
+    public function reconcile($id)
+    {
+        $reservation = $this->reservation->findOrFail($id);
+
+        $reservation->payments()->reconcile();
+
+        return $this->response->item($reservation, new ReservationTransformer, ['include' => 'dues']);
+    }
 }

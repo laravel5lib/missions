@@ -48,6 +48,7 @@
 				<li><a href="/campaigns">Trips</a></li>
 				<li><a href="/fundraisers">Fundraisers</a></li>
 				<li><a href="/groups">Groups</a></li>
+				<li><a href="/support">Partnership</a></li>
 
 				<!-- 1N1D-->
 				<li class="navlabel">1Nation1Day</li>
@@ -59,6 +60,7 @@
 				<li class="navlabel">Causes</li>
 				<li><a href="/water">Clean Water</a></li>
 				<li><a href="/orphans">Rescue Orphans</a></li>
+				<li><a href="/medical">Medical Missions</a></li>
 				<!--<li><a href="#">Homes</a></li>-->
 				<!--<li><a href="#">Trafficking Rescue</a></li>-->
 				<!--<li><a href="#">Leadership Centers</a></li>-->
@@ -71,7 +73,7 @@
 
 				<!-- M.Me -->
 				<li class="navlabel">About</li>
-				<li><a href="#">Missions.Me</a></li>
+				<li><a href="/about-mm">Missions.Me</a></li>
 				<li><a href="#">Contact Us</a></li>
 			</ul>
 		</aside>

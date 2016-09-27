@@ -556,7 +556,7 @@
 					search: this.search,
 					per_page: this.per_page,
 					page: this.page,
-					sort: this.orderByField + ' ' + (this.direction ? 'asc' : 'desc')
+					sort: this.orderByField + '|' + (this.direction ? 'asc' : 'desc')
 				};
 
 				$.extend(params, this.filters);

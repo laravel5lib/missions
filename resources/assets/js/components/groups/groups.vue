@@ -22,14 +22,14 @@
             <validator name="CreateGroup">
               <form id="CreateGroupForm" class="form-horizontal" novalidate>
                   <div class="form-group">
-                      <div class="col-sm-6" :class="{ 'has-error': checkForError('name') }">
+                      <div class="col-sm-6" :class="{ 'has-error': checkForError('name') || errors.name }">
                           <label for="name">Name</label>
                           <input type="text" class="form-control" name="name" id="name" v-model="name"
                                  placeholder="Group Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
                                  maxlength="100" minlength="1" required>
                           <p class="help-block" v-if="errors.name" v-text="errors.name"></p>
                       </div>
-                      <div class="col-sm-6" :class="{ 'has-error': checkForError('campaign') }">
+                      <div class="col-sm-6" :class="{ 'has-error': checkForError('campaign') || errors.campaign }">
                           <label for="campaign">Which Campaign are you interested in?</label>
                           <select name="type" id="campaign" class="form-control" v-model="campaign" v-validate:campaign="{ required: true }" required>
                               <option value="">-- please select --</option>
@@ -77,7 +77,7 @@
                               </select>
                           </div>
                       </div>
-                      <div class="col-sm-6" :class="{ 'has-error': checkForError('type') }">
+                      <div class="col-sm-6" :class="{ 'has-error': checkForError('type') || errors.type }">
                           <label for="type">Type</label>
                           <select name="type" id="type" class="form-control" v-model="type" v-validate:type="{ required: true }" required>
                               <option value="">-- please select --</option>
@@ -87,14 +87,14 @@
                   </div>
 
                   <div class="form-group">
-                      <div class="col-sm-4" :class="{ 'has-error': checkForError('timezone') }">
+                      <div class="col-sm-4" :class="{ 'has-error': checkForError('timezone') || errors.timezone }">
                           <label for="timezone">Timezone</label>
                           <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                           <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
                               <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                           </select>
                       </div>
-                      <div class="col-sm-4" :class="{ 'has-error': checkForError('phone') }">
+                      <div class="col-sm-4" :class="{ 'has-error': checkForError('phone') || errors.phone_one }">
                           <label for="infoPhone">Phone 1</label>
                           <input type="text" class="form-control" v-model="phone_one | phone" v-validate:phone="{ require: true, minlength:9 }" id="infoPhone" placeholder="123-456-7890">
                           <p class="help-block" v-if="errors.phone_one" v-text="errors.phone_one"></p>
@@ -106,26 +106,26 @@
                   </div>
 
                   <div class="form-group">
-                      <div class="col-sm-4" :class="{ 'has-error': checkForError('contact') }">
+                      <div class="col-sm-4" :class="{ 'has-error': checkForError('contact') || errors.contact }">
                           <label for="contact">Your Name</label>
                           <input type="text" class="form-control" name="contact" id="contact" v-model="contact"
                                  placeholder="John Smith" v-validate:contact="{ required: true, minlength:1, maxlength:100 }"
                                  maxlength="100" minlength="1" required>
                           <p class="help-block" v-if="errors.contact" v-text="errors.contact"></p>
                       </div>
-                      <div class="col-sm-4" :class="{ 'has-error': checkForError('email') }">
+                      <div class="col-sm-4" :class="{ 'has-error': checkForError('email') || errors.email }">
                           <label for="email">Email</label>
                           <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate:email="['email','require']">
                           <p class="help-block" v-if="errors.email" v-text="errors.email"></p>
                       </div>
-                      <div class="col-sm-4" :class="{ 'has-error': checkForError('position') }">
+                      <div class="col-sm-4" :class="{ 'has-error': checkForError('position') || errors.position }">
                           <label for="position">Your Position</label>
                           <input type="text" class="form-control" name="position" id="position" v-model="position" v-validate:position="{ require: true, minlength:1 }">
                           <p class="help-block" v-if="errors.position" v-text="errors.position"></p>
                       </div>
                   </div>
 
-                  <div class="form-group" :class="{ 'has-error': checkForError('spoken') }">
+                  <div class="form-group" :class="{ 'has-error': checkForError('spoken') || errors.spoke_to_rep }">
                       <label for="status" class="col-sm-8 control-label">Have you spoken with a Missions.Me representative?</label>
                       <div class="col-sm-4">
                           <label class="radio-inline">
@@ -134,6 +134,7 @@
                           <label class="radio-inline">
                               <input type="radio" name="status2" id="status2" value="no" v-model="spoke_to_rep" v-validate:spoken=""> No
                           </label>
+                          <!--<p class="help-block" v-if="errors.spoke_to_rep" v-text="errors.spoke_to_rep"></p>-->
                       </div>
                   </div>
                   <div class="form-group">
@@ -374,6 +375,11 @@
                 pagination: {},
             }
         },
+        computed: {
+            country_code() {
+                return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+            },
+        },
         watch: {
             'page': function (val, oldVal) {
                 this.pagination.current_page = val;
@@ -406,6 +412,7 @@
             resetForm() {
                 this.name ='';
                 this.type ='';
+                this.countryCodeObj = null;
                 this.country_code = null;
                 this.description ='';
                 this.timezone = null;
@@ -413,8 +420,8 @@
                 this.phone_two ='';
                 this.address_one ='';
                 this.address_two ='';
-                this.this.city ='';
-                this.this.state ='';
+                this.city ='';
+                this.state ='';
                 this.zip ='';
                 this.url ='';
                 this.campaign ='';
@@ -422,7 +429,8 @@
                 this.position ='';
                 this.email ='';
                 this.spoke_to_rep = undefined;
-
+                this.attemptSubmit = false;
+                $('#collapseGroupForm').collapse('hide');
             },
             submit(){
                 this.attemptSubmit = true;

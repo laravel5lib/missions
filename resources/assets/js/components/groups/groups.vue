@@ -142,16 +142,16 @@
                           <a @click="submit" class="btn btn-primary">Send Request</a>
                       </div>
                   </div>
-                  <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-                      <span class="icon-ok-circled alert-icon-float-left"></span>
-                      <strong>Awesome!</strong>
-                      <p>Group request sent</p>
-                  </alert>
-
               </form>
           </validator>
           </div><!-- end col -->
         </div><!-- end row -->
+      <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+          <span class="icon-ok-circled alert-icon-float-left"></span>
+          <strong>Awesome!</strong>
+          <p>Group request sent</p>
+      </alert>
+
       </div><!-- end content-section -->
       </div><!-- end container -->
     </div><!-- end white-bg -->

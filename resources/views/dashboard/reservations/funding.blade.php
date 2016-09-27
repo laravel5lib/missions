@@ -1,6 +1,16 @@
 @extends('dashboard.layouts.default')
 
 @section('content')
+<div class="white-header-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Reservations <small>Funding</small></h3>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="divider inv lg">
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
@@ -27,8 +37,8 @@
                             {{--<span class="pull-right">${{ number_format($totalAmountDue,2) }}</span>--}}
                         </h4>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ ($totalAmountRaised/$totalAmountDue) * 100 }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{ ($totalAmountRaised/$totalAmountDue) * 100 }}%;">
-                                {{ number_format(($totalAmountRaised/$totalAmountDue) * 100, 2) }}% of ${{ number_format($totalAmountDue,2) }} Raised
+                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{--{{ ($totalAmountRaised/$totalAmountDue) * 100 }}--}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{--{{ ($totalAmountRaised/$totalAmountDue) * 100 }}--}}%;">
+                                {{--{{ number_format(($totalAmountRaised/$totalAmountDue) * 100, 2) }}--}}% of ${{ number_format($totalAmountDue,2) }} Raised
                             </div>
                         </div>
                         <div class="panel panel-default">

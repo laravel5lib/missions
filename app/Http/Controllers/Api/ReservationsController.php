@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ReservationWasCreated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
-use App\Http\Transformers\v1\DonationTransformer;
+use App\Http\Transformers\v1\DonorTransformer;
+use App\Models\v1\Donor;
 use App\Models\v1\Reservation;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\ReservationRequest;
@@ -24,8 +25,7 @@ class ReservationsController extends Controller
      */
     public function __construct(Reservation $reservation)
     {
-//        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
+        $this->middleware('api.auth', ['only' => 'store', 'update', 'destroy']);
         $this->reservation = $reservation;
     }
 
@@ -53,26 +53,30 @@ class ReservationsController extends Controller
      */
     public function show($id)
     {
-        $reservation = Reservation::findOrFail($id);
+        $reservation = $this->reservation->findOrFail($id);
 
         return $this->response->item($reservation, new ReservationTransformer);
     }
 
     /**
-     * Show all the donations for the specified reservation.
+     * Show all the donors for the specified reservation.
      *
      * @param $id
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function donations($id, Request $request)
-    {
-        $donations = Reservation::findOrFail($id)
-                        ->donations()
-                        ->paginate($request->get('per_page', 10));
-
-        return $this->response->paginator($donations, new DonationTransformer);
-    }
+//    public function donors($id, Request $request)
+//    {
+//        // Filter donors by reservation
+//        $request->merge(['reservation' => $id]);
+//
+//        $donors = Donor::filter($request->all())
+//            ->paginate($request->get('per_page'));
+//
+//        // Pass the reservation to the transformer to filter
+//        // embedded relationships by designation.
+//        return $this->response->paginator($donors, new DonorTransformer(['reservation' => $id]));
+//    }
 
     /**
      * Store a reservation.
@@ -82,18 +86,9 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        $reservation = Reservation::create($request->all());
+        $reservation = $this->reservation->create($request->except('costs', 'donor', 'payment'));
 
-        // Eager load trip relationships for sync
-        $reservation->load('trip.costs', 'trip.requirements', 'trip.deadlines');
-
-        $reservation->syncCosts($reservation->trip->costs);
-        $reservation->syncRequirements($reservation->trip->requirements);
-        $reservation->syncDeadlines($reservation->trip->deadlines);
-        $reservation->addTodos($reservation->trip->todos);
-
-        if ($request->has('tags'))
-            $reservation->tag($request->get('tags'));
+        event(new ReservationWasCreated($reservation, $request));
 
         return $this->response->item($reservation, new ReservationTransformer);
     }
@@ -107,7 +102,7 @@ class ReservationsController extends Controller
      */
     public function update(ReservationRequest $request, $id)
     {
-        $reservation = Reservation::findOrFail($id);
+        $reservation = $this->reservation->findOrFail($id);
 
         $reservation->update($request->except('costs', 'requirements', 'deadlines', 'todos'));
 
@@ -118,6 +113,10 @@ class ReservationsController extends Controller
 
         if ($request->has('tags'))
             $reservation->retag($request->get('tags'));
+
+        if ( ! $request->has('medical_release_id'))
+            $reservation->medicalRelease()->dissociate();
+            $reservation->save();
 
         return $this->response->item($reservation, new ReservationTransformer);
     }
@@ -130,7 +129,7 @@ class ReservationsController extends Controller
      */
     public function destroy($id)
     {
-        $reservation = Reservation::findOrFail($id);
+        $reservation = $this->reseration->findOrFail($id);
 
         $reservation->delete();
 

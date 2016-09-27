@@ -26,7 +26,7 @@ class PassportsController extends Controller
         $this->passport = $passport;
 
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     /**
@@ -70,9 +70,7 @@ class PassportsController extends Controller
     {
         $passport = $this->passport->create($request->all());
 
-        $location = url('/passports/' . $passport->id);
-
-        return $this->response->created($location);
+        return $this->response->item($passport, new PassportTransformer);
     }
 
     /**

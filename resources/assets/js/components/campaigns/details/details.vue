@@ -1,50 +1,63 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4><i class="fa fa-info-circle"></i> Details</h4>
+            <h4>Details</h4>
         </div>
         <table class="table table-hover">
             <tbody>
             <tr>
-                <td>Name</td>
+                <th>Name</th>
                 <td v-if="!editMode">{{campaign.name}}</td>
             </tr>
             <tr>
-                <td>Description</td>
+                <th>Description</th>
                 <td v-if="!editMode">{{campaign.description}}</td>
             </tr>
             <tr>
-                <td>Country</td>
+                <th>Page Url</th>
+                <td>{{campaign.page_url}}</td>
+            </tr>
+            <tr>
+                <th>Page Source</th>
+                <td>{{campaign.page_src}}</td>
+            </tr>
+            <tr>
+                <th>Country</th>
                 <td>{{campaign.country}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
             </tr>
             <tr>
-                <td>Thumbnail</td>
-                <td>{{campaign.thumb_src}}</td>
+                <th>Groups</th>
+                <td>{{campaign.groups_count}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
             </tr>
             <tr>
-                <td>Start Date</td>
+                <th>Status</th>
+                <td>{{campaign.status}}</td>
+                <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
+            </tr>
+            <tr>
+                <th>Start Date</th>
                 <td>{{toDate(campaign.started_at)}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
             </tr>
             <tr>
-                <td>End Date</td>
+                <th>End Date</th>
                 <td>{{toDate(campaign.ended_at)}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
             </tr>
             <tr>
-                <td>Created At</td>
+                <th>Created At</th>
                 <td>{{toDate(campaign.updated_at, 'LLL')}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
             </tr>
             <tr>
-                <td>Updated At</td>
+                <th>Updated At</th>
                 <td>{{toDate(campaign.created_at, 'LLL')}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
             </tr>
             <tr>
-                <td>Published At</td>
+                <th>Published At</th>
                 <td>{{toDate(campaign.published_at, 'LLL')}}</td>
                 <!--<td><a class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a></td>-->
             </tr>

@@ -2,73 +2,75 @@
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <form class="form-inline text-right" novalidate>
+                <form class="form-inline" novalidate>
+                    <div class="form-inline" style="display: inline-block;">
+                        <div class="form-group">
+                            <label>Show</label>
+                            <select class="form-control input-sm" v-model="per_page">
+                                <option v-for="option in perPageOptions" :value="option">{{option}}</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <div class="dropdown" style="display: inline-block;">
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            Filters
+                            Sort By
                             <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <li>
-                                <label style="padding: 3px 20px;">
+                                <label style="margin-bottom: 0" class="small">
                                     <input type="radio" v-model="status" value=""> Any Status
                                 </label>
                             </li>
                             <li>
-                                <label style="padding: 3px 20px;">
+                                <label style="margin-bottom: 0" class="small">
                                     <input type="radio" v-model="status" value="true"> Public Only
                                 </label>
                             </li>
                             <li>
-                                <label style="padding: 3px 20px;">
+                                <label style="margin-bottom: 0" class="small">
                                     <input type="radio" v-model="status" value="false"> Private only
                                 </label>
                             </li>
                             <li role="separator" class="divider"></li>
                             <li>
-                                <label style="padding: 3px 20px;">
+                                <label style="margin-bottom: 0" class="small">
                                     <input type="radio" v-model="type" value=""> Any Type
                                 </label>
                             </li>
                             <li>
-                                <label style="padding: 3px 20px;">
+                                <label style="margin-bottom: 0" class="small">
                                     <input type="radio" v-model="type" value="church"> Church Only
                                 </label>
                             </li>
                             <li>
-                                <label style="padding: 3px 20px;">
+                                <label style="margin-bottom: 0" class="small">
                                     <input type="radio" v-model="type" value="business"> Business only
                                 </label>
                             </li>
                             <li>
-                                <label style="padding: 3px 20px;">
+                                <label style="margin-bottom: 0" class="small">
                                     <input type="radio" v-model="type" value="nonprofit"> Non-Profit Only
                                 </label>
                             </li>
                             <li>
-                                <label style="padding: 3px 20px;">
+                                <label style="margin-bottom: 0" class="small">
                                     <input type="radio" v-model="type" value="youth"> Private only
                                 </label>
                             </li>
                             <li>
-                                <label style="padding: 3px 20px;">
+                                <label style="margin-bottom: 0" class="small">
                                     <input type="radio" v-model="type" value="other"> Other only
                                 </label>
                             </li>
                         </ul>
                     </div>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-addon">Show</span>
-                        <select class="form-control" v-model="per_page">
-                            <option v-for="option in perPageOptions" :value="option">{{option}}</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
-                    | <a class="btn btn-primary btn-sm" href="groups/create"><i class="fa fa-plus"></i> New</a>
+                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters</button>
+                    <a class="btn btn-primary btn-sm" href="groups/create">New <i class="fa fa-plus icon-left"></i></a>
                 </form>
             </div>
         </div>
@@ -86,17 +88,37 @@
                     <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th :class="{'text-primary': orderByField === 'country_name'}">
-                    Location
-                    <!--<i @click="setOrderByField('campaign.data.name')" v-if="orderByField !== 'campaign.data.name'" class="fa fa-sort pull-right"></i>-->
-                    <!--<i @click="direction=direction*-1" v-if="orderByField === 'campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>-->
-                </th>
-                <th :class="{'text-primary': orderByField === 'public'}">
-                    Status
-                    <i @click="setOrderByField('public')" v-if="orderByField !== 'public'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'public'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th>Active Trips</th>
+                <template v-if="pending">
+                    <th :class="{'text-primary': orderByField === 'country_name'}">
+                        Location
+                        <!--<i @click="setOrderByField('notes.data[0].content')" v-if="orderByField !== 'notes.data[0].content'" class="fa fa-sort pull-right"></i>-->
+                        <!--<i @click="direction=direction*-1" v-if="orderByField === 'notes.data[0].content'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>-->
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'phone_one'}">
+                        Phone One
+                        <i @click="setOrderByField('public')" v-if="orderByField !== 'public'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'public'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'email'}">
+                        Email
+                        <i @click="setOrderByField('email')" v-if="orderByField !== 'email'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                </template>
+                <template v-else>
+                    <th :class="{'text-primary': orderByField === 'country_name'}">
+                        Location
+                        <!--<i @click="setOrderByField('campaign.data.name')" v-if="orderByField !== 'campaign.data.name'" class="fa fa-sort pull-right"></i>-->
+                        <!--<i @click="direction=direction*-1" v-if="orderByField === 'campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>-->
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'public'}">
+                        Status
+                        <i @click="setOrderByField('public')" v-if="orderByField !== 'public'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'public'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th>Active Trips</th>
+                </template>
+
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
@@ -104,12 +126,18 @@
             <tr v-for="group in groups|filterBy search|orderBy orderByField direction|filterBy status in 'public'|filterBy type in 'type'">
                 <td>{{group.name}}</td>
                 <td>{{group.type|capitalize}}</td>
-                <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>
-                <td>{{group.public ? 'Public' : 'Private'}}</td>
-                <td>{{group.trips.data.length}}</td>
+                <template v-if="pending">
+                    <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>
+                    <td>{{group.phone_one}}</td>
+                    <td>{{group.email}}</td>
+                </template>
+                <template v-else>
+                    <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>
+                    <td>{{group.public ? 'Public' : 'Private'}}</td>
+                    <td>{{group.trips.data.length}}</td>
+                </template>
                 <td>
-                    <a href="/admin{{group.links[0].uri}}"><i class="fa fa-eye"></i></a>
-                    <a href="/admin{{group.links[0].uri}}/edit"><i class="fa fa-pencil"></i></a>
+                    <a data-toggle="tooltip" data-placement="top" title="Manage" href="/admin{{group.links[0].uri}}"><i class="fa fa-gear"></i></a>
                 </td>
             </tr>
             </tbody>
@@ -142,6 +170,12 @@
 <script>
     export default{
         name: 'admin-groups',
+        props: {
+            pending: {
+                type: Boolean,
+                default: false
+            }
+        },
         data(){
             return{
                 groups: [],
@@ -182,10 +216,11 @@
             },
             searchGroups(){
                 this.$http.get('groups', {
-                    include:'trips:onlyPublished',
+                    include:'trips:onlyPublished,notes',
                     search: this.searchText,
                     per_page: this.per_page,
-                    page: this.page
+                    page: this.page,
+                    pending: this.pending ? true : null
                 }).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.groups = response.data.data;

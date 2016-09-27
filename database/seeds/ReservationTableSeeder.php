@@ -1,6 +1,8 @@
 <?php
 
+use App\Events\ReservationWasCreated;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\Request;
 
 class ReservationTableSeeder extends Seeder
 {
@@ -13,42 +15,27 @@ class ReservationTableSeeder extends Seeder
     {
         factory(App\Models\v1\Reservation::class, config('seeders.reservations'))->create()->each(function($r) {
 
-            foreach($r->trip->deadlines as $deadline)
-            {
-                $r->deadlines()->attach($deadline->id, ['grace_period' => $deadline->grace_period + random_int(0, 3)]);
-            }
+            $r->companions()->save(factory(App\Models\v1\Companion::class)->make());
 
-            foreach($r->trip->requirements as $requirement)
-            {
-                $statuses = ['incomplete', 'reviewing', 'complete'];
-                $rand_key = array_rand($statuses);
+            $r->notes()->save(factory(App\Models\v1\Note::class)->make());
 
-                $statuses[$rand_key] == 'complete' ? $completed_at = \Carbon\Carbon::now() : $completed_at = null;
+            $r->tag(['vip', 'missionary']);
 
-                $r->requirements()->attach($requirement->id, [
-                    'grace_period' => $requirement->grace_period + random_int(0, 3),
-                    'status' => $statuses[$rand_key],
-                    'completed_at' => $completed_at
-                ]);
-            }
+            event(new ReservationWasCreated($r, new Request));
+        });
 
-            foreach($r->trip->costs as $cost)
-            {
-                $r->costs()->attach($cost->id, ['grace_period' => $cost->grace_period + random_int(0, 3)]);
-            }
+        // Give the admin user at least one reservation.
+        $user = App\Models\v1\User::where('name', 'Admin')->firstOrFail();
 
-            foreach($r->trip->todos as $todo)
-            {
-                $r->todos()->save(factory(App\Models\v1\Todo::class)->make([
-                    'task' => $todo
-                ]));
-            }
+        factory(App\Models\v1\Reservation::class)->create(['user_id' => $user->id])->each(function($r) {
 
             $r->companions()->save(factory(App\Models\v1\Companion::class)->make());
 
             $r->notes()->save(factory(App\Models\v1\Note::class)->make());
 
             $r->tag(['vip', 'missionary']);
+
+            event(new ReservationWasCreated($r, new Request));
         });
     }
 }

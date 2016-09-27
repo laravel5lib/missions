@@ -25,10 +25,14 @@ class FundraiserRequest extends FormRequest
     {
         return [
             'name'             => 'required|string',
+            'fund_id'          => 'required|exists:funds,id',
             'goal_amount'      => 'required|min:1|numeric',
             'description'      => 'string',
-            'expires_at'       => 'required|date',
-            'banner_upload_id' => 'string|exists:uploads'
+            'banner_upload_id' => 'string|exists:uploads,id',
+            'upload_ids'       => 'array',
+            'upload_ids.*'     => 'required|exists:uploads,id',
+            'started_at'       => 'required|date|before:ended_at',
+            'ended_at'         => 'required|date|after:started_at'
         ];
     }
 }

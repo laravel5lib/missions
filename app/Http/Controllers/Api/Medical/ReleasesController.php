@@ -4,30 +4,27 @@ namespace App\Http\Controllers\Api\Medical;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\Medical\ReleaseRequest;
-use App\Http\Transformers\v1\Medical\ReleaseTransformer;
-use App\Models\v1\Medical\Release;
-
-use App\Http\Requests;
+use App\Http\Transformers\v1\MedicalReleaseTransformer;
+use App\Models\v1\MedicalRelease;
 use Dingo\Api\Contract\Http\Request;
 
 class ReleasesController extends Controller
 {
 
     /**
-     * @var Release
+     * @var MedicalRelease
      */
     private $release;
 
     /**
      * ReleasesController constructor.
-     * @param Release $release
+     * @param MedicalRelease $release
      */
-    public function __construct(Release $release)
+    public function __construct(MedicalRelease $release)
     {
         $this->release = $release;
 
-        $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+        $this->middleware('api.auth',  ['only' => ['store','update','destroy']]);
     }
 
     /**
@@ -45,7 +42,7 @@ class ReleasesController extends Controller
 
         $releases = $releases->paginate($request->get('per_page', 25));
 
-        return $this->response->paginator($releases, new ReleaseTransformer);
+        return $this->response->paginator($releases, new MedicalReleaseTransformer);
     }
 
     /**
@@ -58,7 +55,7 @@ class ReleasesController extends Controller
     {
         $release = $this->release->findOrFail($id);
 
-        return $this->response->item($release, new ReleaseTransformer);
+        return $this->response->item($release, new MedicalReleaseTransformer);
     }
 
     /**
@@ -69,11 +66,16 @@ class ReleasesController extends Controller
      */
     public function store(ReleaseRequest $request)
     {
+        if ( ! empty($request->get('conditions')))
+            $request->merge(['is_risk' => true]);
+
         $release = $this->release->create($request->all());
 
-        $location = url('/medical/releases/' . $release->id);
+        $release->syncConditions($request->get('conditions'));
 
-        return $this->response->created($location);
+        $release->syncAllergies($request->get('allergies'));
+
+        return $this->response->item($release, new MedicalReleaseTransformer);
     }
 
     /**
@@ -85,11 +87,18 @@ class ReleasesController extends Controller
      */
     public function update(ReleaseRequest $request, $id)
     {
+        if ( ! empty($request->get('conditions')))
+            $request->merge(['is_risk' => true]);
+
         $release = $this->release->findOrFail($id);
 
         $release->update($request->all());
 
-        return $this->response->item($release, new ReleaseTransformer);
+        $release->syncConditions($request->get('conditions'));
+
+        $release->syncAllergies($request->get('allergies'));
+
+        return $this->response->item($release, new MedicalReleaseTransformer);
     }
 
     /**

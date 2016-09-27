@@ -26,7 +26,7 @@ class RegionsController extends Controller
         $this->region = $region;
 
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     /**

@@ -28,9 +28,10 @@ class Group extends Model
     protected $fillable = [
         'name', 'type', 'timezone', 'url', 'public',
         'address_one', 'address_two',
-        'city', 'state', 'zip', 'country', 'phone_one',
+        'city', 'state', 'zip', 'country_code', 'phone_one',
         'phone_two', 'email', 'description',
-        'stripe_id', 'card_brand', 'card_last_four'
+        'stripe_id', 'card_brand', 'card_last_four',
+        'status'
     ];
 
     /**
@@ -56,6 +57,23 @@ class Group extends Model
      * @var array
      */
     protected $casts = [];
+
+    /**
+     * Set default values.
+     *
+     * @var array
+     */
+    protected $attributes = ['status' => 'approved'];
+
+    /**
+     * Set the status attribute.
+     *
+     * @param $value
+     */
+    public function setStatusAttribute($value)
+    {
+        $this->attributes['status'] = strtolower(trim($value));
+    }
 
     /**
      * Get all the group's trips.
@@ -140,6 +158,16 @@ class Group extends Model
     }
 
     /**
+     * Get the group's social links.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function social()
+    {
+        return $this->morphMany(Link::class, 'linkable');
+    }
+
+    /**
      * Get the group's uploads.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
@@ -147,6 +175,50 @@ class Group extends Model
     public function uploads()
     {
         return $this->morphedByMany(Upload::class, 'uploadable');
+    }
+
+    /**
+     * Get the group's stories.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function stories()
+    {
+        return $this->morphToMany(Story::class, 'publication', 'published_stories')
+            ->withPivot('published_at')
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get the group's notes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
+
+    /**
+     * Get public groups.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePublic($query)
+    {
+        return $query->where('public', true);
+    }
+
+    /**
+     * Get private groups.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePrivate($query)
+    {
+        return $query->where('public', false);
     }
 
     /**

@@ -16,6 +16,34 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.index');
     });
 
+    Route::get('settings', function() {
+        return view('dashboard.settings');
+    });
+
+    Route::get('groups', function() {
+        if( ! auth()->user()->managing()->count()) abort(403);
+        return view('dashboard.groups.index');
+    });
+
+    Route::get('groups/{id}', function($id) use ($dispatcher) {
+        if( ! auth()->user()->managing()->count()) abort(403);
+        $group = $dispatcher->get('groups/' . $id);
+        return view('dashboard.groups.show', compact('group', 'id'));
+    });
+
+    Route::get('groups/{id}/edit', function($id) use ($dispatcher) {
+        if( ! auth()->user()->managing()->count()) abort(403);
+        $group = $dispatcher->get('groups/' . $id);
+        return view('dashboard.groups.edit', compact('group', 'id'));
+    });
+
+    Route::get('groups/{groupId}/trips/{id}', function($groupId, $id) use ($dispatcher) {
+        if( ! auth()->user()->managing()->count()) abort(403);
+        $group = $dispatcher->get('groups/' . $groupId);
+        $trip = $dispatcher->get('trips/' . $id);
+        return view('dashboard.groups.trips.show', compact('group', 'groupId', 'trip', 'id'));
+    });
+
     Route::get('records', function () {
         return view('dashboard.records.index');
     });
@@ -29,12 +57,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.passports.create');
     });
 
-    Route::get('passports/{id}', function () {
-        return view('dashboard.passports.index');
+    Route::get('passports/{id}', function ($id) {
+        return view('dashboard.passports.index', compact('id'));
     });
 
-    Route::get('passports/{id}/edit', function () {
-        return view('dashboard.passports.edit');
+    Route::get('passports/{id}/edit', function ($id) {
+        return view('dashboard.passports.edit', compact('id'));
     });
 
     // Visas
@@ -46,40 +74,18 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.visas.create');
     });
 
-    Route::get('visas/{id}', function () {
-        return view('dashboard.visas.index');
+    Route::get('visas/{id}', function ($id) {
+        return view('dashboard.visas.index', compact('id'));
     });
 
-    Route::get('visas/{id}/edit', function () {
-        return view('dashboard.visas.edit');
+    Route::get('visas/{id}/edit', function ($id) {
+        return view('dashboard.visas.edit', compact('id'));
     });
 
 
     Route::get('/reservations', function () use ($dispatcher) {
-        try {
-            $reservations = $dispatcher->get('reservations', ['include' => 'trip.campaign,trip.group', 'user' => array(Auth::user()->id)]);
 
-            // filter reservations
-            $activeReservations = collect();
-            $inactiveReservations = collect();
-            foreach ($reservations as $reservation) {
-                $reservation->country = country($reservation->trip->campaign->country_code);
-
-                if($reservation->trip->ended_at->gt(now())) {
-                    $activeReservations->push($reservation);
-                } else {
-                    $inactiveReservations->push($reservation);
-                }
-            }
-
-        } catch (Dingo\Api\Exception\InternalHttpException $e) {
-            // We can get the response here to check the status code of the error or response body.
-            $response = $e->getResponse();
-            return $response;
-        }
-
-    //    return $reservations;
-        return view('dashboard.reservations.index', compact('activeReservations', 'inactiveReservations'));
+        return view('dashboard.reservations.index');
     });
 
     Route::get('/reservations/{id}', function ($id) use ($dispatcher) {
@@ -262,6 +268,56 @@ Route::post('/login', 'Auth\AuthController@authenticate');
 Route::get('/register', 'Auth\Authcontroller@create');
 Route::post('/register', 'Auth\AuthController@register');
 Route::get('/logout', 'Auth\AuthController@logout');
+
+Route::get('/fundraisers', 'FundraisersController@index');
+Route::get('/groups', function() {
+    return view('site.groups.index');
+});
+Route::get('/groups/{slug}', 'GroupsController@profile');
+Route::get('/profiles/{slug}', 'UsersController@profile');
+Route::get('/@{slug}', 'UsersController@profile');
+Route::get('@{slug}/donate', function ($slug) {
+    $type = 'users';
+    return view('site.donate', compact('type', 'slug'));
+});
+
+Route::get('{type}/{slug?}/donate', function ($type, $slug) {
+    return view('site.donate', compact('type', 'slug'));
+})->where('type', 'profiles|groups|reservations|trips');
+
+Route::get('/donate', function () {
+    return view('site.donate');
+});
+Route::get('/speakers', function () {
+    return view('site.speakers');
+});
+Route::get('/water', function () {
+    return view('site.water');
+});
+Route::get('/orphans', function () {
+    return view('site.orphans');
+});
+Route::get('/college', function () {
+    return view('site.college');
+});
+Route::get('/college-financial', function () {
+    return view('site.college-financial');
+});
+Route::get('/support', function () {
+    return view('site.support');
+});
+Route::get('/medical', function () {
+    return view('site.medical');
+});
+Route::get('/about-mm', function () {
+    return view('site.about-mm');
+});
+
+Route::get('/{slug}', function ($slug) {
+    return $slug;
+});
+
+Route::get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')->where('sponsor_slug', '.+');
 
 Route::get('/', function () {
     return view('site.index');

@@ -1,16 +1,38 @@
 import Vue from 'vue';
 import login from './components/login.vue';
 import topNav from './components/top-nav.vue';
+import actionTrigger from './components/action-trigger.vue';
+import donate from './components/donate.vue';
+import modalDonate from './components/modal-donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
+import groups from './components/groups/groups.vue';
+import fundraisers from './components/fundraisers/fundraisers.vue';
+import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
+import groupProfileTrips from './components/groups/group-profile-trips.vue';
+import groupProfileStories from './components/groups/group-profile-stories.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
+import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
 import recordsList from './components/records/records-list.vue';
+import groupsList from './components/groups/groups-list.vue';
 import visasList from './components/visas/visas-list.vue';
 import passportsList from './components/passports/passports-list.vue';
+import passportCreateUpdate from './components/passports/passport-create-update.vue';
+import visaCreateUpdate from './components/visas/visa-create-update.vue';
+import reservationsPassportsManager from './components/reservations/reservations-passports-manager.vue';
+import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
+import userSettings from './components/users/user-settings.vue';
+import userProfileStories from './components/users/user-profile-stories.vue';
+import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
+import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
+import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
+import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
+import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
+import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -28,6 +50,9 @@ import adminGroupCreate from './components/groups/admin-group-create.vue';
 import adminGroupEdit from './components/groups/admin-group-edit.vue';
 import adminGroupManagers from './components/groups/admin-group-managers.vue';
 import adminReservations from './components/reservations/admin-reservations-list.vue';
+import adminReservationEdit from './components/reservations/admin-reservation-edit.vue';
+import adminReservationCosts from './components/reservations/admin-reservation-costs.vue';
+import adminReservationDeadlines from './components/reservations/admin-reservation-deadlines.vue';
 import adminUsers from './components/users/admin-users-list.vue';
 import adminUserCreate from './components/users/admin-user-create.vue';
 import adminUserEdit from './components/users/admin-user-edit.vue';
@@ -39,6 +64,10 @@ import adminUploadCreateUpdate from './components/uploads/admin-upload-create-up
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 window._ = require('underscore');
+window.marked = require('marked');
+require('gsap');
+window.ScrollMagic = require('scrollmagic');
+require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
 // require('vue-strap/src/index.js');
 // window.VueStrap = require('vue-strap/dist/vue-strap.min');
 import VueStrap from 'vue-strap/dist/vue-strap.min';
@@ -77,24 +106,12 @@ Vue.http.interceptors.push({
 
     response: function (response) {
         if (response.status && response.status === 401) {
-            Vue.http.post('/api/refresh').then(
-                function (response) {
-                    $.cookie('api_token', response.data.token);
-                    window.location.reload();
-                },
-                function (response) {
-                    if (response.status && response.status === 401 || response.status && response.status === 500) {
-                        $.removeCookie('api_token');
-                        window.location.replace('/logout');
-                    };
-                }
-            )
-
+            $.removeCookie('api_token');
+            console.log('not logged in');
+            // window.location.replace('/logout');
         }
         if (response.status && response.status === 500) {
-            alert('Oops! Something went wrong with the server.')
-            // $.removeCookie('api_token');
-            // window.location.replace('/logout');
+            console.log('Oops! Something went wrong with the server.')
         }
         if (response.headers && response.headers('Authorization')) {
             $.cookie('api_token', response.headers('Authorization'));
@@ -209,19 +226,41 @@ new Vue({
     },
     components: [
         login,
+        fundraisers,
         campaigns,
+        groups,
         campaignGroups,
         groupTrips,
+        groupProfileTrips,
+        groupProfileStories,
+        groupProfileFundraisers,
         groupTripWrapper,
+        tripDetailsMissionaries,
         tripRegWizard,
         reservationsList,
         donationsList,
+        fundraisersStories,
         topNav,
+        actionTrigger,
+        donate,
+        modalDonate,
 
         //dashboard components
         recordsList,
         passportsList,
+        passportCreateUpdate,
         visasList,
+        groupsList,
+        visaCreateUpdate,
+        reservationsPassportsManager,
+        reservationsVisasManager,
+        userSettings,
+        userProfileStories,
+        userProfileFundraisers,
+        userProfileFundraisersDonors,
+        userProfileFundraisersProgress,
+        dashboardGroupTrips,
+        dashboardGroupReservations,
 
         // admin components
         adminCampaignCreate,
@@ -239,6 +278,9 @@ new Vue({
         adminGroupEdit,
         adminGroupManagers,
         adminReservations,
+        adminReservationEdit,
+        adminReservationCosts,
+        adminReservationDeadlines,
         adminUsers,
         adminUserCreate,
         adminUserEdit,

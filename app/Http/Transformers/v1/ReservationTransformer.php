@@ -19,7 +19,8 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'member', 'passport', 'visa'
+        'fundraisers', 'member', 'passport', 'visa', 'dues',
+        'medicalRelease'
     ];
 
     /**
@@ -30,7 +31,7 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function transform(Reservation $reservation)
     {
-        $reservation->load('tagged', 'avatar');
+        $reservation->load('tagged', 'avatar', 'fund');
 
         return [
             'id'              => $reservation->id,
@@ -40,9 +41,22 @@ class ReservationTransformer extends TransformerAbstract
             'status'          => $reservation->status,
             'shirt_size'      => $reservation->shirt_size,
             'shirt_size_name' => implode(array_values(ShirtSize::get($reservation->shirt_size)), ''),
+            'age'             => $reservation->age,
             'birthday'        => $reservation->birthday->toDateString(),
-            'companion_limit' => (int) $reservation->companions_limit,
+            'email'           => $reservation->email,
+            'phone_one'       => $reservation->phone_one,
+            'phone_two'       => $reservation->phone_two,
+            'address'         => $reservation->address,
+            'city'            => $reservation->city,
+            'state'           => $reservation->state,
+            'zip'             => $reservation->zip,
+            'country_code'    => $reservation->country_code,
+            'country_name'    => country($reservation->country_code),
+            'companion_limit' => (int) $reservation->companion_limit,
             'avatar'          => $reservation->avatar ? image($reservation->avatar->source) : null,
+            'total_cost'      => (int) $reservation->getTotalCost(),
+            'total_raised'    => (int) $reservation->fund->balance,
+            'total_owed'      => (int) $reservation->getTotalOwed(),
             'created_at'      => $reservation->created_at->toDateTimeString(),
             'updated_at'      => $reservation->updated_at->toDateTimeString(),
             'tags'            => $reservation->tagNames(),
@@ -53,6 +67,30 @@ class ReservationTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    /**
+     * Include Dues
+     *
+     * @param Reservation $reservation
+     * @param ParamBag|null $params ( i.e dues:status(active|extended) )
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeDues(Reservation $reservation, ParamBag $params = null)
+    {
+        // Optional params validation
+        if ( ! is_null($params)) {
+            $this->validateParams($params);
+
+            $dues = $reservation->dues->filter(function ($value) use ($params) {
+                return in_array($value->getStatus(),  $params->get('status'));
+            });
+
+        } else {
+            $dues = $reservation->dues;
+        }
+
+        return $this->collection($dues, new DueTransformer);
     }
 
     /**
@@ -91,7 +129,7 @@ class ReservationTransformer extends TransformerAbstract
     {
         $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
 
-        return $this->item($rep, new RepTransformer);
+        return $this->item($rep, new UserTransformer);
     }
 
     /**
@@ -200,7 +238,7 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function includeFundraisers(Reservation $reservation)
     {
-        $fundraisers = $reservation->fundraisers;
+        $fundraisers = $reservation->fundraisers()->get();
 
         return $this->collection($fundraisers, new FundraiserTransformer);
     }
@@ -222,6 +260,8 @@ class ReservationTransformer extends TransformerAbstract
     {
         $passport = $reservation->passport;
 
+        if ( ! $passport) return null;
+
         return $this->item($passport, new PassportTransformer);
     }
 
@@ -229,7 +269,18 @@ class ReservationTransformer extends TransformerAbstract
     {
         $visa = $reservation->visa;
 
+        if ( ! $visa) return null;
+
         return $this->item($visa, new VisaTransformer);
+    }
+
+    public function includeMedicalRelease(Reservation $reservation)
+    {
+        $release = $reservation->medicalRelease;
+
+        if ( ! $release) return null;
+
+        return $this->item($release, new MedicalReleaseTransformer);
     }
 
     private function validateParams($params)

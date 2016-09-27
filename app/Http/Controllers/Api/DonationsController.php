@@ -2,55 +2,64 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\DonationWasMade;
+use App\Events\TransactionWasCreated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use App\Http\Requests\v1\CardRequest;
 use App\Http\Requests\v1\DonationRequest;
-use App\Models\v1\Donation;
 use App\Http\Transformers\v1\DonationTransformer;
+use App\Models\v1\Transaction;
+use App\Http\Transformers\v1\TransactionTransformer;
+use App\Models\v1\Donor;
 use App\Services\PaymentGateway;
+use Dingo\Api\Contract\Http\Request;
 
 class DonationsController extends Controller
 {
 
     /**
-     * @var Donation
-     */
-    private $donation;
-
-    /**
      * @var PaymentGateway
      */
-    private $paymentGateway;
+    private $payment;
+
+    /**
+     * @var Donor
+     */
+    private $donor;
+    /**
+     * @var Transaction
+     */
+    private $transaction;
 
     /**
      * DonationsController constructor.
      *
-     * @param Donation $donation
-     * @param PaymentGateway $paymentGateway
+     * @param Transaction $transaction
+     * @param PaymentGateway $payment
+     * @param Donor $donor
      */
-    public function __construct(Donation $donation, PaymentGateway $paymentGateway)
+    public function __construct(Transaction $transaction, PaymentGateway $payment, Donor $donor)
     {
-        $this->donation = $donation;
-        $this->payment = $paymentGateway;
+        $this->transaction = $transaction;
+        $this->payment = $payment;
+        $this->donor = $donor;
 
-        $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('api.auth');
     }
 
     /**
      * Get all donations.
      *
-     * @param null $fundraiser_id
+     * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function index($fundraiser_id = null)
+    public function index(Request $request)
     {
-        $donations = $this->donation;
-        if ($fundraiser_id) $donations = $donations->whereFundraiser($fundraiser_id);
-        $donations = $donations->paginate(25);
+        $donations = $this->transaction
+            ->filter($request->all())
+            ->paginate($request->get('per_page', 10));
 
-        return $this->response->paginator($donations, new DonationTransformer);
+        return $this->response->paginator($donations, new TransactionTransformer);
     }
 
     /**
@@ -61,9 +70,9 @@ class DonationsController extends Controller
      */
     public function show($id)
     {
-        $donation = $this->donation->findOrFail($id);
+        $donation = $this->transaction->findOrFail($id);
 
-        return $this->response->item($donation, new DonationTransformer);
+        return $this->response->item($donation, new TransactionTransformer);
     }
 
     /**
@@ -74,19 +83,54 @@ class DonationsController extends Controller
      */
     public function store(DonationRequest $request)
     {
-        // has no charge object been created?
-        if($request->has('card')) {
-            $this->payment->chargeAndCaptureCard($request->only(
-                'card', 'customer_id', 'amount', 'currency', 'description'
-            ));
+        // has a credit card token already been created and provided?
+        // if not, tokenize the card details.
+        if( ! $request->has('token')) {
+            $token = $this->payment->createCardToken($request->get('card'));
+        } else {
+            $token = $request->get('token');
         }
 
-        // has the card been authorized and a charge object created already?
-        if($request->has('charge_id')) {
-            $this->payment->captureCharge($request->get('charge_id'));
+        // create customer with the token and donor details
+        $customer = $this->payment
+            ->createCustomer($request->get('donor'), $token);
+
+        // merge the customer id with donor details
+        $request['donor'] = $request->get('donor') + ['customer_id' => $customer['id']];
+
+        // create the charge with customer id, token, and donation details
+        $charge = $this->payment->createCharge(
+            $request->all(),
+            $customer['default_source'],
+            $customer['id']
+        );
+
+        // capture the charge
+        $this->payment->captureCharge($charge['id']);
+
+        // rebuild the payment array with new details
+        $request['payment'] = [
+            'type' => 'card',
+            'charge_id' => $charge['id'],
+            'brand' => $charge['source']['brand'],
+            'last_four' => $charge['source']['last4'],
+            'cardholder' => $charge['source']['name'],
+        ];
+
+        // we can pass donor details to try and find a match
+        // or to create a new donor if a match isn't found.
+        if($request->has('donor')) {
+            $donor = $this->donor->firstOrCreate($request->get('donor'));
+        // Alternatively, we can use an existing donor by id.
+        } else {
+            $donor = $this->donor->findOrFail($request->get('donor_id'));
         }
 
-        $donation = $this->donation->create($request->all());
+        // Create the donation for the donor.
+        $request->merge(['type' => 'donation']);
+        $donation = $donor->donations()->create($request->all());
+
+        event(new TransactionWasCreated($donation));
 
         return $this->response->item($donation, new DonationTransformer);
     }
@@ -99,12 +143,6 @@ class DonationsController extends Controller
      */
     public function authorizeCard(CardRequest $request)
     {
-        $token = $this->payment->createCardToken($request->all());
-
-        return $this->payment->createCharge(
-            $request->all(),
-            $token,
-            $request->get('customer_id')
-        );
+        return $this->payment->createCardToken($request->all());
     }
 }

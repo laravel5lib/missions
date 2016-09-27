@@ -13,7 +13,8 @@ class UserTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'reservations', 'notes', 'managing', 'facilitating', 'passports', 'visas', 'uploads'
+        'reservations', 'notes', 'managing', 'facilitating',
+        'passports', 'visas', 'uploads', 'accolades', 'fundraisers'
     ];
 
     /**
@@ -37,7 +38,7 @@ class UserTransformer extends TransformerAbstract
             'birthday'     => $user->birthday ? $user->birthday->toDateString() : null,
             'phone_one'    => $user->phone_one,
             'phone_two'    => $user->phone_two,
-            'street'       => $user->street,
+            'street'       => $user->address,
             'city'         => $user->city,
             'state'        => $user->state,
             'zip'          => $user->zip,
@@ -58,6 +59,13 @@ class UserTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    public function includeAccolades(User $user)
+    {
+        $accolades = $user->accolades;
+
+        return $this->collection($accolades, new AccoladeTransformer);
     }
 
     public function includeUploads(User $user)

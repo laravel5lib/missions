@@ -40,5 +40,16 @@ class Upload extends Model
     {
         return $this->morphedByMany(User::class, 'uploadable');
     }
+
+    /**
+     * Get the upload's fundraisers.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function fundraisers()
+    {
+        return $this->morphedByMany(Fundraiser::class, 'uploadable');
+    }
+
 }
 

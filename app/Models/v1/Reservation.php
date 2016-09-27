@@ -2,8 +2,8 @@
 
 namespace App\Models\v1;
 
+use App\Jobs\Reservations\SyncPaymentsDue;
 use App\UuidForKey;
-use Carbon\Carbon;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -28,9 +28,10 @@ class Reservation extends Model
      */
     protected $fillable = [
         'given_names', 'surname', 'gender', 'status',
-        'shirt_size', 'birthday', 'user_id',
-        'trip_id', 'rep_id', 'todos', 'companions', 'costs',
-        'passport_id'
+        'shirt_size', 'birthday', 'phone_one', 'phone_two',
+        'address', 'city', 'state', 'zip', 'country_code',
+        'trip_id', 'rep_id', 'todos', 'companion_limit', 'costs',
+        'passport_id', 'user_id', 'email'
     ];
 
     /**
@@ -95,17 +96,21 @@ class Reservation extends Model
     public function costs()
     {
         return $this->belongsToMany(Cost::class, 'reservation_costs')
-                    ->withPivot('grace_period', 'locked')
+                    ->withPivot('locked')
                     ->withTimestamps();
     }
 
     public function activeCosts()
     {
         return $this->belongsToMany(Cost::class, 'reservation_costs')
-            ->whereDate('active_at', '<=', Carbon::now())
-            ->orderBy('active_at', 'desc')
-            ->withPivot('grace_period', 'locked')
-            ->withTimestamps();
+                    ->active()
+                    ->withPivot('locked')
+                    ->withTimestamps();
+    }
+
+    public function dues()
+    {
+        return $this->morphMany(Due::class, 'payable')->sortRecent();
     }
 
     /**
@@ -117,7 +122,8 @@ class Reservation extends Model
     {
         return $this->belongsToMany(Deadline::class, 'reservation_deadlines')
                     ->withPivot('grace_period')
-                    ->withTimestamps();
+                    ->withTimestamps()
+                    ->orderBy('date', 'desc');
     }
 
     /**
@@ -149,7 +155,8 @@ class Reservation extends Model
     {
         return $this->belongsToMany(Requirement::class, 'reservation_requirements')
                     ->withPivot('grace_period', 'status', 'completed_at')
-                    ->withTimestamps();
+                    ->withTimestamps()
+                    ->orderBy('due_at', 'desc');
     }
 
     /**
@@ -159,17 +166,22 @@ class Reservation extends Model
      */
     public function fundraisers()
     {
-        return $this->morphMany(Fundraiser::class, 'fundable');
+        return $this->fund->fundraisers();
     }
 
-    /**
-     * Get all of the reservation's donations.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
+    public function fund()
+    {
+        return $this->morphOne(Fund::class, 'fundable');
+    }
+
     public function donations()
     {
-        return $this->morphMany(Donation::class, 'designation');
+        return $this->fund()->donations();
+    }
+
+    public function donors()
+    {
+        return $this->fund()->donors();
     }
 
     /**
@@ -191,6 +203,17 @@ class Reservation extends Model
     {
         return $this->belongsTo(Visa::class);
     }
+
+    /**
+     * Get the reservation's medical release.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function medicalRelease()
+    {
+        return $this->belongsTo(MedicalRelease::class);
+    }
+
 
     /**
      * Get the reservation's team member details
@@ -236,7 +259,52 @@ class Reservation extends Model
     }
 
     /**
-     * Syncronize all the trip's costs.
+     * Get the total cost for the reservation.
+     *
+     * @return mixed
+     */
+    public function getTotalCost()
+    {
+        $payments = $this->dues()->with('payment')->get();
+
+        return $payments->sum('payment.amount_owed');
+    }
+
+    /**
+     * Get the total of what was raised.
+     *
+     * @return float
+     */
+    public function getTotalRaised()
+    {
+        return $this->fund->balance;
+    }
+
+    /**
+     * Get the percentage of what was raised.
+     *
+     * @return float
+     */
+    public function getPercentRaised()
+    {
+        if( $this->getTotalRaised() === 0 or $this->getTotalCost() === 0 )
+            return 0;
+
+        return round(($this->getTotalRaised()/$this->getTotalCost()) * 100);
+    }
+
+    /**
+     * Get the total amount still owed for the reservation.
+     *
+     * @return mixed
+     */
+    public function getTotalOwed()
+    {
+        return $this->getTotalCost() - $this->fund->balance;
+    }
+
+    /**
+     * Synchronize all the reservation's costs.
      *
      * @param $costs
      */
@@ -250,10 +318,22 @@ class Reservation extends Model
         $data = $costs->pluck('id')->all();
         
         $this->costs()->sync($data);
+
+        dispatch(new SyncPaymentsDue($this));
     }
 
     /**
-     * Syncronize all the reservation's requirements.
+     * Manage a Reservation's Payments.
+     *
+     * @return ReservationPayment
+     */
+    public function payments()
+    {
+        return new ReservationPayment($this);
+    }
+
+    /**
+     * Synchronize all the reservation's requirements.
      *
      * @param $requirements
      */
@@ -276,7 +356,7 @@ class Reservation extends Model
     }
 
     /**
-     * Syncronize all the reservation's deadlines.
+     * Synchronize all the reservation's deadlines.
      *
      * @param $deadlines
      */
@@ -289,7 +369,7 @@ class Reservation extends Model
 
         $data = $deadlines->keyBy('id')->map(function($item, $key) {
             return [
-                'grace_period' => $item->grace_period
+                'grace_period' => $item['grace_period']
             ];
         })->toArray();
 
@@ -313,7 +393,7 @@ class Reservation extends Model
     }
 
     /**
-     * Syncronize all the reservation's todos.
+     * Synchronize all the reservation's todos.
      *
      * @param $todos
      */

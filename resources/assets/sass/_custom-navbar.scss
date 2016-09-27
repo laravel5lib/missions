@@ -354,6 +354,13 @@
   &.btn-xs {
     @include navbar-vertical-align(22);
   }
+  &:hover,
+  &:focus,
+  &.focus {
+    color: $brand-primary !important;
+    border-color: lighten($btn-primary-border, 10%) !important;
+    text-decoration: none;
+  }
 }
 
 

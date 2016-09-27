@@ -26,7 +26,7 @@ class Campaign extends Model
      */
     protected $fillable = [
         'name', 'country_code', 'short_desc', 'page_url', 'thumb_src',
-        'started_at', 'ended_at', 'published_at'
+        'started_at', 'ended_at', 'published_at', 'page_src'
     ];
 
     /**
@@ -94,6 +94,35 @@ class Campaign extends Model
     }
 
     /**
+     * Get the campaign's name.
+     *
+     * @param $value
+     * @return string
+     */
+    public function getNameAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    /**
+     * Get the Campaign's Status.
+     *
+     * @return string
+     */
+    public function getStatusAttribute()
+    {
+        if ($this->published_at and $this->published_at->isFuture()) {
+            return 'Scheduled';
+        }
+
+        if ($this->published_at and $this->published_at->isPast()) {
+            return 'Published';
+        }
+
+        return 'Draft';
+    }
+
+    /**
      * Get all the campaign's trips.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -133,9 +162,26 @@ class Campaign extends Model
         return $this->belongsTo(Upload::class, 'banner_upload_id');
     }
 
+    /**
+     * Get public campaigns.
+     *
+     * @param $query
+     * @return mixed
+     */
     public function scopePublic($query)
     {
         return $query->whereDate('published_at', '<=', date('Y-m-d'));
+    }
+
+    /**
+     * Get active campaigns.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeActive($query)
+    {
+        return $query->whereDate('ended_at', '>=', date('Y-m-d'));
     }
 
 }

@@ -1,11 +1,18 @@
 @extends('dashboard.layouts.default')
 
 @section('content')
+<div class="white-header-bg">
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="text-muted text-center">My Reservations</h1>
+                <h3>My Reservations</h3>
             </div>
+        </div>
+    </div>
+</div>
+<hr class="divider inv lg">
+    <div class="container">
+        <div class="row">
             <div class="col-sm-12">
                 <ul class="nav nav-tabs">
                     <li role="presentation" class="active">
@@ -19,11 +26,11 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="active">
-                        <reservations-list reservations="{{ json_encode($activeReservations) }}"></reservations-list>
+                        <reservations-list user-id="{{ Auth::user()->id }}" type="active"></reservations-list>
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="archive">
-                        <reservations-list reservations="{{ json_encode($inactiveReservations) }}"></reservations-list>
+                        <reservations-list user-id="{{ Auth::user()->id }}" type="archive"></reservations-list>
                     </div>
 
                 </div>

@@ -1,13 +1,18 @@
 @extends('admin.layouts.default')
 
 @section('content')
+<div class="white-header-bg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
-                <h3>Groups <small>{{ $group->name }}</small></h3>
-                <!-- Single button -->
+            <div class="col-sm-8">
+                <h3>
+                    {{ $group->name }} <small>&middot; Group</small>
+                </h3>
+            </div>
+            <div class="col-sm-4">
+                <hr class="divider inv sm">
                 <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Action <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
@@ -18,45 +23,92 @@
                         {{--<li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>--}}
                     </ul>
                 </div>
-                <hr>
             </div>
+        </div>
+    </div>
+</div>
+<hr class="divider inv lg">
+    <div class="container">
+        <div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-default">
                 	  <div class="panel-heading">
-                			<h3 class="panel-title">Details</h3>
+                			<h5>{{ $group->name }} <small>&middot; Details</small></h5>
                 	  </div>
                 	  <div class="panel-body">
-                			<dl class="dl-horizontal">
-                                <dt>Name</dt>
-                                <dd>{{ $group->name }}</dd>
-                                <dt>Description</dt>
-                                <dd>{{ $group->description }}</dd>
-                                <dt>Type</dt>
-                                <dd>{{ $group->type }}</dd>
-                                <dt>Status</dt>
-                                <dd>{{ $group->public ? 'Public': 'Private' }}</dd>
-                                <dt>Phone 1</dt>
-                                <dd>{{ $group->phone_one }}</dd>
-                                <dt>Phone 2</dt>
-                                <dd>{{ $group->phone_two or 'Not Available' }}</dd>
-                                <dt>Email Address</dt>
-                                <dd>{{ $group->email or 'Not Available' }}</dd>
-                                <dt>Address</dt>
-                                <dd>
-                                    {{ $group->address_one or 'Not Available' }}@if($group->address_one)<br>@endif
-                                    {{ $group->address_two }}@if($group->address_two)<br>@endif
-                                    {{ $group->city }}{{ ($group->city && $group->state) ? ',' : '' }} {{ $group->state }} {{ $group->zip }}
-                                </dd>
-                                <dt>Country</dt>
-                                <dd>{{ country($group->country_code) }}</dd>
-                                <dt>Timezone</dt>
-                                <dd>{{ $group->timezone }}</dd>
-                                <dt>Url slug</dt>
-                                <dd>{{ $group->url }}</dd>
-                            </dl>
+                			<div class="col-sm-8">
+                                @unless( ! $group->description)
+                                <label>Description</label>
+                                <p>{{ $group->description }}</p>
+                                <hr class="divider">
+                                @endunless
+                                <div class="row">
+                                    <div class="col-sm-6 text-center">
+                                        <label>Type</label>
+                                        <p>{{ $group->type }}</p>
+                                    </div>
+                                    <div class="col-sm-6 text-center">
+                                        <label>Status</label>
+                                        <p>{{ $group->public ? 'Public': 'Private' }}</p>
+                                    </div>
+                                </div>
+                                <hr class="divider">
+                                @unless( ! $group->url)
+                                <div class="row">
+                                    <div class="col-sm-12 text-center">
+                                        <div class="well">
+                                            <label>Url slug</label>
+                                            @if($group->public)
+                                                <h4><a href="/groups/{{ $group->url }}">http://missions.me/groups/{{ $group->url }}</a></h4>
+                                            @else
+                                                <h4 class="text-strike text-muted">http://missions.me/groups/{{ $group->url }}</h4>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                @endunless
+                            </div>
+                            <div class="col-sm-4 panel panel-default">
+                                <div class="panel-body">
+                                    <label>Phone 1</label>
+                                    <p>{{ $group->phone_one }}</p>
+                                    <label>Phone 2</label>
+                                    <p>{{ $group->phone_two or 'Not Available' }}</p>
+                                    <label>Email Address</label>
+                                    <p>{{ $group->email or 'Not Available' }}</p>
+                                    <label>Address</label>
+                                    <p>
+                                        {{ $group->address_one or 'Not Available' }}@if($group->address_one)<br>@endif
+                                        {{ $group->address_two }}@if($group->address_two)<br>@endif
+                                        {{ $group->city }}{{ ($group->city && $group->state) ? ',' : '' }} {{ $group->state }} {{ $group->zip }}
+                                    </p>
+                                    <label>Country</label>
+                                    <p>{{ country($group->country_code) }}</p>
+                                    <label>Timezone</label>
+                                    <p>{{ $group->timezone }}</p>
+                                </div>
+                            </div>
                 	  </div>
                 </div>
                 <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Notes</h5>
+                    </div>
+                    <div class="list-group">
+                        @foreach($group->notes as $note)
+                            <div class="list-group-item">
+                                <h5 class="list-group-item-heading">{{ $note->subject }} <small>&middot; {{ $note->user ? $note->user->name : 'Guest' }} <span class="pull-right">{{ $note->created_at->diffForHumans() }}</span></small></h5>
+                                <p class="list-group-item-text">{{ $note->content }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -18,7 +18,9 @@
         "cartalyst/stripe-laravel": "4.0.*",
         "rtconner/laravel-tagging": "~2.1",
         "league/glide": "^1.0",
-        "silber/bouncer": "^0.1.7"
+        "silber/bouncer": "^0.1.7",
+        "barryvdh/laravel-cors": "^0.8.1",
+        "haleks/laravel-markdown": "^0.2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

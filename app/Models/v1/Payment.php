@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,5 +24,20 @@ class Payment extends Model
     public function cost()
     {
         return $this->belongsTo(Cost::class);
+    }
+
+    public function due()
+    {
+        return $this->hasOne(Due::class);
+    }
+
+    public function scopePast($query)
+    {
+        return $query->where('due_at', '<', Carbon::now());
+    }
+
+    public function getBalanceDue()
+    {
+        return $this->cost->getBalanceDue($this->due_at);
     }
 }

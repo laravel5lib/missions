@@ -5,11 +5,10 @@ namespace App\Models\v1;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Fundraiser extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey;
+    use Filterable, UuidForKey;
 
     /**
      * The table associated with the model.
@@ -24,8 +23,8 @@ class Fundraiser extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'expires_at', 'goal_amount', 'description',
-        'sponsor_id', 'sponsor_type'
+        'name', 'started_at', 'ended_at', 'goal_amount', 'description',
+        'sponsor_id', 'sponsor_type', 'url', 'type'
     ];
 
     /**
@@ -34,7 +33,7 @@ class Fundraiser extends Model
      * @var array
      */
     protected $dates = [
-        'expires_at', 'created_at', 'updated_at', 'deleted_at'
+        'started_at', 'ended_at', 'created_at', 'updated_at', 'deleted_at'
     ];
 
     /**
@@ -55,23 +54,50 @@ class Fundraiser extends Model
     }
 
     /**
-     * Get all of the owning fundable models.
+     * Get the fund the fundraiser belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function fundable()
+    public function fund()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Fund::class);
     }
 
     /**
-     * Get all the fundraiser's donations.
+     * Get all the fundraiser's stories.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function stories()
+    {
+        return $this->morphToMany(Story::class, 'publication', 'published_stories')
+            ->withPivot('published_at')
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get the donations made through the fundraiser.
+     *
+     * @return mixed
      */
     public function donations()
     {
-        return $this->morphMany(Donation::class, 'designation');
+        return $this->fund->donations()
+                          ->from($this->started_at)
+                          ->to($this->ended_at);
+    }
+
+    /**
+     * Get the donors who gave through the fundraiser.
+     *
+     * @return mixed
+     */
+    public function donors()
+    {
+        return $this->fund
+                    ->donors()
+                    ->wherePivot('created_at', '>=', $this->started_at)
+                    ->wherePivot('created_at', '<=', $this->ended_at);
     }
 
     /**
@@ -84,6 +110,16 @@ class Fundraiser extends Model
         return $this->donations()->sum('amount');
     }
 
+    public function getPercentRaised()
+    {
+        // check for 0 values first,
+        // because division by zero is not possible
+        if( $this->raised() === 0 or $this->goal_amount === 0 )
+            return 0;
+
+        return round(($this->raised()/$this->goal_amount) * 100);
+    }
+
     /**
      * Get the fundraiser's page banner.
      *
@@ -93,4 +129,15 @@ class Fundraiser extends Model
     {
         return $this->belongsTo(Upload::class, 'banner_upload_id');
     }
+
+    /**
+     * Get the fundraiser's uploads.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function uploads()
+    {
+        return $this->morphToMany(Upload::class, 'uploadable');
+    }
+
 }

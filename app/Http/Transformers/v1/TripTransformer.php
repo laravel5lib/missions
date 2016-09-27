@@ -29,7 +29,7 @@ class TripTransformer extends TransformerAbstract
      */
     public function transform(Trip $trip)
     {
-        $trip->load('reservations');
+        $trip->load('costs');
 
         return [
             'id'              => $trip->id,
@@ -38,8 +38,9 @@ class TripTransformer extends TransformerAbstract
             'rep_id'          => $trip->rep_id,
             'spots'           => (int) $trip->spots,
             'status'          => $trip->status,
+            'starting_cost'   => (int) $trip->starting_cost,
             'companion_limit' => (int) $trip->companion_limit,
-            'reservations'    => (int) $trip->reservations()->count(),
+            'reservations'    => (int) $trip->reservations_count,
             'country_code'    => $trip->country_code,
             'country_name'    => country($trip->country_code),
             'type'            => $trip->type,
@@ -115,7 +116,7 @@ class TripTransformer extends TransformerAbstract
      * Include Costs
      *
      * @param Trip $trip
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeCosts(Trip $trip, ParamBag $params = null)
     {

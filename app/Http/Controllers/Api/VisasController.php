@@ -26,7 +26,7 @@ class VisasController extends Controller
         $this->visa = $visa;
 
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     /**
@@ -70,9 +70,7 @@ class VisasController extends Controller
     {
         $visa = $this->visa->create($request->all());
 
-        $location = url('/visas/' . $visa->id);
-
-        return $this->response->created($location);
+        return $this->response->item($visa, new VisaTransformer);
     }
 
     /**

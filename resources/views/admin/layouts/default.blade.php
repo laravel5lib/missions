@@ -7,7 +7,7 @@
 @section('layout')
   @include('admin.partials._toolbar')
   @include('_topnav')
-  <div id="page-wrap"><!-- page-wrap important for sticky footer -->
+  <div id="admin-page-wrap"><!-- page-wrap important for sticky footer -->
     @yield('content')
   </div>
   @include('_footer')

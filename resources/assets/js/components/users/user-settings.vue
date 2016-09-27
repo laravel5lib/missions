@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="UserSettings">
+    <validator name="UserSettings" @dirty="onDirty" @modified="onModified">
         <form id="UserSettingsForm" class="" novalidate>
             <div class="row">
                 <div class="col-sm-6">
@@ -358,6 +358,11 @@
                 <strong>Well Done!</strong>
                 <p>Profile updated successfully</p>
             </alert>
+            <alert :show.sync="unsaved" placement="top-right" duration="3000" type="danger" width="400px" dismissable>
+                <span class="icon-info-circled alert-icon-float-left"></span>
+                <strong>Changes made!</strong>
+                <p>Save your changes first</p>
+            </alert>
         </form>
     </validator>
 </template>
@@ -411,6 +416,8 @@
                 resource: this.$resource('users/me'),
                 errors: {},
                 saved: false,
+                unsaved: false,
+                isDirty: false,
             }
         },
         computed: {
@@ -429,9 +436,17 @@
                 return this.$UserSettings[field].invalid && this.attemptSubmit;
             },
             onModified(){
+                console.log('modified');
                 this.saved = false;
             },
+            onDirty(){
+                console.log('dirty');
+                this.isDirty = true;
+            },
             submit(){
+                if (this.unsaved) {
+
+                }
                 this.attemptSubmit = true;
                 if (this.$UserSettings.valid) {
                     this.resource.update({id: this.userId}, {

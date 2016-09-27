@@ -52,7 +52,7 @@ class ReservationTransformer extends TransformerAbstract
             'zip'             => $reservation->zip,
             'country_code'    => $reservation->country_code,
             'country_name'    => country($reservation->country_code),
-            'companion_limit' => (int) $reservation->companions_limit,
+            'companion_limit' => (int) $reservation->companion_limit,
             'avatar'          => $reservation->avatar ? image($reservation->avatar->source) : null,
             'total_cost'      => (int) $reservation->getTotalCost(),
             'total_raised'    => (int) $reservation->fund->balance,

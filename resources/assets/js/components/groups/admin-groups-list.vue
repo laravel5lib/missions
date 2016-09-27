@@ -89,10 +89,10 @@
                     <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
                 <template v-if="pending">
-                    <th :class="{'text-primary': orderByField === 'notes.data[0].content'}">
-                        Contact Person Name
-                        <i @click="setOrderByField('notes.data[0].content')" v-if="orderByField !== 'notes.data[0].content'" class="fa fa-sort pull-right"></i>
-                        <i @click="direction=direction*-1" v-if="orderByField === 'notes.data[0].content'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    <th :class="{'text-primary': orderByField === 'country_name'}">
+                        Location
+                        <!--<i @click="setOrderByField('notes.data[0].content')" v-if="orderByField !== 'notes.data[0].content'" class="fa fa-sort pull-right"></i>-->
+                        <!--<i @click="direction=direction*-1" v-if="orderByField === 'notes.data[0].content'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>-->
                     </th>
                     <th :class="{'text-primary': orderByField === 'phone_one'}">
                         Phone One
@@ -127,7 +127,7 @@
                 <td>{{group.name}}</td>
                 <td>{{group.type|capitalize}}</td>
                 <template v-if="pending">
-                    <td>{{group.notes.data[0].content}}</td>
+                    <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>
                     <td>{{group.phone_one}}</td>
                     <td>{{group.email}}</td>
                 </template>

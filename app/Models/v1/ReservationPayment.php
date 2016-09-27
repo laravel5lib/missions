@@ -30,6 +30,7 @@ class ReservationPayment {
         if($this->reservation->has('dues')) $this->reservation->dues()->delete();
 
         $this->addDues($this->calculateDues());
+        $this->reconcile();
     }
 
     /**
@@ -76,6 +77,16 @@ class ReservationPayment {
         })->all();
 
         $this->reservation->dues()->saveMany($data);
+    }
+
+    /**
+     * Reconcile the outstanding balances.
+     */
+    public function reconcile()
+    {
+        $amount = $this->reservation->fund->balance;
+
+        $this->updateBalances($amount);
     }
 
     /**

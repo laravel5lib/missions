@@ -442,6 +442,9 @@
 			'ageMax': function (val) {
 				this.searchReservations();
 			},
+			'direction': function (val) {
+				this.searchReservations();
+			},
         	'activeFields': function (val, oldVal) {
         		// if the orderBy field is removed from view
         		if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
@@ -492,7 +495,6 @@
 					}
 				});
 
-				console.log('Filters Saved');
 			},
 			isActive(field){
 				return _.contains(this.activeFields, field);
@@ -501,7 +503,9 @@
 				return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields
 			},
             setOrderByField(field){
-                return this.orderByField = field, this.direction = 1, this.searchReservations();
+                this.orderByField = field;
+				this.direction = 1;
+				this.searchReservations();
 			},
             resetFilter(){
                 this.orderByField = 'surname';
@@ -554,7 +558,7 @@
 					search: this.search,
 					per_page: this.per_page,
 					page: this.page,
-					sort: this.orderByField + ' ' + this.direction ? 'asc' : 'desc'
+					sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
 				};
 
 				$.extend(params, this.filters);

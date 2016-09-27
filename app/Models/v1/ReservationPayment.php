@@ -30,6 +30,8 @@ class ReservationPayment {
         if($this->reservation->has('dues')) $this->reservation->dues()->delete();
 
         $this->addDues($this->calculateDues());
+
+        $this->updateBalances($this->reservation->fund->balance);
     }
 
     /**
@@ -79,6 +81,16 @@ class ReservationPayment {
     }
 
     /**
+     * Reconcile the outstanding balances.
+     */
+    public function reconcile()
+    {
+//        $amount = $this->reservation->fund->balance;
+//
+//        $this->updateBalances($amount);
+    }
+
+    /**
      * Update the reservation's outstanding balances.
      *
      * @param $amount
@@ -94,7 +106,7 @@ class ReservationPayment {
 
             if ($due->outstanding_balance < $amount) {
                 $carryOver = $amount - $due->outstanding_balance;
-                $payment = $due->outsanding_balance;
+                $payment = $due->outstanding_balance;
             } else {
                 $carryOver = 0;
                 $payment = $amount;

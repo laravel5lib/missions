@@ -30,15 +30,15 @@ class ReservationTableSeeder extends Seeder
                 return $value->type == 'incremental' && $value->active_at < $maxDate;
             });
 
-            $r->syncCosts($costs);
-            $r->syncRequirements($r->trip->requirements);
-            $r->syncDeadlines($r->trip->deadlines);
-            $r->addTodos($r->trip->todos);
-
             $fund = $r->fund()->create([
                 'name' => generateFundName($r),
                 'balance' => 0
             ]);
+
+            $r->syncCosts($costs);
+            $r->syncRequirements($r->trip->requirements);
+            $r->syncDeadlines($r->trip->deadlines);
+            $r->addTodos($r->trip->todos);
 
             $donor = factory(App\Models\v1\Donor::class)->create([
                 'account_id' => $r->user_id,
@@ -46,12 +46,20 @@ class ReservationTableSeeder extends Seeder
                 'name' => $r->user->name
             ]);
 
-            factory(App\Models\v1\Transaction::class, 'donation')->create([
+           $transaction = factory(App\Models\v1\Transaction::class, 'donation')->create([
                 'amount' => 100,
                 'description' => 'Reservation Payment',
                 'fund_id' => $fund->id,
                 'donor_id' => $donor->id
             ]);
+
+            $balance = $transaction->fund->balance + $transaction->amount;
+            $transaction->fund->balance = $balance;
+            $transaction->fund->save();
+
+            $transaction->fund->fundable
+                ->payments()
+                ->updateBalances($transaction->amount);
 
             $slug = str_slug(country($r->trip->country_code)).
                 '-'.
@@ -92,15 +100,15 @@ class ReservationTableSeeder extends Seeder
                 return $value->type == 'incremental' && $value->active_at < $maxDate;
             });
 
-            $r->syncCosts($costs);
-            $r->syncRequirements($r->trip->requirements);
-            $r->syncDeadlines($r->trip->deadlines);
-            $r->addTodos($r->trip->todos);
-
             $fund = $r->fund()->create([
                 'name' => generateFundName($r),
                 'balance' => 0
             ]);
+
+            $r->syncCosts($costs);
+            $r->syncRequirements($r->trip->requirements);
+            $r->syncDeadlines($r->trip->deadlines);
+            $r->addTodos($r->trip->todos);
 
             $donor = factory(App\Models\v1\Donor::class)->create([
                 'account_id' => $r->user_id,
@@ -108,12 +116,20 @@ class ReservationTableSeeder extends Seeder
                 'name' => $r->user->name
             ]);
 
-            factory(App\Models\v1\Transaction::class, 'donation')->create([
+            $transaction = factory(App\Models\v1\Transaction::class, 'donation')->create([
                 'amount' => 100,
                 'description' => 'Reservation Payment',
                 'fund_id' => $fund->id,
                 'donor_id' => $donor->id
             ]);
+
+            $balance = $transaction->fund->balance + $transaction->amount;
+            $transaction->fund->balance = $balance;
+            $transaction->fund->save();
+
+            $transaction->fund->fundable
+                ->payments()
+                ->updateBalances($transaction->amount);
 
             $slug = str_slug(country($r->trip->country_code)).
                 '-'.

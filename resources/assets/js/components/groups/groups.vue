@@ -142,39 +142,30 @@
                           <a @click="submit" class="btn btn-primary">Send Request</a>
                       </div>
                   </div>
-                  <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-                      <span class="icon-ok-circled alert-icon-float-left"></span>
-                      <strong>Awesome!</strong>
-                      <p>Group request sent</p>
-                  </alert>
-
               </form>
           </validator>
           </div><!-- end col -->
         </div><!-- end row -->
+      <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+          <span class="icon-ok-circled alert-icon-float-left"></span>
+          <strong>Awesome!</strong>
+          <p>Group request sent</p>
+      </alert>
+
       </div><!-- end content-section -->
       </div><!-- end container -->
     </div><!-- end white-bg -->
     <hr class="divider inv xlg">
     <div class="container">
-        <div class="col-xs-6">
+        <div class="col-xs-12">
             <h4>Groups Partnered With Us</h4>
-        </div>
-        <div class="col-xs-6 text-right">
-            <!--<a v-if="groups.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>-->
         </div>
     </div>
     <div class="container">
-        <div class="col-xs-6">
-            <div class="form-group form-group-sm">
-                <input type="text" class="form-control" placeholder="Search for..." v-model="search" debounce="250">
-                <!--<span class="input-group-btn">
-                    <button class="btn btn-default" type="button">Go!</button>
-                </span>-->
+        <div class="col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group form-group-md">
+                <input type="text" class="form-control" placeholder="Start typing a group name or category..." v-model="search" debounce="250">
             </div><!-- /input-group -->
-        </div>
-        <div class="col-xs-6 text-right">
-            <!--<a v-if="groups.length > 8 && groups == 8" @click="seeAll" class="btn btn-primary btn-sm">See All</a>-->
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
@@ -183,20 +174,23 @@
                 <a :href="'/groups/' + group.url" role="button">
                     <img :src="group.avatar" :alt="group.name" class="img-responsive">
                 </a>
-                    <div style="min-height:220px;" class="panel-body">
+                    <div style="min-height:120px;" class="panel-body">
                         <!--<h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;"><i class="fa fa-users"></i> {{group.type}} Group</h6>-->
                         <a :href="'/groups/' + group.url" role="button">
                             <h5 style="text-transform:capitalize;" class="text-primary">{{group.name}}</h5>
                         </a>
                         <h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;">{{group.type}} Group</h6>
-                        <hr class="divider lg" />
-                        <p class="small">{{group.description}}</p>
                     </div><!-- end panel-body -->
             </div><!-- end panel -->
         </div><!-- end col -->
-        <div class="col-sm-12 text-center" v-if="groups.length">
+        <div class="col-sm-12" v-if=" ! groups.length">
+            <hr class="divider inv">
+            <p class="text-muted lead text-center">Hmmmm. We couldn't find any groups matching your search.</p>
+            <hr class="divider inv">
+        </div>
+        <div class="col-xs-12 text-center" v-if="groups.length">
             <nav>
-                <ul class="pagination pagination-sm">
+                <ul class="pagination pagination-md">
                     <li :class="{ 'disabled': pagination.current_page == 1 }">
                         <a aria-label="Previous" @click="page=pagination.current_page-1">
                             <span aria-hidden="true">&laquo;</span>
@@ -216,7 +210,9 @@
       <div class="container">
       <div class="content-section">
         <div class="row">
-          <h1 class="dash-trailing-light">Group Leader Or Youth Pastor</h1>
+            <div class="col-xs-12">
+                <h1 class="dash-trailing-light">Group Leader Or Youth Pastor</h1>
+            </div>
           <div class="col-sm-6">
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
               <div class="panel panel-default">

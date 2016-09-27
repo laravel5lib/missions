@@ -32,39 +32,36 @@
         <div class="col-xs-12">
             <h4>Current Fundraisers</h4>
         </div>
-        <div class="col-xs-6">
-            <div class="form-group form-group-sm">
-                <input type="text" class="form-control" placeholder="Search for..." v-model="search" debounce="250">
-                <!--<span class="input-group-btn">
-                    <button class="btn btn-default" type="button">Go!</button>
-                </span>-->
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group form-group-md">
+                <input type="text" class="form-control" placeholder="Start typing a fundraiser name..." v-model="search" debounce="250">
             </div><!-- /input-group -->
-        </div>
-        <div class="col-xs-6 text-right">
-            <!--<a v-if="fundraisers.length > 6 && fundraisersLimit == 6" @click="seeAll" class="btn btn-primary btn-sm">See All</a>-->
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-        <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex">
+        <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex" v-if="fundraisers.length">
             <div class="panel panel-default">
                 <img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">
                 <div class="panel-body">
                     <h5>{{ fundraiser.name }}</h5>
                     <h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;">Expires: {{ fundraiser.ended_at | moment 'll'  }}</h6>
                     <h3><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>
-                    <p><span>{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100)|number 1 }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>
+                    <p><span>{{ fundraiser.raised_percent|number }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: (fundraiser.raised_amount/fundraiser.goal_amount * 100) + '%'}">
-                            <span class="sr-only">{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100) }}% Complete (success)</span>
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: fundraiser.raised_percent + '%'}">
+                            <span class="sr-only">{{ fundraiser.raised_percent|number }}% Complete (success)</span>
                         </div>
                     </div>
                     <p><a class="btn btn-primary btn-block" :href="pathName + '/' + fundraiser.url">Details</a></p>
                 </div><!-- end panel-body -->
             </div><!-- end panel -->
         </div><!-- end col -->
-        <div class="col-sm-12 text-center">
+        <div class="col-xs-12 text-center" v-if=" ! fundraisers.length">
+            <p class="lead text-muted">Hmmmm. We couldn't find any fundraisers matching your search.</p>
+        </div>
+        <div class="col-xs-12 text-center" v-if="fundraisers.length">
             <nav>
-                <ul class="pagination pagination-sm">
+                <ul class="pagination pagination-md">
                     <li :class="{ 'disabled': pagination.current_page == 1 }">
                         <a aria-label="Previous" @click="page=pagination.current_page-1">
                             <span aria-hidden="true">&laquo;</span>

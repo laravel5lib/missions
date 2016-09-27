@@ -32,20 +32,14 @@
         <div class="col-xs-12">
             <h4>Current Fundraisers</h4>
         </div>
-        <div class="col-xs-6">
-            <div class="form-group form-group-sm">
-                <input type="text" class="form-control" placeholder="Search for..." v-model="search" debounce="250">
-                <!--<span class="input-group-btn">
-                    <button class="btn btn-default" type="button">Go!</button>
-                </span>-->
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group form-group-md">
+                <input type="text" class="form-control" placeholder="Start typing a fundraiser name..." v-model="search" debounce="250">
             </div><!-- /input-group -->
-        </div>
-        <div class="col-xs-6 text-right">
-            <!--<a v-if="fundraisers.length > 6 && fundraisersLimit == 6" @click="seeAll" class="btn btn-primary btn-sm">See All</a>-->
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-        <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex">
+        <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex" v-if="fundraisers.length">
             <div class="panel panel-default">
                 <img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">
                 <div class="panel-body">
@@ -62,9 +56,12 @@
                 </div><!-- end panel-body -->
             </div><!-- end panel -->
         </div><!-- end col -->
-        <div class="col-sm-12 text-center">
+        <div class="col-xs-12 text-center" v-if=" ! fundraisers.length">
+            <p class="lead text-muted">Hmmmm. We couldn't find any fundraisers matching your search.</p>
+        </div>
+        <div class="col-xs-12 text-center" v-if="fundraisers.length">
             <nav>
-                <ul class="pagination pagination-sm">
+                <ul class="pagination pagination-md">
                     <li :class="{ 'disabled': pagination.current_page == 1 }">
                         <a aria-label="Previous" @click="page=pagination.current_page-1">
                             <span aria-hidden="true">&laquo;</span>

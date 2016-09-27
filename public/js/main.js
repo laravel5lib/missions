@@ -73,8 +73,8 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 },{"../core-js/symbol":12,"../core-js/symbol/iterator":13}],16:[function(require,module,exports){
 /*!
- * Bootstrap v3.3.7 (http://getbootstrap.com)
- * Copyright 2011-2016 Twitter, Inc.
+ * Bootstrap v3.3.6 (http://getbootstrap.com)
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under the MIT license
  */
 
@@ -85,16 +85,16 @@ if (typeof jQuery === 'undefined') {
 +function ($) {
   'use strict';
   var version = $.fn.jquery.split(' ')[0].split('.')
-  if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1) || (version[0] > 3)) {
-    throw new Error('Bootstrap\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 4')
+  if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1) || (version[0] > 2)) {
+    throw new Error('Bootstrap\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 3')
   }
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: transition.js v3.3.7
+ * Bootstrap: transition.js v3.3.6
  * http://getbootstrap.com/javascript/#transitions
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -151,10 +151,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: alert.js v3.3.7
+ * Bootstrap: alert.js v3.3.6
  * http://getbootstrap.com/javascript/#alerts
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -170,7 +170,7 @@ if (typeof jQuery === 'undefined') {
     $(el).on('click', dismiss, this.close)
   }
 
-  Alert.VERSION = '3.3.7'
+  Alert.VERSION = '3.3.6'
 
   Alert.TRANSITION_DURATION = 150
 
@@ -183,7 +183,7 @@ if (typeof jQuery === 'undefined') {
       selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
     }
 
-    var $parent = $(selector === '#' ? [] : selector)
+    var $parent = $(selector)
 
     if (e) e.preventDefault()
 
@@ -246,10 +246,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: button.js v3.3.7
+ * Bootstrap: button.js v3.3.6
  * http://getbootstrap.com/javascript/#buttons
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -266,7 +266,7 @@ if (typeof jQuery === 'undefined') {
     this.isLoading = false
   }
 
-  Button.VERSION  = '3.3.7'
+  Button.VERSION  = '3.3.6'
 
   Button.DEFAULTS = {
     loadingText: 'loading...'
@@ -288,10 +288,10 @@ if (typeof jQuery === 'undefined') {
 
       if (state == 'loadingText') {
         this.isLoading = true
-        $el.addClass(d).attr(d, d).prop(d, true)
+        $el.addClass(d).attr(d, d)
       } else if (this.isLoading) {
         this.isLoading = false
-        $el.removeClass(d).removeAttr(d).prop(d, false)
+        $el.removeClass(d).removeAttr(d)
       }
     }, this), 0)
   }
@@ -355,15 +355,10 @@ if (typeof jQuery === 'undefined') {
 
   $(document)
     .on('click.bs.button.data-api', '[data-toggle^="button"]', function (e) {
-      var $btn = $(e.target).closest('.btn')
+      var $btn = $(e.target)
+      if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn')
       Plugin.call($btn, 'toggle')
-      if (!($(e.target).is('input[type="radio"], input[type="checkbox"]'))) {
-        // Prevent double click on radios, and the double selections (so cancellation) on checkboxes
-        e.preventDefault()
-        // The target component still receive the focus
-        if ($btn.is('input,button')) $btn.trigger('focus')
-        else $btn.find('input:visible,button:visible').first().trigger('focus')
-      }
+      if (!($(e.target).is('input[type="radio"]') || $(e.target).is('input[type="checkbox"]'))) e.preventDefault()
     })
     .on('focus.bs.button.data-api blur.bs.button.data-api', '[data-toggle^="button"]', function (e) {
       $(e.target).closest('.btn').toggleClass('focus', /^focus(in)?$/.test(e.type))
@@ -372,10 +367,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: carousel.js v3.3.7
+ * Bootstrap: carousel.js v3.3.6
  * http://getbootstrap.com/javascript/#carousel
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -403,7 +398,7 @@ if (typeof jQuery === 'undefined') {
       .on('mouseleave.bs.carousel', $.proxy(this.cycle, this))
   }
 
-  Carousel.VERSION  = '3.3.7'
+  Carousel.VERSION  = '3.3.6'
 
   Carousel.TRANSITION_DURATION = 600
 
@@ -610,14 +605,13 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: collapse.js v3.3.7
+ * Bootstrap: collapse.js v3.3.6
  * http://getbootstrap.com/javascript/#collapse
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
-/* jshint latedef: false */
 
 +function ($) {
   'use strict';
@@ -641,7 +635,7 @@ if (typeof jQuery === 'undefined') {
     if (this.options.toggle) this.toggle()
   }
 
-  Collapse.VERSION  = '3.3.7'
+  Collapse.VERSION  = '3.3.6'
 
   Collapse.TRANSITION_DURATION = 350
 
@@ -823,10 +817,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: dropdown.js v3.3.7
+ * Bootstrap: dropdown.js v3.3.6
  * http://getbootstrap.com/javascript/#dropdowns
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -843,7 +837,7 @@ if (typeof jQuery === 'undefined') {
     $(element).on('click.bs.dropdown', this.toggle)
   }
 
-  Dropdown.VERSION = '3.3.7'
+  Dropdown.VERSION = '3.3.6'
 
   function getParent($this) {
     var selector = $this.attr('data-target')
@@ -989,10 +983,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: modal.js v3.3.7
+ * Bootstrap: modal.js v3.3.6
  * http://getbootstrap.com/javascript/#modals
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -1023,7 +1017,7 @@ if (typeof jQuery === 'undefined') {
     }
   }
 
-  Modal.VERSION  = '3.3.7'
+  Modal.VERSION  = '3.3.6'
 
   Modal.TRANSITION_DURATION = 300
   Modal.BACKDROP_TRANSITION_DURATION = 150
@@ -1130,9 +1124,7 @@ if (typeof jQuery === 'undefined') {
     $(document)
       .off('focusin.bs.modal') // guard against infinite focus loop
       .on('focusin.bs.modal', $.proxy(function (e) {
-        if (document !== e.target &&
-            this.$element[0] !== e.target &&
-            !this.$element.has(e.target).length) {
+        if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
           this.$element.trigger('focus')
         }
       }, this))
@@ -1329,11 +1321,11 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tooltip.js v3.3.7
+ * Bootstrap: tooltip.js v3.3.6
  * http://getbootstrap.com/javascript/#tooltip
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -1356,7 +1348,7 @@ if (typeof jQuery === 'undefined') {
     this.init('tooltip', element, options)
   }
 
-  Tooltip.VERSION  = '3.3.7'
+  Tooltip.VERSION  = '3.3.6'
 
   Tooltip.TRANSITION_DURATION = 150
 
@@ -1647,11 +1639,9 @@ if (typeof jQuery === 'undefined') {
 
     function complete() {
       if (that.hoverState != 'in') $tip.detach()
-      if (that.$element) { // TODO: Check whether guarding this code with this `if` is really necessary.
-        that.$element
-          .removeAttr('aria-describedby')
-          .trigger('hidden.bs.' + that.type)
-      }
+      that.$element
+        .removeAttr('aria-describedby')
+        .trigger('hidden.bs.' + that.type)
       callback && callback()
     }
 
@@ -1694,10 +1684,7 @@ if (typeof jQuery === 'undefined') {
       // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
       elRect = $.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top })
     }
-    var isSvg = window.SVGElement && el instanceof window.SVGElement
-    // Avoid using $.offset() on SVGs since it gives incorrect results in jQuery 3.
-    // See https://github.com/twbs/bootstrap/issues/20280
-    var elOffset  = isBody ? { top: 0, left: 0 } : (isSvg ? null : $element.offset())
+    var elOffset  = isBody ? { top: 0, left: 0 } : $element.offset()
     var scroll    = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() }
     var outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null
 
@@ -1813,7 +1800,6 @@ if (typeof jQuery === 'undefined') {
       that.$tip = null
       that.$arrow = null
       that.$viewport = null
-      that.$element = null
     })
   }
 
@@ -1850,10 +1836,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: popover.js v3.3.7
+ * Bootstrap: popover.js v3.3.6
  * http://getbootstrap.com/javascript/#popovers
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -1870,7 +1856,7 @@ if (typeof jQuery === 'undefined') {
 
   if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
 
-  Popover.VERSION  = '3.3.7'
+  Popover.VERSION  = '3.3.6'
 
   Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
     placement: 'right',
@@ -1959,10 +1945,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: scrollspy.js v3.3.7
+ * Bootstrap: scrollspy.js v3.3.6
  * http://getbootstrap.com/javascript/#scrollspy
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -1988,7 +1974,7 @@ if (typeof jQuery === 'undefined') {
     this.process()
   }
 
-  ScrollSpy.VERSION  = '3.3.7'
+  ScrollSpy.VERSION  = '3.3.6'
 
   ScrollSpy.DEFAULTS = {
     offset: 10
@@ -2132,10 +2118,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tab.js v3.3.7
+ * Bootstrap: tab.js v3.3.6
  * http://getbootstrap.com/javascript/#tabs
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -2152,7 +2138,7 @@ if (typeof jQuery === 'undefined') {
     // jscs:enable requireDollarBeforejQueryAssignment
   }
 
-  Tab.VERSION = '3.3.7'
+  Tab.VERSION = '3.3.6'
 
   Tab.TRANSITION_DURATION = 150
 
@@ -2288,10 +2274,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: affix.js v3.3.7
+ * Bootstrap: affix.js v3.3.6
  * http://getbootstrap.com/javascript/#affix
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -2317,7 +2303,7 @@ if (typeof jQuery === 'undefined') {
     this.checkPosition()
   }
 
-  Affix.VERSION  = '3.3.7'
+  Affix.VERSION  = '3.3.6'
 
   Affix.RESET    = 'affix affix-top affix-bottom'
 
@@ -2899,7 +2885,6 @@ var createDict = function(){
   // Thrash, waste and sodomy: IE GC bug
   var iframe = require('./_dom-create')('iframe')
     , i      = enumBugKeys.length
-    , lt     = '<'
     , gt     = '>'
     , iframeDocument;
   iframe.style.display = 'none';
@@ -2909,7 +2894,7 @@ var createDict = function(){
   // html.removeChild(iframe);
   iframeDocument = iframe.contentWindow.document;
   iframeDocument.open();
-  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+  iframeDocument.write('<script>document.F=Object</script' + gt);
   iframeDocument.close();
   createDict = iframeDocument.F;
   while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
@@ -2927,7 +2912,6 @@ module.exports = Object.create || function create(O, Properties){
   } else result = createDict();
   return Properties === undefined ? result : dPs(result, Properties);
 };
-
 },{"./_an-object":32,"./_dom-create":39,"./_enum-bug-keys":40,"./_html":47,"./_object-dps":61,"./_shared-key":74}],60:[function(require,module,exports){
 var anObject       = require('./_an-object')
   , IE8_DOM_DEFINE = require('./_ie8-dom-define')
@@ -26792,30 +26776,10 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
 
 var process = module.exports = {};
 
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
+// cached from whatever global is present so that test runners that stub it don't break things.
+var cachedSetTimeout = setTimeout;
+var cachedClearTimeout = clearTimeout;
 
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-(function () {
-  try {
-    cachedSetTimeout = setTimeout;
-  } catch (e) {
-    cachedSetTimeout = function () {
-      throw new Error('setTimeout is not defined');
-    }
-  }
-  try {
-    cachedClearTimeout = clearTimeout;
-  } catch (e) {
-    cachedClearTimeout = function () {
-      throw new Error('clearTimeout is not defined');
-    }
-  }
-} ())
 var queue = [];
 var draining = false;
 var currentQueue;
@@ -31847,8 +31811,7 @@ function restoreState (vm, state, isRoot) {
 }
 
 function format (id) {
-  var match = id.match(/[^\/]+\.vue$/)
-  return match ? match[0] : id
+  return id.match(/[^\/]+\.vue$/)[0]
 }
 
 },{}],113:[function(require,module,exports){
@@ -35546,7 +35509,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 },{}],116:[function(require,module,exports){
 (function (process){
 /*!
- * vue-validator v2.1.6
+ * vue-validator v2.1.4
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -35971,14 +35934,13 @@ function Override (Vue) {
 }
 
 var VALIDATE_UPDATE = '__vue-validator-validate-update__';
-var PRIORITY_VALIDATE = 4096;
+var PRIORITY_VALIDATE = 16;
 var PRIORITY_VALIDATE_CLASS = 32;
 var REGEX_FILTER = /[^|]\|[^|]/;
 var REGEX_VALIDATE_DIRECTIVE = /^v-validate(?:$|:(.*)$)/;
 var REGEX_EVENT = /^v-on:|^@/;
 
 var classId = 0; // ID for validation class
-
 
 function ValidateClass (Vue) {
   var vIf = Vue.directive('if');
@@ -36058,6 +36020,7 @@ function ValidateClass (Vue) {
 }
 
 function Validate (Vue) {
+  var vIf = Vue.directive('if');
   var FragmentFactory = Vue.FragmentFactory;
   var parseDirective = Vue.parsers.directive.parseDirective;
   var _Vue$util = Vue.util;
@@ -36088,9 +36051,8 @@ function Validate (Vue) {
    */
 
   Vue.directive('validate', {
-    deep: true,
     terminal: true,
-    priority: PRIORITY_VALIDATE,
+    priority: vIf.priority + PRIORITY_VALIDATE,
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
 
     paramWatchers: {
@@ -36808,7 +36770,7 @@ var BaseValidation = function () {
   BaseValidation.prototype._invokeValidator = function _invokeValidator(vm, validator, val, arg, cb) {
     var future = validator.call(this, val, arg);
     if (typeof future === 'function') {
-      // function 
+      // function
       future(function () {
         // resolve
         cb(true);
@@ -37468,7 +37430,7 @@ var Validator$1 = function () {
     var validation = this._getValidationFrom(field);
     var validations = this._groupValidations[group];
 
-    validations && !~indexOf(validations, validation) && validations.push(validation);
+    validations && ! ~indexOf(validations, validation) && validations.push(validation);
   };
 
   Validator.prototype.removeGroupValidation = function removeGroupValidation(group, field) {
@@ -38151,7 +38113,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.1.6';
+plugin.version = '2.1.4';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
@@ -38162,7 +38124,7 @@ module.exports = plugin;
 },{"_process":108}],117:[function(require,module,exports){
 (function (process,global){
 /*!
- * Vue.js v1.0.26
+ * Vue.js v1.0.24
  * (c) 2016 Evan You
  * Released under the MIT License.
  */
@@ -38561,15 +38523,10 @@ var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
 // UA sniffing for working around browser-specific quirks
 var UA = inBrowser && window.navigator.userAgent.toLowerCase();
-var isIE = UA && UA.indexOf('trident') > 0;
 var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
 var isAndroid = UA && UA.indexOf('android') > 0;
 var isIos = UA && /(iphone|ipad|ipod|ios)/i.test(UA);
-var iosVersionMatch = isIos && UA.match(/os ([\d_]+)/);
-var iosVersion = iosVersionMatch && iosVersionMatch[1].split('_');
-
-// detecting iOS UIWebView by indexedDB
-var hasMutationObserverBug = iosVersion && Number(iosVersion[0]) >= 9 && Number(iosVersion[1]) >= 3 && !window.indexedDB;
+var isWechat = UA && UA.indexOf('micromessenger') > 0;
 
 var transitionProp = undefined;
 var transitionEndEvent = undefined;
@@ -38610,7 +38567,7 @@ var nextTick = (function () {
   }
 
   /* istanbul ignore if */
-  if (typeof MutationObserver !== 'undefined' && !hasMutationObserverBug) {
+  if (typeof MutationObserver !== 'undefined' && !(isWechat && isIos)) {
     var counter = 1;
     var observer = new MutationObserver(nextTickHandler);
     var textNode = document.createTextNode(counter);
@@ -38682,12 +38639,12 @@ var p = Cache.prototype;
 
 p.put = function (key, value) {
   var removed;
+  if (this.size === this.limit) {
+    removed = this.shift();
+  }
 
   var entry = this.get(key, true);
   if (!entry) {
-    if (this.size === this.limit) {
-      removed = this.shift();
-    }
     entry = {
       key: key
     };
@@ -38932,7 +38889,7 @@ function compileRegex() {
   var unsafeOpen = escapeRegex(config.unsafeDelimiters[0]);
   var unsafeClose = escapeRegex(config.unsafeDelimiters[1]);
   tagRE = new RegExp(unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '|' + open + '((?:.|\\n)+?)' + close, 'g');
-  htmlRE = new RegExp('^' + unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '$');
+  htmlRE = new RegExp('^' + unsafeOpen + '.*' + unsafeClose + '$');
   // reset cache
   cache = new Cache(1000);
 }
@@ -39719,8 +39676,7 @@ if (process.env.NODE_ENV !== 'production') {
       return (/HTMLUnknownElement/.test(el.toString()) &&
         // Chrome returns unknown for several HTML5 elements.
         // https://code.google.com/p/chromium/issues/detail?id=540526
-        // Firefox returns unknown for some "Interactive elements."
-        !/^(data|time|rtc|rb|details|dialog|summary)$/.test(tag)
+        !/^(data|time|rtc|rb)$/.test(tag)
       );
     }
   };
@@ -40056,9 +40012,7 @@ function mergeOptions(parent, child, vm) {
   }
   if (child.mixins) {
     for (var i = 0, l = child.mixins.length; i < l; i++) {
-      var mixin = child.mixins[i];
-      var mixinOptions = mixin.prototype instanceof Vue ? mixin.options : mixin;
-      parent = mergeOptions(parent, mixinOptions, vm);
+      parent = mergeOptions(parent, child.mixins[i], vm);
     }
   }
   for (key in parent) {
@@ -40486,13 +40440,10 @@ var util = Object.freeze({
 	hasProto: hasProto,
 	inBrowser: inBrowser,
 	devtools: devtools,
-	isIE: isIE,
 	isIE9: isIE9,
 	isAndroid: isAndroid,
 	isIos: isIos,
-	iosVersionMatch: iosVersionMatch,
-	iosVersion: iosVersion,
-	hasMutationObserverBug: hasMutationObserverBug,
+	isWechat: isWechat,
 	get transitionProp () { return transitionProp; },
 	get transitionEndEvent () { return transitionEndEvent; },
 	get animationProp () { return animationProp; },
@@ -40980,9 +40931,7 @@ var saveRE = /[\{,]\s*[\w\$_]+\s*:|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\
 var restoreRE = /"(\d+)"/g;
 var pathTestRE = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/;
 var identRE = /[^\w$\.](?:[A-Za-z_$][\w$]*)/g;
-var literalValueRE$1 = /^(?:true|false|null|undefined|Infinity|NaN)$/;
-
-function noop() {}
+var booleanLiteralRE = /^(?:true|false)$/;
 
 /**
  * Save / Rewrite / Restore
@@ -41064,7 +41013,7 @@ function compileGetter(exp) {
   // save strings and object literal keys
   var body = exp.replace(saveRE, save).replace(wsRE, '');
   // rewrite all paths
-  // pad 1 space here because the regex matches 1 extra char
+  // pad 1 space here becaue the regex matches 1 extra char
   body = (' ' + body).replace(identRE, rewrite).replace(restoreRE, restore);
   return makeGetterFn(body);
 }
@@ -41085,15 +41034,7 @@ function makeGetterFn(body) {
     return new Function('scope', 'return ' + body + ';');
     /* eslint-enable no-new-func */
   } catch (e) {
-    if (process.env.NODE_ENV !== 'production') {
-      /* istanbul ignore if */
-      if (e.toString().match(/unsafe-eval|CSP/)) {
-        warn('It seems you are using the default build of Vue.js in an environment ' + 'with Content Security Policy that prohibits unsafe-eval. ' + 'Use the CSP-compliant build instead: ' + 'http://vuejs.org/guide/installation.html#CSP-compliant-build');
-      } else {
-        warn('Invalid expression. ' + 'Generated function body: ' + body);
-      }
-    }
-    return noop;
+    process.env.NODE_ENV !== 'production' && warn('Invalid expression. ' + 'Generated function body: ' + body);
   }
 }
 
@@ -41155,8 +41096,8 @@ function parseExpression(exp, needSet) {
 
 function isSimplePath(exp) {
   return pathTestRE.test(exp) &&
-  // don't treat literal values as paths
-  !literalValueRE$1.test(exp) &&
+  // don't treat true/false as paths
+  !booleanLiteralRE.test(exp) &&
   // Math constants e.g. Math.PI, Math.E etc.
   exp.slice(0, 5) !== 'Math.';
 }
@@ -41572,7 +41513,7 @@ function traverse(val, seen) {
   }
   var isA = isArray(val);
   var isO = isObject(val);
-  if ((isA || isO) && Object.isExtensible(val)) {
+  if (isA || isO) {
     if (val.__ob__) {
       var depId = val.__ob__.dep.id;
       if (seen.has(depId)) {
@@ -41635,7 +41576,6 @@ function isRealTemplate(node) {
 
 var tagRE$1 = /<([\w:-]+)/;
 var entityRE = /&#?\w+?;/;
-var commentRE = /<!--/;
 
 /**
  * Convert a string template to a DocumentFragment.
@@ -41658,9 +41598,8 @@ function stringToFragment(templateString, raw) {
   var frag = document.createDocumentFragment();
   var tagMatch = templateString.match(tagRE$1);
   var entityMatch = entityRE.test(templateString);
-  var commentMatch = commentRE.test(templateString);
 
-  if (!tagMatch && !entityMatch && !commentMatch) {
+  if (!tagMatch && !entityMatch) {
     // text only, return a single text node.
     frag.appendChild(document.createTextNode(templateString));
   } else {
@@ -42627,7 +42566,7 @@ var vFor = {
    * the filters. This is passed to and called by the watcher.
    *
    * It is necessary for this to be called during the
-   * watcher's dependency collection phase because we want
+   * wathcer's dependency collection phase because we want
    * the v-for to update when the source Object is mutated.
    */
 
@@ -42970,10 +42909,7 @@ var text$2 = {
   },
 
   update: function update(value) {
-    // #3029 only update when the value changes. This prevent
-    // browsers from overwriting values like selectionStart
-    value = _toString(value);
-    if (value !== this.el.value) this.el.value = value;
+    this.el.value = _toString(value);
   },
 
   unbind: function unbind() {
@@ -43022,8 +42958,6 @@ var radio = {
 var select = {
 
   bind: function bind() {
-    var _this = this;
-
     var self = this;
     var el = this.el;
 
@@ -43055,12 +42989,7 @@ var select = {
     // selectedIndex with value -1 to 0 when the element
     // is appended to a new parent, therefore we have to
     // force a DOM update whenever that happens...
-    this.vm.$on('hook:attached', function () {
-      nextTick(_this.forceUpdate);
-    });
-    if (!inDoc(el)) {
-      nextTick(this.forceUpdate);
-    }
+    this.vm.$on('hook:attached', this.forceUpdate);
   },
 
   update: function update(value) {
@@ -44330,7 +44259,7 @@ function processPropValue(vm, prop, rawValue, fn) {
   if (value === undefined) {
     value = getPropDefaultValue(vm, prop);
   }
-  value = coerceProp(prop, value, vm);
+  value = coerceProp(prop, value);
   var coerced = value !== rawValue;
   if (!assertProp(prop, value, vm)) {
     value = undefined;
@@ -44449,17 +44378,13 @@ function assertProp(prop, value, vm) {
  * @return {*}
  */
 
-function coerceProp(prop, value, vm) {
+function coerceProp(prop, value) {
   var coerce = prop.options.coerce;
   if (!coerce) {
     return value;
   }
-  if (typeof coerce === 'function') {
-    return coerce(value);
-  } else {
-    process.env.NODE_ENV !== 'production' && warn('Invalid coerce for prop "' + prop.name + '": expected function, got ' + typeof coerce + '.', vm);
-    return value;
-  }
+  // coerce is a function
+  return coerce(value);
 }
 
 /**
@@ -44991,9 +44916,10 @@ var transition$1 = {
     // resolve on owner vm
     var hooks = resolveAsset(this.vm.$options, 'transitions', id);
     id = id || 'v';
-    oldId = oldId || 'v';
     el.__v_trans = new Transition(el, id, hooks, this.vm);
-    removeClass(el, oldId + '-transition');
+    if (oldId) {
+      removeClass(el, oldId + '-transition');
+    }
     addClass(el, id + '-transition');
   }
 };
@@ -45418,7 +45344,7 @@ function makeTextNodeLinkFn(tokens, frag) {
           if (token.html) {
             replace(node, parseTemplate(value, true));
           } else {
-            node.data = _toString(value);
+            node.data = value;
           }
         } else {
           vm._bindDir(token.descriptor, node, host, scope);
@@ -46402,7 +46328,7 @@ function eventsMixin (Vue) {
   };
 }
 
-function noop$1() {}
+function noop() {}
 
 /**
  * A directive links a DOM element with a piece of data,
@@ -46501,7 +46427,7 @@ Directive.prototype._bind = function () {
         }
       };
     } else {
-      this._update = noop$1;
+      this._update = noop;
     }
     var preProcess = this._preProcess ? bind(this._preProcess, this) : null;
     var postProcess = this._postProcess ? bind(this._postProcess, this) : null;
@@ -47939,7 +47865,7 @@ var filters = {
 
   json: {
     read: function read(value, indent) {
-      return typeof value === 'string' ? value : JSON.stringify(value, null, arguments.length > 1 ? indent : 2);
+      return typeof value === 'string' ? value : JSON.stringify(value, null, Number(indent) || 2);
     },
     write: function write(value) {
       try {
@@ -48012,13 +47938,7 @@ var filters = {
 
   pluralize: function pluralize(value) {
     var args = toArray(arguments, 1);
-    var length = args.length;
-    if (length > 1) {
-      var index = value % 10 - 1;
-      return index in args ? args[index] : args[length - 1];
-    } else {
-      return args[0] + (value === 1 ? '' : 's');
-    }
+    return args.length > 1 ? args[value % 10 - 1] || args[args.length - 1] : args[0] + (value === 1 ? '' : 's');
   },
 
   /**
@@ -48203,9 +48123,7 @@ function installGlobalAPI (Vue) {
           }
         }
         if (type === 'component' && isPlainObject(definition)) {
-          if (!definition.name) {
-            definition.name = id;
-          }
+          definition.name = id;
           definition = Vue.extend(definition);
         }
         this.options[type + 's'][id] = definition;
@@ -48220,7 +48138,7 @@ function installGlobalAPI (Vue) {
 
 installGlobalAPI(Vue);
 
-Vue.version = '1.0.26';
+Vue.version = '1.0.24';
 
 // devtools global hook
 /* istanbul ignore next */
@@ -48295,9 +48213,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2a7f7076", module.exports)
+    hotAPI.createRecord("_v-0a8b2cde", module.exports)
   } else {
-    hotAPI.update("_v-2a7f7076", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0a8b2cde", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],120:[function(require,module,exports){
@@ -48421,9 +48339,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-402a95aa", module.exports)
+    hotAPI.createRecord("_v-14d23642", module.exports)
   } else {
-    hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-14d23642", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],121:[function(require,module,exports){
@@ -48496,9 +48414,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6c0d9684", module.exports)
+    hotAPI.createRecord("_v-2c5a08ec", module.exports)
   } else {
-    hotAPI.update("_v-6c0d9684", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2c5a08ec", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./details/details.vue":125,"./details/regions.vue":126,"./details/transports.vue":127,"./details/trips.vue":128,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],122:[function(require,module,exports){
@@ -48649,9 +48567,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3a603938", module.exports)
+    hotAPI.createRecord("_v-b5b1c060", module.exports)
   } else {
-    hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-b5b1c060", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],123:[function(require,module,exports){
@@ -48723,9 +48641,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-12a47980", module.exports)
+    hotAPI.createRecord("_v-71409450", module.exports)
   } else {
-    hotAPI.update("_v-12a47980", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-71409450", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],124:[function(require,module,exports){
@@ -48762,9 +48680,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-58d98fb2", module.exports)
+    hotAPI.createRecord("_v-483b544a", module.exports)
   } else {
-    hotAPI.update("_v-58d98fb2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-483b544a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],125:[function(require,module,exports){
@@ -48803,9 +48721,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c27860f8", module.exports)
+    hotAPI.createRecord("_v-6f75c21c", module.exports)
   } else {
-    hotAPI.update("_v-c27860f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6f75c21c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],126:[function(require,module,exports){
@@ -48838,9 +48756,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-88b7227e", module.exports)
+    hotAPI.createRecord("_v-e7533d4e", module.exports)
   } else {
-    hotAPI.update("_v-88b7227e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-e7533d4e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],127:[function(require,module,exports){
@@ -48872,9 +48790,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2299a818", module.exports)
+    hotAPI.createRecord("_v-368f8e80", module.exports)
   } else {
-    hotAPI.update("_v-2299a818", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-368f8e80", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],128:[function(require,module,exports){
@@ -48946,9 +48864,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-19c29ab0", module.exports)
+    hotAPI.createRecord("_v-43005348", module.exports)
   } else {
-    hotAPI.update("_v-19c29ab0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-43005348", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],129:[function(require,module,exports){
@@ -49022,9 +48940,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1c3f53a2", module.exports)
+    hotAPI.createRecord("_v-e0395672", module.exports)
   } else {
-    hotAPI.update("_v-1c3f53a2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-e0395672", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],130:[function(require,module,exports){
@@ -49080,9 +48998,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-94fcdc0a", module.exports)
+    hotAPI.createRecord("_v-1f091c63", module.exports)
   } else {
-    hotAPI.update("_v-94fcdc0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1f091c63", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./campaign-groups.vue":123,"./group-trips.vue":129,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],131:[function(require,module,exports){
@@ -49532,9 +49450,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-52666078", module.exports)
+    hotAPI.createRecord("_v-342117a8", module.exports)
   } else {
-    hotAPI.update("_v-52666078", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-342117a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],132:[function(require,module,exports){
@@ -49667,9 +49585,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4773c802", module.exports)
+    hotAPI.createRecord("_v-1c1b689a", module.exports)
   } else {
-    hotAPI.update("_v-4773c802", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1c1b689a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],133:[function(require,module,exports){
@@ -49732,9 +49650,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-60464908", module.exports)
+    hotAPI.createRecord("_v-0dcad7d8", module.exports)
   } else {
-    hotAPI.update("_v-60464908", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0dcad7d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],134:[function(require,module,exports){
@@ -49779,6 +49697,7 @@ exports.default = {
             timezones: []
         };
     },
+    //timezoneObj: null,
 
     computed: {
         country_code: function country_code() {
@@ -49839,9 +49758,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0f6c0d9e", module.exports)
+    hotAPI.createRecord("_v-3fc3ff94", module.exports)
   } else {
-    hotAPI.update("_v-0f6c0d9e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3fc3ff94", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],135:[function(require,module,exports){
@@ -49894,6 +49813,7 @@ exports.default = {
             timezones: []
         };
     },
+    //timezoneObj: null,
 
     computed: {
         country_code: function country_code() {
@@ -49979,9 +49899,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7071c3a8", module.exports)
+    hotAPI.createRecord("_v-1df65278", module.exports)
   } else {
-    hotAPI.update("_v-7071c3a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1df65278", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],136:[function(require,module,exports){
@@ -50080,9 +50000,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1244b388", module.exports)
+    hotAPI.createRecord("_v-7e446020", module.exports)
   } else {
-    hotAPI.update("_v-1244b388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7e446020", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],137:[function(require,module,exports){
@@ -50156,15 +50076,15 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"\"> Any Status\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"true\"> Public Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"false\"> Private only\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"\"> Any Type\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"church\"> Church Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"business\"> Business only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"nonprofit\"> Non-Profit Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"youth\"> Private only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"other\"> Other only\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n                <a class=\"btn btn-primary btn-sm\" href=\"groups/create\">New <i class=\"fa fa-plus icon-left\"></i></a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'name'}\">\n                Group\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <template v-if=\"pending\">\n                <th :class=\"{'text-primary': orderByField === 'notes.data[0].content'}\">\n                    Contact Person Name\n                    <i @click=\"setOrderByField('notes.data[0].content')\" v-if=\"orderByField !== 'notes.data[0].content'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'notes.data[0].content'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'phone_one'}\">\n                    Phone One\n                    <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'email'}\">\n                    Email\n                    <i @click=\"setOrderByField('email')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n            </template>\n            <template v-else=\"\">\n                <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                    Location\n                    <!--<i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>-->\n                    <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'public'}\">\n                    Status\n                    <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th>Active Trips</th>\n            </template>\n\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"group in groups|filterBy search|orderBy orderByField direction|filterBy status in 'public'|filterBy type in 'type'\">\n            <td>{{group.name}}</td>\n            <td>{{group.type|capitalize}}</td>\n            <template v-if=\"pending\">\n                <td>{{group.notes.data[0].content}}</td>\n                <td>{{group.phone_one}}</td>\n                <td>{{group.email}}</td>\n            </template>\n            <template v-else=\"\">\n                <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n                <td>{{group.public ? 'Public' : 'Private'}}</td>\n                <td>{{group.trips.data.length}}</td>\n            </template>\n            <td>\n                <a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Manage\" href=\"/admin{{group.links[0].uri}}\"><i class=\"fa fa-gear\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"\"> Any Status\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"true\"> Public Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"false\"> Private only\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"\"> Any Type\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"church\"> Church Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"business\"> Business only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"nonprofit\"> Non-Profit Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"youth\"> Private only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"other\"> Other only\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n                <a class=\"btn btn-primary btn-sm\" href=\"groups/create\">New <i class=\"fa fa-plus icon-left\"></i></a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'name'}\">\n                Group\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <template v-if=\"pending\">\n                <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                    Location\n                    <!--<i @click=\"setOrderByField('notes.data[0].content')\" v-if=\"orderByField !== 'notes.data[0].content'\" class=\"fa fa-sort pull-right\"></i>-->\n                    <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'notes.data[0].content'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'phone_one'}\">\n                    Phone One\n                    <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'email'}\">\n                    Email\n                    <i @click=\"setOrderByField('email')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n            </template>\n            <template v-else=\"\">\n                <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                    Location\n                    <!--<i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>-->\n                    <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'public'}\">\n                    Status\n                    <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th>Active Trips</th>\n            </template>\n\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"group in groups|filterBy search|orderBy orderByField direction|filterBy status in 'public'|filterBy type in 'type'\">\n            <td>{{group.name}}</td>\n            <td>{{group.type|capitalize}}</td>\n            <template v-if=\"pending\">\n                <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n                <td>{{group.phone_one}}</td>\n                <td>{{group.email}}</td>\n            </template>\n            <template v-else=\"\">\n                <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n                <td>{{group.public ? 'Public' : 'Private'}}</td>\n                <td>{{group.trips.data.length}}</td>\n            </template>\n            <td>\n                <a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Manage\" href=\"/admin{{group.links[0].uri}}\"><i class=\"fa fa-gear\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6170d6da", module.exports)
+    hotAPI.createRecord("_v-647e220a", module.exports)
   } else {
-    hotAPI.update("_v-6170d6da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-647e220a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],138:[function(require,module,exports){
@@ -50470,9 +50390,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4d4691e4", module.exports)
+    hotAPI.createRecord("_v-4d7c267c", module.exports)
   } else {
-    hotAPI.update("_v-4d4691e4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4d7c267c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":1,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],139:[function(require,module,exports){
@@ -50518,9 +50438,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-15f24781", module.exports)
+    hotAPI.createRecord("_v-29e82de9", module.exports)
   } else {
-    hotAPI.update("_v-15f24781", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-29e82de9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],140:[function(require,module,exports){
@@ -50554,9 +50474,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-24620ef0", module.exports)
+    hotAPI.createRecord("_v-36a2fd50", module.exports)
   } else {
-    hotAPI.update("_v-24620ef0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-36a2fd50", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],141:[function(require,module,exports){
@@ -50608,9 +50528,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3568e8fb", module.exports)
+    hotAPI.createRecord("_v-495ecf63", module.exports)
   } else {
-    hotAPI.update("_v-3568e8fb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-495ecf63", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],142:[function(require,module,exports){
@@ -50641,9 +50561,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-38497816", module.exports)
+    hotAPI.createRecord("_v-7dd5d87e", module.exports)
   } else {
-    hotAPI.update("_v-38497816", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7dd5d87e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],143:[function(require,module,exports){
@@ -50715,9 +50635,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-a95a0ede", module.exports)
+    hotAPI.createRecord("_v-264b7e0e", module.exports)
   } else {
-    hotAPI.update("_v-a95a0ede", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-264b7e0e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],144:[function(require,module,exports){
@@ -50783,6 +50703,11 @@ exports.default = {
         };
     },
 
+    computed: {
+        country_code: function country_code() {
+            return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+        }
+    },
     watch: {
         'page': function page(val, oldVal) {
             this.pagination.current_page = val;
@@ -50815,6 +50740,7 @@ exports.default = {
         resetForm: function resetForm() {
             this.name = '';
             this.type = '';
+            this.countryCodeObj = null;
             this.country_code = null;
             this.description = '';
             this.timezone = null;
@@ -50822,8 +50748,8 @@ exports.default = {
             this.phone_two = '';
             this.address_one = '';
             this.address_two = '';
-            this.this.city = '';
-            this.this.state = '';
+            this.city = '';
+            this.state = '';
             this.zip = '';
             this.url = '';
             this.campaign = '';
@@ -50831,6 +50757,8 @@ exports.default = {
             this.position = '';
             this.email = '';
             this.spoke_to_rep = undefined;
+            this.attemptSubmit = false;
+            $('#collapseGroupForm').collapse('hide');
         },
         submit: function submit() {
             this.attemptSubmit = true;
@@ -50881,15 +50809,15 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"content-page-header\">\n  <img class=\"img-responsive\" src=\"images/groups/groups-header.jpg\" alt=\"\">\n  <div class=\"c-page-header-text\">\n    <h1 class=\"text-uppercase dash-trailing\">Groups</h1>\n  </div><!-- end c-page-header-content -->\n</div><!-- end c-page-header -->\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center\">\n        <h2 class=\"text-primary\">Group trips is what we do!</h2>\n        <p>Missions.Me specializes in taking groups around the world on life-changing missions experiences.  If you are interested in partnering with one of our missions campaigns or trips, please fill out the form.  Missions.Me can provide your group with its own profile, URL and custom missions trips created especially for your group.</p>\n        <hr class=\"divider inv\">\n        <a class=\"btn btn-primary btn-lg\" role=\"button\" data-toggle=\"collapse\" href=\"#collapseGroupForm\" aria-expanded=\"false\" aria-controls=\"collapseGroupForm\">Take Your Group</a>\n      </div><!-- end col -->\n    </div><!-- end row -->\n    <hr class=\"divider inv xlg\">\n    <div class=\"row collapse\" id=\"collapseGroupForm\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1\">\n        <validator name=\"CreateGroup\">\n          <form id=\"CreateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n              <div class=\"form-group\">\n                  <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('name') }\">\n                      <label for=\"name\">Name</label>\n                      <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                      <p class=\"help-block\" v-if=\"errors.name\" v-text=\"errors.name\"></p>\n                  </div>\n                  <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('campaign') }\">\n                      <label for=\"campaign\">Which Campaign are you interested in?</label>\n                      <select name=\"type\" id=\"campaign\" class=\"form-control\" v-model=\"campaign\" v-validate:campaign=\"{ required: true }\" required=\"\">\n                          <option value=\"\">-- please select --</option>\n                          <option :value=\"campaign.id\" v-for=\"campaign in campaigns\">{{campaign.name}}</option>\n                      </select>\n                      <p class=\"help-block\" v-if=\"errors.campaign\" v-text=\"errors.campaign\"></p>\n                  </div>\n              </div>\n              <div class=\"form-group\">\n                  <div class=\"col-sm-6\">\n                      <label for=\"infoAddress\">Address 1</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n                  </div>\n                  <div class=\"col-sm-6\">\n                      <label for=\"infoAddress2\">Address 2</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n                  </div>\n              </div>\n\n              <div class=\"row form-group col-sm-offset-2\">\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoCity\">City</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                      <p class=\"help-block\" v-if=\"errors.city\" v-text=\"errors.city\"></p>\n                  </div>\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoState\">State/Prov.</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                        <p class=\"help-block\" v-if=\"errors.state\" v-text=\"errors.state\"></p>\n                  </div>\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoZip\">ZIP/Postal Code</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                      <p class=\"help-block\" v-if=\"errors.zip\" v-text=\"errors.zip\"></p>\n                  </div>\n              </div>\n\n              <div class=\"row form-group col-sm-offset-2\">\n                  <div class=\"col-sm-6\">\n                      <div :class=\"{ 'has-error': checkForError('country') }\">\n                          <label for=\"country\">Country</label>\n                          <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                          <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                              <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                          </select>\n                      </div>\n                  </div>\n                  <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('type') }\">\n                      <label for=\"type\">Type</label>\n                      <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                          <option value=\"\">-- please select --</option>\n                          <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                      </select>\n                  </div>\n              </div>\n\n              <div class=\"form-group\">\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('timezone') }\">\n                      <label for=\"timezone\">Timezone</label>\n                      <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                      <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                          <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                      </select>\n                  </div>\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('phone') }\">\n                      <label for=\"infoPhone\">Phone 1</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" v-validate:phone=\"{ require: true, minlength:9 }\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                      <p class=\"help-block\" v-if=\"errors.phone_one\" v-text=\"errors.phone_one\"></p>\n                  </div>\n                  <div class=\"col-sm-4\">\n                      <label for=\"infoMobile\">Phone 2</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                  </div>\n              </div>\n\n              <div class=\"form-group\">\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('contact') }\">\n                      <label for=\"contact\">Your Name</label>\n                      <input type=\"text\" class=\"form-control\" name=\"contact\" id=\"contact\" v-model=\"contact\" placeholder=\"John Smith\" v-validate:contact=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                      <p class=\"help-block\" v-if=\"errors.contact\" v-text=\"errors.contact\"></p>\n                  </div>\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('email') }\">\n                      <label for=\"email\">Email</label>\n                      <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"['email','require']\">\n                      <p class=\"help-block\" v-if=\"errors.email\" v-text=\"errors.email\"></p>\n                  </div>\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('position') }\">\n                      <label for=\"position\">Your Position</label>\n                      <input type=\"text\" class=\"form-control\" name=\"position\" id=\"position\" v-model=\"position\" v-validate:position=\"{ require: true, minlength:1 }\">\n                      <p class=\"help-block\" v-if=\"errors.position\" v-text=\"errors.position\"></p>\n                  </div>\n              </div>\n\n              <div class=\"form-group\" :class=\"{ 'has-error': checkForError('spoken') }\">\n                  <label for=\"status\" class=\"col-sm-8 control-label\">Have you spoken with a Missions.Me representative?</label>\n                  <div class=\"col-sm-4\">\n                      <label class=\"radio-inline\">\n                          <input type=\"radio\" name=\"status\" id=\"status\" value=\"yes\" v-model=\"spoke_to_rep\" v-validate:spoken=\"{ require: { rule: true } }\"> Yes\n                      </label>\n                      <label class=\"radio-inline\">\n                          <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"no\" v-model=\"spoke_to_rep\" v-validate:spoken=\"\"> No\n                      </label>\n                  </div>\n              </div>\n              <div class=\"form-group\">\n                  <div class=\"col-sm-12 text-center\">\n                      <a @click=\"submit\" class=\"btn btn-primary\">Send Request</a>\n                  </div>\n              </div>\n              <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n                  <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n                  <strong>Awesome!</strong>\n                  <p>Group request sent</p>\n              </alert>\n\n          </form>\n      </validator>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end white-bg -->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <h4>Groups Partnered With Us</h4>\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <!--<a v-if=\"groups.length > 3\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>-->\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <div class=\"form-group form-group-sm\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\" v-model=\"search\" debounce=\"250\">\n            <!--<span class=\"input-group-btn\">\n                <button class=\"btn btn-default\" type=\"button\">Go!</button>\n            </span>-->\n        </div><!-- /input-group -->\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <!--<a v-if=\"groups.length > 8 && groups == 8\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>-->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n    <div class=\"col-sm-6 col-md-3\" v-for=\"group in groups|limitBy groupsLimit\" v-if=\"groups.length\" style=\"display:flex\">\n        <div class=\"panel panel-default\">\n            <a :href=\"'/groups/' + group.url\" role=\"button\">\n                <img :src=\"group.avatar\" :alt=\"group.name\" class=\"img-responsive\">\n            </a>\n                <div style=\"min-height:220px;\" class=\"panel-body\">\n                    <!--<h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\"><i class=\"fa fa-users\"></i> {{group.type}} Group</h6>-->\n                    <a :href=\"'/groups/' + group.url\" role=\"button\">\n                        <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">{{group.name}}</h5>\n                    </a>\n                    <h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\">{{group.type}} Group</h6>\n                    <hr class=\"divider lg\">\n                    <p class=\"small\">{{group.description}}</p>\n                </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div class=\"col-sm-12 text-center\" v-if=\"groups.length\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n</div>\n<div class=\"dark-bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <h1 class=\"dash-trailing-light\">Group Leader Or Youth Pastor</h1>\n      <div class=\"col-sm-6\">\n        <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n              <h6 class=\"panel-title\">\n                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                  Is this going to be a logistical nightmare?\n                </a>\n              </h6>\n            </div>\n            <div id=\"collapseOne\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"headingOne\">\n              <div class=\"panel-body\">\n                <p>Missions.Me specializes in bringing youth groups, college groups, business groups, or any other types of groups you've created. We take care of all of your transportation, hotel, food and ministry schedule. As a leader, fund-raising and team building is all you'll need to focus on.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n                  International travel with teens?!\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n              <div class=\"panel-body\">\n                <p>Don't freak out.</p>\n                <p>Missions.Me will provide you with the flight itineraries, prepay baggage fees and be there waiting with pizza in hand when your group arrives. We dare you to find an easier missions experience.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingThree\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseThree\" aria-expanded=\"false\" aria-controls=\"collapseThree\">\n                  Will my team be eating bugs and sleeping in the jungle?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseThree\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingThree\">\n              <div class=\"panel-body\">\n                <p>It is the vision of Missions.Me to always give our best to the people we're ministering to. To achieve that, our missionaries need to be well rested and well fed. The conditions will vary from state to state, but keep in mind that the farther your team travels from a major city, the less available \"higher standard\" accommodations become.</p>\n\n                <p>HOTEL: Every hotel we stay in is inspected by a staff member prior to the trip. We guarantee that your hotel will be equipped with air conditioning and high speed internet.</p>\n\n                <p>FOOD: All restaurants are tested and approved by a staff member. You will eat at widely-known American restaurants (i.e. McDonald's, Wendy's, Pizza Hut) whenever possible. You will also be given the opportunity to partake in the local cuisine.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingFour\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseFour\" aria-expanded=\"false\" aria-controls=\"collapseFour\">\n                  How will my leadership fit with Missions.Me?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseFour\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingFour\">\n              <div class=\"panel-body\">\n                <p>If you've ever been on a trip before, you know nothing gets done without organization and good leadership.From scheduling ministry sites, pick-ups, drop-offs, meals, translators and communicating with in-country contacts, our leaders handle everything and relay to you and your leadership the necessary information.</p>\n                <a href=\"downloads/SampleSchedule.pdf\" target=\"_blank\" class=\"btn btn-primary btn-sm\">Sample Weekly Schedule</a>\n                <hr class=\"divider inv\">\n                <p>Our leaders or \"project directors\" number one job is to take care of you (the team leader) so that you can properly take care of your group (team). Most importantly, we strive to create a culture of leadership on our trips that creates new leaders and takes your student leaders to the next level.</p>\n                <a href=\"downloads/SampleFlow.pdf\" target=\"_blank\" class=\"btn btn-primary btn-sm\">Sample Leadership Flow Chart</a>\n              </div>\n            </div>\n          </div><!-- end panel -->\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingFive\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseFive\" aria-expanded=\"false\" aria-controls=\"collapseFive\">\n                  How will I recruit?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseFive\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingFive\">\n              <div class=\"panel-body\">\n                <p>Missions.Me specializes in not only bringing a message of hope to nations around the world but also a missional message to the American church. Every year, Missions.Me holds several Missions Nights in churches and generational services around the U.S. The service is packed with video, a powerful message from one of our Missions.Me Project Directors and a call to the mission field. The Missions.Me team comes prepared with applications, training instructions and fundraising ideas to make your church groups trip preparation process so easy. That night following the powerful missions service, those who responded will meet and together, we will launch your group with everything they will need to change the world.</p>\n              </div>\n            </div>\n          </div><!-- end panel -->\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingSix\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseSix\" aria-expanded=\"false\" aria-controls=\"collapseSix\">\n                  How will I train my group?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseSix\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingSix\">\n              <div class=\"panel-body\">\n                <p>Missions.Me gives you everything you need to hold successful training meetings. You set your own dates and times for training, we do the rest.</p>\n              </div>\n            </div>\n          </div><!-- end panel -->\n        </div>\n      </div>\n      <div class=\"col-sm-6\">\n        <div class=\"video-outer\">\n          <div class=\"video-inner\">\n            <iframe src=\"https://player.vimeo.com/video/109034302\" width=\"640\" height=\"360\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n  </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"content-page-header\">\n  <img class=\"img-responsive\" src=\"images/groups/groups-header.jpg\" alt=\"\">\n  <div class=\"c-page-header-text\">\n    <h1 class=\"text-uppercase dash-trailing\">Groups</h1>\n  </div><!-- end c-page-header-content -->\n</div><!-- end c-page-header -->\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center\">\n        <h2 class=\"text-primary\">Group trips is what we do!</h2>\n        <p>Missions.Me specializes in taking groups around the world on life-changing missions experiences.  If you are interested in partnering with one of our missions campaigns or trips, please fill out the form.  Missions.Me can provide your group with its own profile, URL and custom missions trips created especially for your group.</p>\n        <hr class=\"divider inv\">\n        <a class=\"btn btn-primary btn-lg\" role=\"button\" data-toggle=\"collapse\" href=\"#collapseGroupForm\" aria-expanded=\"false\" aria-controls=\"collapseGroupForm\">Take Your Group</a>\n      </div><!-- end col -->\n    </div><!-- end row -->\n    <hr class=\"divider inv xlg\">\n    <div class=\"row collapse\" id=\"collapseGroupForm\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1\">\n        <validator name=\"CreateGroup\">\n          <form id=\"CreateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n              <div class=\"form-group\">\n                  <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('name') || errors.name }\">\n                      <label for=\"name\">Name</label>\n                      <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                      <p class=\"help-block\" v-if=\"errors.name\" v-text=\"errors.name\"></p>\n                  </div>\n                  <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('campaign') || errors.campaign }\">\n                      <label for=\"campaign\">Which Campaign are you interested in?</label>\n                      <select name=\"type\" id=\"campaign\" class=\"form-control\" v-model=\"campaign\" v-validate:campaign=\"{ required: true }\" required=\"\">\n                          <option value=\"\">-- please select --</option>\n                          <option :value=\"campaign.id\" v-for=\"campaign in campaigns\">{{campaign.name}}</option>\n                      </select>\n                      <p class=\"help-block\" v-if=\"errors.campaign\" v-text=\"errors.campaign\"></p>\n                  </div>\n              </div>\n              <div class=\"form-group\">\n                  <div class=\"col-sm-6\">\n                      <label for=\"infoAddress\">Address 1</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n                  </div>\n                  <div class=\"col-sm-6\">\n                      <label for=\"infoAddress2\">Address 2</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n                  </div>\n              </div>\n\n              <div class=\"row form-group col-sm-offset-2\">\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoCity\">City</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                      <p class=\"help-block\" v-if=\"errors.city\" v-text=\"errors.city\"></p>\n                  </div>\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoState\">State/Prov.</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                        <p class=\"help-block\" v-if=\"errors.state\" v-text=\"errors.state\"></p>\n                  </div>\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoZip\">ZIP/Postal Code</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                      <p class=\"help-block\" v-if=\"errors.zip\" v-text=\"errors.zip\"></p>\n                  </div>\n              </div>\n\n              <div class=\"row form-group col-sm-offset-2\">\n                  <div class=\"col-sm-6\">\n                      <div :class=\"{ 'has-error': checkForError('country') }\">\n                          <label for=\"country\">Country</label>\n                          <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                          <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                              <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                          </select>\n                      </div>\n                  </div>\n                  <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('type') || errors.type }\">\n                      <label for=\"type\">Type</label>\n                      <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                          <option value=\"\">-- please select --</option>\n                          <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                      </select>\n                  </div>\n              </div>\n\n              <div class=\"form-group\">\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('timezone') || errors.timezone }\">\n                      <label for=\"timezone\">Timezone</label>\n                      <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                      <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                          <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                      </select>\n                  </div>\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('phone') || errors.phone_one }\">\n                      <label for=\"infoPhone\">Phone 1</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" v-validate:phone=\"{ require: true, minlength:9 }\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                      <p class=\"help-block\" v-if=\"errors.phone_one\" v-text=\"errors.phone_one\"></p>\n                  </div>\n                  <div class=\"col-sm-4\">\n                      <label for=\"infoMobile\">Phone 2</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                  </div>\n              </div>\n\n              <div class=\"form-group\">\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('contact') || errors.contact }\">\n                      <label for=\"contact\">Your Name</label>\n                      <input type=\"text\" class=\"form-control\" name=\"contact\" id=\"contact\" v-model=\"contact\" placeholder=\"John Smith\" v-validate:contact=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                      <p class=\"help-block\" v-if=\"errors.contact\" v-text=\"errors.contact\"></p>\n                  </div>\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('email') || errors.email }\">\n                      <label for=\"email\">Email</label>\n                      <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"['email','require']\">\n                      <p class=\"help-block\" v-if=\"errors.email\" v-text=\"errors.email\"></p>\n                  </div>\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('position') || errors.position }\">\n                      <label for=\"position\">Your Position</label>\n                      <input type=\"text\" class=\"form-control\" name=\"position\" id=\"position\" v-model=\"position\" v-validate:position=\"{ require: true, minlength:1 }\">\n                      <p class=\"help-block\" v-if=\"errors.position\" v-text=\"errors.position\"></p>\n                  </div>\n              </div>\n\n              <div class=\"form-group\" :class=\"{ 'has-error': checkForError('spoken') || errors.spoke_to_rep }\">\n                  <label for=\"status\" class=\"col-sm-8 control-label\">Have you spoken with a Missions.Me representative?</label>\n                  <div class=\"col-sm-4\">\n                      <label class=\"radio-inline\">\n                          <input type=\"radio\" name=\"status\" id=\"status\" value=\"yes\" v-model=\"spoke_to_rep\" v-validate:spoken=\"{ require: { rule: true } }\"> Yes\n                      </label>\n                      <label class=\"radio-inline\">\n                          <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"no\" v-model=\"spoke_to_rep\" v-validate:spoken=\"\"> No\n                      </label>\n                      <!--<p class=\"help-block\" v-if=\"errors.spoke_to_rep\" v-text=\"errors.spoke_to_rep\"></p>-->\n                  </div>\n              </div>\n              <div class=\"form-group\">\n                  <div class=\"col-sm-12 text-center\">\n                      <a @click=\"submit\" class=\"btn btn-primary\">Send Request</a>\n                  </div>\n              </div>\n              <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n                  <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n                  <strong>Awesome!</strong>\n                  <p>Group request sent</p>\n              </alert>\n\n          </form>\n      </validator>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end white-bg -->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <h4>Groups Partnered With Us</h4>\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <!--<a v-if=\"groups.length > 3\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>-->\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <div class=\"form-group form-group-sm\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\" v-model=\"search\" debounce=\"250\">\n            <!--<span class=\"input-group-btn\">\n                <button class=\"btn btn-default\" type=\"button\">Go!</button>\n            </span>-->\n        </div><!-- /input-group -->\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <!--<a v-if=\"groups.length > 8 && groups == 8\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>-->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n    <div class=\"col-sm-6 col-md-3\" v-for=\"group in groups|limitBy groupsLimit\" v-if=\"groups.length\" style=\"display:flex\">\n        <div class=\"panel panel-default\">\n            <a :href=\"'/groups/' + group.url\" role=\"button\">\n                <img :src=\"group.avatar\" :alt=\"group.name\" class=\"img-responsive\">\n            </a>\n                <div style=\"min-height:220px;\" class=\"panel-body\">\n                    <!--<h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\"><i class=\"fa fa-users\"></i> {{group.type}} Group</h6>-->\n                    <a :href=\"'/groups/' + group.url\" role=\"button\">\n                        <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">{{group.name}}</h5>\n                    </a>\n                    <h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\">{{group.type}} Group</h6>\n                    <hr class=\"divider lg\">\n                    <p class=\"small\">{{group.description}}</p>\n                </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div class=\"col-sm-12 text-center\" v-if=\"groups.length\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n</div>\n<div class=\"dark-bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <h1 class=\"dash-trailing-light\">Group Leader Or Youth Pastor</h1>\n      <div class=\"col-sm-6\">\n        <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n              <h6 class=\"panel-title\">\n                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                  Is this going to be a logistical nightmare?\n                </a>\n              </h6>\n            </div>\n            <div id=\"collapseOne\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"headingOne\">\n              <div class=\"panel-body\">\n                <p>Missions.Me specializes in bringing youth groups, college groups, business groups, or any other types of groups you've created. We take care of all of your transportation, hotel, food and ministry schedule. As a leader, fund-raising and team building is all you'll need to focus on.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n                  International travel with teens?!\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n              <div class=\"panel-body\">\n                <p>Don't freak out.</p>\n                <p>Missions.Me will provide you with the flight itineraries, prepay baggage fees and be there waiting with pizza in hand when your group arrives. We dare you to find an easier missions experience.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingThree\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseThree\" aria-expanded=\"false\" aria-controls=\"collapseThree\">\n                  Will my team be eating bugs and sleeping in the jungle?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseThree\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingThree\">\n              <div class=\"panel-body\">\n                <p>It is the vision of Missions.Me to always give our best to the people we're ministering to. To achieve that, our missionaries need to be well rested and well fed. The conditions will vary from state to state, but keep in mind that the farther your team travels from a major city, the less available \"higher standard\" accommodations become.</p>\n\n                <p>HOTEL: Every hotel we stay in is inspected by a staff member prior to the trip. We guarantee that your hotel will be equipped with air conditioning and high speed internet.</p>\n\n                <p>FOOD: All restaurants are tested and approved by a staff member. You will eat at widely-known American restaurants (i.e. McDonald's, Wendy's, Pizza Hut) whenever possible. You will also be given the opportunity to partake in the local cuisine.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingFour\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseFour\" aria-expanded=\"false\" aria-controls=\"collapseFour\">\n                  How will my leadership fit with Missions.Me?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseFour\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingFour\">\n              <div class=\"panel-body\">\n                <p>If you've ever been on a trip before, you know nothing gets done without organization and good leadership.From scheduling ministry sites, pick-ups, drop-offs, meals, translators and communicating with in-country contacts, our leaders handle everything and relay to you and your leadership the necessary information.</p>\n                <a href=\"downloads/SampleSchedule.pdf\" target=\"_blank\" class=\"btn btn-primary btn-sm\">Sample Weekly Schedule</a>\n                <hr class=\"divider inv\">\n                <p>Our leaders or \"project directors\" number one job is to take care of you (the team leader) so that you can properly take care of your group (team). Most importantly, we strive to create a culture of leadership on our trips that creates new leaders and takes your student leaders to the next level.</p>\n                <a href=\"downloads/SampleFlow.pdf\" target=\"_blank\" class=\"btn btn-primary btn-sm\">Sample Leadership Flow Chart</a>\n              </div>\n            </div>\n          </div><!-- end panel -->\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingFive\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseFive\" aria-expanded=\"false\" aria-controls=\"collapseFive\">\n                  How will I recruit?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseFive\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingFive\">\n              <div class=\"panel-body\">\n                <p>Missions.Me specializes in not only bringing a message of hope to nations around the world but also a missional message to the American church. Every year, Missions.Me holds several Missions Nights in churches and generational services around the U.S. The service is packed with video, a powerful message from one of our Missions.Me Project Directors and a call to the mission field. The Missions.Me team comes prepared with applications, training instructions and fundraising ideas to make your church groups trip preparation process so easy. That night following the powerful missions service, those who responded will meet and together, we will launch your group with everything they will need to change the world.</p>\n              </div>\n            </div>\n          </div><!-- end panel -->\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingSix\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseSix\" aria-expanded=\"false\" aria-controls=\"collapseSix\">\n                  How will I train my group?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseSix\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingSix\">\n              <div class=\"panel-body\">\n                <p>Missions.Me gives you everything you need to hold successful training meetings. You set your own dates and times for training, we do the rest.</p>\n              </div>\n            </div>\n          </div><!-- end panel -->\n        </div>\n      </div>\n      <div class=\"col-sm-6\">\n        <div class=\"video-outer\">\n          <div class=\"video-inner\">\n            <iframe src=\"https://player.vimeo.com/video/109034302\" width=\"640\" height=\"360\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n  </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-cf6ec6ac", module.exports)
+    hotAPI.createRecord("_v-131fb342", module.exports)
   } else {
-    hotAPI.update("_v-cf6ec6ac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-131fb342", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],145:[function(require,module,exports){
@@ -51049,9 +50977,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7dce67a4", module.exports)
+    hotAPI.createRecord("_v-d1dcd388", module.exports)
   } else {
-    hotAPI.update("_v-7dce67a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d1dcd388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],146:[function(require,module,exports){
@@ -51202,9 +51130,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1e536124", module.exports)
+    hotAPI.createRecord("_v-7119d0e8", module.exports)
   } else {
-    hotAPI.update("_v-1e536124", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7119d0e8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./donate.vue":131,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],147:[function(require,module,exports){
@@ -51364,9 +51292,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-17773f82", module.exports)
+    hotAPI.createRecord("_v-50789c2c", module.exports)
   } else {
-    hotAPI.update("_v-17773f82", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-50789c2c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],148:[function(require,module,exports){
@@ -51415,6 +51343,7 @@ exports.default = {
     },
     methods: {
         // emulate pagination
+
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -51451,9 +51380,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4b4c5de6", module.exports)
+    hotAPI.createRecord("_v-4e59a916", module.exports)
   } else {
-    hotAPI.update("_v-4b4c5de6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4e59a916", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],149:[function(require,module,exports){
@@ -51488,9 +51417,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-558d51ea", module.exports)
+    hotAPI.createRecord("_v-5bdfb51a", module.exports)
   } else {
-    hotAPI.update("_v-558d51ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5bdfb51a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],150:[function(require,module,exports){
@@ -51702,9 +51631,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-86b15298", module.exports)
+    hotAPI.createRecord("_v-79b755c8", module.exports)
   } else {
-    hotAPI.update("_v-86b15298", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-79b755c8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/helpers/defineProperty":14,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],151:[function(require,module,exports){
@@ -51907,9 +51836,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-45829fee", module.exports)
+    hotAPI.createRecord("_v-46c63a71", module.exports)
   } else {
-    hotAPI.update("_v-45829fee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-46c63a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],152:[function(require,module,exports){
@@ -52077,9 +52006,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1bac2c0c", module.exports)
+    hotAPI.createRecord("_v-1be1c0a4", module.exports)
   } else {
-    hotAPI.update("_v-1bac2c0c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1be1c0a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],153:[function(require,module,exports){
@@ -52191,6 +52120,9 @@ exports.default = {
 		'ageMax': function ageMax(val) {
 			this.searchReservations();
 		},
+		'direction': function direction(val) {
+			this.searchReservations();
+		},
 		'activeFields': function activeFields(val, oldVal) {
 			// if the orderBy field is removed from view
 			if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
@@ -52210,6 +52142,9 @@ exports.default = {
 			this.searchReservations();
 		}
 	},
+	/*'groups':function () {
+ 	this.searchReservations();
+ }*/
 	methods: {
 		consoleCallback: function consoleCallback(val) {
 			console.dir((0, _stringify2.default)(val));
@@ -52237,8 +52172,6 @@ exports.default = {
 					hasPassport: this.filters.hasPassport
 				}
 			});
-
-			console.log('Filters Saved');
 		},
 		isActive: function isActive(field) {
 			return _.contains(this.activeFields, field);
@@ -52247,7 +52180,9 @@ exports.default = {
 			return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields;
 		},
 		setOrderByField: function setOrderByField(field) {
-			return this.orderByField = field, this.direction = 1, this.searchReservations();
+			this.orderByField = field;
+			this.direction = 1;
+			this.searchReservations();
 		},
 		resetFilter: function resetFilter() {
 			this.orderByField = 'surname';
@@ -52297,7 +52232,7 @@ exports.default = {
 				search: this.search,
 				per_page: this.per_page,
 				page: this.page,
-				sort: this.orderByField + ' ' + this.direction ? 'asc' : 'desc'
+				sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
 			};
 
 			$.extend(params, this.filters);
@@ -52385,9 +52320,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0ff77a9a", module.exports)
+    hotAPI.createRecord("_v-02fd7dca", module.exports)
   } else {
-    hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-02fd7dca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":1,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],154:[function(require,module,exports){
@@ -52436,9 +52371,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5e12a7a6", module.exports)
+    hotAPI.createRecord("_v-3cf658c5", module.exports)
   } else {
-    hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3cf658c5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],155:[function(require,module,exports){
@@ -52492,9 +52427,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-01de7a71", module.exports)
+    hotAPI.createRecord("_v-2017324e", module.exports)
   } else {
-    hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2017324e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],156:[function(require,module,exports){
@@ -52552,6 +52487,7 @@ exports.default = {
     },
     methods: {
         // emulate pagination
+
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -52597,9 +52533,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5d37e43e", module.exports)
+    hotAPI.createRecord("_v-1d893e54", module.exports)
   } else {
-    hotAPI.update("_v-5d37e43e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1d893e54", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../passports/passport-create-update.vue":147,"vue":117,"vue-hot-reload-api":112}],157:[function(require,module,exports){
@@ -52657,6 +52593,7 @@ exports.default = {
     },
     methods: {
         // emulate pagination
+
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -52702,9 +52639,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1bd1d2ef", module.exports)
+    hotAPI.createRecord("_v-277b5b87", module.exports)
   } else {
-    hotAPI.update("_v-1bd1d2ef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-277b5b87", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../visas/visa-create-update.vue":196,"vue":117,"vue-hot-reload-api":112}],158:[function(require,module,exports){
@@ -52765,9 +52702,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1f813726", module.exports)
+    hotAPI.createRecord("_v-1699c084", module.exports)
   } else {
-    hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1699c084", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],159:[function(require,module,exports){
@@ -52923,9 +52860,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4eaab280", module.exports)
+    hotAPI.createRecord("_v-01e85f58", module.exports)
   } else {
-    hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-01e85f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./create/deadlines.vue":166,"./create/details.vue":167,"./create/pricing.vue":168,"./create/requirements.vue":169,"./create/settings.vue":170,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],160:[function(require,module,exports){
@@ -52959,9 +52896,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1f88c822", module.exports)
+    hotAPI.createRecord("_v-19795487", module.exports)
   } else {
-    hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-19795487", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],161:[function(require,module,exports){
@@ -53052,9 +52989,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-07829d12", module.exports)
+    hotAPI.createRecord("_v-41cb11df", module.exports)
   } else {
-    hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-41cb11df", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],162:[function(require,module,exports){
@@ -53232,9 +53169,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1684d064", module.exports)
+    hotAPI.createRecord("_v-da7ed334", module.exports)
   } else {
-    hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-da7ed334", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./edit/deadlines.vue":171,"./edit/details.vue":172,"./edit/pricing.vue":173,"./edit/requirements.vue":174,"./edit/settings.vue":175,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],163:[function(require,module,exports){
@@ -53335,9 +53272,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-9f5ddb6a", module.exports)
+    hotAPI.createRecord("_v-1b17f8e3", module.exports)
   } else {
-    hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1b17f8e3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],164:[function(require,module,exports){
@@ -53408,9 +53345,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-25146f20", module.exports)
+    hotAPI.createRecord("_v-67217e50", module.exports)
   } else {
-    hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-67217e50", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],165:[function(require,module,exports){
@@ -53479,9 +53416,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-41204f31", module.exports)
+    hotAPI.createRecord("_v-637d2399", module.exports)
   } else {
-    hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-637d2399", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],166:[function(require,module,exports){
@@ -53557,9 +53494,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-8ed335c4", module.exports)
+    hotAPI.createRecord("_v-4a198cf4", module.exports)
   } else {
-    hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4a198cf4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],167:[function(require,module,exports){
@@ -53633,6 +53570,7 @@ exports.default = {
 				ended_at: this.ended_at
 			});
 		},
+		//rep_id: this.rep_id,
 		getGroups: function getGroups(search, loading) {
 			loading(true);
 			this.$http.get('groups', { search: search }).then(function (response) {
@@ -53670,9 +53608,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-087e8cf6", module.exports)
+    hotAPI.createRecord("_v-0ed0f026", module.exports)
   } else {
-    hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0ed0f026", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],168:[function(require,module,exports){
@@ -53899,9 +53837,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5c73f5ee", module.exports)
+    hotAPI.createRecord("_v-62c6591e", module.exports)
   } else {
-    hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-62c6591e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],169:[function(require,module,exports){
@@ -53978,9 +53916,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-af5f3746", module.exports)
+    hotAPI.createRecord("_v-790256f5", module.exports)
   } else {
-    hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-790256f5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],170:[function(require,module,exports){
@@ -54033,9 +53971,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-49d154f0", module.exports)
+    hotAPI.createRecord("_v-305758f0", module.exports)
   } else {
-    hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-305758f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],171:[function(require,module,exports){
@@ -54115,9 +54053,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-03d4d92c", module.exports)
+    hotAPI.createRecord("_v-00aba794", module.exports)
   } else {
-    hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-00aba794", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],172:[function(require,module,exports){
@@ -54251,9 +54189,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5888d913", module.exports)
+    hotAPI.createRecord("_v-cbdfbd0a", module.exports)
   } else {
-    hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-cbdfbd0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-select":114}],173:[function(require,module,exports){
@@ -54484,9 +54422,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2e8e2497", module.exports)
+    hotAPI.createRecord("_v-70156cff", module.exports)
   } else {
-    hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-70156cff", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],174:[function(require,module,exports){
@@ -54566,9 +54504,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3dd864e2", module.exports)
+    hotAPI.createRecord("_v-0a518627", module.exports)
   } else {
-    hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0a518627", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],175:[function(require,module,exports){
@@ -54626,9 +54564,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-f3e5b1bc", module.exports)
+    hotAPI.createRecord("_v-756eebba", module.exports)
   } else {
-    hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-756eebba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],176:[function(require,module,exports){
@@ -54672,9 +54610,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-424f54dc", module.exports)
+    hotAPI.createRecord("_v-681de544", module.exports)
   } else {
-    hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-681de544", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],177:[function(require,module,exports){
@@ -54839,9 +54777,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3935869d", module.exports)
+    hotAPI.createRecord("_v-b8072596", module.exports)
   } else {
-    hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-b8072596", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],178:[function(require,module,exports){
@@ -54896,9 +54834,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ca5dc6f6", module.exports)
+    hotAPI.createRecord("_v-63f3eb1d", module.exports)
   } else {
-    hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-63f3eb1d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],179:[function(require,module,exports){
@@ -55194,9 +55132,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-40feac0a", module.exports)
+    hotAPI.createRecord("_v-830bbb3a", module.exports)
   } else {
-    hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-830bbb3a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],180:[function(require,module,exports){
@@ -55239,9 +55177,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-9d0c84f0", module.exports)
+    hotAPI.createRecord("_v-fba89fc0", module.exports)
   } else {
-    hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-fba89fc0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],181:[function(require,module,exports){
@@ -55276,9 +55214,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5f91920b", module.exports)
+    hotAPI.createRecord("_v-ee616aba", module.exports)
   } else {
-    hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ee616aba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],182:[function(require,module,exports){
@@ -55313,9 +55251,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-235a6f58", module.exports)
+    hotAPI.createRecord("_v-45b743c0", module.exports)
   } else {
-    hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-45b743c0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],183:[function(require,module,exports){
@@ -55360,6 +55298,7 @@ exports.default = {
     },
     methods: {
         // emulate pagination
+
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -55384,9 +55323,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c5dc1f32", module.exports)
+    hotAPI.createRecord("_v-71b990ff", module.exports)
   } else {
-    hotAPI.update("_v-c5dc1f32", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-71b990ff", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],184:[function(require,module,exports){
@@ -55695,9 +55634,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6fb76f2d", module.exports)
+    hotAPI.createRecord("_v-5dcd5b95", module.exports)
   } else {
-    hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5dcd5b95", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../login.vue":145,"./registration/additional-trip-options.vue":176,"./registration/basic-info.vue":177,"./registration/deadline-agreement.vue":178,"./registration/payment-details.vue":179,"./registration/review.vue":180,"./registration/roca.vue":181,"./registration/tos.vue":182,"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],185:[function(require,module,exports){
@@ -56024,9 +55963,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-e6a8f7c4", module.exports)
+    hotAPI.createRecord("_v-6ba4fc86", module.exports)
   } else {
-    hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6ba4fc86", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],186:[function(require,module,exports){
@@ -56164,9 +56103,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-507a71a9", module.exports)
+    hotAPI.createRecord("_v-d3f25bde", module.exports)
   } else {
-    hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d3f25bde", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],187:[function(require,module,exports){
@@ -56289,9 +56228,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-e7b14e18", module.exports)
+    hotAPI.createRecord("_v-9535dce8", module.exports)
   } else {
-    hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-9535dce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],188:[function(require,module,exports){
@@ -56325,9 +56264,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-b88f63ba", module.exports)
+    hotAPI.createRecord("_v-6613f28a", module.exports)
   } else {
-    hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6613f28a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],189:[function(require,module,exports){
@@ -56477,9 +56416,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-372d71fc", module.exports)
+    hotAPI.createRecord("_v-fb2774cc", module.exports)
   } else {
-    hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-fb2774cc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],190:[function(require,module,exports){
@@ -56699,9 +56638,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-46ea867d", module.exports)
+    hotAPI.createRecord("_v-69475ae5", module.exports)
   } else {
-    hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-69475ae5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":1,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],191:[function(require,module,exports){
@@ -56774,9 +56713,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-69badce8", module.exports)
+    hotAPI.createRecord("_v-d7753fb8", module.exports)
   } else {
-    hotAPI.update("_v-69badce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d7753fb8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":106,"vue":117,"vue-hot-reload-api":112}],192:[function(require,module,exports){
@@ -56812,9 +56751,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ea6dd1a8", module.exports)
+    hotAPI.createRecord("_v-d31ac078", module.exports)
   } else {
-    hotAPI.update("_v-ea6dd1a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d31ac078", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],193:[function(require,module,exports){
@@ -56852,9 +56791,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-718e65c4", module.exports)
+    hotAPI.createRecord("_v-95628cf4", module.exports)
   } else {
-    hotAPI.update("_v-718e65c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-95628cf4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],194:[function(require,module,exports){
@@ -56978,9 +56917,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-63c1ee29", module.exports)
+    hotAPI.createRecord("_v-ad6362de", module.exports)
   } else {
-    hotAPI.update("_v-63c1ee29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ad6362de", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],195:[function(require,module,exports){
@@ -57153,9 +57092,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2d9ee899", module.exports)
+    hotAPI.createRecord("_v-1d00ad31", module.exports)
   } else {
-    hotAPI.update("_v-2d9ee899", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1d00ad31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],196:[function(require,module,exports){
@@ -57306,9 +57245,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-12a04920", module.exports)
+    hotAPI.createRecord("_v-1119a388", module.exports)
   } else {
-    hotAPI.update("_v-12a04920", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1119a388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],197:[function(require,module,exports){
@@ -57357,6 +57296,7 @@ exports.default = {
     },
     methods: {
         // emulate pagination
+
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -57393,9 +57333,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4fbd58ab", module.exports)
+    hotAPI.createRecord("_v-5bcb9b13", module.exports)
   } else {
-    hotAPI.update("_v-4fbd58ab", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5bcb9b13", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],198:[function(require,module,exports){

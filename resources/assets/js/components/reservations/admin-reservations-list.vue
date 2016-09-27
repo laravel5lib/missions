@@ -495,7 +495,6 @@
 					}
 				});
 
-				console.log('Filters Saved');
 			},
 			isActive(field){
 				return _.contains(this.activeFields, field);

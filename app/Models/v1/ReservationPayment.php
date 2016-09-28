@@ -117,4 +117,35 @@ class ReservationPayment {
             $amount = $carryOver;
         }
     }
+
+    /**
+     * Bump to next incremental cost.
+     *
+     * @return bool
+     */
+    public function bump()
+    {
+        $current = $this->reservation->costs->reject(function($cost) {
+            return  ! $cost->pivot->locked and $cost->type == 'incremental';
+        });
+
+        if ( ! $current->contains('type', 'incremental')) {
+            $active = $this->reservation->trip->activeCosts()->get();
+
+            $maxDate = $active->where('type', 'incremental')->max('active_at');
+
+            $costs = $active->reject(function ($value) use ($maxDate)
+            {
+                return $value->type == 'incremental' && $value->active_at < $maxDate;
+            });
+
+            $new_costs = $current->merge($costs);
+
+            $this->reservation->syncCosts($new_costs);
+
+            return true;
+        }
+
+        return false;
+    }
 }

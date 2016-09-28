@@ -48,7 +48,7 @@ class Due extends Model
     public function getStatus()
     {
         // make sure the date is compared with the user's timezone
-        $timezone = $this->reservation->user->timezone;
+        $timezone = $this->payable->user->timezone;
 
         if ($this->due_at
             ->timezone($timezone)

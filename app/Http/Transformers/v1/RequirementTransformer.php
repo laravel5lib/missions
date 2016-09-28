@@ -42,14 +42,14 @@ class RequirementTransformer extends TransformerAbstract
         if ($requirement->pivot)
         {
             $array = [
-                'item'         => $requirement->item,
-                'item_type'    => $requirement->item_type,
-                'due_at'       => $requirement->due_at->toDateTimeString(),
-                'grace_period' => (int) $requirement->pivot->grace_period ? $requirement->pivot->grace_period : $requirement->grace_period,
-                'enforced'     => (bool) $requirement->enforced,
-                'status'       => $requirement->pivot->status,
-                'completed_at' => Carbon::parse($requirement->pivot->completed_at)->toDateTimeString(),
-                'updated_at'   => $requirement->pivot->updated_at->toDateTimeString()
+                'requirement_id' => $requirement->id,
+                'item'           => $requirement->item,
+                'item_type'      => $requirement->item_type,
+                'due_at'         => $requirement->due_at->toDateTimeString(),
+                'grace_period'   => (int) $requirement->pivot->grace_period ? $requirement->pivot->grace_period : $requirement->grace_period,
+                'enforced'       => (bool) $requirement->enforced,
+                'status'         => $requirement->pivot->status,
+                'updated_at'     => $requirement->pivot->updated_at->toDateTimeString()
             ];
         }
 

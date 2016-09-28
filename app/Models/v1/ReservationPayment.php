@@ -117,4 +117,52 @@ class ReservationPayment {
             $amount = $carryOver;
         }
     }
+
+    /**
+     * Get late payments.
+     *
+     * @return mixed
+     */
+    public function late()
+    {
+        return $this->reservation->dues()->with('payment')->get()->filter(function($due) {
+           return $due->getStatus() == 'overdue';
+        });
+    }
+
+    /**
+     * Bump to next incremental cost.
+     *
+     * @return bool
+     */
+    public function bump()
+    {
+        $current = $this->reservation
+                        ->costs()
+                        ->whereIn('id', $this->late()->pluck('payment.cost_id'))
+                        ->get()
+                        ->reject(function($cost) {
+                            return  ! $cost->pivot->locked
+                                    and $cost->type == 'incremental';
+                        });
+
+        if ( ! $current->contains('type', 'incremental')) {
+            $active = $this->reservation->trip->activeCosts()->get();
+
+            $maxDate = $active->where('type', 'incremental')->max('active_at');
+
+            $costs = $active->reject(function ($value) use ($maxDate)
+            {
+                return $value->type == 'incremental' && $value->active_at < $maxDate;
+            });
+
+            $new_costs = $current->merge($costs);
+
+            $this->reservation->syncCosts($new_costs);
+
+            return true;
+        }
+
+        return false;
+    }
 }

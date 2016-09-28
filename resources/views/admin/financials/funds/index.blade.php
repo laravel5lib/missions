@@ -44,7 +44,7 @@
                                     <span class="text-danger">$ {{ $fund->balance }}</span>
                                 @endif
                             </td>
-                            <td><a href="#"><i class="fa fa-cog"></i></a></td>
+                            <td><a href="{{ url('/admin/funds/' . $fund->id) }}"><i class="fa fa-cog"></i></a></td>
                         </tr>
                     @endforeach
                     </tbody>

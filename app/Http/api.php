@@ -64,6 +64,7 @@ $api->version('v1', [
     $api->resource('stories', 'StoriesController');
     $api->get('funds', 'FundsController@index');
     $api->get('funds/{id}', 'FundsController@show');
+    $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
     $api->resource('transactions', 'TransactionsController');
 
     $api->group(['prefix' => 'medical'], function($api)

@@ -46,6 +46,8 @@ class HandleLatePayments extends Command
     {
         $reservation = $this->reservation->findOrfail($this->argument('id'));
 
-        $reservation->payments()->bump();
+        $reservation->payments()->bump() ?
+            $this->info('Costs updated.') :
+            $this->error('No changes made.');
     }
 }

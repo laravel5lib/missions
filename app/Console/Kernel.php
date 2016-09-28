@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
         Commands\SendEmails::class,
         Commands\SendWelcomeEmails::class,
         Commands\SendReservationConfirmationEmail::class,
-        Commands\SendReceiptEmail::class
+        Commands\SendReceiptEmail::class,
+        Commands\HandleLatePayments::class
     ];
 
     /**

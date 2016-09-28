@@ -788,7 +788,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'anonymous', function(Faker
     $fund = $faker->randomElement(App\Models\v1\Fund::all()->toArray());
 
     return [
-        'fund_id' => key($fund),
+        'fund_id' => $fund['id'],
         'donor_id' => App\Models\v1\Donor::where('name', 'anonymous')->pluck('id'),
         'description' => 'Donation to ' . $fund['name'],
         'type' => 'donation',

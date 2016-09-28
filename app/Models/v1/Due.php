@@ -47,9 +47,23 @@ class Due extends Model
      */
     public function getStatus()
     {
-        if ($this->due_at->isPast() and $this->outstanding_balance > 0) return 'late';
-        if ($this->due_at > $this->payment->due_at and $this->due_at->isFuture()) return 'extended';
-        if ($this->outstanding_balance == 0) return 'paid';
+        // make sure the date is compared with the user's timezone
+        $timezone = $this->reservation->user->timezone;
+
+        if ($this->due_at
+            ->timezone($timezone)
+            ->addDays($this->grace_period)
+            ->isPast() and $this->outstanding_balance > 0)
+            return 'overdue';
+
+        if ($this->due_at->timezone($timezone)->isPast() and $this->outstanding_balance > 0)
+            return 'late';
+
+        if ($this->due_at > $this->payment->due_at and $this->due_at->timezone($timezone)->isFuture())
+            return 'extended';
+
+        if ($this->outstanding_balance == 0)
+            return 'paid';
 
         return 'pending';
     }

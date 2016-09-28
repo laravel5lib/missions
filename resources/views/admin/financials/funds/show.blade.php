@@ -33,7 +33,7 @@
                         <p>{{ $fund->updated_at->format('F j, Y h:i a') }}</p>
                     </div>
                     <div class="panel-footer text-right">
-                        <btn class="btn btn-sm btn-default"><i class="fa fa-calculator"></i> Reconcile</btn>
+                        <reconcile-fund id="{{ $fund->id }}"></reconcile-fund>
                     </div>
                 </div>
             </div>

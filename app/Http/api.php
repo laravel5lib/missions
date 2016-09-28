@@ -42,6 +42,7 @@ $api->version('v1', [
     $api->resource('trips', 'TripsController');
     $api->post('trips/{id}/register', 'TripsController@register');
     $api->resource('reservations', 'ReservationsController');
+    $api->put('reservations/{reservation}/requirements/{requirement}', 'ReservationsController@updateRequirement');
     $api->put('reservations/{id}/payments/reconcile', 'ReservationsController@reconcile');
     $api->resource('assignments', 'AssignmentsController');
     $api->resource('fundraisers', 'FundraisersController');

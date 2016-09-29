@@ -104,6 +104,8 @@ class ReservationPayment {
                 ->sortRecent()
                 ->first();
 
+            if (! $due) break;
+
             if ($due->outstanding_balance < $amount) {
                 $carryOver = $amount - $due->outstanding_balance;
                 $payment = $due->outstanding_balance;

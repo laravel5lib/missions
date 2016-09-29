@@ -61,6 +61,23 @@ class CreateTripsTables extends Migration
                 ->onDelete('cascade');
         });
 
+        Schema::create('trip_interests', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('trip_id')->index();
+            $table->string('name');
+            $table->string('email');
+            $table->string('phone')->nullable();
+            $table->json('communication_preferences')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::table('trip_interests', function($table)
+        {
+            $table->foreign('trip_id')
+                ->references('id')->on('trips')
+                ->onDelete('cascade');
+        });
+
     }
 
     /**
@@ -74,5 +91,6 @@ class CreateTripsTables extends Migration
 
         Schema::drop('facilitators');
         Schema::drop('trips');
+        Schema::dropIfExists('trip_interests');
     }
 }

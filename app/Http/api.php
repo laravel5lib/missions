@@ -41,6 +41,7 @@ $api->version('v1', [
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
     $api->post('trips/{id}/register', 'TripsController@register');
+    $api->resource('interests', 'TripInterestsController');
     $api->resource('reservations', 'ReservationsController');
     $api->put('reservations/{reservation}/requirements/{requirement}', 'ReservationsController@updateRequirement');
     $api->put('reservations/{id}/payments/reconcile', 'ReservationsController@reconcile');

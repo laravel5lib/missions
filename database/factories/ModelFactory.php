@@ -831,3 +831,16 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Fak
         'payment' => null,
     ];
 });
+
+/**
+ * Trip Interest Factory
+ */
+$factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $faker) {
+    return [
+        'trip_id' => $faker->randomElement(App\Models\v1\Trip::pluck('id')->toArray()),
+        'name' => $faker->name,
+        'email' => $faker->safeEmail,
+        'phone' => $faker->optional(0.5)->phoneNumber,
+        'communication_preferences' => $faker->randomElements(['email', 'phone', 'text'], 2)
+    ];
+});

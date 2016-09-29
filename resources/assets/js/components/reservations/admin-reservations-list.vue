@@ -356,6 +356,14 @@
 			tripId: {
 				type: String,
 				default: null
+			},
+			storageName: {
+				type: String,
+				default: 'AdminReservationsListConfig'
+			},
+			type: {
+				type: String,
+				default: 'current'
 			}
 		},
 		data(){
@@ -472,7 +480,7 @@
 				console.dir(JSON.stringify(val))
 			},
         	updateConfig(){
-				localStorage.AdminReservationsListConfig = JSON.stringify({
+				localStorage[this.storageName] = JSON.stringify({
 					activeFields: this.activeFields,
 					maxActiveFields: this.maxActiveFields,
 					per_page: this.per_page,
@@ -561,6 +569,19 @@
 					sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
 				};
 
+				switch (this.type){
+					case 'current':
+						params.current = true;
+						break;
+					case 'archived':
+						params.archived = true;
+						break;
+					case 'dropped':
+						params.dropped = true;
+						break;
+				}
+
+
 				$.extend(params, this.filters);
 				$.extend(params, {
 					age: [ this.ageMin, this.ageMax]
@@ -601,8 +622,8 @@
         },
         ready(){
             // load view state
-			if (localStorage.AdminReservationsListConfig) {
-				var config = JSON.parse(localStorage.AdminReservationsListConfig);
+			if (localStorage[this.storageName]) {
+				var config = JSON.parse(localStorage[this.storageName]);
 				this.activeFields = config.activeFields;
 				this.maxActiveFields = config.maxActiveFields;
 				this.filters = config.filters;

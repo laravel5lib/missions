@@ -61,17 +61,21 @@
 		        	<h2 class="text-center">Fundraising Downloads</h2>
 		        	<hr class="divider inv lg">
 				    <div class="row">
-			        	<div class="col-sm-3">
+			        	<div class="col-md-3 col-sm-6">
 							<a class="btn btn-info btn-block" href="downloads/FundraisingGuide.pdf" target="_blank">Fundraising Guide</a>
+							<hr class="divider inv hidden-md">
 				        </div><!-- end col -->
-				        <div class="col-sm-3">
+				        <div class="col-md-3 col-sm-6">
 							<a class="btn btn-info btn-block" href="downloads/100fundraising.pdf" target="_blank">100 Fundraising Ideas</a>
+							<hr class="divider inv hidden-md">
 				        </div><!-- end col -->
-				        <div class="col-sm-3">
+				        <div class="col-md-3 col-sm-6">
 							<a class="btn btn-info btn-block" href="downloads/SampleLetter.pdf" target="_blank">Sample Support Letter</a>
+							<hr class="divider inv hidden-md">
 				        </div><!-- end col -->
-				        <div class="col-sm-3">
+				        <div class="col-md-3 col-sm-6">
 							<a class="btn btn-info btn-block" href="downloads/ParentsLetter.pdf" target="_blank">Parents Letter</a>
+							<hr class="divider inv hidden-md">
 				        </div><!-- end col -->
 				    </div><!-- end row -->
 		        </div><!-- end col -->

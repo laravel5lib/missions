@@ -59,6 +59,7 @@ import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
 import adminUploads from './components/uploads/admin-uploads-list.vue';
 import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
+import reconcileFund from './components/reconcile-fund.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -287,6 +288,7 @@ new Vue({
         adminUserDelete,
         adminUploads,
         adminUploadCreateUpdate,
+        reconcileFund
     ],
     http: {
         headers: {

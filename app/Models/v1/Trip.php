@@ -192,9 +192,24 @@ class Trip extends Model
         return $this->hasMany(Reservation::class);
     }
 
+    /**
+     * Get the trip's fund.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
     public function fund()
     {
         return $this->morphOne(Fund::class, 'fundable');
+    }
+
+    /**
+     * Get all the trip's interests.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function interests()
+    {
+        return $this->hasMany(TripInterest::class);
     }
 
     /**
@@ -343,4 +358,15 @@ class Trip extends Model
 
         $this->save();
     }
+
+    public function scopeCurrent($query)
+    {
+        return $query->where('ended_at', '>=', Carbon::now());
+    }
+
+    public function scopePast($query)
+    {
+        return $query->where('ended_at', '<', Carbon::now());
+    }
+
 }

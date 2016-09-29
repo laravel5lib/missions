@@ -39,6 +39,11 @@ Route::get('/funds', function() use($dispatcher) {
     return view('admin.financials.funds.index', compact('funds'));
 });
 
+Route::get('funds/{id}', function($id) use($dispatcher) {
+    $fund = $dispatcher->get('funds/'.$id);
+    return view('admin.financials.funds.show', compact('fund'));
+});
+
 Route::get('/transactions', function() use($dispatcher) {
     $transactions = $dispatcher->get('transactions');
     $transactions->setPath('/admin/transactions');

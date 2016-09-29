@@ -788,7 +788,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'anonymous', function(Faker
     $fund = $faker->randomElement(App\Models\v1\Fund::all()->toArray());
 
     return [
-        'fund_id' => key($fund),
+        'fund_id' => $fund['id'],
         'donor_id' => App\Models\v1\Donor::where('name', 'anonymous')->pluck('id'),
         'description' => 'Donation to ' . $fund['name'],
         'type' => 'donation',
@@ -829,5 +829,18 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Fak
         'type' => 'transfer',
         'amount' => -$faker->randomNumber(2),
         'payment' => null,
+    ];
+});
+
+/**
+ * Trip Interest Factory
+ */
+$factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $faker) {
+    return [
+        'trip_id' => $faker->randomElement(App\Models\v1\Trip::pluck('id')->toArray()),
+        'name' => $faker->name,
+        'email' => $faker->safeEmail,
+        'phone' => $faker->optional(0.5)->phoneNumber,
+        'communication_preferences' => $faker->randomElements(['email', 'phone', 'text'], 2)
     ];
 });

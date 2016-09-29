@@ -117,6 +117,29 @@ p.large-type {
   background: $brand-warning;
 }
 
+/* panel heading colors */
+// Trip type background colors
+.panel-medical {
+  background-color: $brand-primary !important;
+  color: #fff !important;
+}
+.panel-ministry {
+  background-color: $brand-ministry !important;
+  color: #fff !important;
+}
+.panel-family {
+  background-color: $brand-family !important;
+  color: #fff !important;
+}
+.panel-international {
+  background-color: $brand-international !important;
+  color: #fff !important;
+}
+.panel-leader {
+  background-color: $brand-leader !important;
+  color: #fff !important;
+}
+
 .footer {
   background-color: #f5f5f5;
   border-top: 1px solid #e7e7e7;

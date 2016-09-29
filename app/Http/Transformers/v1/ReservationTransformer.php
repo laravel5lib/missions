@@ -20,7 +20,7 @@ class ReservationTransformer extends TransformerAbstract
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
         'fundraisers', 'member', 'passport', 'visa', 'dues',
-        'medicalRelease'
+        'medicalRelease', 'fund'
     ];
 
     /**
@@ -91,6 +91,19 @@ class ReservationTransformer extends TransformerAbstract
         }
 
         return $this->collection($dues, new DueTransformer);
+    }
+
+    /**
+     * Include Fund
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeFund(Reservation $reservation)
+    {
+        $fund = $reservation->fund;
+
+        return $this->item($fund, new FundTransformer);
     }
 
     /**

@@ -358,4 +358,15 @@ class Trip extends Model
 
         $this->save();
     }
+
+    public function scopeCurrent($query)
+    {
+        return $query->where('ended_at', '>=', Carbon::now());
+    }
+
+    public function scopePast($query)
+    {
+        return $query->where('ended_at', '<', Carbon::now());
+    }
+
 }

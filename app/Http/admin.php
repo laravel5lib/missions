@@ -21,6 +21,7 @@ Route::resource('trips', 'TripsController');
 
 Route::resource('groups', 'GroupsController');
 
+Route::get('reservations/{tab?}', 'ReservationsController@index')->where('tab', 'current|archived|dropped');
 Route::resource('reservations', 'ReservationsController');
 
 Route::resource('users', 'UsersController');

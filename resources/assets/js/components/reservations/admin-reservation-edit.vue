@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="UpdateReservation">
+    <validator name="UpdateReservation" @dirty="onDirty" @modified="onModified" @touched="onTouched">
         <form id="UpdateReservation" novalidate class="form-horizontal">
 
             <div class="row">
@@ -29,7 +29,7 @@
                 <div class="col-sm-6">
                     <div class="form-group" :class="{ 'has-error': checkForError('givennames') }">
                         <label for="given_names">Given Names</label>
-                        <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
+                        <input type=    "text" class="form-control" name="given_names" id="given_names" v-model="given_names"
                                placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="100" minlength="1" required>
                     </div>
@@ -169,9 +169,8 @@
             <div class="form-group">
                 <div class="col-sm-12 text-center">
                     <br>
-                    <a href="/admin/reservations/{{id}}" class="btn btn-default">Cancel</a>
-                    <a @click="update" class="btn btn-primary">Update</a>
-                    <a href="/admin/reservations/{{id}}" class="btn btn-success">Finish</a>
+                    <a @click="update" class="btn btn-primary">Save</a>
+                    <a @click="back" class="btn btn-success">Done</a>
                 </div>
             </div>
 
@@ -222,7 +221,7 @@
                 userObj: null,
                 errors: [],
                 countries: [],
-				showSuccess: false
+				showSuccess: false,
             }
         },
         computed:{
@@ -280,6 +279,13 @@
                         this.errors = error.data.errors;
                     })
                 }
+            },
+            back(){
+                if (this.hasChanged) {
+
+                    return false;
+                }
+                window.location.href = '/admin/reservations/' + this.id;
             }
 
         },
@@ -322,7 +328,7 @@
                 this.userObj = reservation.user.data;
                 this.selectedAvatar = {source: reservation.avatar};
 
-                this.loaded = true
+                this.loaded = true;
             })
         }
     }

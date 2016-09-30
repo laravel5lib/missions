@@ -274,6 +274,7 @@ Route::get('/groups', function() {
     return view('site.groups.index');
 });
 Route::get('/groups/{slug}', 'GroupsController@profile');
+Route::get('groups/{slug}/signup', 'GroupsController@signup');
 Route::get('/profiles/{slug}', 'UsersController@profile');
 Route::get('/@{slug}', 'UsersController@profile');
 Route::get('@{slug}/donate', function ($slug) {

@@ -417,6 +417,7 @@
                 errors: {},
                 showSuccess: false,
                 showSaveAlert: false,
+                hasChanged: false,
             }
         },
         computed: {

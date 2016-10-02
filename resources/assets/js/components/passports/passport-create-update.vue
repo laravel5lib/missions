@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUpdatePassport">
+    <validator name="CreateUpdatePassport" @touched="onTouched">
         <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
             <div class="form-group" :class="{ 'has-error': checkForError('givennames') }">
                 <label for="given_names" class="col-sm-2 control-label">Given Names</label>
@@ -90,12 +90,24 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <a href="/dashboard/passports" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
+                    <a @click="back()" class="btn btn-success">Done</a>
                 </div>
             </div>
         </form>
+
+        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <span class="icon-ok-circled alert-icon-float-left"></span>
+            <strong>Awesome!</strong>
+            <p>Reservation updated!</p>
+        </alert>
+        <alert :show.sync="showSaveAlert" placement="top-right" :duration="3000" type="warning" width="400px" dismissable>
+            <span class="icon-info-circled alert-icon-float-left"></span>
+            <strong>Changes made!</strong>
+            <p>Save your changes first</p>
+        </alert>
+
     </validator>
 </template>
 <script>
@@ -104,7 +116,7 @@
     import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
     export default{
         name: 'passport-create-update',
-        components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel},
+        components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel, 'alert' : VueStrap.alert},
         props: {
             isUpdate: {
                 type:Boolean,
@@ -136,7 +148,9 @@
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 tomorrow:moment().add(1, 'days').format('YYYY-MM-DD'),
-
+                showSuccess: false,
+                showSaveAlert: false,
+                hasChanged: false
             }
         },
         computed: {
@@ -151,6 +165,16 @@
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateUpdatePassport[field].invalid && this.attemptSubmit;
+            },
+            onTouched(){
+                this.hasChanged = true;
+            },
+            back(){
+                if (this.hasChanged) {
+                    this.showSaveAlert = true;
+                    return false;
+                }
+                window.location.href = '/dashboard/passports/';
             },
             submit(){
                 this.attemptSubmit = true;
@@ -168,7 +192,9 @@
                         user_id: this.user_id,
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/passports';
+//                        window.location.href = '/dashboard/passports';
+                        this.showSuccess = true;
+                        this.hasChanged = false;
                     }, function (error) {
                         debugger;
                     });
@@ -190,7 +216,9 @@
                         user_id: this.user_id,
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/passports';
+//                        window.location.href = '/dashboard/passports';
+                        this.showSuccess = true;
+                        this.hasChanged = false;
                     }, function (error) {
                         debugger;
                     });

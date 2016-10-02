@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="UpdateGroup">
+    <validator name="UpdateGroup" @touched="onTouched">
         <form id="UpdateGroupForm" class="form-horizontal" novalidate>
             <div class="row form-group" :class="{ 'has-error': checkForError('name') }">
                 <div class="col-sm-12">
@@ -126,16 +126,20 @@
 
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a href="/admin/groups" class="btn btn-default">Cancel</a>
                     <a @click="submit()" class="btn btn-primary">Update</a>
-                    <a href="/admin/groups" class="btn btn-success">Finished</a>
+                    <a @click="back()" class="btn btn-success">Done</a>
                 </div>
             </div>
 
             <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
-                <strong>Awesome!</strong>
+                <strong>Well Done!</strong>
                 <p>Group updated!</p>
+            </alert>
+            <alert :show.sync="showSaveAlert" placement="top-right" :duration="3000" type="danger" width="400px" dismissable>
+                <span class="icon-info-circled alert-icon-float-left"></span>
+                <strong>Changes made!</strong>
+                <p>Save your changes first</p>
             </alert>
         </form>
     </validator>
@@ -175,6 +179,9 @@
                 countryCodeObj: null,
                 timezones: [],
                 //timezoneObj: null,
+                showSuccess: false,
+                showSaveAlert: false,
+                hasChanged: false,
 
             }
         },
@@ -189,6 +196,16 @@
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$UpdateGroup[field].invalid && this.attemptSubmit;
+            },
+            onTouched(){
+                this.hasChanged = true;
+            },
+            back(){
+                if (this.hasChanged) {
+                    this.showSaveAlert = true;
+                    return false;
+                }
+                window.location.href = '/admin/groups/' + this.groupId;
             },
             submit(){
                 this.attemptSubmit = true;
@@ -213,6 +230,7 @@
                         email: this.email
                     }).then(function (resp) {
                         this.showSuccess = true;
+                        this.hasChanged = false;
                     }, function (error) {
                         console.log(error);
                         debugger;

@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-	<validator name="UpdateCampaign">
+	<validator name="UpdateCampaign" @touched="onTouched">
 		<form id="UpdateCampaignForm" class="form-horizontal" novalidate>
 			<div class="row">
 				<div class="col-sm-12">
@@ -136,11 +136,24 @@
 
 			<div class="form-group">
 				<div class="col-sm-12 text-center">
-					<a href="/admin/campaigns/{{campaignId}}" class="btn btn-default">Cancel</a>
+					<!--<a href="/admin/campaigns/{{campaignId}}" class="btn btn-default">Cancel</a>-->
 					<a @click="update()" class="btn btn-primary">Update</a>
+					<a @click="back()" class="btn btn-success">Done</a>
 				</div>
 			</div>
 		</form>
+
+		<alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+			<span class="icon-ok-circled alert-icon-float-left"></span>
+			<strong>Well Done!</strong>
+			<p>Profile updated!</p>
+		</alert>
+		<alert :show.sync="showSaveAlert" placement="top-right" :duration="3000" type="danger" width="400px" dismissable>
+			<span class="icon-info-circled alert-icon-float-left"></span>
+			<strong>Changes made!</strong>
+			<p>Save your changes first</p>
+		</alert>
+
 
 		<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModal">
 			<div class="modal-dialog modal-sm">
@@ -171,7 +184,7 @@
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
 	export default{
 		name: 'campaign-edit',
-		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel},
+		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel, 'alert': VueStrap.alert},
 		props: ['campaignId'],
 		data(){
 			return {
@@ -194,7 +207,10 @@
 				avatar_upload_id: null,
 				selectedBanner: null,
 				banner_upload_id: null,
-				resource: this.$resource('campaigns{/id}')
+				resource: this.$resource('campaigns{/id}'),
+				showSuccess: false,
+				showSaveAlert: false,
+				hasChanged: false,
 			}
 		},
 		computed:{
@@ -216,6 +232,16 @@
 			},
 			convertToSlug(text){
 				return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
+			},
+			onTouched(){
+				this.hasChanged = true;
+			},
+			back(){
+				if (this.hasChanged) {
+					this.showSaveAlert = true;
+					return false;
+				}
+				window.location.href = '/admin/campaigns/';
 			},
 			update(){
 				// Touch fields for proper validation
@@ -239,7 +265,9 @@
 					}).then(function (resp) {
 						resp.data.data.published_at = moment(resp.data.data.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS')
 						$.extend(this, resp.data.data);
-						window.location.href = '/admin/campaigns/'
+//						window.location.href = '/admin/campaigns/'
+						this.showSuccess = true;
+						this.hasChanged = false;
 					}, function (error) {
 						this.errors = error.data.errors;
 					});

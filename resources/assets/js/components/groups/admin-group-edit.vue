@@ -136,11 +136,9 @@
                 <strong>Well Done!</strong>
                 <p>Group updated!</p>
             </alert>
-            <alert :show.sync="showSaveAlert" placement="top-right" :duration="3000" type="danger" width="400px" dismissable>
-                <span class="icon-info-circled alert-icon-float-left"></span>
-                <strong>Changes made!</strong>
-                <p>Save your changes first</p>
-            </alert>
+            <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+                <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
+            </modal>
         </form>
     </validator>
 </template>
@@ -149,7 +147,7 @@
     import VueStrap from "vue-strap/dist/vue-strap.min";
     export default{
         name: 'group-edit',
-        components: { vSelect, 'alert': VueStrap.alert },
+        components: { vSelect, 'alert': VueStrap.alert, 'modal': VueStrap.modal },
         props: ['groupId', 'managing'],
         data(){
             return {
@@ -200,12 +198,15 @@
             onTouched(){
                 this.hasChanged = true;
             },
-            back(){
-                if (this.hasChanged) {
+            back(force){
+                if (this.hasChanged && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
                 window.location.href = '/admin/groups/' + this.groupId;
+            },
+            forceBack(){
+                return this.back(true);
             },
             submit(){
                 this.attemptSubmit = true;

@@ -90,9 +90,10 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
+                    <a v-if="!isUpdate" href="/dashboard/passports" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
-                    <a @click="back()" class="btn btn-success">Done</a>
+                    <a v-if="isUpdate" @click="back()" class="btn btn-success">Done</a>
                 </div>
             </div>
         </form>
@@ -102,11 +103,9 @@
             <strong>Awesome!</strong>
             <p>Reservation updated!</p>
         </alert>
-        <alert :show.sync="showSaveAlert" placement="top-right" :duration="3000" type="warning" width="400px" dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Changes made!</strong>
-            <p>Save your changes first</p>
-        </alert>
+        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+            <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
+        </modal>
 
     </validator>
 </template>
@@ -116,7 +115,7 @@
     import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
     export default{
         name: 'passport-create-update',
-        components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel, 'alert' : VueStrap.alert},
+        components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel, 'alert' : VueStrap.alert, 'modal' : VueStrap.modal},
         props: {
             isUpdate: {
                 type:Boolean,
@@ -169,12 +168,15 @@
             onTouched(){
                 this.hasChanged = true;
             },
-            back(){
-                if (this.hasChanged) {
+            back(force){
+                if (this.hasChanged && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
                 window.location.href = '/dashboard/passports/';
+            },
+            forceBack(){
+                return this.back(true);
             },
             submit(){
                 this.attemptSubmit = true;
@@ -192,9 +194,9 @@
                         user_id: this.user_id,
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-//                        window.location.href = '/dashboard/passports';
-                        this.showSuccess = true;
-                        this.hasChanged = false;
+                        window.location.href = '/dashboard/passports';
+//                        this.showSuccess = true;
+//                        this.hasChanged = false;
                     }, function (error) {
                         debugger;
                     });

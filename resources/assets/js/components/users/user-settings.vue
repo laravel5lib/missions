@@ -358,11 +358,9 @@
                 <strong>Well Done!</strong>
                 <p>Profile updated successfully</p>
             </alert>
-            <alert :show.sync="showSaveAlert" placement="top-right" :duration="3000" type="danger" width="400px" dismissable>
-                <span class="icon-info-circled alert-icon-float-left"></span>
-                <strong>Changes made!</strong>
-                <p>Save your changes first</p>
-            </alert>
+            <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+                <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
+            </modal>
         </form>
     </validator>
 </template>
@@ -376,7 +374,7 @@
     import vSelect from "vue-select";
     export default{
         name: 'user-settings',
-        components: {vSelect, 'alert': VueStrap.alert},
+        components: {vSelect, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
         data(){
             return {
                 name: '',
@@ -473,13 +471,16 @@
                     });
                 }
             },
-            back(){
-                if (this.hasChanged) {
+            back(force){
+                if (this.hasChanged && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
                 window.location.href = '/dashboard';
-            }
+            },
+            forceBack(){
+                return this.back(true);
+            },
         },
         ready(){
             this.$http.get('utilities/countries').then(function (response) {

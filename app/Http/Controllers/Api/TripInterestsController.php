@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\TripInterestWasCreated;
 use App\Http\Requests\v1\TripInterestRequest;
 use App\Http\Transformers\v1\TripInterestTransformer;
 use App\Models\v1\TripInterest;
@@ -62,6 +63,8 @@ class TripInterestsController extends Controller
     public function store(TripInterestRequest $request)
     {
         $interest = $this->interest->create($request->all());
+
+        event(new TripInterestWasCreated($interest));
 
         return $this->response->item($interest, new TripInterestTransformer);
     }

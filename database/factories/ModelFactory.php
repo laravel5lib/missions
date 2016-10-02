@@ -116,20 +116,21 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
     $campaign = $campaign->find($campaign->lists('id')->random());
 
     return [
-        'group_id'         => $faker->randomElement(App\Models\v1\Group::lists('id')->toArray()),
-        'campaign_id'      => $campaign->id,
-        'spots'            => random_int(0, 500),
-        'companion_limit'  => random_int(0, 3),
-        'country_code'     => $campaign->country_code,
-        'type'             => $faker->randomElement(['full', 'short', 'medical', 'media']),
-        'difficulty'       => $faker->randomElement(['level_1', 'level_2', 'level_3']),
-        'started_at'       => $campaign->started_at,
-        'ended_at'         => $campaign->ended_at,
-        'todos'            => ['Send shirt', 'Send wrist band', 'Enter into LGL', 'Send launch guide', 'Send luggage tag'],
-        'prospects'        => $faker->randomElements([
+        'group_id'        => $faker->randomElement(App\Models\v1\Group::pluck('id')->toArray()),
+        'campaign_id'     => $campaign->id,
+        'spots'           => random_int(0, 500),
+        'companion_limit' => random_int(0, 3),
+        'country_code'    => $campaign->country_code,
+        'type'            => $faker->randomElement(['full', 'short', 'medical', 'media']),
+        'difficulty'      => $faker->randomElement(['level_1', 'level_2', 'level_3']),
+        'started_at'      => $campaign->started_at,
+        'ended_at'        => $campaign->ended_at,
+        'todos'           => ['Send shirt', 'Send wrist band', 'Enter into LGL', 'Send launch guide', 'Send luggage tag'],
+        'prospects'       => $faker->randomElements([
             'adults', 'teens', 'men', 'women', 'medical professionals',
             'media professionals', 'business professionals', 'pastors',
             'families'], 4),
+        'rep_id'          => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
         'description'      => file_get_contents(resource_path('assets/sample_trip.md')),
         'published_at'     => $faker->optional(0.9)->dateTimeInInterval($campaign->published_at, '+ 1 month'),
         'closed_at'        => $faker->dateTimeInInterval($campaign->started_at, '- 7 days')

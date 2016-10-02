@@ -13,6 +13,7 @@ import groupTrips from './components/campaigns/group-trips.vue';
 import groupProfileTrips from './components/groups/group-profile-trips.vue';
 import groupProfileStories from './components/groups/group-profile-stories.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
+import groupInterestSignup from './components/groups/group-interest-signup.vue';
 import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
@@ -236,6 +237,7 @@ new Vue({
         groupProfileStories,
         groupProfileFundraisers,
         groupTripWrapper,
+        groupInterestSignup,
         tripDetailsMissionaries,
         tripRegWizard,
         reservationsList,

@@ -416,7 +416,7 @@
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'user-settings',
-        components: {vSelect, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
+        components: {vSelect, 'upload-create-update': uploadCreateUpdate, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
         data(){
             return {
                 id: '',
@@ -530,8 +530,8 @@
                         url: this.public ? this.url : undefined,
                         avatar_upload_id: this.avatar_upload_id,
                         banner_upload_id: this.banner_upload_id,
-                    }).then(function (resp) {
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
+                    }).then(function (response) {
+                        this.setUserData(response.data.data);
                         this.showSuccess = true;
                         this.hasChanged = false;
 
@@ -551,19 +551,8 @@
             forceBack(){
                 return this.back(true);
             },
-        },
-        ready(){
-            this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
-            });
-
-            this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.data.timezones;
-            });
-
-            this.resource.get().then(function (response) {
-                var user = response.data.data;
-                this.id = user.id
+            setUserData(user){
+                this.id = user.id;
                 this.avatar = user.avatar;
                 this.banner = user.banner;
                 this.name = user.name;
@@ -586,6 +575,21 @@
                 this.gender = user.gender;
                 this.status = user.status;
                 this.alt_email = user.alt_email;
+                this.avatar_upload_id = user.avatar_upload_id;
+                this.banner_upload_id = user.banner_upload_id;
+            }
+        },
+        ready(){
+            this.$http.get('utilities/countries').then(function (response) {
+                this.countries = response.data.countries;
+            });
+
+            this.$http.get('utilities/timezones').then(function (response) {
+                this.timezones = response.data.timezones;
+            });
+
+            this.resource.get().then(function (response) {
+                this.setUserData(response.data.data)
             }, function (response) {
                 console.log('Update Failed! :(');
                 console.log(response);

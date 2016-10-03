@@ -25,7 +25,6 @@ class ProjectInitiativeRequest extends Request
     {
         return [
             'name'         => 'required|max:50',
-            'cause_id'     => 'required|exists:causes,id',
             'country_code' => 'required',
             'started_at'   => 'date',
             'ended_at'     => 'date',

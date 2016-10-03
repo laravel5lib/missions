@@ -2,12 +2,13 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProjectInitiative extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, UuidForKey;
 
     /**
      * All of the relationships to be touched.

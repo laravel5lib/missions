@@ -20,6 +20,7 @@ Route::resource('campaigns.transports', 'TransportsController');
 Route::resource('trips', 'TripsController');
 
 Route::resource('groups', 'GroupsController');
+Route::resource('interests', 'TripInterestsController');
 
 Route::get('reservations/{tab?}', 'ReservationsController@index')->where('tab', 'current|archived|dropped');
 Route::resource('reservations', 'ReservationsController');

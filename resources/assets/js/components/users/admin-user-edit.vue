@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="EditUser">
+    <validator name="EditUser" @touched="onTouched">
         <form id="EditUserForm" class="form-horizontal" novalidate>
             <div class="form-group" :class="{ 'has-error': checkForError('name') }">
                 <label for="name" class="col-sm-2 control-label">Name</label>
@@ -340,19 +340,28 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <a href="/admin/users" class="btn btn-default">Cancel</a>
                     <a @click="submit()" class="btn btn-primary">Update</a>
+                    <a @click="back()" class="btn btn-success">Done</a>
                 </div>
             </div>
         </form>
+        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <span class="icon-ok-circled alert-icon-float-left"></span>
+            <strong>Well Done!</strong>
+            <p>User updated!</p>
+        </alert>
+        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+            <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
+        </modal>
     </validator>
 </template>
 <script>
     import vSelect from "vue-select";
+    import VueStrap from "vue-strap/dist/vue-strap.min";
     export default{
         name: 'user-edit',
         props: ['userId'],
-        components: {vSelect},
+        components: {vSelect, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
         data(){
             return {
                 name: '',
@@ -389,7 +398,10 @@
                 dobMonth: null,
                 dobDay: null,
                 dobYear: null,
-                resource: this.$resource('users{/id}')
+                resource: this.$resource('users{/id}'),
+                showSuccess: false,
+                showSaveAlert: false,
+                hasChanged: false,
             }
         },
         computed: {
@@ -406,6 +418,19 @@
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$EditUser[field].invalid && this.attemptSubmit;
+            },
+            onTouched(){
+                this.hasChanged = true;
+            },
+            back(force){
+                if (this.hasChanged && !force ) {
+                    this.showSaveAlert = true;
+                    return false;
+                }
+                window.location.href = '/admin/users/' + this.userId;
+            },
+            forceBack(){
+                return this.back(true);
             },
             submit(){
                 this.attemptSubmit = true;
@@ -432,7 +457,9 @@
                         public: this.public,
                         url: this.public ? this.url : undefined,
                     }).then(function (resp) {
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
+                        // window.location.href = '/admin' + resp.data.data.links[0].uri;
+                        this.showSuccess = true;
+                        this.hasChanged = false;
                     }, function (error) {
                         console.log(error);
                     });
@@ -471,7 +498,7 @@
                 this.status = user.status;
                 this.alt_email = user.alt_email;
             }, function (response) {
-                console.log('Update Failed! :(');
+                console.log('Loading Failed! :(');
                 console.log(response);
             });
         }

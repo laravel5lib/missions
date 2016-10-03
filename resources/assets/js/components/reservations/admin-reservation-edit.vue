@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="UpdateReservation" @dirty="onDirty" @modified="onModified" @touched="onTouched">
+    <validator name="UpdateReservation" @touched="onTouched">
         <form id="UpdateReservation" novalidate class="form-horizontal">
 
             <div class="row">
@@ -180,6 +180,9 @@
             <strong>Awesome!</strong>
             <p>Reservation updated!</p>
         </alert>
+        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+            <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
+        </modal>
     </validator>
 </template>
 <script>
@@ -189,7 +192,7 @@
     export default{
         name: 'admin-reservation-edit',
         props: ['id'],
-        components: { vSelect, 'datepicker': VueStrap.datepicker, 'alert': VueStrap.alert, 'upload-create-update': uploadCreateUpdate },
+        components: { vSelect, 'datepicker': VueStrap.datepicker, 'alert': VueStrap.alert, 'modal': VueStrap.modal, 'upload-create-update': uploadCreateUpdate },
         data(){
             return{
                 given_names: '',
@@ -222,6 +225,8 @@
                 errors: [],
                 countries: [],
 				showSuccess: false,
+                showSaveAlert: false,
+                hasChanged: false
             }
         },
         computed:{
@@ -238,6 +243,9 @@
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$UpdateReservation[field].invalid && this.attemptSubmit;
+            },
+            onTouched(){
+                this.hasChanged = true;
             },
             searchUsers(search, loading){
                 loading(true);
@@ -274,19 +282,23 @@
                     }).then(function (response) {
                         $.extend(this, response.data.data);
 						this.showSuccess = true;
+						this.hasChanged = false;
 
                     }, function (error) {
                         this.errors = error.data.errors;
-                    })
+                    });
                 }
             },
-            back(){
-                if (this.hasChanged) {
-
+            back(force){
+                if (this.hasChanged && !force ) {
+                    this.showSaveAlert = true;
                     return false;
                 }
                 window.location.href = '/admin/reservations/' + this.id;
-            }
+            },
+            forceBack(){
+                return this.back(true);
+            },
 
         },
         events:{

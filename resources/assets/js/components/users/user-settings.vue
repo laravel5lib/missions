@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="UserSettings" @dirty="onDirty" @modified="onModified">
+    <validator name="UserSettings" @touched="onTouched">
         <form id="UserSettingsForm" class="" novalidate>
             <div class="row">
                 <div class="col-sm-6">
@@ -348,21 +348,19 @@
                 </div><!-- end col -->
                 <div class="col-sm-12 text-center">
                     <hr class="divider inv lg">
-                    <a href="/dashboard" class="btn btn-default">Cancel</a>
                     <a @click="submit()" class="btn btn-primary">Update</a>
+                    <a @click="back()" class="btn btn-success">Done</a>
                     <hr class="divider inv xlg">
                 </div><!-- end col -->
             </div><!-- end row -->
-            <alert :show.sync="saved" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
                 <strong>Well Done!</strong>
                 <p>Profile updated successfully</p>
             </alert>
-            <alert :show.sync="unsaved" placement="top-right" duration="3000" type="danger" width="400px" dismissable>
-                <span class="icon-info-circled alert-icon-float-left"></span>
-                <strong>Changes made!</strong>
-                <p>Save your changes first</p>
-            </alert>
+            <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+                <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
+            </modal>
         </form>
     </validator>
 </template>
@@ -376,7 +374,7 @@
     import vSelect from "vue-select";
     export default{
         name: 'user-settings',
-        components: {vSelect, 'alert': VueStrap.alert},
+        components: {vSelect, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
         data(){
             return {
                 name: '',
@@ -415,9 +413,9 @@
                 dobYear: null,
                 resource: this.$resource('users/me'),
                 errors: {},
-                saved: false,
-                unsaved: false,
-                isDirty: false,
+                showSuccess: false,
+                showSaveAlert: false,
+                hasChanged: false,
             }
         },
         computed: {
@@ -435,18 +433,10 @@
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$UserSettings[field].invalid && this.attemptSubmit;
             },
-            onModified(){
-                console.log('modified');
-                this.saved = false;
-            },
-            onDirty(){
-                console.log('dirty');
-                this.isDirty = true;
+            onTouched(){
+                this.hasChanged = true;
             },
             submit(){
-                if (this.unsaved) {
-
-                }
                 this.attemptSubmit = true;
                 if (this.$UserSettings.valid) {
                     this.resource.update({id: this.userId}, {
@@ -472,16 +462,25 @@
                         url: this.public ? this.url : undefined,
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        this.saved = true;
-                        setTimeout(function () {
-                            this.saved = false;
-                        }.bind(this), 3000);
+                        this.showSuccess = true;
+                        this.hasChanged = false;
+
                     }, function (error) {
                         console.log(error);
                         this.errors = error.data.errors;
                     });
                 }
-            }
+            },
+            back(force){
+                if (this.hasChanged && !force ) {
+                    this.showSaveAlert = true;
+                    return false;
+                }
+                window.location.href = '/dashboard';
+            },
+            forceBack(){
+                return this.back(true);
+            },
         },
         ready(){
             this.$http.get('utilities/countries').then(function (response) {

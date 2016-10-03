@@ -27,8 +27,7 @@ class ProjectPackageRequest extends Request
             'amount' => 'required|numeric',
             'currency_code' => 'alpha|min:3|max:3',
             'generate_dates' => 'boolean',
-            'project_type_id' => 'required|exists:project_types,id',
-            'project_initiative_id' => 'required|exists:project_initiatives,id'
+            'project_type_id' => 'required|exists:project_types,id'
         ];
     }
 }

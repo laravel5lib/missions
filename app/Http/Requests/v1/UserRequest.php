@@ -40,8 +40,8 @@ class UserRequest extends FormRequest
             'url'              => 'string|unique:users,url,',
             'public'           => 'boolean',
             'bio'              => 'string|max:120',
-            'banner_upload_id' => 'string|exists:uploads',
-            'avatar_upload_id' => 'string|exists:uploads'
+            'banner_upload_id' => 'string|exists:uploads,id',
+            'avatar_upload_id' => 'string|exists:uploads,id'
         ];
 
         if ($this->isMethod('put'))

@@ -49,7 +49,7 @@
                     <li role="presentation"><a href="#requirements" aria-controls="requirements" role="tab" data-toggle="tab">Requirements</a></li>
                     <li role="presentation"><a href="#funding" aria-controls="funding" role="tab" data-toggle="tab">Funding</a></li>
                     <li role="presentation"><a href="#dues" aria-controls="dues" role="tab" data-toggle="tab">Dues</a></li>
-                    {{--<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>--}}
+                    <li role="presentation"><a href="#settings" aria-controls="interests" role="tab" data-toggle="tab">Settings</a></li>
                 </ul>
             </div><!-- end panel -->
         </div>
@@ -62,122 +62,108 @@
                             <h5>Details</h5>
                         </div>
                         <div class="panel-body">
-                            <dl class="dl-horizontal">
-                                <dt>Reservation ID</dt>
-                                <dd>{{ $reservation->id }}</dd>
-                                <dt>Surname</dt>
-                                <dd>{{ $reservation->surname }}</dd>
-                                <dt>Given Names</dt>
-                                <dd>{{ $reservation->given_names }}</dd>
-                                <dt>Gender</dt>
-                                <dd>{{ $reservation->gender }}</dd>
-                                <dt>Marital Status</dt>
-                                <dd>{{ $reservation->status }}</dd>
-                                <dt>Shirt Size</dt>
-                                <dd>{{ $reservation->shirt_size }}</dd>
-                                <dt>Age</dt>
-                                <dd>{{ $reservation->birthday->age }}</dd>
-                                <dt>Birthday</dt>
-                                <dd>{{ $reservation->birthday->format('F j, Y') }}</dd>
-                                <dt>Email</dt>
-                                <dd>{{ $reservation->email }}</dd>
-                                <dt>Home Phone</dt>
-                                <dd>{{ $reservation->phone_one }}</dd>
-                                <dt>Mobile Phone</dt>
-                                <dd>{{ $reservation->phone_two }}</dd>
-                                <dt>Address</dt>
-                                <dd>{{ $reservation->address }}</dd>
-                                <dt>City</dt>
-                                <dd>{{ $reservation->city }}</dd>
-                                <dt>State/Providence</dt>
-                                <dd>{{ $reservation->state }}</dd>
-                                <dt>Zip/Postal Code</dt>
-                                <dd>{{ $reservation->zip }}</dd>
-                                <dt>Country</dt>
-                                <dd>{{ country($reservation->country_code) }}</dd>
-                                <dt>Group</dt>
-                                <dd>{{ $reservation->trip->group->name }}</dd>
-                                <dt>Trip Type</dt>
-                                <dd>{{ $reservation->trip->type }} Missionary</dd>
-                                <dt>Start Date</dt>
-                                <dd>{{ $reservation->trip->started_at->toFormattedDateString() }}</dd>
-                                <dt>End Date</dt>
-                                <dd>{{ $reservation->trip->ended_at->toFormattedDateString() }}</dd>
-                                <dt>Trip Starts In</dt>
-                                <dd>{{ $reservation->trip->started_at->diffInDays() }} days</dd>
-                            </dl>
+                            <div class="col-md-7">
+                                <label>Reservation ID</label>
+                                <p>{{ $reservation->id }}</p>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Surname</label>
+                                        <p>{{ $reservation->surname }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Given Names</label>
+                                        <p>{{ $reservation->given_names }}</p>
+                                    </div>
+                                </div>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Gender</label>
+                                        <p>{{ $reservation->gender }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Marital Status</label>
+                                        <p>{{ $reservation->status }}</p>
+                                    </div>
+                                </div>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Shirt Size</label>
+                                        <p>{{ $reservation->shirt_size }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Age</label>
+                                        <p>{{ $reservation->birthday->age }}</p>
+                                    </div>
+                                </div>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Birthday</label>
+                                        <p>{{ $reservation->birthday->format('F j, Y') }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Group</label>
+                                        <p>{{ $reservation->trip->group->name }}</p>
+                                    </div>
+                                </div>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Trip Type</label>
+                                        <p>{{ $reservation->trip->type }} Missionary</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Start Date</label>
+                                        <p>{{ $reservation->trip->started_at->toFormattedDateString() }}</p>
+                                    </div>
+                                </div>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>End Date</label>
+                                        <p>{{ $reservation->trip->ended_at->toFormattedDateString() }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Trip Starts In</label>
+                                        <p>{{ $reservation->trip->started_at->diffInDays() }} days</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 panel panel-default panel-body text-center">
+                                <label>Email</label>
+                                <p>{{ $reservation->email }}</p>
+                                <label>Home Phone</label>
+                                <p>{{ $reservation->phone_one }}</p>
+                                <label>Mobile Phone</label>
+                                <p>{{ $reservation->phone_two }}</p>
+                                <label>Address</label>
+                                <p>{{ $reservation->address }}</p>
+                                <label>City</label>
+                                <p>{{ $reservation->city }}</p>
+                                <label>State/Providence</label>
+                                <p>{{ $reservation->state }}</p>
+                                <label>Zip/Postal Code</label>
+                                <p>{{ $reservation->zip }}</p>
+                                <label>Country</label>
+                                <p>{{ country($reservation->country_code) }}</p>
+                            </div>
                         </div>
                     </div><!-- end panel -->
                 </div><!-- end tab -->
                 <div role="tabpanel" class="tab-pane" id="costs">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <img class="media-object" style="width:100px; height:100px" src="{{ image($reservation->trip->campaign->avatar->source . "?w=200") }}" alt="{{ $reservation->trip->campaign->name }}">
-                        </a>
-                        <div class="media-body">
-                            <h3 class="media-heading">
-                                {{ $reservation->trip->campaign->name }}
-                                <small>{{ country($reservation->trip->campaign->country_code) }}</small>
-                            </h3>
-                            <h4>
-                                Costs
-
-                            </h4>
-                        </div>
-                    </div>
-                    <hr class="divider">
-                    <admin-reservation-costs id="{{ $reservation->id }}"></admin-reservation-costs>
-
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h5>Costs Breakdown</h5>
                         </div>
                         <div class="panel-body">
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Due Date</th>
-                                    <th>Amount</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($reservation->costs as $cost)
-                                    <tr style="border-top: 2px solid #cccccc">
-                                        <td>{{ $cost->name }}</td>
-                                        <td></td>
-                                        <td><b>${{ number_format($cost->amount, 2) }}</b></td>
-                                    </tr>
-                                    @foreach($cost->payments as $payment)
-                                        <tr class="@if($cost->type === 'incremental' && $payment->upfront){{'success'}}@endif">
-                                            <td>
-                                                @if($cost->type === 'incremental' && $payment->upfront)
-                                                    <small class="badge badge-success">Paid</small>
-                                                @endif
-                                                @if($cost->type === 'incremental' && !$payment->upfront && $payment->due_next)
-                                                    <small class="badge badge-danger">Next Defaulting Amount</small>
-                                                @endif
-                                                @if($cost->type === 'incremental' && $payment->due_at->between(now()->startOfMonth(), now()->endOfMonth()))
-                                                    <small class="badge badge-info">Due this month</small>
-                                                @endif
-                                                @if($cost->type === 'incremental' && $payment->due_at->between(now()->addMonth()->startOfMonth(),now()->addMonth()->endOfMonth()))
-                                                    <small class="badge badge-warning">Due next month</small>
-                                                @endif
-                                            </td>
-                                            <td>{{ carbon($payment->due_at)->toFormattedDateString() }}</td>
-                                            <td>${{ number_format($payment->amount_owed) }}</td>
-                                        </tr>
-                                        {{--<li class="list-group-item">{{ $payment->amount_owed }}</li>--}}
-                                    @endforeach
-                                @endforeach
-
-                                    </tbody>
-
-                                </table>--}}
-                            </div>
-                        </div><!-- end panel -->
-                        {{--            {{ $reservation->costs }}--}}
-                    </div><!-- end tab -->
+                            <admin-reservation-costs id="{{ $reservation->id }}"></admin-reservation-costs>
+                        </div><!-- end panel-body -->
+                        {{-- {{ $reservation->costs }} --}}
+                    </div><!-- end panel -->
+                </div><!-- end tab -->
                     <div role="tabpanel" class="tab-pane" id="deadlines">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -247,34 +233,35 @@
                                     </div>
                                 </div>
                         <div class="col-sm-12">
-                            <h4>Fund Transaction</h4>
+                            <h4>Fund Transactions</h4>
                             <hr>
                         </div>
                             <div class="col-sm-12">
-                                <div class="panel panel-default">
+                                <div class="panel panel-default panel-primary">
                                     <div class="panel-heading">
-                                        {{ $reservation->fund->name }}
-{{--                                        <span class="pull-right">Ends: {{ carbon($reservation->fund->created_at)->toFormattedDateString() }}</span>--}}
+                                       <a <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><h5>{{ $reservation->fund->name }}</h5></a>
+                                        {{-- <span class="pull-right">Ends: {{ carbon($reservation->fund->created_at)->toFormattedDateString() }}</span>--}}
                                     </div>
-                                    <div class="panel-body">
+                                    <div id="collapseOne" class="panel-collapse collapse">
                                         {{--<p>{{ $fundraiser->description or 'No Description'}}</p>--}}
-                                        <h6>
-                                            Amount in fund
-                                            <span class="pull-right">Total: ${{ number_format($reservation->fund->balance, 2) }}</span>
-                                        </h6>
-
                                                 <ul class="list-group">
+                                                    <li class="list-group-item" style="background:#05ce7b;">
+                                                        <h4 class="text-center text-white">${{ number_format($reservation->fund->balance, 2) }} <small class="text-white">Total In Fund</small></h4>
+                                                    </li>
                                                     @foreach($reservation->fund->transactions as $transaction)
                                                         <li class="list-group-item">
-                                                            <h4 class="list-group-item-heading">
+                                                            <hr class="divider inv sm">
+                                                            <h4 class="list-group-item-heading text-success">
                                                                 ${{ $transaction->amount }} {{ $transaction->type }}</h4>
-                                                            <div class="list-group-item-text">
-                                                                <b>Description:</b><br>
-                                                                {{ $transaction->description }}
-                                                            </div>
-                                                            <div class="list-group-item-text">
-                                                                <b>Comment:</b><br>
-                                                                {{ $transaction->comment }}
+                                                            <hr class="divider inv sm">
+                                                            <div class="well">
+                                                                <div class="list-group-item-text">
+                                                                    <p class="small"><b>Description:</b> {{ $transaction->description }}</p>
+                                                                </div>
+                                                            <hr class="divider">
+                                                                <div class="list-group-item-text">
+                                                                    <p class="small"><b>Comment:</b> {{ $transaction->comment }}</p>
+                                                                </div>
                                                             </div>
                                                         </li>
                                                     @endforeach

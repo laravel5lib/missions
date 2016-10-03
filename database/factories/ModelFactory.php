@@ -116,20 +116,21 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
     $campaign = $campaign->find($campaign->lists('id')->random());
 
     return [
-        'group_id'         => $faker->randomElement(App\Models\v1\Group::lists('id')->toArray()),
-        'campaign_id'      => $campaign->id,
-        'spots'            => random_int(0, 500),
-        'companion_limit'  => random_int(0, 3),
-        'country_code'     => $campaign->country_code,
-        'type'             => $faker->randomElement(['full', 'short', 'medical', 'media']),
-        'difficulty'       => $faker->randomElement(['level_1', 'level_2', 'level_3']),
-        'started_at'       => $campaign->started_at,
-        'ended_at'         => $campaign->ended_at,
-        'todos'            => ['Send shirt', 'Send wrist band', 'Enter into LGL', 'Send launch guide', 'Send luggage tag'],
-        'prospects'        => $faker->randomElements([
+        'group_id'        => $faker->randomElement(App\Models\v1\Group::pluck('id')->toArray()),
+        'campaign_id'     => $campaign->id,
+        'spots'           => random_int(0, 500),
+        'companion_limit' => random_int(0, 3),
+        'country_code'    => $campaign->country_code,
+        'type'            => $faker->randomElement(['full', 'short', 'medical', 'media']),
+        'difficulty'      => $faker->randomElement(['level_1', 'level_2', 'level_3']),
+        'started_at'      => $campaign->started_at,
+        'ended_at'        => $campaign->ended_at,
+        'todos'           => ['Send shirt', 'Send wrist band', 'Enter into LGL', 'Send launch guide', 'Send luggage tag'],
+        'prospects'       => $faker->randomElements([
             'adults', 'teens', 'men', 'women', 'medical professionals',
             'media professionals', 'business professionals', 'pastors',
             'families'], 4),
+        'rep_id'          => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
         'description'      => file_get_contents(resource_path('assets/sample_trip.md')),
         'published_at'     => $faker->optional(0.9)->dateTimeInInterval($campaign->published_at, '+ 1 month'),
         'closed_at'        => $faker->dateTimeInInterval($campaign->started_at, '- 7 days')
@@ -788,7 +789,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'anonymous', function(Faker
     $fund = $faker->randomElement(App\Models\v1\Fund::all()->toArray());
 
     return [
-        'fund_id' => key($fund),
+        'fund_id' => $fund['id'],
         'donor_id' => App\Models\v1\Donor::where('name', 'anonymous')->pluck('id'),
         'description' => 'Donation to ' . $fund['name'],
         'type' => 'donation',
@@ -829,5 +830,57 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Fak
         'type' => 'transfer',
         'amount' => -$faker->randomNumber(2),
         'payment' => null,
+    ];
+});
+
+/**
+ * Trip Interest Factory
+ */
+$factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $faker) {
+    return [
+        'trip_id' => $faker->randomElement(App\Models\v1\Trip::pluck('id')->toArray()),
+        'name' => $faker->name,
+        'email' => $faker->safeEmail,
+        'phone' => $faker->optional(0.5)->phoneNumber,
+        'communication_preferences' => $faker->randomElements(['email', 'phone', 'text'], 2)
+    ];
+});
+
+/**
+ * Cause Factory
+ */
+$factory->define(App\Models\v1\Cause::class, function(Faker\Generator $faker) {
+    return [
+        'name' => $faker->catchPhrase,
+        'short_desc' => $faker->realText(200),
+        'upload_id' => $faker->randomElement(App\Models\v1\Upload::pluck('id')->toArray()),
+        'active' => $faker->boolean(50)
+    ];
+});
+
+/**
+ * Project Type Factory
+ */
+$factory->define(App\Models\v1\ProjectType::class, function(Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'short_desc' => $faker->realText(200),
+        'upload_id' => $faker->randomElement(App\Models\v1\Upload::pluck('id')->toArray()),
+        'active' => $faker->boolean(50)
+    ];
+});
+
+/**
+ * Project Initiative Factory
+ */
+$factory->define(App\Models\v1\ProjectInitiative::class, function(Faker\Generator $faker) {
+    return [
+        'name' => $faker->catchPhrase,
+        'cause_id' => $faker->randomElement(App\Models\v1\Cause::pluck('id')->toArray()),
+        'country_code' => $faker->countryCode,
+        'started_at' => $faker->dateTimeThisYear(),
+        'ended_at' => $faker->dateTimeThisYear(),
+        'active' => $faker->boolean(50),
+        'rep_id' => $faker->randomElements(App\Models\v1\User::pluck('id')->toArray())
     ];
 });

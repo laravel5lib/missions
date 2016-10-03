@@ -33,6 +33,54 @@
 				<h3>Why Partnership?</h3>
 				<p>Missions.Me is passionate about helping the less fortunate around the world. We can’t do this alone. It takes a team, and it takes a relationship that goes far deeper than just a pocket full of cash. When someone partners with Missions.Me, we take it seriously. We value the personal relationship</p>
 			</div>
+		</div>
+		<div class="row hidden-sm hidden-xs">
+          <div class="col-md-6">
+            <div class="partner-equals-panel pull-right">
+              <div class="view">
+                <h4>Partnership<span>=</span></h4>
+              </div>
+              <div class="equals-icon">
+                <img src="images/support/rocker-hand.png" width="100px" height="100px" />
+                <h4>Family</h4>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="partner-equals-panel pull-left">
+              <div class="view">
+                <h4>Partnership<span>=</span></h4>
+              </div>
+              <div class="equals-icon">
+                <img src="images/support/vision.png" width="100px" height="100px" />
+                <h4>Shared Vision</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row hidden-sm hidden-xs">
+          <div class="col-md-6">
+            <div class="partner-equals-panel pull-right">
+              <div class="view">
+                <h4>Partnership<span>=</span></h4>
+              </div>
+              <div class="equals-icon">
+                <img src="images/support/team-mates.png" width="100px" height="100px" />
+                <h4>Team Mates</h4>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="partner-equals-panel pull-left">
+              <div class="view">
+                <h4>Partnership<span>=</span></h4>
+              </div>
+              <div class="equals-icon">
+                <img src="images/support/pizza.png" width="100px" height="100px" />
+                <h4>Let's Grab Pizza</h4>
+              </div>
+            </div>
+          </div>
 		</div><!-- end row -->
 	</div>
 	</div><!-- end container -->
@@ -211,6 +259,56 @@
 	</div>
 	</div><!-- end container -->
 </div><!-- end dark-bg-primary -->
+<div class="gray-lighter-bg">
+    <div class="container">
+    <div class="content-section">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h1>Other Ways To Give</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2 col-md-offset-2">
+            <img src="images/support/heart-other.png" width="100px" height="100px" />
+          </div>
+          <div class="col-md-6">
+            <h4 class="bold uppercaseit ways-to-give">Honor and Memory Giving</h4>
+            <p>Remember your loved one or friend in a way that can change someone else’s life. Donate and send a personalized card in honor or memory of someone special.</p>
+          </div>
+        </div>
+        <hr class="divider inv">
+        <div class="row">
+          <div class="col-md-2 col-md-offset-2">
+            <img src="images/support/map-other.png" width="100px" height="100px" />
+          </div>
+          <div class="col-md-6">
+            <h4 class="bold uppercaseit ways-to-give">Gifts In Kind</h4>
+            <p>Want to give something other than cash? That’s great! We have ways of turning that asset into something that will help people half-a-world away.</p>
+          </div>
+        </div>
+        <hr class="divider inv">
+        <div class="row">
+          <div class="col-md-2 col-md-offset-2">
+            <img src="images/support/briefcase-other.png" width="100px" height="100px" />
+          </div>
+          <div class="col-md-6">
+            <h4 class="bold uppercaseit ways-to-give">Workplace Giving</h4>
+            <p>Some corporations will match financial donations to qualified non-profits. Find out if your workplace will be proud to support the generosity of their employee.</p>
+          </div>
+        </div>
+        <hr class="divider inv">
+        <div class="row">
+          <div class="col-md-2 col-md-offset-2">
+            <img src="images/support/pray-other.png" width="100px" height="100px" />
+          </div>
+          <div class="col-md-6">
+            <h4 class="bold uppercaseit ways-to-give">Pray</h4>
+            <p>Praying for Missions.Me is the most important way you can support our work.</p>
+          </div>
+        </div>
+    </div>
+    </div>
+</div><!-- end white-bg -->
 <div class="dark-bg-primary">
 	<div class="container">
 	<div class="content-section">

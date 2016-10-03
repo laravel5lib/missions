@@ -20,7 +20,7 @@ class ReservationTransformer extends TransformerAbstract
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
         'fundraisers', 'member', 'passport', 'visa', 'dues',
-        'medicalRelease'
+        'medicalRelease', 'fund'
     ];
 
     /**
@@ -52,7 +52,7 @@ class ReservationTransformer extends TransformerAbstract
             'zip'             => $reservation->zip,
             'country_code'    => $reservation->country_code,
             'country_name'    => country($reservation->country_code),
-            'companion_limit' => (int) $reservation->companions_limit,
+            'companion_limit' => (int) $reservation->companion_limit,
             'avatar'          => $reservation->avatar ? image($reservation->avatar->source) : null,
             'total_cost'      => (int) $reservation->getTotalCost(),
             'total_raised'    => (int) $reservation->fund->balance,
@@ -91,6 +91,19 @@ class ReservationTransformer extends TransformerAbstract
         }
 
         return $this->collection($dues, new DueTransformer);
+    }
+
+    /**
+     * Include Fund
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeFund(Reservation $reservation)
+    {
+        $fund = $reservation->fund;
+
+        return $this->item($fund, new FundTransformer);
     }
 
     /**

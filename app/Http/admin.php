@@ -20,7 +20,9 @@ Route::resource('campaigns.transports', 'TransportsController');
 Route::resource('trips', 'TripsController');
 
 Route::resource('groups', 'GroupsController');
+Route::resource('interests', 'TripInterestsController');
 
+Route::get('reservations/{tab?}', 'ReservationsController@index')->where('tab', 'current|archived|dropped|prospects');
 Route::resource('reservations', 'ReservationsController');
 
 Route::resource('users', 'UsersController');
@@ -37,6 +39,11 @@ Route::get('/funds', function() use($dispatcher) {
     $funds = $dispatcher->get('funds');
     $funds->setPath('/admin/funds');
     return view('admin.financials.funds.index', compact('funds'));
+});
+
+Route::get('funds/{id}', function($id) use($dispatcher) {
+    $fund = $dispatcher->get('funds/'.$id);
+    return view('admin.financials.funds.show', compact('fund'));
 });
 
 Route::get('/transactions', function() use($dispatcher) {

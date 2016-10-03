@@ -4,6 +4,7 @@ namespace App\Models\v1;
 
 use App\Jobs\Reservations\SyncPaymentsDue;
 use App\UuidForKey;
+use Carbon\Carbon;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -30,7 +31,7 @@ class Reservation extends Model
         'given_names', 'surname', 'gender', 'status',
         'shirt_size', 'birthday', 'phone_one', 'phone_two',
         'address', 'city', 'state', 'zip', 'country_code',
-        'trip_id', 'rep_id', 'todos', 'companions', 'costs',
+        'trip_id', 'rep_id', 'todos', 'companion_limit', 'costs',
         'passport_id', 'user_id', 'email'
     ];
 
@@ -413,5 +414,12 @@ class Reservation extends Model
         }
 
         if( ! $ids->isEmpty()) $this->todos()->delete($ids);
+    }
+
+    public function scopeCurrent($query)
+    {
+        return $query->whereHas('trip', function($trip) {
+            return $trip->where('ended_at', '>', Carbon::now());
+        });
     }
 }

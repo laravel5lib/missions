@@ -112,7 +112,7 @@
                     </div>
                     <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Sort By
+                        Fields
                         <span class="caret"></span>
                         </button>
 						<ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -143,7 +143,7 @@
 							</li>
 							<li>
 								<label class="small" style="margin-bottom: 0px;">
-									<input type="checkbox" v-model="activeFields" value="amount_raised" :disabled="maxCheck('amount_raised')"> Amout Raised
+									<input type="checkbox" v-model="activeFields" value="total_raised" :disabled="maxCheck('total_raised')"> Amout Raised
 								</label>
 							</li>
 							<li>
@@ -264,10 +264,10 @@
                     <i @click="setOrderByField('trip.data.type')" v-if="orderByField !== 'trip.data.type'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th v-if="isActive('amount_raised')" :class="{'text-primary': orderByField === 'amount_raised'}">
+                <th v-if="isActive('total_raised')" :class="{'text-primary': orderByField === 'total_raised'}">
                     $ Raised
-                    <i @click="setOrderByField('amount_raised')" v-if="orderByField !== 'amount_raised'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'amount_raised'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    <i @click="setOrderByField('total_raised')" v-if="orderByField !== 'total_raised'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'total_raised'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
                 <th v-if="isActive('percent_raised')" :class="{'text-primary': orderByField === 'percent_raised'}">
                     % Raised
@@ -299,7 +299,7 @@
                 <td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
                 <td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
                 <td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
-                <td v-if="isActive('amount_raised')" v-text="reservation.amount_raised|currency"></td>
+                <td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
                 <td v-if="isActive('percent_raised')">{{reservation.percent_raised|number '2'}}%</td>
                 <td v-if="isActive('registered')" v-text="reservation.created_at|moment 'll'"></td>
                 <td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
@@ -356,6 +356,14 @@
 			tripId: {
 				type: String,
 				default: null
+			},
+			storageName: {
+				type: String,
+				default: 'AdminReservationsListConfig'
+			},
+			type: {
+				type: String,
+				default: 'current'
 			}
 		},
 		data(){
@@ -425,11 +433,11 @@
 			},
 			'groupsArr': function (val) {
 				this.filters.groups = _.pluck(val, 'id')||'';
-				this.searchReservations();
+//				this.searchReservations();
 			},
 			'usersArr': function (val) {
 				this.filters.user = _.pluck(val, 'id')||'';
-				this.searchReservations();
+//				this.searchReservations();
 			},
 			'tagsString': function (val) {
 				var tags = val.split(/[\s,]+/);
@@ -442,6 +450,9 @@
 			'ageMax': function (val) {
 				this.searchReservations();
 			},
+			'direction': function (val) {
+				this.searchReservations();
+			},
         	'activeFields': function (val, oldVal) {
         		// if the orderBy field is removed from view
         		if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
@@ -451,28 +462,25 @@
 				this.updateConfig();
 			},
             'search': function (val, oldVal) {
-				this.updateConfig();
 				this.page = 1;
                 this.searchReservations();
             },
             'page': function (val, oldVal) {
-				this.updateConfig();
 				this.searchReservations();
             },
             'per_page': function (val, oldVal) {
-				this.updateConfig();
 				this.searchReservations();
             },
-			'groups':function () {
+			/*'groups':function () {
 				this.searchReservations();
-			}
+			}*/
         },
         methods: {
 			consoleCallback (val) {
 				console.dir(JSON.stringify(val))
 			},
         	updateConfig(){
-				localStorage.AdminReservationsListConfig = JSON.stringify({
+				localStorage[this.storageName] = JSON.stringify({
 					activeFields: this.activeFields,
 					maxActiveFields: this.maxActiveFields,
 					per_page: this.per_page,
@@ -494,6 +502,7 @@
 						hasPassport: this.filters.hasPassport,
 					}
 				});
+
 			},
 			isActive(field){
 				return _.contains(this.activeFields, field);
@@ -502,8 +511,10 @@
 				return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields
 			},
             setOrderByField(field){
-                return this.orderByField = field, this.direction = 1;
-            },
+                this.orderByField = field;
+				this.direction = 1;
+				this.searchReservations();
+			},
             resetFilter(){
                 this.orderByField = 'surname';
                 this.direction = 1;
@@ -530,21 +541,6 @@
             country(code){
                 return code;
             },
-            totalAmountRaised(reservation){
-                var total = 0;
-                _.each(reservation.fundraisers.data, function (fundraiser) {
-                    total += fundraiser.raised_amount;
-                });
-                return total;
-            },
-            totalPercentRaised(reservation){
-                var totalDue = 0;
-                _.each(reservation.costs.data, function (cost) {
-                    totalDue += cost.amount;
-                });
-                return this.totalAmountRaised(reservation) / totalDue * 100;
-
-            },
             age(birthday){
                 return moment().diff(birthday, 'years')
             },
@@ -555,7 +551,21 @@
 					search: this.search,
 					per_page: this.per_page,
 					page: this.page,
+					sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
 				};
+
+				switch (this.type){
+					case 'current':
+						params.current = true;
+						break;
+					case 'archived':
+						params.archived = true;
+						break;
+					case 'dropped':
+						params.dropped = true;
+						break;
+				}
+
 
 				$.extend(params, this.filters);
 				$.extend(params, {
@@ -564,12 +574,13 @@
                 this.$http.get('reservations', params).then(function (response) {
                     var self = this;
                     _.each(response.data.data, function (reservation) {
-                        reservation.amount_raised = this.totalAmountRaised(reservation);
-                        reservation.percent_raised = this.totalPercentRaised(reservation);
+                        reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
                     }, this);
                     this.reservations = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                })
+                }).then(function () {
+					this.updateConfig();
+				})
             },
 			getGroups(search, loading){
 				loading ? loading(true) : void 0;
@@ -595,10 +606,11 @@
         },
         ready(){
             // load view state
-			if (localStorage.AdminReservationsListConfig) {
-				var config = JSON.parse(localStorage.AdminReservationsListConfig);
+			if (localStorage[this.storageName]) {
+				var config = JSON.parse(localStorage[this.storageName]);
 				this.activeFields = config.activeFields;
 				this.maxActiveFields = config.maxActiveFields;
+				this.filters = config.filters;
 			}
 			// populate
             this.getGroups();

@@ -13,6 +13,7 @@ import groupTrips from './components/campaigns/group-trips.vue';
 import groupProfileTrips from './components/groups/group-profile-trips.vue';
 import groupProfileStories from './components/groups/group-profile-stories.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
+import groupInterestSignup from './components/groups/group-interest-signup.vue';
 import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
 import tripRegWizard from './components/trips/trip-registration-wizard.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
@@ -45,6 +46,7 @@ import adminTripsReservations from './components/trips/admin-trip-reservations-l
 import adminTripsFacilitators from './components/trips/admin-trip-facilitators.vue';
 import adminTripsDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripsDelete from './components/trips/admin-trip-delete.vue';
+import adminInterestsList from './components/interests/admin-interests-list.vue';
 import adminGoups from './components/groups/admin-groups-list.vue';
 import adminGroupCreate from './components/groups/admin-group-create.vue';
 import adminGroupEdit from './components/groups/admin-group-edit.vue';
@@ -59,6 +61,7 @@ import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
 import adminUploads from './components/uploads/admin-uploads-list.vue';
 import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
+import reconcileFund from './components/reconcile-fund.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -235,6 +238,7 @@ new Vue({
         groupProfileStories,
         groupProfileFundraisers,
         groupTripWrapper,
+        groupInterestSignup,
         tripDetailsMissionaries,
         tripRegWizard,
         reservationsList,
@@ -273,6 +277,7 @@ new Vue({
         adminTripsFacilitators,
         adminTripsDuplicate,
         adminTripsDelete,
+        adminInterestsList,
         adminGoups,
         adminGroupCreate,
         adminGroupEdit,
@@ -287,6 +292,7 @@ new Vue({
         adminUserDelete,
         adminUploads,
         adminUploadCreateUpdate,
+        reconcileFund
     ],
     http: {
         headers: {

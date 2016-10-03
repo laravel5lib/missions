@@ -2899,7 +2899,6 @@ var createDict = function(){
   // Thrash, waste and sodomy: IE GC bug
   var iframe = require('./_dom-create')('iframe')
     , i      = enumBugKeys.length
-    , lt     = '<'
     , gt     = '>'
     , iframeDocument;
   iframe.style.display = 'none';
@@ -2909,7 +2908,7 @@ var createDict = function(){
   // html.removeChild(iframe);
   iframeDocument = iframe.contentWindow.document;
   iframeDocument.open();
-  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+  iframeDocument.write('<script>document.F=Object</script' + gt);
   iframeDocument.close();
   createDict = iframeDocument.F;
   while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
@@ -2927,7 +2926,6 @@ module.exports = Object.create || function create(O, Properties){
   } else result = createDict();
   return Properties === undefined ? result : dPs(result, Properties);
 };
-
 },{"./_an-object":32,"./_dom-create":39,"./_enum-bug-keys":40,"./_html":47,"./_object-dps":61,"./_shared-key":74}],60:[function(require,module,exports){
 var anObject       = require('./_an-object')
   , IE8_DOM_DEFINE = require('./_ie8-dom-define')
@@ -31847,8 +31845,7 @@ function restoreState (vm, state, isRoot) {
 }
 
 function format (id) {
-  var match = id.match(/[^\/]+\.vue$/)
-  return match ? match[0] : id
+  return id.match(/[^\/]+\.vue$/)[0]
 }
 
 },{}],113:[function(require,module,exports){
@@ -35546,7 +35543,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 },{}],116:[function(require,module,exports){
 (function (process){
 /*!
- * vue-validator v2.1.6
+ * vue-validator v2.1.5
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -35971,14 +35968,13 @@ function Override (Vue) {
 }
 
 var VALIDATE_UPDATE = '__vue-validator-validate-update__';
-var PRIORITY_VALIDATE = 4096;
+var PRIORITY_VALIDATE = 16;
 var PRIORITY_VALIDATE_CLASS = 32;
 var REGEX_FILTER = /[^|]\|[^|]/;
 var REGEX_VALIDATE_DIRECTIVE = /^v-validate(?:$|:(.*)$)/;
 var REGEX_EVENT = /^v-on:|^@/;
 
 var classId = 0; // ID for validation class
-
 
 function ValidateClass (Vue) {
   var vIf = Vue.directive('if');
@@ -36058,6 +36054,7 @@ function ValidateClass (Vue) {
 }
 
 function Validate (Vue) {
+  var vIf = Vue.directive('if');
   var FragmentFactory = Vue.FragmentFactory;
   var parseDirective = Vue.parsers.directive.parseDirective;
   var _Vue$util = Vue.util;
@@ -36090,7 +36087,7 @@ function Validate (Vue) {
   Vue.directive('validate', {
     deep: true,
     terminal: true,
-    priority: PRIORITY_VALIDATE,
+    priority: vIf.priority + PRIORITY_VALIDATE,
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
 
     paramWatchers: {
@@ -36808,7 +36805,7 @@ var BaseValidation = function () {
   BaseValidation.prototype._invokeValidator = function _invokeValidator(vm, validator, val, arg, cb) {
     var future = validator.call(this, val, arg);
     if (typeof future === 'function') {
-      // function 
+      // function
       future(function () {
         // resolve
         cb(true);
@@ -37468,7 +37465,7 @@ var Validator$1 = function () {
     var validation = this._getValidationFrom(field);
     var validations = this._groupValidations[group];
 
-    validations && !~indexOf(validations, validation) && validations.push(validation);
+    validations && ! ~indexOf(validations, validation) && validations.push(validation);
   };
 
   Validator.prototype.removeGroupValidation = function removeGroupValidation(group, field) {
@@ -38151,7 +38148,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.1.6';
+plugin.version = '2.1.5';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
@@ -38162,7 +38159,7 @@ module.exports = plugin;
 },{"_process":108}],117:[function(require,module,exports){
 (function (process,global){
 /*!
- * Vue.js v1.0.26
+ * Vue.js v1.0.24
  * (c) 2016 Evan You
  * Released under the MIT License.
  */
@@ -38561,15 +38558,10 @@ var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
 // UA sniffing for working around browser-specific quirks
 var UA = inBrowser && window.navigator.userAgent.toLowerCase();
-var isIE = UA && UA.indexOf('trident') > 0;
 var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
 var isAndroid = UA && UA.indexOf('android') > 0;
 var isIos = UA && /(iphone|ipad|ipod|ios)/i.test(UA);
-var iosVersionMatch = isIos && UA.match(/os ([\d_]+)/);
-var iosVersion = iosVersionMatch && iosVersionMatch[1].split('_');
-
-// detecting iOS UIWebView by indexedDB
-var hasMutationObserverBug = iosVersion && Number(iosVersion[0]) >= 9 && Number(iosVersion[1]) >= 3 && !window.indexedDB;
+var isWechat = UA && UA.indexOf('micromessenger') > 0;
 
 var transitionProp = undefined;
 var transitionEndEvent = undefined;
@@ -38610,7 +38602,7 @@ var nextTick = (function () {
   }
 
   /* istanbul ignore if */
-  if (typeof MutationObserver !== 'undefined' && !hasMutationObserverBug) {
+  if (typeof MutationObserver !== 'undefined' && !(isWechat && isIos)) {
     var counter = 1;
     var observer = new MutationObserver(nextTickHandler);
     var textNode = document.createTextNode(counter);
@@ -38682,12 +38674,12 @@ var p = Cache.prototype;
 
 p.put = function (key, value) {
   var removed;
+  if (this.size === this.limit) {
+    removed = this.shift();
+  }
 
   var entry = this.get(key, true);
   if (!entry) {
-    if (this.size === this.limit) {
-      removed = this.shift();
-    }
     entry = {
       key: key
     };
@@ -38932,7 +38924,7 @@ function compileRegex() {
   var unsafeOpen = escapeRegex(config.unsafeDelimiters[0]);
   var unsafeClose = escapeRegex(config.unsafeDelimiters[1]);
   tagRE = new RegExp(unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '|' + open + '((?:.|\\n)+?)' + close, 'g');
-  htmlRE = new RegExp('^' + unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '$');
+  htmlRE = new RegExp('^' + unsafeOpen + '.*' + unsafeClose + '$');
   // reset cache
   cache = new Cache(1000);
 }
@@ -39719,8 +39711,7 @@ if (process.env.NODE_ENV !== 'production') {
       return (/HTMLUnknownElement/.test(el.toString()) &&
         // Chrome returns unknown for several HTML5 elements.
         // https://code.google.com/p/chromium/issues/detail?id=540526
-        // Firefox returns unknown for some "Interactive elements."
-        !/^(data|time|rtc|rb|details|dialog|summary)$/.test(tag)
+        !/^(data|time|rtc|rb)$/.test(tag)
       );
     }
   };
@@ -40056,9 +40047,7 @@ function mergeOptions(parent, child, vm) {
   }
   if (child.mixins) {
     for (var i = 0, l = child.mixins.length; i < l; i++) {
-      var mixin = child.mixins[i];
-      var mixinOptions = mixin.prototype instanceof Vue ? mixin.options : mixin;
-      parent = mergeOptions(parent, mixinOptions, vm);
+      parent = mergeOptions(parent, child.mixins[i], vm);
     }
   }
   for (key in parent) {
@@ -40486,13 +40475,10 @@ var util = Object.freeze({
 	hasProto: hasProto,
 	inBrowser: inBrowser,
 	devtools: devtools,
-	isIE: isIE,
 	isIE9: isIE9,
 	isAndroid: isAndroid,
 	isIos: isIos,
-	iosVersionMatch: iosVersionMatch,
-	iosVersion: iosVersion,
-	hasMutationObserverBug: hasMutationObserverBug,
+	isWechat: isWechat,
 	get transitionProp () { return transitionProp; },
 	get transitionEndEvent () { return transitionEndEvent; },
 	get animationProp () { return animationProp; },
@@ -40980,9 +40966,7 @@ var saveRE = /[\{,]\s*[\w\$_]+\s*:|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\
 var restoreRE = /"(\d+)"/g;
 var pathTestRE = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/;
 var identRE = /[^\w$\.](?:[A-Za-z_$][\w$]*)/g;
-var literalValueRE$1 = /^(?:true|false|null|undefined|Infinity|NaN)$/;
-
-function noop() {}
+var booleanLiteralRE = /^(?:true|false)$/;
 
 /**
  * Save / Rewrite / Restore
@@ -41064,7 +41048,7 @@ function compileGetter(exp) {
   // save strings and object literal keys
   var body = exp.replace(saveRE, save).replace(wsRE, '');
   // rewrite all paths
-  // pad 1 space here because the regex matches 1 extra char
+  // pad 1 space here becaue the regex matches 1 extra char
   body = (' ' + body).replace(identRE, rewrite).replace(restoreRE, restore);
   return makeGetterFn(body);
 }
@@ -41085,15 +41069,7 @@ function makeGetterFn(body) {
     return new Function('scope', 'return ' + body + ';');
     /* eslint-enable no-new-func */
   } catch (e) {
-    if (process.env.NODE_ENV !== 'production') {
-      /* istanbul ignore if */
-      if (e.toString().match(/unsafe-eval|CSP/)) {
-        warn('It seems you are using the default build of Vue.js in an environment ' + 'with Content Security Policy that prohibits unsafe-eval. ' + 'Use the CSP-compliant build instead: ' + 'http://vuejs.org/guide/installation.html#CSP-compliant-build');
-      } else {
-        warn('Invalid expression. ' + 'Generated function body: ' + body);
-      }
-    }
-    return noop;
+    process.env.NODE_ENV !== 'production' && warn('Invalid expression. ' + 'Generated function body: ' + body);
   }
 }
 
@@ -41155,8 +41131,8 @@ function parseExpression(exp, needSet) {
 
 function isSimplePath(exp) {
   return pathTestRE.test(exp) &&
-  // don't treat literal values as paths
-  !literalValueRE$1.test(exp) &&
+  // don't treat true/false as paths
+  !booleanLiteralRE.test(exp) &&
   // Math constants e.g. Math.PI, Math.E etc.
   exp.slice(0, 5) !== 'Math.';
 }
@@ -41572,7 +41548,7 @@ function traverse(val, seen) {
   }
   var isA = isArray(val);
   var isO = isObject(val);
-  if ((isA || isO) && Object.isExtensible(val)) {
+  if (isA || isO) {
     if (val.__ob__) {
       var depId = val.__ob__.dep.id;
       if (seen.has(depId)) {
@@ -41635,7 +41611,6 @@ function isRealTemplate(node) {
 
 var tagRE$1 = /<([\w:-]+)/;
 var entityRE = /&#?\w+?;/;
-var commentRE = /<!--/;
 
 /**
  * Convert a string template to a DocumentFragment.
@@ -41658,9 +41633,8 @@ function stringToFragment(templateString, raw) {
   var frag = document.createDocumentFragment();
   var tagMatch = templateString.match(tagRE$1);
   var entityMatch = entityRE.test(templateString);
-  var commentMatch = commentRE.test(templateString);
 
-  if (!tagMatch && !entityMatch && !commentMatch) {
+  if (!tagMatch && !entityMatch) {
     // text only, return a single text node.
     frag.appendChild(document.createTextNode(templateString));
   } else {
@@ -42627,7 +42601,7 @@ var vFor = {
    * the filters. This is passed to and called by the watcher.
    *
    * It is necessary for this to be called during the
-   * watcher's dependency collection phase because we want
+   * wathcer's dependency collection phase because we want
    * the v-for to update when the source Object is mutated.
    */
 
@@ -42970,10 +42944,7 @@ var text$2 = {
   },
 
   update: function update(value) {
-    // #3029 only update when the value changes. This prevent
-    // browsers from overwriting values like selectionStart
-    value = _toString(value);
-    if (value !== this.el.value) this.el.value = value;
+    this.el.value = _toString(value);
   },
 
   unbind: function unbind() {
@@ -43022,8 +42993,6 @@ var radio = {
 var select = {
 
   bind: function bind() {
-    var _this = this;
-
     var self = this;
     var el = this.el;
 
@@ -43055,12 +43024,7 @@ var select = {
     // selectedIndex with value -1 to 0 when the element
     // is appended to a new parent, therefore we have to
     // force a DOM update whenever that happens...
-    this.vm.$on('hook:attached', function () {
-      nextTick(_this.forceUpdate);
-    });
-    if (!inDoc(el)) {
-      nextTick(this.forceUpdate);
-    }
+    this.vm.$on('hook:attached', this.forceUpdate);
   },
 
   update: function update(value) {
@@ -44330,7 +44294,7 @@ function processPropValue(vm, prop, rawValue, fn) {
   if (value === undefined) {
     value = getPropDefaultValue(vm, prop);
   }
-  value = coerceProp(prop, value, vm);
+  value = coerceProp(prop, value);
   var coerced = value !== rawValue;
   if (!assertProp(prop, value, vm)) {
     value = undefined;
@@ -44449,17 +44413,13 @@ function assertProp(prop, value, vm) {
  * @return {*}
  */
 
-function coerceProp(prop, value, vm) {
+function coerceProp(prop, value) {
   var coerce = prop.options.coerce;
   if (!coerce) {
     return value;
   }
-  if (typeof coerce === 'function') {
-    return coerce(value);
-  } else {
-    process.env.NODE_ENV !== 'production' && warn('Invalid coerce for prop "' + prop.name + '": expected function, got ' + typeof coerce + '.', vm);
-    return value;
-  }
+  // coerce is a function
+  return coerce(value);
 }
 
 /**
@@ -44991,9 +44951,10 @@ var transition$1 = {
     // resolve on owner vm
     var hooks = resolveAsset(this.vm.$options, 'transitions', id);
     id = id || 'v';
-    oldId = oldId || 'v';
     el.__v_trans = new Transition(el, id, hooks, this.vm);
-    removeClass(el, oldId + '-transition');
+    if (oldId) {
+      removeClass(el, oldId + '-transition');
+    }
     addClass(el, id + '-transition');
   }
 };
@@ -45418,7 +45379,7 @@ function makeTextNodeLinkFn(tokens, frag) {
           if (token.html) {
             replace(node, parseTemplate(value, true));
           } else {
-            node.data = _toString(value);
+            node.data = value;
           }
         } else {
           vm._bindDir(token.descriptor, node, host, scope);
@@ -46402,7 +46363,7 @@ function eventsMixin (Vue) {
   };
 }
 
-function noop$1() {}
+function noop() {}
 
 /**
  * A directive links a DOM element with a piece of data,
@@ -46501,7 +46462,7 @@ Directive.prototype._bind = function () {
         }
       };
     } else {
-      this._update = noop$1;
+      this._update = noop;
     }
     var preProcess = this._preProcess ? bind(this._preProcess, this) : null;
     var postProcess = this._postProcess ? bind(this._postProcess, this) : null;
@@ -47939,7 +47900,7 @@ var filters = {
 
   json: {
     read: function read(value, indent) {
-      return typeof value === 'string' ? value : JSON.stringify(value, null, arguments.length > 1 ? indent : 2);
+      return typeof value === 'string' ? value : JSON.stringify(value, null, Number(indent) || 2);
     },
     write: function write(value) {
       try {
@@ -48012,13 +47973,7 @@ var filters = {
 
   pluralize: function pluralize(value) {
     var args = toArray(arguments, 1);
-    var length = args.length;
-    if (length > 1) {
-      var index = value % 10 - 1;
-      return index in args ? args[index] : args[length - 1];
-    } else {
-      return args[0] + (value === 1 ? '' : 's');
-    }
+    return args.length > 1 ? args[value % 10 - 1] || args[args.length - 1] : args[0] + (value === 1 ? '' : 's');
   },
 
   /**
@@ -48203,9 +48158,7 @@ function installGlobalAPI (Vue) {
           }
         }
         if (type === 'component' && isPlainObject(definition)) {
-          if (!definition.name) {
-            definition.name = id;
-          }
+          definition.name = id;
           definition = Vue.extend(definition);
         }
         this.options[type + 's'][id] = definition;
@@ -48220,7 +48173,7 @@ function installGlobalAPI (Vue) {
 
 installGlobalAPI(Vue);
 
-Vue.version = '1.0.26';
+Vue.version = '1.0.24';
 
 // devtools global hook
 /* istanbul ignore next */
@@ -48295,9 +48248,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2a7f7076", module.exports)
+    hotAPI.createRecord("_v-94beedbc", module.exports)
   } else {
-    hotAPI.update("_v-2a7f7076", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-94beedbc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],120:[function(require,module,exports){
@@ -48421,12 +48374,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-402a95aa", module.exports)
+    hotAPI.createRecord("_v-0b3f2b04", module.exports)
   } else {
-    hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0b3f2b04", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],121:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":188,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],121:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -48496,9 +48449,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6c0d9684", module.exports)
+    hotAPI.createRecord("_v-0edb47a0", module.exports)
   } else {
-    hotAPI.update("_v-6c0d9684", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0edb47a0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./details/details.vue":125,"./details/regions.vue":126,"./details/transports.vue":127,"./details/trips.vue":128,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],122:[function(require,module,exports){
@@ -48524,7 +48477,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
 	name: 'campaign-edit',
-	components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel },
+	components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
 	props: ['campaignId'],
 	data: function data() {
 		return {
@@ -48547,7 +48500,10 @@ exports.default = {
 			avatar_upload_id: null,
 			selectedBanner: null,
 			banner_upload_id: null,
-			resource: this.$resource('campaigns{/id}')
+			resource: this.$resource('campaigns{/id}'),
+			showSuccess: false,
+			showSaveAlert: false,
+			hasChanged: false
 		};
 	},
 
@@ -48572,6 +48528,19 @@ exports.default = {
 		convertToSlug: function convertToSlug(text) {
 			return text.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
 		},
+		onTouched: function onTouched() {
+			this.hasChanged = true;
+		},
+		back: function back(force) {
+			if (this.hasChanged && !force) {
+				this.showSaveAlert = true;
+				return false;
+			}
+			window.location.href = '/admin/campaigns/';
+		},
+		forceBack: function forceBack() {
+			return this.back(true);
+		},
 		update: function update() {
 			// Touch fields for proper validation
 			if (_.isFunction(this.$validate)) this.$validate(true);
@@ -48593,7 +48562,9 @@ exports.default = {
 				}).then(function (resp) {
 					resp.data.data.published_at = moment(resp.data.data.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
 					$.extend(this, resp.data.data);
-					window.location.href = '/admin/campaigns/';
+					//						window.location.href = '/admin/campaigns/'
+					this.showSuccess = true;
+					this.hasChanged = false;
 				}, function (error) {
 					this.errors = error.data.errors;
 				});
@@ -48643,18 +48614,18 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateCampaign\">\n\t<form id=\"UpdateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<a class=\"pull-right\" data-toggle=\"modal\" data-target=\"#deleteConfirmationModal\"><h6><i class=\"fa fa-trash\"></i> Delete</h6></a>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"country\">Country</label>\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"description\">Description</label>\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:255 }\" maxlength=\"255\" minlength=\"1\"></textarea>\n\t\t\t\t<div v-if=\"short_desc\" class=\"help-block\">{{short_desc.length}}/255 characters remaining</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"started_at\">Dates</label>\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.started_at\" class=\"help-block\">{{errors.started_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.ended_at\" class=\"help-block\">{{errors.ended_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"published_at\">Published Date</label>\n\t\t\t\t<input type=\"datetime-local\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t</div>\n\t\t</div>\n\n\t\t<template v-if=\"published_at\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.page_url }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Url</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false }\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<div v-if=\"errors.page_url\" class=\"help-block\">{{errors.page_url.toString()}}</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('src') }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Source</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">/resources/views/sites/campaigns/partials/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_src\" v-model=\"page_src\" class=\"form-control\" v-validate:src=\"{ required: false }\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">.blade.php</span>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</template>\n\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n\t\t\t\t\t\t\tSet Avatar\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"collapse\" id=\"avatarCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedBanner ? (selectedBanner.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedBanner ? selectedBanner.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedBanner ? selectedBanner.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#bannerCollapse\" aria-expanded=\"false\" aria-controls=\"bannerCollapse\">\n\t\t\t\t\t\t\tSet Banner\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"collapse\" id=\"bannerCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t</div><!-- end row -->\n\t\t<hr class=\"divider inv lg\">\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t<a href=\"/admin/campaigns/{{campaignId}}\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t<a @click=\"update()\" class=\"btn btn-primary\">Update</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\n\t<div class=\"modal fade\" id=\"deleteConfirmationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"deleteConfirmationModal\">\n\t\t<div class=\"modal-dialog modal-sm\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t\t\t<h4 class=\"modal-title text-center\" id=\"myModalLabel\">Are You Sure?</h4>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<p class=\"text-center\">Are you sure you want to delete this campaign?</p>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t\t<a class=\"btn btn-sm btn-default\" data-dismiss=\"modal\">No</a>\n\t\t\t\t\t\t\t<a @click=\"deleteCampaign()\" class=\"btn btn-sm btn-primary\">Yes</a>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateCampaign\" @touched=\"onTouched\">\n\t<form id=\"UpdateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<a class=\"pull-right\" data-toggle=\"modal\" data-target=\"#deleteConfirmationModal\"><h6><i class=\"fa fa-trash\"></i> Delete</h6></a>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"country\">Country</label>\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"description\">Description</label>\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:255 }\" maxlength=\"255\" minlength=\"1\"></textarea>\n\t\t\t\t<div v-if=\"short_desc\" class=\"help-block\">{{short_desc.length}}/255 characters remaining</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"started_at\">Dates</label>\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.started_at\" class=\"help-block\">{{errors.started_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.ended_at\" class=\"help-block\">{{errors.ended_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"published_at\">Published Date</label>\n\t\t\t\t<input type=\"datetime-local\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t</div>\n\t\t</div>\n\n\t\t<template v-if=\"published_at\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.page_url }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Url</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false }\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<div v-if=\"errors.page_url\" class=\"help-block\">{{errors.page_url.toString()}}</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('src') }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Source</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">/resources/views/sites/campaigns/partials/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_src\" v-model=\"page_src\" class=\"form-control\" v-validate:src=\"{ required: false }\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">.blade.php</span>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</template>\n\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n\t\t\t\t\t\t\tSet Avatar\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"collapse\" id=\"avatarCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedBanner ? (selectedBanner.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedBanner ? selectedBanner.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedBanner ? selectedBanner.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#bannerCollapse\" aria-expanded=\"false\" aria-controls=\"bannerCollapse\">\n\t\t\t\t\t\t\tSet Banner\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"collapse\" id=\"bannerCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t</div><!-- end row -->\n\t\t<hr class=\"divider inv lg\">\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t<!--<a href=\"/admin/campaigns/{{campaignId}}\" class=\"btn btn-default\">Cancel</a>-->\n\t\t\t\t<a @click=\"update()\" class=\"btn btn-primary\">Update</a>\n\t\t\t\t<a @click=\"back()\" class=\"btn btn-success\">Done</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\n\t<alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n\t\t<span class=\"icon-ok-circled alert-icon-float-left\"></span>\n\t\t<strong>Well Done!</strong>\n\t\t<p>Profile updated!</p>\n\t</alert>\n\t<modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n\t\t<div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n\t</modal>\n\n\t<div class=\"modal fade\" id=\"deleteConfirmationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"deleteConfirmationModal\">\n\t\t<div class=\"modal-dialog modal-sm\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t\t\t<h4 class=\"modal-title text-center\" id=\"myModalLabel\">Are You Sure?</h4>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<p class=\"text-center\">Are you sure you want to delete this campaign?</p>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t\t<a class=\"btn btn-sm btn-default\" data-dismiss=\"modal\">No</a>\n\t\t\t\t\t\t\t<a @click=\"deleteCampaign()\" class=\"btn btn-sm btn-primary\">Yes</a>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3a603938", module.exports)
+    hotAPI.createRecord("_v-23ed330c", module.exports)
   } else {
-    hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-23ed330c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],123:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":188,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],123:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48723,9 +48694,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-12a47980", module.exports)
+    hotAPI.createRecord("_v-a06e71d8", module.exports)
   } else {
-    hotAPI.update("_v-12a47980", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-a06e71d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],124:[function(require,module,exports){
@@ -48762,9 +48733,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-58d98fb2", module.exports)
+    hotAPI.createRecord("_v-97adfaf4", module.exports)
   } else {
-    hotAPI.update("_v-58d98fb2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-97adfaf4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],125:[function(require,module,exports){
@@ -48803,9 +48774,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c27860f8", module.exports)
+    hotAPI.createRecord("_v-57ded358", module.exports)
   } else {
-    hotAPI.update("_v-c27860f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-57ded358", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],126:[function(require,module,exports){
@@ -48838,9 +48809,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-88b7227e", module.exports)
+    hotAPI.createRecord("_v-74bf7295", module.exports)
   } else {
-    hotAPI.update("_v-88b7227e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-74bf7295", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],127:[function(require,module,exports){
@@ -48872,9 +48843,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2299a818", module.exports)
+    hotAPI.createRecord("_v-115c23c4", module.exports)
   } else {
-    hotAPI.update("_v-2299a818", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-115c23c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],128:[function(require,module,exports){
@@ -48946,9 +48917,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-19c29ab0", module.exports)
+    hotAPI.createRecord("_v-f096f8f8", module.exports)
   } else {
-    hotAPI.update("_v-19c29ab0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-f096f8f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],129:[function(require,module,exports){
@@ -48967,7 +48938,13 @@ exports.default = {
 			page: 1
 		};
 	},
+	//				tripTypeClass: ''
 
+	computed: {
+		getClass: function getClass(type) {
+			if (type == 'medical') return 'panel-medical';
+		}
+	},
 	methods: {
 		getTrips: function getTrips() {
 			var resource = this.$resource('groups{/id}', {
@@ -49016,15 +48993,15 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dark-bg-primary\">\n<div class=\"container\">\n\t<hr class=\"divider inv xlg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center\">\n\t\t\t<a :href=\"'/groups/' + group.url\"><img class=\"img-circle img-lg\" src=\"{{ group.avatar }}\"></a>\n\t\t\t<h3>{{ group.name }}</h3>\n\t\t</div>\n\t</div>\n\t<hr class=\"divider inv lg\">\n</div>\n</div>\n<div class=\"container\">\n\t<hr class=\"divider inv lg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t<h2>Choose A Trip</h2>\n\t\t\t<hr class=\"divider red-small lg\">\n\t\t</div>\n\t\t<div class=\"col-xs-12\">\n\t\t<table class=\"table table-hover\">\n\t\t\t<thead>\n\t\t\t<tr>\n\t\t\t\t<th>Type</th>\n\t\t\t\t<th>Dates</th>\n\t\t\t\t<th>Starting Cost</th>\n\t\t\t\t<th>Spots Left</th>\n\t\t\t\t<th>Ideal For</th>\n\t\t\t\t<th>Status</th>\n\t\t\t\t<th></th>\n\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t<tr v-for=\"trip in trips\" style=\"border-bottom: 1px solid #e6e6e6\">\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.type | capitalize }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.starting_cost | currency }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.spots }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">\n\t\t\t\t\t<span v-for=\"prospect in trip.prospects\">\n\t\t\t\t\t\t{{ prospect | capitalize }}<span v-show=\"$index + 1 != trip.prospects.length\">, </span> \n\t\t\t\t\t</span>\n\t\t\t\t</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.status | capitalize }}</td>\n\t\t\t\t<td class=\"text-right\"><a href=\"/trips/{{ trip.id }}\" class=\"btn btn-primary-hollow btn-sm\">Select</a></td>\n\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t</div>\n\t</div><!-- end row -->\n\t<hr class=\"divider inv xlg\">\n</div><!-- end container -->\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dark-bg-primary\">\n<div class=\"container\">\n\t<hr class=\"divider inv xlg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center\">\n\t\t\t<a :href=\"'/groups/' + group.url\"><img class=\"img-circle img-lg\" src=\"{{ group.avatar }}\"></a>\n\t\t\t<h3>{{ group.name }}</h3>\n\t\t</div>\n\t</div>\n\t<hr class=\"divider inv lg\">\n</div>\n</div>\n<div class=\"container\">\n\t<hr class=\"divider inv lg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t<h2>Choose A Trip</h2>\n\t\t\t<hr class=\"divider red-small lg\">\n\t\t</div>\n\t</div>\n\t<div class=\"row\">\n\t\t<div v-for=\"trip in trips\" class=\"col-xs-6 col-sm-3\">\n\t\t\t<div class=\"panel panel-default\">\n\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t<h5 class=\"text-uppercase text-center\">{{ trip.type | capitalize }}</h5>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"panel-body text-center\">\n\t\t\t\t\t<p class=\"badge\">{{ trip.status | capitalize }}</p><br>\n\t\t\t\t\t<p class=\"small\">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</p>\n\t\t\t\t\t<label>Perfect For</label>\n\t\t\t\t\t<p class=\"small\"><span v-for=\"prospect in trip.prospects\">\n\t\t\t\t\t\t\t{{ prospect | capitalize }}<span v-show=\"$index + 1 != trip.prospects.length\">, </span> \n\t\t\t\t\t</span></p>\n\t\t\t\t\t<label>Spots Available</label>\n\t\t\t\t\t<p>{{ trip.spots }}</p>\n\t\t\t\t\t<h3 class=\"text-success\">{{ trip.starting_cost | currency }}</h3>\n\t\t\t\t\t<a href=\"/trips/{{ trip.id }}\" class=\"btn btn-primary-hollow btn-sm\">Select</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div><!-- end row -->\n\t<hr class=\"divider inv xlg\">\n</div><!-- end container -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1c3f53a2", module.exports)
+    hotAPI.createRecord("_v-91c337fa", module.exports)
   } else {
-    hotAPI.update("_v-1c3f53a2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-91c337fa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],130:[function(require,module,exports){
@@ -49080,9 +49057,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-94fcdc0a", module.exports)
+    hotAPI.createRecord("_v-752828b2", module.exports)
   } else {
-    hotAPI.update("_v-94fcdc0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-752828b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./campaign-groups.vue":123,"./group-trips.vue":129,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],131:[function(require,module,exports){
@@ -49532,9 +49509,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-52666078", module.exports)
+    hotAPI.createRecord("_v-04b75470", module.exports)
   } else {
-    hotAPI.update("_v-52666078", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-04b75470", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],132:[function(require,module,exports){
@@ -49667,9 +49644,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4773c802", module.exports)
+    hotAPI.createRecord("_v-01a99cd6", module.exports)
   } else {
-    hotAPI.update("_v-4773c802", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-01a99cd6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],133:[function(require,module,exports){
@@ -49726,15 +49703,15 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"carousel-example-generic\" class=\"carousel slide\" data-ride=\"carousel\">\n    <!-- Indicators -->\n    <ol class=\"carousel-indicators\">\n        <!--<li data-target=\"#carousel-example-generic\" data-slide-to=\"0\" class=\"active\"></li>-->\n        <li data-target=\"#carousel-example-generic\" class=\"{{ $index == 0 ? 'active' : '' }}\" :data-slide-to=\"$index\" v-for=\"fundraiser in featuredFundraisers\"></li>\n    </ol>\n    <!-- Wrapper for slides -->\n    <div class=\"carousel-inner\" role=\"listbox\">\n        <div class=\"item {{ $index == 0 ? 'active' : '' }}\" v-for=\"fundraiser in featuredFundraisers\">\n            <img :src=\"fundraiser.banner\">\n            <div class=\"carousel-caption\">\n                <h6 class=\"text-uppercase\"><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h6>\n                <h3>{{fundraiser.name}}</h3>\n                <a :href=\"'/fundraisers/' + fundraiser.id\" class=\"btn btn-primary btn-sm\">More Details</a>\n                <hr class=\"divider inv\">\n            </div>\n        </div>\n    </div>\n    <!-- Controls -->\n    <a class=\"left carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"prev\">\n        <span class=\"fa fa-angle-left\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Previous</span>\n    </a>\n    <a class=\"right carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"next\">\n        <span class=\"fa fa-angle-right\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Next</span>\n    </a>\n</div><!-- end carousel -->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-12\">\n        <h4>Current Fundraisers</h4>\n    </div>\n    <div class=\"col-xs-6\">\n        <div class=\"form-group form-group-sm\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\" v-model=\"search\" debounce=\"250\">\n            <!--<span class=\"input-group-btn\">\n                <button class=\"btn btn-default\" type=\"button\">Go!</button>\n            </span>-->\n        </div><!-- /input-group -->\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <!--<a v-if=\"fundraisers.length > 6 && fundraisersLimit == 6\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>-->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n    <div class=\"col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12\" v-for=\"fundraiser in fundraisers|limitBy fundraisersLimit\" style=\"display:flex\">\n        <div class=\"panel panel-default\">\n            <img :src=\"fundraiser.banner||'images/india-prof-pic.jpg'\" alt=\"India\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h5>{{ fundraiser.name }}</h5>\n                <h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\">Expires: {{ fundraiser.ended_at | moment 'll'  }}</h6>\n                <h3><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>\n                <p><span>{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100)|number 1 }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>\n                <div class=\"progress\">\n                    <div class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\" :style=\"{ width: (fundraiser.raised_amount/fundraiser.goal_amount * 100) + '%'}\">\n                        <span class=\"sr-only\">{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100) }}% Complete (success)</span>\n                    </div>\n                </div>\n                <p><a class=\"btn btn-primary btn-block\" :href=\"pathName + '/' + fundraiser.url\">Details</a></p>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div class=\"col-sm-12 text-center\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"carousel-example-generic\" class=\"carousel slide\" data-ride=\"carousel\">\n    <!-- Indicators -->\n    <ol class=\"carousel-indicators\">\n        <!--<li data-target=\"#carousel-example-generic\" data-slide-to=\"0\" class=\"active\"></li>-->\n        <li data-target=\"#carousel-example-generic\" class=\"{{ $index == 0 ? 'active' : '' }}\" :data-slide-to=\"$index\" v-for=\"fundraiser in featuredFundraisers\"></li>\n    </ol>\n    <!-- Wrapper for slides -->\n    <div class=\"carousel-inner\" role=\"listbox\">\n        <div class=\"item {{ $index == 0 ? 'active' : '' }}\" v-for=\"fundraiser in featuredFundraisers\">\n            <img :src=\"fundraiser.banner\">\n            <div class=\"carousel-caption\">\n                <h6 class=\"text-uppercase\"><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h6>\n                <h3>{{fundraiser.name}}</h3>\n                <a :href=\"'/fundraisers/' + fundraiser.id\" class=\"btn btn-primary btn-sm\">More Details</a>\n                <hr class=\"divider inv\">\n            </div>\n        </div>\n    </div>\n    <!-- Controls -->\n    <a class=\"left carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"prev\">\n        <span class=\"fa fa-angle-left\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Previous</span>\n    </a>\n    <a class=\"right carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"next\">\n        <span class=\"fa fa-angle-right\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Next</span>\n    </a>\n</div><!-- end carousel -->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-12\">\n        <h4>Current Fundraisers</h4>\n    </div>\n    <div class=\"col-md-6 col-xs-12\">\n        <div class=\"form-group form-group-md\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Start typing a fundraiser name...\" v-model=\"search\" debounce=\"250\">\n        </div><!-- /input-group -->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n    <div class=\"col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12\" v-for=\"fundraiser in fundraisers|limitBy fundraisersLimit\" style=\"display:flex\" v-if=\"fundraisers.length\">\n        <div class=\"panel panel-default\">\n            <img :src=\"fundraiser.banner||'images/india-prof-pic.jpg'\" alt=\"India\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h5>{{ fundraiser.name }}</h5>\n                <h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\">Expires: {{ fundraiser.ended_at | moment 'll'  }}</h6>\n                <h3><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>\n                <p><span>{{ fundraiser.raised_percent|number }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>\n                <div class=\"progress\">\n                    <div class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\" :style=\"{ width: fundraiser.raised_percent + '%'}\">\n                        <span class=\"sr-only\">{{ fundraiser.raised_percent|number }}% Complete (success)</span>\n                    </div>\n                </div>\n                <p><a class=\"btn btn-primary btn-block\" :href=\"pathName + '/' + fundraiser.url\">Details</a></p>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div class=\"col-xs-12 text-center\" v-if=\" ! fundraisers.length\">\n        <p class=\"lead text-muted\">Hmmmm. We couldn't find any fundraisers matching your search.</p>\n    </div>\n    <div class=\"col-xs-12 text-center\" v-if=\"fundraisers.length\">\n        <nav>\n            <ul class=\"pagination pagination-md\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-60464908", module.exports)
+    hotAPI.createRecord("_v-3dcec450", module.exports)
   } else {
-    hotAPI.update("_v-60464908", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3dcec450", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],134:[function(require,module,exports){
@@ -49779,6 +49756,7 @@ exports.default = {
             timezones: []
         };
     },
+    //timezoneObj: null,
 
     computed: {
         country_code: function country_code() {
@@ -49839,30 +49817,40 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0f6c0d9e", module.exports)
+    hotAPI.createRecord("_v-6ef1dd1c", module.exports)
   } else {
-    hotAPI.update("_v-0f6c0d9e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6ef1dd1c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],135:[function(require,module,exports){
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _vueSelect = require('vue-select');
+var _defineProperty2 = require("babel-runtime/helpers/defineProperty");
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _vueSelect = require("vue-select");
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require("vue-strap/dist/vue-strap.min");
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     name: 'group-edit',
-    components: { vSelect: _vueSelect2.default },
+    components: { vSelect: _vueSelect2.default, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
     props: ['groupId', 'managing'],
     data: function data() {
-        return {
+        var _ref;
+
+        return _ref = {
             name: '',
             description: '',
             type: '',
@@ -49876,17 +49864,19 @@ exports.default = {
             state: '',
             zip: '',
             public: false,
+            status: '',
             url: '',
             email: '',
 
             // logic variables
             typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
+            showSuccess: false,
             attemptSubmit: false,
             resource: this.$resource('groups{/id}'),
             countries: [],
             countryCodeObj: null,
             timezones: []
-        };
+        }, (0, _defineProperty3.default)(_ref, "showSuccess", false), (0, _defineProperty3.default)(_ref, "showSaveAlert", false), (0, _defineProperty3.default)(_ref, "hasChanged", false), _ref;
     },
 
     computed: {
@@ -49901,6 +49891,19 @@ exports.default = {
             // if user clicked submit button while the field is invalid trigger error styles
 
             return this.$UpdateGroup[field].invalid && this.attemptSubmit;
+        },
+        onTouched: function onTouched() {
+            this.hasChanged = true;
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/admin/groups/' + this.groupId;
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
         },
         submit: function submit() {
             this.attemptSubmit = true;
@@ -49920,12 +49923,12 @@ exports.default = {
                     state: this.state,
                     zip: this.zip,
                     public: this.public,
+                    status: this.status,
                     url: this.url,
                     email: this.email
                 }).then(function (resp) {
-                    if (!this.managing) {
-                        window.location.href = '/' + location.pathname.split('/')[1] + '/' + resp.data.data.links[0].uri;
-                    }
+                    this.showSuccess = true;
+                    this.hasChanged = false;
                 }, function (error) {
                     console.log(error);
                     debugger;
@@ -49958,6 +49961,7 @@ exports.default = {
             this.state = group.state;
             this.zip = group.zip;
             this.public = group.public;
+            this.status = group.status;
             this.url = group.url;
             this.email = group.email;
         }, function (response) {
@@ -49967,18 +49971,18 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateGroup\">\n    <form id=\"UpdateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Name</label>\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"description\">Description</label>\n                <textarea class=\"form-control\" v-model=\"description\" id=\"description\" placeholder=\"Description of Group\"></textarea>\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress\">Address 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress2\">Address 2</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n            </div>\n            <div class=\"col-sm-8\">\n                <div :class=\"{ 'has-error': checkForError('country') }\">\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n            <div class=\"col-sm-6\">\n                <label for=\"country\">Type</label>\n                <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                    <option value=\"\">-- please select --</option>\n                    <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                </select>\n            </div>\n            <div :class=\"{ 'has-error': checkForError('timezone') }\">\n                <div class=\"col-sm-6\">\n                    <label for=\"country\">Timezone</label>\n                    <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                    <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                        <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                    </select>\n\n                </div>\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Email</label>\n                <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <template v-if=\"!!public\">\n            <div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\">\n                <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n                <div class=\"col-sm-10\">\n                    <div class=\"input-group\">\n                        <span class=\"input-group-addon\">www.missions.me/groups/</span>\n                        <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" v-validate:url=\"{ required: !!public }\">\n                    </div>\n                </div>\n            </div>\n        </template>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-12 text-center\">\n                <a href=\"/admin/groups\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateGroup\" @touched=\"onTouched\">\n    <form id=\"UpdateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Name</label>\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"description\">Description</label>\n                <textarea class=\"form-control\" v-model=\"description\" id=\"description\" placeholder=\"Description of Group\"></textarea>\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress\">Address 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress2\">Address 2</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n            </div>\n            <div class=\"col-sm-8\">\n                <div :class=\"{ 'has-error': checkForError('country') }\">\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n            <div class=\"col-sm-6\">\n                <label for=\"country\">Type</label>\n                <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                    <option value=\"\">-- please select --</option>\n                    <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                </select>\n            </div>\n            <div :class=\"{ 'has-error': checkForError('timezone') }\">\n                <div class=\"col-sm-6\">\n                    <label for=\"country\">Timezone</label>\n                    <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                    <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                        <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                    </select>\n\n                </div>\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Email</label>\n                <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <select class=\"form-control\" name=\"status\" id=\"status\" v-model=\"status\">\n                    <option value=\"approved\">Approved</option>\n                    <option value=\"pending\">Pending</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"public\" class=\"col-sm-2 control-label\">Visibility</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n\n        <template v-if=\"!!public\">\n            <div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\">\n                <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n                <div class=\"col-sm-10\">\n                    <div class=\"input-group\">\n                        <span class=\"input-group-addon\">www.missions.me/groups/</span>\n                        <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" v-validate:url=\"{ required: !!public }\">\n                    </div>\n                </div>\n            </div>\n        </template>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-12 text-center\">\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n                <a @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n\n        <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n            <strong>Well Done!</strong>\n            <p>Group updated!</p>\n        </alert>\n        <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n            <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n        </modal>\n    </form>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7071c3a8", module.exports)
+    hotAPI.createRecord("_v-35b90700", module.exports)
   } else {
-    hotAPI.update("_v-7071c3a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-35b90700", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],136:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":14,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50074,9 +50078,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1244b388", module.exports)
+    hotAPI.createRecord("_v-1ea3db48", module.exports)
   } else {
-    hotAPI.update("_v-1244b388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1ea3db48", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],137:[function(require,module,exports){
@@ -50087,6 +50091,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
     name: 'admin-groups',
+    props: {
+        pending: {
+            type: Boolean,
+            default: false
+        }
+    },
     data: function data() {
         return {
             groups: [],
@@ -50128,10 +50138,11 @@ exports.default = {
         },
         searchGroups: function searchGroups() {
             this.$http.get('groups', {
-                include: 'trips:onlyPublished',
+                include: 'trips:onlyPublished,notes',
                 search: this.searchText,
                 per_page: this.per_page,
-                page: this.page
+                page: this.page,
+                pending: this.pending ? true : null
             }).then(function (response) {
                 this.pagination = response.data.meta.pagination;
                 this.groups = response.data.data;
@@ -50143,15 +50154,15 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"\"> Any Status\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"true\"> Public Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"false\"> Private only\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"\"> Any Type\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"church\"> Church Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"business\"> Business only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"nonprofit\"> Non-Profit Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"youth\"> Private only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"other\"> Other only\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n                <a class=\"btn btn-primary btn-sm\" href=\"groups/create\">New <i class=\"fa fa-plus icon-left\"></i></a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'name'}\">\n                Group\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                Location\n                <!--<i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>-->\n                <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'public'}\">\n                Status\n                <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th>Active Trips</th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"group in groups|filterBy search|orderBy orderByField direction|filterBy status in 'public'|filterBy type in 'type'\">\n            <td>{{group.name}}</td>\n            <td>{{group.type|capitalize}}</td>\n            <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n            <td>{{group.public ? 'Public' : 'Private'}}</td>\n            <td>{{group.trips.data.length}}</td>\n            <td>\n                <a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Manage\" href=\"/admin{{group.links[0].uri}}\"><i class=\"fa fa-gear\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"\"> Any Status\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"true\"> Public Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"false\"> Private only\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"\"> Any Type\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"church\"> Church Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"business\"> Business only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"nonprofit\"> Non-Profit Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"youth\"> Private only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"other\"> Other only\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n                <a class=\"btn btn-primary btn-sm\" href=\"groups/create\">New <i class=\"fa fa-plus icon-left\"></i></a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'name'}\">\n                Group\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <template v-if=\"pending\">\n                <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                    Location\n                    <!--<i @click=\"setOrderByField('notes.data[0].content')\" v-if=\"orderByField !== 'notes.data[0].content'\" class=\"fa fa-sort pull-right\"></i>-->\n                    <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'notes.data[0].content'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'phone_one'}\">\n                    Phone One\n                    <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'email'}\">\n                    Email\n                    <i @click=\"setOrderByField('email')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n            </template>\n            <template v-else=\"\">\n                <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                    Location\n                    <!--<i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>-->\n                    <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'public'}\">\n                    Status\n                    <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th>Active Trips</th>\n            </template>\n\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"group in groups|filterBy search|orderBy orderByField direction|filterBy status in 'public'|filterBy type in 'type'\">\n            <td>{{group.name}}</td>\n            <td>{{group.type|capitalize}}</td>\n            <template v-if=\"pending\">\n                <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n                <td>{{group.phone_one}}</td>\n                <td>{{group.email}}</td>\n            </template>\n            <template v-else=\"\">\n                <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n                <td>{{group.public ? 'Public' : 'Private'}}</td>\n                <td>{{group.trips.data.length}}</td>\n            </template>\n            <td>\n                <a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Manage\" href=\"/admin{{group.links[0].uri}}\"><i class=\"fa fa-gear\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6170d6da", module.exports)
+    hotAPI.createRecord("_v-1f92c63f", module.exports)
   } else {
-    hotAPI.update("_v-6170d6da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1f92c63f", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],138:[function(require,module,exports){
@@ -50457,9 +50468,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4d4691e4", module.exports)
+    hotAPI.createRecord("_v-c7c44690", module.exports)
   } else {
-    hotAPI.update("_v-4d4691e4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-c7c44690", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":1,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],139:[function(require,module,exports){
@@ -50505,12 +50516,111 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-15f24781", module.exports)
+    hotAPI.createRecord("_v-04b4c32d", module.exports)
   } else {
-    hotAPI.update("_v-15f24781", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-04b4c32d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":117,"vue-hot-reload-api":112}],140:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'group-interest-signup',
+    props: ['id'],
+    components: { 'spinner': _vueStrap2.default.spinner, 'alert': _vueStrap2.default.alert },
+    data: function data() {
+        return {
+            group: {},
+            interest: {
+                communication_preferences: []
+            },
+            campaign_id: null,
+            campaigns: {},
+            allTrips: {},
+            attemptSubmit: false,
+            showSuccess: false
+        };
+    },
+
+    computed: {
+        trips: function trips() {
+            return _.where(this.allTrips, { campaign_id: this.campaign_id });
+        }
+    },
+    ready: function ready() {
+        this.$http.get('groups/' + this.id, { include: 'trips.campaign' }).then(function (response) {
+            this.group = response.data.data;
+            this.allTrips = response.data.data.trips.data;
+            var campaigns = _.mapObject(response.data.data.trips.data, 'campaign');
+            this.campaigns = this.removeDuplicates(campaigns, 'id');
+            console.log(this.campaigns);
+        });
+    },
+
+    methods: {
+        checkForError: function checkForError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+
+            return this.$Interest[field].invalid && this.attemptSubmit;
+        },
+        removeDuplicates: function removeDuplicates(arr, prop) {
+            var new_arr = [];
+            var lookup = {};
+
+            for (var i in arr) {
+                lookup[arr[i]['data'][prop]] = arr[i];
+            }
+
+            for (i in lookup) {
+                new_arr.push(lookup[i]);
+            }
+
+            return new_arr;
+        },
+        save: function save() {
+            this.attemptSubmit = true;
+            if (this.$Interest.valid) {
+                this.$refs.validationspinner.show();
+                this.$http.post('interests', this.interest).then(function (response) {
+                    this.$refs.validationspinner.hide();
+                    this.showSuccess = true;
+                    this.attemptSubmit = false;
+                    this.interest = {
+                        communication_preferences: []
+                    };
+                    this.campaign_id = '';
+                    console.log(response);
+                }).then(function (error) {
+                    this.$refs.validationspinner.hide();
+                    console.log(error);
+                });
+            }
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <validator name=\"Interest\">\n    <form novalidate=\"\" id=\"TripInterestSignupForm\">\n        <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n            <strong>Awesome!</strong>\n            <p>Trip interest sent.</p>\n        </alert>\n        <spinner v-ref:validationspinner=\"\" size=\"xl\" :fixed=\"false\" text=\"Saving\"></spinner>\n        <div class=\"row\">\n            <div class=\"col-xs-12\" :class=\"{ 'has-error': checkForError('campaign')}\">\n                <label>Campaign of Interest</label>\n                <select v-model=\"campaign_id\" class=\"form-control\" v-validate:campaign=\"{required: true}\">\n                    <option v-for=\"campaign in campaigns\" :value=\"campaign.data.id\">\n                        {{   campaign.data.name }}\n                    </option>\n                </select>\n            </div>\n        </div>\n        <hr class=\"divider inv sm\">\n        <div class=\"row\" v-if=\"campaign_id\">\n            <div class=\"col-xs-12\" :class=\"{ 'has-error': checkForError('trip')}\">\n                <label>Trip Type</label>\n                <select v-model=\"interest.trip_id\" class=\"form-control\" v-validate:trip=\"{required: true}\">\n                    <option v-for=\"trip in trips\" :value=\"trip.id\">\n                        {{ trip.type | capitalize }} Trip\n                    </option>\n                </select>\n            </div>\n        </div>\n        <hr class=\"divider inv sm\">\n        <div class=\"row\">\n            <div class=\"col-xs-12\" :class=\"{ 'has-error': checkForError('name')}\">\n                <label>Name</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"interest.name\" v-validate:name=\"{required: true}\">\n            </div>\n        </div>\n        <hr class=\"divider inv sm\">\n        <div class=\"row\">\n            <div class=\"col-xs-12\" :class=\"{ 'has-error': checkForError('email')}\">\n                <label>Email</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"interest.email\" v-validate:email=\"{required: true, email: true}\">\n            </div>\n        </div>\n        <hr class=\"divider inv sm\">\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <label>Phone</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"interest.phone | phone\">\n            </div>\n        </div>\n        <hr class=\"divider inv sm\">\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <label>Communication Preference</label>\n                <hr class=\"divider inv sm\">\n                <div>\n                    <label class=\"checkbox-inline\">\n                        <input type=\"checkbox\" value=\"email\" v-model=\"interest.communication_preferences\"> Email\n                    </label>\n                    <label class=\"checkbox-inline\">\n                        <input type=\"checkbox\" value=\"phone\" v-model=\"interest.communication_preferences\"> Phone\n                    </label>\n                    <label class=\"checkbox-inline\">\n                        <input type=\"checkbox\" value=\"text\" v-model=\"interest.communication_preferences\"> Text\n                    </label>\n                </div>\n            </div>\n        </div>\n        <hr class=\"divider inv md\">\n        <div class=\"row\">\n            <div class=\"col-sm-12 text-center\">\n                <div class=\"form-group\">\n                    <a class=\"btn btn-primary\" @click=\"save()\">Submit</a>\n                </div>\n            </div>\n        </div>\n    </form>\n    </validator>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-54cea8da", module.exports)
+  } else {
+    hotAPI.update("_v-54cea8da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],141:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50541,12 +50651,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-24620ef0", module.exports)
+    hotAPI.createRecord("_v-9e3256c8", module.exports)
   } else {
-    hotAPI.update("_v-24620ef0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-9e3256c8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],141:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],142:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50595,12 +50705,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3568e8fb", module.exports)
+    hotAPI.createRecord("_v-242b64a7", module.exports)
   } else {
-    hotAPI.update("_v-3568e8fb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-242b64a7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],142:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],143:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50628,12 +50738,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-38497816", module.exports)
+    hotAPI.createRecord("_v-bae2227c", module.exports)
   } else {
-    hotAPI.update("_v-38497816", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-bae2227c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],143:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50702,12 +50812,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-a95a0ede", module.exports)
+    hotAPI.createRecord("_v-199fdb3d", module.exports)
   } else {
-    hotAPI.update("_v-a95a0ede", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-199fdb3d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],144:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50718,16 +50828,49 @@ var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
 
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     name: 'groups',
-    components: { vSelect: _vueSelect2.default },
+    components: { vSelect: _vueSelect2.default, 'alert': _vueStrap2.default.alert },
     data: function data() {
         return {
+            // logic vars
+            campaigns: [],
             groups: [],
             groupsLimit: 8,
+            attemptSubmit: false,
             resource: this.$resource('groups?isPublic=yes'),
+            typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
+            countries: [],
+            countryCodeObj: null,
+            timezones: [],
+            errors: {},
+            showSuccess: false,
+
+            // form vars
+            name: '',
+            type: '',
+            country_code: null,
+            description: '',
+            timezone: null,
+            phone_one: '',
+            phone_two: '',
+            address_one: '',
+            address_two: '',
+            city: '',
+            state: '',
+            zip: '',
+            url: '',
+            campaign: '',
+            contact: '',
+            position: '',
+            email: '',
+            spoke_to_rep: undefined,
 
             // pagination vars
             search: '',
@@ -50737,6 +50880,11 @@ exports.default = {
         };
     },
 
+    computed: {
+        country_code: function country_code() {
+            return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+        }
+    },
     watch: {
         'page': function page(val, oldVal) {
             this.pagination.current_page = val;
@@ -50765,25 +50913,236 @@ exports.default = {
                 this.groups = groups.data.data;
                 this.pagination = groups.data.meta.pagination;
             }).then(function () {});
+        },
+        resetForm: function resetForm() {
+            this.name = '';
+            this.type = '';
+            this.countryCodeObj = null;
+            this.country_code = null;
+            this.description = '';
+            this.timezone = null;
+            this.phone_one = '';
+            this.phone_two = '';
+            this.address_one = '';
+            this.address_two = '';
+            this.city = '';
+            this.state = '';
+            this.zip = '';
+            this.url = '';
+            this.campaign = '';
+            this.contact = '';
+            this.position = '';
+            this.email = '';
+            this.spoke_to_rep = undefined;
+            this.attemptSubmit = false;
+            $('#collapseGroupForm').collapse('hide');
+        },
+        submit: function submit() {
+            this.attemptSubmit = true;
+            if (this.$CreateGroup.valid) {
+                this.$http.post('groups/submit', {
+                    name: this.name,
+                    type: this.type,
+                    country_code: this.country_code,
+                    description: this.description,
+                    timezone: this.timezone,
+                    phone_one: this.phone_one,
+                    phone_two: this.phone_two,
+                    address_one: this.address_one,
+                    address_two: this.address_two,
+                    city: this.city,
+                    state: this.state,
+                    zip: this.zip,
+                    url: this.url,
+                    campaign: this.campaign,
+                    contact: this.contact,
+                    position: this.position,
+                    email: this.email,
+                    spoke_to_rep: this.spoke_to_rep
+                }).then(function (response) {
+                    console.log(response);
+                    this.showSuccess = true;
+                    this.resetForm();
+                }, function (error) {
+                    this.errors = error.data.errors;
+                });
+            }
         }
     },
     ready: function ready() {
         this.searchGroups();
+
+        this.$http.get('utilities/countries').then(function (response) {
+            this.countries = response.data.countries;
+        });
+
+        this.$http.get('utilities/timezones').then(function (response) {
+            this.timezones = response.data.timezones;
+        });
+
+        this.$http.get('campaigns').then(function (response) {
+            this.campaigns = response.data.data;
+        });
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"content-page-header\">\n  <img class=\"img-responsive\" src=\"images/groups/groups-header.jpg\" alt=\"\">\n  <div class=\"c-page-header-text\">\n    <h1 class=\"text-uppercase dash-trailing\">Groups</h1>\n  </div><!-- end c-page-header-content -->\n</div><!-- end c-page-header -->\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center\">\n        <h2 class=\"text-primary\">Group trips is what we do!</h2>\n        <p>Missions.Me specializes in taking groups around the world on life-changing missions experiences.  If you are interested in partnering with one of our missions campaigns or trips, please fill out the form.  Missions.Me can provide your group with its own profile, URL and custom missions trips created especially for your group.</p>\n        <hr class=\"divider inv\">\n        <a class=\"btn btn-primary btn-lg\" role=\"button\" data-toggle=\"collapse\" href=\"#collapseGroupForm\" aria-expanded=\"false\" aria-controls=\"collapseGroupForm\">Take Your Group</a>\n      </div><!-- end col -->\n    </div><!-- end row -->\n    <hr class=\"divider inv xlg\">\n    <div class=\"row collapse\" id=\"collapseGroupForm\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1\">\n        <validator name=\"CreateGroup\">\n          <form id=\"CreateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n              <div class=\"form-group\">\n                  <div class=\"col-sm-6\">\n                      <label for=\"name\">Name</label>\n                      <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                  </div>\n                  <div class=\"col-sm-6\">\n                      <label for=\"type\">Which Campaign are you interested in?</label>\n                      <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                          <option value=\"\">-- please select --</option>\n                          <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                      </select>\n                  </div>\n              </div>\n              <div class=\"form-group\">\n                  <div class=\"col-sm-6\">\n                      <label for=\"infoAddress\">Address 1</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n                  </div>\n                  <div class=\"col-sm-6\">\n                      <label for=\"infoAddress2\">Address 2</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n                  </div>\n              </div>\n\n              <div class=\"row form-group col-sm-offset-2\">\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoCity\">City</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                  </div>\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoState\">State/Prov.</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                  </div>\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoZip\">ZIP/Postal Code</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                  </div>\n              </div>\n\n              <div class=\"row form-group col-sm-offset-2\">\n                  <div class=\"col-sm-6\">\n                      <div :class=\"{ 'has-error': checkForError('country') }\">\n                          <label for=\"country\">Country</label>\n                          <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                          <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                              <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                          </select>\n                      </div>\n                  </div>\n                  <div class=\"col-sm-6\">\n                      <label for=\"type\">Type</label>\n                      <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                          <option value=\"\">-- please select --</option>\n                          <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                      </select>\n                  </div>\n              </div>\n\n              <div class=\"form-group\">\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('timezone') }\">\n                      <label for=\"timezone\">Timezone</label>\n                      <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                      <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                          <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                      </select>\n                  </div>\n                  <div class=\"col-sm-4\">\n                      <label for=\"infoPhone\">Phone 1</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                  </div>\n                  <div class=\"col-sm-4\">\n                      <label for=\"infoMobile\">Phone 2</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                  </div>\n              </div>\n\n              <div class=\"form-group\">\n                  <div class=\"col-sm-4\">\n                      <label for=\"description\">Your Name</label>\n                      <input type=\"text\" class=\"form-control\" name=\"\" id=\"\" v-model=\"\" placeholder=\"John Smith\" v-validate:type=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                  </div>\n                  <div class=\"col-sm-4\">\n                      <label for=\"name\">Email</label>\n                      <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\">\n                  </div>\n                  <div class=\"col-sm-4\">\n                      <label for=\"name\">Your Position</label>\n                      <input type=\"text\" class=\"form-control\" name=\"position\" id=\"position\" v-model=\"position\">\n                  </div>\n              </div>\n\n              <div class=\"form-group\">\n                  <label for=\"status\" class=\"col-sm-8 control-label\">Have you spoken with a Missions.Me representative?</label>\n                  <div class=\"col-sm-4\">\n                      <label class=\"radio-inline\">\n                          <input type=\"radio\" name=\"status\" id=\"status\" :value=\"true\" v-model=\"public\"> Yes\n                      </label>\n                      <label class=\"radio-inline\">\n                          <input type=\"radio\" name=\"status2\" id=\"status2\" :value=\"false\" v-model=\"public\"> No\n                      </label>\n                  </div>\n              </div>\n              <div class=\"form-group\">\n                  <div class=\"col-sm-12 text-center\">\n                      <a @click=\"submit()\" class=\"btn btn-primary\">Send Request</a>\n                  </div>\n              </div>\n          </form>\n      </validator>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end white-bg -->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <h4>Groups Partnered With Us</h4>\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <!--<a v-if=\"groups.length > 3\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>-->\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"col-xs-6\">\n        <div class=\"form-group form-group-sm\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Search for...\" v-model=\"search\" debounce=\"250\">\n            <!--<span class=\"input-group-btn\">\n                <button class=\"btn btn-default\" type=\"button\">Go!</button>\n            </span>-->\n        </div><!-- /input-group -->\n    </div>\n    <div class=\"col-xs-6 text-right\">\n        <!--<a v-if=\"groups.length > 8 && groups == 8\" @click=\"seeAll\" class=\"btn btn-primary btn-sm\">See All</a>-->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n    <div class=\"col-sm-6 col-md-3\" v-for=\"group in groups|limitBy groupsLimit\" v-if=\"groups.length\" style=\"display:flex\">\n        <div class=\"panel panel-default\">\n            <a :href=\"'/groups/' + group.url\" role=\"button\">\n                <img :src=\"group.avatar\" :alt=\"group.name\" class=\"img-responsive\">\n            </a>\n                <div style=\"min-height:220px;\" class=\"panel-body\">\n                    <!--<h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\"><i class=\"fa fa-users\"></i> {{group.type}} Group</h6>-->\n                    <a :href=\"'/groups/' + group.url\" role=\"button\">\n                        <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">{{group.name}}</h5>\n                    </a>\n                    <h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\">{{group.type}} Group</h6>\n                    <hr class=\"divider lg\">\n                    <p class=\"small\">{{group.description}}</p>\n                </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div class=\"col-sm-12 text-center\" v-if=\"groups.length\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n</div>\n<div class=\"dark-bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <h1 class=\"dash-trailing-light\">Group Leader Or Youth Pastor</h1>\n      <div class=\"col-sm-6\">\n        <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n              <h6 class=\"panel-title\">\n                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                  Is this going to be a logistical nightmare?\n                </a>\n              </h6>\n            </div>\n            <div id=\"collapseOne\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"headingOne\">\n              <div class=\"panel-body\">\n                <p>Missions.Me specializes in bringing youth groups, college groups, business groups, or any other types of groups you've created. We take care of all of your transportation, hotel, food and ministry schedule. As a leader, fund-raising and team building is all you'll need to focus on.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n                  International travel with teens?!\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n              <div class=\"panel-body\">\n                <p>Don't freak out.</p>\n                <p>Missions.Me will provide you with the flight itineraries, prepay baggage fees and be there waiting with pizza in hand when your group arrives. We dare you to find an easier missions experience.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingThree\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseThree\" aria-expanded=\"false\" aria-controls=\"collapseThree\">\n                  Will my team be eating bugs and sleeping in the jungle?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseThree\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingThree\">\n              <div class=\"panel-body\">\n                <p>It is the vision of Missions.Me to always give our best to the people we're ministering to. To achieve that, our missionaries need to be well rested and well fed. The conditions will vary from state to state, but keep in mind that the farther your team travels from a major city, the less available \"higher standard\" accommodations become.</p>\n\n                <p>HOTEL: Every hotel we stay in is inspected by a staff member prior to the trip. We guarantee that your hotel will be equipped with air conditioning and high speed internet.</p>\n\n                <p>FOOD: All restaurants are tested and approved by a staff member. You will eat at widely-known American restaurants (i.e. McDonald's, Wendy's, Pizza Hut) whenever possible. You will also be given the opportunity to partake in the local cuisine.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingFour\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseFour\" aria-expanded=\"false\" aria-controls=\"collapseFour\">\n                  How will my leadership fit with Missions.Me?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseFour\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingFour\">\n              <div class=\"panel-body\">\n                <p>If you've ever been on a trip before, you know nothing gets done without organization and good leadership.From scheduling ministry sites, pick-ups, drop-offs, meals, translators and communicating with in-country contacts, our leaders handle everything and relay to you and your leadership the necessary information.</p>\n                <a href=\"downloads/SampleSchedule.pdf\" target=\"_blank\" class=\"btn btn-primary btn-sm\">Sample Weekly Schedule</a>\n                <hr class=\"divider inv\">\n                <p>Our leaders or \"project directors\" number one job is to take care of you (the team leader) so that you can properly take care of your group (team). Most importantly, we strive to create a culture of leadership on our trips that creates new leaders and takes your student leaders to the next level.</p>\n                <a href=\"downloads/SampleFlow.pdf\" target=\"_blank\" class=\"btn btn-primary btn-sm\">Sample Leadership Flow Chart</a>\n              </div>\n            </div>\n          </div><!-- end panel -->\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingFive\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseFive\" aria-expanded=\"false\" aria-controls=\"collapseFive\">\n                  How will I recruit?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseFive\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingFive\">\n              <div class=\"panel-body\">\n                <p>Missions.Me specializes in not only bringing a message of hope to nations around the world but also a missional message to the American church. Every year, Missions.Me holds several Missions Nights in churches and generational services around the U.S. The service is packed with video, a powerful message from one of our Missions.Me Project Directors and a call to the mission field. The Missions.Me team comes prepared with applications, training instructions and fundraising ideas to make your church groups trip preparation process so easy. That night following the powerful missions service, those who responded will meet and together, we will launch your group with everything they will need to change the world.</p>\n              </div>\n            </div>\n          </div><!-- end panel -->\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingSix\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseSix\" aria-expanded=\"false\" aria-controls=\"collapseSix\">\n                  How will I train my group?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseSix\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingSix\">\n              <div class=\"panel-body\">\n                <p>Missions.Me gives you everything you need to hold successful training meetings. You set your own dates and times for training, we do the rest.</p>\n              </div>\n            </div>\n          </div><!-- end panel -->\n        </div>\n      </div>\n      <div class=\"col-sm-6\">\n        <div class=\"video-outer\">\n          <div class=\"video-inner\">\n            <iframe src=\"https://player.vimeo.com/video/109034302\" width=\"640\" height=\"360\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n  </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"content-page-header\">\n  <img class=\"img-responsive\" src=\"images/groups/groups-header.jpg\" alt=\"\">\n  <div class=\"c-page-header-text\">\n    <h1 class=\"text-uppercase dash-trailing\">Groups</h1>\n  </div><!-- end c-page-header-content -->\n</div><!-- end c-page-header -->\n<div class=\"white-bg\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center\">\n        <h2 class=\"text-primary\">Group trips is what we do!</h2>\n        <p>Missions.Me specializes in taking groups around the world on life-changing missions experiences.  If you are interested in partnering with one of our missions campaigns or trips, please fill out the form.  Missions.Me can provide your group with its own profile, URL and custom missions trips created especially for your group.</p>\n        <hr class=\"divider inv\">\n        <a class=\"btn btn-primary btn-lg\" role=\"button\" data-toggle=\"collapse\" href=\"#collapseGroupForm\" aria-expanded=\"false\" aria-controls=\"collapseGroupForm\">Take Your Group</a>\n      </div><!-- end col -->\n    </div><!-- end row -->\n    <hr class=\"divider inv xlg\">\n    <div class=\"row collapse\" id=\"collapseGroupForm\">\n      <div class=\"col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1\">\n        <validator name=\"CreateGroup\">\n          <form id=\"CreateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n              <div class=\"form-group\">\n                  <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('name') || errors.name }\">\n                      <label for=\"name\">Name</label>\n                      <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                      <p class=\"help-block\" v-if=\"errors.name\" v-text=\"errors.name\"></p>\n                  </div>\n                  <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('campaign') || errors.campaign }\">\n                      <label for=\"campaign\">Which Campaign are you interested in?</label>\n                      <select name=\"type\" id=\"campaign\" class=\"form-control\" v-model=\"campaign\" v-validate:campaign=\"{ required: true }\" required=\"\">\n                          <option value=\"\">-- please select --</option>\n                          <option :value=\"campaign.id\" v-for=\"campaign in campaigns\">{{campaign.name}}</option>\n                      </select>\n                      <p class=\"help-block\" v-if=\"errors.campaign\" v-text=\"errors.campaign\"></p>\n                  </div>\n              </div>\n              <div class=\"form-group\">\n                  <div class=\"col-sm-6\">\n                      <label for=\"infoAddress\">Address 1</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n                  </div>\n                  <div class=\"col-sm-6\">\n                      <label for=\"infoAddress2\">Address 2</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n                  </div>\n              </div>\n\n              <div class=\"row form-group col-sm-offset-2\">\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoCity\">City</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                      <p class=\"help-block\" v-if=\"errors.city\" v-text=\"errors.city\"></p>\n                  </div>\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoState\">State/Prov.</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                        <p class=\"help-block\" v-if=\"errors.state\" v-text=\"errors.state\"></p>\n                  </div>\n                  <div class=\"col-sm-4\">\n                          <label for=\"infoZip\">ZIP/Postal Code</label>\n                          <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                      <p class=\"help-block\" v-if=\"errors.zip\" v-text=\"errors.zip\"></p>\n                  </div>\n              </div>\n\n              <div class=\"row form-group col-sm-offset-2\">\n                  <div class=\"col-sm-6\">\n                      <div :class=\"{ 'has-error': checkForError('country') }\">\n                          <label for=\"country\">Country</label>\n                          <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                          <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                              <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                          </select>\n                      </div>\n                  </div>\n                  <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('type') || errors.type }\">\n                      <label for=\"type\">Type</label>\n                      <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                          <option value=\"\">-- please select --</option>\n                          <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                      </select>\n                  </div>\n              </div>\n\n              <div class=\"form-group\">\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('timezone') || errors.timezone }\">\n                      <label for=\"timezone\">Timezone</label>\n                      <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                      <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                          <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                      </select>\n                  </div>\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('phone') || errors.phone_one }\">\n                      <label for=\"infoPhone\">Phone 1</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" v-validate:phone=\"{ require: true, minlength:9 }\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                      <p class=\"help-block\" v-if=\"errors.phone_one\" v-text=\"errors.phone_one\"></p>\n                  </div>\n                  <div class=\"col-sm-4\">\n                      <label for=\"infoMobile\">Phone 2</label>\n                      <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                  </div>\n              </div>\n\n              <div class=\"form-group\">\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('contact') || errors.contact }\">\n                      <label for=\"contact\">Your Name</label>\n                      <input type=\"text\" class=\"form-control\" name=\"contact\" id=\"contact\" v-model=\"contact\" placeholder=\"John Smith\" v-validate:contact=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                      <p class=\"help-block\" v-if=\"errors.contact\" v-text=\"errors.contact\"></p>\n                  </div>\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('email') || errors.email }\">\n                      <label for=\"email\">Email</label>\n                      <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"['email','require']\">\n                      <p class=\"help-block\" v-if=\"errors.email\" v-text=\"errors.email\"></p>\n                  </div>\n                  <div class=\"col-sm-4\" :class=\"{ 'has-error': checkForError('position') || errors.position }\">\n                      <label for=\"position\">Your Position</label>\n                      <input type=\"text\" class=\"form-control\" name=\"position\" id=\"position\" v-model=\"position\" v-validate:position=\"{ require: true, minlength:1 }\">\n                      <p class=\"help-block\" v-if=\"errors.position\" v-text=\"errors.position\"></p>\n                  </div>\n              </div>\n\n              <div class=\"form-group\" :class=\"{ 'has-error': checkForError('spoken') || errors.spoke_to_rep }\">\n                  <label for=\"status\" class=\"col-sm-8 control-label\">Have you spoken with a Missions.Me representative?</label>\n                  <div class=\"col-sm-4\">\n                      <label class=\"radio-inline\">\n                          <input type=\"radio\" name=\"status\" id=\"status\" value=\"yes\" v-model=\"spoke_to_rep\" v-validate:spoken=\"{ require: { rule: true } }\"> Yes\n                      </label>\n                      <label class=\"radio-inline\">\n                          <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"no\" v-model=\"spoke_to_rep\" v-validate:spoken=\"\"> No\n                      </label>\n                      <!--<p class=\"help-block\" v-if=\"errors.spoke_to_rep\" v-text=\"errors.spoke_to_rep\"></p>-->\n                  </div>\n              </div>\n              <div class=\"form-group\">\n                  <div class=\"col-sm-12 text-center\">\n                      <a @click=\"submit\" class=\"btn btn-primary\">Send Request</a>\n                  </div>\n              </div>\n          </form>\n      </validator>\n      </div><!-- end col -->\n    </div><!-- end row -->\n  <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n      <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n      <strong>Awesome!</strong>\n      <p>Group request sent</p>\n  </alert>\n\n  </div><!-- end content-section -->\n  </div><!-- end container -->\n</div><!-- end white-bg -->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-12\">\n        <h4>Groups Partnered With Us</h4>\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"col-md-6 col-sm-12 col-xs-12\">\n        <div class=\"form-group form-group-md\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Start typing a group name or category...\" v-model=\"search\" debounce=\"250\">\n        </div><!-- /input-group -->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n    <div class=\"col-sm-6 col-md-3\" v-for=\"group in groups|limitBy groupsLimit\" v-if=\"groups.length\" style=\"display:flex\">\n        <div class=\"panel panel-default\">\n            <a :href=\"'/groups/' + group.url\" role=\"button\">\n                <img :src=\"group.avatar\" :alt=\"group.name\" class=\"img-responsive\">\n            </a>\n                <div style=\"min-height:120px;\" class=\"panel-body\">\n                    <!--<h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\"><i class=\"fa fa-users\"></i> {{group.type}} Group</h6>-->\n                    <a :href=\"'/groups/' + group.url\" role=\"button\">\n                        <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">{{group.name}}</h5>\n                    </a>\n                    <h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\">{{group.type}} Group</h6>\n                </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div class=\"col-sm-12\" v-if=\" ! groups.length\">\n        <hr class=\"divider inv\">\n        <p class=\"text-muted lead text-center\">Hmmmm. We couldn't find any groups matching your search.</p>\n        <hr class=\"divider inv\">\n    </div>\n    <div class=\"col-xs-12 text-center\" v-if=\"groups.length\">\n        <nav>\n            <ul class=\"pagination pagination-md\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n</div>\n<div class=\"dark-bg-primary\">\n  <div class=\"container\">\n  <div class=\"content-section\">\n    <div class=\"row\">\n        <div class=\"col-xs-12\">\n            <h1 class=\"dash-trailing-light\">Group Leader Or Youth Pastor</h1>\n        </div>\n      <div class=\"col-sm-6\">\n        <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n              <h6 class=\"panel-title\">\n                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                  Is this going to be a logistical nightmare?\n                </a>\n              </h6>\n            </div>\n            <div id=\"collapseOne\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"headingOne\">\n              <div class=\"panel-body\">\n                <p>Missions.Me specializes in bringing youth groups, college groups, business groups, or any other types of groups you've created. We take care of all of your transportation, hotel, food and ministry schedule. As a leader, fund-raising and team building is all you'll need to focus on.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n                  International travel with teens?!\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n              <div class=\"panel-body\">\n                <p>Don't freak out.</p>\n                <p>Missions.Me will provide you with the flight itineraries, prepay baggage fees and be there waiting with pizza in hand when your group arrives. We dare you to find an easier missions experience.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingThree\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseThree\" aria-expanded=\"false\" aria-controls=\"collapseThree\">\n                  Will my team be eating bugs and sleeping in the jungle?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseThree\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingThree\">\n              <div class=\"panel-body\">\n                <p>It is the vision of Missions.Me to always give our best to the people we're ministering to. To achieve that, our missionaries need to be well rested and well fed. The conditions will vary from state to state, but keep in mind that the farther your team travels from a major city, the less available \"higher standard\" accommodations become.</p>\n\n                <p>HOTEL: Every hotel we stay in is inspected by a staff member prior to the trip. We guarantee that your hotel will be equipped with air conditioning and high speed internet.</p>\n\n                <p>FOOD: All restaurants are tested and approved by a staff member. You will eat at widely-known American restaurants (i.e. McDonald's, Wendy's, Pizza Hut) whenever possible. You will also be given the opportunity to partake in the local cuisine.</p>\n              </div>\n            </div>\n          </div>\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingFour\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseFour\" aria-expanded=\"false\" aria-controls=\"collapseFour\">\n                  How will my leadership fit with Missions.Me?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseFour\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingFour\">\n              <div class=\"panel-body\">\n                <p>If you've ever been on a trip before, you know nothing gets done without organization and good leadership.From scheduling ministry sites, pick-ups, drop-offs, meals, translators and communicating with in-country contacts, our leaders handle everything and relay to you and your leadership the necessary information.</p>\n                <a href=\"downloads/SampleSchedule.pdf\" target=\"_blank\" class=\"btn btn-primary btn-sm\">Sample Weekly Schedule</a>\n                <hr class=\"divider inv\">\n                <p>Our leaders or \"project directors\" number one job is to take care of you (the team leader) so that you can properly take care of your group (team). Most importantly, we strive to create a culture of leadership on our trips that creates new leaders and takes your student leaders to the next level.</p>\n                <a href=\"downloads/SampleFlow.pdf\" target=\"_blank\" class=\"btn btn-primary btn-sm\">Sample Leadership Flow Chart</a>\n              </div>\n            </div>\n          </div><!-- end panel -->\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingFive\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseFive\" aria-expanded=\"false\" aria-controls=\"collapseFive\">\n                  How will I recruit?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseFive\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingFive\">\n              <div class=\"panel-body\">\n                <p>Missions.Me specializes in not only bringing a message of hope to nations around the world but also a missional message to the American church. Every year, Missions.Me holds several Missions Nights in churches and generational services around the U.S. The service is packed with video, a powerful message from one of our Missions.Me Project Directors and a call to the mission field. The Missions.Me team comes prepared with applications, training instructions and fundraising ideas to make your church groups trip preparation process so easy. That night following the powerful missions service, those who responded will meet and together, we will launch your group with everything they will need to change the world.</p>\n              </div>\n            </div>\n          </div><!-- end panel -->\n          <div class=\"panel panel-default\">\n            <div class=\"panel-heading\" role=\"tab\" id=\"headingSix\">\n              <h4 class=\"panel-title\">\n                <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseSix\" aria-expanded=\"false\" aria-controls=\"collapseSix\">\n                  How will I train my group?\n                </a>\n              </h4>\n            </div>\n            <div id=\"collapseSix\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingSix\">\n              <div class=\"panel-body\">\n                <p>Missions.Me gives you everything you need to hold successful training meetings. You set your own dates and times for training, we do the rest.</p>\n              </div>\n            </div>\n          </div><!-- end panel -->\n        </div>\n      </div>\n      <div class=\"col-sm-6\">\n        <div class=\"video-outer\">\n          <div class=\"video-inner\">\n            <iframe src=\"https://player.vimeo.com/video/109034302\" width=\"640\" height=\"360\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n  </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-cf6ec6ac", module.exports)
+    hotAPI.createRecord("_v-94e88304", module.exports)
   } else {
-    hotAPI.update("_v-cf6ec6ac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-94e88304", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],145:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],146:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'admin-interests-list',
+    components: { vSelect: _vueSelect2.default, 'aside': _vueStrap2.default.aside },
+    data: function data() {
+        return {
+            interests: [],
+            orderByField: 'name',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {},
+            search: '',
+            groupObj: [],
+            groupsOptions: [],
+            campaignObj: null,
+            campaignOptions: [],
+            tripObj: null,
+            tripOptions: [],
+            // filter vars
+            filters: {
+                group: '',
+                campaign: '',
+                trip: '',
+                trip_type: ''
+            },
+            showFilters: false
+        };
+    },
+
+    watch: {
+        // watch filters obj
+        'filters': {
+            handler: function handler(val) {
+                // console.log(val);
+                this.searchInterests();
+            },
+            deep: true
+        },
+        'groupObj': function groupObj(val) {
+            this.filters.group = val ? val.id : '';
+        },
+        'tripObj': function tripObj(val) {
+            this.filters.trip = val ? val.id : '';
+        },
+        'campaignObj': function campaignObj(val) {
+            this.filters.campaign = val ? val.id : '';
+        },
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchInterests();
+        },
+        'direction': function direction(val) {
+            this.searchInterests();
+        },
+        'page': function page(val, oldVal) {
+            this.searchInterests();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchInterests();
+        }
+    },
+
+    methods: {
+        setOrderByField: function setOrderByField(field) {
+            return this.orderByField = field, this.direction = 1;
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'name';
+            this.direction = 1;
+            this.search = null;
+        },
+        getGroups: function getGroups(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('groups', { search: search }).then(function (response) {
+                this.groupsOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        getCampaigns: function getCampaigns(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('campaigns', { search: search }).then(function (response) {
+                this.campaignOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        getTrips: function getTrips(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('trips', { search: search }).then(function (response) {
+                this.tripOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        searchInterests: function searchInterests() {
+            var params = {
+                include: 'trip.group,trip.campaign',
+                search: this.searchText,
+                per_page: this.per_page,
+                page: this.page
+            };
+            $.extend(params, this.filters);
+
+            this.$http.get('interests', params).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.interests = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        // populate
+        this.getGroups();
+        this.getCampaigns();
+        this.getTrips();
+        this.searchInterests();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"groupFilter\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupObj\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Group\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <select id=\"type\" class=\"form-control input-sm\" v-model=\"filters.trip_type\">\n                    <option value=\"\">Any Trip Type</option>\n                    <option value=\"full\">Full</option>\n                    <option value=\"media\">Media</option>\n                    <option value=\"medical\">Medical</option>\n                    <option value=\"short\">Short</option>\n                </select>\n            </div>\n            <div class=\"form-group\" v-if=\"!tripId\">\n                <v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters <i class=\"fa fa-times\"></i></button>\n                <button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <span class=\"caret\"></span>\n                </button>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-striped\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'email'}\">\n                Email\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'phone'}\">\n                Phone\n                <i @click=\"setOrderByField('phone')\" v-if=\"orderByField !== 'phone'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'phone'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                Campaign\n                <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                Trip Type\n                <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                Group\n                <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"interest in interests|filterBy search|orderBy orderByField direction\">\n            <td>{{interest.name|capitalize}}</td>\n            <td>{{interest.email}}</td>\n            <td>{{interest.phone}}</td>\n            <td>{{interest.trip.data.campaign.data.name}}</td>\n            <td>{{interest.trip.data.type}}</td>\n            <td>{{interest.trip.data.group.data.name}}</td>\n            <td>\n                <a href=\"/admin{{interest.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <a href=\"/admin{{campaignId + interest.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-70677a32", module.exports)
+  } else {
+    hotAPI.update("_v-70677a32", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],147:[function(require,module,exports){
 'use strict';
 
 var _vueSelect = require('vue-select');
@@ -50940,12 +51299,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7dce67a4", module.exports)
+    hotAPI.createRecord("_v-036a9d78", module.exports)
   } else {
-    hotAPI.update("_v-7dce67a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-036a9d78", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],146:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51093,12 +51452,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1e536124", module.exports)
+    hotAPI.createRecord("_v-140a9660", module.exports)
   } else {
-    hotAPI.update("_v-1e536124", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-140a9660", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./donate.vue":131,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],147:[function(require,module,exports){
+},{"./donate.vue":131,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],149:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51121,7 +51480,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
     name: 'passport-create-update',
-    components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel },
+    components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
     props: {
         isUpdate: {
             type: Boolean,
@@ -51152,8 +51511,10 @@ exports.default = {
             selectedAvatar: null,
             today: moment().format('YYYY-MM-DD'),
             yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
-            tomorrow: moment().add(1, 'days').format('YYYY-MM-DD')
-
+            tomorrow: moment().add(1, 'days').format('YYYY-MM-DD'),
+            showSuccess: false,
+            showSaveAlert: false,
+            hasChanged: false
         };
     },
 
@@ -51170,6 +51531,19 @@ exports.default = {
             // if user clicked submit button while the field is invalid trigger error styles
 
             return this.$CreateUpdatePassport[field].invalid && this.attemptSubmit;
+        },
+        onTouched: function onTouched() {
+            this.hasChanged = true;
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/dashboard/passports/';
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
         },
         submit: function submit() {
             this.attemptSubmit = true;
@@ -51188,6 +51562,8 @@ exports.default = {
                 }).then(function (resp) {
                     //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                     window.location.href = '/dashboard/passports';
+                    //                        this.showSuccess = true;
+                    //                        this.hasChanged = false;
                 }, function (error) {
                     debugger;
                 });
@@ -51209,7 +51585,9 @@ exports.default = {
                     user_id: this.user_id
                 }).then(function (resp) {
                     //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                    window.location.href = '/dashboard/passports';
+                    //                        window.location.href = '/dashboard/passports';
+                    this.showSuccess = true;
+                    this.hasChanged = false;
                 }, function (error) {
                     debugger;
                 });
@@ -51249,18 +51627,18 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdatePassport\">\n    <form id=\"CreateUpdatePassport\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"given_names\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"surname\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"number\" class=\"col-sm-2 control-label\">Passport Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Passport Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" :max=\"today\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" :min=\"tomorrow\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('birth') }\">\n            <label for=\"birth\" class=\"col-sm-2 control-label\">Birth Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"birth\" :value.sync=\"birthCountryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"birth\" id=\"birth\" class=\"hidden\" v-model=\"birth_country\" v-validate:birth=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('citizenship') }\">\n            <label for=\"citizenship\" class=\"col-sm-2 control-label\">Citizenship</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"country\" :value.sync=\"citizenshipObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"citizenship\" id=\"citizenship\" class=\"hidden\" v-model=\"citizenship\" v-validate:citizenship=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Upload Copy\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'passport-'+given_names+'-'+surname\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/dashboard/passports\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdatePassport\" @touched=\"onTouched\">\n    <form id=\"CreateUpdatePassport\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"given_names\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"surname\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"number\" class=\"col-sm-2 control-label\">Passport Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Passport Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" :max=\"today\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" :min=\"tomorrow\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('birth') }\">\n            <label for=\"birth\" class=\"col-sm-2 control-label\">Birth Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"birth\" :value.sync=\"birthCountryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"birth\" id=\"birth\" class=\"hidden\" v-model=\"birth_country\" v-validate:birth=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('citizenship') }\">\n            <label for=\"citizenship\" class=\"col-sm-2 control-label\">Citizenship</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"country\" :value.sync=\"citizenshipObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"citizenship\" id=\"citizenship\" class=\"hidden\" v-model=\"citizenship\" v-validate:citizenship=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Upload Copy\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'passport-'+given_names+'-'+surname\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a v-if=\"!isUpdate\" href=\"/dashboard/passports\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n                <a v-if=\"isUpdate\" @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n    </form>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Awesome!</strong>\n        <p>Reservation updated!</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-17773f82", module.exports)
+    hotAPI.createRecord("_v-b807f5a4", module.exports)
   } else {
-    hotAPI.update("_v-17773f82", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-b807f5a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],148:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":188,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51306,6 +51684,7 @@ exports.default = {
     },
     methods: {
         // emulate pagination
+
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -51342,12 +51721,57 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4b4c5de6", module.exports)
+    hotAPI.createRecord("_v-2aa502b9", module.exports)
   } else {
-    hotAPI.update("_v-4b4c5de6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2aa502b9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],149:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],151:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'reconcile-fund',
+    props: ['id'],
+    components: {
+        'alert': _vueStrap2.default.alert
+    },
+    data: function data() {
+        return {
+            showSuccess: false
+        };
+    },
+
+    methods: {
+        reconcile: function reconcile() {
+            this.$http.put('funds/' + this.id + '/reconcile').then(function (response) {
+                this.showSuccess = true;
+            });
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <btn class=\"btn btn-sm btn-default\" @click=\"reconcile\"><i class=\"fa fa-calculator\"></i> Reconcile</btn>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Awesome!</strong>\n        <p>Fund has been reconciled!</p>\n    </alert>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-24c26f36", module.exports)
+  } else {
+    hotAPI.update("_v-24c26f36", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51379,12 +51803,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-558d51ea", module.exports)
+    hotAPI.createRecord("_v-384f8292", module.exports)
   } else {
-    hotAPI.update("_v-558d51ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-384f8292", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],150:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51515,8 +51939,8 @@ exports.default = {
         addCosts: function addCosts() {
             // prep current costs
             var currentCostIds = [];
-            _.each(this.costs, function (cost) {
-                currentCostIds.push({ id: cost.id });
+            _.each(this.reservation.costs.data, function (cost) {
+                currentCostIds.push({ id: cost.id || cost.cost_id, locked: cost.locked });
             });
 
             // prep added costs
@@ -51577,18 +52001,8 @@ exports.default = {
 
         // get available costs intersect with current
         this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
-            return !_.findWhere(reservation.costs.data, { cost_id: cost.id });
+            return !_.findWhere(reservation.costs.data, { cost_id: cost.id, type: 'incremental' || 'optional' });
         });
-
-        /*_.some(this.availableCosts, function (cost) {
-            if (cost.type === 'incremental') {
-                _.some(cost.payments.data, function (payment) {
-                    if (moment(payment.due_at).isAfter()){
-                        return payment.due_next = true;
-                    }
-                });
-            }
-        });*/
     }), _methods),
     ready: function ready() {
         this.resource.get().then(function (response) {
@@ -51597,18 +52011,18 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <button class=\"btn btn-primary btn-xs\" @click=\"add\"><span class=\"fa fa-plus\"></span> Add Existing\n    </button>\n    <button class=\"btn btn-primary btn-xs\" @click=\"addNew\"><span class=\"fa fa-plus\"></span> Create New\n    </button>\n\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th>Name</th>\n            <th>Due Date</th>\n            <th>Amount</th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"reservation\">\n        <template v-for=\"due in reservation.dues.data\">\n            <tr>\n                <td>\n                    <i class=\"fa {{ isPast(due.due_at) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}\"></i>&nbsp;\n                    {{ due.cost }}\n                </td>\n                <td>{{ due.due_at| moment 'll' }}</td>\n                <td>{{ due.amount| currency }}</td>\n                <td>\n                    <a class=\"btn btn-default btn-xs\" @click=\"edit(cost)\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger btn-xs\" @click=\"remove(cost)\"><i class=\"fa fa-times\"></i></a>\n                </td>\n            </tr>\n            <!--<tr v-for=\"payment in cost.payments.data\">\n                <td>\n                    <template v-if=\"cost.type === 'incremental' && payment.upfront\">\n                        <small class=\"badge badge-success\">Paid</small>\n                    </template>\n                    <template v-if=\"cost.type === 'incremental' && !payment.upfront && (payment.due_next || false)\">\n                        <small class=\"badge badge-danger\">Next Defaulting Amount</small>\n                    </template>\n                    <template v-if=\"cost.type === 'incremental' && dateIsBetween(payment.due_at, 0)\">\n                        <small class=\"badge badge-info\">Due this month</small>\n                    </template>\n                    <template v-if=\"cost.type === 'incremental' && dateIsBetween(payment.due_at, 1)\">\n                        <small class=\"badge badge-warning\">Due next month</small>\n                    </template>\n                </td>\n                <td>{{ payment.due_at | moment 'll' }}</td>\n                <td>{{ payment.amount_owed | currency }}</td>\n                <td></td>\n            </tr>-->\n            <!--<tr></tr>-->\n        </template>\n\n        </tbody>\n    </table>\n\n    <modal title=\"Add Costs\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addCosts\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"AddCost\">\n                <form class=\"form-horizontal\" novalidate=\"\">\n                    <div class=\"form-group\" :class=\"{ 'has-error': checkForError('costs') }\">\n                        <label class=\"col-sm-2 control-label\">Available Costs</label>\n                        <div class=\"col-sm-10\">\n                            <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedCosts\" :options=\"availableCosts\" label=\"name\"></v-select>\n                            <select hidden=\"\" v-model=\"user_id\" v-validate:costs=\"{ required: true }\" multiple=\"\">\n                                <option :value=\"cost.id\" v-for=\"cost in costs\">{{cost.name}}</option>\n                            </select>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"Edit Cost\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\" :callback=\"update\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"EditCost\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                <label for=\"grace_period\">Grace Period</label>\n                                <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                    <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"editedCost.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                    <span class=\"input-group-addon\">Days</span>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"New Cost\" :show.sync=\"showNewModal\" effect=\"fade\" width=\"800\" :callback=\"addNew\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"NewCost\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('name')}\">\n                                <label for=\"name\">Name</label>\n                                <input type=\"text\" id=\"name\" v-model=\"newCost.name\" v-validate:name=\"{require:true}\" class=\"form-control input-sm\">\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newCost.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newCost.due_at\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"newCost.enforced\">\n                                    Enforced?\n                                </label>\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n        <button class=\"btn btn-primary btn-xs\" @click=\"add\"><span class=\"fa fa-plus\"></span> Add Existing\n        </button>\n        <!--<button class=\"btn btn-primary btn-xs\" @click=\"addNew\"><span\n                class=\"fa fa-plus\"></span> Create New\n        </button>-->\n\n        <hr class=\"divider sm\">\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th>Status</th>\n                <th>Name</th>\n                <th>Due Date</th>\n                <th>Amount</th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody v-if=\"reservation\">\n            <template v-for=\"due in reservation.dues.data\">\n                <tr>\n                    <td class=\"text-center\">\n\t\t\t\t\t\t<small class=\"badge\" :class=\"{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }\">{{due.status|capitalize}}</small>\n\t\t\t\t\t</td>\n                    <td>\n                        {{ due.cost }}\n                    </td>\n                    <td>{{ due.due_at| moment 'll' }}</td>\n                    <td>{{ due.amount| currency }}</td>\n                    <td>\n                        <a class=\"btn btn-default btn-xs\" @click=\"edit(due)\"><i class=\"fa fa-pencil\"></i></a>\n                        <a class=\"btn btn-danger btn-xs\" @click=\"remove(due)\"><i class=\"fa fa-times\"></i></a>\n                    </td>\n                </tr>\n            </template>\n\n            </tbody>\n        </table>\n\n        <modal title=\"Add Costs\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addCosts\">\n            <div slot=\"modal-body\" class=\"modal-body\">\n                <validator name=\"AddCost\">\n                    <form class=\"for\" novalidate=\"\">\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('costs') }\">\n                            <label class=\"control-label\">Available Costs</label>\n                            <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedCosts\" :options=\"availableCosts\" label=\"name\"></v-select>\n                            <select hidden=\"\" v-model=\"user_id\" v-validate:costs=\"{ required: true }\" multiple=\"\">\n                                <option :value=\"cost.id\" v-for=\"cost in costs\">{{cost.name}}</option>\n                            </select>\n                        </div>\n                    </form>\n                </validator>\n            </div>\n        </modal>\n\n        <modal title=\"Edit Cost\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\" :callback=\"update\">\n            <div slot=\"modal-body\" class=\"modal-body\">\n                <validator name=\"EditCost\">\n                    <form class=\"form\" novalidate=\"\">\n                        <div class=\"row\">\n                            <div class=\"col-sm-12\">\n\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('locked') }\" v-if=\"editedCost.type = 'incremental'\">\n                                    <label for=\"locked\">Locked</label>\n                                    <input id=\"locked\" type=\"checkbox\" class=\"form-control\" v-model=\"editedCost.locked\" v-validate:locked=\"{required: true, min:false}\">\n                                </div>\n\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                    <label for=\"grace_period\">Grace Period</label>\n                                    <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                        <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"editedCost.grace_period\" v-validate:grace=\"{required: { rule: true }}\">\n                                        <span class=\"input-group-addon\">Days</span>\n                                    </div>\n                                </div>\n                                <div class=\"form-group\">\n                                    <label for=\"due_date\">Due Date</label>\n                                    <input id=\"due_date\" type=\"datetime-local\" class=\"form-control\" v-model=\"editedCost.due_date\">\n                                </div>\n                            </div>\n                        </div>\n                    </form>\n                </validator>\n            </div>\n        </modal>\n\n        <modal title=\"New Cost\" :show.sync=\"showNewModal\" effect=\"fade\" width=\"800\" :callback=\"addNew\">\n            <div slot=\"modal-body\" class=\"modal-body\">\n                <validator name=\"NewCost\">\n                    <form class=\"form\" novalidate=\"\">\n                        <div class=\"row\">\n                            <div class=\"col-sm-12\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('name')}\">\n                                    <label for=\"name\">Name</label>\n                                    <input type=\"text\" id=\"name\" v-model=\"newCost.name\" v-validate:name=\"{require:true}\" class=\"form-control input-sm\">\n                                </div>\n\n                                <div class=\"row\">\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                            <label for=\"grace_period\">Grace Period</label>\n                                            <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                                <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newCost.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                                <span class=\"input-group-addon\">Days</span>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('due')}\">\n                                            <label for=\"due_at\">Due</label>\n                                            <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newCost.due_at\" v-validate:due=\"{required: true}\">\n                                        </div>\n\n                                    </div>\n                                </div>\n\n                                <br>\n                                <div class=\"checkbox\">\n                                    <label>\n                                        <input type=\"checkbox\" v-model=\"newCost.enforced\">\n                                        Enforced?\n                                    </label>\n                                </div>\n                            </div>\n                        </div>\n                    </form>\n                </validator>\n            </div>\n        </modal>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-86b15298", module.exports)
+    hotAPI.createRecord("_v-48b96660", module.exports)
   } else {
-    hotAPI.update("_v-86b15298", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-48b96660", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/defineProperty":14,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],151:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":14,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51628,7 +52042,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     name: 'admin-reservation-deadlines',
     props: ['id'],
-    components: { vSelect: _vueSelect2.default, 'modal': _vueStrap2.default.modal },
+    components: { vSelect: _vueSelect2.default, 'modal': _vueStrap2.default.modal, 'alert': _vueStrap2.default.alert },
     data: function data() {
         return {
             reservation: null,
@@ -51755,9 +52169,9 @@ exports.default = {
             delete trip.difficulty;
             delete trip.rep_id;
 
-            this.$http.put('trips/' + trip.id, trip).then(function (response) {
+            this.$http.put('trips/' + trip.id + '?include=deadlines', trip).then(function (response) {
                 var thisTrip = response.data.data;
-                this.selectedDeadlines = new Array(this.newDeadline);
+                this.selectedDeadlines = new Array(_.findWhere(response.data.data.deadlines.data, { name: this.newDeadline.name }));
 
                 return this.addDeadlines();
             });
@@ -51802,18 +52216,18 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <button class=\"btn btn-primary btn-xs\" @click=\"add\">\n        <span class=\"fa fa-plus\"></span> Add Existing\n    </button>\n    <button class=\"btn btn-primary btn-xs\" @click=\"new\">\n        <span class=\"fa fa-plus\"></span> Create New\n    </button>\n\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th>Name</th>\n            <th>Name</th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"reservation\">\n        <tr v-for=\"deadline in reservation.deadlines.data\">\n            <td>\n                <i class=\"fa {{ isPast(deadline.due_at) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}\"></i>&nbsp;\n                {{ deadline.name ? deadline.name : !deadline.cost_name ? deadline.cost_name : deadline.item  + ' Submission' }}\n            </td>\n            <td>{{ deadline.due_at| moment 'll' }}</td>\n            <td>\n                <a class=\"btn btn-default btn-xs\" @click=\"edit(deadline)\"><i class=\"fa fa-pencil\"></i></a>\n                <a class=\"btn btn-danger btn-xs\" @click=\"remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n    </table>\n\n    <modal title=\"Add Deadlines\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addDeadlines\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"AddDeadline\">\n                <form class=\"form-horizontal\" novalidate=\"\">\n                    <div class=\"form-group\" :class=\"{ 'has-error': checkForError('deadlines') }\"><label class=\"col-sm-2 control-label\">Available Deadlines</label>\n                        <div class=\"col-sm-10\">\n                            <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedDeadlines\" :options=\"availableDeadlines\" label=\"name\"></v-select>\n                            <select hidden=\"\" v-model=\"user_id\" v-validate:deadlines=\"{ required: true }\" multiple=\"\">\n                                <option :value=\"deadline.id\" v-for=\"deadline in deadlines\">{{deadline.name}}</option>\n                            </select></div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"Edit Deadline\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\" :callback=\"update\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"EditDeadline\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForEditDeadlineError('grace') }\">\n                                <label for=\"grace_period\">Grace Period</label>\n                                <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditDeadlineError('grace') }\">\n                                    <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"editedDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                    <span class=\"input-group-addon\">Days</span>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"New Deadline\" :show.sync=\"showNewModal\" effect=\"fade\" width=\"800\" :callback=\"addNew\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"NewDeadline\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForNewDeadlineError('name')}\">\n                                <label for=\"name\">Name</label>\n                                <input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" v-validate:name=\"{require:true}\" class=\"form-control input-sm\">\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewDeadlineError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForNewDeadlineError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewDeadlineError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.date\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n                                    Enforced?\n                                </label>\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <button class=\"btn btn-primary btn-xs\" @click=\"add\">\n        <span class=\"fa fa-plus\"></span> Add Existing\n    </button>\n    <!--<button class=\"btn btn-primary btn-xs\" @click=\"new\">\n        <span class=\"fa fa-plus\"></span> Create New\n    </button>-->\n\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th>Name</th>\n            <th>Due Date</th>\n            <th>Grace Period</th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"reservation\">\n        <tr v-for=\"deadline in reservation.deadlines.data\">\n            <td>\n                <i class=\"fa {{ isPast(deadline.due_at) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}\"></i>&nbsp;\n                {{ deadline.name ? deadline.name : !deadline.cost_name ? deadline.cost_name : deadline.item  + ' Submission' }}\n            </td>\n            <td>{{ deadline.due_at| moment 'll' }}</td>\n            <td>{{ deadline.grace_period }} {{ deadline.grace_period | pluralize 'day' }}</td>\n            <td>\n                <a class=\"btn btn-default btn-xs\" @click=\"edit(deadline)\"><i class=\"fa fa-pencil\"></i></a>\n                <a class=\"btn btn-danger btn-xs\" @click=\"remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n    </table>\n\n    <modal title=\"Add Deadlines\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addDeadlines\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"AddDeadline\">\n                <form class=\"form-horizontal\" novalidate=\"\">\n                    <div class=\"form-group\" :class=\"{ 'has-error': checkForError('deadlines') }\"><label class=\"col-sm-2 control-label\">Available Deadlines</label>\n                        <div class=\"col-sm-10\">\n                            <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedDeadlines\" :options=\"availableDeadlines\" label=\"name\"></v-select>\n                            <select hidden=\"\" v-model=\"user_id\" v-validate:deadlines=\"{ required: true }\" multiple=\"\">\n                                <option :value=\"deadline.id\" v-for=\"deadline in deadlines\">{{deadline.name}}</option>\n                            </select></div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"Edit Deadline\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\" :callback=\"update\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"EditDeadline\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForEditDeadlineError('grace') }\">\n                                <label for=\"grace_period\">Grace Period</label>\n                                <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditDeadlineError('grace') }\">\n                                    <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"editedDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                    <span class=\"input-group-addon\">Days</span>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"New Deadline\" :show.sync=\"showNewModal\" effect=\"fade\" width=\"800\" :callback=\"addNew\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"NewDeadline\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForNewDeadlineError('name')}\">\n                                <label for=\"name\">Name</label>\n                                <input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" v-validate:name=\"{require:true}\" class=\"form-control input-sm\">\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewDeadlineError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForNewDeadlineError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewDeadlineError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.date\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n                                    Enforced?\n                                </label>\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-45829fee", module.exports)
+    hotAPI.createRecord("_v-25adec96", module.exports)
   } else {
-    hotAPI.update("_v-45829fee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-25adec96", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],152:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51837,7 +52251,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     name: 'admin-reservation-edit',
     props: ['id'],
-    components: { vSelect: _vueSelect2.default, 'datepicker': _vueStrap2.default.datepicker, 'upload-create-update': _adminUploadCreateUpdate2.default },
+    components: { vSelect: _vueSelect2.default, 'datepicker': _vueStrap2.default.datepicker, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal, 'upload-create-update': _adminUploadCreateUpdate2.default },
     data: function data() {
         return {
             given_names: '',
@@ -51868,13 +52282,16 @@ exports.default = {
             countryCodeObj: null,
             userObj: null,
             errors: [],
-            countries: []
+            countries: [],
+            showSuccess: false,
+            showSaveAlert: false,
+            hasChanged: false
         };
     },
 
     computed: {
         user_id: function user_id() {
-            return _.isObject(this.userObj) ? this.userObj.code : null;
+            return _.isObject(this.userObj) ? this.userObj.id : null;
         },
         country_code: function country_code() {
             if (_.isObject(this.countryCodeObj)) {
@@ -51887,6 +52304,9 @@ exports.default = {
             // if user clicked submit button while the field is invalid trigger error styles
 
             return this.$UpdateReservation[field].invalid && this.attemptSubmit;
+        },
+        onTouched: function onTouched() {
+            this.hasChanged = true;
         },
         searchUsers: function searchUsers(search, loading) {
             loading(true);
@@ -51914,16 +52334,29 @@ exports.default = {
                     phone_two: this.phone_two,
                     city: this.city,
                     state: this.state,
+                    zip: this.zip,
                     country_code: this.country_code,
                     companion_limit: this.companion_limit,
                     avatar_upload_id: this.avatar_upload_id,
                     user_id: this.user_id
                 }).then(function (response) {
                     $.extend(this, response.data.data);
+                    this.showSuccess = true;
+                    this.hasChanged = false;
                 }, function (error) {
                     this.errors = error.data.errors;
                 });
             }
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/admin/reservations/' + this.id;
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
         }
     },
     events: {
@@ -51969,18 +52402,18 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateReservation\">\n    <form id=\"UpdateReservation\" novalidate=\"\" class=\"form-horizontal\">\n\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <div class=\"media\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n                        <button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n                            Set Avatar\n                        </button>\n                    </div>\n                </div>\n                <div class=\"collapse\" id=\"avatarCollapse\">\n                    <div class=\"well\">\n                        <upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n                    <label for=\"given_names\">Given Names</label>\n                    <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname')  }\">\n                <label for=\"surname\">Surname</label>\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <label>Date of Birth</label>\n                <datepicker v-if=\"loaded\" :value.sync=\"birthday\" format=\"YYYY-MM-DD\" :clear-button=\"true\" placeholder=\"Date of Birth\"></datepicker>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('size') }\">\n                    <label for=\"infoShirtSize\">Shirt Sizes</label>\n                    <select class=\"form-control\" v-model=\"shirt_size\" v-validate:size=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoShirtSize\">\n                        <option value=\"S\">S (Small)</option>\n                        <option value=\"M\">M (Medium)</option>\n                        <option value=\"L\">L (Large)</option>\n                        <option value=\"XL\">XL (Extra Large)</option>\n                        <option value=\"XXL\">XXL (2 Extra Large)</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <label>Gender</label>\n                <div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n                    <label>\n                        <input type=\"radio\" v-model=\"gender\" v-validate:gender=\"{ required: { rule: true} }\" value=\"male\"> Male\n                    </label>\n                </div>\n                <div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n                    <label>\n                        <input type=\"radio\" v-model=\"gender\" v-validate:gender=\"\" value=\"female\"> Female\n                    </label>\n                </div>\n                <span class=\"help-block\" v-show=\"checkForError('gender')\">Select a gender</span>\n\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n                    <label for=\"infoRelStatus\">Relationship Status</label>\n                    <select class=\"form-control\" v-model=\"status\" v-validate:status=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoRelStatus\">\n                        <option value=\"single\">Single</option>\n                        <option value=\"married\">Married</option>\n                        <option value=\"divorced\">Divorced</option>\n                        <option value=\"widowed\">Widowed</option>\n\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('phoneone') ||  checkForError('phonetwo') }\">\n            <div class=\"col-sm-6\">\n                <label for=\"infoPhone\">Phone 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" v-validate:phoneone=\"{ required: true }\" placeholder=\"123-456-7890\">\n            </div>\n            <div class=\"col-sm-6\">\n                <label for=\"infoMobile\">Phone 2</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" v-validate:phonetwo=\"{ required: true }\" placeholder=\"123-456-7890\">\n            </div>\n        </div>\n\n        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"infoEmail\">Email</label>\n                <input type=\"email\" class=\"form-control\" v-model=\"email\" id=\"infoEmail\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\" placeholder=\"Email˚\">\n            </div>\n        </div>\n        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('address') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"infoAddress\">Address 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address\" id=\"infoAddress\" v-validate:address=\"{ required: true }\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"form-group col-sm-6\" :class=\"{ 'has-error': checkForError('city') }\">\n                <label for=\"infoCity\">City</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" v-validate:city=\"{ required: true }\" placeholder=\"City\">\n            </div>\n            <div class=\"form-group col-sm-6\" :class=\"{ 'has-error': checkForError('state') }\">\n                <label for=\"infoState\">State/Prov.</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" v-validate:state=\"{ required: true }\" placeholder=\"State/Province\">\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"form-group col-sm-4\" :class=\"{ 'has-error': checkForError('zip') }\">\n                <label for=\"infoZip\">ZIP/Postal Code</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" v-validate:zip=\"{ required: true }\" placeholder=\"12345\">\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('user') }\">\n                    <label for=\"manager\">Managing User</label>\n                    <v-select class=\"form-control\" :value.sync=\"userObj\" :options=\"users\" :debounce=\"250\" :on-search=\"searchUsers\" label=\"name\"></v-select>\n                    <select id=\"manager\" hidden=\"\" class=\"form-control hidden\" v-model=\"user_id\" v-validate:user=\"{require:true}\">\n                        <option v-for=\"user in users\" :value=\"user.id\">{{ user.name }}</option>\n                    </select>\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n                    <label for=\"companions\">Companions</label>\n                    <input type=\"number\" class=\"form-control\" v-validate:companions=\"{ require: true }\" v-model=\"companion_limit\" id=\"companions\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-12 text-center\">\n                <br>\n                <a href=\"/admin/reservations/{{id}}\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"update\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateReservation\" @touched=\"onTouched\">\n    <form id=\"UpdateReservation\" novalidate=\"\" class=\"form-horizontal\">\n\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <div class=\"media\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n                        <button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n                            Set Avatar\n                        </button>\n                    </div>\n                </div>\n                <div class=\"collapse\" id=\"avatarCollapse\">\n                    <div class=\"well\">\n                        <upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n                    <label for=\"given_names\">Given Names</label>\n                    <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname')  }\">\n                <label for=\"surname\">Surname</label>\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <label>Date of Birth</label>\n                <datepicker v-if=\"loaded\" :value.sync=\"birthday\" format=\"yyyy-MM-dd\" :clear-button=\"true\" placeholder=\"Date of Birth\"></datepicker>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('size') }\">\n                    <label for=\"infoShirtSize\">Shirt Sizes</label>\n                    <select class=\"form-control\" v-model=\"shirt_size\" v-validate:size=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoShirtSize\">\n                        <option value=\"S\">S (Small)</option>\n                        <option value=\"M\">M (Medium)</option>\n                        <option value=\"L\">L (Large)</option>\n                        <option value=\"XL\">XL (Extra Large)</option>\n                        <option value=\"XXL\">XXL (2 Extra Large)</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <label>Gender</label>\n                <div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n                    <label>\n                        <input type=\"radio\" v-model=\"gender\" v-validate:gender=\"{ required: { rule: true} }\" value=\"male\"> Male\n                    </label>\n                </div>\n                <div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n                    <label>\n                        <input type=\"radio\" v-model=\"gender\" v-validate:gender=\"\" value=\"female\"> Female\n                    </label>\n                </div>\n                <span class=\"help-block\" v-show=\"checkForError('gender')\">Select a gender</span>\n\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n                    <label for=\"infoRelStatus\">Relationship Status</label>\n                    <select class=\"form-control\" v-model=\"status\" v-validate:status=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoRelStatus\">\n                        <option value=\"single\">Single</option>\n                        <option value=\"married\">Married</option>\n                        <option value=\"divorced\">Divorced</option>\n                        <option value=\"widowed\">Widowed</option>\n\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-sm-6\">\n                <label for=\"infoPhone\">Phone 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n            </div>\n            <div class=\"col-sm-6\">\n                <label for=\"infoMobile\">Phone 2</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n            </div>\n        </div>\n\n        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"infoEmail\">Email</label>\n                <input type=\"email\" class=\"form-control\" v-model=\"email\" id=\"infoEmail\" v-validate:email=\"['email']\" placeholder=\"Email˚\">\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"infoAddress\">Address 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"form-group col-sm-6\">\n                <label for=\"infoCity\">City</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n            </div>\n            <div class=\"form-group col-sm-6\">\n                <label for=\"infoState\">State/Prov.</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"form-group col-sm-4\">\n                <label for=\"infoZip\">ZIP/Postal Code</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\">\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"\" v-model=\"country_code\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('user') }\">\n                    <label for=\"manager\">Managing User</label>\n                    <v-select class=\"form-control\" :value.sync=\"userObj\" :options=\"users\" :debounce=\"250\" :on-search=\"searchUsers\" label=\"name\"></v-select>\n                    <select id=\"manager\" hidden=\"\" class=\"form-control hidden\" v-model=\"user_id\" v-validate:user=\"{require:true}\">\n                        <option v-for=\"user in users\" :value=\"user.id\">{{ user.name }}</option>\n                    </select>\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n                    <label for=\"companions\">Companions</label>\n                    <input type=\"number\" number=\"\" class=\"form-control\" v-validate:companions=\"{ require: true }\" v-model=\"companion_limit\" id=\"companions\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-12 text-center\">\n                <br>\n                <a @click=\"update\" class=\"btn btn-primary\">Save</a>\n                <a @click=\"back\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n\n    </form>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Awesome!</strong>\n        <p>Reservation updated!</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1bac2c0c", module.exports)
+    hotAPI.createRecord("_v-6a8376e0", module.exports)
   } else {
-    hotAPI.update("_v-1bac2c0c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6a8376e0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],153:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":188,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],156:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -52010,6 +52443,14 @@ exports.default = {
 		tripId: {
 			type: String,
 			default: null
+		},
+		storageName: {
+			type: String,
+			default: 'AdminReservationsListConfig'
+		},
+		type: {
+			type: String,
+			default: 'current'
 		}
 	},
 	data: function data() {
@@ -52072,11 +52513,11 @@ exports.default = {
 		},
 		'groupsArr': function groupsArr(val) {
 			this.filters.groups = _.pluck(val, 'id') || '';
-			this.searchReservations();
+			//				this.searchReservations();
 		},
 		'usersArr': function usersArr(val) {
 			this.filters.user = _.pluck(val, 'id') || '';
-			this.searchReservations();
+			//				this.searchReservations();
 		},
 		'tagsString': function tagsString(val) {
 			var tags = val.split(/[\s,]+/);
@@ -52089,6 +52530,9 @@ exports.default = {
 		'ageMax': function ageMax(val) {
 			this.searchReservations();
 		},
+		'direction': function direction(val) {
+			this.searchReservations();
+		},
 		'activeFields': function activeFields(val, oldVal) {
 			// if the orderBy field is removed from view
 			if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
@@ -52098,28 +52542,25 @@ exports.default = {
 			this.updateConfig();
 		},
 		'search': function search(val, oldVal) {
-			this.updateConfig();
 			this.page = 1;
 			this.searchReservations();
 		},
 		'page': function page(val, oldVal) {
-			this.updateConfig();
 			this.searchReservations();
 		},
 		'per_page': function per_page(val, oldVal) {
-			this.updateConfig();
-			this.searchReservations();
-		},
-		'groups': function groups() {
 			this.searchReservations();
 		}
 	},
+	/*'groups':function () {
+ 	this.searchReservations();
+ }*/
 	methods: {
 		consoleCallback: function consoleCallback(val) {
 			console.dir((0, _stringify2.default)(val));
 		},
 		updateConfig: function updateConfig() {
-			localStorage.AdminReservationsListConfig = (0, _stringify2.default)({
+			localStorage[this.storageName] = (0, _stringify2.default)({
 				activeFields: this.activeFields,
 				maxActiveFields: this.maxActiveFields,
 				per_page: this.per_page,
@@ -52149,7 +52590,9 @@ exports.default = {
 			return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields;
 		},
 		setOrderByField: function setOrderByField(field) {
-			return this.orderByField = field, this.direction = 1;
+			this.orderByField = field;
+			this.direction = 1;
+			this.searchReservations();
 		},
 		resetFilter: function resetFilter() {
 			this.orderByField = 'surname';
@@ -52175,20 +52618,6 @@ exports.default = {
 		country: function country(code) {
 			return code;
 		},
-		totalAmountRaised: function totalAmountRaised(reservation) {
-			var total = 0;
-			_.each(reservation.fundraisers.data, function (fundraiser) {
-				total += fundraiser.raised_amount;
-			});
-			return total;
-		},
-		totalPercentRaised: function totalPercentRaised(reservation) {
-			var totalDue = 0;
-			_.each(reservation.costs.data, function (cost) {
-				totalDue += cost.amount;
-			});
-			return this.totalAmountRaised(reservation) / totalDue * 100;
-		},
 		age: function age(birthday) {
 			return moment().diff(birthday, 'years');
 		},
@@ -52198,8 +52627,21 @@ exports.default = {
 				include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
 				search: this.search,
 				per_page: this.per_page,
-				page: this.page
+				page: this.page,
+				sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
 			};
+
+			switch (this.type) {
+				case 'current':
+					params.current = true;
+					break;
+				case 'archived':
+					params.archived = true;
+					break;
+				case 'dropped':
+					params.dropped = true;
+					break;
+			}
 
 			$.extend(params, this.filters);
 			$.extend(params, {
@@ -52208,11 +52650,12 @@ exports.default = {
 			this.$http.get('reservations', params).then(function (response) {
 				var self = this;
 				_.each(response.data.data, function (reservation) {
-					reservation.amount_raised = this.totalAmountRaised(reservation);
-					reservation.percent_raised = this.totalPercentRaised(reservation);
+					reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100;
 				}, this);
 				this.reservations = response.data.data;
 				this.pagination = response.data.meta.pagination;
+			}).then(function () {
+				this.updateConfig();
 			});
 		},
 		getGroups: function getGroups(search, loading) {
@@ -52239,10 +52682,11 @@ exports.default = {
 	},
 	ready: function ready() {
 		// load view state
-		if (localStorage.AdminReservationsListConfig) {
-			var config = JSON.parse(localStorage.AdminReservationsListConfig);
+		if (localStorage[this.storageName]) {
+			var config = JSON.parse(localStorage[this.storageName]);
 			this.activeFields = config.activeFields;
 			this.maxActiveFields = config.maxActiveFields;
+			this.filters = config.filters;
 		}
 		// populate
 		this.getGroups();
@@ -52273,7 +52717,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"groupFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupsArr\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" v-if=\"!tripId\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"amount_raised\" :disabled=\"maxCheck('amount_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<span class=\"caret\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\tActive Filters:\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t</div>\n        <hr class=\"divider sm\">\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('amount_raised')\" :class=\"{'text-primary': orderByField === 'amount_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('amount_raised')\" v-if=\"orderByField !== 'amount_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'amount_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('amount_raised')\" v-text=\"reservation.amount_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <td><a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-pencil\"></i></a></td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <nav>\n                            <ul class=\"pagination pagination-sm\">\n                                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                        <span aria-hidden=\"true\">«</span>\n                                    </a>\n                                </li>\n                                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                        <span aria-hidden=\"true\">»</span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </nav>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"groupFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupsArr\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" v-if=\"!tripId\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"total_raised\" :disabled=\"maxCheck('total_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<span class=\"caret\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\tActive Filters:\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t</div>\n        <hr class=\"divider sm\">\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('total_raised')\" :class=\"{'text-primary': orderByField === 'total_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('total_raised')\" v-if=\"orderByField !== 'total_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'total_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('total_raised')\" v-text=\"reservation.total_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <td><a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-pencil\"></i></a></td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <nav>\n                            <ul class=\"pagination pagination-sm\">\n                                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                        <span aria-hidden=\"true\">«</span>\n                                    </a>\n                                </li>\n                                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                        <span aria-hidden=\"true\">»</span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </nav>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -52283,12 +52727,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0ff77a9a", module.exports)
+    hotAPI.createRecord("_v-f7d35b42", module.exports)
   } else {
-    hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-f7d35b42", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],154:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52334,12 +52778,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5e12a7a6", module.exports)
+    hotAPI.createRecord("_v-a13fe9fe", module.exports)
   } else {
-    hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-a13fe9fe", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],155:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52390,12 +52834,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-01de7a71", module.exports)
+    hotAPI.createRecord("_v-49f0bb1d", module.exports)
   } else {
-    hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-49f0bb1d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],156:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52450,6 +52894,7 @@ exports.default = {
     },
     methods: {
         // emulate pagination
+
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -52495,12 +52940,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5d37e43e", module.exports)
+    hotAPI.createRecord("_v-75d11b12", module.exports)
   } else {
-    hotAPI.update("_v-5d37e43e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-75d11b12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../passports/passport-create-update.vue":147,"vue":117,"vue-hot-reload-api":112}],157:[function(require,module,exports){
+},{"../passports/passport-create-update.vue":149,"vue":117,"vue-hot-reload-api":112}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52555,6 +53000,7 @@ exports.default = {
     },
     methods: {
         // emulate pagination
+
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -52600,12 +53046,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1bd1d2ef", module.exports)
+    hotAPI.createRecord("_v-459f93c3", module.exports)
   } else {
-    hotAPI.update("_v-1bd1d2ef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-459f93c3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../visas/visa-create-update.vue":196,"vue":117,"vue-hot-reload-api":112}],158:[function(require,module,exports){
+},{"../visas/visa-create-update.vue":199,"vue":117,"vue-hot-reload-api":112}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52636,6 +53082,13 @@ exports.default = {
 				return !!parseInt(val);
 			}
 		},
+		'managing': {
+			type: Boolean,
+			default: false,
+			coerce: function coerce(val) {
+				return parseInt(val) > 0;
+			}
+		},
 		name: {
 			type: String,
 			default: null
@@ -52654,21 +53107,30 @@ exports.default = {
 			showRight: false
 		};
 	},
+
+	methods: {
+		isDashboard: function isDashboard() {
+			return this.auth && window.location.pathname.split('/')[1] === 'dashboard';
+		},
+		isAdmin: function isAdmin() {
+			return this.admin && window.location.pathname.split('/')[1] === 'admin';
+		}
+	},
 	ready: function ready() {}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div style=\"display:inline;\">\n\t<button class=\"navbar-toggle\" @click=\"showRight = true\">\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t</button>\n\t<aside :show.sync=\"showRight\" placement=\"right\" header=\"Missions.Me\" :width=\"275\">\n\t\t<ul class=\"nav navmenu-nav\">\n\t\t\t<li class=\"donate-nav\"><a class=\"navDonate\" href=\"/fundraisers\"><i class=\"fa fa-heart\"></i> Donate To A Cause</a>\n\t\t\t</li>\n\t\t\t<li v-if=\"auth\" id=\"userMenu\" class=\"dropdown-toggle visible-xs text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"img-xs img-circle av-left\" :src=\"avatar\" :alt=\"name\"> {{ name }}\n\t\t\t\t\t<i class=\"fa fa-angle-down\"></i>\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t<ul v-if=\"auth\" class=\"dropdown-menu\" aria-labelledby=\"userMenu\">\n\t\t\t\t<li class=\"text-center\"><a :href=\"url\">My Profile</a></li>\n\t\t\t\t<li class=\"text-center\"><a href=\"/dashboard\">Dashboard</a></li>\n\t\t\t\t<li v-if=\"admin\" class=\"text-center\"><a href=\"/admin\">Admin</a></li>\n\t\t\t\t<li class=\"text-center\"><a href=\"/logout\">Sign Out</a></li>\n\t\t\t</ul>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Login</a></li>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Sign Up</a></li>\n\t\t\t<li class=\"navlabel\">Get Started</li>\n\t\t\t<li><a href=\"/campaigns\">Trips</a></li>\n\t\t\t<li><a href=\"/fundraisers\">Fundraisers</a></li>\n\t\t\t<li><a href=\"/groups\">Groups</a></li>\n\t\t\t<li class=\"navlabel\">1Nation1Day</li>\n\t\t\t<li><a href=\"http://1nation1day.com/\">2017 Nicaragua</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/dominican\">2015 Dominican</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/honduras\">2013 Honduras</a></li>\n\t\t\t<li class=\"navlabel\">Causes</li>\n\t\t\t<li><a href=\"/water\">Clean Water</a></li>\n\t\t\t<li><a href=\"/orphans\">Rescue Orphans</a></li>\n\t\t\t<!--<li><a href=\"#\">Homes</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Trafficking Rescue</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Leadership Centers</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Sponsor A Project</a></li>-->\n\t\t\t<li class=\"navlabel\">Train</li>\n\t\t\t<li><a href=\"/college\">Missions.Me College</a></li>\n\t\t\t<li><a href=\"/speakers\">Speakers</a></li>\n\t\t\t<li class=\"navlabel\">About</li>\n\t\t\t<li><a href=\"#\">Missions.Me</a></li>\n\t\t\t<li><a href=\"#\">Contact Us</a></li>\n\t\t</ul>\n\t</aside>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div style=\"display:inline;\">\n\t<button class=\"navbar-toggle\" @click=\"showRight = true\">\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t</button>\n\t<aside :show.sync=\"showRight\" placement=\"right\" header=\"Missions.Me\" :width=\"275\">\n\t\t<ul class=\"nav navmenu-nav\">\n\t\t\t<li class=\"donate-nav\"><a class=\"navDonate\" href=\"/fundraisers\"><i class=\"fa fa-heart\"></i> Donate To A Cause</a>\n\t\t\t</li>\n\t\t\t<li v-if=\"auth\" id=\"userMenu\" class=\"dropdown-toggle visible-xs text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"img-xs img-circle av-left\" :src=\"avatar\" :alt=\"name\"> {{ name }}\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t<template v-if=\"auth\" class=\"dropdown-menu\" aria-labelledby=\"userMenu\">\n\t\t\t\t<li class=\"navlabel\">Account</li>\n\t\t\t\t<li class=\"\"><a :href=\"url\">My Profile</a></li>\n\t\t\t\t<li class=\"\"><a href=\"/dashboard\">Dashboard</a></li>\n\t\t\t\t<li v-if=\"admin\" class=\"\"><a href=\"/admin\">Admin</a></li>\n\t\t\t\t<li class=\"\"><a href=\"/logout\">Sign Out</a></li>\n\t\t\t</template>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Login</a></li>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Sign Up</a></li>\n\n\t\t\t<template v-if=\"isDashboard()\">\n\t\t\t\t<li class=\"navlabel\">User</li>\n\t\t\t\t<li><a href=\"/dashboard\"><i class=\"fa fa-tachometer\"></i> Dashboard</a></li>\n\t\t\t\t<li><a href=\"/dashboard/settings\"><i class=\"fa fa-cog\"></i> Settings</a></li>\n\t\t\t\t<li><a href=\"/dashboard/reservations\"><i class=\"fa fa-ticket\"></i> Reservations</a></li>\n\t\t\t\t<li><a href=\"/dashboard/records\"><i class=\"fa fa-archive\"></i> Records</a></li>\n\t\t\t\t<li v-if=\"managing\"><a href=\"/dashboard/groups\"><i class=\"fa fa-users\"></i> Groups</a></li>\n\t\t\t</template>\n\n\t\t\t<template v-if=\"isAdmin()\">\n\t\t\t\t<li class=\"navlabel\">Admin</li>\n\t\t\t\t<li><a href=\"/admin\"><i class=\"fa fa-tachometer\"></i> Dashboard</a></li>\n\t\t\t\t<li><a href=\"/admin/campaigns\"><i class=\"fa fa-globe\"></i> Campaings</a></li>\n\t\t\t\t<li><a href=\"/admin/reservations\"><i class=\"fa fa-ticket\"></i> Reservations</a></li>\n\t\t\t\t<li><a href=\"/admin/groups\"><i class=\"fa fa-users\"></i> Groups</a></li>\n\t\t\t\t<li><a href=\"/admin/interests\"><i class=\"fa fa-question-mark\"></i> Interests</a></li>\n\t\t\t\t<li><a href=\"/admin/users\"><i class=\"fa fa-user\"></i> Users</a></li>\n\t\t\t\t<li><a href=\"/admin/uploads\"><i class=\"fa fa-picture-o\"></i> Uploads</a></li>\n\t\t\t</template>\n\t\t\t<!-- Get Started -->\n\t\t\t<li class=\"navlabel\">Get Started</li>\n\t\t\t<li><a href=\"/campaigns\">Trips</a></li>\n\t\t\t<li><a href=\"/fundraisers\">Fundraisers</a></li>\n\t\t\t<li><a href=\"/groups\">Groups</a></li>\n\t\t\t<li><a href=\"/support\">Partnership</a></li>\n\n\t\t\t<!-- 1N1D-->\n\t\t\t<li class=\"navlabel\">1Nation1Day</li>\n\t\t\t<li><a href=\"http://1nation1day.com/\">2017 Nicaragua</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/dominican\">2015 Dominican</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/honduras\">2013 Honduras</a></li>\n\n\t\t\t<!-- Causes -->\n\t\t\t<li class=\"navlabel\">Causes</li>\n\t\t\t<li><a href=\"/water\">Clean Water</a></li>\n\t\t\t<li><a href=\"/orphans\">Rescue Orphans</a></li>\n\t\t\t<li><a href=\"/medical\">Medical Missions</a></li>\n\t\t\t<!--<li><a href=\"#\">Homes</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Trafficking Rescue</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Leadership Centers</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Sponsor A Project</a></li>-->\n\n\t\t\t<!-- Training -->\n\t\t\t<li class=\"navlabel\">Train</li>\n\t\t\t<li><a href=\"/college\">Missions.Me College</a></li>\n\t\t\t<li><a href=\"/speakers\">Speakers</a></li>\n\n\t\t\t<!-- M.Me -->\n\t\t\t<li class=\"navlabel\">About</li>\n\t\t\t<li><a href=\"/about-mm\">Missions.Me</a></li>\n\t\t\t<li><a href=\"#\">Contact Us</a></li>\n\t\t</ul>\n\t</aside>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1f813726", module.exports)
+    hotAPI.createRecord("_v-a231700c", module.exports)
   } else {
-    hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-a231700c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],159:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],162:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -52821,12 +53283,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4eaab280", module.exports)
+    hotAPI.createRecord("_v-469c8f94", module.exports)
   } else {
-    hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-469c8f94", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":166,"./create/details.vue":167,"./create/pricing.vue":168,"./create/requirements.vue":169,"./create/settings.vue":170,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],160:[function(require,module,exports){
+},{"./create/deadlines.vue":169,"./create/details.vue":170,"./create/pricing.vue":171,"./create/requirements.vue":172,"./create/settings.vue":173,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52857,12 +53319,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1f88c822", module.exports)
+    hotAPI.createRecord("_v-5e2d84c3", module.exports)
   } else {
-    hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5e2d84c3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],161:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52950,12 +53412,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-07829d12", module.exports)
+    hotAPI.createRecord("_v-66842823", module.exports)
   } else {
-    hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-66842823", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],162:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],165:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -53130,12 +53592,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1684d064", module.exports)
+    hotAPI.createRecord("_v-8c08b4bc", module.exports)
   } else {
-    hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-8c08b4bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":171,"./edit/details.vue":172,"./edit/pricing.vue":173,"./edit/requirements.vue":174,"./edit/settings.vue":175,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],163:[function(require,module,exports){
+},{"./edit/deadlines.vue":174,"./edit/details.vue":175,"./edit/pricing.vue":176,"./edit/requirements.vue":177,"./edit/settings.vue":178,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53233,12 +53695,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-9f5ddb6a", module.exports)
+    hotAPI.createRecord("_v-cc43e7c2", module.exports)
   } else {
-    hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-cc43e7c2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],164:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53306,12 +53768,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-25146f20", module.exports)
+    hotAPI.createRecord("_v-6bdfd31c", module.exports)
   } else {
-    hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6bdfd31c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],165:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53377,12 +53839,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-41204f31", module.exports)
+    hotAPI.createRecord("_v-23a3fbdd", module.exports)
   } else {
-    hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-23a3fbdd", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],166:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53455,12 +53917,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-8ed335c4", module.exports)
+    hotAPI.createRecord("_v-c9cbdc6c", module.exports)
   } else {
-    hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-c9cbdc6c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],167:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],170:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 'use strict';
@@ -53531,6 +53993,7 @@ exports.default = {
 				ended_at: this.ended_at
 			});
 		},
+		//rep_id: this.rep_id,
 		getGroups: function getGroups(search, loading) {
 			loading(true);
 			this.$http.get('groups', { search: search }).then(function (response) {
@@ -53568,12 +54031,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-087e8cf6", module.exports)
+    hotAPI.createRecord("_v-0a5fa131", module.exports)
   } else {
-    hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0a5fa131", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],168:[function(require,module,exports){
+},{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53797,12 +54260,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5c73f5ee", module.exports)
+    hotAPI.createRecord("_v-3f362696", module.exports)
   } else {
-    hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3f362696", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],169:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53876,12 +54339,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-af5f3746", module.exports)
+    hotAPI.createRecord("_v-616b6831", module.exports)
   } else {
-    hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-616b6831", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],170:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53931,12 +54394,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-49d154f0", module.exports)
+    hotAPI.createRecord("_v-0f0f62c4", module.exports)
   } else {
-    hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0f0f62c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],171:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54013,12 +54476,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-03d4d92c", module.exports)
+    hotAPI.createRecord("_v-1273c0d8", module.exports)
   } else {
-    hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1273c0d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],172:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54149,12 +54612,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5888d913", module.exports)
+    hotAPI.createRecord("_v-72548882", module.exports)
   } else {
-    hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-72548882", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-select":114}],173:[function(require,module,exports){
+},{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-select":114}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54382,12 +54845,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2e8e2497", module.exports)
+    hotAPI.createRecord("_v-c649f17a", module.exports)
   } else {
-    hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-c649f17a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],174:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54464,12 +54927,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3dd864e2", module.exports)
+    hotAPI.createRecord("_v-4f05b663", module.exports)
   } else {
-    hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4f05b663", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],175:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54524,12 +54987,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-f3e5b1bc", module.exports)
+    hotAPI.createRecord("_v-3d46cc14", module.exports)
   } else {
-    hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3d46cc14", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],176:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54570,12 +55033,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-424f54dc", module.exports)
+    hotAPI.createRecord("_v-0109f388", module.exports)
   } else {
-    hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0109f388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],177:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54737,12 +55200,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3935869d", module.exports)
+    hotAPI.createRecord("_v-22c28071", module.exports)
   } else {
-    hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-22c28071", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],178:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54794,12 +55257,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ca5dc6f6", module.exports)
+    hotAPI.createRecord("_v-ddfdfb4e", module.exports)
   } else {
-    hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ddfdfb4e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],179:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55092,12 +55555,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-40feac0a", module.exports)
+    hotAPI.createRecord("_v-5deab4a7", module.exports)
   } else {
-    hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5deab4a7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],180:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55137,12 +55600,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-9d0c84f0", module.exports)
+    hotAPI.createRecord("_v-6a94c15c", module.exports)
   } else {
-    hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6a94c15c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],181:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55174,12 +55637,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5f91920b", module.exports)
+    hotAPI.createRecord("_v-64f90a42", module.exports)
   } else {
-    hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-64f90a42", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],182:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55211,12 +55674,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-235a6f58", module.exports)
+    hotAPI.createRecord("_v-05de1c04", module.exports)
   } else {
-    hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-05de1c04", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],183:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55258,6 +55721,7 @@ exports.default = {
     },
     methods: {
         // emulate pagination
+
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -55282,12 +55746,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c5dc1f32", module.exports)
+    hotAPI.createRecord("_v-5747c53b", module.exports)
   } else {
-    hotAPI.update("_v-c5dc1f32", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5747c53b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],184:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],187:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -55593,12 +56057,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6fb76f2d", module.exports)
+    hotAPI.createRecord("_v-906ca04e", module.exports)
   } else {
-    hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-906ca04e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":145,"./registration/additional-trip-options.vue":176,"./registration/basic-info.vue":177,"./registration/deadline-agreement.vue":178,"./registration/payment-details.vue":179,"./registration/review.vue":180,"./registration/roca.vue":181,"./registration/tos.vue":182,"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],185:[function(require,module,exports){
+},{"../login.vue":147,"./registration/additional-trip-options.vue":179,"./registration/basic-info.vue":180,"./registration/deadline-agreement.vue":181,"./registration/payment-details.vue":182,"./registration/review.vue":183,"./registration/roca.vue":184,"./registration/tos.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55682,12 +56146,12 @@ exports.default = {
 			coords: 'Try to move/resize the selection',
 			constrained: true,
 			vueCropApi: null,
-			scaledWidth: 600,
-			scaledHeight: 600,
-			imageMaxWidth: 600,
-			imageMaxHeight: 600,
-			imageWidth: 600,
-			imageHeight: 600,
+			scaledWidth: 400,
+			scaledHeight: 400,
+			imageMaxWidth: 400,
+			imageMaxHeight: 400,
+			imageWidth: 400,
+			imageHeight: 400,
 			imageAspectRatio: null,
 			aspectRatio: this.width / this.height,
 			fileA: null,
@@ -55748,12 +56212,25 @@ exports.default = {
 		'per_page': function per_page(val, oldVal) {
 			this.searchUploads();
 		}
-
 	},
 	events: {
 		'vueCrop-api': function vueCropApi(api) {
 			// make api available on scope
 			window.vueCropApi = this.vueCropApi = api;
+		},
+		'uploads-complete': function uploadsComplete(data) {
+			switch (data.type) {
+				case 'avatar':
+					this.selectedAvatar = data;
+					this.avatar_upload_id = data.id;
+					jQuery('#avatarCollapse').collapse('hide');
+					break;
+				case 'banner':
+					this.selectedBanner = data;
+					this.banner_upload_id = data.id;
+					jQuery('#bannerCollapse').collapse('hide');
+					break;
+			}
 		}
 	},
 	methods: {
@@ -55916,18 +56393,18 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<form class=\"form-inline\" v-if=\"isChild &amp;&amp; !uiLocked\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector1\" v-model=\"uiSelector\" :value=\"1\"> Select file\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector2\" v-model=\"uiSelector\" :value=\"2\"> Upload file\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr v-if=\"uiSelector!==0\">\n\t</form>\n\t<div v-if=\"isChild &amp;&amp; uiSelector==1\">\n\t\t<form class=\"form-inline text-right\" novalidate=\"\">\n\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t</div>\n\t\t</form>\n\t\t<br>\n\t\t<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\t\t\t<div class=\"col-sm-2 col-md-2\" v-for=\"upload in uploads\" style=\"display:flex\">\n\t\t\t\t<div class=\"panel panel-default\">\n\n\t\t\t\t\t\t<a @click=\"selectExisting(upload)\" role=\"button\">\n\t\t\t\t\t\t\t<tooltip effect=\"scale\" placement=\"top\" :content=\"upload.name\">\n\t\t\t\t\t\t\t\t<img :src=\"upload.source + '?w=100&amp;q=50'\" :alt=\"upload.name\" class=\"img-responsive\">\n\t\t\t\t\t\t\t</tooltip>\n\t\t\t\t\t\t</a>\n\n\t\t\t\t\t<!--<div class=\"panel-body\">\n\t\t\t\t\t\t<h6 class=\"text-uppercase\">{{upload.name}}</h6>\n\t\t\t\t\t</div>--><!-- end panel-body -->\n\t\t\t\t\t<div class=\"panel-footer\">\n\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-block btn-primary\" @click=\"selectExisting(upload)\">Select</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end panel -->\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t\t<nav>\n\t\t\t\t\t<ul class=\"pagination pagination-sm\">\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</nav>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<validator v-if=\"!isChild||uiSelector===2\" name=\"CreateUpload\">\n\t\t<form id=\"CreateUploadForm\" class=\"form-horizontal\" novalidate=\"\" @submit=\"prevent\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('tags') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"tags\" class=\"col-sm-2 control-label\">Tags</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<v-select id=\"tags\" class=\"form-control\" multiple=\"\" :value.sync=\"tags\" :options=\"tagOptions\"></v-select>\n\t\t\t\t\t<select hidden=\"\" id=\"tags\" name=\"tags\" v-model=\"tags\" multiple=\"\" v-validate:tags=\"{ required:true }\">\n\t\t\t\t\t\t<option v-for=\"tag in tagOptions\" :value=\"tag\">{{tag}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\" :disabled=\"lockType\">\n\t\t\t\t\t\t<option :value=\"\">-- select type --</option>\n\t\t\t\t\t\t<option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type === 'other'\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions (px)\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">File</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"file\" id=\"file\" :accept=\"allowedTypes\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t<!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-10\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t\t<a v-if=\"!isChild\" href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" v-if=\"!isUpdate\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t\t<a @click=\"update()\" v-if=\"isUpdate\" class=\"btn btn-primary\">Update</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t</form>\n\t</validator>\n\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<form class=\"form-inline\" v-if=\"isChild &amp;&amp; !uiLocked\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector1\" v-model=\"uiSelector\" :value=\"1\"> Select file\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector2\" v-model=\"uiSelector\" :value=\"2\"> Upload file\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr v-if=\"uiSelector!==0\">\n\t</form>\n\t<div v-if=\"isChild &amp;&amp; uiSelector==1\">\n\t\t<form class=\"form-inline text-right\" novalidate=\"\">\n\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t</div>\n\t\t</form>\n\t\t<br>\n\t\t<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\t\t\t<div class=\"col-sm-2 col-md-2\" v-for=\"upload in uploads\" style=\"display:flex\">\n\t\t\t\t<div class=\"panel panel-default\">\n\n\t\t\t\t\t\t<a @click=\"selectExisting(upload)\" role=\"button\">\n\t\t\t\t\t\t\t<tooltip effect=\"scale\" placement=\"top\" :content=\"upload.name\">\n\t\t\t\t\t\t\t\t<img :src=\"upload.source + '?w=100&amp;q=50'\" :alt=\"upload.name\" class=\"img-responsive\">\n\t\t\t\t\t\t\t</tooltip>\n\t\t\t\t\t\t</a>\n\n\t\t\t\t\t<!--<div class=\"panel-body\">\n\t\t\t\t\t\t<h6 class=\"text-uppercase\">{{upload.name}}</h6>\n\t\t\t\t\t</div>--><!-- end panel-body -->\n\t\t\t\t\t<div class=\"panel-footer\">\n\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-block btn-primary\" @click=\"selectExisting(upload)\">Select</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end panel -->\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t\t<nav>\n\t\t\t\t\t<ul class=\"pagination pagination-sm\">\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</nav>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<validator v-if=\"!isChild||uiSelector===2\" name=\"CreateUpload\">\n\t\t<form id=\"CreateUploadForm\" class=\"form\" novalidate=\"\" @submit=\"prevent\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"name\" class=\"control-label\">Name</label>\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('tags') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"tags\" class=\"control-label\">Tags</label>\n\t\t\t\t\t<v-select id=\"tags\" class=\"form-control\" multiple=\"\" :value.sync=\"tags\" :options=\"tagOptions\"></v-select>\n\t\t\t\t\t<select hidden=\"\" id=\"tags\" name=\"tags\" v-model=\"tags\" multiple=\"\" v-validate:tags=\"{ required:true }\">\n\t\t\t\t\t\t<option v-for=\"tag in tagOptions\" :value=\"tag\">{{tag}}</option>\n\t\t\t\t\t</select>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"type\" class=\"control-label\">Type</label>\n\t\t\t\t\t<select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\" :disabled=\"lockType\">\n\t\t\t\t\t\t<option :value=\"\">-- select type --</option>\n\t\t\t\t\t\t<option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t\t</select>\n\t\t\t</div>\n\n\t\t\t<div class=\"row\" v-if=\"type &amp;&amp; type === 'other'\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions (px)\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<label for=\"file\" class=\"control-label\">File</label>\n\t\t\t\t\t<input type=\"file\" id=\"file\" :accept=\"allowedTypes\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t<!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t</div>\n\n\t\t\t<div class=\"row2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-12\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<a v-if=\"!isChild\" href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" v-if=\"!isUpdate\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t\t<a @click=\"update()\" v-if=\"isUpdate\" class=\"btn btn-primary\">Update</a>\n\t\t\t</div>\n\n\t\t</form>\n\t</validator>\n\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-e6a8f7c4", module.exports)
+    hotAPI.createRecord("_v-0b158eca", module.exports)
   } else {
-    hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0b158eca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],186:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],189:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -56062,12 +56539,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-507a71a9", module.exports)
+    hotAPI.createRecord("_v-8a802f56", module.exports)
   } else {
-    hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-8a802f56", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],187:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56187,12 +56664,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-e7b14e18", module.exports)
+    hotAPI.createRecord("_v-0bcd7c70", module.exports)
   } else {
-    hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0bcd7c70", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],188:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],191:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56223,28 +56700,32 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-b88f63ba", module.exports)
+    hotAPI.createRecord("_v-11aa36f7", module.exports)
   } else {
-    hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-11aa36f7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],189:[function(require,module,exports){
-'use strict';
+},{"vue":117,"vue-hot-reload-api":112}],192:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _vueSelect = require('vue-select');
+var _vueSelect = require("vue-select");
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require("vue-strap/dist/vue-strap.min");
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     name: 'user-edit',
     props: ['userId'],
-    components: { vSelect: _vueSelect2.default },
+    components: { vSelect: _vueSelect2.default, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
     data: function data() {
         return {
             name: '',
@@ -56281,7 +56762,10 @@ exports.default = {
             dobMonth: null,
             dobDay: null,
             dobYear: null,
-            resource: this.$resource('users{/id}')
+            resource: this.$resource('users{/id}'),
+            showSuccess: false,
+            showSaveAlert: false,
+            hasChanged: false
         };
     },
 
@@ -56298,6 +56782,19 @@ exports.default = {
             // if user clicked submit button while the field is invalid trigger error styles
 
             return this.$EditUser[field].invalid && this.attemptSubmit;
+        },
+        onTouched: function onTouched() {
+            this.hasChanged = true;
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/admin/users/' + this.userId;
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
         },
         submit: function submit() {
             this.attemptSubmit = true;
@@ -56324,7 +56821,9 @@ exports.default = {
                     public: this.public,
                     url: this.public ? this.url : undefined
                 }).then(function (resp) {
-                    window.location.href = '/admin' + resp.data.data.links[0].uri;
+                    // window.location.href = '/admin' + resp.data.data.links[0].uri;
+                    this.showSuccess = true;
+                    this.hasChanged = false;
                 }, function (error) {
                     console.log(error);
                 });
@@ -56363,24 +56862,24 @@ exports.default = {
             this.status = user.status;
             this.alt_email = user.alt_email;
         }, function (response) {
-            console.log('Update Failed! :(');
+            console.log('Loading Failed! :(');
             console.log(response);
         });
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"EditUser\">\n    <form id=\"EditUserForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"User Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Alt. Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': !!changePassword &amp;&amp; (checkForError('password')||checkForError('passwordconfirmation')) }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Password</label>\n            <div class=\"col-sm-10\">\n                <div class=\"checkbox\">\n                    <label>\n                        <input type=\"checkbox\" v-model=\"changePassword\">\n                        Change Password\n                    </label>\n                </div>\n                <div v-if=\"changePassword\" class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ minlength:8 }\" placeholder=\"Enter password\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ minlength:8 }\" placeholder=\"Enter password again\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                </div>\n                <div v-if=\"changePassword\" class=\"help-block\">Password must be at least 8 characters long</div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\">Date of Birth</label>\n\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-xs-5\">\n                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                            <option value=\"01\">January</option>\n                            <option value=\"02\">February</option>\n                            <option value=\"03\">March</option>\n                            <option value=\"04\">April</option>\n                            <option value=\"05\">May</option>\n                            <option value=\"06\">June</option>\n                            <option value=\"07\">July</option>\n                            <option value=\"08\">August</option>\n                            <option value=\"09\">September</option>\n                            <option value=\"10\">October</option>\n                            <option value=\"11\">November</option>\n                            <option value=\"12\">December</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Month</h6>\n                    </div>\n                    <div class=\"col-xs-3\">\n                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                            <option value=\"01\">1</option>\n                            <option value=\"02\">2</option>\n                            <option value=\"03\">3</option>\n                            <option value=\"04\">4</option>\n                            <option value=\"05\">5</option>\n                            <option value=\"06\">6</option>\n                            <option value=\"07\">7</option>\n                            <option value=\"08\">8</option>\n                            <option value=\"09\">9</option>\n                            <option value=\"10\">10</option>\n                            <option value=\"11\">11</option>\n                            <option value=\"12\">12</option>\n                            <option value=\"13\">13</option>\n                            <option value=\"14\">14</option>\n                            <option value=\"15\">15</option>\n                            <option value=\"16\">16</option>\n                            <option value=\"17\">17</option>\n                            <option value=\"18\">18</option>\n                            <option value=\"19\">19</option>\n                            <option value=\"20\">20</option>\n                            <option value=\"21\">21</option>\n                            <option value=\"22\">22</option>\n                            <option value=\"23\">23</option>\n                            <option value=\"24\">24</option>\n                            <option value=\"25\">25</option>\n                            <option value=\"26\">26</option>\n                            <option value=\"27\">27</option>\n                            <option value=\"28\">28</option>\n                            <option value=\"29\">29</option>\n                            <option value=\"30\">30</option>\n                            <option value=\"31\">31</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Day</h6>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                            <option value=\"1930\">1930</option>\n                            <option value=\"1931\">1931</option>\n                            <option value=\"1932\">1932</option>\n                            <option value=\"1933\">1933</option>\n                            <option value=\"1934\">1934</option>\n                            <option value=\"1935\">1935</option>\n                            <option value=\"1936\">1936</option>\n                            <option value=\"1937\">1937</option>\n                            <option value=\"1938\">1938</option>\n                            <option value=\"1939\">1939</option>\n                            <option value=\"1940\">1940</option>\n                            <option value=\"1941\">1941</option>\n                            <option value=\"1942\">1942</option>\n                            <option value=\"1943\">1943</option>\n                            <option value=\"1944\">1944</option>\n                            <option value=\"1945\">1945</option>\n                            <option value=\"1946\">1946</option>\n                            <option value=\"1947\">1947</option>\n                            <option value=\"1948\">1948</option>\n                            <option value=\"1949\">1949</option>\n                            <option value=\"1950\">1950</option>\n                            <option value=\"1951\">1951</option>\n                            <option value=\"1952\">1952</option>\n                            <option value=\"1953\">1953</option>\n                            <option value=\"1954\">1954</option>\n                            <option value=\"1955\">1955</option>\n                            <option value=\"1956\">1956</option>\n                            <option value=\"1957\">1957</option>\n                            <option value=\"1958\">1958</option>\n                            <option value=\"1959\">1959</option>\n                            <option value=\"1960\">1960</option>\n                            <option value=\"1961\">1961</option>\n                            <option value=\"1962\">1962</option>\n                            <option value=\"1963\">1963</option>\n                            <option value=\"1964\">1964</option>\n                            <option value=\"1965\">1965</option>\n                            <option value=\"1966\">1966</option>\n                            <option value=\"1967\">1967</option>\n                            <option value=\"1968\">1968</option>\n                            <option value=\"1969\">1969</option>\n                            <option value=\"1970\">1970</option>\n                            <option value=\"1971\">1971</option>\n                            <option value=\"1972\">1972</option>\n                            <option value=\"1973\">1973</option>\n                            <option value=\"1974\">1974</option>\n                            <option value=\"1975\">1975</option>\n                            <option value=\"1976\">1976</option>\n                            <option value=\"1977\">1977</option>\n                            <option value=\"1978\">1978</option>\n                            <option value=\"1979\">1979</option>\n                            <option value=\"1980\">1980</option>\n                            <option value=\"1981\">1981</option>\n                            <option value=\"1982\">1982</option>\n                            <option value=\"1983\">1983</option>\n                            <option value=\"1984\">1984</option>\n                            <option value=\"1985\">1985</option>\n                            <option value=\"1986\">1986</option>\n                            <option value=\"1987\">1987</option>\n                            <option value=\"1988\">1988</option>\n                            <option value=\"1989\">1989</option>\n                            <option value=\"1990\" selected=\"selected\">1990</option>\n                            <option value=\"1991\">1991</option>\n                            <option value=\"1992\">1992</option>\n                            <option value=\"1993\">1993</option>\n                            <option value=\"1994\">1994</option>\n                            <option value=\"1995\">1995</option>\n                            <option value=\"1996\">1996</option>\n                            <option value=\"1997\">1997</option>\n                            <option value=\"1998\">1998</option>\n                            <option value=\"1999\">1999</option>\n                            <option value=\"2000\">2000</option>\n                            <option value=\"2001\">2001</option>\n                            <option value=\"2002\">2002</option>\n                            <option value=\"2003\">2003</option>\n                            <option value=\"2004\">2004</option>\n                            <option value=\"2005\">2005</option>\n                            <option value=\"2006\">2006</option>\n                            <option value=\"2007\">2007</option>\n                            <option value=\"2008\">2008</option>\n                            <option value=\"2009\">2009</option>\n                            <option value=\"2010\">2010</option>\n                            <option value=\"2011\">2011</option>\n                            <option value=\"2012\">2012</option>\n                            <option value=\"2013\">2013</option>\n                            <option value=\"2014\">2014</option>\n                            <option value=\"2015\">2015</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Year</h6>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div><!-- end form-group -->\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n            <label for=\"gender\" class=\"col-sm-2 control-label\">Gender</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"bio\">Bio</label>\n            <div class=\"col-sm-10\">\n                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"User Bio\" maxlength=\"120\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress\">Address 1</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress2\">Address 2</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                <div class=\"form-group\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                </div>\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\n                    <label class=\"control-label\" for=\"country\" style=\"padding-top:0;margin-bottom: 5px;\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <label for=\"timezone\" class=\"col-sm-2 control-label\">Timezone</label>\n\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"public\" class=\"col-sm-2 control-label\">Public</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <div class=\"form-group\" v-if=\"!!public\">\n            <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n            <div class=\"col-sm-10\">\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon\">www.missions.me/users/</span>\n                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/admin/users\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"EditUser\" @touched=\"onTouched\">\n    <form id=\"EditUserForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"User Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Alt. Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': !!changePassword &amp;&amp; (checkForError('password')||checkForError('passwordconfirmation')) }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Password</label>\n            <div class=\"col-sm-10\">\n                <div class=\"checkbox\">\n                    <label>\n                        <input type=\"checkbox\" v-model=\"changePassword\">\n                        Change Password\n                    </label>\n                </div>\n                <div v-if=\"changePassword\" class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ minlength:8 }\" placeholder=\"Enter password\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ minlength:8 }\" placeholder=\"Enter password again\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                </div>\n                <div v-if=\"changePassword\" class=\"help-block\">Password must be at least 8 characters long</div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\">Date of Birth</label>\n\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-xs-5\">\n                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                            <option value=\"01\">January</option>\n                            <option value=\"02\">February</option>\n                            <option value=\"03\">March</option>\n                            <option value=\"04\">April</option>\n                            <option value=\"05\">May</option>\n                            <option value=\"06\">June</option>\n                            <option value=\"07\">July</option>\n                            <option value=\"08\">August</option>\n                            <option value=\"09\">September</option>\n                            <option value=\"10\">October</option>\n                            <option value=\"11\">November</option>\n                            <option value=\"12\">December</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Month</h6>\n                    </div>\n                    <div class=\"col-xs-3\">\n                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                            <option value=\"01\">1</option>\n                            <option value=\"02\">2</option>\n                            <option value=\"03\">3</option>\n                            <option value=\"04\">4</option>\n                            <option value=\"05\">5</option>\n                            <option value=\"06\">6</option>\n                            <option value=\"07\">7</option>\n                            <option value=\"08\">8</option>\n                            <option value=\"09\">9</option>\n                            <option value=\"10\">10</option>\n                            <option value=\"11\">11</option>\n                            <option value=\"12\">12</option>\n                            <option value=\"13\">13</option>\n                            <option value=\"14\">14</option>\n                            <option value=\"15\">15</option>\n                            <option value=\"16\">16</option>\n                            <option value=\"17\">17</option>\n                            <option value=\"18\">18</option>\n                            <option value=\"19\">19</option>\n                            <option value=\"20\">20</option>\n                            <option value=\"21\">21</option>\n                            <option value=\"22\">22</option>\n                            <option value=\"23\">23</option>\n                            <option value=\"24\">24</option>\n                            <option value=\"25\">25</option>\n                            <option value=\"26\">26</option>\n                            <option value=\"27\">27</option>\n                            <option value=\"28\">28</option>\n                            <option value=\"29\">29</option>\n                            <option value=\"30\">30</option>\n                            <option value=\"31\">31</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Day</h6>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                            <option value=\"1930\">1930</option>\n                            <option value=\"1931\">1931</option>\n                            <option value=\"1932\">1932</option>\n                            <option value=\"1933\">1933</option>\n                            <option value=\"1934\">1934</option>\n                            <option value=\"1935\">1935</option>\n                            <option value=\"1936\">1936</option>\n                            <option value=\"1937\">1937</option>\n                            <option value=\"1938\">1938</option>\n                            <option value=\"1939\">1939</option>\n                            <option value=\"1940\">1940</option>\n                            <option value=\"1941\">1941</option>\n                            <option value=\"1942\">1942</option>\n                            <option value=\"1943\">1943</option>\n                            <option value=\"1944\">1944</option>\n                            <option value=\"1945\">1945</option>\n                            <option value=\"1946\">1946</option>\n                            <option value=\"1947\">1947</option>\n                            <option value=\"1948\">1948</option>\n                            <option value=\"1949\">1949</option>\n                            <option value=\"1950\">1950</option>\n                            <option value=\"1951\">1951</option>\n                            <option value=\"1952\">1952</option>\n                            <option value=\"1953\">1953</option>\n                            <option value=\"1954\">1954</option>\n                            <option value=\"1955\">1955</option>\n                            <option value=\"1956\">1956</option>\n                            <option value=\"1957\">1957</option>\n                            <option value=\"1958\">1958</option>\n                            <option value=\"1959\">1959</option>\n                            <option value=\"1960\">1960</option>\n                            <option value=\"1961\">1961</option>\n                            <option value=\"1962\">1962</option>\n                            <option value=\"1963\">1963</option>\n                            <option value=\"1964\">1964</option>\n                            <option value=\"1965\">1965</option>\n                            <option value=\"1966\">1966</option>\n                            <option value=\"1967\">1967</option>\n                            <option value=\"1968\">1968</option>\n                            <option value=\"1969\">1969</option>\n                            <option value=\"1970\">1970</option>\n                            <option value=\"1971\">1971</option>\n                            <option value=\"1972\">1972</option>\n                            <option value=\"1973\">1973</option>\n                            <option value=\"1974\">1974</option>\n                            <option value=\"1975\">1975</option>\n                            <option value=\"1976\">1976</option>\n                            <option value=\"1977\">1977</option>\n                            <option value=\"1978\">1978</option>\n                            <option value=\"1979\">1979</option>\n                            <option value=\"1980\">1980</option>\n                            <option value=\"1981\">1981</option>\n                            <option value=\"1982\">1982</option>\n                            <option value=\"1983\">1983</option>\n                            <option value=\"1984\">1984</option>\n                            <option value=\"1985\">1985</option>\n                            <option value=\"1986\">1986</option>\n                            <option value=\"1987\">1987</option>\n                            <option value=\"1988\">1988</option>\n                            <option value=\"1989\">1989</option>\n                            <option value=\"1990\" selected=\"selected\">1990</option>\n                            <option value=\"1991\">1991</option>\n                            <option value=\"1992\">1992</option>\n                            <option value=\"1993\">1993</option>\n                            <option value=\"1994\">1994</option>\n                            <option value=\"1995\">1995</option>\n                            <option value=\"1996\">1996</option>\n                            <option value=\"1997\">1997</option>\n                            <option value=\"1998\">1998</option>\n                            <option value=\"1999\">1999</option>\n                            <option value=\"2000\">2000</option>\n                            <option value=\"2001\">2001</option>\n                            <option value=\"2002\">2002</option>\n                            <option value=\"2003\">2003</option>\n                            <option value=\"2004\">2004</option>\n                            <option value=\"2005\">2005</option>\n                            <option value=\"2006\">2006</option>\n                            <option value=\"2007\">2007</option>\n                            <option value=\"2008\">2008</option>\n                            <option value=\"2009\">2009</option>\n                            <option value=\"2010\">2010</option>\n                            <option value=\"2011\">2011</option>\n                            <option value=\"2012\">2012</option>\n                            <option value=\"2013\">2013</option>\n                            <option value=\"2014\">2014</option>\n                            <option value=\"2015\">2015</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Year</h6>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div><!-- end form-group -->\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n            <label for=\"gender\" class=\"col-sm-2 control-label\">Gender</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"bio\">Bio</label>\n            <div class=\"col-sm-10\">\n                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"User Bio\" maxlength=\"120\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress\">Address 1</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress2\">Address 2</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                <div class=\"form-group\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                </div>\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\n                    <label class=\"control-label\" for=\"country\" style=\"padding-top:0;margin-bottom: 5px;\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <label for=\"timezone\" class=\"col-sm-2 control-label\">Timezone</label>\n\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"public\" class=\"col-sm-2 control-label\">Public</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <div class=\"form-group\" v-if=\"!!public\">\n            <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n            <div class=\"col-sm-10\">\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon\">www.missions.me/users/</span>\n                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n                <a @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n    </form>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>User updated!</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-372d71fc", module.exports)
+    hotAPI.createRecord("_v-acb15654", module.exports)
   } else {
-    hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-acb15654", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],190:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],193:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -56597,12 +57096,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-46ea867d", module.exports)
+    hotAPI.createRecord("_v-296e3329", module.exports)
   } else {
-    hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-296e3329", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],191:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":1,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],194:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56672,12 +57171,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-69badce8", module.exports)
+    hotAPI.createRecord("_v-7d5b1140", module.exports)
   } else {
-    hotAPI.update("_v-69badce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7d5b1140", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":106,"vue":117,"vue-hot-reload-api":112}],192:[function(require,module,exports){
+},{"marked":106,"vue":117,"vue-hot-reload-api":112}],195:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56710,12 +57209,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ea6dd1a8", module.exports)
+    hotAPI.createRecord("_v-96d25000", module.exports)
   } else {
-    hotAPI.update("_v-ea6dd1a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-96d25000", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],193:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56750,12 +57249,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-718e65c4", module.exports)
+    hotAPI.createRecord("_v-0f4b0dca", module.exports)
   } else {
-    hotAPI.update("_v-718e65c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0f4b0dca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],194:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56876,12 +57375,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-63c1ee29", module.exports)
+    hotAPI.createRecord("_v-63f13656", module.exports)
   } else {
-    hotAPI.update("_v-63c1ee29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-63f13656", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],195:[function(require,module,exports){
+},{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],198:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.alert.top, .alert.top-right {\n    top: 80px;\n}\n")
 'use strict';
@@ -56898,13 +57397,21 @@ var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
 
+var _adminUploadCreateUpdate = require('../uploads/admin-upload-create-update.vue');
+
+var _adminUploadCreateUpdate2 = _interopRequireDefault(_adminUploadCreateUpdate);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     name: 'user-settings',
-    components: { vSelect: _vueSelect2.default, 'alert': _vueStrap2.default.alert },
+    components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
     data: function data() {
         return {
+
+            id: '',
+            avatar: '',
+            banner: '',
             name: '',
             email: '',
             alt_email: '',
@@ -56941,7 +57448,15 @@ exports.default = {
             dobYear: null,
             resource: this.$resource('users/me'),
             errors: {},
-            saved: false
+            showSuccess: false,
+            showSaveAlert: false,
+            hasChanged: false,
+
+            selectedAvatar: null,
+            avatar_upload_id: null,
+            selectedBanner: null,
+            banner_upload_id: null
+
         };
     },
 
@@ -56953,14 +57468,31 @@ exports.default = {
             return this.dobYear && this.dobMonth && this.dobDay ? moment().set({ year: this.dobYear, month: this.dobMonth, day: this.dobDay }).format('LL') : null;
         }
     },
+    events: {
+        'uploads-complete': function uploadsComplete(data) {
+            switch (data.type) {
+                case 'avatar':
+                    this.selectedAvatar = data;
+                    this.avatar_upload_id = data.id;
+                    jQuery('#avatarCollapse').collapse('hide');
+                    break;
+                case 'banner':
+                    this.selectedBanner = data;
+                    this.banner_upload_id = data.id;
+                    jQuery('#bannerCollapse').collapse('hide');
+                    break;
+            }
+            this.submit();
+        }
+    },
     methods: {
         checkForError: function checkForError(field) {
             // if user clicked submit button while the field is invalid trigger error styles
 
             return this.$UserSettings[field].invalid && this.attemptSubmit;
         },
-        onModified: function onModified() {
-            this.saved = false;
+        onTouched: function onTouched() {
+            this.hasChanged = true;
         },
         submit: function submit() {
             this.attemptSubmit = true;
@@ -56985,18 +57517,28 @@ exports.default = {
                     status: this.status,
                     gender: this.gender,
                     public: this.public,
-                    url: this.public ? this.url : undefined
+                    url: this.public ? this.url : undefined,
+                    avatar_upload_id: this.avatar_upload_id,
+                    banner_upload_id: this.banner_upload_id
                 }).then(function (resp) {
                     //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                    this.saved = true;
-                    setTimeout(function () {
-                        this.saved = false;
-                    }.bind(this), 3000);
+                    this.showSuccess = true;
+                    this.hasChanged = false;
                 }, function (error) {
                     console.log(error);
                     this.errors = error.data.errors;
                 });
             }
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/dashboard';
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
         }
     },
     ready: function ready() {
@@ -57010,6 +57552,9 @@ exports.default = {
 
         this.resource.get().then(function (response) {
             var user = response.data.data;
+            this.id = user.id;
+            this.avatar = user.avatar;
+            this.banner = user.banner;
             this.name = user.name;
             this.bio = user.bio;
             this.type = user.type;
@@ -57041,7 +57586,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UserSettings\">\n    <form id=\"UserSettingsForm\" class=\"\" novalidate=\"\">\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h5>Account</h5>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Name</label>\n                                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"User Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') || errors.email }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Email</label>\n                                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n                                <div v-show=\"errors.email\" class=\"help-block\">{{errors.email}}</div>\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': errors.alt_email }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Alt. Email</label>\n                                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n                                <div v-show=\"errors.alt_email\" class=\"help-block\">{{errors.alt_email}}</div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': !!changePassword &amp;&amp; (checkForError('password')||checkForError('passwordconfirmation')) }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Password</label>\n                                <div class=\"checkbox\">\n                                    <label>\n                                        <input type=\"checkbox\" v-model=\"changePassword\">\n                                        Change Password\n                                    </label>\n                                </div>\n                                <div v-if=\"changePassword\" class=\"row\">\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ minlength:8 }\" placeholder=\"Enter password\">\n                                            <span class=\"input-group-btn\">\n                                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                                </button>\n                                            </span>\n                                        </div>\n                                    </div>\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ minlength:8 }\" placeholder=\"Enter password again\">\n                                            <span class=\"input-group-btn\">\n                                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                                </button>\n                                            </span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div v-if=\"changePassword\" class=\"help-block\">Password must be at least 8 characters long</div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\">\n                            <div class=\"col-sm-12\">\n                                <label>Date of Birth</label>\n                                <div class=\"row\">\n                                    <div class=\"col-xs-5\">\n                                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                                            <option value=\"01\">January</option>\n                                            <option value=\"02\">February</option>\n                                            <option value=\"03\">March</option>\n                                            <option value=\"04\">April</option>\n                                            <option value=\"05\">May</option>\n                                            <option value=\"06\">June</option>\n                                            <option value=\"07\">July</option>\n                                            <option value=\"08\">August</option>\n                                            <option value=\"09\">September</option>\n                                            <option value=\"10\">October</option>\n                                            <option value=\"11\">November</option>\n                                            <option value=\"12\">December</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Month</h6>\n                                    </div>\n                                    <div class=\"col-xs-3\">\n                                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                                            <option value=\"01\">1</option>\n                                            <option value=\"02\">2</option>\n                                            <option value=\"03\">3</option>\n                                            <option value=\"04\">4</option>\n                                            <option value=\"05\">5</option>\n                                            <option value=\"06\">6</option>\n                                            <option value=\"07\">7</option>\n                                            <option value=\"08\">8</option>\n                                            <option value=\"09\">9</option>\n                                            <option value=\"10\">10</option>\n                                            <option value=\"11\">11</option>\n                                            <option value=\"12\">12</option>\n                                            <option value=\"13\">13</option>\n                                            <option value=\"14\">14</option>\n                                            <option value=\"15\">15</option>\n                                            <option value=\"16\">16</option>\n                                            <option value=\"17\">17</option>\n                                            <option value=\"18\">18</option>\n                                            <option value=\"19\">19</option>\n                                            <option value=\"20\">20</option>\n                                            <option value=\"21\">21</option>\n                                            <option value=\"22\">22</option>\n                                            <option value=\"23\">23</option>\n                                            <option value=\"24\">24</option>\n                                            <option value=\"25\">25</option>\n                                            <option value=\"26\">26</option>\n                                            <option value=\"27\">27</option>\n                                            <option value=\"28\">28</option>\n                                            <option value=\"29\">29</option>\n                                            <option value=\"30\">30</option>\n                                            <option value=\"31\">31</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Day</h6>\n                                    </div>\n                                    <div class=\"col-xs-4\">\n                                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                                            <option value=\"1930\">1930</option>\n                                            <option value=\"1931\">1931</option>\n                                            <option value=\"1932\">1932</option>\n                                            <option value=\"1933\">1933</option>\n                                            <option value=\"1934\">1934</option>\n                                            <option value=\"1935\">1935</option>\n                                            <option value=\"1936\">1936</option>\n                                            <option value=\"1937\">1937</option>\n                                            <option value=\"1938\">1938</option>\n                                            <option value=\"1939\">1939</option>\n                                            <option value=\"1940\">1940</option>\n                                            <option value=\"1941\">1941</option>\n                                            <option value=\"1942\">1942</option>\n                                            <option value=\"1943\">1943</option>\n                                            <option value=\"1944\">1944</option>\n                                            <option value=\"1945\">1945</option>\n                                            <option value=\"1946\">1946</option>\n                                            <option value=\"1947\">1947</option>\n                                            <option value=\"1948\">1948</option>\n                                            <option value=\"1949\">1949</option>\n                                            <option value=\"1950\">1950</option>\n                                            <option value=\"1951\">1951</option>\n                                            <option value=\"1952\">1952</option>\n                                            <option value=\"1953\">1953</option>\n                                            <option value=\"1954\">1954</option>\n                                            <option value=\"1955\">1955</option>\n                                            <option value=\"1956\">1956</option>\n                                            <option value=\"1957\">1957</option>\n                                            <option value=\"1958\">1958</option>\n                                            <option value=\"1959\">1959</option>\n                                            <option value=\"1960\">1960</option>\n                                            <option value=\"1961\">1961</option>\n                                            <option value=\"1962\">1962</option>\n                                            <option value=\"1963\">1963</option>\n                                            <option value=\"1964\">1964</option>\n                                            <option value=\"1965\">1965</option>\n                                            <option value=\"1966\">1966</option>\n                                            <option value=\"1967\">1967</option>\n                                            <option value=\"1968\">1968</option>\n                                            <option value=\"1969\">1969</option>\n                                            <option value=\"1970\">1970</option>\n                                            <option value=\"1971\">1971</option>\n                                            <option value=\"1972\">1972</option>\n                                            <option value=\"1973\">1973</option>\n                                            <option value=\"1974\">1974</option>\n                                            <option value=\"1975\">1975</option>\n                                            <option value=\"1976\">1976</option>\n                                            <option value=\"1977\">1977</option>\n                                            <option value=\"1978\">1978</option>\n                                            <option value=\"1979\">1979</option>\n                                            <option value=\"1980\">1980</option>\n                                            <option value=\"1981\">1981</option>\n                                            <option value=\"1982\">1982</option>\n                                            <option value=\"1983\">1983</option>\n                                            <option value=\"1984\">1984</option>\n                                            <option value=\"1985\">1985</option>\n                                            <option value=\"1986\">1986</option>\n                                            <option value=\"1987\">1987</option>\n                                            <option value=\"1988\">1988</option>\n                                            <option value=\"1989\">1989</option>\n                                            <option value=\"1990\" selected=\"selected\">1990</option>\n                                            <option value=\"1991\">1991</option>\n                                            <option value=\"1992\">1992</option>\n                                            <option value=\"1993\">1993</option>\n                                            <option value=\"1994\">1994</option>\n                                            <option value=\"1995\">1995</option>\n                                            <option value=\"1996\">1996</option>\n                                            <option value=\"1997\">1997</option>\n                                            <option value=\"1998\">1998</option>\n                                            <option value=\"1999\">1999</option>\n                                            <option value=\"2000\">2000</option>\n                                            <option value=\"2001\">2001</option>\n                                            <option value=\"2002\">2002</option>\n                                            <option value=\"2003\">2003</option>\n                                            <option value=\"2004\">2004</option>\n                                            <option value=\"2005\">2005</option>\n                                            <option value=\"2006\">2006</option>\n                                            <option value=\"2007\">2007</option>\n                                            <option value=\"2008\">2008</option>\n                                            <option value=\"2009\">2009</option>\n                                            <option value=\"2010\">2010</option>\n                                            <option value=\"2011\">2011</option>\n                                            <option value=\"2012\">2012</option>\n                                            <option value=\"2013\">2013</option>\n                                            <option value=\"2014\">2014</option>\n                                            <option value=\"2015\">2015</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Year</h6>\n                                    </div>\n                                </div>\n                            </div><!-- end col -->\n                        </div><!-- end form-group -->\n\n                        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n                            <label for=\"gender\" class=\"col-sm-2\">Gender</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n                            <label for=\"status\" class=\"col-sm-2\">Status</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\">\n                            <label for=\"public\" class=\"col-sm-2\">Public</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.url }\" v-if=\"!!public\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"url\" class=\"control-label\">Url Slug</label>\n                                <div class=\"input-group\">\n                                    <span class=\"input-group-addon\">www.missions.me/users/</span>\n                                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                                </div>\n                                <div v-show=\"errors.url\" class=\"help-block\">{{errors.url}}</div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h5>Contact Info</h5>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"bio\">Bio</label>\n                                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"User Bio\" maxlength=\"120\"></textarea>\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"infoAddress\">Address 1</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"infoAddress2\">Address 2</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoCity\">City</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoState\">State/Prov.</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-4\">\n                                <label for=\"infoZip\">ZIP/Postal Code</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                            </div>\n                            <div class=\"col-sm-8\">\n                                <div :class=\"{ 'has-error': checkForError('country') }\">\n                                    <label class=\"control-label\" for=\"country\" style=\"padding-top:0;margin-bottom: 5px;\">Country</label>\n                                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                                    </select>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"timezone\" class=\"control-label\">Timezone</label>\n                                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                                </select>\n                            </div>\n                        </div>\n\n\n                        <div class=\" form-group\">\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoPhone\">Phone 1</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoMobile\">Phone 2</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div><!-- end col -->\n            <div class=\"col-sm-12 text-center\">\n                <hr class=\"divider inv lg\">\n                <a href=\"/dashboard\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n                <hr class=\"divider inv xlg\">\n            </div><!-- end col -->\n        </div><!-- end row -->\n        <alert :show.sync=\"saved\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n            <strong>Well Done!</strong>\n            <p>Profile updated successfully</p>\n        </alert>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UserSettings\" @touched=\"onTouched\">\n    <form id=\"UserSettingsForm\" class=\"\" novalidate=\"\">\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h5>Account</h5>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"form-group\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"media\">\n                                    <div class=\"media-left\">\n                                        <a href=\"#\">\n                                            <img class=\"media-object img-rounded\" :src=\"avatar\" :alt=\"name\" width=\"64\">\n                                        </a>\n                                    </div>\n                                    <div class=\"media-body\">\n                                        <button class=\"btn btn-primary btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\"><i class=\"fa fa-camera\"></i> Upload</button><br>\n                                        <small>Max file size: 2mb</small>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"media\">\n                                    <div class=\"media-left\">\n                                        <a href=\"#\">\n                                            <img class=\"media-object img-rounded\" :src=\"banner\" :alt=\"name\" width=\"64\">\n                                        </a>\n                                    </div>\n                                    <div class=\"media-body\">\n                                        <button class=\"btn btn-primary btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#bannerCollapse\" aria-expanded=\"false\" aria-controls=\"bannerCollapse\"><i class=\"fa fa-camera\"></i> Cover</button>\n                                        <small>Max file size: 2mb</small>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"col-sm-12\">\n                                <div class=\"collapse\" id=\"avatarCollapse\">\n                                    <div class=\"well\">\n                                        <upload-create-update type=\"avatar\" :name=\"id\" :lock-type=\"true\" :ui-locked=\"true\" :ui-selector=\"2\" :is-child=\"true\" :tags=\"['User']\"></upload-create-update>\n                                    </div>\n                                </div>\n                                <div class=\"collapse\" id=\"bannerCollapse\">\n                                    <div class=\"well\">\n                                        <upload-create-update type=\"banner\" :name=\"id\" :lock-type=\"true\" :ui-locked=\"true\" :ui-selector=\"2\" :is-child=\"true\" :tags=\"['User']\"></upload-create-update>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Name</label>\n                                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"User Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') || errors.email }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Email</label>\n                                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n                                <div v-show=\"errors.email\" class=\"help-block\">{{errors.email}}</div>\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': errors.alt_email }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Alt. Email</label>\n                                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n                                <div v-show=\"errors.alt_email\" class=\"help-block\">{{errors.alt_email}}</div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': !!changePassword &amp;&amp; (checkForError('password')||checkForError('passwordconfirmation')) }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Password</label>\n                                <div class=\"checkbox\">\n                                    <label>\n                                        <input type=\"checkbox\" v-model=\"changePassword\">\n                                        Change Password\n                                    </label>\n                                </div>\n                                <div v-if=\"changePassword\" class=\"row\">\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ minlength:8 }\" placeholder=\"Enter password\">\n                                            <span class=\"input-group-btn\">\n                                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                                </button>\n                                            </span>\n                                        </div>\n                                    </div>\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ minlength:8 }\" placeholder=\"Enter password again\">\n                                            <span class=\"input-group-btn\">\n                                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                                </button>\n                                            </span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div v-if=\"changePassword\" class=\"help-block\">Password must be at least 8 characters long</div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\">\n                            <div class=\"col-sm-12\">\n                                <label>Date of Birth</label>\n                                <div class=\"row\">\n                                    <div class=\"col-xs-5\">\n                                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                                            <option value=\"01\">January</option>\n                                            <option value=\"02\">February</option>\n                                            <option value=\"03\">March</option>\n                                            <option value=\"04\">April</option>\n                                            <option value=\"05\">May</option>\n                                            <option value=\"06\">June</option>\n                                            <option value=\"07\">July</option>\n                                            <option value=\"08\">August</option>\n                                            <option value=\"09\">September</option>\n                                            <option value=\"10\">October</option>\n                                            <option value=\"11\">November</option>\n                                            <option value=\"12\">December</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Month</h6>\n                                    </div>\n                                    <div class=\"col-xs-3\">\n                                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                                            <option value=\"01\">1</option>\n                                            <option value=\"02\">2</option>\n                                            <option value=\"03\">3</option>\n                                            <option value=\"04\">4</option>\n                                            <option value=\"05\">5</option>\n                                            <option value=\"06\">6</option>\n                                            <option value=\"07\">7</option>\n                                            <option value=\"08\">8</option>\n                                            <option value=\"09\">9</option>\n                                            <option value=\"10\">10</option>\n                                            <option value=\"11\">11</option>\n                                            <option value=\"12\">12</option>\n                                            <option value=\"13\">13</option>\n                                            <option value=\"14\">14</option>\n                                            <option value=\"15\">15</option>\n                                            <option value=\"16\">16</option>\n                                            <option value=\"17\">17</option>\n                                            <option value=\"18\">18</option>\n                                            <option value=\"19\">19</option>\n                                            <option value=\"20\">20</option>\n                                            <option value=\"21\">21</option>\n                                            <option value=\"22\">22</option>\n                                            <option value=\"23\">23</option>\n                                            <option value=\"24\">24</option>\n                                            <option value=\"25\">25</option>\n                                            <option value=\"26\">26</option>\n                                            <option value=\"27\">27</option>\n                                            <option value=\"28\">28</option>\n                                            <option value=\"29\">29</option>\n                                            <option value=\"30\">30</option>\n                                            <option value=\"31\">31</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Day</h6>\n                                    </div>\n                                    <div class=\"col-xs-4\">\n                                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                                            <option value=\"1930\">1930</option>\n                                            <option value=\"1931\">1931</option>\n                                            <option value=\"1932\">1932</option>\n                                            <option value=\"1933\">1933</option>\n                                            <option value=\"1934\">1934</option>\n                                            <option value=\"1935\">1935</option>\n                                            <option value=\"1936\">1936</option>\n                                            <option value=\"1937\">1937</option>\n                                            <option value=\"1938\">1938</option>\n                                            <option value=\"1939\">1939</option>\n                                            <option value=\"1940\">1940</option>\n                                            <option value=\"1941\">1941</option>\n                                            <option value=\"1942\">1942</option>\n                                            <option value=\"1943\">1943</option>\n                                            <option value=\"1944\">1944</option>\n                                            <option value=\"1945\">1945</option>\n                                            <option value=\"1946\">1946</option>\n                                            <option value=\"1947\">1947</option>\n                                            <option value=\"1948\">1948</option>\n                                            <option value=\"1949\">1949</option>\n                                            <option value=\"1950\">1950</option>\n                                            <option value=\"1951\">1951</option>\n                                            <option value=\"1952\">1952</option>\n                                            <option value=\"1953\">1953</option>\n                                            <option value=\"1954\">1954</option>\n                                            <option value=\"1955\">1955</option>\n                                            <option value=\"1956\">1956</option>\n                                            <option value=\"1957\">1957</option>\n                                            <option value=\"1958\">1958</option>\n                                            <option value=\"1959\">1959</option>\n                                            <option value=\"1960\">1960</option>\n                                            <option value=\"1961\">1961</option>\n                                            <option value=\"1962\">1962</option>\n                                            <option value=\"1963\">1963</option>\n                                            <option value=\"1964\">1964</option>\n                                            <option value=\"1965\">1965</option>\n                                            <option value=\"1966\">1966</option>\n                                            <option value=\"1967\">1967</option>\n                                            <option value=\"1968\">1968</option>\n                                            <option value=\"1969\">1969</option>\n                                            <option value=\"1970\">1970</option>\n                                            <option value=\"1971\">1971</option>\n                                            <option value=\"1972\">1972</option>\n                                            <option value=\"1973\">1973</option>\n                                            <option value=\"1974\">1974</option>\n                                            <option value=\"1975\">1975</option>\n                                            <option value=\"1976\">1976</option>\n                                            <option value=\"1977\">1977</option>\n                                            <option value=\"1978\">1978</option>\n                                            <option value=\"1979\">1979</option>\n                                            <option value=\"1980\">1980</option>\n                                            <option value=\"1981\">1981</option>\n                                            <option value=\"1982\">1982</option>\n                                            <option value=\"1983\">1983</option>\n                                            <option value=\"1984\">1984</option>\n                                            <option value=\"1985\">1985</option>\n                                            <option value=\"1986\">1986</option>\n                                            <option value=\"1987\">1987</option>\n                                            <option value=\"1988\">1988</option>\n                                            <option value=\"1989\">1989</option>\n                                            <option value=\"1990\" selected=\"selected\">1990</option>\n                                            <option value=\"1991\">1991</option>\n                                            <option value=\"1992\">1992</option>\n                                            <option value=\"1993\">1993</option>\n                                            <option value=\"1994\">1994</option>\n                                            <option value=\"1995\">1995</option>\n                                            <option value=\"1996\">1996</option>\n                                            <option value=\"1997\">1997</option>\n                                            <option value=\"1998\">1998</option>\n                                            <option value=\"1999\">1999</option>\n                                            <option value=\"2000\">2000</option>\n                                            <option value=\"2001\">2001</option>\n                                            <option value=\"2002\">2002</option>\n                                            <option value=\"2003\">2003</option>\n                                            <option value=\"2004\">2004</option>\n                                            <option value=\"2005\">2005</option>\n                                            <option value=\"2006\">2006</option>\n                                            <option value=\"2007\">2007</option>\n                                            <option value=\"2008\">2008</option>\n                                            <option value=\"2009\">2009</option>\n                                            <option value=\"2010\">2010</option>\n                                            <option value=\"2011\">2011</option>\n                                            <option value=\"2012\">2012</option>\n                                            <option value=\"2013\">2013</option>\n                                            <option value=\"2014\">2014</option>\n                                            <option value=\"2015\">2015</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Year</h6>\n                                    </div>\n                                </div>\n                            </div><!-- end col -->\n                        </div><!-- end form-group -->\n\n                        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n                            <label for=\"gender\" class=\"col-sm-2\">Gender</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n                            <label for=\"status\" class=\"col-sm-2\">Status</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\">\n                            <label for=\"public\" class=\"col-sm-2\">Public</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.url }\" v-if=\"!!public\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"url\" class=\"control-label\">Url Slug</label>\n                                <div class=\"input-group\">\n                                    <span class=\"input-group-addon\">www.missions.me/users/</span>\n                                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                                </div>\n                                <div v-show=\"errors.url\" class=\"help-block\">{{errors.url}}</div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h5>Contact Info</h5>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"bio\">Bio</label>\n                                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"User Bio\" maxlength=\"120\"></textarea>\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"infoAddress\">Address 1</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"infoAddress2\">Address 2</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoCity\">City</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoState\">State/Prov.</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-4\">\n                                <label for=\"infoZip\">ZIP/Postal Code</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                            </div>\n                            <div class=\"col-sm-8\">\n                                <div :class=\"{ 'has-error': checkForError('country') }\">\n                                    <label class=\"control-label\" for=\"country\" style=\"padding-top:0;margin-bottom: 5px;\">Country</label>\n                                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                                    </select>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"timezone\" class=\"control-label\">Timezone</label>\n                                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                                </select>\n                            </div>\n                        </div>\n\n\n                        <div class=\" form-group\">\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoPhone\">Phone 1</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoMobile\">Phone 2</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div><!-- end col -->\n            <div class=\"col-sm-12 text-center\">\n                <hr class=\"divider inv lg\">\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n                <a @click=\"back()\" class=\"btn btn-success\">Done</a>\n                <hr class=\"divider inv xlg\">\n            </div><!-- end col -->\n        </div><!-- end row -->\n        <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n            <strong>Well Done!</strong>\n            <p>Profile updated successfully</p>\n        </alert>\n        <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n            <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n        </modal>\n    </form>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -57051,12 +57596,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2d9ee899", module.exports)
+    hotAPI.createRecord("_v-ee234926", module.exports)
   } else {
-    hotAPI.update("_v-2d9ee899", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ee234926", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],196:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":188,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -57079,7 +57624,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
     name: 'visa-create-update',
-    components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel },
+    components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
     props: {
         isUpdate: {
             type: Boolean,
@@ -57123,6 +57668,19 @@ exports.default = {
 
             return this.$CreateUpdateVisa[field].invalid && this.attemptSubmit;
         },
+        onTouched: function onTouched() {
+            this.hasChanged = true;
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/dashboard/visas/';
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
+        },
         submit: function submit() {
             this.attemptSubmit = true;
             if (this.$CreateUpdateVisa.valid) {
@@ -57159,7 +57717,7 @@ exports.default = {
                     user_id: this.user_id
                 }).then(function (resp) {
                     //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                    window.location.href = '/dashboard/visas';
+                    // window.location.href = '/dashboard/visas';
                 }, function (error) {
                     debugger;
                 });
@@ -57198,18 +57756,18 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdateVisa\">\n    <form id=\"CreateUpdateVisa\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"given_names\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"surname\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"number\" class=\"col-sm-2 control-label\">Visa Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Visa Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" :max=\"today\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" :min=\"tomorrow\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n            <label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"countryObj\" :value.sync=\"countryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Avatar\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'visa-'+given_names+'-'+surname\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/dashboard/visas\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdateVisa\" @touched=\"onTouched\">\n    <form id=\"CreateUpdateVisa\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"given_names\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"surname\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"number\" class=\"col-sm-2 control-label\">Visa Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Visa Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" :max=\"today\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" :min=\"tomorrow\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n            <label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"countryObj\" :value.sync=\"countryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Avatar\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'visa-'+given_names+'-'+surname\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a v-if=\"!isUpdate\" href=\"/dashboard/visas\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n                <a v-if=\"isUpdate\" @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n    </form>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>Profile updated!</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-12a04920", module.exports)
+    hotAPI.createRecord("_v-62eb7acc", module.exports)
   } else {
-    hotAPI.update("_v-12a04920", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-62eb7acc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],197:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":188,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -57255,6 +57813,7 @@ exports.default = {
     },
     methods: {
         // emulate pagination
+
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -57291,12 +57850,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4fbd58ab", module.exports)
+    hotAPI.createRecord("_v-d20a1352", module.exports)
   } else {
-    hotAPI.update("_v-4fbd58ab", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d20a1352", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],198:[function(require,module,exports){
+},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],201:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -57358,6 +57917,10 @@ var _groupProfileStories2 = _interopRequireDefault(_groupProfileStories);
 var _groupsTripsSelectionWrapper = require('./components/campaigns/groups-trips-selection-wrapper.vue');
 
 var _groupsTripsSelectionWrapper2 = _interopRequireDefault(_groupsTripsSelectionWrapper);
+
+var _groupInterestSignup = require('./components/groups/group-interest-signup.vue');
+
+var _groupInterestSignup2 = _interopRequireDefault(_groupInterestSignup);
 
 var _tripDetailsMissionaries = require('./components/trips/trip-details-missionaries.vue');
 
@@ -57479,6 +58042,10 @@ var _adminTripDelete = require('./components/trips/admin-trip-delete.vue');
 
 var _adminTripDelete2 = _interopRequireDefault(_adminTripDelete);
 
+var _adminInterestsList = require('./components/interests/admin-interests-list.vue');
+
+var _adminInterestsList2 = _interopRequireDefault(_adminInterestsList);
+
 var _adminGroupsList = require('./components/groups/admin-groups-list.vue');
 
 var _adminGroupsList2 = _interopRequireDefault(_adminGroupsList);
@@ -57534,6 +58101,10 @@ var _adminUploadsList2 = _interopRequireDefault(_adminUploadsList);
 var _adminUploadCreateUpdate = require('./components/uploads/admin-upload-create-update.vue');
 
 var _adminUploadCreateUpdate2 = _interopRequireDefault(_adminUploadCreateUpdate);
+
+var _reconcileFund = require('./components/reconcile-fund.vue');
+
+var _reconcileFund2 = _interopRequireDefault(_reconcileFund);
 
 var _vueStrap = require('vue-strap/dist/vue-strap.min');
 
@@ -57699,13 +58270,13 @@ new _vue2.default({
             public: false
         }
     },
-    components: [_login2.default, _fundraisers2.default, _campaigns2.default, _groups2.default, _campaignGroups2.default, _groupTrips2.default, _groupProfileTrips2.default, _groupProfileStories2.default, _groupProfileFundraisers2.default, _groupsTripsSelectionWrapper2.default, _tripDetailsMissionaries2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _fundraisersStories2.default, _topNav2.default, _actionTrigger2.default, _donate2.default, _modalDonate2.default,
+    components: [_login2.default, _fundraisers2.default, _campaigns2.default, _groups2.default, _campaignGroups2.default, _groupTrips2.default, _groupProfileTrips2.default, _groupProfileStories2.default, _groupProfileFundraisers2.default, _groupsTripsSelectionWrapper2.default, _groupInterestSignup2.default, _tripDetailsMissionaries2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _fundraisersStories2.default, _topNav2.default, _actionTrigger2.default, _donate2.default, _modalDonate2.default,
 
     //dashboard components
     _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default, _groupsList2.default, _visaCreateUpdate2.default, _reservationsPassportsManager2.default, _reservationsVisasManager2.default, _userSettings2.default, _userProfileStories2.default, _userProfileFundraisers2.default, _userProfileFundraisersDonors2.default, _userProfileFundraisersProgress2.default, _dashboardGroupTrips2.default, _dashboardGroupReservations2.default,
 
     // admin components
-    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminReservationEdit2.default, _adminReservationCosts2.default, _adminReservationDeadlines2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default],
+    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminInterestsList2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminReservationEdit2.default, _adminReservationCosts2.default, _adminReservationDeadlines2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default, _reconcileFund2.default],
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -57726,6 +58297,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/action-trigger.vue":119,"./components/campaigns/admin-campaign-create.vue":120,"./components/campaigns/admin-campaign-details.vue":121,"./components/campaigns/admin-campaign-edit.vue":122,"./components/campaigns/campaign-groups.vue":123,"./components/campaigns/campaigns.vue":124,"./components/campaigns/group-trips.vue":129,"./components/campaigns/groups-trips-selection-wrapper.vue":130,"./components/donate.vue":131,"./components/fundraisers/fundraisers-stories.vue":132,"./components/fundraisers/fundraisers.vue":133,"./components/groups/admin-group-create.vue":134,"./components/groups/admin-group-edit.vue":135,"./components/groups/admin-group-managers.vue":136,"./components/groups/admin-groups-list.vue":137,"./components/groups/dashboard-group-reservations.vue":138,"./components/groups/dashboard-group-trips.vue":139,"./components/groups/group-profile-fundraisers.vue":140,"./components/groups/group-profile-stories.vue":141,"./components/groups/group-profile-trips.vue":142,"./components/groups/groups-list.vue":143,"./components/groups/groups.vue":144,"./components/login.vue":145,"./components/modal-donate.vue":146,"./components/passports/passport-create-update.vue":147,"./components/passports/passports-list.vue":148,"./components/records/records-list.vue":149,"./components/reservations/admin-reservation-costs.vue":150,"./components/reservations/admin-reservation-deadlines.vue":151,"./components/reservations/admin-reservation-edit.vue":152,"./components/reservations/admin-reservations-list.vue":153,"./components/reservations/donations-list.vue":154,"./components/reservations/reservations-list.vue":155,"./components/reservations/reservations-passports-manager.vue":156,"./components/reservations/reservations-visas-manager.vue":157,"./components/top-nav.vue":158,"./components/trips/admin-trip-create.vue":159,"./components/trips/admin-trip-delete.vue":160,"./components/trips/admin-trip-duplicate.vue":161,"./components/trips/admin-trip-edit.vue":162,"./components/trips/admin-trip-facilitators.vue":163,"./components/trips/admin-trip-reservations-list.vue":164,"./components/trips/admin-trips-list.vue":165,"./components/trips/trip-details-missionaries.vue":183,"./components/trips/trip-registration-wizard.vue":184,"./components/uploads/admin-upload-create-update.vue":185,"./components/uploads/admin-uploads-list.vue":186,"./components/users/admin-user-create.vue":187,"./components/users/admin-user-delete.vue":188,"./components/users/admin-user-edit.vue":189,"./components/users/admin-users-list.vue":190,"./components/users/user-profile-fundraisers-donors.vue":191,"./components/users/user-profile-fundraisers-progress.vue":192,"./components/users/user-profile-fundraisers.vue":193,"./components/users/user-profile-stories.vue":194,"./components/users/user-settings.vue":195,"./components/visas/visa-create-update.vue":196,"./components/visas/visas-list.vue":197,"bootstrap-sass":16,"gsap":103,"jquery":105,"jquery.cookie":104,"marked":106,"moment":107,"scrollmagic":109,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":110,"underscore":111,"vue":117,"vue-resource":113,"vue-strap/dist/vue-strap.min":115,"vue-validator":116}]},{},[198]);
+},{"./components/action-trigger.vue":119,"./components/campaigns/admin-campaign-create.vue":120,"./components/campaigns/admin-campaign-details.vue":121,"./components/campaigns/admin-campaign-edit.vue":122,"./components/campaigns/campaign-groups.vue":123,"./components/campaigns/campaigns.vue":124,"./components/campaigns/group-trips.vue":129,"./components/campaigns/groups-trips-selection-wrapper.vue":130,"./components/donate.vue":131,"./components/fundraisers/fundraisers-stories.vue":132,"./components/fundraisers/fundraisers.vue":133,"./components/groups/admin-group-create.vue":134,"./components/groups/admin-group-edit.vue":135,"./components/groups/admin-group-managers.vue":136,"./components/groups/admin-groups-list.vue":137,"./components/groups/dashboard-group-reservations.vue":138,"./components/groups/dashboard-group-trips.vue":139,"./components/groups/group-interest-signup.vue":140,"./components/groups/group-profile-fundraisers.vue":141,"./components/groups/group-profile-stories.vue":142,"./components/groups/group-profile-trips.vue":143,"./components/groups/groups-list.vue":144,"./components/groups/groups.vue":145,"./components/interests/admin-interests-list.vue":146,"./components/login.vue":147,"./components/modal-donate.vue":148,"./components/passports/passport-create-update.vue":149,"./components/passports/passports-list.vue":150,"./components/reconcile-fund.vue":151,"./components/records/records-list.vue":152,"./components/reservations/admin-reservation-costs.vue":153,"./components/reservations/admin-reservation-deadlines.vue":154,"./components/reservations/admin-reservation-edit.vue":155,"./components/reservations/admin-reservations-list.vue":156,"./components/reservations/donations-list.vue":157,"./components/reservations/reservations-list.vue":158,"./components/reservations/reservations-passports-manager.vue":159,"./components/reservations/reservations-visas-manager.vue":160,"./components/top-nav.vue":161,"./components/trips/admin-trip-create.vue":162,"./components/trips/admin-trip-delete.vue":163,"./components/trips/admin-trip-duplicate.vue":164,"./components/trips/admin-trip-edit.vue":165,"./components/trips/admin-trip-facilitators.vue":166,"./components/trips/admin-trip-reservations-list.vue":167,"./components/trips/admin-trips-list.vue":168,"./components/trips/trip-details-missionaries.vue":186,"./components/trips/trip-registration-wizard.vue":187,"./components/uploads/admin-upload-create-update.vue":188,"./components/uploads/admin-uploads-list.vue":189,"./components/users/admin-user-create.vue":190,"./components/users/admin-user-delete.vue":191,"./components/users/admin-user-edit.vue":192,"./components/users/admin-users-list.vue":193,"./components/users/user-profile-fundraisers-donors.vue":194,"./components/users/user-profile-fundraisers-progress.vue":195,"./components/users/user-profile-fundraisers.vue":196,"./components/users/user-profile-stories.vue":197,"./components/users/user-settings.vue":198,"./components/visas/visa-create-update.vue":199,"./components/visas/visas-list.vue":200,"bootstrap-sass":16,"gsap":103,"jquery":105,"jquery.cookie":104,"marked":106,"moment":107,"scrollmagic":109,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":110,"underscore":111,"vue":117,"vue-resource":113,"vue-strap/dist/vue-strap.min":115,"vue-validator":116}]},{},[201]);
 
 //# sourceMappingURL=main.js.map

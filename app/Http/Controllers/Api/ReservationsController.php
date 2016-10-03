@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\ReservationWasCreated;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\RequirementRequest;
 use App\Http\Transformers\v1\DonorTransformer;
+use App\Http\Transformers\v1\RequirementTransformer;
 use App\Models\v1\Donor;
 use App\Models\v1\Reservation;
+use Carbon\Carbon;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\ReservationRequest;
 use App\Http\Transformers\v1\ReservationTransformer;
@@ -114,6 +117,10 @@ class ReservationsController extends Controller
         if ($request->has('tags'))
             $reservation->retag($request->get('tags'));
 
+        if ( ! $request->has('medical_release_id'))
+            $reservation->medicalRelease()->dissociate();
+            $reservation->save();
+
         return $this->response->item($reservation, new ReservationTransformer);
     }
 
@@ -130,5 +137,39 @@ class ReservationsController extends Controller
         $reservation->delete();
 
         return $this->response->noContent();
+    }
+
+    public function reconcile($id)
+    {
+        $reservation = $this->reservation->findOrFail($id);
+
+        $reservation->payments()->reconcile();
+
+        return $this->response->item($reservation, new ReservationTransformer, ['include' => 'dues']);
+    }
+
+    /**
+     * Update an existing requirement.
+     *
+     * @param $reservation_id
+     * @param $requirement_id
+     * @param RequirementRequest $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function updateRequirement($reservation_id, $requirement_id, RequirementRequest $request)
+    {
+        $reservation = $this->reservation->findOrFail($reservation_id);
+
+        $attributes = [
+            'status' => $request->get('status', 'incomplete'),
+            'grace_period' => $request->get('grace_period', null)
+        ];
+
+        $reservation->requirements()->updateExistingPivot($requirement_id, $attributes);
+
+        return $this->response->item($reservation->requirements()
+            ->where('requirement_id', $requirement_id)
+            ->first(),
+            new RequirementTransformer);
     }
 }

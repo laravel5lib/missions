@@ -21,6 +21,10 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ReservationWasProcessed' => [
             'App\Listeners\EmailReservationConfirmation',
             'App\Listeners\NotifyFacilitatorsOfNewReservation'
+        ],
+        'App\Events\TripInterestWasCreated' => [
+            'App\Listeners\NotifyFacilitatorsOfNewTripInterest',
+            'App\Listeners\NotifyTripRepOfNewTripInterest'
         ]
     ];
 

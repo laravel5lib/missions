@@ -29,7 +29,6 @@ class CostTransformer extends TransformerAbstract
             'name'             => $cost->name,
             'description'      => $cost->description,
             'amount'           => $cost->amount,
-            'balance_due'      => (int) $cost->getBalanceDue(),
             'active_at'        => $cost->active_at->toDateTimeString(),
             'type'             => $cost->type,
         ];
@@ -41,10 +40,10 @@ class CostTransformer extends TransformerAbstract
                 'name'             => $cost->name,
                 'description'      => $cost->description,
                 'amount'           => $cost->amount,
-                'balance_due'      => (int) $cost->getBalanceDue(),
                 'active_at'        => $cost->active_at->toDateTimeString(),
                 'type'             => $cost->type,
-                'updated_at'       => $cost->pivot->updated_at->toDateTimeString()
+                'updated_at'       => $cost->pivot->updated_at->toDateTimeString(),
+                'locked'           => (boolean) $cost->locked
             ];
         }
 

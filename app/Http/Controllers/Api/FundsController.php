@@ -40,4 +40,13 @@ class FundsController extends Controller
 
         return $this->response->item($fund, new FundTransformer);
     }
+
+    public function reconcile($id)
+    {
+        $fund = $this->fund->findOrFail($id);
+
+        $fund->reconcile();
+
+        return $this->response->item($fund, new FundTransformer);
+    }
 }

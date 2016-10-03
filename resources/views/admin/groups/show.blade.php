@@ -37,9 +37,11 @@
                 	  </div>
                 	  <div class="panel-body">
                 			<div class="col-sm-8">
+                                @unless( ! $group->description)
                                 <label>Description</label>
                                 <p>{{ $group->description }}</p>
                                 <hr class="divider">
+                                @endunless
                                 <div class="row">
                                     <div class="col-sm-6 text-center">
                                         <label>Type</label>
@@ -51,6 +53,7 @@
                                     </div>
                                 </div>
                                 <hr class="divider">
+                                @unless( ! $group->url)
                                 <div class="row">
                                     <div class="col-sm-12 text-center">
                                         <div class="well">
@@ -63,6 +66,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endunless
                             </div>
                             <div class="col-sm-4 panel panel-default">
                                 <div class="panel-body">
@@ -87,6 +91,24 @@
                 	  </div>
                 </div>
                 <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Notes</h5>
+                    </div>
+                    <div class="list-group">
+                        @foreach($group->notes as $note)
+                            <div class="list-group-item">
+                                <h5 class="list-group-item-heading">{{ $note->subject }} <small>&middot; {{ $note->user ? $note->user->name : 'Guest' }} <span class="pull-right">{{ $note->created_at->diffForHumans() }}</span></small></h5>
+                                <p class="list-group-item-text">{{ $note->content }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
     </div>

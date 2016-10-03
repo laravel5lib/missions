@@ -27,11 +27,11 @@ class ReservationsController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index($tab = null)
     {
         $this->authorize('view', $this->reservation);
 
-        return view('admin.reservations.index');
+        return view('admin.reservations.index', compact('tab'));
     }
 
     /**

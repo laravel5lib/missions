@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="UpdateReservation">
+    <validator name="UpdateReservation" @touched="onTouched">
         <form id="UpdateReservation" novalidate class="form-horizontal">
 
             <div class="row">
@@ -29,7 +29,7 @@
                 <div class="col-sm-6">
                     <div class="form-group" :class="{ 'has-error': checkForError('givennames') }">
                         <label for="given_names">Given Names</label>
-                        <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
+                        <input type=    "text" class="form-control" name="given_names" id="given_names" v-model="given_names"
                                placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="100" minlength="1" required>
                     </div>
@@ -47,7 +47,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Date of Birth</label>
-                    <datepicker v-if="loaded" :value.sync="birthday" format="YYYY-MM-DD" :clear-button="true" placeholder="Date of Birth"></datepicker>
+                    <datepicker v-if="loaded" :value.sync="birthday" format="yyyy-MM-dd" :clear-button="true" placeholder="Date of Birth"></datepicker>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group" :class="{ 'has-error': checkForError('size') }">
@@ -161,7 +161,7 @@
                 <div class="col-sm-6">
                     <div class="form-group" :class="{ 'has-error': checkForError('companions') }">
                         <label for="companions">Companions</label>
-                        <input type="number" class="form-control" v-validate:companions="{ require: true }" v-model="companion_limit" id="companions">
+                        <input type="number" number class="form-control" v-validate:companions="{ require: true }" v-model="companion_limit" id="companions">
                     </div>
                 </div>
             </div>
@@ -169,9 +169,8 @@
             <div class="form-group">
                 <div class="col-sm-12 text-center">
                     <br>
-                    <a href="/admin/reservations/{{id}}" class="btn btn-default">Cancel</a>
-                    <a @click="update" class="btn btn-primary">Update</a>
-                    <a href="/admin/reservations/{{id}}" class="btn btn-success">Finish</a>
+                    <a @click="update" class="btn btn-primary">Save</a>
+                    <a @click="back" class="btn btn-success">Done</a>
                 </div>
             </div>
 
@@ -181,16 +180,19 @@
             <strong>Awesome!</strong>
             <p>Reservation updated!</p>
         </alert>
+        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+            <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
+        </modal>
     </validator>
 </template>
 <script>
     import vSelect from 'vue-select';
     import VueStrap from 'vue-strap/dist/vue-strap.min'
-    import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
+    import uploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
     export default{
         name: 'admin-reservation-edit',
         props: ['id'],
-        components: { vSelect, 'datepicker': VueStrap.datepicker, 'alert': VueStrap.alert, 'upload-create-update': adminUploadCreateUpdate },
+        components: { vSelect, 'datepicker': VueStrap.datepicker, 'alert': VueStrap.alert, 'modal': VueStrap.modal, 'upload-create-update': uploadCreateUpdate },
         data(){
             return{
                 given_names: '',
@@ -222,12 +224,14 @@
                 userObj: null,
                 errors: [],
                 countries: [],
-				showSuccess: false
+				showSuccess: false,
+                showSaveAlert: false,
+                hasChanged: false
             }
         },
         computed:{
             user_id(){
-                return _.isObject(this.userObj) ? this.userObj.code : null;
+                return _.isObject(this.userObj) ? this.userObj.id : null;
             },
             country_code() {
                 if (_.isObject(this.countryCodeObj)) {
@@ -239,6 +243,9 @@
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$UpdateReservation[field].invalid && this.attemptSubmit;
+            },
+            onTouched(){
+                this.hasChanged = true;
             },
             searchUsers(search, loading){
                 loading(true);
@@ -267,6 +274,7 @@
                         phone_two: this.phone_two,
                         city: this.city,
                         state: this.state,
+                        zip: this.zip,
                         country_code: this.country_code,
                         companion_limit: this.companion_limit,
                         avatar_upload_id: this.avatar_upload_id,
@@ -274,12 +282,23 @@
                     }).then(function (response) {
                         $.extend(this, response.data.data);
 						this.showSuccess = true;
+						this.hasChanged = false;
 
                     }, function (error) {
                         this.errors = error.data.errors;
-                    })
+                    });
                 }
-            }
+            },
+            back(force){
+                if (this.hasChanged && !force ) {
+                    this.showSaveAlert = true;
+                    return false;
+                }
+                window.location.href = '/admin/reservations/' + this.id;
+            },
+            forceBack(){
+                return this.back(true);
+            },
 
         },
         events:{
@@ -321,7 +340,7 @@
                 this.userObj = reservation.user.data;
                 this.selectedAvatar = {source: reservation.avatar};
 
-                this.loaded = true
+                this.loaded = true;
             })
         }
     }

@@ -13,15 +13,21 @@ class FundsTableSeeder extends Seeder
     {
         factory(App\Models\v1\Transaction::class, 'donation', 100)->create()
             ->each(function($t) {
-                event(new \App\Events\TransactionWasCreated($t));
+                $balance = $t->fund->balance + $t->amount;
+                $t->fund->balance = $balance;
+                $t->fund->save();
             });
         factory(App\Models\v1\Transaction::class, 'transfer_to', 25)->create()
             ->each(function($t) {
-                event(new \App\Events\TransactionWasCreated($t));
+                $balance = $t->fund->balance + $t->amount;
+                $t->fund->balance = $balance;
+                $t->fund->save();
             });
         factory(App\Models\v1\Transaction::class, 'transfer_from', 25)->create()
             ->each(function($t) {
-                event(new \App\Events\TransactionWasCreated($t));
+                $balance = $t->fund->balance + $t->amount;
+                $t->fund->balance = $balance;
+                $t->fund->save();
             });
     }
 }

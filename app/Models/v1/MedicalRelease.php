@@ -126,4 +126,50 @@ class MedicalRelease extends Model
         $this->attributes['emergency_contact'] = json_encode($value);
     }
 
+    /**
+     * Synchronize medical conditions.
+     *
+     * @param array $conditions
+     */
+    public function syncConditions($conditions)
+    {
+        if ( ! $conditions) return $this->conditions()->delete();
+
+        $names = $this->conditions()->lists('name', 'name');
+
+        foreach($conditions as $condition)
+        {
+            array_forget($names, $condition['name']);
+
+            $this->conditions()->updateOrCreate(['name' => $condition['name']], $condition);
+        }
+
+        if( ! $names->isEmpty()) $this->conditions()
+                                    ->whereIn('name', $names)
+                                    ->delete();
+    }
+
+    /**
+     * Synchronize medical allergies.
+     *
+     * @param array $allergies
+     */
+    public function syncAllergies($allergies)
+    {
+        if ( ! $allergies) return $this->allergies()->delete();
+
+        $names = $this->allergies()->lists('name', 'name');
+
+        foreach($allergies as $allergy)
+        {
+            array_forget($names, $allergy['name']);
+
+            $this->allergies()->updateOrCreate(['name' => $allergy['name']], $allergy);
+        }
+
+        if( ! $names->isEmpty()) $this->allergies()
+            ->whereIn('name', $names)
+            ->delete();
+    }
+
 }

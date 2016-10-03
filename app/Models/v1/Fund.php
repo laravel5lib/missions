@@ -67,4 +67,14 @@ class Fund extends Model
                     ->groupBy('name')
                     ->orderBy('name');
     }
+
+    /**
+     * Reconcile the fund's balance.
+     */
+    public function reconcile()
+    {
+        $this->balance = (int) $this->transactions()->sum('amount');
+
+        $this->save();
+    }
 }

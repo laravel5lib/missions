@@ -285,8 +285,6 @@
 			'per_page': function (val, oldVal) {
 				this.searchUploads();
 			},
-
-
 		},
 		events:{
 			'vueCrop-api':function (api) {

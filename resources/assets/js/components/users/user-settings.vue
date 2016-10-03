@@ -17,7 +17,7 @@
                                             </a>
                                         </div>
                                         <div class="media-body">
-                                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button><br>
+                                            <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button><br>
                                             <small>Max file size: 2mb</small>
                                         </div>
                                     </div>
@@ -30,7 +30,7 @@
                                             </a>
                                         </div>
                                         <div class="media-body">
-                                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button>
+                                            <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button>
                                             <small>Max file size: 2mb</small>
                                         </div>
                                     </div>
@@ -38,12 +38,12 @@
                                 <div class="col-sm-12">
                                     <div class="collapse" id="avatarCollapse">
                                         <div class="well">
-                                            <upload-create-update type="avatar" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['user']"></upload-create-update>
+                                            <upload-create-update type="avatar" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['User']"></upload-create-update>
                                         </div>
                                     </div>
                                     <div class="collapse" id="bannerCollapse">
                                         <div class="well">
-                                            <upload-create-update type="banner" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['user']"></upload-create-update>
+                                            <upload-create-update type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['User']"></upload-create-update>
                                         </div>
                                     </div>
                                 </div>
@@ -416,6 +416,7 @@
         components: {vSelect, uploadCreateUpdate, 'alert': VueStrap.alert},
         data(){
             return {
+                id: '',
                 avatar: '',
                 banner: '',
                 name: '',
@@ -471,6 +472,23 @@
                 return this.dobYear && this.dobMonth && this.dobDay
                         ? moment().set({year: this.dobYear, month: this.dobMonth, day:this.dobDay}).format('LL')
                         : null;
+            }
+        },
+        events:{
+            'uploads-complete'(data){
+                switch(data.type){
+                    case 'avatar':
+                        this.selectedAvatar = data;
+                        this.avatar_upload_id = data.id;
+                        jQuery('#avatarCollapse').collapse('hide');
+                        break;
+                    case 'banner':
+                        this.selectedBanner = data;
+                        this.banner_upload_id = data.id;
+                        jQuery('#bannerCollapse').collapse('hide');
+                        break;
+                }
+                this.submit();
             }
         },
         methods: {
@@ -531,6 +549,7 @@
 
             this.resource.get().then(function (response) {
                 var user = response.data.data;
+                this.id = user.id
                 this.avatar = user.avatar;
                 this.banner = user.banner;
                 this.name = user.name;

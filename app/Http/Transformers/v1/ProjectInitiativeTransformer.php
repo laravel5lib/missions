@@ -39,7 +39,7 @@ class ProjectInitiativeTransformer extends Fractal\TransformerAbstract
             'links'     => [
                 [
                     'rel' => 'self',
-                    'uri' => url('/api/projects/initiatives/'.$initiative->id),
+                    'uri' => url('/api/causes/' . $initiative->cause->id . '/initiatives/'.$initiative->id),
                 ]
             ],
         ];

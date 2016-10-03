@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
         <validator name="Interest">
-        <form novalidate name="TripInterestSignupForm">
+        <form novalidate id="TripInterestSignupForm">
             <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
                 <strong>Awesome!</strong>
@@ -9,20 +9,20 @@
             </alert>
             <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Saving"></spinner>
             <div class="row">
-                <div class="col-xs-12" :class="{ 'has-error': checkForError('campaign_id')}">
+                <div class="col-xs-12" :class="{ 'has-error': checkForError('campaign')}">
                     <label>Campaign of Interest</label>
-                    <select v-model="campaign_id" class="form-control" v-validate:campaign_id="{required: true}">
+                    <select v-model="campaign_id" class="form-control" v-validate:campaign="{required: true}">
                         <option v-for="campaign in campaigns" :value="campaign.data.id">
-                            {{ campaign.data.name }}
+                            {{   campaign.data.name }}
                         </option>
                     </select>
                 </div>
             </div>
             <hr class="divider inv sm">
             <div class="row" v-if="campaign_id">
-                <div class="col-xs-12" :class="{ 'has-error': checkForError('trip_id')}">
+                <div class="col-xs-12" :class="{ 'has-error': checkForError('trip')}">
                     <label>Trip Type</label>
-                    <select v-model="interest.trip_id" class="form-control" v-validate:trip_id="{required: true}">
+                    <select v-model="interest.trip_id" class="form-control" v-validate:trip="{required: true}">
                         <option v-for="trip in trips" :value="trip.id">
                             {{ trip.type | capitalize }} Trip
                         </option>
@@ -95,6 +95,7 @@
                 campaign_id: null,
                 campaigns: {},
                 allTrips: {},
+                attemptSubmit: false,
                 showSuccess: false
             }
         },
@@ -108,13 +109,14 @@
                 this.group = response.data.data;
                 this.allTrips = response.data.data.trips.data;
                 var campaigns = _.mapObject(response.data.data.trips.data, 'campaign');
-                this.campaigns = this.removeDuplicates(campaigns, 'id')
+                this.campaigns = this.removeDuplicates(campaigns, 'id');
+                console.log(this.campaigns);
             })
         },
         methods: {
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$Interest[field].invalid;
+                return this.$Interest[field].invalid && this.attemptSubmit;
             },
             removeDuplicates(arr, prop) {
                 var new_arr = [];
@@ -131,15 +133,18 @@
                 return new_arr;
             },
             save() {
-                this.$refs.validationspinner.show();
-                this.$http.post('interests', this.interest).then(function (response) {
-                    this.$refs.validationspinner.hide();
-                    this.showSuccess = true;
-                    console.log(response);
-                }).then(function(error) {
-                    this.$refs.validationspinner.hide();
-                    console.log(error);
-                });
+                this.attemptSubmit = true;
+                if (this.$Interest.valid) {
+                    this.$refs.validationspinner.show();
+                    this.$http.post('interests', this.interest).then(function (response) {
+                        this.$refs.validationspinner.hide();
+                        this.showSuccess = true;
+                        console.log(response);
+                    }).then(function (error) {
+                        this.$refs.validationspinner.hide();
+                        console.log(error);
+                    });
+                }
             }
         }
     }

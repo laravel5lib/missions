@@ -845,3 +845,42 @@ $factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $fa
         'communication_preferences' => $faker->randomElements(['email', 'phone', 'text'], 2)
     ];
 });
+
+/**
+ * Cause Factory
+ */
+$factory->define(App\Models\v1\Cause::class, function(Faker\Generator $faker) {
+    return [
+        'name' => $faker->catchPhrase,
+        'short_desc' => $faker->realText(200),
+        'upload_id' => $faker->randomElement(App\Models\v1\Upload::pluck('id')->toArray()),
+        'active' => $faker->boolean(50)
+    ];
+});
+
+/**
+ * Project Type Factory
+ */
+$factory->define(App\Models\v1\ProjectType::class, function(Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'short_desc' => $faker->realText(200),
+        'upload_id' => $faker->randomElement(App\Models\v1\Upload::pluck('id')->toArray()),
+        'active' => $faker->boolean(50)
+    ];
+});
+
+/**
+ * Project Initiative Factory
+ */
+$factory->define(App\Models\v1\ProjectInitiative::class, function(Faker\Generator $faker) {
+    return [
+        'name' => $faker->catchPhrase,
+        'cause_id' => $faker->randomElement(App\Models\v1\Cause::pluck('id')->toArray()),
+        'country_code' => $faker->countryCode,
+        'started_at' => $faker->dateTimeThisYear(),
+        'ended_at' => $faker->dateTimeThisYear(),
+        'active' => $faker->boolean(50),
+        'rep_id' => $faker->randomElements(App\Models\v1\User::pluck('id')->toArray())
+    ];
+});

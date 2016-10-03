@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TransportSeeder::class);
         $this->call(AccommodationSeeder::class);
         $this->call(StoriesTableSeeder::class);
+        $this->call(ProjectTablesSeeder::class);
 
         config(['mail.driver' => 'smtp']);
         config(['queue.default' => 'sqs']);

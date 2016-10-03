@@ -40,6 +40,7 @@
 					<li><a href="/admin/campaigns"><i class="fa fa-globe"></i> Campaings</a></li>
 					<li><a href="/admin/reservations"><i class="fa fa-ticket"></i> Reservations</a></li>
 					<li><a href="/admin/groups"><i class="fa fa-users"></i> Groups</a></li>
+					<li><a href="/admin/interests"><i class="fa fa-question-mark"></i> Interests</a></li>
 					<li><a href="/admin/users"><i class="fa fa-user"></i> Users</a></li>
 					<li><a href="/admin/uploads"><i class="fa fa-picture-o"></i> Uploads</a></li>
 				</template>

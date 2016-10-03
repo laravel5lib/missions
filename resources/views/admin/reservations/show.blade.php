@@ -49,7 +49,7 @@
                     <li role="presentation"><a href="#requirements" aria-controls="requirements" role="tab" data-toggle="tab">Requirements</a></li>
                     <li role="presentation"><a href="#funding" aria-controls="funding" role="tab" data-toggle="tab">Funding</a></li>
                     <li role="presentation"><a href="#dues" aria-controls="dues" role="tab" data-toggle="tab">Dues</a></li>
-                    {{--<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>--}}
+                    <li role="presentation"><a href="#settings" aria-controls="interests" role="tab" data-toggle="tab">Settings</a></li>
                 </ul>
             </div><!-- end panel -->
         </div>

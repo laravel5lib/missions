@@ -46,6 +46,7 @@ import adminTripsReservations from './components/trips/admin-trip-reservations-l
 import adminTripsFacilitators from './components/trips/admin-trip-facilitators.vue';
 import adminTripsDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripsDelete from './components/trips/admin-trip-delete.vue';
+import adminInterestsList from './components/interests/admin-interests-list.vue';
 import adminGoups from './components/groups/admin-groups-list.vue';
 import adminGroupCreate from './components/groups/admin-group-create.vue';
 import adminGroupEdit from './components/groups/admin-group-edit.vue';
@@ -276,6 +277,7 @@ new Vue({
         adminTripsFacilitators,
         adminTripsDuplicate,
         adminTripsDelete,
+        adminInterestsList,
         adminGoups,
         adminGroupCreate,
         adminGroupEdit,

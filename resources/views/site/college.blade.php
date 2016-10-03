@@ -38,7 +38,7 @@
 
 <div class="darker-bg-primary">
 	<div class="white-bg">
-		<ul class="nav nav-tabs">
+		<ul class="nav nav-tabs hidden-xs">
 		    <li class="active"><a class="scrollNav" href="#who-we-are">Who We Are</a></li>
 		    <li><a class="scrollNav" href="#academics">Academics</a></li>
 		    <li><a class="scrollNav" href="#community">Community</a></li>
@@ -47,6 +47,21 @@
 		    <li><a class="scrollNav" href="#academics">Missions</a></li>
 		    <li><a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
 		</ul>
+		<div class="btn-group btn-group-justified visible-xs-block" role="group">
+			<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button"
+			   aria-haspopup="true" aria-expanded="false">
+				College <span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-right">
+				<li class="active"><a class="scrollNav" href="#who-we-are">Who We Are</a></li>
+				<li><a class="scrollNav" href="#academics">Academics</a></li>
+				<li><a class="scrollNav" href="#community">Community</a></li>
+				<li><a class="scrollNav" href="#students">Prospective Students</a></li>
+				<li><a class="scrollNav" href="/college-financial">Financial Aid</a></li>
+				<li><a class="scrollNav" href="#academics">Missions</a></li>
+				<li><a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
+			</ul>
+		</div>
 	</div><!-- end white-bg -->
 	<div class="container">
 	<div class="content-section">

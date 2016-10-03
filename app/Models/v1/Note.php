@@ -110,4 +110,16 @@ class Note extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get most recent notes.
+     *
+     * @param $query
+     * @param int $number
+     * @return mixed
+     */
+    public function scopeRecent($query, $number = 3)
+    {
+        return $query->latest()->limit($number);
+    }
 }

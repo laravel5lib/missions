@@ -22,7 +22,7 @@ Route::resource('trips', 'TripsController');
 Route::resource('groups', 'GroupsController');
 Route::resource('interests', 'TripInterestsController');
 
-Route::get('reservations/{tab?}', 'ReservationsController@index')->where('tab', 'current|archived|dropped');
+Route::get('reservations/{tab?}', 'ReservationsController@index')->where('tab', 'current|archived|dropped|prospects');
 Route::resource('reservations', 'ReservationsController');
 
 Route::resource('users', 'UsersController');

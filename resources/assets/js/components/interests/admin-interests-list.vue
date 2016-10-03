@@ -22,11 +22,6 @@
                               :value.sync="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
-                <div class="form-group" v-if="!tripId">
-                    <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getTrips"
-                              :value.sync="tripObj" :options="tripOptions" label="country_name"
-                              placeholder="Filter by Trip"></v-select>
-                </div>
 
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>

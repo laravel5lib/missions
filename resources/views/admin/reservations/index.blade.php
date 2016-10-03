@@ -5,7 +5,7 @@
         // Javascript to enable link to tab
         var hash = document.location.hash;
         var tab_router = _.last(location.pathname.split('/'));
-        if (_.contains(['current', 'archived', 'dropped'], tab_router)) {
+        if (_.contains(['current', 'archived', 'dropped', 'prospects'], tab_router)) {
             $('.nav-tabs a[href="#'+tab_router+'"]').tab('show');
         }
 
@@ -36,9 +36,10 @@
             <div class="col-sm-12">
                 <!-- TAB NAVIGATION -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a href="#current" role="tab" data-toggle="tab">Current</a></li>
+                    <li><a href="#current" role="tab" data-toggle="tab">Current</a></li>
                     <li><a href="#archived" role="tab" data-toggle="tab">Archived</a></li>
                     <li><a href="#dropped" role="tab" data-toggle="tab">Dropped</a></li>
+                    <li><a href="#prospects" role="tab" data-toggle="tab">Prospects</a></li>
                 </ul>
                 <!-- TAB CONTENT -->
                 <div class="tab-content">
@@ -50,6 +51,9 @@
                     </div>
                     <div class="tab-pane fade" id="dropped">
                         <admin-reservations-list type="dropped" storage-name="AdminReservationsDroppedStorage"></admin-reservations-list>
+                    </div>
+                    <div class="tab-pane fade" id="prospects">
+                        <admin-interests-list></admin-interests-list>
                     </div>
                 </div>
 

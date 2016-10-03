@@ -8,15 +8,6 @@ use League\Fractal;
 class CauseTransformer extends Fractal\TransformerAbstract
 {
     /**
-     * List of resources possible to include
-     *
-     * @var array
-     */
-    protected $availableIncludes = [
-        'initiatives'
-    ];
-
-    /**
      * Turn this item object into a generic array
      *
      * @param Cause $cause
@@ -24,7 +15,7 @@ class CauseTransformer extends Fractal\TransformerAbstract
      */
     public function transform(Cause $cause)
     {
-        $this->load('image');
+        $cause->load('image');
 
         return [
             'id'            => $cause->id,
@@ -41,12 +32,5 @@ class CauseTransformer extends Fractal\TransformerAbstract
                 ]
             ],
         ];
-    }
-
-    public function includeInitiatives(Cause $cause)
-    {
-        $initiatives = $cause->initiatives;
-
-        return $this->collection($initiatives, new ProjectInitiativeTransformer);
     }
 }

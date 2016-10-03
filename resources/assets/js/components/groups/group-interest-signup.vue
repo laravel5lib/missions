@@ -139,9 +139,11 @@
                     this.$http.post('interests', this.interest).then(function (response) {
                         this.$refs.validationspinner.hide();
                         this.showSuccess = true;
+                        this.attemptSubmit = false;
                         this.interest = {
                             communication_preferences: []
-                        },
+                        };
+                        this.campaign_id = '';
                         console.log(response);
                     }).then(function (error) {
                         this.$refs.validationspinner.hide();

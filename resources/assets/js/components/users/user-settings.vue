@@ -8,6 +8,47 @@
                             <h5>Account</h5>
                         </div>
                         <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object img-rounded" :src="avatar" :alt="name" width="64">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button><br>
+                                            <small>Max file size: 2mb</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object img-rounded" :src="banner" :alt="name" width="64">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button>
+                                            <small>Max file size: 2mb</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="collapse" id="avatarCollapse">
+                                        <div class="well">
+                                            <upload-create-update type="avatar" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['User']"></upload-create-update>
+                                        </div>
+                                    </div>
+                                    <div class="collapse" id="bannerCollapse">
+                                        <div class="well">
+                                            <upload-create-update type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :is-child="true" :tags="['User']"></upload-create-update>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group" :class="{ 'has-error': checkForError('name') }">
                                 <div class="col-sm-12">
                                     <label for="name">Name</label>
@@ -372,11 +413,15 @@
 <script>
     import VueStrap from 'vue-strap/dist/vue-strap.min';
     import vSelect from "vue-select";
+    import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'user-settings',
-        components: {vSelect, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
+        components: {vSelect, 'upload-create-update': uploadCreateUpdate, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
         data(){
             return {
+                id: '',
+                avatar: '',
+                banner: '',
                 name: '',
                 email: '',
                 alt_email: '',
@@ -416,6 +461,12 @@
                 showSuccess: false,
                 showSaveAlert: false,
                 hasChanged: false,
+
+                selectedAvatar: null,
+                avatar_upload_id: null,
+                selectedBanner: null,
+                banner_upload_id: null,
+
             }
         },
         computed: {
@@ -426,6 +477,23 @@
                 return this.dobYear && this.dobMonth && this.dobDay
                         ? moment().set({year: this.dobYear, month: this.dobMonth, day:this.dobDay}).format('LL')
                         : null;
+            }
+        },
+        events:{
+            'uploads-complete'(data){
+                switch(data.type){
+                    case 'avatar':
+                        this.selectedAvatar = data;
+                        this.avatar_upload_id = data.id;
+                        jQuery('#avatarCollapse').collapse('hide');
+                        break;
+                    case 'banner':
+                        this.selectedBanner = data;
+                        this.banner_upload_id = data.id;
+                        jQuery('#bannerCollapse').collapse('hide');
+                        break;
+                }
+                this.submit();
             }
         },
         methods: {
@@ -460,8 +528,10 @@
                         gender: this.gender,
                         public: this.public,
                         url: this.public ? this.url : undefined,
-                    }).then(function (resp) {
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
+                        avatar_upload_id: this.avatar_upload_id,
+                        banner_upload_id: this.banner_upload_id,
+                    }).then(function (response) {
+                        this.setUserData(response.data.data);
                         this.showSuccess = true;
                         this.hasChanged = false;
 
@@ -481,18 +551,10 @@
             forceBack(){
                 return this.back(true);
             },
-        },
-        ready(){
-            this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
-            });
-
-            this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.data.timezones;
-            });
-
-            this.resource.get().then(function (response) {
-                var user = response.data.data;
+            setUserData(user){
+                this.id = user.id;
+                this.avatar = user.avatar;
+                this.banner = user.banner;
                 this.name = user.name;
                 this.bio = user.bio;
                 this.type = user.type;
@@ -513,6 +575,21 @@
                 this.gender = user.gender;
                 this.status = user.status;
                 this.alt_email = user.alt_email;
+                this.avatar_upload_id = user.avatar_upload_id;
+                this.banner_upload_id = user.banner_upload_id;
+            }
+        },
+        ready(){
+            this.$http.get('utilities/countries').then(function (response) {
+                this.countries = response.data.countries;
+            });
+
+            this.$http.get('utilities/timezones').then(function (response) {
+                this.timezones = response.data.timezones;
+            });
+
+            this.resource.get().then(function (response) {
+                this.setUserData(response.data.data)
             }, function (response) {
                 console.log('Update Failed! :(');
                 console.log(response);

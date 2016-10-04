@@ -67,6 +67,11 @@ $api->version('v1', [
     $api->get('funds/{id}', 'FundsController@show');
     $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
     $api->resource('transactions', 'TransactionsController');
+    $api->resource('causes', 'CausesController');
+    $api->resource('causes/{cause}/initiatives', 'ProjectInitiativesController');
+    $api->resource('initiatives/{initiative}/packages', 'ProjectPackagesController');
+    $api->resource('projects/types', 'ProjectTypesController');
+    $api->resource('projects', 'ProjectsController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

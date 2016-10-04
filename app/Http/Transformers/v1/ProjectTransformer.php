@@ -82,7 +82,11 @@ class ProjectTransformer extends Fractal\TransformerAbstract
      */
     public function includeCosts(Project $project)
     {
-        return $this->collection($project->costs, new CostTransformer);
+        $costs = $project->costs;
+
+        if ( ! $costs) return null;
+
+        return $this->collection($costs, new CostTransformer);
     }
 
     /**

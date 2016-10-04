@@ -13,11 +13,12 @@ class ProjectTablesSeeder extends Seeder
     {
         factory(App\Models\v1\ProjectType::class, 8)->create();
         factory(App\Models\v1\Cause::class, 5)->create()->each(function($cause) {
-//            $cause->initiatives()->saveMany([
-//                factory(App\Models\v1\ProjectInitiative::class)->make(),
-//                factory(App\Models\v1\ProjectInitiative::class)->make(),
-//                factory(App\Models\v1\ProjectInitiative::class)->make()
-//            ]);
+            $cause->initiatives()->saveMany([
+                factory(App\Models\v1\ProjectInitiative::class)->make(),
+                factory(App\Models\v1\ProjectInitiative::class)->make(),
+                factory(App\Models\v1\ProjectInitiative::class)->make()
+            ]);
         });
+        factory(App\Models\v1\ProjectPackage::class, 25)->create();
     }
 }

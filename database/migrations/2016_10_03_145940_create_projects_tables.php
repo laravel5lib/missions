@@ -57,8 +57,6 @@ class CreateProjectsTables extends Migration
             $table->uuid('id')->primary();
             $table->uuid('project_initiative_id')->index();
             $table->uuid('project_type_id')->index();
-            $table->integer('amount')->unsigned()->default(0);
-            $table->string('currency_code')->default('USD');
             $table->boolean('generate_dates')->default(0);
 
             $table->foreign('project_initiative_id')

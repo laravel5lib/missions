@@ -881,6 +881,17 @@ $factory->define(App\Models\v1\ProjectInitiative::class, function(Faker\Generato
         'started_at' => $faker->dateTimeThisYear(),
         'ended_at' => $faker->dateTimeThisYear(),
         'active' => $faker->boolean(50),
-        'rep_id' => $faker->randomElements(App\Models\v1\User::pluck('id')->toArray())
+        'rep_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray())
+    ];
+});
+
+/**
+ * Project Package Factory
+ */
+$factory->define(App\Models\v1\ProjectPackage::class, function(Faker\Generator $faker) {
+    return [
+        'generate_dates' => $faker->boolean(50),
+        'project_type_id' => $faker->randomElement(App\Models\v1\ProjectType::pluck('id')->toArray()),
+        'project_initiative_id' => $faker->randomElement(App\Models\v1\ProjectInitiative::pluck('id')->toArray()),
     ];
 });

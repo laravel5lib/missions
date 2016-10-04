@@ -15,7 +15,7 @@ class ProjectInitiative extends Model
      *
      * @var array
      */
-    protected $touches = ['cause', 'types'];
+    protected $touches = ['cause'];
 
     /**
      * The attributes that should be mutated to dates.

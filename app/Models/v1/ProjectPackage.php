@@ -2,10 +2,13 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
 use Illuminate\Database\Eloquent\Model;
 
 class ProjectPackage extends Model
 {
+    use UuidForKey;
+
     public $timestamps = false;
 
     /**
@@ -13,7 +16,7 @@ class ProjectPackage extends Model
      *
      * @var array
      */
-    protected $touches = ['initiative', 'type', 'enhancements'];
+    protected $touches = ['initiative', 'type'];
 
     /**
      * The attributes that can be mass assigned

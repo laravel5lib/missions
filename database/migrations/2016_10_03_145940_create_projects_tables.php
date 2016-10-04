@@ -76,9 +76,9 @@ class CreateProjectsTables extends Migration
             $table->string('sponsor_type');
             $table->string('plaque_prefix')->nullable();
             $table->string('plaque_message')->nullable();
-            $table->timestamp('funded_at')->nullable();
-            $table->timestamp('launched_at')->nullable();
-            $table->timestamp('completed_at')->nullable();
+            $table->date('funded_at')->nullable();
+            $table->date('launched_at')->nullable();
+            $table->date('completed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

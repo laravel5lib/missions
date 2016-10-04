@@ -301,6 +301,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'static', function (Faker\Generato
     return [
         'name'                 => $faker->catchPhrase,
         'description'          => $faker->optional(0.5)->sentence(10),
+        'active_at'            => $faker->dateTimeThisYear(),
         'amount'               => $faker->numberBetween($min = 50, $max = 200),
         'type'                 => 'static',
         'cost_assignable_type' => 'trips',
@@ -893,5 +894,20 @@ $factory->define(App\Models\v1\ProjectPackage::class, function(Faker\Generator $
         'generate_dates' => $faker->boolean(50),
         'project_type_id' => $faker->randomElement(App\Models\v1\ProjectType::pluck('id')->toArray()),
         'project_initiative_id' => $faker->randomElement(App\Models\v1\ProjectInitiative::pluck('id')->toArray()),
+    ];
+});
+
+/**
+ * Project Factory
+ */
+$factory->define(App\Models\v1\Project::class, function(Faker\Generator $faker) {
+    return [
+        'project_package_id' => $faker->randomElement(App\Models\v1\ProjectPackage::pluck('id')->toArray()),
+        'rep_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
+        'sponsor_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
+        'sponsor_type' => 'users',
+        'plaque_prefix' => $faker->randomElement(['in honor of', 'in memory of', 'sponsored by']),
+        'plaque_message' => $faker->name,
+        'launched_at' => $faker->dateTimeThisYear('+ 1 year')
     ];
 });

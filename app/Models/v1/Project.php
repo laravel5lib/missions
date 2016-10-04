@@ -2,12 +2,13 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, UuidForKey;
 
     /**
      * The attributes that should be mutated to dates.
@@ -40,8 +41,46 @@ class Project extends Model
         'completed_at'
     ];
 
+    /**
+     * Notes attached to the project.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
     public function notes()
     {
         return $this->morphMany(Note::class, 'noteable');
+    }
+
+    /**
+     * The costs associated with the project.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function costs()
+    {
+        return $this->belongsToMany(Cost::class, 'project_costs')
+                    ->withPivot('quantity')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Sync costs with the project.
+     *
+     * @param $costs
+     */
+    public function syncCosts($costs)
+    {
+        if ( ! $costs) return;
+
+        if ( ! $costs instanceof Collection)
+            $costs = collect($costs);
+
+        $data = $costs->keyBy('id')->map(function($item) {
+            return [
+                'quantity' => $item->quantity,
+            ];
+        })->toArray();
+
+        $this->costs()->sync($data);
     }
 }

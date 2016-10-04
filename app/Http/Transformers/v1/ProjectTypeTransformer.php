@@ -19,7 +19,7 @@ class ProjectTypeTransformer extends Fractal\TransformerAbstract
         $type->load('image');
 
         return [
-            'id'            => (int) $type->id,
+            'id'            => $type->id,
             'name'          => $type->name,
             'short_desc'    => $type->short_desc,
             'image'         => $type->image ? image($type->image->source) : null,

@@ -50639,9 +50639,12 @@ exports.default = {
                 this.$http.post('interests', this.interest).then(function (response) {
                     this.$refs.validationspinner.hide();
                     this.showSuccess = true;
+                    this.attemptSubmit = false;
                     this.interest = {
                         communication_preferences: []
-                    }, console.log(response);
+                    };
+                    this.campaign_id = '';
+                    console.log(response);
                 }).then(function (error) {
                     this.$refs.validationspinner.hide();
                     console.log(error);

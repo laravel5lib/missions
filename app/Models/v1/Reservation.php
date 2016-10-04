@@ -177,7 +177,7 @@ class Reservation extends Model
 
     public function donations()
     {
-        return $this->fund()->donations();
+        return $this->fund->donations();
     }
 
     public function donors()

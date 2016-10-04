@@ -526,6 +526,50 @@ class User extends Authenticatable implements JWTSubject
         return $accolade->items;
     }
 
+    public function upcomingPayments()
+    {
+        $dues = Due::whereIn(
+            'payable_id',
+            $this->reservations()->pluck('id')->toArray()
+        )->where('payable_type', 'reservations')
+         ->withBalance()
+         ->sortRecent()
+         ->take(5)
+         ->get();
+
+        return $dues;
+    }
+
+    public function outstandingRequirements()
+    {
+        $requirements = $this->reservations()
+             ->with('requirements')
+             ->get()
+             ->pluck('requirements')
+             ->flatten()
+             ->reject(function($item) {
+                 $item->status = 'incomplete';
+             })
+             ->sortBy('due_at')
+             ->take(5);
+
+        return $requirements;
+    }
+
+    public function recentDonations()
+    {
+        $donations = $this->reservations()
+            ->with('fund.donations')
+            ->get()
+            ->pluck('donations')
+            ->flatten()
+            ->sortBy('created_at')
+            ->take(5);
+
+
+        return $donations;
+    }
+
     public function withAvailableRegions()
     {
         $reservations = $this->where('id', $this->id)->with(['reservations' => function ($query) {

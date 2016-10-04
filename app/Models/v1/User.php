@@ -30,7 +30,8 @@ class User extends Authenticatable implements JWTSubject
         'phone_one', 'phone_two', 'gender', 'status',
         'birthday', 'address', 'city', 'zip', 'country_code',
         'state', 'timezone', 'url', 'public', 'bio',
-        'stripe_id', 'card_brand', 'card_last_four'
+        'stripe_id', 'card_brand', 'card_last_four',
+        'avatar_upload_id', 'banner_upload_id'
     ];
 
     /**

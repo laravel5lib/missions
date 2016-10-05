@@ -116,25 +116,25 @@
             <div class="row form-group">
                 <div class="col-sm-12">
                     <label for="infoAddress">Address 1</label>
-                    <input type="text" class="form-control" v-model="address" id="infoAddress" placeholder="Street Address 1">
+                    <input type="text" class="form-control" v-model="address" id="infoAddress" v-validate:address="{}" placeholder="Street Address 1">
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-sm-6">
                     <label for="infoCity">City</label>
-                    <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
+                    <input type="text" class="form-control" v-model="city" id="infoCity" v-validate:city="{}" placeholder="City">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="infoState">State/Prov.</label>
-                    <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
+                    <input type="text" class="form-control" v-model="state" id="infoState" v-validate:state="{}" placeholder="State/Province">
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-sm-4">
                     <label for="infoZip">ZIP/Postal Code</label>
-                    <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
+                    <input type="text" class="form-control" v-model="zip" id="infoZip" v-validate:zip="{}" placeholder="12345">
                 </div>
                 <div class="col-sm-8">
                     <div class="form-group">
@@ -170,7 +170,7 @@
                 <div class="col-sm-12 text-center">
                     <br>
                     <a @click="update" class="btn btn-primary">Save</a>
-                    <a @click="back" class="btn btn-success">Done</a>
+                    <a @click="back()" class="btn btn-success">Done</a>
                 </div>
             </div>
 

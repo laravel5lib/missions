@@ -776,7 +776,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\
         'amount' => $faker->randomNumber(2),
         'payment' => [
             'type' => 'card',
-            'last_four', '1234',
+            'last_four' => '1234',
             'cardholder' => 'John Doe',
             'zip' => '56789',
             'brand' => 'visa'
@@ -829,7 +829,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Fak
         'description' => 'Transfer to ' . $fund['name'],
         'donor_id' => null,
         'type' => 'transfer',
-        'amount' => -$faker->randomNumber(2),
+        'amount' => $faker->randomNumber(2),
         'payment' => null,
     ];
 });

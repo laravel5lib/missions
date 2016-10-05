@@ -7,7 +7,15 @@
         @foreach(auth()->user()->upcomingPayments() as $payment)
             <tr>
                 <td class="text-danger">${{ $payment->outstanding_balance }}</td>
-                <td class="text-right text-muted">{{ $payment->due_at->format('M j') }}</td>
+                <td class="text-right">
+                    @if ($payment->getStatus() == 'late' or $payment->getStatus() == 'overdue')
+                        <span class="badge badge-danger">Late</span>
+                    @elseif($payment->getStatus() == 'paid')
+                        <span class="badge badge-success">Paid</span>
+                    @else
+                        <span class="badge badge-info">Due in {{ $payment->due_at->diffForHumans(null, true) }}</span>
+                    @endif
+                </td>
             </tr>
         @endforeach
         </tbody>

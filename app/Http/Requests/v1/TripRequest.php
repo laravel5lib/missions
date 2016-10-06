@@ -28,7 +28,7 @@ class TripRequest extends FormRequest
         $required = [
             'group_id'     => 'required|exists:groups,id',
             'country_code' => 'required',
-            'type'         => 'required|in:full,media,medical,short',
+            'type'         => 'required|in:ministry,family,international,leader,medical,media',
             'difficulty'   => 'required|in:level_1,level_2,level_3',
             'started_at'   => 'required|date',
             'ended_at'     => 'required|date',
@@ -39,7 +39,7 @@ class TripRequest extends FormRequest
             $required = [
                 'group_id'     => 'sometimes|required|exists:groups,id',
                 'country_code' => 'sometimes|required',
-                'type'         => 'sometimes|required|in:full,media,medical,short',
+                'type'         => 'sometimes|required|in:ministry,family,international,leader,medical,media',
                 'difficulty'   => 'sometimes|required|in:level_1,level_2,level_3',
                 'started_at'   => 'sometimes|required|date',
                 'ended_at'     => 'sometimes|required|date',

@@ -313,6 +313,9 @@ Route::get('/medical', function () {
 Route::get('/about-mm', function () {
     return view('site.about-mm');
 });
+Route::get('/contact', function () {
+    return view('site.contact');
+});
 
 Route::get('/{slug}', function ($slug) {
     return $slug;

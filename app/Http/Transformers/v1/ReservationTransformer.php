@@ -59,11 +59,11 @@ class ReservationTransformer extends TransformerAbstract
             'total_owed'      => (int) $reservation->getTotalOwed(),
             'created_at'      => $reservation->created_at->toDateTimeString(),
             'updated_at'      => $reservation->updated_at->toDateTimeString(),
-            'tags'            => $reservation->tagNames(),
+            'tags'            => $reservation->tagSlugs(),
             'links'           => [
                 [
                     'rel' => 'self',
-                    'uri' => '/reservations/' . $reservation->id,
+                    'uri' => '/api/reservations/' . $reservation->id,
                 ]
             ],
         ];

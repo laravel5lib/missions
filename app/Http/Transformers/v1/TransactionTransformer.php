@@ -36,16 +36,30 @@ class TransactionTransformer extends TransformerAbstract {
         return $array;
     }
 
+    /**
+     * Include fund.
+     *
+     * @param Transaction $transaction
+     * @return \League\Fractal\Resource\Item
+     */
     public function includeFund(Transaction $transaction)
     {
         $fund = $transaction->fund;
 
-        return $this->item($fund, new FundraiserTransformer);
+        return $this->item($fund, new FundTransformer);
     }
 
+    /**
+     * Include donor.
+     *
+     * @param Transaction $transaction
+     * @return \League\Fractal\Resource\Item
+     */
     public function includeDonor(Transaction $transaction)
     {
         $donor = $transaction->donor;
+
+        if ( ! $donor) return null;
 
         return $this->item($donor, new DonorTransformer);
     }

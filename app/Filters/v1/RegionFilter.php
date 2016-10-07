@@ -1,8 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class RegionFilter extends ModelFilter
+class RegionFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -10,8 +8,24 @@ class RegionFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [
-        'tags' => ['tags']
+    public $relations = [];
+
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = [
+        'name', 'country_code', 'call_sign', 'created_at', 'updated_at'
+    ];
+
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = [
+        'name', 'call_sign', 'accommodations.name'
     ];
 
     /**
@@ -25,6 +39,12 @@ class RegionFilter extends ModelFilter
         return $this->whereIn('country_code', $codes);
     }
 
+    /**
+     * Between number of teams.
+     *
+     * @param $teams
+     * @return mixed
+     */
     public function teams($teams)
     {
         if(count($teams) < 2) return $this;
@@ -33,51 +53,16 @@ class RegionFilter extends ModelFilter
                     ->has('teams', '<=', $teams[1]);
     }
 
+    /**
+     * If has accommodations.
+     *
+     * @param $hasAccommodations
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function hasAccommodations($hasAccommodations)
     {
         return $hasAccommodations == 'yes' ?
             $this->has('accommodations') :
             $this->has('accommodations', '<', 1);
-    }
-
-    /**
-     * Find by search
-     *
-     * @param $search
-     * @return mixed
-     */
-    public function search($search)
-    {
-        return $this->where(function($q) use ($search)
-        {
-            return $q->where('name', 'LIKE', "%$search%")
-                ->orWhere('call_sign', 'LIKE', "%$search%")
-                ->orWhereHas('accommodations', function($a) use($search)
-                {
-                    return $a->where('name', 'LIKE', "%$search%");
-                });
-        });
-    }
-
-    /**
-     * Sort by fields
-     *
-     * @param $sort
-     * @return mixed
-     */
-    public function sort($sort)
-    {
-        $sortable = [
-            'name', 'country_code', 'call_sign', 'created_at', 'updated_at'
-        ];
-
-        $param = preg_split('/\|+/', $sort);
-        $field = $param[0];
-        $direction = isset($param[1]) ? $param[1] : 'asc';
-
-        if ( in_array($field, $sortable) )
-            return $this->orderBy($field, $direction);
-
-        return $this;
     }
 }

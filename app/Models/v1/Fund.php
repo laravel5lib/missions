@@ -6,10 +6,11 @@ use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Fund extends Model
 {
-    use UuidForKey, Filterable, Taggable;
+    use UuidForKey, Filterable, Taggable, SoftDeletes;
 
     protected $fillable = ['name', 'balance', 'fundable_id', 'fundable_type'];
 

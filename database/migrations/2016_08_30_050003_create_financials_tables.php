@@ -34,6 +34,7 @@ class CreateFinancialsTables extends Migration
             $table->uuid('fundable_id');
             $table->uuid('fundable_type');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('transactions', function (Blueprint $table) {

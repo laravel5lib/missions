@@ -21,8 +21,8 @@
 				</div>
 			</form>-->
 			<br>
-			<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-				<div class="col-sm-2 col-md-2" v-for="upload in uploads" style="display:flex">
+			<div class="" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+				<div class="col-sm-2 col-md-2" v-for="upload in uploads" style="display:flex;flex: 1">
 					<div class="panel panel-default">
 
 							<a @click="selectExisting(upload)" role="button">
@@ -194,7 +194,12 @@
 			name: {
 				type: String,
 				default: ''
+			},
+			perPage: {
+				type: Number,
+				default: 6
 			}
+
 		},
         data(){
             return {
@@ -234,7 +239,7 @@
 				resource: this.$resource('uploads{/id}'),
 				uploads: [],
 				page: 1,
-				per_page: 6,
+//				per_page: 6,
 				search: '',
 				pagination: {},
             }
@@ -278,7 +283,7 @@
 			'page': function (val, oldVal) {
 				this.searchUploads();
 			},
-			'per_page': function (val, oldVal) {
+			'perPage': function (val, oldVal) {
 				this.searchUploads();
 			},
 		},
@@ -423,7 +428,7 @@
 			searchUploads(){
 				var params = {
 					include: '',
-					per_page: this.per_page,
+					per_page: this.perPage,
 					page: this.page,
 					sort: this.orderByField + '|' + (this.direction?'asc':'desc'),
 					type: this.type,
@@ -458,6 +463,8 @@
 						this.adjustSelectByType();
 				}
 			}
+
+			this.searchUploads();
 
         }
     }

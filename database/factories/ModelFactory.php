@@ -121,7 +121,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
         'spots'           => random_int(0, 500),
         'companion_limit' => random_int(0, 3),
         'country_code'    => $campaign->country_code,
-        'type'            => $faker->randomElement(['full', 'short', 'medical', 'media']),
+        'type'            => $faker->randomElement(['ministry', 'family', 'international', 'leader', 'medical', 'media']),
         'difficulty'      => $faker->randomElement(['level_1', 'level_2', 'level_3']),
         'started_at'      => $campaign->started_at,
         'ended_at'        => $campaign->ended_at,

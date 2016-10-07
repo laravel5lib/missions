@@ -8,19 +8,24 @@
 @endsection
 
 @section('content')
+<div class="white-header-bg">
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="text-muted text-center">My Passports <small>Edit</small></h1>
+                <h3>My Passports <small>&middot; Edit</small></h3>
             </div>
         </div>
-        <div class="row">
+    </div>
+</div>
+<hr class="divider inv lg">
+<div class="container">
+    <div class="row">
             <div class="col-sm-8">
                 <passport-create-update :is-update="true" id="{{ $id }}"></passport-create-update>
             </div>
             <div class="col-sm-4">
                 <img src="/images/passport-placeholder.png" alt="" style="width: 100%;height: auto;">
             </div>
-        </div>
     </div>
+</div>
 @endsection

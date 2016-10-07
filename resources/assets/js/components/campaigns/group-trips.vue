@@ -22,7 +22,7 @@
 		<div class="row">
 			<div v-for="trip in trips" class="col-xs-6 col-sm-3">
 				<div class="panel panel-default">
-					<div class="panel-heading">
+					<div class="panel-heading" :class="'panel-' + trip.type">
 						<h5 class="text-uppercase text-center">{{ trip.type | capitalize }}</h5>
 					</div>
 					<div class="panel-body text-center">
@@ -51,13 +51,7 @@
 			return {
 				group:{},
 				trips: [],
-				page: 1,
-//				tripTypeClass: ''
-			}
-		},
-		computed: {
-			getClass: function(type) {
-				if(type == 'medical') return 'panel-medical';
+				page: 1
 			}
 		},
 		methods: {

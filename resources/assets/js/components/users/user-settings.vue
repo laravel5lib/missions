@@ -384,6 +384,29 @@
                                     <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="facebook">Facebook</label>
+                                    <input type="text" class="form-control" v-model="facebook" id="facebook" placeholder="Facebook Profile">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="twitter">Twitter</label>
+                                    <input type="text" class="form-control" v-model="twitter" id="twitter" placeholder="Twitter Profile">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="instagram">Instagram</label>
+                                    <input type="text" class="form-control" v-model="instagram" id="instagram" placeholder="Instagram Profile">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="linkedIn">LinkedIn</label>
+                                    <input type="text" class="form-control" v-model="linkedIn" id="linkedIn" placeholder="LinkedIn Profile">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="website">Website</label>
+                                    <input type="text" class="form-control" v-model="website" id="website" placeholder="Website">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div><!-- end col -->
@@ -394,6 +417,14 @@
                     <hr class="divider inv xlg">
                 </div><!-- end col -->
             </div><!-- end row -->
+            <alert :show.sync="showError" placement="top-right" :duration="6000" type="success" width="400px" dismissable>
+                <span class="icon-ok-circled alert-icon-float-left"></span>
+                <strong>Oh No!</strong>
+                <p>There are several errors:</p>
+                <ul>
+                    <li v-for="error in errors">{{error}}</li>
+                </ul>
+            </alert>
             <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
                 <strong>Well Done!</strong>
@@ -443,6 +474,11 @@
                 url: null,
                 gender: false,
                 admin: false,
+                facebook: '',
+                twitter: '',
+                instagram: '',
+                linkedIn: '',
+                website: '',
 
                 // logic variables
 //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
@@ -458,6 +494,7 @@
                 dobYear: null,
                 resource: this.$resource('users/me'),
                 errors: {},
+                showError: false,
                 showSuccess: false,
                 showSaveAlert: false,
                 hasChanged: false,
@@ -530,7 +567,12 @@
                         url: this.public ? this.url : undefined,
                         avatar_upload_id: this.avatar_upload_id,
                         banner_upload_id: this.banner_upload_id,
-                    }).then(function (response) {
+                        facebook: user.facebook,
+                        twitter: user.twitter,
+                        instagram: user.instagram,
+                        linkedIn: user.linkedIn,
+                        website: user.website,
+                }).then(function (response) {
                         this.setUserData(response.data.data);
                         this.showSuccess = true;
                         this.hasChanged = false;
@@ -538,6 +580,7 @@
                     }, function (error) {
                         console.log(error);
                         this.errors = error.data.errors;
+                        this.showError = true;
                     });
                 }
             },
@@ -577,6 +620,11 @@
                 this.alt_email = user.alt_email;
                 this.avatar_upload_id = user.avatar_upload_id;
                 this.banner_upload_id = user.banner_upload_id;
+                this.facebook = user.facebook;
+                this.twitter = user.twitter;
+                this.instagram = user.instagram;
+                this.linkedIn = user.linkedIn;
+                this.website = user.website;
             }
         },
         ready(){

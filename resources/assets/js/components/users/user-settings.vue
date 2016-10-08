@@ -18,7 +18,7 @@
                                         </div>
                                         <div class="media-body">
                                             <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button><br>
-                                            <small>Max file size: 2mb</small>
+                                            <small>Max file size: 2MB</small>
                                         </div>
                                     </div>
                                 </div>
@@ -30,8 +30,8 @@
                                             </a>
                                         </div>
                                         <div class="media-body">
-                                            <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button>
-                                            <small>Max file size: 2mb</small>
+                                            <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button><br>
+                                            <small>Max file size: 2MB</small>
                                         </div>
                                     </div>
                                 </div>
@@ -417,13 +417,13 @@
                     <hr class="divider inv xlg">
                 </div><!-- end col -->
             </div><!-- end row -->
-            <alert :show.sync="showError" placement="top-right" :duration="6000" type="success" width="400px" dismissable>
-                <span class="icon-ok-circled alert-icon-float-left"></span>
+            <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+                <span class="icon-info-circled alert-icon-float-left"></span>
                 <strong>Oh No!</strong>
-                <p>There are several errors:</p>
-                <ul>
+                <p>There are errors on the form.</p>
+                <!--<ul v-if="errors.length">
                     <li v-for="error in errors">{{error}}</li>
-                </ul>
+                </ul>-->
             </alert>
             <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
@@ -567,11 +567,11 @@
                         url: this.public ? this.url : undefined,
                         avatar_upload_id: this.avatar_upload_id,
                         banner_upload_id: this.banner_upload_id,
-                        facebook: user.facebook,
-                        twitter: user.twitter,
-                        instagram: user.instagram,
-                        linkedIn: user.linkedIn,
-                        website: user.website,
+                        facebook: this.facebook,
+                        twitter: this.twitter,
+                        instagram: this.instagram,
+                        linkedIn: this.linkedIn,
+                        website: this.website,
                 }).then(function (response) {
                         this.setUserData(response.data.data);
                         this.showSuccess = true;
@@ -582,6 +582,8 @@
                         this.errors = error.data.errors;
                         this.showError = true;
                     });
+                } else {
+                    this.showError = true;
                 }
             },
             back(force){
@@ -602,6 +604,7 @@
                 this.bio = user.bio;
                 this.type = user.type;
                 this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                console.log(this.countryCodeObj);
                 this.country_code = user.country_code;
                 this.timezone = user.timezone;
                 this.phone_one = user.phone_one;

@@ -25,7 +25,7 @@ class RefundRequest extends FormRequest
     {
         return [
             'amount' => 'required|integer',
-            'transaction_id' => 'required|transactions,id',
+            'fund_id' => 'required|funds,id',
         ];
     }
 }

@@ -14,15 +14,15 @@
 			<hr v-if="uiSelector!==0">
 		</form>
 		<div v-if="isChild && uiSelector==1">
-			<form class="form-inline text-right" novalidate>
+			<!--<form class="form-inline text-right" novalidate>
 				<div class="input-group input-group-sm">
 					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
-			</form>
+			</form>-->
 			<br>
-			<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-				<div class="col-sm-2 col-md-2" v-for="upload in uploads" style="display:flex">
+			<div class="" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+				<div class="col-sm-2 col-md-2" v-for="upload in uploads" style="display:flex;flex: 1">
 					<div class="panel panel-default">
 
 							<a @click="selectExisting(upload)" role="button">
@@ -31,9 +31,9 @@
 								</tooltip>
 							</a>
 
-						<!--<div class="panel-body">
-							<h6 class="text-uppercase">{{upload.name}}</h6>
-						</div>--><!-- end panel-body -->
+						<div class="panel-body">
+							<span class="text-uppercase">{{upload.name}}</span>
+						</div> end panel-body
 						<div class="panel-footer">
 							<button type="button" class="btn btn-xs btn-block btn-primary" @click="selectExisting(upload)">Select</button>
 						</div>
@@ -194,7 +194,12 @@
 			name: {
 				type: String,
 				default: ''
+			},
+			perPage: {
+				type: Number,
+				default: 6
 			}
+
 		},
         data(){
             return {
@@ -234,7 +239,7 @@
 				resource: this.$resource('uploads{/id}'),
 				uploads: [],
 				page: 1,
-				per_page: 6,
+//				per_page: 6,
 				search: '',
 				pagination: {},
             }
@@ -268,11 +273,7 @@
 					this.searchUploads();
 				}
 			},
-			// Search Functionality
-			'search': function (val, oldVal) {
-				this.page = 1;
-				this.searchUploads();
-			},
+			// Pagination Functionality
 			'orderByField': function (val, oldVal) {
 				this.searchUploads();
 			},
@@ -282,7 +283,7 @@
 			'page': function (val, oldVal) {
 				this.searchUploads();
 			},
-			'per_page': function (val, oldVal) {
+			'perPage': function (val, oldVal) {
 				this.searchUploads();
 			},
 		},
@@ -427,8 +428,7 @@
 			searchUploads(){
 				var params = {
 					include: '',
-					search: this.search,
-					per_page: this.per_page,
+					per_page: this.perPage,
 					page: this.page,
 					sort: this.orderByField + '|' + (this.direction?'asc':'desc'),
 					type: this.type,
@@ -463,6 +463,8 @@
 						this.adjustSelectByType();
 				}
 			}
+
+			this.searchUploads();
 
         }
     }

@@ -350,6 +350,11 @@
             <strong>Well Done!</strong>
             <p>User updated!</p>
         </alert>
+        <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+            <span class="icon-info-circled alert-icon-float-left"></span>
+            <strong>Oh No!</strong>
+            <p>There are errors on the form.</p>
+        </alert>
         <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
@@ -400,6 +405,7 @@
                 dobYear: null,
                 resource: this.$resource('users{/id}'),
                 showSuccess: false,
+                showError: false,
                 showSaveAlert: false,
                 hasChanged: false,
             }
@@ -461,8 +467,11 @@
                         this.showSuccess = true;
                         this.hasChanged = false;
                     }, function (error) {
+                        this.showError = true;
                         console.log(error);
                     });
+                } else {
+                    this.showError = true;
                 }
             }
         },

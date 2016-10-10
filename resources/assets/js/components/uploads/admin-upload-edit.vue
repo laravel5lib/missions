@@ -92,7 +92,6 @@
                     <a @click="submit()" class="btn btn-primary">Update</a>
                 </div>
             </div>
-
         </form>
     </validator>
 </template>

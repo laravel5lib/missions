@@ -92,6 +92,11 @@
             <strong>Well Done!</strong>
             <p>Profile updated!</p>
         </alert>
+        <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+            <span class="icon-info-circled alert-icon-float-left"></span>
+            <strong>Oh No!</strong>
+            <p>There are errors on the form.</p>
+        </alert>
         <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
@@ -130,6 +135,8 @@
                 countries: [],
                 countryObj: null,
                 attemptSubmit: false,
+                showSuccess: false,
+                showError: false,
                 selectedAvatar: null,
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
@@ -173,11 +180,15 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
+                        this.showSuccess = true;
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                         window.location.href = '/dashboard/visas';
                     }, function (error) {
+                        this.showError = true;
                         debugger;
                     });
+                } else {
+                    this.showError = true;
                 }
             },
             update(){

@@ -76,6 +76,12 @@
                     </div>
                 </div>
             </div>
+            <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+                <span class="icon-info-circled alert-icon-float-left"></span>
+                <strong>Oh No!</strong>
+                <p>There are errors on the form.</p>
+            </alert>
+
         </form>
         </validator>
     </div>
@@ -96,7 +102,8 @@
                 campaigns: {},
                 allTrips: {},
                 attemptSubmit: false,
-                showSuccess: false
+                showSuccess: false,
+                showError: false
             }
         },
         computed: {
@@ -148,7 +155,10 @@
                     }).then(function (error) {
                         this.$refs.validationspinner.hide();
                         console.log(error);
+                        this.showError = true;
                     });
+                } else {
+                    this.showError = true;
                 }
             }
         }

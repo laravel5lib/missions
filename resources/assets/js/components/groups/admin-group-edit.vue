@@ -136,6 +136,12 @@
                 <strong>Well Done!</strong>
                 <p>Group updated!</p>
             </alert>
+            <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+                <span class="icon-info-circled alert-icon-float-left"></span>
+                <strong>Oh No!</strong>
+                <p>There are errors on the form.</p>
+            </alert>
+
             <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
                 <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
             </modal>
@@ -170,7 +176,6 @@
 
                 // logic variables
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
-                showSuccess: false,
                 attemptSubmit: false,
                 resource: this.$resource('groups{/id}'),
                 countries: [],
@@ -178,6 +183,7 @@
                 timezones: [],
                 //timezoneObj: null,
                 showSuccess: false,
+                showError: false,
                 showSaveAlert: false,
                 hasChanged: false,
 
@@ -234,8 +240,11 @@
                         this.hasChanged = false;
                     }, function (error) {
                         console.log(error);
+                        this.showError = true;
                         debugger;
                     });
+                } else {
+                    this.showError = true;
                 }
             }
         },

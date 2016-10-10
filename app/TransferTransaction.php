@@ -11,16 +11,18 @@ class TransferTransaction extends TransactionHandler
         app(TransferRequest::class)->validate();
 
         // Transfer from
-        $this->transaction->create([
+        $from = $this->transaction->create([
             'amount' => $request->get('amount'),
             'fund_id' => $request->get('from_fund_id')
         ]);
 
         // Transfer to
-        $this->transaction->create([
+        $to = $this->transaction->create([
             'amount' => $request->get('amount'),
             'fund_id' => $request->get('to_fund_id')
         ]);
+
+        return $from->merge($to);
 
     }
 }

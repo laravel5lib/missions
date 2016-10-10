@@ -44,6 +44,7 @@
                                 <a href="#pricing" class="list-group-item">Pricing</a>
                                 <a href="#requirements" class="list-group-item">Requirements</a>
                                 <a href="#deadlines" class="list-group-item">Deadlines</a>
+                                <a href="#interests" class="list-group-item">Interests</a>
                             </div>
                         </div>
                     </div>
@@ -257,6 +258,8 @@
                                 {% $trip->description %}
                             </div>
                         </div>
+                        <div id="interests"></div>
+                        <dashboard-interests-list group-id="{{ $groupId }}" trip-id="{{ $trip->id }}"></dashboard-interests-list>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="reservations">

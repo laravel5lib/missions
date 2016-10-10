@@ -23,8 +23,8 @@ class TransactionTransformer extends TransformerAbstract {
             'type'        => $transaction->type,
             'description' => $transaction->description,
             'payment'     => $transaction->payment,
-            'created_at'  => $transaction->created_at->toDateTimeString(),
-            'updated_at'  => $transaction->updated_at->toDateTimeString(),
+            'created_at'  => $transaction->created_at->toRfc3339String(),
+            'updated_at'  => $transaction->updated_at->toRfc3339String(),
             'links'       => [
                 [
                     'rel' => 'self',

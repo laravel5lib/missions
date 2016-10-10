@@ -72,7 +72,9 @@ class TransactionsController extends Controller
     {
         $transaction = $this->getTransactionHandler()->create($this->request);
 
-        return $this->response->item($transaction, new TransactionTransformer);
+//        return $transaction;
+
+        return $this->response->collection($transaction, new TransactionTransformer);
     }
 
     /**
@@ -101,14 +103,11 @@ class TransactionsController extends Controller
             case 'transfer':
                 return app()->make(TransferTransaction::class);
                 break;
-            case 'fee':
-                return app()->make(FeeTransaction::class);
-                break;
             case 'refund':
                 return app()->make(RefundTransaction::class);
                 break;
             default:
-                return app()->make(PaymentTransaction::class);
+                return app()->make(DonationTransaction::class);
         }
     }
 }

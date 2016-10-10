@@ -34,6 +34,7 @@ import userProfileFundraisersProgress from './components/users/user-profile-fund
 import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
 import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
 import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
+import dashboardInterestsList from './components/interests/dashboard-interests-list.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -265,6 +266,7 @@ new Vue({
         userProfileFundraisersProgress,
         dashboardGroupTrips,
         dashboardGroupReservations,
+        dashboardInterestsList,
 
         // admin components
         adminCampaignCreate,

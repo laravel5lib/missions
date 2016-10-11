@@ -96,6 +96,10 @@ class UsersController extends Controller
 
         $user->update($request->all());
 
+        if ($request->has('links')) {
+            $user->syncLinks($request->get('links'));
+        }
+
         return $this->response->item($user, new UserTransformer);
     }
 

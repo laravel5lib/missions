@@ -72,6 +72,7 @@ $api->version('v1', [
     $api->resource('initiatives/{initiative}/packages', 'ProjectPackagesController');
     $api->resource('projects/types', 'ProjectTypesController');
     $api->resource('projects', 'ProjectsController');
+    $api->resource('notes', 'NotesController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

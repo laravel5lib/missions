@@ -5,6 +5,12 @@ $('.launch-modal').on('click', function(e){
     e.preventDefault();
     $( '#' + $(this).data('video-modal') ).modal();
 });
+$('.video-modal').on('hide.bs.modal', function(e) {    
+    var $if = $(e.delegateTarget).find('iframe');
+    var src = $if.attr("src");
+    $if.attr("src", '/empty.html');
+    $if.attr("src", src);
+});
 </script>
 @endsection
 @section('content')
@@ -14,27 +20,28 @@ $('.launch-modal').on('click', function(e){
     <source src="video/mm-homepage-bg.mp4" type="video/mp4">
     <source src="video/mm-homepage-bg.ogv" type="video/ogg">
   </video>
-</div>
-<div class="container">
-  <div class="row">
-    <hr class="divider inv xlg">
-    <hr class="divider inv xlg">
-    <hr class="divider inv xlg">
-    <hr class="divider inv xlg">
-    <div class="col-md-8 col-md-offset-2 text-center">
-      <h1 class="text-white text-hero animate fadeInUp one">Where <span class="text-primary animate fadeInUp two">you</span> can change the world.</h1>
-      <hr class="divider inv">
-      <a href="/campaigns" class="btn btn-primary animate fadeInUp two">Go On A Trip</a>
-      <a href="/fundraisers" class="btn btn-white-hollow animate fadeInUp three">Support A Cause</a>
+  <div class="container">
+    <div class="row">
       <hr class="divider inv xlg">
       <hr class="divider inv xlg">
       <hr class="divider inv xlg">
       <hr class="divider inv xlg">
-      </div>
-    </div><!-- end col -->
-  </div><!-- end row -->
-</div><!-- end container -->
-<div class="gray-darker-bg animate fadeInUp three" style="background-color:rgba(62, 62, 62, 0.8);">
+      <div class="col-md-8 col-md-offset-2 text-center">
+        <h1 class="text-white text-hero" data-aos="fade-up">Where <span class="text-primary" data-aos="zoom-in" data-aos-delay="400">you</span> can change the world.</h1>
+        <hr class="divider inv">
+        <a href="/campaigns" class="btn btn-primary" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
+        <a href="/fundraisers" class="btn btn-white-hollow" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
+        <hr class="divider inv xlg">
+        <hr class="divider inv xlg">
+        <hr class="divider inv xlg">
+        <hr class="divider inv xlg">
+        </div>
+      </div><!-- end col -->
+    </div><!-- end row -->
+  </div><!-- end container -->
+</div><!-- end vid-bg -->
+
+<div class="gray-darker-bg">
   <div class="container">
     <div class="content-section" style="padding:30px 0px;">
       <div class="row">
@@ -50,57 +57,69 @@ $('.launch-modal').on('click', function(e){
     <div class="content-section">
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 text-center">
-          <h1>Take Your Group</h1>
-          <hr class="divider red-small">
+          <h1 data-aos="fade-up">Take Your Group</h1>
+          <hr data-aos="fade-up" class="divider red-small">
           <hr class="divider inv">
-          <p>Missions.Me specializes in taking groups around the world on life-changing missions experiences. Missions.Me can provide your group with custom missions trips created especially for your group.</p>
+          <p data-aos="fade-up">Missions.Me specializes in taking groups around the world on life-changing missions experiences. Missions.Me can provide your group with custom missions trips created especially for your group.</p>
           <hr class="divider inv">
-          <a href="#" class="btn btn-info">Take Your Group</a>
+          <a data-aos="fade-up" href="#" class="btn btn-info">Take Your Group</a>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->
   </div><!-- end container -->
 </div><!-- end white-bg -->
-<div class="angel-house-bg">
+<div class="gray-darker-bg">
   <div class="container">
     <div class="content-section">
       <div class="row">
         <div class="col-sm-6 home-half-section">
-          <h1 class="dash-trailing">Angel House</h1>
-          <p class="large-type">Our mission is to bring abandoned children from the slum to safety and into the loving arms of caretakers that will educate, love and raise them to become future leaders in their generation.</p>
+          <h1 class="dash-trailing" data-aos="fade-right">Angel House</h1>
+          <p class="large-type" data-aos="fade-right">Our mission is to bring abandoned children from the slum to safety and into the loving arms of caretakers that will educate, love and raise them to become future leaders in their generation.</p>
           <hr class="divider inv">
-          <a href="/orphans" class="btn btn-white-hollow">Learn More</a>
+          <a href="/orphans" class="btn btn-info" data-aos="fade-right">Learn More</a>
         </div><!-- end col -->
         <hr class="divider inv lg visible-xs visible-sm">
+        <div class="col-sm-6">
+          <img data-aos="fade-left" class="img-responsive img-rounded" src="../images/home/angel-house.jpg">
+        </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->
   </div><!-- end container -->
 </div><!-- end white-bg -->
+<div class="college-vid-bg">
+  <video muted autoplay loop poster="images/college/home-placeholder.jpg" class="college-vid-bg-video">
+    <source src="images/college/mmc-vid-bg.webm" type="video/webm">
+    <source src="images/college/mmc-vid-bg.mp4" type="video/mp4">
+    <source src="images/college/mmc-vid-bg.ogv" type="video/ogg">
+  </video>
+  <div class="container">
+    <div class="row">
+      <hr class="divider inv xlg">
+      <hr class="divider inv xlg">
+      <hr class="divider inv xlg">
+      <div class="col-md-6 col-md-offset-3 text-center">
+        <h1 class="home-college-header text-white" data-aos="fade-up">Missions.Me College</h1>
+        <hr class="divider red-small" data-aos="fade-up">
+        <hr class="divider inv">
+        <p class="text-white" data-aos="fade-up">We believe success is a byproduct of significance and strive to develop a premiere training facility where individuals are equipped with the tools to live impact filled lives.</p>
+        <hr class="divider inv">
+        <a href="/college" class="btn btn-white-hollow" data-aos="fade-up">Learn More</a>
+        <hr class="divider inv xlg">
+        <hr class="divider inv xlg">
+        <hr class="divider inv xlg">
+        </div>
+      </div><!-- end col -->
+    </div><!-- end row -->
+  </div><!-- end container -->
+</div>
 <div class="gray-lighter-bg">
   <div class="container">
     <div class="content-section">
       <div class="row">
-        <div class="col-md-6">
-          <img class="img-responsive img-rounded" src="../images/home/college-home-2.jpg">
-        </div><!-- end col -->
-        <div class="col-md-6 home-half-section">
-          <h1 class="dash-trailing home-college-header">Missions.Me College</h1>
-          <p class="large-type">We believe success is a byproduct of significance and strive to develop a premiere training facility where individuals are equipped with the tools to live impact filled lives.</p>
-          <hr class="divider inv">
-          <a href="/college" class="btn btn-primary">Learn More</a>
-        </div><!-- end col -->
-      </div><!-- end row -->
-    </div><!-- end content-section -->
-  </div><!-- end container -->
-</div><!-- end white-bg -->
-<div class="change-world-bg">
-  <div class="container">
-    <div class="content-section">
-      <div class="row">
         <div class="col-sm-12 text-center">
-          <h1>Change The World</h1>
-          <a href="#" class="btn btn-primary btn-lg">Create Your Account</a>
-          <h5 class="text-uppercase"><a href="#">Or Donate</a></h5>
+          <h1 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="200">Change The World</h1>
+          <a data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="300" href="#" class="btn btn-primary btn-lg">Create Your Account</a>
+          <h5 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="400" class="text-uppercase"><a href="#">Or Donate</a></h5>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->

@@ -37,7 +37,7 @@ class NoteTransformer extends TransformerAbstract
             'links'      => [
                 [
                     'rel' => 'self',
-                    'uri' => '/notes/' . $note->id,
+                    'uri' => '/api/notes/' . $note->id,
                 ]
             ]
         ];

@@ -80,7 +80,8 @@ import VueStrap from 'vue-strap/dist/vue-strap.min';
 
 require('jquery.cookie');
 require('bootstrap-sass');
-
+window.AOS = require('aos');
+AOS.init();
 $( document ).ready(function() {
     console.log($.fn.tooltip.Constructor.VERSION);
     $('[data-toggle="offcanvas"]').click(function () {

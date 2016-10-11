@@ -316,6 +316,12 @@ Route::get('/about-mm', function () {
 Route::get('/contact', function () {
     return view('site.contact');
 });
+Route::get('/1n1d13', function () {
+    return view('site.1n1d13');
+});
+Route::get('/1n1d15', function () {
+    return view('site.1n1d15');
+});
 
 Route::get('/{slug}', function ($slug) {
     return $slug;

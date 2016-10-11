@@ -1,7 +1,4 @@
 <div class="panel panel-default">
-	<div class="panel-heading">
-		<a href="{{ url('dashboard/reservations') }}" class="btn btn-block btn-default"><span class="fa fa-chevron-left icon-left"></span> My Reservations</a>
-	</div>
 	<ul class="list-group">
 		<a class="list-group-item {{ $active == 'details' ? 'active' : '' }}" href="{{ url('dashboard/reservations', [$reservation->id]) }}">Details</a>
 	    <a class="list-group-item {{ $active == 'requirements' ? 'active' : '' }}" href="{{ url('dashboard/reservations', [$reservation->id, 'requirements']) }}">Travel Documents</a>

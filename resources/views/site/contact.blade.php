@@ -68,32 +68,6 @@
 			                  </div>
 
 			                  <div class="form-group">
-			                      <div class="col-sm-6">
-			                          <label for="infoAddress">Address 1</label>
-			                          <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
-			                      </div>
-			                      <div class="col-sm-6">
-			                          <label for="infoAddress2">Address 2</label>
-			                          <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
-			                      </div>
-			                  </div>
-
-			                  <div class="row form-group col-sm-offset-2">
-			                      <div class="col-sm-4">
-			                              <label for="infoCity">City</label>
-			                              <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
-			                      </div>
-			                      <div class="col-sm-4">
-			                              <label for="infoState">State/Prov.</label>
-			                              <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
-			                      </div>
-			                      <div class="col-sm-4">
-			                              <label for="infoZip">ZIP/Postal Code</label>
-			                              <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
-			                      </div>
-			                  </div>
-
-			                  <div class="form-group">
 			                      <div class="col-sm-12">
 			                      	<label for="name">Questions, Comments, or Ideas</label>
 			                      	<textarea type="text" class="form-control" name="comments" id="comments" v-model="comments"></textarea>

@@ -8129,6 +8129,35 @@ input[type="reset"].btn-block,
 input[type="button"].btn-block {
   width: 100%; }
 
+.btn-video-play {
+  height: 100px;
+  width: 100px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 2px solid #f6323e;
+  padding: 30px 40px;
+  margin: 0 auto;
+  border-radius: 50%;
+  -o-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  transition: all 0.1s ease-in-out; }
+  .btn-video-play:after {
+    content: '';
+    position: absolute;
+    top: 93%;
+    left: 50%;
+    margin-top: -9.38462px;
+    margin-left: -6.5px;
+    width: 0px;
+    height: 0px;
+    border-top: 9.66667px solid transparent;
+    border-bottom: 9.66667px solid transparent;
+    border-left: 18.33333px solid #f6323e; }
+  .btn-video-play:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 4px solid #eb0a18; }
+
 .fade {
   opacity: 0;
   transition: opacity 0.15s linear; }
@@ -13891,6 +13920,36 @@ body {
       color: #fff;
       vertical-align: middle; }
 
+/* Video Modal */
+.video-modal .modal-backdrop.in {
+  filter: alpha(opacity=7);
+  opacity: 0.7; }
+
+.video-modal .modal-content {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none; }
+
+.video-modal .modal-body {
+  padding: 0 25px 25px 25px; }
+
+.video-modal .modal-header {
+  padding: 25px 25px 15px 25px;
+  text-align: right; }
+
+.video-modal .modal-header, .video-modal .modal-footer {
+  border: 0; }
+
+.video-modal .modal-header .close {
+  float: none;
+  margin: 0;
+  font-size: 36px;
+  color: #fff;
+  font-weight: 300;
+  text-shadow: none;
+  opacity: 1; }
+
 /* Wrapper for page content to push down footer */
 #page-wrap {
   min-height: 100%;
@@ -14115,7 +14174,7 @@ li.av-nav > a {
   border-bottom: 1px solid #e6e6e6; }
 
 .gray-lighter-bg {
-  color: #808080;
+  color: #3e3e3e;
   background-color: #f5f5f5; }
 
 .gray-light-bg {
@@ -14178,6 +14237,37 @@ li.av-nav > a {
     .profile-pic-panel {
       margin-top: 40px; } }
 
+/* Home Page */
+.home-half-section {
+  padding: 3%; }
+
+.angel-house-bg {
+  color: #fff;
+  background-image: url(../images/home/angel-house-bg.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
+  background-color: #3e3e3e; }
+  .angel-house-bg .content-section {
+    padding: 120px 0px; }
+
+h1.home-college-header {
+  margin-top: 40px; }
+
+.change-world-bg {
+  color: #fff;
+  background-image: url(../images/home/change-world-bg.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
+  background-color: #3e3e3e; }
+  .change-world-bg a {
+    color: #fff; }
+  .change-world-bg .content-section {
+    padding: 80px 0px; }
+
 .max-panel-height {
   max-height: 390px;
   overflow: scroll; }
@@ -14223,7 +14313,7 @@ li.av-nav > a {
 
 @media (max-width: 767px) {
   .vid-bg {
-    background: url("images/video/video-placeholder.png") center center/cover no-repeat; }
+    background: url("../video/video-placeholder.png") center center/cover no-repeat; }
   .vid-bg-video {
     display: none; } }
 
@@ -14248,7 +14338,7 @@ li.av-nav > a {
 
 @media (max-width: 767px) {
   .college-vid-bg {
-    background: url("images/college/home-placeholder.jpg") center center/cover no-repeat; }
+    background: url("../images/college/home-placeholder.jpg") center center/cover no-repeat; }
   .college-vid-bg-video {
     display: none; } }
 
@@ -14409,6 +14499,89 @@ a.socialIcon:hover, .socialHoverClass {
   .divider.sm {
     margin-top: 5px;
     margin-bottom: 5px; }
+
+/* CSS Onload Animations
+/*=== Trigger  ===*/
+.animate {
+  animation-duration: 1s;
+  animation-fill-mode: both; }
+
+/*=== Optional Delays, change values here  ===*/
+.one {
+  animation-delay: 0.4s; }
+
+.two {
+  animation-delay: 0.8s; }
+
+.three {
+  animation-delay: 1.3s; }
+
+.four {
+  animation-delay: 2.3s; }
+
+/*=== Animations start here  ===*/
+/*=== FADE IN  ===*/
+
+@keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+.fadeIn {
+  animation-name: fadeIn; }
+
+/*=== FADE IN DOWN ===*/
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+
+.fadeInDown {
+  animation-name: fadeInDown; }
+
+/*==== FADE IN UP ===*/
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+
+.fadeInUp {
+  animation-name: fadeInUp; }
+
+/*=== FADE IN LEFT ===*/
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+
+.fadeInLeft {
+  animation-name: fadeInLeft; }
+
+/*==== FADE IN RIGHT ===*/
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
+
+.fadeInRight {
+  animation-name: fadeInRight; }
 
 [v-cloak] {
   display: none; }

@@ -244,9 +244,20 @@ $factory->define(App\Models\v1\Todo::class, function (Faker\Generator $faker)
 {
     return [
         'task'          => $faker->realText(25),
-        'completed_at'  => $faker->optional(0.5)->dateTimeThisYear,
+        'completed_at'  => null,
         'todoable_type' => 'reservations',
         'todoable_id'   => $faker->randomElement(App\Models\v1\Reservation::lists('id')->toArray()),
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Todo::class, 'completed', function (Faker\Generator $faker)
+{
+    return [
+        'task'          => $faker->realText(25),
+        'completed_at'  => $faker->dateTimeThisYear,
+        'user_id'       => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
+        'todoable_type' => 'reservations',
+        'todoable_id'   => $faker->randomElement(App\Models\v1\Reservation::pluck('id')->toArray()),
     ];
 });
 

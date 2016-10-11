@@ -23,7 +23,7 @@ class Todo extends Model
      * @var array
      */
     protected $fillable = [
-        'task', 'completed_at'
+        'task', 'completed_at', 'user_id', 'todoable_id', 'todoable_type'
     ];
 
     /**
@@ -77,5 +77,15 @@ class Todo extends Model
     public function todoable()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Get the user who completed the task.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

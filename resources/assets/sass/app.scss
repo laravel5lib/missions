@@ -710,7 +710,7 @@ h1.home-college-header {
 .vid-bg {
     position: relative;
     overflow: hidden;
-    z-index: -100;
+    z-index: 0;
 }
 
 .vid-bg-video {
@@ -741,7 +741,7 @@ h1.home-college-header {
 .college-vid-bg {
   position: relative;
   overflow: hidden;
-  z-index: -100;
+  z-index: 0;
 }
 .college-vid-bg-video {
   position: absolute;

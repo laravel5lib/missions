@@ -119,7 +119,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
         <div class="col-sm-12 text-center">
           <h1 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="200">Change The World</h1>
           <a data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="300" href="#" class="btn btn-primary btn-lg">Create Your Account</a>
-          <h5 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="400" class="text-uppercase"><a href="#">Or Donate</a></h5>
+          <h5 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="300" class="text-uppercase"><a href="#">Or Donate</a></h5>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->

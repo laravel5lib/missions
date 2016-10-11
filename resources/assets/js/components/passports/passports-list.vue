@@ -4,14 +4,6 @@
             <div class="alert alert-info" role="alert">No records found</div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-12 text-right">
-                <a href="passports/create" class="btn btn-md btn-primary"><i class="fa fa-plus"></i> Add Passport</a>
-                <hr>
-            </div>
-        </div>
-
-
         <div class="col-sm-4" v-for="passport in paginatedPassports">
             <div class="panel panel-default">
                 <div style="min-height:220px;" class="panel-body">

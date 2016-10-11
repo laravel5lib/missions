@@ -708,17 +708,14 @@ h1.home-college-header {
 
 // -- Video Background -- //
 .vid-bg {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    position: relative;
     overflow: hidden;
     z-index: -100;
 }
 
 .vid-bg-video {
     position: absolute;
+    display: block;
     top: 50%;
     left: 50%;
     width: auto;
@@ -742,16 +739,13 @@ h1.home-college-header {
 }
 // -- College Video Background -- //
 .college-vid-bg {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  position: relative;
   overflow: hidden;
   z-index: -100;
 }
 .college-vid-bg-video {
   position: absolute;
+  display: block;
   top: 50%;
   left: 50%;
   width: auto;

@@ -13,29 +13,28 @@
     <source src="images/college/mmc-vid-bg.mp4" type="video/mp4">
     <source src="images/college/mmc-vid-bg.ogv" type="video/ogg">
   </video>
+  <div class="container">
+	  <div class="row">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <div class="col-md-6 col-md-offset-3 text-center">
+	    	<img style="width:200px" src="images/college/mm-college-logo.png" alt="Missions.Me College">
+	      <h1 class="text-white">Launching students into a life of significance.</h1>
+	      <hr class="divider inv">
+	      <a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/" class="btn btn-white-hollow btn-lg">Apply Now</a>
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      </div>
+	    </div><!-- end col -->
+	  </div><!-- end row -->
+	</div><!-- end container -->
 </div>
-<div class="container">
-  <div class="row">
-    <hr class="divider inv xlg">
-    <hr class="divider inv xlg">
-    <hr class="divider inv xlg">
-    <hr class="divider inv xlg">
-    <hr class="divider inv xlg">
-    <div class="col-md-6 col-md-offset-3 text-center">
-    	<img style="width:200px" src="images/college/mm-college-logo.png" alt="Missions.Me College">
-      <h1 class="text-white">Launching students into a life of significance.</h1>
-      <hr class="divider inv">
-      <a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/" class="btn btn-white-hollow btn-lg">Apply Now</a>
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      </div>
-    </div><!-- end col -->
-  </div><!-- end row -->
-</div><!-- end container -->
-
 <div class="darker-bg-primary">
 	<div class="white-bg">
 		<ul class="nav nav-tabs hidden-xs hidden-sm">

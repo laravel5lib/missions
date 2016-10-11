@@ -1,8 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class NoteFilter extends ModelFilter
+class NoteFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -12,6 +10,30 @@ class NoteFilter extends ModelFilter
     */
     public $relations = [];
 
+    /**
+     * The fields that are sortable.
+     *
+     * @var array
+     */
+    public $sortable = [
+        'subject', 'created_at', 'updated_at'
+    ];
+
+    /**
+     * The fields that are searchable.
+     *
+     * @var array
+     */
+    public $searchable = [
+        'subject', 'content', 'user.name'
+    ];
+
+    /**
+     * By noteable_type and noteable_id.
+     *
+     * @param $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function type($type)
     {
         $param = preg_split('/\|+/', $type);

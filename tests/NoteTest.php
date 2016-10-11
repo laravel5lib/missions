@@ -67,4 +67,38 @@ class NoteTest extends TestCase
             ]);
     }
 
+    /**
+     * @test
+     */
+    public function note_request_validates()
+    {
+        $this->post('/api/notes')
+             ->assertResponseStatus(422)
+             ->seeJsonStructure([
+                 'message',
+                 'status_code',
+                 'errors' => [
+                     'user_id', 'subject', 'content',
+                     'noteable_type', 'noteable_id'
+                 ]
+             ])->seeJson([
+                 'status_code' => 422
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function note_saves_in_database()
+    {
+        $note = factory(\App\Models\v1\Note::class)->make()->toArray();
+
+        $this->post('/api/notes', $note)
+            ->seeInDatabase('notes', $note)
+            ->assertResponseOk()
+            ->seeJson(
+                array_except($note, ['noteable_type', 'noteable_id', 'user_id'])
+            );
+    }
+
 }

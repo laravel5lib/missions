@@ -49,7 +49,7 @@
                     <li role="presentation"><a href="#requirements" aria-controls="requirements" role="tab" data-toggle="tab">Requirements</a></li>
                     <li role="presentation"><a href="#funding" aria-controls="funding" role="tab" data-toggle="tab">Funding</a></li>
                     <li role="presentation"><a href="#dues" aria-controls="dues" role="tab" data-toggle="tab">Dues</a></li>
-                    <li role="presentation"><a href="#settings" aria-controls="interests" role="tab" data-toggle="tab">Settings</a></li>
+                    <li role="presentation"><a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">Notes</a></li>
                 </ul>
             </div><!-- end panel -->
         </div>
@@ -318,6 +318,15 @@
                         </div><!-- end panel-body -->
                     </div><!-- end panel -->
                 </div><!-- end tab -->
+
+
+                <div role="tabpanel" class="tab-pane" id="notes">
+                    <notes type="reservations"
+                           id="{{ $reservation->id }}"
+                           user_id="{{ auth()->user()->id }}"
+                           :per_page="3">
+                    </notes>
+                </div>
 
                 </div>
             </div>

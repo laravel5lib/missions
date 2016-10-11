@@ -36,6 +36,7 @@ import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
 import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
 import dashboardInterestsList from './components/interests/dashboard-interests-list.vue';
 import notes from './components/notes.vue';
+import todos from './components/todos.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -251,6 +252,7 @@ new Vue({
         donate,
         modalDonate,
         notes,
+        todos,
 
         //dashboard components
         recordsList,

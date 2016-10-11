@@ -50,6 +50,7 @@
                     <li role="presentation"><a href="#funding" aria-controls="funding" role="tab" data-toggle="tab">Funding</a></li>
                     <li role="presentation"><a href="#dues" aria-controls="dues" role="tab" data-toggle="tab">Dues</a></li>
                     <li role="presentation"><a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">Notes</a></li>
+                    <li role="presentation"><a href="#todos" aria-controls="notes" role="tab" data-toggle="tab">Todos</a></li>
                 </ul>
             </div><!-- end panel -->
         </div>
@@ -326,6 +327,13 @@
                            user_id="{{ auth()->user()->id }}"
                            :per_page="3">
                     </notes>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="todos">
+                    <todos type="reservations"
+                           id="{{ $reservation->id }}"
+                           user_id="{{ auth()->user()->id }}">
+                    </todos>
                 </div>
 
                 </div>

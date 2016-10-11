@@ -341,14 +341,21 @@
                     <a @click="submit()" class="btn btn-primary">Create</a>
                 </div>
             </div>
+            <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+                <span class="icon-info-circled alert-icon-float-left"></span>
+                <strong>Oh No!</strong>
+                <p>There are errors on the form.</p>
+            </alert>
+
         </form>
     </validator>
 </template>
 <script>
     import vSelect from "vue-select";
+    import VueStrap from "vue-strap/dist/vue-strap.min"
     export default{
         name: 'user-create',
-        components: {vSelect},
+        components: {vSelect, 'alert': VueStrap.alert},
         data(){
             return {
                 name: '',
@@ -376,6 +383,7 @@
                 // logic variables
 //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
                 attemptSubmit: false,
+                showError: false,
                 countries: [],
                 countryCodeObj: null,
                 timezones: [],
@@ -431,8 +439,11 @@
                     }).then(function (resp) {
                         window.location.href = '/admin' + resp.data.data.links[0].uri;
                     }, function (error) {
+                        this.showError = true;
                         console.log(error);
                     });
+                } else {
+                    this.showError = true;
                 }
             }
         },

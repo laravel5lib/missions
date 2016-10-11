@@ -44,7 +44,7 @@
                             <td>{{ $donor->phone }}</td>
                             <td>{{ $donor->zip }}</td>
                             <td>$ {{ $donor->donations()->sum('amount') }}</td>
-                            <td><a href="#"><i class="fa fa-cog"></i></a></td>
+                            <td><a href="{{ url('/admin/donors/' . $donor->id) }}"><i class="fa fa-cog"></i></a></td>
                         </tr>
                     @endforeach
                     </tbody>

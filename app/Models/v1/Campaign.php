@@ -132,6 +132,13 @@ class Campaign extends Model
         return $this->hasMany(Trip::class);
     }
 
+    public function reservationsCount()
+    {
+        $trips = $this->trips()->withCount('reservations')->get();
+
+        return $trips->sum('reservations_count');
+    }
+
     /**
      * Get all the campaign's associated groups.
      *

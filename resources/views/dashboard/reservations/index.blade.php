@@ -34,9 +34,9 @@
                     </div>
 
                 </div>
-
             </div>
         </div>
+        <hr class="divider inv lg">
     </div>
 
 @endsection

@@ -6,5 +6,6 @@
     <li><a href="/admin/groups"><i class="fa fa-users"></i></a></li>
     <li><a href="/admin/users"><i class="fa fa-user"></i></a></li>
     <li><a href="/admin/uploads"><i class="fa fa-picture-o"></i></a></li>
+    <li><a href="/admin/funds"><i class="fa fa-usd"></i></a></li>
   </ul>
 </div>

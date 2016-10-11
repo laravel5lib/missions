@@ -7,7 +7,8 @@
         @foreach(auth()->user()->recentDonations() as $donation)
             <tr>
                 <td class="text-success">${{ $donation->amount }}</td>
-                <td class="text-right text-muted">{{ $donation->created_at->format('M j') }}</td>
+                <td>{{ $donation->donor->name }}</td>
+                <td class="text-right text-muted">{{ $donation->created_at->diffForHumans() }}</td>
             </tr>
         @endforeach
         </tbody>

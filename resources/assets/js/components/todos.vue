@@ -4,17 +4,27 @@
             <h5>ToDos</h5>
         </div>
         <div class="list-group">
-            <a href="#" class="list-group-item" v-for="todo in todos">
-                <span v-if="todo.completed_at">
-                    <i class="fa fa-check-square-o fa-lg" style="margin-right: 10px"></i>
-                    <s>{{ todo.task }}</s>
-                    <br /><small class="text-muted">Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}</small>
-                </span>
-                <span v-else>
-                    <i class="fa fa-square-o fa-lg" style="margin-right: 10px"></i>
-                    {{ todo.task }}
-                </span>
-            </a>
+            <div class="list-group-item" v-for="todo in todos">
+                    <input type="text"
+                           class="form-control"
+                           v-model="selectedTodo.task"
+                           v-if="selectedTodo.id == todo.id"
+                           @blur="updateTodo">
+                    <div class="row" v-else>
+                        <div class="col-xs-2">
+                            <i class="fa fa-lg"
+                               :class="{ 'fa-check-square-o' : todo.completed_at, 'fa-square-o' : !todo.completed_at }"
+                               style="margin-right: 10px">
+                            </i>
+                        </div>
+                        <div class="col-xs-10" @dblclick="editTodo(todo)">
+                            <span :class="{ 'text-strike' : todo.completed_at }">{{ todo.task }}</span>
+                            <small class="text-muted" v-if="todo.completed_at"><br />
+                                Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}
+                            </small>
+                        </div>
+                    </div>
+            </div>
         </div>
     </div>
 </template>
@@ -43,7 +53,7 @@
         },
         data() {
             return {
-                todos:{},
+                todos: {},
                 selectedTodo: {},
                 page: 1,
                 pagination: {},
@@ -69,6 +79,12 @@
             }
         },
         methods: {
+            editTodo(todo) {
+                this.selectedTodo = todo;
+            },
+            updateTodo() {
+                this.selectedTodo = {};
+            },
             fetch() {
                 var params = '?sort=task|desc&include=user&per_page=' + this.per_page + '&page=' + this.page;
 

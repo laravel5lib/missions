@@ -70,8 +70,8 @@
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
             </div>
-            <div class="list-group-item" v-for="note in notes" v-if="notes.length > 0">
-                <div class="row">
+            <div class="list-group-item" v-for="note in notes">
+                <div class="row" v-if="notes.length > 0">
                     <div class="col-xs-8">
                         <h5 class="list-group-item-heading">{{ note.subject }}
                             <br> <small>

@@ -29,6 +29,7 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
                     <li role="presentation"><a href="#reservations" aria-controls="reservations" role="tab" data-toggle="tab">Reservations</a></li>
+                    <li role="presentation"><a href="#interests" aria-controls="interests" role="tab" data-toggle="tab">Interests</a></li>
                 </ul>
             </div>
         </div>
@@ -262,7 +263,11 @@
                 <div role="tabpanel" class="tab-pane" id="reservations">
                     <div class="col-xs-12">
                         <dashboard-group-reservations trip-id="{{ $trip->id }}"></dashboard-group-reservations>
-                        {{--<admin-trip-reservations trip-id="{{ $trip->id }}"></admin-trip-reservations>--}}
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="interests">
+                    <div class="col-xs-12">
+                        <dashboard-interests-list group-id="{{ $groupId }}" trip-id="{{ $trip->id }}"></dashboard-interests-list>
                     </div>
                 </div>
             </div>

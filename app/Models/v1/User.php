@@ -517,6 +517,29 @@ class User extends Authenticatable implements JWTSubject
         return $this->morphMany(Accolade::class, 'recipient');
     }
 
+    /**
+     * Synchronize User Profile Links.
+     *
+     * @param $links
+     */
+    public function syncLinks($links)
+    {
+        if ( ! $links) return;
+
+        $ids = $this->links()->lists('id', 'id');
+
+        foreach($links as $link)
+        {
+            if( ! isset($link['id'])) $link['id'] = null;
+
+            array_forget($ids, $link['id']);
+
+            $this->links()->updateOrCreate(['id' => $link['id']], $link);
+        }
+
+        if( ! $ids->isEmpty()) Link::destroy($ids);
+    }
+
     public function getCountriesVisited()
     {
         $this->load('accolades');

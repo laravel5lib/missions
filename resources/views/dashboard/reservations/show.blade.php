@@ -19,67 +19,17 @@
         </div>
     </div>
 </div>
-<hr class="divider inv lg">
+    <hr class="divider inv lg">
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
-                @include('dashboard.reservations.layouts.menu')
+                @include('dashboard.reservations.layouts.menu', [
+                'links' => config('navigation.dashboard.reservation')
+                ])
             </div>
             <div class="col-sm-8">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h5>Reservation Details</h5>
-                    </div>
-                    <div class="panel-body">
-                        <div class="col-sm-6">
-                            <label>Reservation ID</label>
-                            <p>{{ $reservation->id }}</p>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label>Surname</label>
-                                    <p>{{ $reservation->surname }}</p>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label>Given Names</label>
-                                    <p>{{ $reservation->given_names }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label>Gender</label>
-                                    <p>{{ $reservation->gender }}</p>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label>Marital Status</label>
-                                    <p>{{ $reservation->status }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label>Shirt Size</label>
-                                    <p>{{ $reservation->shirt_size }}</p>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label>Age</label>
-                                    <p>{{ $reservation->birthday->age }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 panel panel-default panel-body text-center">
-                            <label>Group</label>
-                            <p>{{ $reservation->trip->group->name }}</p>
-                            <label>Trip Type</label>
-                            <p>{{ $reservation->trip->type }} Missionary</p>
-                            <label>Start Date</label>
-                            <p>{{ $reservation->trip->started_at->toFormattedDateString() }}</p>
-                            <label>End Date</label>
-                            <p>{{ $reservation->trip->ended_at->toFormattedDateString() }}</p>
-                            <label>Trip Starts In</label>
-                            <p>{{ $reservation->trip->started_at->diffInDays() }} days</p>
-                        </div><!-- end col -->
-                    </div><!-- end panel-body -->
-                </div><!-- end panel -->
+                @yield('tab')
             </div>
         </div>
     </div>
-@endsection
+@stop

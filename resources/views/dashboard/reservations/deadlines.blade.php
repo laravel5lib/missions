@@ -205,7 +205,9 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
-                @include('dashboard.reservations.layouts.menu')
+                @include('dashboard.reservations.layouts.menu', [
+                'links' => config('navigation.dashboard.reservation')
+                ])
             </div>
             <div class="col-sm-8">
                 <div class="row">

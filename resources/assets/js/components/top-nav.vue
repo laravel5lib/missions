@@ -1,5 +1,5 @@
 <template>
-	<div style="display:inline;">
+	<li style="display:inline;">
 		<button class="navbar-toggle" @click="showRight = true">
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
@@ -78,7 +78,7 @@
 				<li><a href="/contact">Contact Us</a></li>
 			</ul>
 		</aside>
-	</div>
+	</li>
 </template>
 <script>
 	import VueStrap from 'vue-strap/dist/vue-strap.min';

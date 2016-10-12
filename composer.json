@@ -20,7 +20,8 @@
         "league/glide": "^1.0",
         "silber/bouncer": "^0.1.7",
         "barryvdh/laravel-cors": "^0.8.1",
-        "haleks/laravel-markdown": "^0.2.0"
+        "haleks/laravel-markdown": "^0.2.0",
+        "maatwebsite/excel": "~2.1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

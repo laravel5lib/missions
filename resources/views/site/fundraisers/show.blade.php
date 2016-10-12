@@ -19,9 +19,10 @@
             <h5 class="text-center">organized by {{ $fundraiser->sponsor->name }}</h5>
             <hr class="divider inv lg">
             <div class="col-sm-8">
-                @if($fundraiser->banner)
+                <fundraisers-banner id="{{ $fundraiser->id }}" banner="{{ $fundraiser->banner ? image($fundraiser->banner->source) : '' }}"></fundraisers-banner>
+                {{--@if($fundraiser->banner)
                     <img src="{{ image($fundraiser->banner->source) }}" class="img-responsive">
-                @endif
+                @endif--}}
                 <hr class="divider inv">
                 <ul class="nav nav-tabs">
                     <li role="presentation" class="active"><a href="#desc" data-toggle="tab">Description</a></li>

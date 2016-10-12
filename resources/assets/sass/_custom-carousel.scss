@@ -24,6 +24,24 @@
       @include img-responsive;
       line-height: 1;
     }
+    @media screen and (max-width: 991px) {
+      > img,
+      > a > img {
+        display: block;
+        max-width: none;
+        height: 450px;
+        line-height: 1;
+      }
+    }
+    @media screen and (max-width: 767px) {
+      > img,
+      > a > img {
+        display: block;
+        max-width: none;
+        height: 400px;
+        line-height: 1;
+      }
+    }
 
     // WebKit CSS3 transforms for supported devices
     @media all and (transform-3d), (-webkit-transform-3d) {
@@ -239,6 +257,28 @@
     background: $gray-darker;
     margin-top: 5px;
     margin-bottom: 5px;
+  }
+  @media screen and (max-width: 991px) {
+    h3 {
+      font-size: 1.5em !important;
+    }
+    h6 {
+      font-size: .7em !important;
+    }
+    p {
+      font-size: .9em;
+    }
+  }
+  @media screen and (max-width: 767px) {
+    h3 {
+      font-size: 1em !important;
+    }
+    h6 {
+      font-size: .5em !important;
+    }
+    p {
+      font-size: .7em;
+    }
   }
 }
 

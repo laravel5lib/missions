@@ -28,14 +28,6 @@
 
                     <hr class="divider inv" />
 
-                    @if($trip->requirements->count())
-                        @include('site.trips.partials._requirements', ['trip' => $trip])
-                    @endif
-
-                    @if($trip->deadlines->count())
-                        @include('site.trips.partials._deadlines', ['trip' => $trip])
-                    @endif
-
                     <h4>Missionaries Registered</h4>
                     <hr class="divider">
                     <div class="row">
@@ -50,20 +42,12 @@
 
             <hr class="divider inv" />
 
-            @if($trip->requirements->count())
-                @include('site.trips.partials._requirements', ['trip' => $trip])
-            @endif
-
-            @if($trip->deadlines->count())
-                @include('site.trips.partials._deadlines', ['trip' => $trip])
-            @endif
-
-            <h4>Missionaries Registered</h4>
-            <hr class="divider">
-            <div class="row">
-                <trip-details-missionaries :reservations="{{ json_encode($trip->reservations) }}"></trip-details-missionaries>
+            {{--<h4>Missionaries Registered</h4>--}}
+            {{--<hr class="divider">--}}
+            {{--<div class="row">--}}
+                {{--<trip-details-missionaries :reservations="{{ json_encode($trip->reservations) }}"></trip-details-missionaries>--}}
 {{--                @each('site.trips.partials._missionaries', $trip->reservations, 'res', 'site.trips.partials._no_missionaries')--}}
-            </div>
+            {{--</div>--}}
         </div>
         <div class="col-xs-12 col-sm-5 col-md-5 col-lg-4">
             <div class="panel panel-default">
@@ -74,6 +58,12 @@
                     @else
                         <a href="/trips/{{ $trip->id }}/register" class="btn btn-info btn-lg btn-block">Register Now</a>
                     @endif
+
+                    @unless($trip->reservations->count() < 2)
+                        <h5 class="text-center">
+                            <small>{{ $trip->reservations->count() }} people have registered for this trip.</small>
+                        </h5>
+                    @endunless
 
                     <hr class="divider lg">
                     <h6 class="text-center text-uppercase small text-muted">Start Date</h6>
@@ -95,6 +85,13 @@
                     <h4 class="text-center">${{  number_format($trip->starting_cost, 2, '.', ',') }}</h4>
             	</div>
             </div>
+            @if($trip->requirements->count())
+                @include('site.trips.partials._requirements', ['trip' => $trip])
+            @endif
+
+            @if($trip->deadlines->count())
+                @include('site.trips.partials._deadlines', ['trip' => $trip])
+            @endif
         </div>
     </div>
 </div>

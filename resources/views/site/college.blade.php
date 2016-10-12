@@ -13,32 +13,31 @@
     <source src="images/college/mmc-vid-bg.mp4" type="video/mp4">
     <source src="images/college/mmc-vid-bg.ogv" type="video/ogg">
   </video>
+  <div class="container">
+	  <div class="row">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <div class="col-md-6 col-md-offset-3 text-center">
+	    	<img style="width:200px" src="images/college/mm-college-logo.png" alt="Missions.Me College">
+	      <h1 class="text-white">Launching students into a life of significance.</h1>
+	      <hr class="divider inv">
+	      <a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/" class="btn btn-white-hollow btn-lg">Apply Now</a>
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      </div>
+	    </div><!-- end col -->
+	  </div><!-- end row -->
+	</div><!-- end container -->
 </div>
-<div class="container">
-  <div class="row">
-    <hr class="divider inv xlg">
-    <hr class="divider inv xlg">
-    <hr class="divider inv xlg">
-    <hr class="divider inv xlg">
-    <hr class="divider inv xlg">
-    <div class="col-md-6 col-md-offset-3 text-center">
-    	<img style="width:200px" src="images/college/mm-college-logo.png" alt="Missions.Me College">
-      <h1 class="text-white">Launching students into a life of significance.</h1>
-      <hr class="divider inv">
-      <a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/" class="btn btn-white-hollow btn-lg">Apply Now</a>
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      </div>
-    </div><!-- end col -->
-  </div><!-- end row -->
-</div><!-- end container -->
-
 <div class="darker-bg-primary">
 	<div class="white-bg">
-		<ul class="nav nav-tabs">
+		<ul class="nav nav-tabs hidden-xs hidden-sm">
 		    <li class="active"><a class="scrollNav" href="#who-we-are">Who We Are</a></li>
 		    <li><a class="scrollNav" href="#academics">Academics</a></li>
 		    <li><a class="scrollNav" href="#community">Community</a></li>
@@ -47,6 +46,21 @@
 		    <li><a class="scrollNav" href="#academics">Missions</a></li>
 		    <li><a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
 		</ul>
+		<div class="btn-group btn-group-justified visible-xs-block visible-sm-block" role="group">
+			<a class="btn btn-default dropdown-toggle" style="border-radius:0;" data-toggle="dropdown" role="button"
+			   aria-haspopup="true" aria-expanded="false">
+				Menu <span class="caret"></span>
+			</a>
+			<ul style="right:0;" class="dropdown-menu">
+				<li class="active"><a class="scrollNav" href="#who-we-are">Who We Are</a></li>
+				<li><a class="scrollNav" href="#academics">Academics</a></li>
+				<li><a class="scrollNav" href="#community">Community</a></li>
+				<li><a class="scrollNav" href="#students">Prospective Students</a></li>
+				<li><a class="scrollNav" href="/college-financial">Financial Aid</a></li>
+				<li><a class="scrollNav" href="#academics">Missions</a></li>
+				<li><a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
+			</ul>
+		</div>
 	</div><!-- end white-bg -->
 	<div class="container">
 	<div class="content-section">

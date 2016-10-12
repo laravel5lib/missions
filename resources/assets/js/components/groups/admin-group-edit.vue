@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="UpdateGroup">
+    <validator name="UpdateGroup" @touched="onTouched">
         <form id="UpdateGroupForm" class="form-horizontal" novalidate>
             <div class="row form-group" :class="{ 'has-error': checkForError('name') }">
                 <div class="col-sm-12">
@@ -126,17 +126,25 @@
 
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a href="/admin/groups" class="btn btn-default">Cancel</a>
                     <a @click="submit()" class="btn btn-primary">Update</a>
-                    <a href="/admin/groups" class="btn btn-success">Finished</a>
+                    <a @click="back()" class="btn btn-success">Done</a>
                 </div>
             </div>
 
             <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
-                <strong>Awesome!</strong>
+                <strong>Well Done!</strong>
                 <p>Group updated!</p>
             </alert>
+            <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+                <span class="icon-info-circled alert-icon-float-left"></span>
+                <strong>Oh No!</strong>
+                <p>There are errors on the form.</p>
+            </alert>
+
+            <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+                <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
+            </modal>
         </form>
     </validator>
 </template>
@@ -145,7 +153,7 @@
     import VueStrap from "vue-strap/dist/vue-strap.min";
     export default{
         name: 'group-edit',
-        components: { vSelect, 'alert': VueStrap.alert },
+        components: { vSelect, 'alert': VueStrap.alert, 'modal': VueStrap.modal },
         props: ['groupId', 'managing'],
         data(){
             return {
@@ -168,13 +176,16 @@
 
                 // logic variables
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
-                showSuccess: false,
                 attemptSubmit: false,
                 resource: this.$resource('groups{/id}'),
                 countries: [],
                 countryCodeObj: null,
                 timezones: [],
                 //timezoneObj: null,
+                showSuccess: false,
+                showError: false,
+                showSaveAlert: false,
+                hasChanged: false,
 
             }
         },
@@ -189,6 +200,19 @@
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$UpdateGroup[field].invalid && this.attemptSubmit;
+            },
+            onTouched(){
+                this.hasChanged = true;
+            },
+            back(force){
+                if (this.hasChanged && !force ) {
+                    this.showSaveAlert = true;
+                    return false;
+                }
+                window.location.href = '/admin/groups/' + this.groupId;
+            },
+            forceBack(){
+                return this.back(true);
             },
             submit(){
                 this.attemptSubmit = true;
@@ -213,10 +237,14 @@
                         email: this.email
                     }).then(function (resp) {
                         this.showSuccess = true;
+                        this.hasChanged = false;
                     }, function (error) {
                         console.log(error);
+                        this.showError = true;
                         debugger;
                     });
+                } else {
+                    this.showError = true;
                 }
             }
         },

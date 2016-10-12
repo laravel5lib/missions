@@ -54,6 +54,8 @@ class TripTableSeeder extends Seeder
 
             $t->facilitators()->attach(User::where('email', 'admin@admin.com')->first()->id);
 
+            $t->interests()->saveMany(factory(App\Models\v1\TripInterest::class, 5)->make());
+
         });
     }
 }

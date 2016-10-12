@@ -30,7 +30,8 @@ class User extends Authenticatable implements JWTSubject
         'phone_one', 'phone_two', 'gender', 'status',
         'birthday', 'address', 'city', 'zip', 'country_code',
         'state', 'timezone', 'url', 'public', 'bio',
-        'stripe_id', 'card_brand', 'card_last_four'
+        'stripe_id', 'card_brand', 'card_last_four',
+        'avatar_upload_id', 'banner_upload_id'
     ];
 
     /**
@@ -516,6 +517,29 @@ class User extends Authenticatable implements JWTSubject
         return $this->morphMany(Accolade::class, 'recipient');
     }
 
+    /**
+     * Synchronize User Profile Links.
+     *
+     * @param $links
+     */
+    public function syncLinks($links)
+    {
+        if ( ! $links) return;
+
+        $ids = $this->links()->lists('id', 'id');
+
+        foreach($links as $link)
+        {
+            if( ! isset($link['id'])) $link['id'] = null;
+
+            array_forget($ids, $link['id']);
+
+            $this->links()->updateOrCreate(['id' => $link['id']], $link);
+        }
+
+        if( ! $ids->isEmpty()) Link::destroy($ids);
+    }
+
     public function getCountriesVisited()
     {
         $this->load('accolades');
@@ -523,6 +547,50 @@ class User extends Authenticatable implements JWTSubject
         $accolade = $this->accolades()->where('name', 'countries_visited')->first();
 
         return $accolade->items;
+    }
+
+    public function upcomingPayments()
+    {
+        $dues = Due::whereIn(
+            'payable_id',
+            $this->reservations()->pluck('id')->toArray()
+        )->where('payable_type', 'reservations')
+         ->withBalance()
+         ->sortRecent()
+         ->take(5)
+         ->get();
+
+        return $dues;
+    }
+
+    public function outstandingRequirements()
+    {
+        $requirements = $this->reservations()
+             ->with('requirements')
+             ->get()
+             ->pluck('requirements')
+             ->flatten()
+             ->reject(function($item) {
+                 $item->status = 'incomplete';
+             })
+             ->sortBy('due_at')
+             ->take(5);
+
+        return $requirements;
+    }
+
+    public function recentDonations()
+    {
+        $donations = $this->reservations()
+            ->with('fund.donations')
+            ->get()
+            ->pluck('donations')
+            ->flatten()
+            ->sortBy('created_at')
+            ->take(5);
+
+
+        return $donations;
     }
 
     public function withAvailableRegions()

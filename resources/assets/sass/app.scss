@@ -2,6 +2,7 @@
 @import "custom-bootstrap";
 @import "node_modules/font-awesome/scss/font-awesome";
 @import "node_modules/jasny-bootstrap/scss/jasny-bootstrap.scss";
+@import "node_modules/aos/src/sass/aos.scss";
 
 /*
  * Variables...
@@ -115,6 +116,29 @@ p.large-type {
 }
 .dash-trailing-warning:after {
   background: $brand-warning;
+}
+
+/* panel heading colors */
+// Trip type background colors
+.panel-medical {
+  background-color: $brand-primary !important;
+  color: #fff !important;
+}
+.panel-ministry {
+  background-color: $brand-ministry !important;
+  color: #fff !important;
+}
+.panel-family {
+  background-color: $brand-family !important;
+  color: #fff !important;
+}
+.panel-international {
+  background-color: $brand-international !important;
+  color: #fff !important;
+}
+.panel-leader {
+  background-color: $brand-leader !important;
+  color: #fff !important;
 }
 
 .footer {
@@ -270,6 +294,38 @@ body {
   }
 }
 
+/* Video Modal */
+.video-modal {
+  .modal-backdrop.in {
+      filter: alpha(opacity=7);
+      opacity: 0.7;
+  }
+  .modal-content {
+      background: none;
+      border: 0;
+      -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0;
+      -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+  }
+  .modal-body {
+      padding: 0 25px 25px 25px;
+  }
+  .modal-header {
+      padding: 25px 25px 15px 25px;
+      text-align: right;
+  }
+  .modal-header, .modal-footer {
+      border: 0;
+  }
+  .modal-header .close {
+      float: none;
+      margin: 0;
+      font-size: 36px;
+      color: #fff;
+      font-weight: 300;
+      text-shadow: none;
+      opacity: 1;
+  }
+}
 /* Wrapper for page content to push down footer */
 #page-wrap {
   min-height: 100%;
@@ -518,7 +574,7 @@ li.av-nav > a {
   border-bottom: 1px solid $gray-light;
 }
 .gray-lighter-bg {
-  color: $gray-dark;
+  color: $gray-darker;
   background-color: $gray-lighter;
 }
 .gray-light-bg {
@@ -585,6 +641,41 @@ $img-base-size: 40px;
   }
 }
 
+/* Home Page */
+.home-half-section {
+  padding: 3%;
+}
+.angel-house-bg {
+  color: #fff;
+  background-image: url(../images/home/angel-house-bg.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
+  background-color: $gray-darker;
+  .content-section {
+    padding: 120px 0px;
+  }
+}
+h1.home-college-header {
+  margin-top: 40px;
+}
+.change-world-bg {
+  color: #fff;
+  background-image: url(../images/home/change-world-bg.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
+  background-color: $gray-darker;
+  a {
+    color: #fff;
+  }
+  .content-section {
+    padding: 80px 0px;
+  }
+}
+
 // -- Panel -- //
 .max-panel-height {
   max-height: 390px;
@@ -617,17 +708,14 @@ $img-base-size: 40px;
 
 // -- Video Background -- //
 .vid-bg {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    position: relative;
     overflow: hidden;
-    z-index: -100;
+    z-index: 0;
 }
 
 .vid-bg-video {
     position: absolute;
+    display: block;
     top: 50%;
     left: 50%;
     width: auto;
@@ -642,7 +730,7 @@ $img-base-size: 40px;
 
 @media (max-width: 767px) {
     .vid-bg {
-        background: url('images/video/video-placeholder.png') center center / cover no-repeat;
+        background: url('../video/video-placeholder.png') center center / cover no-repeat;
     }
 
     .vid-bg-video {
@@ -651,16 +739,13 @@ $img-base-size: 40px;
 }
 // -- College Video Background -- //
 .college-vid-bg {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  position: relative;
   overflow: hidden;
-  z-index: -100;
+  z-index: 0;
 }
 .college-vid-bg-video {
   position: absolute;
+  display: block;
   top: 50%;
   left: 50%;
   width: auto;
@@ -675,7 +760,7 @@ $img-base-size: 40px;
 
 @media (max-width: 767px) {
     .college-vid-bg {
-      background: url('images/college/home-placeholder.jpg') center center / cover no-repeat;
+      background: url('../images/college/home-placeholder.jpg') center center / cover no-repeat;
     }
     .college-vid-bg-video {
       display: none;
@@ -885,6 +970,201 @@ $divider-base-size: 10px;
     margin-top: $divider-base-size/2;
     margin-bottom: $divider-base-size/2;
   }
+}
+
+ 
+/* CSS Onload Animations
+/*=== Trigger  ===*/
+.animate {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+ 
+/*=== Optional Delays, change values here  ===*/
+.one {
+-webkit-animation-delay: 0.4s;
+-moz-animation-delay: 0.4s;
+animation-delay: 0.4s;
+}
+ 
+.two {
+-webkit-animation-delay: 0.8s;
+-moz-animation-delay: 0.8s;
+animation-delay: 0.8s;
+}
+ 
+.three {
+-webkit-animation-delay: 1.3s;
+-moz-animation-delay: 1.3s;
+animation-delay: 1.3s;
+}
+ 
+.four {
+-webkit-animation-delay: 2.3s;
+-moz-animation-delay: 2.3s;
+animation-delay: 2.3s;
+}
+ 
+/*=== Animations start here  ===*/
+/*=== FADE IN  ===*/
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+ 
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+ 
+  to {
+    opacity: 1;
+  }
+}
+ 
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+ 
+ 
+/*=== FADE IN DOWN ===*/
+@-webkit-keyframes fadeInDown {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+ 
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+ 
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+ 
+.fadeInDown {
+  -webkit-animation-name: fadeInDown;
+  animation-name: fadeInDown;
+}
+ 
+/*==== FADE IN UP ===*/
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+ 
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+ 
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+ 
+.fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
+}
+ 
+/*=== FADE IN LEFT ===*/
+@-webkit-keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+ 
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+ 
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+ 
+.fadeInLeft {
+  -webkit-animation-name: fadeInLeft;
+  animation-name: fadeInLeft;
+}
+ 
+ 
+/*==== FADE IN RIGHT ===*/
+@-webkit-keyframes fadeInRight {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+  }
+ 
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+  }
+ 
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+ 
+.fadeInRight {
+  -webkit-animation-name: fadeInRight;
+  animation-name: fadeInRight;
 }
 
 [v-cloak] {

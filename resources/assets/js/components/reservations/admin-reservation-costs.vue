@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <button class="btn btn-primary btn-xs" @click="add"><span
-                class="fa fa-plus"></span> Add Existing
+        <button class="btn btn-primary btn-xs" @click="add">
+            <span class="fa fa-plus"></span> Add Existing
         </button>
         <!--<button class="btn btn-primary btn-xs" @click="addNew"><span
                 class="fa fa-plus"></span> Create New
@@ -11,7 +11,7 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th>Status</th>
+                <th>Locked</th>
                 <th>Name</th>
                 <th>Due Date</th>
                 <th>Amount</th>
@@ -19,23 +19,21 @@
             </tr>
             </thead>
             <tbody v-if="reservation">
-            <template v-for="due in reservation.dues.data">
+            <template v-for="cost in reservation.costs.data">
                 <tr>
-                    <td class="text-center">
-						<small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
-					</td>
+                    <!--<td class="text-center">
+                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
+                    </td>-->
+                    <td>{{ cost.locked ? 'Yes' : 'No' }}</td>
+                    <td>{{ cost.name || cost.cost }}</td>
+                    <td>{{ cost.due_at| moment 'll' }}</td>
+                    <td>{{ cost.amount| currency }}</td>
                     <td>
-                        {{ due.cost }}
-                    </td>
-                    <td>{{ due.due_at| moment 'll' }}</td>
-                    <td>{{ due.amount| currency }}</td>
-                    <td>
-                        <a class="btn btn-default btn-xs" @click="edit(due)"><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger btn-xs" @click="remove(due)"><i class="fa fa-times"></i></a>
+                        <a class="btn btn-default btn-xs" @click="edit(cost)"><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-danger btn-xs" @click="remove(cost)"><i class="fa fa-times"></i></a>
                     </td>
                 </tr>
             </template>
-
             </tbody>
         </table>
 
@@ -56,7 +54,7 @@
             </div>
         </modal>
 
-        <modal title="Edit Cost" :show.sync="showEditModal" effect="fade" width="800" :callback="update">
+        <modal title="Edit Cost" :show.sync="showEditModal" effect="fade" width="800" :callback="updateCost">
             <div slot="modal-body" class="modal-body">
                 <validator name="EditCost">
                     <form class="form" novalidate>
@@ -79,7 +77,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="due_date">Due Date</label>
-                                    <input id="due_date" type="datetime-local" class="form-control" v-model="editedCost.due_date">
+                                    <input id="due_date" type="datetime-local" class="form-control" v-model="editedCost.due_at">
                                 </div>
                             </div>
                         </div>
@@ -214,21 +212,30 @@
 
             },
             edit(cost){
+                cost.due_at = moment().format('YYYY-MM-DDTHH:mm:ss');
                 this.editedCost = cost;
                 this.attemptSubmit = false;
                 this.showEditModal = true;
             },
-            update(cost){
+            updateCost(){
                 // prep current costs
-                var currentDeadlineIds = [];
-                _.some(this.reservation.costs.data, function (cost) {
-                    if (cost.id === this.editedCost.cost_id) {
-                        return cost = this.editedCost;
+                var costs = [];
+                _.each(this.reservation.costs.data, function (cost) {
+                    if (cost.cost_id === this.editedCost.cost_id) {
+                        costs.push({
+                            id: this.editedCost.cost_id,
+                            locked: this.editedCost.locked,
+                            due_at: moment(this.editedCost.due_at).format('YYYY-MM-DD HH:mm:ss'),
+                            due_date: moment(this.editedCost.due_at).format('YYYY-MM-DD HH:mm:ss'),
+                            grace_period: 10
+                        });
+                    } else {
+                        costs.push({id: cost.cost_id, locked: cost.locked});
                     }
                 }.bind(this));
 
                 var reservation = this.preppedReservation;
-                reservation.costs = this.reservation.costs.data;
+                reservation.costs = costs;
 
                 return this.doUpdate(reservation);
             },
@@ -285,7 +292,7 @@
                     var thisTrip = response.data.data;
                     this.selectedcosts = new Array(this.newDeadline);
 
-                    return this.addcosts();
+                    return this.addCosts();
 
                 });
             },
@@ -298,6 +305,7 @@
                 return this.resource.update(reservation).then(function (response) {
                     this.setReservationData(response.data.data);
                     this.selectedCosts = [];
+                    this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
                 });
             },
             setReservationData(reservation){
@@ -321,7 +329,7 @@
         },
         ready(){
             this.resource.get().then(function (response) {
-                this.setReservationData(response.data.data)
+                this.setReservationData(response.data.data);
             });
 
         }

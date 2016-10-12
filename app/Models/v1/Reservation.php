@@ -4,6 +4,7 @@ namespace App\Models\v1;
 
 use App\Jobs\Reservations\SyncPaymentsDue;
 use App\UuidForKey;
+use Carbon\Carbon;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -176,7 +177,7 @@ class Reservation extends Model
 
     public function donations()
     {
-        return $this->fund()->donations();
+        return $this->fund->donations();
     }
 
     public function donors()
@@ -413,5 +414,12 @@ class Reservation extends Model
         }
 
         if( ! $ids->isEmpty()) $this->todos()->delete($ids);
+    }
+
+    public function scopeCurrent($query)
+    {
+        return $query->whereHas('trip', function($trip) {
+            return $trip->where('ended_at', '>', Carbon::now());
+        });
     }
 }

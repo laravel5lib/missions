@@ -41,6 +41,7 @@ $api->version('v1', [
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
     $api->post('trips/{id}/register', 'TripsController@register');
+    $api->resource('interests', 'TripInterestsController');
     $api->resource('reservations', 'ReservationsController');
     $api->put('reservations/{reservation}/requirements/{requirement}', 'ReservationsController@updateRequirement');
     $api->put('reservations/{id}/payments/reconcile', 'ReservationsController@reconcile');
@@ -64,7 +65,15 @@ $api->version('v1', [
     $api->resource('stories', 'StoriesController');
     $api->get('funds', 'FundsController@index');
     $api->get('funds/{id}', 'FundsController@show');
+    $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
     $api->resource('transactions', 'TransactionsController');
+    $api->resource('causes', 'CausesController');
+    $api->resource('causes/{cause}/initiatives', 'ProjectInitiativesController');
+    $api->resource('initiatives/{initiative}/packages', 'ProjectPackagesController');
+    $api->resource('projects/types', 'ProjectTypesController');
+    $api->resource('projects', 'ProjectsController');
+    $api->resource('notes', 'NotesController');
+    $api->resource('todos', 'TodosController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

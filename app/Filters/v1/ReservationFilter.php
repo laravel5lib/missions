@@ -76,7 +76,26 @@ class ReservationFilter extends ModelFilter
 
     public function tags($tags)
     {
-        $this->withAllTag($tags)->get();
+        return $this->withAllTag($tags)->get();
+    }
+
+    public function current()
+    {
+        return $this->whereHas('trip', function($trip) {
+            return $trip->current();
+        });
+    }
+
+    public function archived()
+    {
+        return $this->whereHas('trip', function($trip) {
+            return $trip->past();
+        });
+    }
+
+    public function dropped()
+    {
+        return $this->onlyTrashed();
     }
 
     /**

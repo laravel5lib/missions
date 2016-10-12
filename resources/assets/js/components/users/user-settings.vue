@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="UserSettings">
+    <validator name="UserSettings" @touched="onTouched">
         <form id="UserSettingsForm" class="" novalidate>
             <div class="row">
                 <div class="col-sm-6">
@@ -8,6 +8,47 @@
                             <h5>Account</h5>
                         </div>
                         <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object img-rounded" :src="avatar" :alt="name" width="64">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button><br>
+                                            <small>Max file size: 2MB</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object img-rounded" :src="banner" :alt="name" width="64">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button><br>
+                                            <small>Max file size: 2MB</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="collapse" id="avatarCollapse">
+                                        <div class="well">
+                                            <upload-create-update type="avatar" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['User']"></upload-create-update>
+                                        </div>
+                                    </div>
+                                    <div class="collapse" id="bannerCollapse">
+                                        <div class="well">
+                                            <upload-create-update type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="2" :is-child="true" :tags="['User']"></upload-create-update>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group" :class="{ 'has-error': checkForError('name') }">
                                 <div class="col-sm-12">
                                     <label for="name">Name</label>
@@ -343,21 +384,55 @@
                                     <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="facebook">Facebook</label>
+                                    <input type="text" class="form-control" v-model="facebook" id="facebook" placeholder="Facebook Profile">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="twitter">Twitter</label>
+                                    <input type="text" class="form-control" v-model="twitter" id="twitter" placeholder="Twitter Profile">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="instagram">Instagram</label>
+                                    <input type="text" class="form-control" v-model="instagram" id="instagram" placeholder="Instagram Profile">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="linkedIn">LinkedIn</label>
+                                    <input type="text" class="form-control" v-model="linkedIn" id="linkedIn" placeholder="LinkedIn Profile">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="website">Website</label>
+                                    <input type="text" class="form-control" v-model="website" id="website" placeholder="Website">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div><!-- end col -->
                 <div class="col-sm-12 text-center">
                     <hr class="divider inv lg">
-                    <a href="/dashboard" class="btn btn-default">Cancel</a>
                     <a @click="submit()" class="btn btn-primary">Update</a>
+                    <a @click="back()" class="btn btn-success">Done</a>
                     <hr class="divider inv xlg">
                 </div><!-- end col -->
             </div><!-- end row -->
-            <alert :show.sync="saved" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+                <span class="icon-info-circled alert-icon-float-left"></span>
+                <strong>Oh No!</strong>
+                <p>There are errors on the form.</p>
+                <!--<ul v-if="errors.length">
+                    <li v-for="error in errors">{{error}}</li>
+                </ul>-->
+            </alert>
+            <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
                 <strong>Well Done!</strong>
                 <p>Profile updated successfully</p>
             </alert>
+            <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+                <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
+            </modal>
         </form>
     </validator>
 </template>
@@ -369,11 +444,15 @@
 <script>
     import VueStrap from 'vue-strap/dist/vue-strap.min';
     import vSelect from "vue-select";
+    import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'user-settings',
-        components: {vSelect, 'alert': VueStrap.alert},
+        components: {vSelect, 'upload-create-update': uploadCreateUpdate, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
         data(){
             return {
+                id: '',
+                avatar: '',
+                banner: '',
                 name: '',
                 email: '',
                 alt_email: '',
@@ -395,6 +474,11 @@
                 url: null,
                 gender: false,
                 admin: false,
+                facebook: '',
+                twitter: '',
+                instagram: '',
+                linkedIn: '',
+                website: '',
 
                 // logic variables
 //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
@@ -410,7 +494,16 @@
                 dobYear: null,
                 resource: this.$resource('users/me'),
                 errors: {},
-                saved: false,
+                showError: false,
+                showSuccess: false,
+                showSaveAlert: false,
+                hasChanged: false,
+
+                selectedAvatar: null,
+                avatar_upload_id: null,
+                selectedBanner: null,
+                banner_upload_id: null,
+
             }
         },
         computed: {
@@ -423,13 +516,30 @@
                         : null;
             }
         },
+        events:{
+            'uploads-complete'(data){
+                switch(data.type){
+                    case 'avatar':
+                        this.selectedAvatar = data;
+                        this.avatar_upload_id = data.id;
+                        jQuery('#avatarCollapse').collapse('hide');
+                        break;
+                    case 'banner':
+                        this.selectedBanner = data;
+                        this.banner_upload_id = data.id;
+                        jQuery('#bannerCollapse').collapse('hide');
+                        break;
+                }
+                this.submit();
+            }
+        },
         methods: {
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$UserSettings[field].invalid && this.attemptSubmit;
             },
-            onModified(){
-                this.saved = false;
+            onTouched(){
+                this.hasChanged = true;
             },
             submit(){
                 this.attemptSubmit = true;
@@ -455,34 +565,46 @@
                         gender: this.gender,
                         public: this.public,
                         url: this.public ? this.url : undefined,
-                    }).then(function (resp) {
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        this.saved = true;
-                        setTimeout(function () {
-                            this.saved = false;
-                        }.bind(this), 3000);
+                        avatar_upload_id: this.avatar_upload_id,
+                        banner_upload_id: this.banner_upload_id,
+                        facebook: this.facebook,
+                        twitter: this.twitter,
+                        instagram: this.instagram,
+                        linkedIn: this.linkedIn,
+                        website: this.website,
+                }).then(function (response) {
+                        this.setUserData(response.data.data);
+                        this.showSuccess = true;
+                        this.hasChanged = false;
+
                     }, function (error) {
                         console.log(error);
                         this.errors = error.data.errors;
+                        this.showError = true;
                     });
+                } else {
+                    this.showError = true;
                 }
-            }
-        },
-        ready(){
-            this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
-            });
-
-            this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.data.timezones;
-            });
-
-            this.resource.get().then(function (response) {
-                var user = response.data.data;
+            },
+            back(force){
+                if (this.hasChanged && !force ) {
+                    this.showSaveAlert = true;
+                    return false;
+                }
+                window.location.href = '/dashboard';
+            },
+            forceBack(){
+                return this.back(true);
+            },
+            setUserData(user){
+                this.id = user.id;
+                this.avatar = user.avatar;
+                this.banner = user.banner;
                 this.name = user.name;
                 this.bio = user.bio;
                 this.type = user.type;
                 this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                console.log(this.countryCodeObj);
                 this.country_code = user.country_code;
                 this.timezone = user.timezone;
                 this.phone_one = user.phone_one;
@@ -499,6 +621,26 @@
                 this.gender = user.gender;
                 this.status = user.status;
                 this.alt_email = user.alt_email;
+                this.avatar_upload_id = user.avatar_upload_id;
+                this.banner_upload_id = user.banner_upload_id;
+                this.facebook = user.facebook;
+                this.twitter = user.twitter;
+                this.instagram = user.instagram;
+                this.linkedIn = user.linkedIn;
+                this.website = user.website;
+            }
+        },
+        ready(){
+            this.$http.get('utilities/countries').then(function (response) {
+                this.countries = response.data.countries;
+            });
+
+            this.$http.get('utilities/timezones').then(function (response) {
+                this.timezones = response.data.timezones;
+            });
+
+            this.resource.get().then(function (response) {
+                this.setUserData(response.data.data)
             }, function (response) {
                 console.log('Update Failed! :(');
                 console.log(response);

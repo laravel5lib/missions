@@ -4,14 +4,6 @@
             <div class="alert alert-info" role="alert">No records found</div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-12 text-right">
-                <a href="passports/create" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i> Add Passport</a>
-                <hr>
-            </div>
-        </div>
-
-
         <div class="col-sm-4" v-for="passport in paginatedPassports">
             <div class="panel panel-default">
                 <div style="min-height:220px;" class="panel-body">
@@ -58,7 +50,7 @@
             </nav>
         </div>
         <modal :show.sync="deleteModal" title="Remove Passport" small="true">
-            <div slot="modal-body" class="modal-body">Are you sure you want to delete this Passport?</div>
+            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete this Passport?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removePassport(selectedPassport)'>Confirm</button>

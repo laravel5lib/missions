@@ -13,7 +13,7 @@ class NoteTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'author'
+        'user'
     ];
 
     /**
@@ -30,10 +30,14 @@ class NoteTransformer extends TransformerAbstract
             'content'    => $note->content,
             'created_at' => $note->created_at->toDateTimeString(),
             'updated_at' => $note->updated_at->toDateTimeString(),
+            'source' => [
+                'type' => $note->noteable_type,
+                'id' => $note->noteable_id
+            ],
             'links'      => [
                 [
                     'rel' => 'self',
-                    'uri' => '/notes/' . $note->id,
+                    'uri' => '/api/notes/' . $note->id,
                 ]
             ]
         ];
@@ -42,15 +46,15 @@ class NoteTransformer extends TransformerAbstract
     }
 
     /**
-     * Include Author
+     * Include User
      *
      * @param Note $note
      * @return \League\Fractal\Resource\Item
      */
-    public function includeAuthor(Note $note)
+    public function includeUser(Note $note)
     {
-        $author = $note->user;
+        $user = $note->user;
 
-        return $this->collection($author, new UserTransformer);
+        return $this->item($user, new UserTransformer);
     }
 }

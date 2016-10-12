@@ -1,0 +1,32 @@
+<template>
+    <div>
+        <btn class="btn btn-sm btn-default" @click="reconcile"><i class="fa fa-calculator"></i> Reconcile</btn>
+        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <span class="icon-ok-circled alert-icon-float-left"></span>
+            <strong>Awesome!</strong>
+            <p>Fund has been reconciled!</p>
+        </alert>
+    </div>
+</template>
+<script>
+    import VueStrap from 'vue-strap/dist/vue-strap.min'
+    export default{
+        name: 'reconcile-fund',
+        props: ['id'],
+        components: {
+            'alert': VueStrap.alert,
+        },
+        data(){
+            return {
+                showSuccess: false
+            }
+        },
+        methods: {
+            reconcile() {
+                this.$http.put('funds/' + this.id + '/reconcile').then(function (response) {
+                    this.showSuccess = true;
+                });
+            }
+        }
+    }
+</script>

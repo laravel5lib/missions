@@ -139,7 +139,7 @@ class GroupTransformer extends TransformerAbstract
      */
     public function includeNotes(Group $group)
     {
-        $notes = $group->notes()->latest()->limit(3)->get();
+        $notes = $group->notes()->recent()->get();
 
         return $this->collection($notes, new NoteTransformer);
     }

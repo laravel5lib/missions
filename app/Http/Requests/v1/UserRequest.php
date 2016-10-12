@@ -40,8 +40,8 @@ class UserRequest extends FormRequest
             'url'              => 'string|unique:users,url,',
             'public'           => 'boolean',
             'bio'              => 'string|max:120',
-            'banner_upload_id' => 'string|exists:uploads',
-            'avatar_upload_id' => 'string|exists:uploads'
+            'banner_upload_id' => 'string|exists:uploads,id',
+            'avatar_upload_id' => 'string|exists:uploads,id'
         ];
 
         if ($this->isMethod('put'))
@@ -54,6 +54,9 @@ class UserRequest extends FormRequest
             $rules['url'] = 'string|unique:users,url,' . $user_id;
             $rules['country_code'] = 'sometimes|required|in:' . Country::codes();
             $rules['timezone'] = 'sometimes|required|max:25';
+            $rules['links'] = 'array';
+            $rules['links.*.name'] = 'required|string';
+            $rules['links.*.url'] = 'required|string';
         }
 
         return $rules;

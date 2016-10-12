@@ -96,19 +96,11 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h5>Notes</h5>
-                    </div>
-                    <div class="list-group">
-                        @foreach($group->notes as $note)
-                            <div class="list-group-item">
-                                <h5 class="list-group-item-heading">{{ $note->subject }} <small>&middot; {{ $note->user ? $note->user->name : 'Guest' }} <span class="pull-right">{{ $note->created_at->diffForHumans() }}</span></small></h5>
-                                <p class="list-group-item-text">{{ $note->content }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
+                <notes type="groups"
+                       id="{{ $group->id }}"
+                       user_id="{{ auth()->user()->id }}"
+                       :per_page="3">
+                </notes>
             </div>
         </div>
     </div>

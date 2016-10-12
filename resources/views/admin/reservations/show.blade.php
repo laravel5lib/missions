@@ -9,7 +9,7 @@
                     <h3>
                         <img class="av-left img-sm img-circle" style="width:100px; height:100px" src="{{ image($reservation->trip->campaign->avatar->source . "?w=200") }}" alt="{{ $reservation->trip->campaign->name }}">
                         {{ $reservation->trip->campaign->name }}
-                        <small>{{ country($reservation->trip->campaign->country_code) }}</small>
+                        <small>&middot; {{ country($reservation->trip->campaign->country_code) }}</small>
                     </h3>
                 </a>
             </div>
@@ -23,10 +23,10 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a href="{{ $reservation->id }}/edit">Edit</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
+                        {{--<li><a href="#">Another action</a></li>--}}
+                        {{--<li><a href="#">Something else here</a></li>--}}
+                        {{--<li role="separator" class="divider"></li>--}}
+                        {{--<li><a href="#">Separated link</a></li>--}}
                     </ul>
                 </div>
             </div>
@@ -48,8 +48,8 @@
                     <li role="presentation"><a href="#deadlines" aria-controls="deadlines" role="tab" data-toggle="tab">Due Dates / Deadlines</a></li>
                     <li role="presentation"><a href="#requirements" aria-controls="requirements" role="tab" data-toggle="tab">Requirements</a></li>
                     <li role="presentation"><a href="#funding" aria-controls="funding" role="tab" data-toggle="tab">Funding</a></li>
-                    <li role="presentation"><a href="#dues" aria-controls="dues" role="tab" data-toggle="tab">Dues</a></li>
-                    {{--<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>--}}
+                    <li role="presentation"><a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">Notes</a></li>
+                    <li role="presentation"><a href="#todos" aria-controls="notes" role="tab" data-toggle="tab">Todos</a></li>
                 </ul>
             </div><!-- end panel -->
         </div>
@@ -62,35 +62,77 @@
                             <h5>Details</h5>
                         </div>
                         <div class="panel-body">
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <label>Reservation ID</label>
                                 <p>{{ $reservation->id }}</p>
-                                <label>Surname</label>
-                                <p>{{ $reservation->surname }}</p>
-                                <label>Given Names</label>
-                                <p>{{ $reservation->given_names }}</p>
-                                <label>Gender</label>
-                                <p>{{ $reservation->gender }}</p>
-                                <label>Marital Status</label>
-                                <p>{{ $reservation->status }}</p>
-                                <label>Shirt Size</label>
-                                <p>{{ $reservation->shirt_size }}</p>
-                                <label>Age</label>
-                                <p>{{ $reservation->birthday->age }}</p>
-                                <label>Birthday</label>
-                                <p>{{ $reservation->birthday->format('F j, Y') }}</p>
-                                <label>Group</label>
-                                <p>{{ $reservation->trip->group->name }}</p>
-                                <label>Trip Type</label>
-                                <p>{{ $reservation->trip->type }} Missionary</p>
-                                <label>Start Date</label>
-                                <p>{{ $reservation->trip->started_at->toFormattedDateString() }}</p>
-                                <label>End Date</label>
-                                <p>{{ $reservation->trip->ended_at->toFormattedDateString() }}</p>
-                                <label>Trip Starts In</label>
-                                <p>{{ $reservation->trip->started_at->diffInDays() }} days</p>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Surname</label>
+                                        <p>{{ $reservation->surname }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Given Names</label>
+                                        <p>{{ $reservation->given_names }}</p>
+                                    </div>
+                                </div>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Gender</label>
+                                        <p>{{ $reservation->gender }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Marital Status</label>
+                                        <p>{{ $reservation->status }}</p>
+                                    </div>
+                                </div>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Shirt Size</label>
+                                        <p>{{ $reservation->shirt_size }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Age</label>
+                                        <p>{{ $reservation->birthday->age }}</p>
+                                    </div>
+                                </div>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Birthday</label>
+                                        <p>{{ $reservation->birthday->format('F j, Y') }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Group</label>
+                                        <p>{{ $reservation->trip->group->name }}</p>
+                                    </div>
+                                </div>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Trip Type</label>
+                                        <p>{{ $reservation->trip->type }} Missionary</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Start Date</label>
+                                        <p>{{ $reservation->trip->started_at->toFormattedDateString() }}</p>
+                                    </div>
+                                </div>
+                                <hr class="divider">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>End Date</label>
+                                        <p>{{ $reservation->trip->ended_at->toFormattedDateString() }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Trip Starts In</label>
+                                        <p>{{ $reservation->trip->started_at->diffInDays() }} days</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5 panel panel-default panel-body text-center">
                                 <label>Email</label>
                                 <p>{{ $reservation->email }}</p>
                                 <label>Home Phone</label>
@@ -121,6 +163,16 @@
                         </div><!-- end panel-body -->
                         {{-- {{ $reservation->costs }} --}}
                     </div><!-- end panel -->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Dues</h5>
+                        </div><!-- end panel-heading -->
+                        <div class="panel-body">
+                            <admin-reservation-dues id="{{ $reservation->id }}"></admin-reservation-dues>
+                        </div><!-- end panel-body -->
+                    </div><!-- end panel -->
+
                 </div><!-- end tab -->
                     <div role="tabpanel" class="tab-pane" id="deadlines">
                         <div class="panel panel-default">
@@ -238,44 +290,22 @@
                         </div><!-- end panel-body -->
                     </div><!-- end panel -->
                 </div><!-- end tab -->
-                <div role="tabpanel" class="tab-pane" id="dues">
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h5>Dues</h5>
-                        </div><!-- end panel-heading -->
-                        <div class="panel-body">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Status</th>
-                                    <th>Outstanding Balance</th>
-                                    <th>Grace Period</th>
-                                    <th>Due</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($reservation->dues as $due)
-                                    <tr>
-                                        <td>
-                                            @if ($due->getStatus() == 'late')
-                                                <span class="badge badge-danger">Past Due</span>
-                                            @elseif($due->getStatus() == 'paid')
-                                                <span class="badge badge-success">Paid</span>
-                                            @else
-                                                <span class="badge badge-info">Due in {{ $due->due_at->diffForHumans(null, true) }}</span>
-                                            @endif
-                                        </td>
-                                        <td>${{ $due->outstanding_balance }}</td>
-                                        <td>{{ $due->grace_period }}</td>
-                                        <td>{{ $due->due_at->toFormattedDateString() }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div><!-- end panel-body -->
-                    </div><!-- end panel -->
-                </div><!-- end tab -->
+
+                <div role="tabpanel" class="tab-pane" id="notes">
+                    <notes type="reservations"
+                           id="{{ $reservation->id }}"
+                           user_id="{{ auth()->user()->id }}"
+                           :per_page="3">
+                    </notes>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="todos">
+                    <todos type="reservations"
+                           id="{{ $reservation->id }}"
+                           user_id="{{ auth()->user()->id }}">
+                    </todos>
+                </div>
 
                 </div>
             </div>

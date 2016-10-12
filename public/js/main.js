@@ -1,30 +1,33 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+!function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.AOS=t():e.AOS=t()}(this,function(){return function(e){function t(n){if(o[n])return o[n].exports;var i=o[n]={exports:{},id:n,loaded:!1};return e[n].call(i.exports,i,i.exports,t),i.loaded=!0,i.exports}var o={};return t.m=e,t.c=o,t.p="dist/",t(0)}([function(e,t,o){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}var i=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var o=arguments[t];for(var n in o)Object.prototype.hasOwnProperty.call(o,n)&&(e[n]=o[n])}return e},a=o(1),r=(n(a),o(5)),c=n(r),u=o(6),s=n(u),d=o(7),f=n(d),l=o(8),m=n(l),p=o(9),b=n(p),v=o(10),g=n(v),y=o(13),w=n(y),h=[],k=!1,x=document.all&&!window.atob,j={offset:120,delay:0,easing:"ease",duration:400,disable:!1,once:!1,startEvent:"DOMContentLoaded"},O=function(){var e=arguments.length<=0||void 0===arguments[0]?!1:arguments[0];return e&&(k=!0),k?(h=(0,g["default"])(h,j),(0,b["default"])(h,j.once),h):void 0},_=function(){h=(0,w["default"])(),O()},z=function(){h.forEach(function(e,t){e.node.removeAttribute("data-aos"),e.node.removeAttribute("data-aos-easing"),e.node.removeAttribute("data-aos-duration"),e.node.removeAttribute("data-aos-delay")})},A=function(e){return e===!0||"mobile"===e&&m["default"].mobile()||"phone"===e&&m["default"].phone()||"tablet"===e&&m["default"].tablet()||"function"==typeof e&&e()===!0},E=function(e){return j=i(j,e),h=(0,w["default"])(),A(j.disable)||x?z():(document.querySelector("body").setAttribute("data-aos-easing",j.easing),document.querySelector("body").setAttribute("data-aos-duration",j.duration),document.querySelector("body").setAttribute("data-aos-delay",j.delay),"DOMContentLoaded"===j.startEvent&&["complete","interactive"].indexOf(document.readyState)>-1?O(!0):"load"===j.startEvent?window.addEventListener(j.startEvent,function(){O(!0)}):document.addEventListener(j.startEvent,function(){O(!0)}),window.addEventListener("resize",(0,s["default"])(O,50,!0)),window.addEventListener("orientationchange",(0,s["default"])(O,50,!0)),window.addEventListener("scroll",(0,c["default"])(function(){(0,b["default"])(h,j.once)},99)),document.addEventListener("DOMNodeRemoved",function(e){var t=e.target;t&&1===t.nodeType&&t.hasAttribute&&t.hasAttribute("data-aos")&&(0,s["default"])(_,50,!0)}),(0,f["default"])("[data-aos]",_),h)};e.exports={init:E,refresh:O,refreshHard:_}},function(e,t){},,,,function(e,t,o){"use strict";function n(e,t,o){var n=!0,a=!0;if("function"!=typeof e)throw new TypeError(c);return i(o)&&(n="leading"in o?!!o.leading:n,a="trailing"in o?!!o.trailing:a),r(e,t,{leading:n,maxWait:t,trailing:a})}function i(e){var t="undefined"==typeof e?"undefined":a(e);return!!e&&("object"==t||"function"==t)}var a="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e},r=o(6),c="Expected a function";e.exports=n},function(e,t){"use strict";function o(e,t,o){function n(t){var o=b,n=v;return b=v=void 0,O=t,y=e.apply(n,o)}function a(e){return O=e,w=setTimeout(d,t),_?n(e):y}function r(e){var o=e-h,n=e-O,i=t-o;return z?x(i,g-n):i}function u(e){var o=e-h,n=e-O;return!h||o>=t||0>o||z&&n>=g}function d(){var e=j();return u(e)?f(e):void(w=setTimeout(d,r(e)))}function f(e){return clearTimeout(w),w=void 0,A&&b?n(e):(b=v=void 0,y)}function l(){void 0!==w&&clearTimeout(w),h=O=0,b=v=w=void 0}function m(){return void 0===w?y:f(j())}function p(){var e=j(),o=u(e);if(b=arguments,v=this,h=e,o){if(void 0===w)return a(h);if(z)return clearTimeout(w),w=setTimeout(d,t),n(h)}return void 0===w&&(w=setTimeout(d,t)),y}var b,v,g,y,w,h=0,O=0,_=!1,z=!1,A=!0;if("function"!=typeof e)throw new TypeError(s);return t=c(t)||0,i(o)&&(_=!!o.leading,z="maxWait"in o,g=z?k(c(o.maxWait)||0,t):g,A="trailing"in o?!!o.trailing:A),p.cancel=l,p.flush=m,p}function n(e){var t=i(e)?h.call(e):"";return t==f||t==l}function i(e){var t="undefined"==typeof e?"undefined":u(e);return!!e&&("object"==t||"function"==t)}function a(e){return!!e&&"object"==("undefined"==typeof e?"undefined":u(e))}function r(e){return"symbol"==("undefined"==typeof e?"undefined":u(e))||a(e)&&h.call(e)==m}function c(e){if("number"==typeof e)return e;if(r(e))return d;if(i(e)){var t=n(e.valueOf)?e.valueOf():e;e=i(t)?t+"":t}if("string"!=typeof e)return 0===e?e:+e;e=e.replace(p,"");var o=v.test(e);return o||g.test(e)?y(e.slice(2),o?2:8):b.test(e)?d:+e}var u="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e},s="Expected a function",d=NaN,f="[object Function]",l="[object GeneratorFunction]",m="[object Symbol]",p=/^\s+|\s+$/g,b=/^[-+]0x[0-9a-f]+$/i,v=/^0b[01]+$/i,g=/^0o[0-7]+$/i,y=parseInt,w=Object.prototype,h=w.toString,k=Math.max,x=Math.min,j=Date.now;e.exports=o},function(e,t){"use strict";function o(e,t){r.push({selector:e,fn:t}),!c&&a&&(c=new a(n),c.observe(i.documentElement,{childList:!0,subtree:!0,removedNodes:!0})),n()}function n(){for(var e,t,o=0,n=r.length;n>o;o++){e=r[o],t=i.querySelectorAll(e.selector);for(var a,c=0,u=t.length;u>c;c++)a=t[c],a.ready||(a.ready=!0,e.fn.call(a,a))}}Object.defineProperty(t,"__esModule",{value:!0});var i=window.document,a=window.MutationObserver||window.WebKitMutationObserver,r=[],c=void 0;t["default"]=o},function(e,t){"use strict";function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var n=function(){function e(e,t){for(var o=0;o<t.length;o++){var n=t[o];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,o,n){return o&&e(t.prototype,o),n&&e(t,n),t}}(),i=function(){function e(){o(this,e)}return n(e,[{key:"phone",value:function(){var e=!1;return function(t){(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(t)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(t.substr(0,4)))&&(e=!0)}(navigator.userAgent||navigator.vendor||window.opera),e}},{key:"mobile",value:function(){var e=!1;return function(t){(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(t)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(t.substr(0,4)))&&(e=!0)}(navigator.userAgent||navigator.vendor||window.opera),e}},{key:"tablet",value:function(){return this.mobile()&&!this.phone()}}]),e}();t["default"]=new i},function(e,t){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var o=function(e,t,o){var n=e.node.getAttribute("data-aos-once");t>e.position?e.node.classList.add("aos-animate"):"undefined"!=typeof n&&("false"===n||!o&&"true"!==n)&&e.node.classList.remove("aos-animate")},n=function(e,t){var n=window.pageYOffset,i=window.innerHeight;e.forEach(function(e,a){o(e,i+n,t)})};t["default"]=n},function(e,t,o){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(t,"__esModule",{value:!0});var i=o(11),a=n(i),r=function(e,t){return e.forEach(function(e,o){e.node.classList.add("aos-init"),e.position=(0,a["default"])(e.node,t.offset)}),e};t["default"]=r},function(e,t,o){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(t,"__esModule",{value:!0});var i=o(12),a=n(i),r=function(e,t){var o=0,n=0,i=window.innerHeight,r={offset:e.getAttribute("data-aos-offset"),anchor:e.getAttribute("data-aos-anchor"),anchorPlacement:e.getAttribute("data-aos-anchor-placement")};switch(r.offset&&!isNaN(r.offset)&&(n=parseInt(r.offset)),r.anchor&&document.querySelectorAll(r.anchor)&&(e=document.querySelectorAll(r.anchor)[0]),o=(0,a["default"])(e).top,r.anchorPlacement){case"top-bottom":break;case"center-bottom":o+=e.offsetHeight/2;break;case"bottom-bottom":o+=e.offsetHeight;break;case"top-center":o+=i/2;break;case"bottom-center":o+=i/2+e.offsetHeight;break;case"center-center":o+=i/2+e.offsetHeight/2;break;case"top-top":o+=i;break;case"bottom-top":o+=e.offsetHeight+i;break;case"center-top":o+=e.offsetHeight/2+i}return r.anchorPlacement||r.offset||isNaN(t)||(n=t),o+n};t["default"]=r},function(e,t){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var o=function(e){for(var t=0,o=0;e&&!isNaN(e.offsetLeft)&&!isNaN(e.offsetTop);)t+=e.offsetLeft-("BODY"!=e.tagName?e.scrollLeft:0),o+=e.offsetTop-("BODY"!=e.tagName?e.scrollTop:0),e=e.offsetParent;return{top:o,left:t}};t["default"]=o},function(e,t){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var o=function(e){e=e||document.querySelectorAll("[data-aos]");var t=[];return[].forEach.call(e,function(e,o){t.push({node:e})}),t};t["default"]=o}])});
+
+},{}],2:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/json/stringify"), __esModule: true };
-},{"core-js/library/fn/json/stringify":17}],2:[function(require,module,exports){
+},{"core-js/library/fn/json/stringify":18}],3:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/create"), __esModule: true };
-},{"core-js/library/fn/object/create":18}],3:[function(require,module,exports){
+},{"core-js/library/fn/object/create":19}],4:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/define-properties"), __esModule: true };
-},{"core-js/library/fn/object/define-properties":19}],4:[function(require,module,exports){
+},{"core-js/library/fn/object/define-properties":20}],5:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
-},{"core-js/library/fn/object/define-property":20}],5:[function(require,module,exports){
+},{"core-js/library/fn/object/define-property":21}],6:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/get-own-property-descriptor"), __esModule: true };
-},{"core-js/library/fn/object/get-own-property-descriptor":21}],6:[function(require,module,exports){
+},{"core-js/library/fn/object/get-own-property-descriptor":22}],7:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/get-own-property-names"), __esModule: true };
-},{"core-js/library/fn/object/get-own-property-names":22}],7:[function(require,module,exports){
+},{"core-js/library/fn/object/get-own-property-names":23}],8:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/get-own-property-symbols"), __esModule: true };
-},{"core-js/library/fn/object/get-own-property-symbols":23}],8:[function(require,module,exports){
+},{"core-js/library/fn/object/get-own-property-symbols":24}],9:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/get-prototype-of"), __esModule: true };
-},{"core-js/library/fn/object/get-prototype-of":24}],9:[function(require,module,exports){
+},{"core-js/library/fn/object/get-prototype-of":25}],10:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/is-extensible"), __esModule: true };
-},{"core-js/library/fn/object/is-extensible":25}],10:[function(require,module,exports){
+},{"core-js/library/fn/object/is-extensible":26}],11:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/keys"), __esModule: true };
-},{"core-js/library/fn/object/keys":26}],11:[function(require,module,exports){
+},{"core-js/library/fn/object/keys":27}],12:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/prevent-extensions"), __esModule: true };
-},{"core-js/library/fn/object/prevent-extensions":27}],12:[function(require,module,exports){
+},{"core-js/library/fn/object/prevent-extensions":28}],13:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/symbol"), __esModule: true };
-},{"core-js/library/fn/symbol":28}],13:[function(require,module,exports){
+},{"core-js/library/fn/symbol":29}],14:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/symbol/iterator"), __esModule: true };
-},{"core-js/library/fn/symbol/iterator":29}],14:[function(require,module,exports){
+},{"core-js/library/fn/symbol/iterator":30}],15:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -49,7 +52,7 @@ exports.default = function (obj, key, value) {
 
   return obj;
 };
-},{"../core-js/object/define-property":4}],15:[function(require,module,exports){
+},{"../core-js/object/define-property":5}],16:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -71,7 +74,7 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 } : function (obj) {
   return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 };
-},{"../core-js/symbol":12,"../core-js/symbol/iterator":13}],16:[function(require,module,exports){
+},{"../core-js/symbol":13,"../core-js/symbol/iterator":14}],17:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.6 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -2436,81 +2439,81 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var core  = require('../../modules/_core')
   , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
 module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
   return $JSON.stringify.apply($JSON, arguments);
 };
-},{"../../modules/_core":35}],18:[function(require,module,exports){
+},{"../../modules/_core":36}],19:[function(require,module,exports){
 require('../../modules/es6.object.create');
 var $Object = require('../../modules/_core').Object;
 module.exports = function create(P, D){
   return $Object.create(P, D);
 };
-},{"../../modules/_core":35,"../../modules/es6.object.create":88}],19:[function(require,module,exports){
+},{"../../modules/_core":36,"../../modules/es6.object.create":89}],20:[function(require,module,exports){
 require('../../modules/es6.object.define-properties');
 var $Object = require('../../modules/_core').Object;
 module.exports = function defineProperties(T, D){
   return $Object.defineProperties(T, D);
 };
-},{"../../modules/_core":35,"../../modules/es6.object.define-properties":89}],20:[function(require,module,exports){
+},{"../../modules/_core":36,"../../modules/es6.object.define-properties":90}],21:[function(require,module,exports){
 require('../../modules/es6.object.define-property');
 var $Object = require('../../modules/_core').Object;
 module.exports = function defineProperty(it, key, desc){
   return $Object.defineProperty(it, key, desc);
 };
-},{"../../modules/_core":35,"../../modules/es6.object.define-property":90}],21:[function(require,module,exports){
+},{"../../modules/_core":36,"../../modules/es6.object.define-property":91}],22:[function(require,module,exports){
 require('../../modules/es6.object.get-own-property-descriptor');
 var $Object = require('../../modules/_core').Object;
 module.exports = function getOwnPropertyDescriptor(it, key){
   return $Object.getOwnPropertyDescriptor(it, key);
 };
-},{"../../modules/_core":35,"../../modules/es6.object.get-own-property-descriptor":91}],22:[function(require,module,exports){
+},{"../../modules/_core":36,"../../modules/es6.object.get-own-property-descriptor":92}],23:[function(require,module,exports){
 require('../../modules/es6.object.get-own-property-names');
 var $Object = require('../../modules/_core').Object;
 module.exports = function getOwnPropertyNames(it){
   return $Object.getOwnPropertyNames(it);
 };
-},{"../../modules/_core":35,"../../modules/es6.object.get-own-property-names":92}],23:[function(require,module,exports){
+},{"../../modules/_core":36,"../../modules/es6.object.get-own-property-names":93}],24:[function(require,module,exports){
 require('../../modules/es6.symbol');
 module.exports = require('../../modules/_core').Object.getOwnPropertySymbols;
-},{"../../modules/_core":35,"../../modules/es6.symbol":99}],24:[function(require,module,exports){
+},{"../../modules/_core":36,"../../modules/es6.symbol":100}],25:[function(require,module,exports){
 require('../../modules/es6.object.get-prototype-of');
 module.exports = require('../../modules/_core').Object.getPrototypeOf;
-},{"../../modules/_core":35,"../../modules/es6.object.get-prototype-of":93}],25:[function(require,module,exports){
+},{"../../modules/_core":36,"../../modules/es6.object.get-prototype-of":94}],26:[function(require,module,exports){
 require('../../modules/es6.object.is-extensible');
 module.exports = require('../../modules/_core').Object.isExtensible;
-},{"../../modules/_core":35,"../../modules/es6.object.is-extensible":94}],26:[function(require,module,exports){
+},{"../../modules/_core":36,"../../modules/es6.object.is-extensible":95}],27:[function(require,module,exports){
 require('../../modules/es6.object.keys');
 module.exports = require('../../modules/_core').Object.keys;
-},{"../../modules/_core":35,"../../modules/es6.object.keys":95}],27:[function(require,module,exports){
+},{"../../modules/_core":36,"../../modules/es6.object.keys":96}],28:[function(require,module,exports){
 require('../../modules/es6.object.prevent-extensions');
 module.exports = require('../../modules/_core').Object.preventExtensions;
-},{"../../modules/_core":35,"../../modules/es6.object.prevent-extensions":96}],28:[function(require,module,exports){
+},{"../../modules/_core":36,"../../modules/es6.object.prevent-extensions":97}],29:[function(require,module,exports){
 require('../../modules/es6.symbol');
 require('../../modules/es6.object.to-string');
 require('../../modules/es7.symbol.async-iterator');
 require('../../modules/es7.symbol.observable');
 module.exports = require('../../modules/_core').Symbol;
-},{"../../modules/_core":35,"../../modules/es6.object.to-string":97,"../../modules/es6.symbol":99,"../../modules/es7.symbol.async-iterator":100,"../../modules/es7.symbol.observable":101}],29:[function(require,module,exports){
+},{"../../modules/_core":36,"../../modules/es6.object.to-string":98,"../../modules/es6.symbol":100,"../../modules/es7.symbol.async-iterator":101,"../../modules/es7.symbol.observable":102}],30:[function(require,module,exports){
 require('../../modules/es6.string.iterator');
 require('../../modules/web.dom.iterable');
 module.exports = require('../../modules/_wks-ext').f('iterator');
-},{"../../modules/_wks-ext":85,"../../modules/es6.string.iterator":98,"../../modules/web.dom.iterable":102}],30:[function(require,module,exports){
+},{"../../modules/_wks-ext":86,"../../modules/es6.string.iterator":99,"../../modules/web.dom.iterable":103}],31:[function(require,module,exports){
 module.exports = function(it){
   if(typeof it != 'function')throw TypeError(it + ' is not a function!');
   return it;
 };
-},{}],31:[function(require,module,exports){
-module.exports = function(){ /* empty */ };
 },{}],32:[function(require,module,exports){
+module.exports = function(){ /* empty */ };
+},{}],33:[function(require,module,exports){
 var isObject = require('./_is-object');
 module.exports = function(it){
   if(!isObject(it))throw TypeError(it + ' is not an object!');
   return it;
 };
-},{"./_is-object":51}],33:[function(require,module,exports){
+},{"./_is-object":52}],34:[function(require,module,exports){
 // false -> Array#indexOf
 // true  -> Array#includes
 var toIObject = require('./_to-iobject')
@@ -2532,16 +2535,16 @@ module.exports = function(IS_INCLUDES){
     } return !IS_INCLUDES && -1;
   };
 };
-},{"./_to-index":77,"./_to-iobject":79,"./_to-length":80}],34:[function(require,module,exports){
+},{"./_to-index":78,"./_to-iobject":80,"./_to-length":81}],35:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = function(it){
   return toString.call(it).slice(8, -1);
 };
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 var core = module.exports = {version: '2.4.0'};
 if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 // optional / simple context binding
 var aFunction = require('./_a-function');
 module.exports = function(fn, that, length){
@@ -2562,18 +2565,18 @@ module.exports = function(fn, that, length){
     return fn.apply(that, arguments);
   };
 };
-},{"./_a-function":30}],37:[function(require,module,exports){
+},{"./_a-function":31}],38:[function(require,module,exports){
 // 7.2.1 RequireObjectCoercible(argument)
 module.exports = function(it){
   if(it == undefined)throw TypeError("Can't call method on  " + it);
   return it;
 };
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 // Thank's IE8 for his funny defineProperty
 module.exports = !require('./_fails')(function(){
   return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
 });
-},{"./_fails":43}],39:[function(require,module,exports){
+},{"./_fails":44}],40:[function(require,module,exports){
 var isObject = require('./_is-object')
   , document = require('./_global').document
   // in old IE typeof document.createElement is 'object'
@@ -2581,12 +2584,12 @@ var isObject = require('./_is-object')
 module.exports = function(it){
   return is ? document.createElement(it) : {};
 };
-},{"./_global":44,"./_is-object":51}],40:[function(require,module,exports){
+},{"./_global":45,"./_is-object":52}],41:[function(require,module,exports){
 // IE 8- don't enum bug keys
 module.exports = (
   'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
 ).split(',');
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 // all enumerable object keys, includes symbols
 var getKeys = require('./_object-keys')
   , gOPS    = require('./_object-gops')
@@ -2602,7 +2605,7 @@ module.exports = function(it){
     while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
   } return result;
 };
-},{"./_object-gops":65,"./_object-keys":68,"./_object-pie":69}],42:[function(require,module,exports){
+},{"./_object-gops":66,"./_object-keys":69,"./_object-pie":70}],43:[function(require,module,exports){
 var global    = require('./_global')
   , core      = require('./_core')
   , ctx       = require('./_ctx')
@@ -2664,7 +2667,7 @@ $export.W = 32;  // wrap
 $export.U = 64;  // safe
 $export.R = 128; // real proto method for `library` 
 module.exports = $export;
-},{"./_core":35,"./_ctx":36,"./_global":44,"./_hide":46}],43:[function(require,module,exports){
+},{"./_core":36,"./_ctx":37,"./_global":45,"./_hide":47}],44:[function(require,module,exports){
 module.exports = function(exec){
   try {
     return !!exec();
@@ -2672,17 +2675,17 @@ module.exports = function(exec){
     return true;
   }
 };
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 var global = module.exports = typeof window != 'undefined' && window.Math == Math
   ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
 if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 var hasOwnProperty = {}.hasOwnProperty;
 module.exports = function(it, key){
   return hasOwnProperty.call(it, key);
 };
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 var dP         = require('./_object-dp')
   , createDesc = require('./_property-desc');
 module.exports = require('./_descriptors') ? function(object, key, value){
@@ -2691,29 +2694,29 @@ module.exports = require('./_descriptors') ? function(object, key, value){
   object[key] = value;
   return object;
 };
-},{"./_descriptors":38,"./_object-dp":60,"./_property-desc":71}],47:[function(require,module,exports){
+},{"./_descriptors":39,"./_object-dp":61,"./_property-desc":72}],48:[function(require,module,exports){
 module.exports = require('./_global').document && document.documentElement;
-},{"./_global":44}],48:[function(require,module,exports){
+},{"./_global":45}],49:[function(require,module,exports){
 module.exports = !require('./_descriptors') && !require('./_fails')(function(){
   return Object.defineProperty(require('./_dom-create')('div'), 'a', {get: function(){ return 7; }}).a != 7;
 });
-},{"./_descriptors":38,"./_dom-create":39,"./_fails":43}],49:[function(require,module,exports){
+},{"./_descriptors":39,"./_dom-create":40,"./_fails":44}],50:[function(require,module,exports){
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
 var cof = require('./_cof');
 module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
   return cof(it) == 'String' ? it.split('') : Object(it);
 };
-},{"./_cof":34}],50:[function(require,module,exports){
+},{"./_cof":35}],51:[function(require,module,exports){
 // 7.2.2 IsArray(argument)
 var cof = require('./_cof');
 module.exports = Array.isArray || function isArray(arg){
   return cof(arg) == 'Array';
 };
-},{"./_cof":34}],51:[function(require,module,exports){
+},{"./_cof":35}],52:[function(require,module,exports){
 module.exports = function(it){
   return typeof it === 'object' ? it !== null : typeof it === 'function';
 };
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict';
 var create         = require('./_object-create')
   , descriptor     = require('./_property-desc')
@@ -2727,7 +2730,7 @@ module.exports = function(Constructor, NAME, next){
   Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
   setToStringTag(Constructor, NAME + ' Iterator');
 };
-},{"./_hide":46,"./_object-create":59,"./_property-desc":71,"./_set-to-string-tag":73,"./_wks":86}],53:[function(require,module,exports){
+},{"./_hide":47,"./_object-create":60,"./_property-desc":72,"./_set-to-string-tag":74,"./_wks":87}],54:[function(require,module,exports){
 'use strict';
 var LIBRARY        = require('./_library')
   , $export        = require('./_export')
@@ -2798,13 +2801,13 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED
   }
   return methods;
 };
-},{"./_export":42,"./_has":45,"./_hide":46,"./_iter-create":52,"./_iterators":55,"./_library":57,"./_object-gpo":66,"./_redefine":72,"./_set-to-string-tag":73,"./_wks":86}],54:[function(require,module,exports){
+},{"./_export":43,"./_has":46,"./_hide":47,"./_iter-create":53,"./_iterators":56,"./_library":58,"./_object-gpo":67,"./_redefine":73,"./_set-to-string-tag":74,"./_wks":87}],55:[function(require,module,exports){
 module.exports = function(done, value){
   return {value: value, done: !!done};
 };
-},{}],55:[function(require,module,exports){
-module.exports = {};
 },{}],56:[function(require,module,exports){
+module.exports = {};
+},{}],57:[function(require,module,exports){
 var getKeys   = require('./_object-keys')
   , toIObject = require('./_to-iobject');
 module.exports = function(object, el){
@@ -2815,9 +2818,9 @@ module.exports = function(object, el){
     , key;
   while(length > index)if(O[key = keys[index++]] === el)return key;
 };
-},{"./_object-keys":68,"./_to-iobject":79}],57:[function(require,module,exports){
+},{"./_object-keys":69,"./_to-iobject":80}],58:[function(require,module,exports){
 module.exports = true;
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 var META     = require('./_uid')('meta')
   , isObject = require('./_is-object')
   , has      = require('./_has')
@@ -2871,7 +2874,7 @@ var meta = module.exports = {
   getWeak:  getWeak,
   onFreeze: onFreeze
 };
-},{"./_fails":43,"./_has":45,"./_is-object":51,"./_object-dp":60,"./_uid":83}],59:[function(require,module,exports){
+},{"./_fails":44,"./_has":46,"./_is-object":52,"./_object-dp":61,"./_uid":84}],60:[function(require,module,exports){
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 var anObject    = require('./_an-object')
   , dPs         = require('./_object-dps')
@@ -2885,6 +2888,7 @@ var createDict = function(){
   // Thrash, waste and sodomy: IE GC bug
   var iframe = require('./_dom-create')('iframe')
     , i      = enumBugKeys.length
+    , lt     = '<'
     , gt     = '>'
     , iframeDocument;
   iframe.style.display = 'none';
@@ -2894,7 +2898,7 @@ var createDict = function(){
   // html.removeChild(iframe);
   iframeDocument = iframe.contentWindow.document;
   iframeDocument.open();
-  iframeDocument.write('<script>document.F=Object</script' + gt);
+  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
   iframeDocument.close();
   createDict = iframeDocument.F;
   while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
@@ -2912,7 +2916,8 @@ module.exports = Object.create || function create(O, Properties){
   } else result = createDict();
   return Properties === undefined ? result : dPs(result, Properties);
 };
-},{"./_an-object":32,"./_dom-create":39,"./_enum-bug-keys":40,"./_html":47,"./_object-dps":61,"./_shared-key":74}],60:[function(require,module,exports){
+
+},{"./_an-object":33,"./_dom-create":40,"./_enum-bug-keys":41,"./_html":48,"./_object-dps":62,"./_shared-key":75}],61:[function(require,module,exports){
 var anObject       = require('./_an-object')
   , IE8_DOM_DEFINE = require('./_ie8-dom-define')
   , toPrimitive    = require('./_to-primitive')
@@ -2929,7 +2934,7 @@ exports.f = require('./_descriptors') ? Object.defineProperty : function defineP
   if('value' in Attributes)O[P] = Attributes.value;
   return O;
 };
-},{"./_an-object":32,"./_descriptors":38,"./_ie8-dom-define":48,"./_to-primitive":82}],61:[function(require,module,exports){
+},{"./_an-object":33,"./_descriptors":39,"./_ie8-dom-define":49,"./_to-primitive":83}],62:[function(require,module,exports){
 var dP       = require('./_object-dp')
   , anObject = require('./_an-object')
   , getKeys  = require('./_object-keys');
@@ -2943,7 +2948,7 @@ module.exports = require('./_descriptors') ? Object.defineProperties : function 
   while(length > i)dP.f(O, P = keys[i++], Properties[P]);
   return O;
 };
-},{"./_an-object":32,"./_descriptors":38,"./_object-dp":60,"./_object-keys":68}],62:[function(require,module,exports){
+},{"./_an-object":33,"./_descriptors":39,"./_object-dp":61,"./_object-keys":69}],63:[function(require,module,exports){
 var pIE            = require('./_object-pie')
   , createDesc     = require('./_property-desc')
   , toIObject      = require('./_to-iobject')
@@ -2960,7 +2965,7 @@ exports.f = require('./_descriptors') ? gOPD : function getOwnPropertyDescriptor
   } catch(e){ /* empty */ }
   if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
 };
-},{"./_descriptors":38,"./_has":45,"./_ie8-dom-define":48,"./_object-pie":69,"./_property-desc":71,"./_to-iobject":79,"./_to-primitive":82}],63:[function(require,module,exports){
+},{"./_descriptors":39,"./_has":46,"./_ie8-dom-define":49,"./_object-pie":70,"./_property-desc":72,"./_to-iobject":80,"./_to-primitive":83}],64:[function(require,module,exports){
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
 var toIObject = require('./_to-iobject')
   , gOPN      = require('./_object-gopn').f
@@ -2981,7 +2986,7 @@ module.exports.f = function getOwnPropertyNames(it){
   return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
 };
 
-},{"./_object-gopn":64,"./_to-iobject":79}],64:[function(require,module,exports){
+},{"./_object-gopn":65,"./_to-iobject":80}],65:[function(require,module,exports){
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
 var $keys      = require('./_object-keys-internal')
   , hiddenKeys = require('./_enum-bug-keys').concat('length', 'prototype');
@@ -2989,9 +2994,9 @@ var $keys      = require('./_object-keys-internal')
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
   return $keys(O, hiddenKeys);
 };
-},{"./_enum-bug-keys":40,"./_object-keys-internal":67}],65:[function(require,module,exports){
+},{"./_enum-bug-keys":41,"./_object-keys-internal":68}],66:[function(require,module,exports){
 exports.f = Object.getOwnPropertySymbols;
-},{}],66:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
 var has         = require('./_has')
   , toObject    = require('./_to-object')
@@ -3005,7 +3010,7 @@ module.exports = Object.getPrototypeOf || function(O){
     return O.constructor.prototype;
   } return O instanceof Object ? ObjectProto : null;
 };
-},{"./_has":45,"./_shared-key":74,"./_to-object":81}],67:[function(require,module,exports){
+},{"./_has":46,"./_shared-key":75,"./_to-object":82}],68:[function(require,module,exports){
 var has          = require('./_has')
   , toIObject    = require('./_to-iobject')
   , arrayIndexOf = require('./_array-includes')(false)
@@ -3023,7 +3028,7 @@ module.exports = function(object, names){
   }
   return result;
 };
-},{"./_array-includes":33,"./_has":45,"./_shared-key":74,"./_to-iobject":79}],68:[function(require,module,exports){
+},{"./_array-includes":34,"./_has":46,"./_shared-key":75,"./_to-iobject":80}],69:[function(require,module,exports){
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
 var $keys       = require('./_object-keys-internal')
   , enumBugKeys = require('./_enum-bug-keys');
@@ -3031,9 +3036,9 @@ var $keys       = require('./_object-keys-internal')
 module.exports = Object.keys || function keys(O){
   return $keys(O, enumBugKeys);
 };
-},{"./_enum-bug-keys":40,"./_object-keys-internal":67}],69:[function(require,module,exports){
+},{"./_enum-bug-keys":41,"./_object-keys-internal":68}],70:[function(require,module,exports){
 exports.f = {}.propertyIsEnumerable;
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 // most Object methods by ES6 should accept primitives
 var $export = require('./_export')
   , core    = require('./_core')
@@ -3044,7 +3049,7 @@ module.exports = function(KEY, exec){
   exp[KEY] = exec(fn);
   $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
 };
-},{"./_core":35,"./_export":42,"./_fails":43}],71:[function(require,module,exports){
+},{"./_core":36,"./_export":43,"./_fails":44}],72:[function(require,module,exports){
 module.exports = function(bitmap, value){
   return {
     enumerable  : !(bitmap & 1),
@@ -3053,9 +3058,9 @@ module.exports = function(bitmap, value){
     value       : value
   };
 };
-},{}],72:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 module.exports = require('./_hide');
-},{"./_hide":46}],73:[function(require,module,exports){
+},{"./_hide":47}],74:[function(require,module,exports){
 var def = require('./_object-dp').f
   , has = require('./_has')
   , TAG = require('./_wks')('toStringTag');
@@ -3063,20 +3068,20 @@ var def = require('./_object-dp').f
 module.exports = function(it, tag, stat){
   if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
 };
-},{"./_has":45,"./_object-dp":60,"./_wks":86}],74:[function(require,module,exports){
+},{"./_has":46,"./_object-dp":61,"./_wks":87}],75:[function(require,module,exports){
 var shared = require('./_shared')('keys')
   , uid    = require('./_uid');
 module.exports = function(key){
   return shared[key] || (shared[key] = uid(key));
 };
-},{"./_shared":75,"./_uid":83}],75:[function(require,module,exports){
+},{"./_shared":76,"./_uid":84}],76:[function(require,module,exports){
 var global = require('./_global')
   , SHARED = '__core-js_shared__'
   , store  = global[SHARED] || (global[SHARED] = {});
 module.exports = function(key){
   return store[key] || (store[key] = {});
 };
-},{"./_global":44}],76:[function(require,module,exports){
+},{"./_global":45}],77:[function(require,module,exports){
 var toInteger = require('./_to-integer')
   , defined   = require('./_defined');
 // true  -> String#at
@@ -3094,7 +3099,7 @@ module.exports = function(TO_STRING){
       : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
-},{"./_defined":37,"./_to-integer":78}],77:[function(require,module,exports){
+},{"./_defined":38,"./_to-integer":79}],78:[function(require,module,exports){
 var toInteger = require('./_to-integer')
   , max       = Math.max
   , min       = Math.min;
@@ -3102,34 +3107,34 @@ module.exports = function(index, length){
   index = toInteger(index);
   return index < 0 ? max(index + length, 0) : min(index, length);
 };
-},{"./_to-integer":78}],78:[function(require,module,exports){
+},{"./_to-integer":79}],79:[function(require,module,exports){
 // 7.1.4 ToInteger
 var ceil  = Math.ceil
   , floor = Math.floor;
 module.exports = function(it){
   return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
 };
-},{}],79:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 // to indexed object, toObject with fallback for non-array-like ES3 strings
 var IObject = require('./_iobject')
   , defined = require('./_defined');
 module.exports = function(it){
   return IObject(defined(it));
 };
-},{"./_defined":37,"./_iobject":49}],80:[function(require,module,exports){
+},{"./_defined":38,"./_iobject":50}],81:[function(require,module,exports){
 // 7.1.15 ToLength
 var toInteger = require('./_to-integer')
   , min       = Math.min;
 module.exports = function(it){
   return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
 };
-},{"./_to-integer":78}],81:[function(require,module,exports){
+},{"./_to-integer":79}],82:[function(require,module,exports){
 // 7.1.13 ToObject(argument)
 var defined = require('./_defined');
 module.exports = function(it){
   return Object(defined(it));
 };
-},{"./_defined":37}],82:[function(require,module,exports){
+},{"./_defined":38}],83:[function(require,module,exports){
 // 7.1.1 ToPrimitive(input [, PreferredType])
 var isObject = require('./_is-object');
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
@@ -3142,13 +3147,13 @@ module.exports = function(it, S){
   if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
   throw TypeError("Can't convert object to primitive value");
 };
-},{"./_is-object":51}],83:[function(require,module,exports){
+},{"./_is-object":52}],84:[function(require,module,exports){
 var id = 0
   , px = Math.random();
 module.exports = function(key){
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
 };
-},{}],84:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 var global         = require('./_global')
   , core           = require('./_core')
   , LIBRARY        = require('./_library')
@@ -3158,9 +3163,9 @@ module.exports = function(name){
   var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
   if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
 };
-},{"./_core":35,"./_global":44,"./_library":57,"./_object-dp":60,"./_wks-ext":85}],85:[function(require,module,exports){
+},{"./_core":36,"./_global":45,"./_library":58,"./_object-dp":61,"./_wks-ext":86}],86:[function(require,module,exports){
 exports.f = require('./_wks');
-},{"./_wks":86}],86:[function(require,module,exports){
+},{"./_wks":87}],87:[function(require,module,exports){
 var store      = require('./_shared')('wks')
   , uid        = require('./_uid')
   , Symbol     = require('./_global').Symbol
@@ -3172,7 +3177,7 @@ var $exports = module.exports = function(name){
 };
 
 $exports.store = store;
-},{"./_global":44,"./_shared":75,"./_uid":83}],87:[function(require,module,exports){
+},{"./_global":45,"./_shared":76,"./_uid":84}],88:[function(require,module,exports){
 'use strict';
 var addToUnscopables = require('./_add-to-unscopables')
   , step             = require('./_iter-step')
@@ -3207,19 +3212,19 @@ Iterators.Arguments = Iterators.Array;
 addToUnscopables('keys');
 addToUnscopables('values');
 addToUnscopables('entries');
-},{"./_add-to-unscopables":31,"./_iter-define":53,"./_iter-step":54,"./_iterators":55,"./_to-iobject":79}],88:[function(require,module,exports){
+},{"./_add-to-unscopables":32,"./_iter-define":54,"./_iter-step":55,"./_iterators":56,"./_to-iobject":80}],89:[function(require,module,exports){
 var $export = require('./_export')
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
 $export($export.S, 'Object', {create: require('./_object-create')});
-},{"./_export":42,"./_object-create":59}],89:[function(require,module,exports){
+},{"./_export":43,"./_object-create":60}],90:[function(require,module,exports){
 var $export = require('./_export');
 // 19.1.2.3 / 15.2.3.7 Object.defineProperties(O, Properties)
 $export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperties: require('./_object-dps')});
-},{"./_descriptors":38,"./_export":42,"./_object-dps":61}],90:[function(require,module,exports){
+},{"./_descriptors":39,"./_export":43,"./_object-dps":62}],91:[function(require,module,exports){
 var $export = require('./_export');
 // 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
 $export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
-},{"./_descriptors":38,"./_export":42,"./_object-dp":60}],91:[function(require,module,exports){
+},{"./_descriptors":39,"./_export":43,"./_object-dp":61}],92:[function(require,module,exports){
 // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
 var toIObject                 = require('./_to-iobject')
   , $getOwnPropertyDescriptor = require('./_object-gopd').f;
@@ -3229,12 +3234,12 @@ require('./_object-sap')('getOwnPropertyDescriptor', function(){
     return $getOwnPropertyDescriptor(toIObject(it), key);
   };
 });
-},{"./_object-gopd":62,"./_object-sap":70,"./_to-iobject":79}],92:[function(require,module,exports){
+},{"./_object-gopd":63,"./_object-sap":71,"./_to-iobject":80}],93:[function(require,module,exports){
 // 19.1.2.7 Object.getOwnPropertyNames(O)
 require('./_object-sap')('getOwnPropertyNames', function(){
   return require('./_object-gopn-ext').f;
 });
-},{"./_object-gopn-ext":63,"./_object-sap":70}],93:[function(require,module,exports){
+},{"./_object-gopn-ext":64,"./_object-sap":71}],94:[function(require,module,exports){
 // 19.1.2.9 Object.getPrototypeOf(O)
 var toObject        = require('./_to-object')
   , $getPrototypeOf = require('./_object-gpo');
@@ -3244,7 +3249,7 @@ require('./_object-sap')('getPrototypeOf', function(){
     return $getPrototypeOf(toObject(it));
   };
 });
-},{"./_object-gpo":66,"./_object-sap":70,"./_to-object":81}],94:[function(require,module,exports){
+},{"./_object-gpo":67,"./_object-sap":71,"./_to-object":82}],95:[function(require,module,exports){
 // 19.1.2.11 Object.isExtensible(O)
 var isObject = require('./_is-object');
 
@@ -3253,7 +3258,7 @@ require('./_object-sap')('isExtensible', function($isExtensible){
     return isObject(it) ? $isExtensible ? $isExtensible(it) : true : false;
   };
 });
-},{"./_is-object":51,"./_object-sap":70}],95:[function(require,module,exports){
+},{"./_is-object":52,"./_object-sap":71}],96:[function(require,module,exports){
 // 19.1.2.14 Object.keys(O)
 var toObject = require('./_to-object')
   , $keys    = require('./_object-keys');
@@ -3263,7 +3268,7 @@ require('./_object-sap')('keys', function(){
     return $keys(toObject(it));
   };
 });
-},{"./_object-keys":68,"./_object-sap":70,"./_to-object":81}],96:[function(require,module,exports){
+},{"./_object-keys":69,"./_object-sap":71,"./_to-object":82}],97:[function(require,module,exports){
 // 19.1.2.15 Object.preventExtensions(O)
 var isObject = require('./_is-object')
   , meta     = require('./_meta').onFreeze;
@@ -3273,9 +3278,9 @@ require('./_object-sap')('preventExtensions', function($preventExtensions){
     return $preventExtensions && isObject(it) ? $preventExtensions(meta(it)) : it;
   };
 });
-},{"./_is-object":51,"./_meta":58,"./_object-sap":70}],97:[function(require,module,exports){
+},{"./_is-object":52,"./_meta":59,"./_object-sap":71}],98:[function(require,module,exports){
 
-},{}],98:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 'use strict';
 var $at  = require('./_string-at')(true);
 
@@ -3293,7 +3298,7 @@ require('./_iter-define')(String, 'String', function(iterated){
   this._i += point.length;
   return {value: point, done: false};
 });
-},{"./_iter-define":53,"./_string-at":76}],99:[function(require,module,exports){
+},{"./_iter-define":54,"./_string-at":77}],100:[function(require,module,exports){
 'use strict';
 // ECMAScript 6 symbols shim
 var global         = require('./_global')
@@ -3529,11 +3534,11 @@ setToStringTag($Symbol, 'Symbol');
 setToStringTag(Math, 'Math', true);
 // 24.3.3 JSON[@@toStringTag]
 setToStringTag(global.JSON, 'JSON', true);
-},{"./_an-object":32,"./_descriptors":38,"./_enum-keys":41,"./_export":42,"./_fails":43,"./_global":44,"./_has":45,"./_hide":46,"./_is-array":50,"./_keyof":56,"./_library":57,"./_meta":58,"./_object-create":59,"./_object-dp":60,"./_object-gopd":62,"./_object-gopn":64,"./_object-gopn-ext":63,"./_object-gops":65,"./_object-keys":68,"./_object-pie":69,"./_property-desc":71,"./_redefine":72,"./_set-to-string-tag":73,"./_shared":75,"./_to-iobject":79,"./_to-primitive":82,"./_uid":83,"./_wks":86,"./_wks-define":84,"./_wks-ext":85}],100:[function(require,module,exports){
+},{"./_an-object":33,"./_descriptors":39,"./_enum-keys":42,"./_export":43,"./_fails":44,"./_global":45,"./_has":46,"./_hide":47,"./_is-array":51,"./_keyof":57,"./_library":58,"./_meta":59,"./_object-create":60,"./_object-dp":61,"./_object-gopd":63,"./_object-gopn":65,"./_object-gopn-ext":64,"./_object-gops":66,"./_object-keys":69,"./_object-pie":70,"./_property-desc":72,"./_redefine":73,"./_set-to-string-tag":74,"./_shared":76,"./_to-iobject":80,"./_to-primitive":83,"./_uid":84,"./_wks":87,"./_wks-define":85,"./_wks-ext":86}],101:[function(require,module,exports){
 require('./_wks-define')('asyncIterator');
-},{"./_wks-define":84}],101:[function(require,module,exports){
+},{"./_wks-define":85}],102:[function(require,module,exports){
 require('./_wks-define')('observable');
-},{"./_wks-define":84}],102:[function(require,module,exports){
+},{"./_wks-define":85}],103:[function(require,module,exports){
 require('./es6.array.iterator');
 var global        = require('./_global')
   , hide          = require('./_hide')
@@ -3547,7 +3552,7 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
   if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
   Iterators[NAME] = Iterators.Array;
 }
-},{"./_global":44,"./_hide":46,"./_iterators":55,"./_wks":86,"./es6.array.iterator":87}],103:[function(require,module,exports){
+},{"./_global":45,"./_hide":47,"./_iterators":56,"./_wks":87,"./es6.array.iterator":88}],104:[function(require,module,exports){
 (function (global){
 /*!
  * VERSION: 1.19.0
@@ -11350,7 +11355,7 @@ if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); } //necessary in case Tween
 
 })((typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window, "TweenMax");
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],104:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 /*!
  * jQuery Cookie Plugin v1.4.1
  * https://github.com/carhartl/jquery-cookie
@@ -11469,7 +11474,7 @@ if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); } //necessary in case Tween
 
 }));
 
-},{"jquery":105}],105:[function(require,module,exports){
+},{"jquery":106}],106:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.2.4
  * http://jquery.com/
@@ -21285,7 +21290,7 @@ if ( !noGlobal ) {
 return jQuery;
 }));
 
-},{}],106:[function(require,module,exports){
+},{}],107:[function(require,module,exports){
 (function (global){
 /**
  * marked - a markdown parser
@@ -22575,9 +22580,9 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
 }());
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],107:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 //! moment.js
-//! version : 2.14.1
+//! version : 2.15.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -22605,7 +22610,9 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
     }
 
     function isObject(input) {
-        return Object.prototype.toString.call(input) === '[object Object]';
+        // IE8 will treat undefined and null as object if it wasn't for
+        // input != null
+        return input != null && Object.prototype.toString.call(input) === '[object Object]';
     }
 
     function isObjectEmpty(obj) {
@@ -22704,7 +22711,7 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
             var parsedParts = some.call(flags.parsedDateParts, function (i) {
                 return i != null;
             });
-            m._isValid = !isNaN(m._d.getTime()) &&
+            var isNowValid = !isNaN(m._d.getTime()) &&
                 flags.overflow < 0 &&
                 !flags.empty &&
                 !flags.invalidMonth &&
@@ -22715,10 +22722,17 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
                 (!flags.meridiem || (flags.meridiem && parsedParts));
 
             if (m._strict) {
-                m._isValid = m._isValid &&
+                isNowValid = isNowValid &&
                     flags.charsLeftOver === 0 &&
                     flags.unusedTokens.length === 0 &&
                     flags.bigHour === undefined;
+            }
+
+            if (Object.isFrozen == null || !Object.isFrozen(m)) {
+                m._isValid = isNowValid;
+            }
+            else {
+                return isNowValid;
             }
         }
         return m._isValid;
@@ -22860,7 +22874,22 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
                 utils_hooks__hooks.deprecationHandler(null, msg);
             }
             if (firstTime) {
-                warn(msg + '\nArguments: ' + Array.prototype.slice.call(arguments).join(', ') + '\n' + (new Error()).stack);
+                var args = [];
+                var arg;
+                for (var i = 0; i < arguments.length; i++) {
+                    arg = '';
+                    if (typeof arguments[i] === 'object') {
+                        arg += '\n[' + i + '] ';
+                        for (var key in arguments[0]) {
+                            arg += key + ': ' + arguments[0][key] + ', ';
+                        }
+                        arg = arg.slice(0, -2); // Remove trailing comma and space
+                    } else {
+                        arg = arguments[i];
+                    }
+                    args.push(arg);
+                }
+                warn(msg + '\nArguments: ' + Array.prototype.slice.call(args).join('') + '\n' + (new Error()).stack);
                 firstTime = false;
             }
             return fn.apply(this, arguments);
@@ -23387,12 +23416,18 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
     var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/;
     var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
     function localeMonths (m, format) {
+        if (!m) {
+            return this._months;
+        }
         return isArray(this._months) ? this._months[m.month()] :
             this._months[(this._months.isFormat || MONTHS_IN_FORMAT).test(format) ? 'format' : 'standalone'][m.month()];
     }
 
     var defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_');
     function localeMonthsShort (m, format) {
+        if (!m) {
+            return this._monthsShort;
+        }
         return isArray(this._monthsShort) ? this._monthsShort[m.month()] :
             this._monthsShort[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
     }
@@ -23889,18 +23924,21 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
 
     var defaultLocaleWeekdays = 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_');
     function localeWeekdays (m, format) {
+        if (!m) {
+            return this._weekdays;
+        }
         return isArray(this._weekdays) ? this._weekdays[m.day()] :
             this._weekdays[this._weekdays.isFormat.test(format) ? 'format' : 'standalone'][m.day()];
     }
 
     var defaultLocaleWeekdaysShort = 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_');
     function localeWeekdaysShort (m) {
-        return this._weekdaysShort[m.day()];
+        return (m) ? this._weekdaysShort[m.day()] : this._weekdaysShort;
     }
 
     var defaultLocaleWeekdaysMin = 'Su_Mo_Tu_We_Th_Fr_Sa'.split('_');
     function localeWeekdaysMin (m) {
-        return this._weekdaysMin[m.day()];
+        return (m) ? this._weekdaysMin[m.day()] : this._weekdaysMin;
     }
 
     function day_of_week__handleStrictParse(weekdayName, format, strict) {
@@ -24595,9 +24633,9 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
     }
 
     utils_hooks__hooks.createFromInputFallback = deprecate(
-        'moment construction falls back to js Date. This is ' +
-        'discouraged and will be removed in upcoming major ' +
-        'release. Please refer to ' +
+        'value provided is not in a recognized ISO format. moment construction falls back to js Date(), ' +
+        'which is not reliable across all browsers and versions. Non ISO date formats are ' +
+        'discouraged and will be removed in an upcoming major release. Please refer to ' +
         'http://momentjs.com/guides/#/warnings/js-date/ for more info.',
         function (config) {
             config._d = new Date(config._i + (config._useUTC ? ' UTC' : ''));
@@ -25096,6 +25134,14 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
         return obj instanceof Duration;
     }
 
+    function absRound (number) {
+        if (number < 0) {
+            return Math.round(-1 * number) * -1;
+        } else {
+            return Math.round(number);
+        }
+    }
+
     // FORMATTING
 
     function offset (token, separator) {
@@ -25246,7 +25292,13 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
         if (this._tzm) {
             this.utcOffset(this._tzm);
         } else if (typeof this._i === 'string') {
-            this.utcOffset(offsetFromString(matchOffset, this._i));
+            var tZone = offsetFromString(matchOffset, this._i);
+
+            if (tZone === 0) {
+                this.utcOffset(0, true);
+            } else {
+                this.utcOffset(offsetFromString(matchOffset, this._i));
+            }
         }
         return this;
     }
@@ -25301,7 +25353,7 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
     }
 
     // ASP.NET json date format regex
-    var aspNetRegex = /^(\-)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)\.?(\d{3})?\d*)?$/;
+    var aspNetRegex = /^(\-)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)(\.\d*)?)?$/;
 
     // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
     // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
@@ -25333,11 +25385,11 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
             sign = (match[1] === '-') ? -1 : 1;
             duration = {
                 y  : 0,
-                d  : toInt(match[DATE])        * sign,
-                h  : toInt(match[HOUR])        * sign,
-                m  : toInt(match[MINUTE])      * sign,
-                s  : toInt(match[SECOND])      * sign,
-                ms : toInt(match[MILLISECOND]) * sign
+                d  : toInt(match[DATE])                         * sign,
+                h  : toInt(match[HOUR])                         * sign,
+                m  : toInt(match[MINUTE])                       * sign,
+                s  : toInt(match[SECOND])                       * sign,
+                ms : toInt(absRound(match[MILLISECOND] * 1000)) * sign // the millisecond decimal point is included in the match
             };
         } else if (!!(match = isoRegex.exec(input))) {
             sign = (match[1] === '-') ? -1 : 1;
@@ -25410,14 +25462,6 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
         }
 
         return res;
-    }
-
-    function absRound (number) {
-        if (number < 0) {
-            return Math.round(-1 * number) * -1;
-        } else {
-            return Math.round(number);
-        }
     }
 
     // TODO: remove 'name' arg after deprecation is removed
@@ -26734,7 +26778,7 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
     // Side effect imports
 
 
-    utils_hooks__hooks.version = '2.14.1';
+    utils_hooks__hooks.version = '2.15.1';
 
     setHookCallback(local__createLocal);
 
@@ -26771,7 +26815,7 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
     return _moment;
 
 }));
-},{}],108:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -26872,7 +26916,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],109:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 /*!
  * ScrollMagic v2.0.5 (2015-04-29)
  * The javascript library for magical scroll interactions.
@@ -29653,7 +29697,7 @@ process.umask = function() { return 0; };
 
 	return ScrollMagic;
 }));
-},{}],110:[function(require,module,exports){
+},{}],111:[function(require,module,exports){
 /*!
  * ScrollMagic v2.0.5 (2015-04-29)
  * The javascript library for magical scroll interactions.
@@ -29964,7 +30008,7 @@ process.umask = function() { return 0; };
 
 	});
 }));
-},{"gsap":103,"scrollmagic":109}],111:[function(require,module,exports){
+},{"gsap":104,"scrollmagic":110}],112:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -31514,7 +31558,7 @@ process.umask = function() { return 0; };
   }
 }.call(this));
 
-},{}],112:[function(require,module,exports){
+},{}],113:[function(require,module,exports){
 var Vue // late bind
 var map = Object.create(null)
 var shimmed = false
@@ -31811,10 +31855,11 @@ function restoreState (vm, state, isRoot) {
 }
 
 function format (id) {
-  return id.match(/[^\/]+\.vue$/)[0]
+  var match = id.match(/[^\/]+\.vue$/)
+  return match ? match[0] : id
 }
 
-},{}],113:[function(require,module,exports){
+},{}],114:[function(require,module,exports){
 /*!
  * vue-resource v0.7.4
  * https://github.com/vuejs/vue-resource
@@ -33191,7 +33236,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 module.exports = plugin;
-},{}],114:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 "use strict";
 
 var _stringify = require("babel-runtime/core-js/json/stringify");
@@ -34132,1384 +34177,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   }]);
 });
 
-},{"babel-runtime/core-js/json/stringify":1,"babel-runtime/core-js/object/create":2,"babel-runtime/core-js/object/define-properties":3,"babel-runtime/core-js/object/define-property":4,"babel-runtime/core-js/object/get-own-property-descriptor":5,"babel-runtime/core-js/object/get-own-property-names":6,"babel-runtime/core-js/object/get-own-property-symbols":7,"babel-runtime/core-js/object/get-prototype-of":8,"babel-runtime/core-js/object/is-extensible":9,"babel-runtime/core-js/object/keys":10,"babel-runtime/core-js/object/prevent-extensions":11,"babel-runtime/helpers/typeof":15}],115:[function(require,module,exports){
-"use strict";
+},{"babel-runtime/core-js/json/stringify":2,"babel-runtime/core-js/object/create":3,"babel-runtime/core-js/object/define-properties":4,"babel-runtime/core-js/object/define-property":5,"babel-runtime/core-js/object/get-own-property-descriptor":6,"babel-runtime/core-js/object/get-own-property-names":7,"babel-runtime/core-js/object/get-own-property-symbols":8,"babel-runtime/core-js/object/get-prototype-of":9,"babel-runtime/core-js/object/is-extensible":10,"babel-runtime/core-js/object/keys":11,"babel-runtime/core-js/object/prevent-extensions":12,"babel-runtime/helpers/typeof":16}],116:[function(require,module,exports){
+"use strict";var _typeof=typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"?function(obj){return typeof obj;}:function(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol&&obj!==Symbol.prototype?"symbol":typeof obj;};!function(t,e){"object"==(typeof exports==="undefined"?"undefined":_typeof(exports))&&"object"==(typeof module==="undefined"?"undefined":_typeof(module))?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==(typeof exports==="undefined"?"undefined":_typeof(exports))?exports.VueStrap=e():t.VueStrap=e();}(undefined,function(){return function(t){function e(o){if(n[o])return n[o].exports;var i=n[o]={exports:{},id:o,loaded:!1};return t[o].call(i.exports,i,i.exports,e),i.loaded=!0,i.exports;}var n={};return e.m=t,e.c=n,e.p="",e(0);}([function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}var i=n(27),r=o(i),a=n(95),s=o(a),l=n(99),c=o(l),u=n(102),d=o(u),p=n(109),f=o(p),h=n(114),v=o(h),y=n(117),b=o(y),m=n(122),g=o(m),x=n(127),w=o(x),_=n(132),k=o(_),S=n(137),M=o(S),O=n(140),$=o(O),D=n(145),j=o(D),C=n(154),N=o(C),B=n(157),L=o(B),A=n(160),T=o(A),P=n(165),E=o(P),R=n(171),V=o(R),z=n(174),I=o(z),W=n(179),F=o(W),Y=n(199),X=o(Y),H=n(202),G=o(H),q=n(207),U=o(q),J=n(210),Z=o(J),K=n(215),Q=o(K),tt=n(220),et=o(tt),nt=n(225),ot=o(nt),it={$:r["default"],accordion:s["default"],affix:c["default"],alert:d["default"],aside:f["default"],buttonGroup:v["default"],carousel:b["default"],checkbox:g["default"],datepicker:w["default"],dropdown:k["default"],formGroup:M["default"],input:$["default"],modal:j["default"],navbar:N["default"],option:L["default"],panel:T["default"],popover:E["default"],progressbar:V["default"],radio:I["default"],select:F["default"],slider:X["default"],spinner:G["default"],tab:U["default"],tabGroup:Z["default"],tabset:Q["default"],tooltip:et["default"],typeahead:ot["default"]};t.exports=it;},,,,,,,,,,,,,,,,,,,,,,,,,,,function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}function i(t,e){var n=[],o=!0,i=!1,r=void 0;try{for(var a,s=(0,h["default"])(t);!(o=(a=s.next()).done);o=!0){var l=a.value;if(l instanceof Node||null===l)~n.indexOf(l)||n.push(l);else{if(!(l instanceof window.NodeList||l instanceof S||l instanceof HTMLCollection||l instanceof Array))return t.get=M.get,t.set=M.set,t.call=M.call,t.owner=e,t;var c=!0,u=!1,d=void 0;try{for(var p,f=(0,h["default"])(l);!(c=(p=f.next()).done);c=!0){var v=p.value;n.push(v);}}catch(y){u=!0,d=y;}finally{try{!c&&f["return"]&&f["return"]();}finally{if(u)throw d;}}}}}catch(y){i=!0,r=y;}finally{try{!o&&s["return"]&&s["return"]();}finally{if(i)throw r;}}return new S([n,e]);}function r(t){var e=this,n=arguments;O[t]instanceof Function?M[t]=function(){var o=[],r=!0,a=!0,s=!1,l=void 0;try{for(var c,u=(0,h["default"])(M);!(a=(c=u.next()).done);a=!0){var d=c.value;d&&d[t]instanceof Function?(d=d[t].apply(d,n),o.push(d),r&&void 0!==d&&(r=!1)):o.push(void 0);}}catch(p){s=!0,l=p;}finally{try{!a&&u["return"]&&u["return"]();}finally{if(s)throw l;}}return r?e:i(o,e);}:(0,l["default"])(M,t,{get:function get(){var e=[],n=!0,o=!1,r=void 0;try{for(var a,s=(0,h["default"])(this);!(n=(a=s.next()).done);n=!0){var l=a.value;null!==l&&(l=l[t]),e.push(l);}}catch(c){o=!0,r=c;}finally{try{!n&&s["return"]&&s["return"]();}finally{if(o)throw r;}}return i(e,this);},set:function set(e){var n=!0,o=!1,i=void 0;try{for(var r,a=(0,h["default"])(this);!(n=(r=a.next()).done);n=!0){var s=r.value;s&&t in s&&(s[t]=e);}}catch(l){o=!0,i=l;}finally{try{!n&&a["return"]&&a["return"]();}finally{if(o)throw i;}}}});}function a(){return new S(arguments);}Object.defineProperty(e,"__esModule",{value:!0});var s=n(28),l=o(s),c=n(46),u=o(c),d=n(82),p=o(d),f=n(88),h=o(f),v=n(93),y=o(v),b=n(94),m=o(b),g=Array.prototype,x=new Error("Passed arguments must be of Node"),w=void 0,_=[],k=[],S=function(){function t(e){(0,y["default"])(this,t);var n=e;if(e[0]===window?n=[window]:"string"==typeof e[0]?(n=(e[1]||document).querySelectorAll(e[0]),e[1]&&(this.owner=e[1])):0 in e&&!(e[0]instanceof Node)&&e[0]&&"length"in e[0]&&(n=e[0],e[1]&&(this.owner=e[1])),n){for(var o in n){this[o]=n[o];}this.length=n.length;}else this.length=0;}return(0,m["default"])(t,[{key:"concat",value:function value(){function e(t){var o=!0,i=!1,r=void 0;try{for(var a,s=(0,h["default"])(t);!(o=(a=s.next()).done);o=!0){var l=a.value;l instanceof Node?~n.indexOf(l)||n.push(l):l&&e(l);}}catch(c){i=!0,r=c;}finally{try{!o&&s["return"]&&s["return"]();}finally{if(i)throw r;}}}var n=g.slice.call(this),o=!0,i=!1,r=void 0;try{for(var a,s=(0,h["default"])(arguments);!(o=(a=s.next()).done);o=!0){var l=a.value;if(l instanceof Node)~n.indexOf(l)||n.push(l);else{if(!(l instanceof window.NodeList||l instanceof t||l instanceof HTMLCollection||l instanceof Array))throw Error("Concat arguments must be of a Node, NodeList, HTMLCollection, or Array of (Node, NodeList, HTMLCollection, Array)");e(l);}}}catch(c){i=!0,r=c;}finally{try{!o&&s["return"]&&s["return"]();}finally{if(i)throw r;}}return new t([n,this]);}},{key:"each",value:function value(){return g.forEach.apply(this,arguments),this;}},{key:"parent",value:function value(){return this.map(function(t){return t.parentNode;});}},{key:"filter",value:function value(){return new t([g.filter.apply(this,arguments),this]);}},{key:"find",value:function value(t){var e=[],n=!0,o=!1,r=void 0;try{for(var a,s=(0,h["default"])(i(this));!(n=(a=s.next()).done);n=!0){var l=a.value,c=l.querySelectorAll(t);c&&c.length&&e.push(c);}}catch(u){o=!0,r=u;}finally{try{!n&&s["return"]&&s["return"]();}finally{if(o)throw r;}}return i(e,this.owner);}},{key:"findChildren",value:function value(t){var e=this;return this.find(t).filter(function(t){return e.includes(t.parentElement);});}},{key:"forEach",value:function value(){return g.forEach.apply(this,arguments),this;}},{key:"includes",value:function value(t,e){return~this.indexOf(t,e);}},{key:"map",value:function value(){for(var t=arguments.length,e=Array(t),n=0;n<t;n++){e[n]=arguments[n];}return i(g.map.apply(this,e),this);}},{key:"pop",value:function e(n){"number"!=typeof n&&(n=1);for(var o=[],e=g.pop.bind(this);n--;){o.push(e());}return new t([o,this]);}},{key:"push",value:function value(){var t=!0,e=!1,n=void 0;try{for(var o,i=(0,h["default"])(arguments);!(t=(o=i.next()).done);t=!0){var r=o.value;if(!(r instanceof Node))throw x;~this.indexOf(r)||g.push.call(this,r);}}catch(a){e=!0,n=a;}finally{try{!t&&i["return"]&&i["return"]();}finally{if(e)throw n;}}return this;}},{key:"delete",value:function value(){for(var e=(new t([[],this.owner]),this.length-1),n=this[e];n;n=this[--e]){n.remove?(n.remove(),g.splice.call(this,e,1)):n.parentNode&&(n.parentNode.removeChild(n),g.splice.call(this,e,1));}return this;}},{key:"shift",value:function n(e){"number"!=typeof e&&(e=1);for(var o=[],n=g.shift.bind(this);e--;){o.push(n());}return new t([o,this]);}},{key:"slice",value:function value(){return new t([g.slice.apply(this,arguments),this]);}},{key:"splice",value:function value(){for(var e=2,n=arguments.length;e<n;e++){if(!(arguments[e]instanceof Node))throw x;}return new t([g.splice.apply(this,arguments),this]);}},{key:"unshift",value:function o(){var o=g.unshift.bind(this),t=!0,e=!1,n=void 0;try{for(var i,r=(0,h["default"])(arguments);!(t=(i=r.next()).done);t=!0){var a=i.value;if(!(a instanceof Node))throw x;~this.indexOf(a)||o(a);}}catch(s){e=!0,n=s;}finally{try{!t&&r["return"]&&r["return"]();}finally{if(e)throw n;}}return this;}},{key:"addClass",value:function value(t){return this.toggleClass(t,!0);}},{key:"removeClass",value:function value(t){return this.toggleClass(t,!1);}},{key:"toggleClass",value:function value(t,e){var n=this,o=void 0===e||null===e?"toggle":e?"add":"remove";return"string"==typeof t&&(t=t.trim().replace(/\s+/," ").split(" ")),t.forEach(function(t){return n.each(function(e){return e.classList[o](t);});}),this;}},{key:"get",value:function value(t){var e=[],n=!0,o=!1,r=void 0;try{for(var a,s=(0,h["default"])(this);!(n=(a=s.next()).done);n=!0){var l=a.value;null!==l&&(l=l[t]),e.push(l);}}catch(c){o=!0,r=c;}finally{try{!n&&s["return"]&&s["return"]();}finally{if(o)throw r;}}return i(e,this);}},{key:"set",value:function value(t,e){if(t.constructor===Object){var n=!0,o=!1,i=void 0;try{for(var r,a=(0,h["default"])(this);!(n=(r=a.next()).done);n=!0){var s=r.value;if(s)for(key in t){key in s&&(s[key]=t[key]);}}}catch(l){o=!0,i=l;}finally{try{!n&&a["return"]&&a["return"]();}finally{if(o)throw i;}}}else{var c=!0,u=!1,d=void 0;try{for(var p,f=(0,h["default"])(this);!(c=(p=f.next()).done);c=!0){var v=p.value;t in v&&(v[t]=e);}}catch(l){u=!0,d=l;}finally{try{!c&&f["return"]&&f["return"]();}finally{if(u)throw d;}}}return this;}},{key:"call",value:function value(){for(var t=arguments.length,e=Array(t),n=0;n<t;n++){e[n]=arguments[n];}var o=g.shift.call(e),r=[],a=!0,s=!0,l=!1,c=void 0;try{for(var u,d=(0,h["default"])(this);!(s=(u=d.next()).done);s=!0){var p=u.value;p&&p[o]instanceof Function?(p=p[o].apply(p,e),r.push(p),a&&void 0!==p&&(a=!1)):r.push(void 0);}}catch(f){l=!0,c=f;}finally{try{!s&&d["return"]&&d["return"]();}finally{if(l)throw c;}}return a?this:i(r,this);}},{key:"item",value:function value(e){return new t([[this[e]],this]);}},{key:"on",value:function value(e,n,o){if("string"==typeof e&&(e=e.trim().replace(/\s+/," ").split(" ")),!this||!this.length)return this;if(void 0===o&&(o=n,n=null),!o)return this;var i=o;o=n?function(e){var o=new t([n,this]);o.length&&o.some(function(t){var n=t.contains(e.target);return n&&i.call(t,e,t),n;});}:function(t){i.apply(this,[t,this]);};var r=!0,a=!1,s=void 0;try{for(var l,c=(0,h["default"])(e);!(r=(l=c.next()).done);r=!0){var u=l.value,d=!0,p=!1,f=void 0;try{for(var v,y=(0,h["default"])(this);!(d=(v=y.next()).done);d=!0){var b=v.value;b&&(b.addEventListener(u,o,!1),k.push({el:b,event:u,callback:o}));}}catch(m){p=!0,f=m;}finally{try{!d&&y["return"]&&y["return"]();}finally{if(p)throw f;}}}}catch(m){a=!0,s=m;}finally{try{!r&&c["return"]&&c["return"]();}finally{if(a)throw s;}}return this;}},{key:"off",value:function value(t,e){if(t instanceof Function&&(e=t,t=null),"string"==typeof t&&e instanceof Function){var n=!0,o=!1,i=void 0;try{for(var r,a=(0,h["default"])(this);!(n=(r=a.next()).done);n=!0){var s=r.value;for(var l in k){var c=!0,u=!1,d=void 0;try{for(var p,f=(0,h["default"])(t.split(" "));!(c=(p=f.next()).done);c=!0){var v=p.value;k[l]&&k[l].el===s&&k[l].event===v&&k[l].callback===e&&(k[l].el.removeEventListener(k[l].event,k[l].callback),delete k[l]);}}catch(y){u=!0,d=y;}finally{try{!c&&f["return"]&&f["return"]();}finally{if(u)throw d;}}}}}catch(y){o=!0,i=y;}finally{try{!n&&a["return"]&&a["return"]();}finally{if(o)throw i;}}}else if("string"==typeof t){var b=!0,m=!1,g=void 0;try{for(var x,w=(0,h["default"])(this);!(b=(x=w.next()).done);b=!0){var _=x.value;for(var S in k){var M=!0,O=!1,$=void 0;try{for(var D,j=(0,h["default"])(t.split(" "));!(M=(D=j.next()).done);M=!0){var C=D.value;k[S]&&k[S].el===_&&k[S].event===C&&(k[S].el.removeEventListener(k[S].event,k[S].callback),delete k[S]);}}catch(y){O=!0,$=y;}finally{try{!M&&j["return"]&&j["return"]();}finally{if(O)throw $;}}}}}catch(y){m=!0,g=y;}finally{try{!b&&w["return"]&&w["return"]();}finally{if(m)throw g;}}}else if(e instanceof Function){var N=!0,B=!1,L=void 0;try{for(var A,T=(0,h["default"])(this);!(N=(A=T.next()).done);N=!0){var P=A.value;for(var E in k){k[E]&&k[E].el===P&&k[E].callback===e&&(k[E].el.removeEventListener(k[E].event,k[E].callback),delete k[E]);}}}catch(y){B=!0,L=y;}finally{try{!N&&T["return"]&&T["return"]();}finally{if(B)throw L;}}}else{var R=!0,V=!1,z=void 0;try{for(var I,W=(0,h["default"])(this);!(R=(I=W.next()).done);R=!0){var F=I.value;for(var Y in k){k[Y]&&k[Y].el===F&&(k[Y].el.removeEventListener(k[Y].event,k[Y].callback),delete k[Y]);}}}catch(y){V=!0,z=y;}finally{try{!R&&W["return"]&&W["return"]();}finally{if(V)throw z;}}}return k=k.filter(function(t){return void 0!==t;}),this;}},{key:"onBlur",value:function value(t){return this&&this.length&&t?(this.each(function(e){_.push({el:e,callback:t});}),w||(w=function w(t){var e=!0,n=!1,o=void 0;try{for(var i,r=(0,h["default"])(_);!(e=(i=r.next()).done);e=!0){var a=i.value,s=a.el.contains(t.target)||a.el===t.target;s||a.callback.call(a.el,t,a.el);}}catch(l){n=!0,o=l;}finally{try{!e&&r["return"]&&r["return"]();}finally{if(n)throw o;}}},document.addEventListener("click",w,!1),document.addEventListener("touchstart",w,!1)),this):this;}},{key:"offBlur",value:function value(t){return this.each(function(e){for(var n in _){!_[n]||_[n].el!==e||t&&_[n].callback!==t||delete _[n];}}),_=_.filter(function(t){return void 0!==t;}),this;}},{key:"asArray",get:function get(){return g.slice.call(this);}}]),t;}(),M=S.prototype;(0,p["default"])(g).forEach(function(t){"join"!==t&&"copyWithin"!==t&&"fill"!==t&&void 0===M[t]&&(M[t]=g[t]);}),window.Symbol&&u["default"]&&(M[u["default"]]=M.values=g[u["default"]]);var O=document.createElement("div");for(var $ in O){r($);}window.NL=a,e["default"]=a;},function(t,e,n){t.exports={"default":n(29),__esModule:!0};},function(t,e,n){n(30);var o=n(33).Object;t.exports=function(t,e,n){return o.defineProperty(t,e,n);};},function(t,e,n){var o=n(31);o(o.S+o.F*!n(41),"Object",{defineProperty:n(37).f});},function(t,e,n){var o=n(32),i=n(33),r=n(34),a=n(36),s="prototype",l=function l(t,e,n){var c,u,d,p=t&l.F,f=t&l.G,h=t&l.S,v=t&l.P,y=t&l.B,b=t&l.W,m=f?i:i[e]||(i[e]={}),g=m[s],x=f?o:h?o[e]:(o[e]||{})[s];f&&(n=e);for(c in n){u=!p&&x&&void 0!==x[c],u&&c in m||(d=u?x[c]:n[c],m[c]=f&&"function"!=typeof x[c]?n[c]:y&&u?r(d,o):b&&x[c]==d?function(t){var e=function e(_e,n,o){if(this instanceof t){switch(arguments.length){case 0:return new t();case 1:return new t(_e);case 2:return new t(_e,n);}return new t(_e,n,o);}return t.apply(this,arguments);};return e[s]=t[s],e;}(d):v&&"function"==typeof d?r(Function.call,d):d,v&&((m.virtual||(m.virtual={}))[c]=d,t&l.R&&g&&!g[c]&&a(g,c,d)));}};l.F=1,l.G=2,l.S=4,l.P=8,l.B=16,l.W=32,l.U=64,l.R=128,t.exports=l;},function(t,e){var n=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=n);},function(t,e){var n=t.exports={version:"2.4.0"};"number"==typeof __e&&(__e=n);},function(t,e,n){var o=n(35);t.exports=function(t,e,n){if(o(t),void 0===e)return t;switch(n){case 1:return function(n){return t.call(e,n);};case 2:return function(n,o){return t.call(e,n,o);};case 3:return function(n,o,i){return t.call(e,n,o,i);};}return function(){return t.apply(e,arguments);};};},function(t,e){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t;};},function(t,e,n){var o=n(37),i=n(45);t.exports=n(41)?function(t,e,n){return o.f(t,e,i(1,n));}:function(t,e,n){return t[e]=n,t;};},function(t,e,n){var o=n(38),i=n(40),r=n(44),a=Object.defineProperty;e.f=n(41)?Object.defineProperty:function(t,e,n){if(o(t),e=r(e,!0),o(n),i)try{return a(t,e,n);}catch(s){}if("get"in n||"set"in n)throw TypeError("Accessors not supported!");return"value"in n&&(t[e]=n.value),t;};},function(t,e,n){var o=n(39);t.exports=function(t){if(!o(t))throw TypeError(t+" is not an object!");return t;};},function(t,e){t.exports=function(t){return"object"==(typeof t==="undefined"?"undefined":_typeof(t))?null!==t:"function"==typeof t;};},function(t,e,n){t.exports=!n(41)&&!n(42)(function(){return 7!=Object.defineProperty(n(43)("div"),"a",{get:function get(){return 7;}}).a;});},function(t,e,n){t.exports=!n(42)(function(){return 7!=Object.defineProperty({},"a",{get:function get(){return 7;}}).a;});},function(t,e){t.exports=function(t){try{return!!t();}catch(e){return!0;}};},function(t,e,n){var o=n(39),i=n(32).document,r=o(i)&&o(i.createElement);t.exports=function(t){return r?i.createElement(t):{};};},function(t,e,n){var o=n(39);t.exports=function(t,e){if(!o(t))return t;var n,i;if(e&&"function"==typeof(n=t.toString)&&!o(i=n.call(t)))return i;if("function"==typeof(n=t.valueOf)&&!o(i=n.call(t)))return i;if(!e&&"function"==typeof(n=t.toString)&&!o(i=n.call(t)))return i;throw TypeError("Can't convert object to primitive value");};},function(t,e){t.exports=function(t,e){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:e};};},function(t,e,n){t.exports={"default":n(47),__esModule:!0};},function(t,e,n){n(48),n(77),t.exports=n(81).f("iterator");},function(t,e,n){"use strict";var o=n(49)(!0);n(52)(String,"String",function(t){this._t=String(t),this._i=0;},function(){var t,e=this._t,n=this._i;return n>=e.length?{value:void 0,done:!0}:(t=o(e,n),this._i+=t.length,{value:t,done:!1});});},function(t,e,n){var o=n(50),i=n(51);t.exports=function(t){return function(e,n){var r,a,s=String(i(e)),l=o(n),c=s.length;return l<0||l>=c?t?"":void 0:(r=s.charCodeAt(l),r<55296||r>56319||l+1===c||(a=s.charCodeAt(l+1))<56320||a>57343?t?s.charAt(l):r:t?s.slice(l,l+2):(r-55296<<10)+(a-56320)+65536);};};},function(t,e){var n=Math.ceil,o=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?o:n)(t);};},function(t,e){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t;};},function(t,e,n){"use strict";var o=n(53),i=n(31),r=n(54),a=n(36),s=n(55),l=n(56),c=n(57),u=n(73),d=n(75),p=n(74)("iterator"),f=!([].keys&&"next"in[].keys()),h="@@iterator",v="keys",y="values",b=function b(){return this;};t.exports=function(t,e,n,m,g,x,w){c(n,e,m);var _,k,S,M=function M(t){if(!f&&t in j)return j[t];switch(t){case v:return function(){return new n(this,t);};case y:return function(){return new n(this,t);};}return function(){return new n(this,t);};},O=e+" Iterator",$=g==y,D=!1,j=t.prototype,C=j[p]||j[h]||g&&j[g],N=C||M(g),B=g?$?M("entries"):N:void 0,L="Array"==e?j.entries||C:C;if(L&&(S=d(L.call(new t())),S!==Object.prototype&&(u(S,O,!0),o||s(S,p)||a(S,p,b))),$&&C&&C.name!==y&&(D=!0,N=function N(){return C.call(this);}),o&&!w||!f&&!D&&j[p]||a(j,p,N),l[e]=N,l[O]=b,g)if(_={values:$?N:M(y),keys:x?N:M(v),entries:B},w)for(k in _){k in j||r(j,k,_[k]);}else i(i.P+i.F*(f||D),e,_);return _;};},function(t,e){t.exports=!0;},function(t,e,n){t.exports=n(36);},function(t,e){var n={}.hasOwnProperty;t.exports=function(t,e){return n.call(t,e);};},function(t,e){t.exports={};},function(t,e,n){"use strict";var o=n(58),i=n(45),r=n(73),a={};n(36)(a,n(74)("iterator"),function(){return this;}),t.exports=function(t,e,n){t.prototype=o(a,{next:i(1,n)}),r(t,e+" Iterator");};},function(t,e,n){var o=n(38),i=n(59),r=n(71),a=n(68)("IE_PROTO"),s=function s(){},l="prototype",_c=function c(){var t,e=n(43)("iframe"),o=r.length,i="<",a=">";for(e.style.display="none",n(72).appendChild(e),e.src="javascript:",t=e.contentWindow.document,t.open(),t.write(i+"script"+a+"document.F=Object"+i+"/script"+a),t.close(),_c=t.F;o--;){delete _c[l][r[o]];}return _c();};t.exports=Object.create||function(t,e){var n;return null!==t?(s[l]=o(t),n=new s(),s[l]=null,n[a]=t):n=_c(),void 0===e?n:i(n,e);};},function(t,e,n){var o=n(37),i=n(38),r=n(60);t.exports=n(41)?Object.defineProperties:function(t,e){i(t);for(var n,a=r(e),s=a.length,l=0;s>l;){o.f(t,n=a[l++],e[n]);}return t;};},function(t,e,n){var o=n(61),i=n(71);t.exports=Object.keys||function(t){return o(t,i);};},function(t,e,n){var o=n(55),i=n(62),r=n(65)(!1),a=n(68)("IE_PROTO");t.exports=function(t,e){var n,s=i(t),l=0,c=[];for(n in s){n!=a&&o(s,n)&&c.push(n);}for(;e.length>l;){o(s,n=e[l++])&&(~r(c,n)||c.push(n));}return c;};},function(t,e,n){var o=n(63),i=n(51);t.exports=function(t){return o(i(t));};},function(t,e,n){var o=n(64);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==o(t)?t.split(""):Object(t);};},function(t,e){var n={}.toString;t.exports=function(t){return n.call(t).slice(8,-1);};},function(t,e,n){var o=n(62),i=n(66),r=n(67);t.exports=function(t){return function(e,n,a){var s,l=o(e),c=i(l.length),u=r(a,c);if(t&&n!=n){for(;c>u;){if(s=l[u++],s!=s)return!0;}}else for(;c>u;u++){if((t||u in l)&&l[u]===n)return t||u||0;}return!t&&-1;};};},function(t,e,n){var o=n(50),i=Math.min;t.exports=function(t){return t>0?i(o(t),9007199254740991):0;};},function(t,e,n){var o=n(50),i=Math.max,r=Math.min;t.exports=function(t,e){return t=o(t),t<0?i(t+e,0):r(t,e);};},function(t,e,n){var o=n(69)("keys"),i=n(70);t.exports=function(t){return o[t]||(o[t]=i(t));};},function(t,e,n){var o=n(32),i="__core-js_shared__",r=o[i]||(o[i]={});t.exports=function(t){return r[t]||(r[t]={});};},function(t,e){var n=0,o=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++n+o).toString(36));};},function(t,e){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");},function(t,e,n){t.exports=n(32).document&&document.documentElement;},function(t,e,n){var o=n(37).f,i=n(55),r=n(74)("toStringTag");t.exports=function(t,e,n){t&&!i(t=n?t:t.prototype,r)&&o(t,r,{configurable:!0,value:e});};},function(t,e,n){var o=n(69)("wks"),i=n(70),r=n(32).Symbol,a="function"==typeof r,s=t.exports=function(t){return o[t]||(o[t]=a&&r[t]||(a?r:i)("Symbol."+t));};s.store=o;},function(t,e,n){var o=n(55),i=n(76),r=n(68)("IE_PROTO"),a=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=i(t),o(t,r)?t[r]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?a:null;};},function(t,e,n){var o=n(51);t.exports=function(t){return Object(o(t));};},function(t,e,n){n(78);for(var o=n(32),i=n(36),r=n(56),a=n(74)("toStringTag"),s=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],l=0;l<5;l++){var c=s[l],u=o[c],d=u&&u.prototype;d&&!d[a]&&i(d,a,c),r[c]=r.Array;}},function(t,e,n){"use strict";var o=n(79),i=n(80),r=n(56),a=n(62);t.exports=n(52)(Array,"Array",function(t,e){this._t=a(t),this._i=0,this._k=e;},function(){var t=this._t,e=this._k,n=this._i++;return!t||n>=t.length?(this._t=void 0,i(1)):"keys"==e?i(0,n):"values"==e?i(0,t[n]):i(0,[n,t[n]]);},"values"),r.Arguments=r.Array,o("keys"),o("values"),o("entries");},function(t,e){t.exports=function(){};},function(t,e){t.exports=function(t,e){return{value:e,done:!!t};};},function(t,e,n){e.f=n(74);},function(t,e,n){t.exports={"default":n(83),__esModule:!0};},function(t,e,n){n(84);var o=n(33).Object;t.exports=function(t){return o.getOwnPropertyNames(t);};},function(t,e,n){n(85)("getOwnPropertyNames",function(){return n(86).f;});},function(t,e,n){var o=n(31),i=n(33),r=n(42);t.exports=function(t,e){var n=(i.Object||{})[t]||Object[t],a={};a[t]=e(n),o(o.S+o.F*r(function(){n(1);}),"Object",a);};},function(t,e,n){var o=n(62),i=n(87).f,r={}.toString,a="object"==(typeof window==="undefined"?"undefined":_typeof(window))&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[],s=function s(t){try{return i(t);}catch(e){return a.slice();}};t.exports.f=function(t){return a&&"[object Window]"==r.call(t)?s(t):i(o(t));};},function(t,e,n){var o=n(61),i=n(71).concat("length","prototype");e.f=Object.getOwnPropertyNames||function(t){return o(t,i);};},function(t,e,n){t.exports={"default":n(89),__esModule:!0};},function(t,e,n){n(77),n(48),t.exports=n(90);},function(t,e,n){var o=n(38),i=n(91);t.exports=n(33).getIterator=function(t){var e=i(t);if("function"!=typeof e)throw TypeError(t+" is not iterable!");return o(e.call(t));};},function(t,e,n){var o=n(92),i=n(74)("iterator"),r=n(56);t.exports=n(33).getIteratorMethod=function(t){if(void 0!=t)return t[i]||t["@@iterator"]||r[o(t)];};},function(t,e,n){var o=n(64),i=n(74)("toStringTag"),r="Arguments"==o(function(){return arguments;}()),a=function a(t,e){try{return t[e];}catch(n){}};t.exports=function(t){var e,n,s;return void 0===t?"Undefined":null===t?"Null":"string"==typeof(n=a(e=Object(t),i))?n:r?o(e):"Object"==(s=o(e))&&"function"==typeof e.callee?"Arguments":s;};},function(t,e){"use strict";e.__esModule=!0,e["default"]=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function");};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}e.__esModule=!0;var i=n(28),r=o(i);e["default"]=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),(0,r["default"])(t,o.key,o);}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e;};}();},function(t,e,n){t.exports=n(96),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(98);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{type:{type:String,"default":null},oneAtAtime:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},created:function created(){var t=this;this._isAccordion=!0,this.$on("isOpenEvent",function(e){t.oneAtAtime&&t.$children.forEach(function(t){e!==t&&(t.isOpen=!1);});});}};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}function i(t){for(var e=new window.XMLHttpRequest(),n={},o={then:function then(t,e){return o.done(t).fail(e);},"catch":function _catch(t){return o.fail(t);},always:function always(t){return o.done(t).fail(t);}},i=["done","fail"],r=function r(){var t=i[a];n[t]=[],o[t]=function(e){return e instanceof Function&&n[t].push(e),o;};},a=0;a<i.length;a++){r();}return o.done(JSON.parse),e.onreadystatechange=function(){if(4===e.readyState){var t={status:e.status};if(200===e.status)try{var o=void 0,i=e.responseText,r=!0,a=!1,s=void 0;try{for(var c,u=(0,l["default"])(n.done);!(r=(c=u.next()).done);r=!0){var d=c.value;void 0!==(o=d(i))&&(i=o);}}catch(p){a=!0,s=p;}finally{try{!r&&u["return"]&&u["return"]();}finally{if(a)throw s;}}}catch(t){var f=!0,h=!1,v=void 0;try{for(var y,b=(0,l["default"])(n.fail);!(f=(y=b.next()).done);f=!0){var m=y.value;m(t);}}catch(p){h=!0,v=p;}finally{try{!f&&b["return"]&&b["return"]();}finally{if(h)throw v;}}}else{var g=!0,x=!1,w=void 0;try{for(var _,k=(0,l["default"])(n.fail);!(g=(_=k.next()).done);g=!0){var S=_.value;S(t);}}catch(p){x=!0,w=p;}finally{try{!g&&k["return"]&&k["return"]();}finally{if(x)throw w;}}}}},e.open("GET",t),e.setRequestHeader("Accept","application/json"),e.send(),o;}function r(){if(document.documentElement.scrollHeight<=document.documentElement.clientHeight)return 0;var t=document.createElement("p");t.style.width="100%",t.style.height="200px";var e=document.createElement("div");e.style.position="absolute",e.style.top="0px",e.style.left="0px",e.style.visibility="hidden",e.style.width="200px",e.style.height="150px",e.style.overflow="hidden",e.appendChild(t),document.body.appendChild(e);var n=t.offsetWidth;e.style.overflow="scroll";var o=t.offsetWidth;return n===o&&(o=e.clientWidth),document.body.removeChild(e),n-o;}function a(t){t=t||"en";var e={daysOfWeek:["Su","Mo","Tu","We","Th","Fr","Sa"],limit:"Limit reached ({{limit}} items max).",loading:"Loading...",minLength:"Min. Length",months:["January","February","March","April","May","June","July","August","September","October","November","December"],notSelected:"Nothing Selected",required:"Required",search:"Search"};return window.VueStrapLang?window.VueStrapLang(t):e;}Object.defineProperty(e,"__esModule",{value:!0}),e.coerce=void 0;var s=n(88),l=o(s);e.getJSON=i,e.getScrollBarWidth=r,e.translations=a;e.coerce={"boolean":function boolean(t){return"string"==typeof t?"false"!==t&&"null"!==t&&"undefined"!==t&&("true"===t||t):t;},number:function number(t){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:null;return"number"==typeof t?t:void 0===t||null===t||isNaN(Number(t))?e:Number(t);},string:function string(t){return void 0===t||null===t?"":t+"";},pattern:function pattern(t){return t instanceof Function||t instanceof RegExp?t:"string"==typeof t?new RegExp(t):null;}};},function(t,e){t.exports="<div class=panel-group> <slot></slot> </div>";},function(t,e,n){t.exports=n(100),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(101);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{offset:{type:Number,coerce:i.coerce.number,"default":0}},data:function data(){return{affixed:!1};},computed:{top:function top(){return this.offset>0?this.offset+"px":null;}},methods:{checkScroll:function checkScroll(){if(this.$el.offsetWidth||this.$el.offsetHeight||this.$el.getClientRects().length){for(var t={},e={},n=this.$el.getBoundingClientRect(),o=document.body,i=["Top","Left"],r=0;r<i.length;r++){var a=i[r],s=a.toLowerCase(),l=window["page"+("Top"===a?"Y":"X")+"Offset"],c="scroll"+a;"number"!=typeof l&&(l=document.documentElement[c],"number"!=typeof l&&(l=document.body[c])),t[s]=l,e[s]=t[s]+n[s]-(this.$el["client"+a]||o["client"+a]||0);}var u=t.top>e.top-this.offset;this.affixed!==u&&(this.affixed=u);}}},ready:function ready(){var t=this;(0,a["default"])(window).on("scroll resize",function(){return t.checkScroll();}),setTimeout(function(){return t.checkScroll();},0);},beforeDestroy:function beforeDestroy(){var t=this;(0,a["default"])(window).off("scroll resize",function(){return t.checkScroll();});}};},function(t,e){t.exports='<div class="hidden-print hidden-xs hidden-sm"> <nav class=bs-docs-sidebar :class={affix:affixed} :style={marginTop:top}> <slot></slot> </nav> </div>';},function(t,e,n){n(103),t.exports=n(107),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(108);},function(t,e,n){var o=n(104);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".fade-transition{-webkit-transition:opacity .3s ease;transition:opacity .3s ease}.fade-enter,.fade-leave{height:0;opacity:0}.alert.top{margin:0 auto;left:0;right:0}.alert.top,.alert.top-right{position:fixed;top:30px;z-index:1050}.alert.top-right{right:50px}",""]);},function(t,e){t.exports=function(){var t=[];return t.toString=function(){for(var t=[],e=0;e<this.length;e++){var n=this[e];n[2]?t.push("@media "+n[2]+"{"+n[1]+"}"):t.push(n[1]);}return t.join("");},t.i=function(e,n){"string"==typeof e&&(e=[[null,e,""]]);for(var o={},i=0;i<this.length;i++){var r=this[i][0];"number"==typeof r&&(o[r]=!0);}for(i=0;i<e.length;i++){var a=e[i];"number"==typeof a[0]&&o[a[0]]||(n&&!a[2]?a[2]=n:n&&(a[2]="("+a[2]+") and ("+n+")"),t.push(a));}},t;};},function(t,e,n){function o(t,e){for(var n=0;n<t.length;n++){var o=t[n],i=f[o.id];if(i){i.refs++;for(var r=0;r<i.parts.length;r++){i.parts[r](o.parts[r]);}for(;r<o.parts.length;r++){i.parts.push(c(o.parts[r],e));}}else{for(var a=[],r=0;r<o.parts.length;r++){a.push(c(o.parts[r],e));}f[o.id]={id:o.id,refs:1,parts:a};}}}function i(t){for(var e=[],n={},o=0;o<t.length;o++){var i=t[o],r=i[0],a=i[1],s=i[2],l=i[3],c={css:a,media:s,sourceMap:l};n[r]?n[r].parts.push(c):e.push(n[r]={id:r,parts:[c]});}return e;}function r(t,e){var n=y(),o=g[g.length-1];if("top"===t.insertAt)o?o.nextSibling?n.insertBefore(e,o.nextSibling):n.appendChild(e):n.insertBefore(e,n.firstChild),g.push(e);else{if("bottom"!==t.insertAt)throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");n.appendChild(e);}}function a(t){t.parentNode.removeChild(t);var e=g.indexOf(t);e>=0&&g.splice(e,1);}function s(t){var e=document.createElement("style");return e.type="text/css",r(t,e),e;}function l(t){var e=document.createElement("link");return e.rel="stylesheet",r(t,e),e;}function c(t,e){var n,o,i;if(e.singleton){var r=m++;n=b||(b=s(e)),o=u.bind(null,n,r,!1),i=u.bind(null,n,r,!0);}else t.sourceMap&&"function"==typeof URL&&"function"==typeof URL.createObjectURL&&"function"==typeof URL.revokeObjectURL&&"function"==typeof Blob&&"function"==typeof btoa?(n=l(e),o=p.bind(null,n),i=function i(){a(n),n.href&&URL.revokeObjectURL(n.href);}):(n=s(e),o=d.bind(null,n),i=function i(){a(n);});return o(t),function(e){if(e){if(e.css===t.css&&e.media===t.media&&e.sourceMap===t.sourceMap)return;o(t=e);}else i();};}function u(t,e,n,o){var i=n?"":o.css;if(t.styleSheet)t.styleSheet.cssText=x(e,i);else{var r=document.createTextNode(i),a=t.childNodes;a[e]&&t.removeChild(a[e]),a.length?t.insertBefore(r,a[e]):t.appendChild(r);}}function d(t,e){var n=e.css,o=e.media;if(o&&t.setAttribute("media",o),t.styleSheet)t.styleSheet.cssText=n;else{for(;t.firstChild;){t.removeChild(t.firstChild);}t.appendChild(document.createTextNode(n));}}function p(t,e){var n=e.css,o=e.sourceMap;o&&(n+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(o))))+" */");var i=new Blob([n],{type:"text/css"}),r=t.href;t.href=URL.createObjectURL(i),r&&URL.revokeObjectURL(r);}var f={},h=function h(t){var e;return function(){return"undefined"==typeof e&&(e=t.apply(this,arguments)),e;};},v=h(function(){return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());}),y=h(function(){return document.head||document.getElementsByTagName("head")[0];}),b=null,m=0,g=[];t.exports=function(t,e){e=e||{},"undefined"==typeof e.singleton&&(e.singleton=v()),"undefined"==typeof e.insertAt&&(e.insertAt="bottom");var n=i(t);return o(n,e),function(t){for(var r=[],a=0;a<n.length;a++){var s=n[a],l=f[s.id];l.refs--,r.push(l);}if(t){var c=i(t);o(c,e);}for(var a=0;a<r.length;a++){var l=r[a];if(0===l.refs){for(var u=0;u<l.parts.length;u++){l.parts[u]();}delete f[l.id];}}};};var x=function(){var t=[];return function(e,n){return t[e]=n,t.filter(Boolean).join("\n");};}();},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{type:{type:String},dismissable:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},show:{type:Boolean,coerce:o.coerce["boolean"],"default":!0,twoWay:!0},duration:{type:Number,coerce:o.coerce.number,"default":0},width:{type:String},placement:{type:String}},watch:{show:function show(t){var e=this;this._timeout&&clearTimeout(this._timeout),t&&Boolean(this.duration)&&(this._timeout=setTimeout(function(){e.show=!1;},this.duration));}}};},function(t,e){t.exports="<div v-show=show v-bind:class=\"{\r\n      'alert':\t\ttrue,\r\n      'alert-success':(type == 'success'),\r\n      'alert-warning':(type == 'warning'),\r\n      'alert-info':\t(type == 'info'),\r\n      'alert-danger':\t(type == 'danger'),\r\n      'top': \t\t\t(placement === 'top'),\r\n      'top-right': \t(placement === 'top-right')\r\n    }\" transition=fade v-bind:style={width:width} role=alert> <button v-show=dismissable type=button class=close @click=\"show = false\"> <span>&times;</span> </button> <slot></slot> </div>";},function(t,e,n){n(110),t.exports=n(112),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(113);},function(t,e,n){var o=n(111);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".aside-open{-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s}.aside-open.has-push-right{-webkit-transform:translateX(-300px);transform:translateX(-300px)}.aside{position:fixed;top:0;bottom:0;z-index:1049;overflow:auto;background:#fff}.aside.left{left:0;right:auto}.aside.right{left:auto;right:0}.slideleft-enter{-webkit-animation:slideleft-in .3s;animation:slideleft-in .3s}.slideleft-leave{-webkit-animation:slideleft-out .3s;animation:slideleft-out .3s}@-webkit-keyframes slideleft-in{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@keyframes slideleft-in{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@-webkit-keyframes slideleft-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}}@keyframes slideleft-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}}.slideright-enter{-webkit-animation:slideright-in .3s;animation:slideright-in .3s}.slideright-leave{-webkit-animation:slideright-out .3s;animation:slideright-out .3s}@-webkit-keyframes slideright-in{0%{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@keyframes slideright-in{0%{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@-webkit-keyframes slideright-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}}@keyframes slideright-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}}.aside:focus{outline:0}@media (max-width:991px){.aside{min-width:240px}}.aside.left{right:auto;left:0}.aside.right{right:0;left:auto}.aside .aside-dialog .aside-header{border-bottom:1px solid #e5e5e5;min-height:16.43px;padding:6px 15px;background:#337ab7;color:#fff}.aside .aside-dialog .aside-header .close{margin-right:-8px;padding:4px 8px;color:#fff;font-size:25px;opacity:.8}.aside .aside-dialog .aside-body{position:relative;padding:15px}.aside .aside-dialog .aside-footer{padding:15px;text-align:right;border-top:1px solid #e5e5e5}.aside .aside-dialog .aside-footer .btn+.btn{margin-left:5px;margin-bottom:0}.aside .aside-dialog .aside-footer .btn-group .btn+.btn{margin-left:-1px}.aside .aside-dialog .aside-footer .btn-block+.btn-block{margin-left:0}.aside-backdrop{position:fixed;top:0;right:0;bottom:0;left:0;z-index:1040;opacity:0;-webkit-transition:opacity .3s ease;transition:opacity .3s ease;background-color:#000}.aside-backdrop.in{opacity:.5;filter:alpha(opacity=50)}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{show:{type:Boolean,coerce:i.coerce["boolean"],required:!0,twoWay:!0},placement:{type:String,"default":"right"},header:{type:String},width:{type:Number,coerce:i.coerce.number,"default":320}},watch:{show:function show(t){var e=this,n=document.body,o=(0,i.getScrollBarWidth)();if(t){this._backdrop||(this._backdrop=document.createElement("div")),this._backdrop.className="aside-backdrop",n.appendChild(this._backdrop),n.classList.add("modal-open"),0!==o&&(n.style.paddingRight=o+"px");this._backdrop.clientHeight;this._backdrop.classList.add("in"),(0,a["default"])(this._backdrop).on("click",function(){return e.close();});}else(0,a["default"])(this._backdrop).on("transitionend",function(){(0,a["default"])(e._backdrop).off();try{n.classList.remove("modal-open"),n.style.paddingRight="0",n.removeChild(e._backdrop),e._backdrop=null;}catch(t){}}),this._backdrop.className="aside-backdrop";}},methods:{close:function close(){this.show=!1;}}};},function(t,e){t.exports="<div class=aside v-bind:style=\"{width:width + 'px'}\" v-bind:class=\"{\r\n    left:placement === 'left',\r\n    right:placement === 'right'\r\n    }\" v-show=show :transition=\"(this.placement === 'left') ? 'slideleft' : 'slideright'\"> <div class=aside-dialog> <div class=aside-content> <div class=aside-header> <button type=button class=close @click=close><span>&times;</span></button> <h4 class=aside-title> <slot name=header> {{ header }} </slot> </h4> </div> <div class=aside-body> <slot></slot> </div> </div> </div> </div>";},function(t,e,n){t.exports=n(115),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(116);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{value:null,buttons:{type:Boolean,coerce:o.coerce["boolean"],"default":!0},justified:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String,"default":"default"},vertical:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},watch:{value:{deep:!0,handler:function handler(t){this.$children.forEach(function(t){t.group&&t.eval&&t.eval();});}}},created:function created(){this._btnGroup=!0;}};},function(t,e){t.exports="<div :class=\"{'btn-group':buttons,'btn-group-justified':justified,'btn-group-vertical':vertical}\" :data-toggle=\"buttons&&'buttons'\"> <slot></slot> </div>";},function(t,e,n){n(118),t.exports=n(120),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(121);},function(t,e,n){var o=n(119);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".carousel-control[_v-322dee41]{cursor:pointer}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{indicators:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},controls:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},interval:{type:Number,coerce:i.coerce.number,"default":5e3}},data:function data(){return{indicator:[],index:0,isAnimating:!1};},watch:{index:function index(t,e){this.slide(t>e?"left":"right",t,e);}},methods:{indicatorClick:function indicatorClick(t){return!this.isAnimating&&this.index!==t&&(this.isAnimating=!0,void(this.index=t));},slide:function slide(t,e,n){var o=this;if(this.$el){var i=(0,a["default"])(".item",this.$el);if(i.length){var r=i[e]||i[0];(0,a["default"])(r).addClass("left"===t?"next":"prev");r.clientHeight;(0,a["default"])([i[n],r]).addClass(t).on("transitionend",function(){i.off("transitionend").className="item",(0,a["default"])(r).addClass("active"),o.isAnimating=!1;});}}},next:function next(){return!(!this.$el||this.isAnimating)&&(this.isAnimating=!0,void(this.index+1<(0,a["default"])(".item",this.$el).length?this.index+=1:this.index=0));},prev:function prev(){return!(!this.$el||this.isAnimating)&&(this.isAnimating=!0,void(0===this.index?this.index=(0,a["default"])(".item",this.$el).length-1:this.index-=1));},toggleInterval:function toggleInterval(t){void 0===t&&(t=this._intervalID),this._intervalID&&(clearInterval(this._intervalID),delete this._intervalID),t&&this.interval>0&&(this._intervalID=setInterval(this.next,this.interval));}},ready:function ready(){var t=this;this.toggleInterval(!0),(0,a["default"])(this.$el).on("mouseenter",function(){return t.toggleInterval(!1);}).on("mouseleave",function(){return t.toggleInterval(!0);});},beforeDestroy:function beforeDestroy(){this.toggleInterval(!1),(0,a["default"])(this.$el).off("mouseenter mouseleave");}};},function(t,e){t.exports='<div class="carousel slide" data-ride=carousel _v-322dee41=""> <ol class=carousel-indicators v-show=indicators _v-322dee41=""> <li v-for="i in indicator" @click=indicatorClick($index) v-bind:class="{active:$index === index}" _v-322dee41=""><span _v-322dee41=""></span></li> </ol> <div class=carousel-inner role=listbox _v-322dee41=""> <slot _v-322dee41=""></slot> </div> <div v-show=controls class="carousel-controls hidden-xs" _v-322dee41=""> <a class="left carousel-control" role=button @click=prev _v-322dee41=""> <span class="glyphicon glyphicon-chevron-left" aria-hidden=true _v-322dee41=""></span> </a> <a class="right carousel-control" role=button @click=next _v-322dee41=""> <span class="glyphicon glyphicon-chevron-right" aria-hidden=true _v-322dee41=""></span> </a> </div> </div>';},function(t,e,n){n(123),t.exports=n(125),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(126);},function(t,e,n){var o=n(124);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,"label.checkbox[_v-6922bf24]{position:relative;padding-left:18px}label.checkbox>input[_v-6922bf24]{box-sizing:border-box;position:absolute;z-index:-1;padding:0;opacity:0;margin:0}label.checkbox>.icon[_v-6922bf24]{position:absolute;top:.2rem;left:0;display:block;width:1.4rem;height:1.4rem;line-height:1rem;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;border-radius:.35rem;background-repeat:no-repeat;background-position:50%;background-size:50% 50%}label.checkbox:not(.active)>.icon[_v-6922bf24]{background-color:#ddd;border:1px solid #bbb}label.checkbox>input:focus~.icon[_v-6922bf24]{outline:0;border:1px solid #66afe9;box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)}label.checkbox.active>.icon[_v-6922bf24]{background-size:1rem 1rem;background-image:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNyIgaGVpZ2h0PSI3Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJtNS43MywwLjUybC0zLjEyNDIyLDMuMzQxNjFsLTEuMzM4OTUsLTEuNDMyMTJsLTEuMjQ5NjksMS4zMzY2NWwyLjU4ODYzLDIuNzY4NzZsNC4zNzM5LC00LjY3ODI2bC0xLjI0OTY5LC0xLjMzNjY1bDAsMGwwLjAwMDAyLDAuMDAwMDF6Ii8+PC9zdmc+)}label.checkbox.active .btn-default[_v-6922bf24]{-webkit-filter:brightness(75%);filter:brightness(75%)}.btn.readonly[_v-6922bf24],label.checkbox.disabled[_v-6922bf24],label.checkbox.readonly[_v-6922bf24]{filter:alpha(opacity=65);box-shadow:none;opacity:.65}label.btn>input[type=checkbox][_v-6922bf24]{position:absolute;clip:rect(0,0,0,0);pointer-events:none}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{value:{"default":!0},checked:{twoWay:!0},button:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},name:{type:String,"default":null},readonly:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String,"default":null}},computed:{active:function active(){return"boolean"!=typeof this.value&&this.group?~this.$parent.value.indexOf(this.value):this.checked===this.value;},isButton:function isButton(){return this.button||this.group&&this.$parent.buttons;},group:function group(){return this.$parent&&this.$parent._checkboxGroup;},typeColor:function typeColor(){return this.type||this.$parent&&this.$parent.type||"default";}},watch:{checked:function checked(t){"boolean"!=typeof this.value&&this.group&&(this.checked&&!~this.$parent.value.indexOf(this.value)&&this.$parent.value.push(this.value),!this.checked&&~this.$parent.value.indexOf(this.value)&&this.$parent.value.$remove(this.value));}},created:function created(){if("boolean"!=typeof this.value){var t=this.$parent;t&&t._btnGroup&&!t._radioGroup&&(t._checkboxGroup=!0,t.value instanceof Array||(t.value=[]));}},ready:function ready(){this.$parent._checkboxGroup&&"boolean"!=typeof this.value&&(this.$parent.value.length?this.checked=~this.$parent.value.indexOf(this.value):this.checked&&this.$parent.value.push(this.value));},methods:{eval:function _eval(){"boolean"!=typeof this.value&&this.group&&(this.checked=~this.$parent.value.indexOf(this.value));},focus:function focus(){this.$els.input.focus();},toggle:function toggle(){if(!this.disabled&&(this.focus(),!this.readonly&&(this.checked=this.checked?null:this.value,this.group&&"boolean"!=typeof this.value))){var t=this.$parent.value.indexOf(this.value);this.$parent.value[~t?"$remove":"push"](this.value);}return!1;}}};},function(t,e){t.exports='<label :class="[isButton?\'btn btn-\'+typeColor:\'open checkbox \'+typeColor,{active:checked,disabled:disabled,readonly:readonly}]" @click.prevent=toggle _v-6922bf24=""> <input type=checkbox autocomplete=off v-el:input="" :checked=active :value=value :name=name :readonly=readonly :disabled=disabled _v-6922bf24=""> <span v-if=!isButton class="icon dropdown-toggle" :class="[active?\'btn-\'+typeColor:\'\',{bg:typeColor===\'default\'}]" _v-6922bf24=""></span> <span v-if="!isButton&amp;active&amp;&amp;typeColor===\'default\'" class=icon _v-6922bf24=""></span> <slot _v-6922bf24=""></slot> </label>';},function(t,e,n){n(128),t.exports=n(130),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(131);},function(t,e,n){var o=n(129);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".datepicker{position:relative;display:inline-block}input.datepicker-input.with-reset-button{padding-right:25px}.datepicker>button.close{position:absolute;top:0;right:0;outline:none;z-index:2;display:block;width:34px;height:34px;line-height:34px;text-align:center}.datepicker>button.close:focus{opacity:.2}.datepicker-popup{position:absolute;border:1px solid #ccc;border-radius:5px;background:#fff;margin-top:2px;z-index:1000;box-shadow:0 6px 12px rgba(0,0,0,.175)}.datepicker-inner{width:218px}.datepicker-body{padding:10px}.datepicker-body span,.datepicker-ctrl p,.datepicker-ctrl span{display:inline-block;width:28px;line-height:28px;height:28px;border-radius:4px}.datepicker-ctrl p{width:65%}.datepicker-ctrl span{position:absolute}.datepicker-body span{text-align:center}.datepicker-monthRange span{width:48px;height:50px;line-height:45px}.datepicker-item-disable{background-color:#fff!important;cursor:not-allowed!important}.datepicker-item-disable,.datepicker-item-gray,.decadeRange span:first-child,.decadeRange span:last-child{color:#999}.datepicker-dateRange-item-active,.datepicker-dateRange-item-active:hover{background:#3276b1!important;color:#fff!important}.datepicker-monthRange{margin-top:10px}.datepicker-ctrl p,.datepicker-ctrl span,.datepicker-dateRange span,.datepicker-monthRange span{cursor:pointer}.datepicker-ctrl i:hover,.datepicker-ctrl p:hover,.datepicker-dateRange-item-hover,.datepicker-dateRange span:hover,.datepicker-monthRange span:hover{background-color:#eee}.datepicker-weekRange span{font-weight:700}.datepicker-label{background-color:#f8f8f8;font-weight:700;padding:7px 0;text-align:center}.datepicker-ctrl{position:relative;height:30px;line-height:30px;font-weight:700;text-align:center}.month-btn{font-weight:700;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.datepicker-preBtn{left:2px}.datepicker-nextBtn{right:2px}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{value:{type:String,twoWay:!0},format:{"default":"MM/dd/yyyy"},disabledDaysOfWeek:{type:Array,"default":function _default(){return[];}},width:{type:String,"default":"200px"},clearButton:{type:Boolean,"default":!1},lang:{type:String,"default":navigator.language},placeholder:{type:String}},ready:function ready(){var t=this;this._blur=function(e){t.$el.contains(e.target)||t.close();},this.$dispatch("child-created",this),this.currDate=this.parse(this.value)||this.parse(new Date()),(0,a["default"])(window).on("click",this._blur);},beforeDestroy:function beforeDestroy(){(0,a["default"])(window).off("click",this._blur);},data:function data(){return{currDate:new Date(),dateRange:[],decadeRange:[],displayDayView:!1,displayMonthView:!1,displayYearView:!1};},watch:{currDate:function currDate(){this.getDateRange();}},computed:{text:function text(){return(0,i.translations)(this.lang);}},methods:{close:function close(){this.displayDayView=this.displayMonthView=this.displayYearView=!1;},inputClick:function inputClick(){this.currDate=this.parse(this.value)||this.parse(new Date()),this.displayMonthView||this.displayYearView?this.displayDayView=!1:this.displayDayView=!this.displayDayView;},preNextDecadeClick:function preNextDecadeClick(t){var e=this.currDate.getFullYear(),n=this.currDate.getMonth(),o=this.currDate.getDate();0===t?this.currDate=new Date(e-10,n,o):this.currDate=new Date(e+10,n,o);},preNextMonthClick:function preNextMonthClick(t){var e=this.currDate.getFullYear(),n=this.currDate.getMonth(),o=this.currDate.getDate();if(0===t){var i=this.getYearMonth(e,n-1);this.currDate=new Date(i.year,i.month,o);}else{var r=this.getYearMonth(e,n+1);this.currDate=new Date(r.year,r.month,o);}},preNextYearClick:function preNextYearClick(t){var e=this.currDate.getFullYear(),n=this.currDate.getMonth(),o=this.currDate.getDate();0===t?this.currDate=new Date(e-1,n,o):this.currDate=new Date(e+1,n,o);},yearSelect:function yearSelect(t){this.displayYearView=!1,this.displayMonthView=!0,this.currDate=new Date(t,this.currDate.getMonth(),this.currDate.getDate());},daySelect:function daySelect(t,e){return"datepicker-item-disable"!==e.$el.classList[0]&&(this.currDate=t,this.value=this.stringify(this.currDate),this.displayDayView=!1,void 0);},switchMonthView:function switchMonthView(){this.displayDayView=!1,this.displayMonthView=!0;},switchDecadeView:function switchDecadeView(){this.displayMonthView=!1,this.displayYearView=!0;},monthSelect:function monthSelect(t){this.displayMonthView=!1,this.displayDayView=!0,this.currDate=new Date(this.currDate.getFullYear(),t,this.currDate.getDate());},getYearMonth:function getYearMonth(t,e){return e>11?(t++,e=0):e<0&&(t--,e=11),{year:t,month:e};},stringifyDecadeHeader:function stringifyDecadeHeader(t){var e=t.getFullYear().toString(),n=e.substring(0,e.length-1)+0,o=parseInt(n,10)+10;return n+"-"+o;},stringifyDayHeader:function stringifyDayHeader(t){return this.text.months[t.getMonth()]+" "+t.getFullYear();},parseMonth:function parseMonth(t){return this.text.months[t.getMonth()];},stringifyYearHeader:function stringifyYearHeader(t){return t.getFullYear();},stringify:function stringify(t){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.format;if(t||(t=this.parse()),!t)return"";var n=t.getFullYear(),o=t.getMonth()+1,i=t.getDate(),r=this.parseMonth(t);return e.replace(/yyyy/g,n).replace(/MMMM/g,r).replace(/MMM/g,r.substring(0,3)).replace(/MM/g,("0"+o).slice(-2)).replace(/dd/g,("0"+i).slice(-2)).replace(/yy/g,n).replace(/M(?!a)/g,o).replace(/d/g,i);},parse:function parse(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:this.value,e=void 0;return e=10!==t.length||"dd-MM-yyyy"!==this.format&&"dd/MM/yyyy"!==this.format?new Date(t):new Date(t.substring(6,10),t.substring(3,5),t.substring(0,2)),isNaN(e.getFullYear())?new Date():e;},getDayCount:function getDayCount(t,e){var n=[31,28,31,30,31,30,31,31,30,31,30,31];return 1===e&&(t%400===0||t%4===0&&t%100!==0)?29:n[e];},getDateRange:function getDateRange(){var t=this;this.dateRange=[],this.decadeRange=[];for(var e={year:this.currDate.getFullYear(),month:this.currDate.getMonth(),day:this.currDate.getDate()},n=e.year.toString(),o=n.substring(0,n.length-1)+0-1,i=0;i<12;i++){this.decadeRange.push({text:o+i});}var r=new Date(e.year,e.month,1),a=r.getDay()+1;0===a&&(a=7);var s=this.getDayCount(e.year,e.month);if(a>1)for(var l=this.getYearMonth(e.year,e.month-1),c=this.getDayCount(l.year,l.month),u=1;u<a;u++){var d=c-a+u+1;this.dateRange.push({text:d,date:new Date(l.year,l.month,d),sclass:"datepicker-item-gray"});}for(var p=function p(n){var o=new Date(e.year,e.month,n),i=o.getDay(),r="";if(t.disabledDaysOfWeek.forEach(function(t){i===parseInt(t,10)&&(r="datepicker-item-disable");}),n===e.day&&t.value){var a=t.parse(t.value);a&&a.getFullYear()===e.year&&a.getMonth()===e.month&&(r="datepicker-dateRange-item-active");}t.dateRange.push({text:n,date:o,sclass:r});},f=1;f<=s;f++){p(f);}if(this.dateRange.length<42)for(var h=42-this.dateRange.length,v=this.getYearMonth(e.year,e.month+1),y=1;y<=h;y++){this.dateRange.push({text:y,date:new Date(v.year,v.month,y),sclass:"datepicker-item-gray"});}}}};},function(t,e){t.exports='<div class=datepicker> <input class="form-control datepicker-input" :class="{\'with-reset-button\': clearButton}" type=text :placeholder=placeholder :style={width:width} @click=inputClick v-model=value /> <button v-if="clearButton && value" type=button class=close @click="value = \'\'"> <span>&times;</span> </button> <div class=datepicker-popup v-show=displayDayView> <div class=datepicker-inner> <div class=datepicker-body> <div class=datepicker-ctrl> <span class="datepicker-preBtn glyphicon glyphicon-chevron-left" aria-hidden=true @click=preNextMonthClick(0)></span> <span class="datepicker-nextBtn glyphicon glyphicon-chevron-right" aria-hidden=true @click=preNextMonthClick(1)></span> <p @click=switchMonthView>{{stringifyDayHeader(currDate)}}</p> </div> <div class=datepicker-weekRange> <span v-for="w in text.daysOfWeek">{{w}}</span> </div> <div class=datepicker-dateRange> <span v-for="d in dateRange" :class=d.sclass @click=daySelect(d.date,this)>{{d.text}}</span> </div> </div> </div> </div> <div class=datepicker-popup v-show=displayMonthView> <div class=datepicker-inner> <div class=datepicker-body> <div class=datepicker-ctrl> <span class="datepicker-preBtn glyphicon glyphicon-chevron-left" aria-hidden=true @click=preNextYearClick(0)></span> <span class="datepicker-nextBtn glyphicon glyphicon-chevron-right" aria-hidden=true @click=preNextYearClick(1)></span> <p @click=switchDecadeView>{{stringifyYearHeader(currDate)}}</p> </div> <div class=datepicker-monthRange> <template v-for="m in text.months"> <span :class="{\'datepicker-dateRange-item-active\':\r\n                  (text.months[parse(value).getMonth()]  === m) &&\r\n                  currDate.getFullYear() === parse(value).getFullYear()}" @click=monthSelect($index)>{{m.substr(0,3)}}</span> </template> </div> </div> </div> </div> <div class=datepicker-popup v-show=displayYearView> <div class=datepicker-inner> <div class=datepicker-body> <div class=datepicker-ctrl> <span class="datepicker-preBtn glyphicon glyphicon-chevron-left" aria-hidden=true @click=preNextDecadeClick(0)></span> <span class="datepicker-nextBtn glyphicon glyphicon-chevron-right" aria-hidden=true @click=preNextDecadeClick(1)></span> <p>{{stringifyDecadeHeader(currDate)}}</p> </div> <div class="datepicker-monthRange decadeRange"> <template v-for="decade in decadeRange"> <span :class="{\'datepicker-dateRange-item-active\':\r\n                  parse(this.value).getFullYear() === decade.text}" @click.stop=yearSelect(decade.text)>{{decade.text}}</span> </template> </div> </div> </div> </div> </div>';},function(t,e,n){n(133),t.exports=n(135),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(136);},function(t,e,n){var o=n(134);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".secret[_v-39be1072]{position:absolute;clip:rect(0 0 0 0);overflow:hidden;margin:-1px;height:1px;width:1px;padding:0;border:0}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{show:{twoWay:!0,type:Boolean,coerce:i.coerce["boolean"],"default":!1},"class":null,disabled:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},text:{type:String,"default":null},type:{type:String,"default":"default"}},computed:{classes:function classes(){return[{open:this.show,disabled:this.disabled},this["class"],this.isLi?"dropdown":this.inInput?"input-group-btn":"btn-group"];},inInput:function inInput(){return this.$parent._input;},isLi:function isLi(){return this.$parent._navbar||this.$parent.menu||this.$parent._tabset;},menu:function menu(){return!this.$parent||this.$parent.navbar;},submenu:function submenu(){return this.$parent&&(this.$parent.menu||this.$parent.submenu);},slots:function slots(){return this._slotContents;}},methods:{blur:function blur(){var t=this;this.unblur(),this._hide=setTimeout(function(){t._hide=null,t.show=!1;},100);},unblur:function unblur(){this._hide&&(clearTimeout(this._hide),this._hide=null);}},ready:function ready(){var t=this,e=(0,a["default"])(this.$els.dropdown);e.onBlur(function(e){t.show=!1;}),e.findChildren("a,button.dropdown-toggle").on("click",function(e){return e.preventDefault(),!t.disabled&&(t.show=!t.show,!1);}),e.findChildren("ul").on("click","li>a",function(e){t.show=!1;});},beforeDestroy:function beforeDestroy(){var t=(0,a["default"])(this.$els.dropdown);t.offBlur(),t.findChildren("a,button").off(),t.findChildren("ul").off();}};},function(t,e){t.exports='<li v-if=isLi v-el:dropdown="" :class=classes _v-39be1072=""> <slot name=button _v-39be1072=""> <a class=dropdown-toggle role=button :class="{disabled: disabled}" @keyup.esc="show = false" _v-39be1072=""> {{ text }} <span class=caret _v-39be1072=""></span> </a> </slot> <slot name=dropdown-menu _v-39be1072=""> <ul v-else="" class=dropdown-menu _v-39be1072=""> <slot _v-39be1072=""></slot> </ul> </slot> </li> <div v-else="" v-el:dropdown="" :class=classes _v-39be1072=""> <slot name=before _v-39be1072=""></slot> <slot name=button _v-39be1072=""> <button type=button class="btn btn-{{type}} dropdown-toggle" @keyup.esc="show = false" :disabled=disabled _v-39be1072=""> {{ text }} <span class=caret _v-39be1072=""></span> </button> </slot> <slot name=dropdown-menu _v-39be1072=""> <ul class=dropdown-menu _v-39be1072=""> <slot _v-39be1072=""></slot> </ul> </slot> </div>';},function(t,e,n){t.exports=n(138),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(139);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27);o(r);e["default"]={props:{valid:{twoWay:!0,"default":null},enterSubmit:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},icon:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},lang:{type:String,"default":navigator.language}},data:function data(){return{children:[],timeout:null};},watch:{valid:function valid(t,e){t!==e&&this._parent&&this._parent.validate();}},methods:{focus:function focus(){this.$els.input.focus();},validate:function validate(){var t=!0;return this.children.some(function(e){var n=e.validate?e.validate():void 0!==e.valid?e.valid:e.required&&!~["",null,void 0].indexOf(e.value);return n||(t=!1),!t;}),this.valid=t,t===!0;}},created:function created(){this._formGroup=!0;for(var t=this.$parent;t&&!t._formGroup;){t=t.$parent;}t&&t._formGroup&&(t.children.push(this),this._parent=t);},ready:function ready(){this.validate();},beforeDestroy:function beforeDestroy(){this._parent&&this._parent.children.$remove(this);}};},function(t,e){t.exports="<slot></slot>";},function(t,e,n){n(141),t.exports=n(143),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(144);},function(t,e,n){var o=n(142);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".form-group[_v-652ad7b9]{position:relative}label~.close[_v-652ad7b9]{top:25px}.input-group>.icon[_v-652ad7b9]{position:relative;display:table-cell;width:0;z-index:3}.close[_v-652ad7b9]{position:absolute;top:0;right:0;z-index:2;display:block;width:34px;height:34px;line-height:34px;text-align:center}.has-feedback .close[_v-652ad7b9]{right:20px}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{value:{twoWay:!0,"default":null},match:{type:String,"default":null},clearButton:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},enterSubmit:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},error:{type:String,"default":null},help:{type:String,"default":null},hideHelp:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},icon:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},label:{type:String,"default":null},lang:{type:String,"default":navigator.language},mask:null,maskDelay:{type:Number,coerce:i.coerce.number,"default":100},max:{type:String,coerce:i.coerce.string,"default":null},maxlength:{type:Number,coerce:i.coerce.number,"default":null},min:{type:String,coerce:i.coerce.string,"default":null},minlength:{type:Number,coerce:i.coerce.number,"default":0},name:{type:String,"default":null},pattern:{coerce:i.coerce.pattern,"default":null},placeholder:{type:String,"default":null},readonly:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},required:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},rows:{type:Number,coerce:i.coerce.number,"default":3},step:{type:Number,coerce:i.coerce.number,"default":null},type:{type:String,"default":"text"},validationDelay:{type:Number,coerce:i.coerce.number,"default":250}},data:function data(){return{valid:null,timeout:null};},computed:{canValidate:function canValidate(){return!this.disabled&&!this.readonly&&(this.required||this.pattern||this.nativeValidate||null!==this.match);},errorText:function errorText(){var t=this.value,e=[this.error];return!t&&this.required&&e.push("("+this.text.required.toLowerCase()+")"),t&&t.length<this.minlength&&e.push("("+this.text.minLength.toLowerCase()+": "+this.minlength+")"),e.join(" ");},input:function input(){return this.$els.input;},nativeValidate:function nativeValidate(){return(this.input||{}).checkValidity&&(~["url","email"].indexOf(this.type.toLowerCase())||this.min||this.max);},showError:function showError(){return this.error&&this.valid===!1;},showHelp:function showHelp(){return this.help&&(!this.showError||!this.hideHelp);},slots:function slots(){return this._slotContents||{};},text:function text(){return(0,i.translations)(this.lang);},title:function title(){return this.errorText||this.help||"";}},watch:{match:function match(t){this.eval();},valid:function valid(t,e){t!==e&&this._parent&&this._parent.validate();},value:function value(t,e){var n=this;t!==e&&(this.mask instanceof Function&&(t=this.mask(t||""),this.value!==t&&(this._timeout.mask&&clearTimeout(this._timeout.mask),this._timeout.mask=setTimeout(function(){n.value=t,n.$els.input.value=t;},this.maskDelay))),this.eval());}},methods:{attr:function attr(t){return~["",null,void 0].indexOf(t)||t instanceof Function?void 0:t;},focus:function focus(){this.input.focus();},eval:function _eval(){var t=this;this._timeout.eval&&clearTimeout(this._timeout.eval),this.canValidate?this._timeout.eval=setTimeout(function(){t.valid=t.validate(),t._timeout.eval=null;},this.validationDelay):this.valid=!0;},onblur:function onblur(t){this.canValidate&&(this.valid=this.validate()),this.$emit("blur",t);},onfocus:function onfocus(t){this.$emit("focus",t);},submit:function submit(){if(this.$parent._formGroup)return this.$parent.validate();if(this.input.form){var t=(0,a["default"])(".form-group.validate:not(.has-success)",this.input.form);t.length?t.find("input,textarea,select")[0].focus():this.input.form.submit();}},validate:function validate(){if(!this.canValidate)return!0;var t=(this.value||"").trim();return t?null!==this.match?this.match===t:!(t.length<this.minlength)&&!(this.nativeValidate&&!this.input.checkValidity())&&(!this.pattern||(this.pattern instanceof Function?this.pattern(this.value):this.pattern.test(this.value))):!this.required;}},created:function created(){this._input=!0,this._timeout={};for(var t=this.$parent;t&&!t._formGroup;){t=t.$parent;}t&&t._formGroup&&(this._parent=t);},ready:function ready(){var t=this;this._parent&&this._parent.children.push(this),(0,a["default"])(this.input).on("focus",function(e){return t.$emit("focus",e);}).on("blur",function(e){t.canValidate&&(t.valid=t.validate()),t.$emit("blur",e);});},beforeDestroy:function beforeDestroy(){this._parent&&this._parent.children.$remove(this),(0,a["default"])(this.input).off();}};},function(t,e){t.exports='<div class=form-group :class="{validate:canValidate,\'has-feedback\':icon,\'has-error\':canValidate&amp;&amp;valid===false,\'has-success\':canValidate&amp;&amp;valid}" _v-652ad7b9=""> <slot name=label _v-652ad7b9=""><label v-if=label class=control-label @click=focus _v-652ad7b9="">{{label}}</label></slot> <div v-if=slots.before||slots.after class=input-group _v-652ad7b9=""> <slot name=before _v-652ad7b9=""></slot> <textarea v-if="type==\'textarea\'" class=form-control v-el:input="" v-model=value :cols=cols :rows=rows :name=name :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @blur=onblur @focus=onfocus _v-652ad7b9=""></textarea> <input v-else="" class=form-control v-el:input="" v-model=value :name=name :max=attr(max) :min=attr(min) :step=step :type=type :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @keyup.enter=enterSubmit&amp;&amp;submit() @blur=onblur @focus=onfocus _v-652ad7b9=""> <div v-if="clearButton &amp;&amp; value" :class={icon:icon} _v-652ad7b9=""> <span class=close @click="value = \'\'" _v-652ad7b9="">×</span> </div> <div v-if=icon class=icon _v-652ad7b9=""> <span v-if="icon&amp;&amp;valid!==null" :class="[\'form-control-feedback glyphicon\',\'glyphicon-\'+(valid?\'ok\':\'remove\')]" aria-hidden=true _v-652ad7b9=""></span> </div> <slot name=after _v-652ad7b9=""></slot> </div> <template v-else="" _v-652ad7b9=""> <textarea v-if="type==\'textarea\'" class=form-control v-el:input="" v-model=value :cols=cols :rows=rows :name=name :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @blur=onblur @focus=onfocus _v-652ad7b9=""></textarea> <input v-else="" class=form-control v-el:input="" v-model=value :name=name :max=attr(max) :min=attr(min) :step=step :type=type :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @keyup.enter=enterSubmit&amp;&amp;submit() @blur=onblur @focus=onfocus _v-652ad7b9=""> <span v-if="clearButton &amp;&amp; value" class=close @click="value = \'\'" _v-652ad7b9="">×</span> <span v-if="icon&amp;&amp;valid!==null" :class="[\'form-control-feedback glyphicon\',\'glyphicon-\'+(valid?\'ok\':\'remove\')]" aria-hidden=true _v-652ad7b9=""></span> </template> <div v-if=showHelp class=help-block @click=focus _v-652ad7b9="">{{help}}</div> <div v-if=showError class="help-block with-errors" @click=focus _v-652ad7b9="">{{errorText}}</div> </div>';},function(t,e,n){n(146),t.exports=n(148),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(153);},function(t,e,n){var o=n(147);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".modal{-webkit-transition:all .3s ease;transition:all .3s ease}.modal.in{background-color:rgba(0,0,0,.5)}.modal.zoom .modal-dialog{-webkit-transform:scale(.1);transform:scale(.1);top:300px;opacity:0;-webkit-transition:all .3s;transition:all .3s}.modal.zoom.in .modal-dialog{-webkit-transform:scale(1);transform:scale(1);-webkit-transform:translate3d(0,-300px,0);transform:translate3d(0,-300px,0);opacity:1}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(149),r=o(i),a=n(97),s=n(27),l=o(s);e["default"]={props:{okText:{type:String,"default":"Save changes"},cancelText:{type:String,"default":"Close"},title:{type:String,"default":""},show:{required:!0,type:Boolean,coerce:a.coerce["boolean"],twoWay:!0},width:{"default":null},callback:{type:Function,"default":function _default(){}},effect:{type:String,"default":null},backdrop:{type:Boolean,coerce:a.coerce["boolean"],"default":!0},large:{type:Boolean,coerce:a.coerce["boolean"],"default":!1},small:{type:Boolean,coerce:a.coerce["boolean"],"default":!1}},computed:{optionalWidth:function optionalWidth(){return null===this.width?null:(0,r["default"])(this.width)?this.width+"px":this.width;}},watch:{show:function show(t){var e=this,n=this.$el,o=document.body,i=(0,a.getScrollBarWidth)();t?((0,l["default"])(n).find(".modal-content").focus(),n.style.display="block",setTimeout(function(){return(0,l["default"])(n).addClass("in");},0),(0,l["default"])(o).addClass("modal-open"),0!==i&&(o.style.paddingRight=i+"px"),this.backdrop&&(0,l["default"])(n).on("click",function(t){t.target===n&&(e.show=!1);})):(o.style.paddingRight=null,(0,l["default"])(o).removeClass("modal-open"),(0,l["default"])(n).removeClass("in").on("transitionend",function(){(0,l["default"])(n).off("click transitionend"),n.style.display="none";}));}},methods:{close:function close(){this.show=!1;}}};},function(t,e,n){t.exports={"default":n(150),__esModule:!0};},function(t,e,n){n(151),t.exports=n(33).Number.isInteger;},function(t,e,n){var o=n(31);o(o.S,"Number",{isInteger:n(152)});},function(t,e,n){var o=n(39),i=Math.floor;t.exports=function(t){return!o(t)&&isFinite(t)&&i(t)===t;};},function(t,e){t.exports="<div role=dialog v-bind:class=\"{\r\n    'modal':true,\r\n    'fade':effect === 'fade',\r\n    'zoom':effect === 'zoom'\r\n    }\"> <div v-bind:class=\"{'modal-dialog':true,'modal-lg':large,'modal-sm':small}\" role=document v-bind:style=\"{width: optionalWidth}\"> <div class=modal-content> <slot name=modal-header> <div class=modal-header> <button type=button class=close @click=close><span>&times;</span></button> <h4 class=modal-title> <slot name=title> {{title}} </slot> </h4> </div> </slot> <slot name=modal-body> <div class=modal-body></div> </slot> <slot name=modal-footer> <div class=modal-footer> <button type=button class=\"btn btn-default\" @click=close>{{ cancelText }}</button> <button type=button class=\"btn btn-primary\" @click=callback>{{ okText }}</button> </div> </slot> </div> </div> </div>";},function(t,e,n){t.exports=n(155),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(156);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(27),r=o(i);e["default"]={props:{type:{type:String,"default":"default"},placement:{type:String,"default":""}},data:function data(){return{id:"bs-example-navbar-collapse-1",collapsed:!0,styles:{}};},computed:{slots:function slots(){return this._slotContents;}},methods:{toggleCollapse:function toggleCollapse(t){t&&t.preventDefault(),this.collapsed=!this.collapsed;}},created:function created(){this._navbar=!0;},ready:function ready(){var t=this,e=(0,r["default"])('.dropdown>[data-toggle="dropdown"]',this.$el).parent();e.on("click",".dropdown-toggle",function(t){t.preventDefault(),e.each(function(e){e.contains(t.target)&&e.classList.toggle("open");});}).on("click",".dropdown-menu>li>a",function(t){e.each(function(e){e.contains(t.target)&&e.classList.remove("open");});}).onBlur(function(t){e.each(function(e){e.contains(t.target)||e.classList.remove("open");});}),(0,r["default"])(this.$el).on("click touchstart","li:not(.dropdown)>a",function(e){setTimeout(function(){t.collapsed=!0;},200);}).onBlur(function(e){t.$el.contains(e.target)||(t.collapsed=!0);});var n=this.$el.offsetHeight;"top"===this.placement&&(document.body.style.paddingTop=n+"px"),"bottom"===this.placement&&(document.body.style.paddingBottom=n+"px"),this.slots.collapse&&(0,r["default"])('[data-toggle="collapse"]',this.$el).on("click",function(e){return t.toggleCollapse(e);});},beforeDestroy:function beforeDestroy(){(0,r["default"])(".dropdown",this.$el).off("click").offBlur(),this.slots.collapse&&(0,r["default"])('[data-toggle="collapse"]',this.$el).off("click");}};},function(t,e){t.exports="<nav v-el:navbar :class=\"['navbar',{\r\n    'navbar-inverse':(type == 'inverse'),\r\n    'navbar-default':(type == 'default'),\r\n    'navbar-fixed-top':(placement === 'top'),\r\n    'navbar-fixed-bottom':(placement === 'bottom'),\r\n    'navbar-static-top':(placement === 'static')\r\n  }]\"> <div class=container-fluid> <div class=navbar-header> <button v-if=!slots.collapse type=button class=\"navbar-toggle collapsed\" aria-expanded=false @click=toggleCollapse> <span class=sr-only>Toggle navigation</span> <span class=icon-bar></span> <span class=icon-bar></span> <span class=icon-bar></span> </button> <slot name=collapse></slot> <slot name=brand></slot> </div> <div :class=\"['navbar-collapse',{collapse:collapsed}]\"> <ul class=\"nav navbar-nav\"> <slot></slot> </ul> <ul v-if=slots.right class=\"nav navbar-nav navbar-right\"> <slot name=right></slot> </ul> </div> </div> </nav>";},function(t,e,n){t.exports=n(158),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(159);},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={props:{value:null},data:function data(){return{loading:!0};},ready:function ready(){if(this.$parent._select){this.$parent.options||(this.$parent.options=[]);var t={};t[this.$parent.optionsLabel]=this.$els.v.innerHTML,t[this.$parent.optionsValue]=this.value,this.$parent.options.push(t),this.loading=!1;}else console.warn("options only work inside a select component");}};},function(t,e){t.exports="<li v-el:v v-if=loading><slot></slot></li>";},function(t,e,n){n(161),t.exports=n(163),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(164);},function(t,e,n){var o=n(162);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".accordion-toggle{cursor:pointer}.collapse-transition{-webkit-transition:max-height .5s ease;transition:max-height .5s ease}.collapse-enter,.collapse-leave{max-height:0!important}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{header:{type:String},isOpen:{type:Boolean,coerce:o.coerce["boolean"],"default":null},type:{type:String,"default":null}},computed:{inAccordion:function inAccordion(){return this.$parent&&this.$parent._isAccordion;},panelType:function panelType(){return"panel-"+(this.type||this.$parent&&this.$parent.type||"default");}},methods:{toggle:function toggle(){this.isOpen=!this.isOpen,this.$dispatch("isOpenEvent",this);}},transitions:{collapse:{afterEnter:function afterEnter(t){t.style.maxHeight="",t.style.overflow="";},beforeLeave:function beforeLeave(t){return t.style.maxHeight=t.offsetHeight+"px",t.style.overflow="hidden",t.offsetHeight;}}},created:function created(){null===this.isOpen&&(this.isOpen=!this.inAccordion);}};},function(t,e){t.exports="<div class=\"panel {{panelType}}\"> <div :class=\"['panel-heading',{'accordion-toggle':inAccordion}]\" @click.prevent=inAccordion&&toggle()> <slot name=header> <h4 class=panel-title>{{ header }}</h4> </slot> </div> <div class=panel-collapse v-el:panel v-show=isOpen transition=collapse> <div class=panel-body> <slot></slot> </div> </div> </div>";},function(t,e,n){n(166),t.exports=n(168),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(170);},function(t,e,n){var o=n(167);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".popover.bottom,.popover.left,.popover.right,.popover.top{display:block}.scale-enter{-webkit-animation:scale-in .15s ease-in;animation:scale-in .15s ease-in}.scale-leave{-webkit-animation:scale-out .15s ease-out;animation:scale-out .15s ease-out}@-webkit-keyframes scale-in{0%{-webkit-transform:scale(0);transform:scale(0);opacity:0}to{-webkit-transform:scale(1);transform:scale(1);opacity:1}}@keyframes scale-in{0%{-webkit-transform:scale(0);transform:scale(0);opacity:0}to{-webkit-transform:scale(1);transform:scale(1);opacity:1}}@-webkit-keyframes scale-out{0%{-webkit-transform:scale(1);transform:scale(1);opacity:1}to{-webkit-transform:scale(0);transform:scale(0);opacity:0}}@keyframes scale-out{0%{-webkit-transform:scale(1);transform:scale(1);opacity:1}to{-webkit-transform:scale(0);transform:scale(0);opacity:0}}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(169),r=o(i);e["default"]={mixins:[r["default"]],props:{trigger:{type:String,"default":"click"}}};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{trigger:{type:String},effect:{type:String,"default":"fade"},title:{type:String},content:{type:String},header:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},placement:{type:String,"default":"top"}},data:function data(){return{position:{top:0,left:0},show:!1};},methods:{toggle:function toggle(t){var e=this;t&&"contextmenu"===this.trigger&&t.preventDefault(),(this.show=!this.show)&&setTimeout(function(){var t=e.$els.popover,n=e.$els.trigger.children[0];switch(e.placement){case"top":e.position.left=n.offsetLeft-t.offsetWidth/2+n.offsetWidth/2,e.position.top=n.offsetTop-t.offsetHeight;break;case"left":e.position.left=n.offsetLeft-t.offsetWidth,e.position.top=n.offsetTop+n.offsetHeight/2-t.offsetHeight/2;break;case"right":e.position.left=n.offsetLeft+n.offsetWidth,e.position.top=n.offsetTop+n.offsetHeight/2-t.offsetHeight/2;break;case"bottom":e.position.left=n.offsetLeft-t.offsetWidth/2+n.offsetWidth/2,e.position.top=n.offsetTop+n.offsetHeight;break;default:console.warn("Wrong placement prop");}t.style.top=e.position.top+"px",t.style.left=e.position.left+"px";},0);}},ready:function ready(){var t=this.$els.trigger;if(!t)return console.error("Could not find trigger v-el in your component that uses popoverMixin.");if("focus"!==this.trigger||~t.tabIndex||(t=(0,a["default"])("a,input,select,textarea,button",t),t.length||(t=null)),t){var e={contextmenu:"contextmenu",hover:"mouseleave mouseenter",focus:"blur focus"};(0,a["default"])(t).on(e[this.trigger]||"click",this.toggle),this._trigger=t;}},beforeDestroy:function beforeDestroy(){this._trigger&&(0,a["default"])(this._trigger).off();}};},function(t,e){t.exports="<span v-el:trigger> <slot></slot> </span> <div v-el:popover v-if=show :class=\"['popover',placement]\" :transition=effect> <div class=arrow></div> <h3 class=popover-title v-if=title> <slot name=title>{{title}}</slot> </h3> <div class=popover-content> <slot name=content>{{{content}}}</slot> </div> </div>";},function(t,e,n){t.exports=n(172),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(173);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{now:{type:Number,coerce:o.coerce.number,required:!0},label:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String},striped:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},animated:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}}};},function(t,e){t.exports="<div role=progressbar :class=\"['progress-bar',{\r\n      'progress-bar-success':type == 'success',\r\n      'progress-bar-warning':type == 'warning',\r\n      'progress-bar-info':type == 'info',\r\n      'progress-bar-danger':type == 'danger',\r\n      'progress-bar-striped':striped,\r\n      'active':animated\r\n    }]\" :style=\"{width: now + '%'}\"> {{label ? now + '%' : ''}} </div>";},function(t,e,n){n(175),t.exports=n(177),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(178);},function(t,e,n){var o=n(176);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".radio{position:relative}.radio>label>input{position:absolute;margin:0;padding:0;opacity:0;z-index:-1;box-sizing:border-box}.radio>label>.icon{position:absolute;top:.15rem;left:0;display:block;width:1.4rem;height:1.4rem;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;border-radius:.7rem;background-repeat:no-repeat;background-position:50%;background-size:50% 50%}.radio:not(.active)>label>.icon{background-color:#ddd;border:1px solid #bbb}.radio>label>input:focus~.icon{outline:0;border:1px solid #66afe9;box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)}.radio.active>label>.icon{background-size:1rem 1rem;background-image:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxjaXJjbGUgY3g9IjUiIGN5PSI1IiByPSI0IiBmaWxsPSIjZmZmIi8+PC9zdmc+)}.radio.active .btn-default{-webkit-filter:brightness(75%);filter:brightness(75%)}.btn.readonly,.radio.disabled>label>.icon,.radio.readonly>label>.icon{filter:alpha(opacity=65);box-shadow:none;opacity:.65}label.btn>input[type=radio]{position:absolute;clip:rect(0,0,0,0);pointer-events:none}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{value:{"default":!0},checked:{twoWay:!0},button:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},name:{type:String,"default":null},readonly:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String,"default":null}},computed:{active:function active(){return this.group?this.$parent.value===this.value:this.value===this.checked;},buttonStyle:function buttonStyle(){return this.button||this.group&&this.$parent.buttons;},group:function group(){return this.$parent&&this.$parent._radioGroup;},typeColor:function typeColor(){return this.type||this.$parent&&this.$parent.type||"default";}},created:function created(){var t=this.$parent;t&&t._btnGroup&&!t._checkboxGroup&&(t._radioGroup=!0);},ready:function ready(){this.$parent._radioGroup&&(this.$parent.value?this.checked=this.$parent.value===this.value:this.checked&&(this.$parent.value=this.value));},methods:{focus:function focus(){this.$els.input.focus();},toggle:function toggle(){this.disabled||(this.focus(),this.readonly||(this.checked=this.value,this.group&&(this.$parent.value=this.value)));}}};},function(t,e){t.exports="<label v-if=buttonStyle :class=\"['btn btn-'+typeColor,{active:active,disabled:disabled,readonly:readonly}]\" @click.prevent=toggle> <input type=radio autocomplete=off v-el:input v-show=!readonly :checked=active :value=value :name=name :readonly=readonly :disabled=disabled /> <slot></slot> </label> <div v-else :class=\"['radio',typeColor,{active:active,disabled:disabled,readonly:readonly}]\" @click.prevent=toggle> <label class=open> <input type=radio autocomplete=off v-el:input :checked=active :value=value :name=name :readonly=readonly :disabled=disabled /> <span class=\"icon dropdown-toggle\" :class=\"[active?'btn-'+typeColor:'',{bg:typeColor==='default'}]\"></span> <span v-if=\"active&&typeColor==='default'\" class=icon></span> <slot></slot> </label> </div>";},function(t,e,n){n(180),t.exports=n(182),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(198);},function(t,e,n){var o=n(181);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,"button.form-control.dropdown-toggle[_v-e514dbc6]{height:auto;padding-right:24px}button.form-control.dropdown-toggle[_v-e514dbc6]:after{content:' ';position:absolute;right:13px;top:50%;margin:-1px 0 0;border-top:4px dashed;border-top:4px solid\\9;border-right:4px solid transparent;border-left:4px solid transparent}.bs-searchbox[_v-e514dbc6]{position:relative;margin:4px 8px}.bs-searchbox .close[_v-e514dbc6]{position:absolute;top:0;right:0;z-index:2;display:block;width:34px;height:34px;line-height:34px;text-align:center}.bs-searchbox input[_v-e514dbc6]:focus,.secret:focus+button[_v-e514dbc6]{outline:0;border-color:#66afe9!important;box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)}.secret[_v-e514dbc6]{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}button>.close[_v-e514dbc6]{margin-left:5px}.notify.out[_v-e514dbc6]{position:relative}.notify.in[_v-e514dbc6],.notify>div[_v-e514dbc6]{position:absolute;width:96%;margin:0 2%;min-height:26px;padding:3px 5px;background:#f5f5f5;border:1px solid #e3e3e3;box-shadow:inset 0 1px 1px rgba(0,0,0,.05);pointer-events:none}.notify>div[_v-e514dbc6]{top:5px;z-index:1}.notify.in[_v-e514dbc6]{opacity:.9;bottom:5px}.btn-group-justified .dropdown-toggle>span[_v-e514dbc6]:not(.close){width:calc(100% - 18px);display:inline-block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-bottom:-4px}.btn-group-justified .dropdown-menu[_v-e514dbc6]{width:100%}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(183),r=o(i),a=n(88),s=o(a),l=n(97),c=n(27),u=o(c),d={};e["default"]={props:{value:{twoWay:!0},options:{type:Array,"default":function _default(){return[];}},multiple:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},clearButton:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},closeOnSelect:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},lang:{type:String,"default":navigator.language},limit:{type:Number,coerce:l.coerce.number,"default":1024},name:{type:String,"default":null},optionsLabel:{type:String,"default":"label"},optionsValue:{type:String,"default":"value"},parent:{"default":!0},placeholder:{type:String,"default":null},readonly:{type:Boolean,coerce:l.coerce["boolean"],"default":null},required:{type:Boolean,coerce:l.coerce["boolean"],"default":null},minSearch:{type:Number,coerce:l.coerce.number,"default":0},search:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},searchText:{type:String,"default":null},url:{type:String,"default":null}},data:function data(){return{loading:null,searchValue:null,show:!1,showNotify:!1,valid:null};},computed:{selected:function selected(){var t=this;if(0===this.options.length)return"";var e=[],n=!0,o=!1,i=void 0;try{for(var a,l=(0,s["default"])(this.values);!(n=(a=l.next()).done);n=!0){var c=a.value;if(~["number","string"].indexOf("undefined"==typeof c?"undefined":(0,r["default"])(c))){var u=null;this.options.some(function(e){if(e instanceof Object?e[t.optionsValue]===c:e===c)return u=e,!0;})&&e.push(u[this.optionsLabel]||u);}}}catch(d){o=!0,i=d;}finally{try{!n&&l["return"]&&l["return"]();}finally{if(o)throw i;}}return e.join(", ");},classes:function classes(){return[{open:this.show,disabled:this.disabled},this["class"],this.isLi?"dropdown":this.inInput?"input-group-btn":"btn-group"];},inInput:function inInput(){return this.$parent._input;},isLi:function isLi(){return this.$parent._navbar||this.$parent.menu||this.$parent._tabset;},canSearch:function canSearch(){return this.minSearch?this.options.length>=this.minSearch:this.search;},limitText:function limitText(){return this.text.limit.replace("{{limit}}",this.limit);},showPlaceholder:function showPlaceholder(){return 0!==this.values.length&&this.hasParent?null:this.placeholder||this.text.notSelected;},text:function text(){return(0,l.translations)(this.lang);},hasParent:function hasParent(){return this.parent instanceof Array?this.parent.length:this.parent;},values:function values(){return this.value instanceof Array?this.value:null!==this.value&&void 0!==this.value?[this.value]:[];}},watch:{options:function options(t){var e=this,n=!1;t instanceof Array&&t.length&&t.map(function(t){if(!(t instanceof Object)){var o={};return o[e.optionsLabel]=t,o[e.optionsValue]=t,n=!0,o;}return t;}),n&&(this.options=t);},show:function show(t){t&&(this.$els.sel.focus(),this.$els.search&&this.$els.search.focus());},url:function url(){this.update();},value:function value(t){var e=this;this.$emit("change",t),this.$emit("selected",this.selected),this.value instanceof Array&&t.length>this.limit&&(this.showNotify=!0,d.limit&&clearTimeout(d.limit),d.limit=setTimeout(function(){d.limit=!1,e.showNotify=!1;},1500)),this.checkValue(),this.valid=this.validate();},valid:function valid(t,e){t!==e&&this._parent&&this._parent.validate();}},methods:{blur:function blur(){this.show=!1;},clear:function clear(){this.disabled||this.readonly||(this.value=this.value instanceof Array?[]:null,this.toggle());},clearSearch:function clearSearch(){this.searchValue="",this.$els.search.focus();},checkValue:function checkValue(){!this.multiple||this.value instanceof Array||(this.value=null===this.value||void 0===this.value?[]:[this.value]),!this.multiple&&this.value instanceof Array&&(this.value=this.value.length?this.value.pop():null),this.limit<1&&(this.limit=1),this.values.length>this.limit&&(this.value=this.value.slice(0,this.limit));},isSelected:function isSelected(t){return this.values.indexOf(t)>-1;},select:function select(t,e){this.value instanceof Array?(~this.value.indexOf(t)?this.value.$remove(t):this.value.push(t),this.closeOnSelect&&this.toggle()):(this.value=~["",null,void 0].indexOf(t)?e:t,this.toggle());},toggle:function toggle(){this.show=!this.show;},update:function update(){var t=this;this.url&&(this.loading=!0,(0,l.getJSON)(this.url).then(function(e){var n=[],o=!0,i=!1,r=void 0;try{for(var a,l=(0,s["default"])(e);!(o=(a=l.next()).done);o=!0){var c=a.value;void 0!==c[t.optionsValue]&&void 0!==c[t.optionsLabel]&&n.push(c);}}catch(u){i=!0,r=u;}finally{try{!o&&l["return"]&&l["return"]();}finally{if(i)throw r;}}t.options=n,n.length||(t.value=t.value instanceof Array?[]:null);}).always(function(){t.loading=!1,t.checkValue();}));},validate:function validate(){return!this.required||(this.value instanceof Array?this.value.length>0:null!==this.value);}},created:function created(){this._select=!0,void 0!==this.value&&this.parent||(this.value=null),!this.multiple&&this.value instanceof Array&&(this.value=this.value.shift()),this.checkValue(),this.url&&this.update();for(var t=this.$parent;t&&!t._formGroup;){t=t.$parent;}t&&t._formGroup&&(t.children.push(this),this._parent=t);},ready:function ready(){var t=this;(0,u["default"])(this.$els.select).onBlur(function(e){t.show=!1;});},beforeDestroy:function beforeDestroy(){this._parent&&this._parent.children.$remove(this),(0,u["default"])(this.$els.select).offBlur();}};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}e.__esModule=!0;var i=n(46),r=o(i),a=n(184),s=o(a),l="function"==typeof s["default"]&&"symbol"==_typeof(r["default"])?function(t){return typeof t==="undefined"?"undefined":_typeof(t);}:function(t){return t&&"function"==typeof s["default"]&&t.constructor===s["default"]?"symbol":typeof t==="undefined"?"undefined":_typeof(t);};e["default"]="function"==typeof s["default"]&&"symbol"===l(r["default"])?function(t){return"undefined"==typeof t?"undefined":l(t);}:function(t){return t&&"function"==typeof s["default"]&&t.constructor===s["default"]?"symbol":"undefined"==typeof t?"undefined":l(t);};},function(t,e,n){t.exports={"default":n(185),__esModule:!0};},function(t,e,n){n(186),n(195),n(196),n(197),t.exports=n(33).Symbol;},function(t,e,n){"use strict";var o=n(32),i=n(55),r=n(41),a=n(31),s=n(54),l=n(187).KEY,c=n(42),u=n(69),d=n(73),p=n(70),f=n(74),h=n(81),v=n(188),y=n(189),b=n(190),m=n(193),g=n(38),x=n(62),w=n(44),_=n(45),k=n(58),S=n(86),M=n(194),O=n(37),$=n(60),D=M.f,j=O.f,C=S.f,_N=o.Symbol,B=o.JSON,L=B&&B.stringify,A="prototype",T=f("_hidden"),P=f("toPrimitive"),E={}.propertyIsEnumerable,R=u("symbol-registry"),V=u("symbols"),z=u("op-symbols"),I=Object[A],W="function"==typeof _N,F=o.QObject,Y=!F||!F[A]||!F[A].findChild,X=r&&c(function(){return 7!=k(j({},"a",{get:function get(){return j(this,"a",{value:7}).a;}})).a;})?function(t,e,n){var o=D(I,e);o&&delete I[e],j(t,e,n),o&&t!==I&&j(I,e,o);}:j,H=function H(t){var e=V[t]=k(_N[A]);return e._k=t,e;},G=W&&"symbol"==_typeof(_N.iterator)?function(t){return"symbol"==(typeof t==="undefined"?"undefined":_typeof(t));}:function(t){return t instanceof _N;},q=function q(t,e,n){return t===I&&q(z,e,n),g(t),e=w(e,!0),g(n),i(V,e)?(n.enumerable?(i(t,T)&&t[T][e]&&(t[T][e]=!1),n=k(n,{enumerable:_(0,!1)})):(i(t,T)||j(t,T,_(1,{})),t[T][e]=!0),X(t,e,n)):j(t,e,n);},U=function U(t,e){g(t);for(var n,o=b(e=x(e)),i=0,r=o.length;r>i;){q(t,n=o[i++],e[n]);}return t;},J=function J(t,e){return void 0===e?k(t):U(k(t),e);},Z=function Z(t){var e=E.call(this,t=w(t,!0));return!(this===I&&i(V,t)&&!i(z,t))&&(!(e||!i(this,t)||!i(V,t)||i(this,T)&&this[T][t])||e);},K=function K(t,e){if(t=x(t),e=w(e,!0),t!==I||!i(V,e)||i(z,e)){var n=D(t,e);return!n||!i(V,e)||i(t,T)&&t[T][e]||(n.enumerable=!0),n;}},Q=function Q(t){for(var e,n=C(x(t)),o=[],r=0;n.length>r;){i(V,e=n[r++])||e==T||e==l||o.push(e);}return o;},tt=function tt(t){for(var e,n=t===I,o=C(n?z:x(t)),r=[],a=0;o.length>a;){!i(V,e=o[a++])||n&&!i(I,e)||r.push(V[e]);}return r;};W||(_N=function N(){if(this instanceof _N)throw TypeError("Symbol is not a constructor!");var t=p(arguments.length>0?arguments[0]:void 0),e=function e(n){this===I&&e.call(z,n),i(this,T)&&i(this[T],t)&&(this[T][t]=!1),X(this,t,_(1,n));};return r&&Y&&X(I,t,{configurable:!0,set:e}),H(t);},s(_N[A],"toString",function(){return this._k;}),M.f=K,O.f=q,n(87).f=S.f=Q,n(192).f=Z,n(191).f=tt,r&&!n(53)&&s(I,"propertyIsEnumerable",Z,!0),h.f=function(t){return H(f(t));}),a(a.G+a.W+a.F*!W,{Symbol:_N});for(var et="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),nt=0;et.length>nt;){f(et[nt++]);}for(var et=$(f.store),nt=0;et.length>nt;){v(et[nt++]);}a(a.S+a.F*!W,"Symbol",{"for":function _for(t){return i(R,t+="")?R[t]:R[t]=_N(t);},keyFor:function keyFor(t){if(G(t))return y(R,t);throw TypeError(t+" is not a symbol!");},useSetter:function useSetter(){Y=!0;},useSimple:function useSimple(){Y=!1;}}),a(a.S+a.F*!W,"Object",{create:J,defineProperty:q,defineProperties:U,getOwnPropertyDescriptor:K,getOwnPropertyNames:Q,getOwnPropertySymbols:tt}),B&&a(a.S+a.F*(!W||c(function(){var t=_N();return"[null]"!=L([t])||"{}"!=L({a:t})||"{}"!=L(Object(t));})),"JSON",{stringify:function stringify(t){if(void 0!==t&&!G(t)){for(var e,n,o=[t],i=1;arguments.length>i;){o.push(arguments[i++]);}return e=o[1],"function"==typeof e&&(n=e),!n&&m(e)||(e=function e(t,_e2){if(n&&(_e2=n.call(this,t,_e2)),!G(_e2))return _e2;}),o[1]=e,L.apply(B,o);}}}),_N[A][P]||n(36)(_N[A],P,_N[A].valueOf),d(_N,"Symbol"),d(Math,"Math",!0),d(o.JSON,"JSON",!0);},function(t,e,n){var o=n(70)("meta"),i=n(39),r=n(55),a=n(37).f,s=0,l=Object.isExtensible||function(){return!0;},c=!n(42)(function(){return l(Object.preventExtensions({}));}),u=function u(t){a(t,o,{value:{i:"O"+ ++s,w:{}}});},d=function d(t,e){if(!i(t))return"symbol"==(typeof t==="undefined"?"undefined":_typeof(t))?t:("string"==typeof t?"S":"P")+t;if(!r(t,o)){if(!l(t))return"F";if(!e)return"E";u(t);}return t[o].i;},p=function p(t,e){if(!r(t,o)){if(!l(t))return!0;if(!e)return!1;u(t);}return t[o].w;},f=function f(t){return c&&h.NEED&&l(t)&&!r(t,o)&&u(t),t;},h=t.exports={KEY:o,NEED:!1,fastKey:d,getWeak:p,onFreeze:f};},function(t,e,n){var o=n(32),i=n(33),r=n(53),a=n(81),s=n(37).f;t.exports=function(t){var e=i.Symbol||(i.Symbol=r?{}:o.Symbol||{});"_"==t.charAt(0)||t in e||s(e,t,{value:a.f(t)});};},function(t,e,n){var o=n(60),i=n(62);t.exports=function(t,e){for(var n,r=i(t),a=o(r),s=a.length,l=0;s>l;){if(r[n=a[l++]]===e)return n;}};},function(t,e,n){var o=n(60),i=n(191),r=n(192);t.exports=function(t){var e=o(t),n=i.f;if(n)for(var a,s=n(t),l=r.f,c=0;s.length>c;){l.call(t,a=s[c++])&&e.push(a);}return e;};},function(t,e){e.f=Object.getOwnPropertySymbols;},function(t,e){e.f={}.propertyIsEnumerable;},function(t,e,n){var o=n(64);t.exports=Array.isArray||function(t){return"Array"==o(t);};},function(t,e,n){var o=n(192),i=n(45),r=n(62),a=n(44),s=n(55),l=n(40),c=Object.getOwnPropertyDescriptor;e.f=n(41)?c:function(t,e){if(t=r(t),e=a(e,!0),l)try{return c(t,e);}catch(n){}if(s(t,e))return i(!o.f.call(t,e),t[e]);};},function(t,e){},function(t,e,n){n(188)("asyncIterator");},function(t,e,n){n(188)("observable");},function(t,e){t.exports='<div v-el:select="" :class=classes _v-e514dbc6=""> <button type=button class="form-control dropdown-toggle" :disabled="disabled || !hasParent" :readonly=readonly @click=toggle() @keyup.esc="show = false" _v-e514dbc6=""> <span class=btn-content _v-e514dbc6="">{{ loading ? text.loading : showPlaceholder || selected }}</span> <span v-if=clearButton&amp;&amp;values.length class=close @click=clear() _v-e514dbc6="">×</span> </button> <select v-el:sel="" v-model=value v-show=show name={{name}} class=secret :multiple=multiple :required=required :readonly=readonly :disabled=disabled _v-e514dbc6=""> <option v-if=required value="" _v-e514dbc6=""></option> <option v-for="option in options" :value=option[optionsValue]||option _v-e514dbc6="">{{ option[optionsLabel]||option }}</option> </select> <ul class=dropdown-menu _v-e514dbc6=""> <template v-if=options.length _v-e514dbc6=""> <li v-if=canSearch class=bs-searchbox _v-e514dbc6=""> <input type=text placeholder={{searchText||text.search}} class=form-control autocomplete=off v-el:search="" v-model=searchValue @keyup.esc="show = false" _v-e514dbc6=""> <span v-show=searchValue class=close @click=clearSearch _v-e514dbc6="">×</span> </li> <li v-if=required&amp;&amp;!clearButton _v-e514dbc6=""><a @mousedown.prevent="clear() &amp;&amp; blur()" _v-e514dbc6="">{{ placeholder || text.notSelected }}</a></li> <li v-for="option in options | filterBy searchValue" :id=option[optionsValue]||option _v-e514dbc6=""> <a @mousedown.prevent=select(option[optionsValue],option) _v-e514dbc6=""> <span v-html=option[optionsLabel]||option _v-e514dbc6=""></span> <span class="glyphicon glyphicon-ok check-mark" v-show=isSelected(option[optionsValue]||option) _v-e514dbc6=""></span> </a> </li> </template> <slot _v-e514dbc6=""></slot> <div v-if="showNotify &amp;&amp; !closeOnSelect" class="notify in" transition=fadein _v-e514dbc6="">{{limitText}}</div> </ul> <div v-if="showNotify &amp;&amp; closeOnSelect" class="notify out" transition=fadein _v-e514dbc6=""><div _v-e514dbc6="">{{limitText}}</div></div> </div>';},function(t,e,n){t.exports=n(200),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(201);},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={data:function data(){return{index:0,show:!1};},computed:{show:function show(){return this.$parent.index===this.index;}},ready:function ready(){for(var t in this.$parent.$children){if(this.$parent.$children[t]===this){this.index=parseInt(t,10);break;}}this.$parent.indicator.push(this.index),0===this.index&&this.$el.classList.add("active");}};},function(t,e){t.exports="<div class=item> <slot></slot> </div>";},function(t,e,n){t.exports=n(203),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(206);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),n(204);var o=n(97),i=500;e["default"]={props:{size:{type:String,"default":"md"},text:{type:String,"default":""},fixed:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},data:function data(){return{active:!1};},computed:{spinnerSize:function spinnerSize(){return this.size?"spinner-"+this.size:"spinner-sm";}},ready:function ready(){this._body=document.querySelector("body"),this._bodyOverflow=this._body.style.overflowY||"";},methods:{getMinWait:function getMinWait(t){return t=t||0,new Date().getTime()-this._started.getTime()<i?i-parseInt(new Date().getTime()-this._started.getTime(),10)+t:0+t;},show:function show(t){t&&t.text&&(this.text=t.text),t&&t.size&&(this.size=t.size),t&&t.fixed&&(this.fixed=t.fixed),this._body.style.overflowY="hidden",this._started=new Date(),this.active=!0,this.$root.$broadcast("shown::spinner");},hide:function hide(){var t=this,e=0;this._spinnerAnimation=setTimeout(function(){t.active=!1,t._body.style.overflowY=t._bodyOverflow,t.$root.$broadcast("hidden::spinner");},this.getMinWait(e));}},events:{"show::spinner":function showSpinner(t){this.show(t);},"hide::spinner":function hideSpinner(){this.hide();},"start::ajax":function startAjax(t){this.show(t);},"end::ajax":function endAjax(){this.hide();}},beforeDestroy:function beforeDestroy(){clearTimeout(this._spinnerAnimation),this._body.style.overflowY=this._bodyOverflow;}};},function(t,e,n){var o=n(205);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,'/*!\r\n *\r\n * Spinner\r\n * With fallback to IE9\r\n *\r\n */@keyframes spin{to{transform:rotate(1turn)}}.spinner-gritcode{top:0;left:0;bottom:0;right:0;z-index:9998;position:absolute;width:100%;text-align:center;background:hsla(0,0%,100%,.9)}.spinner-gritcode.spinner-fixed{position:fixed}.spinner-gritcode .spinner-wrapper{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%)}.spinner-gritcode .spinner-circle{position:relative;border:4px solid #ccc;border-right-color:#337ab7;border-radius:50%;display:inline-block;animation:spin .6s linear;animation-iteration-count:infinite;width:3em;height:3em;z-index:2}.spinner-gritcode .spinner-text{position:relative;text-align:center;margin-top:.5em;z-index:2;width:100%;font-size:95%;color:#337ab7}.spinner-gritcode.spinner-sm .spinner-circle{width:1.5em;height:1.5em}.spinner-gritcode.spinner-md .spinner-circle{width:2em;height:2em}.spinner-gritcode.spinner-lg .spinner-circle{width:2.5em;height:2.5em}.spinner-gritcode.spinner-xl .spinner-circle{width:3.5em;height:3.5em}.ie9 .spinner-gritcode .spinner-circle,.lt-ie10 .spinner-gritcode .spinner-circle,.no-csstransforms3d .spinner-gritcode .spinner-circle,.no-csstransitions .spinner-gritcode .spinner-circle,.oldie .spinner-gritcode .spinner-circle{background:url("http://i2.wp.com/www.thegreatnovelingadventure.com/wp-content/plugins/wp-polls/images/loading.gif") 50% no-repeat;animation:none;margin-left:0;margin-top:5px;border:none;width:32px;height:32px}',""]);},function(t,e){t.exports="<div :class=\"['spinner spinner-gritcode',spinnerSize,{'spinner-fixed':fixed}]\" v-show=active> <div class=spinner-wrapper> <div class=spinner-circle></div> <div class=spinner-text>{{text}}</div> </div> </div>";},function(t,e,n){t.exports=n(208),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(209);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{header:{type:String},disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},computed:{active:function active(){return this._tabset.show===this;},index:function index(){return this._tabset.tabs.indexOf(this);},show:function show(){return this._tabset&&this._tabset.show===this;},transition:function transition(){return this._tabset?this._tabset.effect:null;}},created:function created(){this._ingroup=this.$parent&&this.$parent._tabgroup;for(var t=this;t&&t._tabset!==!0&&t.$parent;){t=t.$parent;}t._tabset?(t.tabs.push(this),this._ingroup?~t.headers.indexOf(this.$parent)||t.headers.push(this.$parent):t.headers.push(this),this._tabset=t):(this._tabset={},console.warn('Warning: "tab" depend on "tabset" to work properly.')),this._ingroup&&this.$parent.tabs.push(this);},beforeDestroy:function beforeDestroy(){this._tabset.active===this.index&&(this._tabset.active=0),this._ingroup&&this.$parent.tabs.$remove(this),this._tabset.tabs.$remove(this);}};},function(t,e){t.exports='<div role=tabpanel class="tab-pane active" v-show=show :class={hide:!show} :transition=transition> <slot></slot> </div>';},function(t,e,n){n(211),t.exports=n(213),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(214);},function(t,e,n){var o=n(212);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".nav-tabs[_v-55faf3cb]{margin-bottom:15px}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},header:{type:String}},data:function data(){return{tabs:[],show:!1};},computed:{active:function active(){return~this.tabs.indexOf(this._tabset.show);}},created:function created(){this._tabgroup=!0;var t=this.$parent&&this.$parent._tabset===!0?this.$parent:{};for(this.$parent&&this.$parent._tabgroup&&console.error("Can't nest tabgroups.");t&&!t._tabset&&t.$parent;){t=t.$parent;}t._tabset?this._tabset=t:(this._tabset={},this.show=!0,console.warn("Warning: tabgroup depend on tabset to work properly."));},methods:{blur:function blur(){this.show=!1;},toggle:function toggle(){this.show=!this.show;}}};},function(t,e){t.exports='<slot _v-55faf3cb=""></slot>';},function(t,e,n){n(216),t.exports=n(218),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(219);},function(t,e,n){var o=n(217);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".nav-tabs[_v-09e2754e]{margin-bottom:15px}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(132),a=o(r);e["default"]={components:{dropdown:a["default"]},props:{navStyle:{type:String,"default":"tabs"},effect:{type:String,"default":"fadein"},active:{twoWay:!0,type:Number,coerce:i.coerce.number,"default":0}},data:function data(){return{show:null,headers:[],tabs:[]};},created:function created(){this._tabset=!0;},watch:{active:function active(t){this.show=this.tabs[t];}},ready:function ready(){this.show=this.tabs[this.active];},methods:{select:function select(t){t.disabled||(this.active=t.index);}}};},function(t,e){t.exports=' <ul class="nav nav-{{navStyle}}" role=tablist _v-09e2754e=""> <template v-for="t in headers" _v-09e2754e=""> <li v-if=!t._tabgroup :class="{active:t.active, disabled:t.disabled}" @click.prevent=select(t) _v-09e2754e=""> <a href=# _v-09e2754e=""><slot name=header _v-09e2754e="">{{{t.header}}}</slot></a> </li> <dropdown v-else="" :text=t.header :class={active:t.active} :disabled=t.disabled _v-09e2754e=""> <li v-for="tab in t.tabs" :class={disabled:tab.disabled} _v-09e2754e=""><a href=# @click.prevent=select(tab) _v-09e2754e="">{{tab.header}}</a></li> </dropdown> </template> </ul> <div class=tab-content v-el:tab-content="" _v-09e2754e=""> <slot _v-09e2754e=""></slot> </div>';},function(t,e,n){n(221),t.exports=n(223),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(224);},function(t,e,n){var o=n(222);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".tooltip.bottom,.tooltip.left,.tooltip.right,.tooltip.top{opacity:.9}.fadein-enter{-webkit-animation:fadein-in .3s ease-in;animation:fadein-in .3s ease-in}.fadein-leave{-webkit-animation:fadein-out .3s ease-out;animation:fadein-out .3s ease-out}@-webkit-keyframes fadein-in{0%{opacity:0}to{opacity:.9}}@keyframes fadein-in{0%{opacity:0}to{opacity:.9}}@-webkit-keyframes fadein-out{0%{opacity:.9}to{opacity:0}}@keyframes fadein-out{0%{opacity:.9}to{opacity:0}}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(169),r=o(i);e["default"]={mixins:[r["default"]],props:{trigger:{type:String,"default":"hover"},effect:{type:String,"default":"scale"}}};},function(t,e){t.exports="<span v-el:trigger> <slot></slot> </span> <div v-el:popover v-if=show style=display:block :class=\"['tooltip',placement]\" :transition=effect> <div class=tooltip-arrow></div> <div class=tooltip-inner> <slot name=content>{{{content}}}</slot> </div> </div>";},function(t,e,n){n(226),t.exports=n(228),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(229);},function(t,e,n){var o=n(227);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".dropdown-menu>li>a{cursor:pointer}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97),i=window.Vue;e["default"]={created:function created(){this.items=this.primitiveData;},partials:{"default":'<span v-html="item | highlight query"></span>'},props:{value:{twoWay:!0,type:String,"default":""},data:{type:Array},limit:{type:Number,"default":8},async:{type:String},template:{type:String},templateName:{type:String,"default":"default"},key:{type:String,"default":null},matchCase:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},matchStart:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},onHit:{type:Function,"default":function _default(t){this.reset(),this.value=t;}},placeholder:{type:String}},data:function data(){return{showDropdown:!1,noResults:!0,current:0,items:[]};},computed:{primitiveData:function primitiveData(){var t=this;if(this.data)return this.data.filter(function(e){e=t.matchCase?e:e.toLowerCase();var n=t.matchCase?t.value:t.value.toLowerCase();return t.matchStart?0===e.indexOf(n):e.indexOf(n)!==-1;}).slice(0,this.limit);}},ready:function ready(){this.templateName&&"default"!==this.templateName&&i.partial(this.templateName,this.template);},methods:{update:function update(){var t=this;return this.value?(this.data&&(this.items=this.primitiveData,this.showDropdown=this.items.length>0),void(this.async&&(0,o.getJSON)(this.async+this.value).then(function(e){t.items=(t.key?e[t.key]:e).slice(0,t.limit),t.showDropdown=t.items.length>0;}))):(this.reset(),!1);},reset:function reset(){this.items=[],this.value="",this.loading=!1,this.showDropdown=!1;},setActive:function setActive(t){this.current=t;},isActive:function isActive(t){return this.current===t;},hit:function hit(t){t.preventDefault(),this.onHit(this.items[this.current],this);},up:function up(){this.current>0&&this.current--;},down:function down(){this.current<this.items.length-1&&this.current++;}},filters:{highlight:function highlight(t,e){return t.replace(new RegExp("("+e+")","gi"),"<strong>$1</strong>");}}};},function(t,e){t.exports='<div style="position: relative" v-bind:class="{\'open\':showDropdown}"> <input type=text class=form-control :placeholder=placeholder autocomplete=off v-model=value @input=update @keydown.up=up @keydown.down=down @keydown.enter=hit @keydown.esc=reset @blur="showDropdown = false"/> <ul class=dropdown-menu v-el:dropdown> <li v-for="item in items" v-bind:class="{\'active\': isActive($index)}"> <a @mousedown.prevent=hit @mousemove=setActive($index)> <partial :name=templateName></partial> </a> </li> </ul> </div>';}]);});
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-!function (t, e) {
-  "object" == (typeof exports === "undefined" ? "undefined" : _typeof(exports)) && "object" == (typeof module === "undefined" ? "undefined" : _typeof(module)) ? module.exports = e() : "function" == typeof define && define.amd ? define([], e) : "object" == (typeof exports === "undefined" ? "undefined" : _typeof(exports)) ? exports.VueStrap = e() : t.VueStrap = e();
-}(undefined, function () {
-  return function (t) {
-    function e(i) {
-      if (n[i]) return n[i].exports;var o = n[i] = { exports: {}, id: i, loaded: !1 };return t[i].call(o.exports, o, o.exports, e), o.loaded = !0, o.exports;
-    }var n = {};return e.m = t, e.c = n, e.p = "", e(0);
-  }([function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }var o = n(25),
-        r = i(o),
-        s = n(33),
-        a = i(s),
-        l = n(93),
-        c = i(l),
-        u = n(96),
-        d = i(u),
-        p = n(99),
-        f = i(p),
-        h = n(104),
-        v = i(h),
-        m = n(110),
-        y = i(m),
-        g = n(113),
-        x = i(g),
-        b = n(116),
-        w = i(b),
-        k = n(123),
-        _ = i(k),
-        M = n(126),
-        D = i(M),
-        S = n(135),
-        O = i(S),
-        E = n(140),
-        R = i(E),
-        j = n(145),
-        C = i(j),
-        $ = n(151),
-        A = i($),
-        L = n(154),
-        N = i(L),
-        B = n(157),
-        T = i(B),
-        P = n(160),
-        I = i(P),
-        X = n(172),
-        Y = i(X),
-        V = n(177),
-        z = i(V),
-        W = n(182),
-        F = i(W),
-        H = n(187),
-        q = i(H),
-        U = n(193),
-        G = i(U),
-        J = n(196),
-        K = i(J),
-        Q = { alert: r["default"], carousel: a["default"], slider: c["default"], accordion: d["default"], affix: f["default"], aside: v["default"], checkboxBtn: x["default"], checkboxGroup: y["default"], datepicker: w["default"], dropdown: _["default"], modal: D["default"], option: O["default"], panel: R["default"], popover: C["default"], progressbar: A["default"], radioGroup: T["default"], radioBtn: N["default"], select: I["default"], tab: Y["default"], tabset: z["default"], tooltip: F["default"], typeahead: q["default"], navbar: G["default"], spinner: K["default"] };t.exports = Q;
-  },,,,,,,,,,,,,,,,,,,,,,,,, function (t, e, n) {
-    n(26), t.exports = n(30), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(32);
-  }, function (t, e, n) {
-    var i = n(27);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".fade-transition{-webkit-transition:opacity .3s ease;transition:opacity .3s ease}.fade-enter,.fade-leave{height:0;opacity:0}.alert.top{margin:0 auto;left:0;right:0}.alert.top,.alert.top-right{position:fixed;top:30px;z-index:2}.alert.top-right{right:50px}", ""]);
-  }, function (t, e) {
-    t.exports = function () {
-      var t = [];return t.toString = function () {
-        for (var t = [], e = 0; e < this.length; e++) {
-          var n = this[e];n[2] ? t.push("@media " + n[2] + "{" + n[1] + "}") : t.push(n[1]);
-        }return t.join("");
-      }, t.i = function (e, n) {
-        "string" == typeof e && (e = [[null, e, ""]]);for (var i = {}, o = 0; o < this.length; o++) {
-          var r = this[o][0];"number" == typeof r && (i[r] = !0);
-        }for (o = 0; o < e.length; o++) {
-          var s = e[o];"number" == typeof s[0] && i[s[0]] || (n && !s[2] ? s[2] = n : n && (s[2] = "(" + s[2] + ") and (" + n + ")"), t.push(s));
-        }
-      }, t;
-    };
-  }, function (t, e, n) {
-    function i(t, e) {
-      for (var n = 0; n < t.length; n++) {
-        var i = t[n],
-            o = f[i.id];if (o) {
-          o.refs++;for (var r = 0; r < o.parts.length; r++) {
-            o.parts[r](i.parts[r]);
-          }for (; r < i.parts.length; r++) {
-            o.parts.push(c(i.parts[r], e));
-          }
-        } else {
-          for (var s = [], r = 0; r < i.parts.length; r++) {
-            s.push(c(i.parts[r], e));
-          }f[i.id] = { id: i.id, refs: 1, parts: s };
-        }
-      }
-    }function o(t) {
-      for (var e = [], n = {}, i = 0; i < t.length; i++) {
-        var o = t[i],
-            r = o[0],
-            s = o[1],
-            a = o[2],
-            l = o[3],
-            c = { css: s, media: a, sourceMap: l };n[r] ? n[r].parts.push(c) : e.push(n[r] = { id: r, parts: [c] });
-      }return e;
-    }function r(t, e) {
-      var n = m(),
-          i = x[x.length - 1];if ("top" === t.insertAt) i ? i.nextSibling ? n.insertBefore(e, i.nextSibling) : n.appendChild(e) : n.insertBefore(e, n.firstChild), x.push(e);else {
-        if ("bottom" !== t.insertAt) throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");n.appendChild(e);
-      }
-    }function s(t) {
-      t.parentNode.removeChild(t);var e = x.indexOf(t);e >= 0 && x.splice(e, 1);
-    }function a(t) {
-      var e = document.createElement("style");return e.type = "text/css", r(t, e), e;
-    }function l(t) {
-      var e = document.createElement("link");return e.rel = "stylesheet", r(t, e), e;
-    }function c(t, e) {
-      var n, i, o;if (e.singleton) {
-        var r = g++;n = y || (y = a(e)), i = u.bind(null, n, r, !1), o = u.bind(null, n, r, !0);
-      } else t.sourceMap && "function" == typeof URL && "function" == typeof URL.createObjectURL && "function" == typeof URL.revokeObjectURL && "function" == typeof Blob && "function" == typeof btoa ? (n = l(e), i = p.bind(null, n), o = function o() {
-        s(n), n.href && URL.revokeObjectURL(n.href);
-      }) : (n = a(e), i = d.bind(null, n), o = function o() {
-        s(n);
-      });return i(t), function (e) {
-        if (e) {
-          if (e.css === t.css && e.media === t.media && e.sourceMap === t.sourceMap) return;i(t = e);
-        } else o();
-      };
-    }function u(t, e, n, i) {
-      var o = n ? "" : i.css;if (t.styleSheet) t.styleSheet.cssText = b(e, o);else {
-        var r = document.createTextNode(o),
-            s = t.childNodes;s[e] && t.removeChild(s[e]), s.length ? t.insertBefore(r, s[e]) : t.appendChild(r);
-      }
-    }function d(t, e) {
-      var n = e.css,
-          i = e.media;e.sourceMap;if (i && t.setAttribute("media", i), t.styleSheet) t.styleSheet.cssText = n;else {
-        for (; t.firstChild;) {
-          t.removeChild(t.firstChild);
-        }t.appendChild(document.createTextNode(n));
-      }
-    }function p(t, e) {
-      var n = e.css,
-          i = (e.media, e.sourceMap);i && (n += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(i)))) + " */");var o = new Blob([n], { type: "text/css" }),
-          r = t.href;t.href = URL.createObjectURL(o), r && URL.revokeObjectURL(r);
-    }var f = {},
-        h = function h(t) {
-      var e;return function () {
-        return "undefined" == typeof e && (e = t.apply(this, arguments)), e;
-      };
-    },
-        v = h(function () {
-      return (/msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase())
-      );
-    }),
-        m = h(function () {
-      return document.head || document.getElementsByTagName("head")[0];
-    }),
-        y = null,
-        g = 0,
-        x = [];t.exports = function (t, e) {
-      e = e || {}, "undefined" == typeof e.singleton && (e.singleton = v()), "undefined" == typeof e.insertAt && (e.insertAt = "bottom");var n = o(t);return i(n, e), function (t) {
-        for (var r = [], s = 0; s < n.length; s++) {
-          var a = n[s],
-              l = f[a.id];l.refs--, r.push(l);
-        }if (t) {
-          var c = o(t);i(c, e);
-        }for (var s = 0; s < r.length; s++) {
-          var l = r[s];if (0 === l.refs) {
-            for (var u = 0; u < l.parts.length; u++) {
-              l.parts[u]();
-            }delete f[l.id];
-          }
-        }
-      };
-    };var b = function () {
-      var t = [];return function (e, n) {
-        return t[e] = n, t.filter(Boolean).join("\n");
-      };
-    }();
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(31),
-        r = i(o);e["default"] = { props: { type: { type: String }, dismissable: { type: Boolean, coerce: r["default"], "default": !1 }, show: { type: Boolean, coerce: r["default"], "default": !0, twoWay: !0 }, duration: { type: Number, "default": 0 }, width: { type: String }, placement: { type: String } }, watch: { show: function show(t) {
-          var e = this;this._timeout && clearTimeout(this._timeout), t && Boolean(this.duration) && (this._timeout = setTimeout(function () {
-            return e.show = !1;
-          }, this.duration));
-        } } };
-  }, function (t, e) {
-    "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 }), e["default"] = function (t) {
-      return "string" != typeof t ? t : "true" === t ? !0 : "false" === t ? !1 : "null" === t ? !1 : "undefined" === t ? !1 : t;
-    };
-  }, function (t, e) {
-    t.exports = "<div v-show=show v-bind:class=\"{\n      'alert':		true,\n      'alert-success':(type == 'success'),\n      'alert-warning':(type == 'warning'),\n      'alert-info':	(type == 'info'),\n      'alert-danger':	(type == 'danger'),\n      'top': 			(placement === 'top'),\n      'top-right': 	(placement === 'top-right')\n    }\" transition=fade v-bind:style={width:width} role=alert><button v-show=dismissable type=button class=close @click=\"show = false\"><span>&times;</span></button><slot></slot></div>";
-  }, function (t, e, n) {
-    n(34), t.exports = n(36), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(92);
-  }, function (t, e, n) {
-    var i = n(35);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".carousel-control[_v-1ce6791c]{cursor:pointer}", ""]);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(37),
-        r = i(o),
-        s = n(91),
-        a = i(s),
-        l = n(31),
-        c = i(l);e["default"] = { props: { indicators: { type: Boolean, coerce: c["default"], "default": !0 }, controls: { type: Boolean, coerce: c["default"], "default": !0 }, interval: { type: Number, "default": 5e3 } }, components: { indicator: { props: ["indicator", "activeIndex", "isAnimating"], template: '<li v-for="i in indicator" @click="handleIndicatorClick($index)" v-bind:class="{\'active\':$index === activeIndex}"><span></span></li>', methods: { handleIndicatorClick: function handleIndicatorClick(t) {
-              return this.isAnimating ? !1 : (this.isAnimating = !0, void (this.activeIndex = t));
-            } } } }, data: function data() {
-        return { indicator: [], activeIndex: 0, isAnimating: !1 };
-      }, computed: { slider: function slider() {
-          return this.$el.querySelectorAll(".item");
-        } }, watch: { activeIndex: function activeIndex(t, e) {
-          t > e ? this.slide("left", t, e) : this.slide("right", t, e);
-        } }, methods: { slide: function slide(t, e, n) {
-          var i = this;this._prevSelectedEvent && this._prevSelectedEvent.remove(), this._selectedEvent && this._selectedEvent.remove();var o = this.slider[n],
-              s = this.slider[e],
-              l = function l() {
-            [].concat((0, r["default"])(i.slider)).forEach(function (t) {
-              return t.className = "item";
-            }), s.classList.add("active"), i.isAnimating = !1;
-          };"left" === t ? s.classList.add("next") : s.classList.add("prev");s.clientHeight;this._prevSelectedEvent = a["default"].listen(o, "transitionend", l), this._selectedEvent = a["default"].listen(s, "transitionend", l), o.classList.add(t), s.classList.add(t);
-        }, nextClick: function nextClick() {
-          return this.isAnimating ? !1 : (this.isAnimating = !0, void (this.activeIndex + 1 < this.slider.length ? this.activeIndex += 1 : this.activeIndex = 0));
-        }, prevClick: function prevClick() {
-          return this.isAnimating ? !1 : (this.isAnimating = !0, void (0 === this.activeIndex ? this.activeIndex = this.slider.length - 1 : this.activeIndex -= 1));
-        } }, ready: function ready() {
-        function t(t, e, i) {
-          t ? n = setInterval(e, i) : clearInterval(n);
-        }var e = this,
-            n = null,
-            i = this.$el;this.interval && (t(!0, this.nextClick, this.interval), i.addEventListener("mouseenter", function () {
-          return t(!1);
-        }), i.addEventListener("mouseleave", function () {
-          return t(!0, e.nextClick, e.interval);
-        }));
-      } };
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }e.__esModule = !0;var o = n(38),
-        r = i(o);e["default"] = function (t) {
-      if (Array.isArray(t)) {
-        for (var e = 0, n = Array(t.length); e < t.length; e++) {
-          n[e] = t[e];
-        }return n;
-      }return (0, r["default"])(t);
-    };
-  }, function (t, e, n) {
-    t.exports = { "default": n(39), __esModule: !0 };
-  }, function (t, e, n) {
-    n(40), n(84), t.exports = n(48).Array.from;
-  }, function (t, e, n) {
-    "use strict";
-    var i = n(41)(!0);n(44)(String, "String", function (t) {
-      this._t = String(t), this._i = 0;
-    }, function () {
-      var t,
-          e = this._t,
-          n = this._i;return n >= e.length ? { value: void 0, done: !0 } : (t = i(e, n), this._i += t.length, { value: t, done: !1 });
-    });
-  }, function (t, e, n) {
-    var i = n(42),
-        o = n(43);t.exports = function (t) {
-      return function (e, n) {
-        var r,
-            s,
-            a = String(o(e)),
-            l = i(n),
-            c = a.length;return 0 > l || l >= c ? t ? "" : void 0 : (r = a.charCodeAt(l), 55296 > r || r > 56319 || l + 1 === c || (s = a.charCodeAt(l + 1)) < 56320 || s > 57343 ? t ? a.charAt(l) : r : t ? a.slice(l, l + 2) : (r - 55296 << 10) + (s - 56320) + 65536);
-      };
-    };
-  }, function (t, e) {
-    var n = Math.ceil,
-        i = Math.floor;t.exports = function (t) {
-      return isNaN(t = +t) ? 0 : (t > 0 ? i : n)(t);
-    };
-  }, function (t, e) {
-    t.exports = function (t) {
-      if (void 0 == t) throw TypeError("Can't call method on  " + t);return t;
-    };
-  }, function (t, e, n) {
-    "use strict";
-    var i = n(45),
-        o = n(46),
-        r = n(61),
-        s = n(51),
-        a = n(62),
-        l = n(63),
-        c = n(64),
-        u = n(80),
-        d = n(82),
-        p = n(81)("iterator"),
-        f = !([].keys && "next" in [].keys()),
-        h = "@@iterator",
-        v = "keys",
-        m = "values",
-        y = function y() {
-      return this;
-    };t.exports = function (t, e, n, g, x, b, w) {
-      c(n, e, g);var k,
-          _,
-          M,
-          D = function D(t) {
-        if (!f && t in R) return R[t];switch (t) {case v:
-            return function () {
-              return new n(this, t);
-            };case m:
-            return function () {
-              return new n(this, t);
-            };}return function () {
-          return new n(this, t);
-        };
-      },
-          S = e + " Iterator",
-          O = x == m,
-          E = !1,
-          R = t.prototype,
-          j = R[p] || R[h] || x && R[x],
-          C = j || D(x),
-          $ = x ? O ? D("entries") : C : void 0,
-          A = "Array" == e ? R.entries || j : j;if (A && (M = d(A.call(new t())), M !== Object.prototype && (u(M, S, !0), i || a(M, p) || s(M, p, y))), O && j && j.name !== m && (E = !0, C = function C() {
-        return j.call(this);
-      }), i && !w || !f && !E && R[p] || s(R, p, C), l[e] = C, l[S] = y, x) if (k = { values: O ? C : D(m), keys: b ? C : D(v), entries: $ }, w) for (_ in k) {
-        _ in R || r(R, _, k[_]);
-      } else o(o.P + o.F * (f || E), e, k);return k;
-    };
-  }, function (t, e) {
-    t.exports = !0;
-  }, function (t, e, n) {
-    var i = n(47),
-        o = n(48),
-        r = n(49),
-        s = n(51),
-        a = "prototype",
-        l = function l(t, e, n) {
-      var c,
-          u,
-          d,
-          p = t & l.F,
-          f = t & l.G,
-          h = t & l.S,
-          v = t & l.P,
-          m = t & l.B,
-          y = t & l.W,
-          g = f ? o : o[e] || (o[e] = {}),
-          x = g[a],
-          b = f ? i : h ? i[e] : (i[e] || {})[a];f && (n = e);for (c in n) {
-        u = !p && b && void 0 !== b[c], u && c in g || (d = u ? b[c] : n[c], g[c] = f && "function" != typeof b[c] ? n[c] : m && u ? r(d, i) : y && b[c] == d ? function (t) {
-          var e = function e(_e, n, i) {
-            if (this instanceof t) {
-              switch (arguments.length) {case 0:
-                  return new t();case 1:
-                  return new t(_e);case 2:
-                  return new t(_e, n);}return new t(_e, n, i);
-            }return t.apply(this, arguments);
-          };return e[a] = t[a], e;
-        }(d) : v && "function" == typeof d ? r(Function.call, d) : d, v && ((g.virtual || (g.virtual = {}))[c] = d, t & l.R && x && !x[c] && s(x, c, d)));
-      }
-    };l.F = 1, l.G = 2, l.S = 4, l.P = 8, l.B = 16, l.W = 32, l.U = 64, l.R = 128, t.exports = l;
-  }, function (t, e) {
-    var n = t.exports = "undefined" != typeof window && window.Math == Math ? window : "undefined" != typeof self && self.Math == Math ? self : Function("return this")();"number" == typeof __g && (__g = n);
-  }, function (t, e) {
-    var n = t.exports = { version: "2.4.0" };"number" == typeof __e && (__e = n);
-  }, function (t, e, n) {
-    var i = n(50);t.exports = function (t, e, n) {
-      if (i(t), void 0 === e) return t;switch (n) {case 1:
-          return function (n) {
-            return t.call(e, n);
-          };case 2:
-          return function (n, i) {
-            return t.call(e, n, i);
-          };case 3:
-          return function (n, i, o) {
-            return t.call(e, n, i, o);
-          };}return function () {
-        return t.apply(e, arguments);
-      };
-    };
-  }, function (t, e) {
-    t.exports = function (t) {
-      if ("function" != typeof t) throw TypeError(t + " is not a function!");return t;
-    };
-  }, function (t, e, n) {
-    var i = n(52),
-        o = n(60);t.exports = n(56) ? function (t, e, n) {
-      return i.f(t, e, o(1, n));
-    } : function (t, e, n) {
-      return t[e] = n, t;
-    };
-  }, function (t, e, n) {
-    var i = n(53),
-        o = n(55),
-        r = n(59),
-        s = Object.defineProperty;e.f = n(56) ? Object.defineProperty : function (t, e, n) {
-      if (i(t), e = r(e, !0), i(n), o) try {
-        return s(t, e, n);
-      } catch (a) {}if ("get" in n || "set" in n) throw TypeError("Accessors not supported!");return "value" in n && (t[e] = n.value), t;
-    };
-  }, function (t, e, n) {
-    var i = n(54);t.exports = function (t) {
-      if (!i(t)) throw TypeError(t + " is not an object!");return t;
-    };
-  }, function (t, e) {
-    t.exports = function (t) {
-      return "object" == (typeof t === "undefined" ? "undefined" : _typeof(t)) ? null !== t : "function" == typeof t;
-    };
-  }, function (t, e, n) {
-    t.exports = !n(56) && !n(57)(function () {
-      return 7 != Object.defineProperty(n(58)("div"), "a", { get: function get() {
-          return 7;
-        } }).a;
-    });
-  }, function (t, e, n) {
-    t.exports = !n(57)(function () {
-      return 7 != Object.defineProperty({}, "a", { get: function get() {
-          return 7;
-        } }).a;
-    });
-  }, function (t, e) {
-    t.exports = function (t) {
-      try {
-        return !!t();
-      } catch (e) {
-        return !0;
-      }
-    };
-  }, function (t, e, n) {
-    var i = n(54),
-        o = n(47).document,
-        r = i(o) && i(o.createElement);t.exports = function (t) {
-      return r ? o.createElement(t) : {};
-    };
-  }, function (t, e, n) {
-    var i = n(54);t.exports = function (t, e) {
-      if (!i(t)) return t;var n, o;if (e && "function" == typeof (n = t.toString) && !i(o = n.call(t))) return o;if ("function" == typeof (n = t.valueOf) && !i(o = n.call(t))) return o;if (!e && "function" == typeof (n = t.toString) && !i(o = n.call(t))) return o;throw TypeError("Can't convert object to primitive value");
-    };
-  }, function (t, e) {
-    t.exports = function (t, e) {
-      return { enumerable: !(1 & t), configurable: !(2 & t), writable: !(4 & t), value: e };
-    };
-  }, function (t, e, n) {
-    t.exports = n(51);
-  }, function (t, e) {
-    var n = {}.hasOwnProperty;t.exports = function (t, e) {
-      return n.call(t, e);
-    };
-  }, function (t, e) {
-    t.exports = {};
-  }, function (t, e, n) {
-    "use strict";
-    var i = n(65),
-        o = n(60),
-        r = n(80),
-        s = {};n(51)(s, n(81)("iterator"), function () {
-      return this;
-    }), t.exports = function (t, e, n) {
-      t.prototype = i(s, { next: o(1, n) }), r(t, e + " Iterator");
-    };
-  }, function (t, e, n) {
-    var i = n(53),
-        o = n(66),
-        r = n(78),
-        s = n(75)("IE_PROTO"),
-        a = function a() {},
-        l = "prototype",
-        _c = function c() {
-      var t,
-          e = n(58)("iframe"),
-          i = r.length,
-          o = ">";for (e.style.display = "none", n(79).appendChild(e), e.src = "javascript:", t = e.contentWindow.document, t.open(), t.write("<script>document.F=Object</script" + o), t.close(), _c = t.F; i--;) {
-        delete _c[l][r[i]];
-      }return _c();
-    };t.exports = Object.create || function (t, e) {
-      var n;return null !== t ? (a[l] = i(t), n = new a(), a[l] = null, n[s] = t) : n = _c(), void 0 === e ? n : o(n, e);
-    };
-  }, function (t, e, n) {
-    var i = n(52),
-        o = n(53),
-        r = n(67);t.exports = n(56) ? Object.defineProperties : function (t, e) {
-      o(t);for (var n, s = r(e), a = s.length, l = 0; a > l;) {
-        i.f(t, n = s[l++], e[n]);
-      }return t;
-    };
-  }, function (t, e, n) {
-    var i = n(68),
-        o = n(78);t.exports = Object.keys || function (t) {
-      return i(t, o);
-    };
-  }, function (t, e, n) {
-    var i = n(62),
-        o = n(69),
-        r = n(72)(!1),
-        s = n(75)("IE_PROTO");t.exports = function (t, e) {
-      var n,
-          a = o(t),
-          l = 0,
-          c = [];for (n in a) {
-        n != s && i(a, n) && c.push(n);
-      }for (; e.length > l;) {
-        i(a, n = e[l++]) && (~r(c, n) || c.push(n));
-      }return c;
-    };
-  }, function (t, e, n) {
-    var i = n(70),
-        o = n(43);t.exports = function (t) {
-      return i(o(t));
-    };
-  }, function (t, e, n) {
-    var i = n(71);t.exports = Object("z").propertyIsEnumerable(0) ? Object : function (t) {
-      return "String" == i(t) ? t.split("") : Object(t);
-    };
-  }, function (t, e) {
-    var n = {}.toString;t.exports = function (t) {
-      return n.call(t).slice(8, -1);
-    };
-  }, function (t, e, n) {
-    var i = n(69),
-        o = n(73),
-        r = n(74);t.exports = function (t) {
-      return function (e, n, s) {
-        var a,
-            l = i(e),
-            c = o(l.length),
-            u = r(s, c);if (t && n != n) {
-          for (; c > u;) {
-            if (a = l[u++], a != a) return !0;
-          }
-        } else for (; c > u; u++) {
-          if ((t || u in l) && l[u] === n) return t || u || 0;
-        }return !t && -1;
-      };
-    };
-  }, function (t, e, n) {
-    var i = n(42),
-        o = Math.min;t.exports = function (t) {
-      return t > 0 ? o(i(t), 9007199254740991) : 0;
-    };
-  }, function (t, e, n) {
-    var i = n(42),
-        o = Math.max,
-        r = Math.min;t.exports = function (t, e) {
-      return t = i(t), 0 > t ? o(t + e, 0) : r(t, e);
-    };
-  }, function (t, e, n) {
-    var i = n(76)("keys"),
-        o = n(77);t.exports = function (t) {
-      return i[t] || (i[t] = o(t));
-    };
-  }, function (t, e, n) {
-    var i = n(47),
-        o = "__core-js_shared__",
-        r = i[o] || (i[o] = {});t.exports = function (t) {
-      return r[t] || (r[t] = {});
-    };
-  }, function (t, e) {
-    var n = 0,
-        i = Math.random();t.exports = function (t) {
-      return "Symbol(".concat(void 0 === t ? "" : t, ")_", (++n + i).toString(36));
-    };
-  }, function (t, e) {
-    t.exports = "constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");
-  }, function (t, e, n) {
-    t.exports = n(47).document && document.documentElement;
-  }, function (t, e, n) {
-    var i = n(52).f,
-        o = n(62),
-        r = n(81)("toStringTag");t.exports = function (t, e, n) {
-      t && !o(t = n ? t : t.prototype, r) && i(t, r, { configurable: !0, value: e });
-    };
-  }, function (t, e, n) {
-    var i = n(76)("wks"),
-        o = n(77),
-        r = n(47).Symbol,
-        s = "function" == typeof r,
-        a = t.exports = function (t) {
-      return i[t] || (i[t] = s && r[t] || (s ? r : o)("Symbol." + t));
-    };a.store = i;
-  }, function (t, e, n) {
-    var i = n(62),
-        o = n(83),
-        r = n(75)("IE_PROTO"),
-        s = Object.prototype;t.exports = Object.getPrototypeOf || function (t) {
-      return t = o(t), i(t, r) ? t[r] : "function" == typeof t.constructor && t instanceof t.constructor ? t.constructor.prototype : t instanceof Object ? s : null;
-    };
-  }, function (t, e, n) {
-    var i = n(43);t.exports = function (t) {
-      return Object(i(t));
-    };
-  }, function (t, e, n) {
-    "use strict";
-    var i = n(49),
-        o = n(46),
-        r = n(83),
-        s = n(85),
-        a = n(86),
-        l = n(73),
-        c = n(87),
-        u = n(88);o(o.S + o.F * !n(90)(function (t) {
-      Array.from(t);
-    }), "Array", { from: function from(t) {
-        var e,
-            n,
-            o,
-            d,
-            p = r(t),
-            f = "function" == typeof this ? this : Array,
-            h = arguments.length,
-            v = h > 1 ? arguments[1] : void 0,
-            m = void 0 !== v,
-            y = 0,
-            g = u(p);if (m && (v = i(v, h > 2 ? arguments[2] : void 0, 2)), void 0 == g || f == Array && a(g)) for (e = l(p.length), n = new f(e); e > y; y++) {
-          c(n, y, m ? v(p[y], y) : p[y]);
-        } else for (d = g.call(p), n = new f(); !(o = d.next()).done; y++) {
-          c(n, y, m ? s(d, v, [o.value, y], !0) : o.value);
-        }return n.length = y, n;
-      } });
-  }, function (t, e, n) {
-    var i = n(53);t.exports = function (t, e, n, o) {
-      try {
-        return o ? e(i(n)[0], n[1]) : e(n);
-      } catch (r) {
-        var s = t["return"];throw void 0 !== s && i(s.call(t)), r;
-      }
-    };
-  }, function (t, e, n) {
-    var i = n(63),
-        o = n(81)("iterator"),
-        r = Array.prototype;t.exports = function (t) {
-      return void 0 !== t && (i.Array === t || r[o] === t);
-    };
-  }, function (t, e, n) {
-    "use strict";
-    var i = n(52),
-        o = n(60);t.exports = function (t, e, n) {
-      e in t ? i.f(t, e, o(0, n)) : t[e] = n;
-    };
-  }, function (t, e, n) {
-    var i = n(89),
-        o = n(81)("iterator"),
-        r = n(63);t.exports = n(48).getIteratorMethod = function (t) {
-      return void 0 != t ? t[o] || t["@@iterator"] || r[i(t)] : void 0;
-    };
-  }, function (t, e, n) {
-    var i = n(71),
-        o = n(81)("toStringTag"),
-        r = "Arguments" == i(function () {
-      return arguments;
-    }()),
-        s = function s(t, e) {
-      try {
-        return t[e];
-      } catch (n) {}
-    };t.exports = function (t) {
-      var e, n, a;return void 0 === t ? "Undefined" : null === t ? "Null" : "string" == typeof (n = s(e = Object(t), o)) ? n : r ? i(e) : "Object" == (a = i(e)) && "function" == typeof e.callee ? "Arguments" : a;
-    };
-  }, function (t, e, n) {
-    var i = n(81)("iterator"),
-        o = !1;try {
-      var r = [7][i]();r["return"] = function () {
-        o = !0;
-      }, Array.from(r, function () {
-        throw 2;
-      });
-    } catch (s) {}t.exports = function (t, e) {
-      if (!e && !o) return !1;var n = !1;try {
-        var r = [7],
-            s = r[i]();s.next = function () {
-          return { done: n = !0 };
-        }, r[i] = function () {
-          return s;
-        }, t(r);
-      } catch (a) {}return n;
-    };
-  }, function (t, e) {
-    "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 });var n = { listen: function listen(t, e, n) {
-        return t.addEventListener ? (t.addEventListener(e, n, !1), { remove: function remove() {
-            t.removeEventListener(e, n, !1);
-          } }) : t.attachEvent ? (t.attachEvent("on" + e, n), { remove: function remove() {
-            t.detachEvent("on" + e, n);
-          } }) : void 0;
-      } };e["default"] = n;
-  }, function (t, e) {
-    t.exports = '<div class="carousel slide" data-ride=carousel _v-1ce6791c=""><ol class=carousel-indicators v-show=indicators _v-1ce6791c=""><indicator :indicator.sync=indicator :active-index.sync=activeIndex :is-animating.sync=isAnimating _v-1ce6791c=""></indicator></ol><div class=carousel-inner role=listbox _v-1ce6791c=""><slot _v-1ce6791c=""></slot></div><div v-show=controls class="carousel-controls hidden-xs" _v-1ce6791c=""><a class="left carousel-control" role=button @click=prevClick _v-1ce6791c=""><span class="fa fa-arrow-left" aria-hidden=true _v-1ce6791c=""></span></a> <a class="right carousel-control" role=button @click=nextClick _v-1ce6791c=""><span class="fa fa-arrow-right" aria-hidden=true _v-1ce6791c=""></span></a></div></div>';
-  }, function (t, e, n) {
-    t.exports = n(94), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(95);
-  }, function (t, e) {
-    "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 }), e["default"] = { data: function data() {
-        return { index: 0, show: !1 };
-      }, computed: { show: function show() {
-          return this.$parent.activeIndex === this.index;
-        } }, ready: function ready() {
-        for (var t in this.$parent.$children) {
-          if (this.$parent.$children[t].$el == this.$el) {
-            this.index = parseInt(t, 10);break;
-          }
-        }this.$parent.indicator.push(this.index), 0 === this.index && this.$el.classList.add("active");
-      } };
-  }, function (t, e) {
-    t.exports = "<div class=item><slot></slot></div>";
-  }, function (t, e, n) {
-    t.exports = n(97), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(98);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(31),
-        r = i(o);e["default"] = { props: { oneAtATime: { type: Boolean, coerce: r["default"], "default": !1 } }, created: function created() {
-        var t = this;this.$on("isOpenEvent", function (e) {
-          t.oneAtATime && t.$children.forEach(function (t) {
-            e !== t && (t.isOpen = !1);
-          });
-        });
-      } };
-  }, function (t, e) {
-    t.exports = "<div class=panel-group><slot></slot></div>";
-  }, function (t, e, n) {
-    n(100), t.exports = n(102), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(103);
-  }, function (t, e, n) {
-    var i = n(101);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".vue-affix{position:fixed}", ""]);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(91),
-        r = i(o);e["default"] = { props: { offset: { type: Number, "default": 0 } }, data: function data() {
-        return { affixed: !1, styles: {} };
-      }, methods: { scrolling: function scrolling() {
-          var t = this.getScroll(window, !0),
-              e = this.getOffset(this.$el);!this.affixed && t > e.top && (this.affixed = !0, this.styles = { top: this.offset + "px", left: e.left + "px", width: this.$el.offsetWidth + "px" }), this.affixed && t < e.top && (this.affixed = !1, this.styles = {});
-        }, getScroll: function getScroll(t, e) {
-          var n = t["page" + (e ? "Y" : "X") + "Offset"],
-              i = "scroll" + (e ? "Top" : "Left");if ("number" != typeof n) {
-            var o = t.document;n = o.documentElement[i], "number" != typeof n && (n = o.body[i]);
-          }return n;
-        }, getOffset: function getOffset(t) {
-          var e = t.getBoundingClientRect(),
-              n = document.body,
-              i = t.clientTop || n.clientTop || 0,
-              o = t.clientLeft || n.clientLeft || 0,
-              r = this.getScroll(window, !0),
-              s = this.getScroll(window);return { top: e.top + r - i, left: e.left + s - o };
-        } }, ready: function ready() {
-        this._scrollEvent = r["default"].listen(window, "scroll", this.scrolling), this._resizeEvent = r["default"].listen(window, "resize", this.scrolling);
-      }, beforeDestroy: function beforeDestroy() {
-        this._scrollEvent && this._scrollEvent.remove(), this._resizeEvent && this._resizeEvent.remove();
-      } };
-  }, function (t, e) {
-    t.exports = "<div><div v-bind:class=\"{'vue-affix': affixed}\" v-bind:style=styles><slot></slot></div></div>";
-  }, function (t, e, n) {
-    n(105), t.exports = n(107), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(109);
-  }, function (t, e, n) {
-    var i = n(106);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".aside-open{-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s}.aside-open.has-push-right{-webkit-transform:translateX(-300px);transform:translateX(-300px)}.aside{position:fixed;top:0;bottom:0;z-index:1049;overflow:auto;background:#fff}.aside.left{left:0;right:auto}.aside.right{left:auto;right:0}.slideleft-enter{-webkit-animation:slideleft-in .3s;animation:slideleft-in .3s}.slideleft-leave{-webkit-animation:slideleft-out .3s;animation:slideleft-out .3s}@-webkit-keyframes slideleft-in{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@keyframes slideleft-in{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@-webkit-keyframes slideleft-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}}@keyframes slideleft-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}}.slideright-enter{-webkit-animation:slideright-in .3s;animation:slideright-in .3s}.slideright-leave{-webkit-animation:slideright-out .3s;animation:slideright-out .3s}@-webkit-keyframes slideright-in{0%{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@keyframes slideright-in{0%{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@-webkit-keyframes slideright-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}}@keyframes slideright-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}}.aside:focus{outline:0}@media (max-width:991px){.aside{min-width:240px}}.aside.left{right:auto;left:0}.aside.right{right:0;left:auto}.aside .aside-dialog .aside-header{border-bottom:1px solid #e5e5e5;min-height:16.43px;padding:6px 15px;background:#337ab7;color:#fff}.aside .aside-dialog .aside-header .close{margin-right:-8px;padding:4px 8px;color:#fff;font-size:25px;opacity:.8}.aside .aside-dialog .aside-body{position:relative;padding:15px}.aside .aside-dialog .aside-footer{padding:15px;text-align:right;border-top:1px solid #e5e5e5}.aside .aside-dialog .aside-footer .btn+.btn{margin-left:5px;margin-bottom:0}.aside .aside-dialog .aside-footer .btn-group .btn+.btn{margin-left:-1px}.aside .aside-dialog .aside-footer .btn-block+.btn-block{margin-left:0}.aside-backdrop{position:fixed;top:0;right:0;bottom:0;left:0;z-index:1040;opacity:0;-webkit-transition:opacity .3s ease;transition:opacity .3s ease;background-color:#000}.aside-backdrop.in{opacity:.5;filter:alpha(opacity=50)}", ""]);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(91),
-        r = i(o),
-        s = n(108),
-        a = i(s),
-        l = n(31),
-        c = i(l);e["default"] = { props: { show: { type: Boolean, coerce: c["default"], require: !0, twoWay: !0 }, placement: { type: String, "default": "right" }, header: { type: String }, width: { type: Number, "default": "320" } }, watch: { show: function show(t) {
-          var e = document.createElement("div"),
-              n = document.body;e.className = "aside-backdrop";var i = (0, a["default"])();if (t) {
-            n.appendChild(e), n.classList.add("modal-open"), 0 !== i && (n.style.paddingRight = i + "px");e.clientHeight;e.className += " in", this._clickEvent = r["default"].listen(e, "click", this.close);
-          } else {
-            this._clickEvent && this._clickEvent.remove(), e = document.querySelector(".aside-backdrop");try {
-              e.className = "aside-backdrop", n.classList.remove("modal-open"), n.style.paddingRight = "0", n.removeChild(e);
-            } catch (o) {}
-          }
-        } }, methods: { close: function close() {
-          this.show = !1;
-        } } };
-  }, function (t, e) {
-    "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 }), e["default"] = function () {
-      if (document.documentElement.scrollHeight <= document.documentElement.clientHeight) return 0;var t = document.createElement("p");t.style.width = "100%", t.style.height = "200px";var e = document.createElement("div");e.style.position = "absolute", e.style.top = "0px", e.style.left = "0px", e.style.visibility = "hidden", e.style.width = "200px", e.style.height = "150px", e.style.overflow = "hidden", e.appendChild(t), document.body.appendChild(e);var n = t.offsetWidth;e.style.overflow = "scroll";var i = t.offsetWidth;return n === i && (i = e.clientWidth), document.body.removeChild(e), n - i;
-    };
-  }, function (t, e) {
-    t.exports = "<div class=aside v-bind:style=\"{width:width + 'px'}\" v-bind:class=\"{\n    left:placement === 'left',\n    right:placement === 'right'\n    }\" v-show=show :transition=\"(this.placement === 'left') ? 'slideleft' : 'slideright'\"><div class=aside-dialog><div class=aside-content><div class=aside-header><button type=button class=close @click=close><span>&times;</span></button><h4 class=aside-title><slot name=header>{{ header }}</slot></h4></div><div class=aside-body><slot></slot></div></div></div></div>";
-  }, function (t, e, n) {
-    t.exports = n(111), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(112);
-  }, function (t, e) {
-    "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 }), e["default"] = { props: { value: { type: Array, "default": function _default() {
-            return [];
-          } }, type: { type: String, "default": "default" } } };
-  }, function (t, e) {
-    t.exports = "<div class=btn-group data-toggle=buttons><slot></slot></div>";
-  }, function (t, e, n) {
-    t.exports = n(114), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(115);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(31),
-        r = i(o);e["default"] = { props: { value: { type: String }, checked: { type: Boolean, coerce: r["default"], "default": !1 } }, computed: { type: function type() {
-          return this.$parent.type;
-        } }, methods: { handleClick: function handleClick() {
-          var t = this.$parent,
-              e = t.value.indexOf(this.value);-1 === e ? t.value.push(this.value) : t.value.splice(e, 1), this.checked = !this.checked;
-        } }, created: function created() {
-        this.$parent.value.length ? this.checked = this.$parent.value.indexOf(this.value) > -1 : this.checked && this.$parent.value.push(this.value);
-      } };
-  }, function (t, e) {
-    t.exports = "<label class=btn v-bind:class=\"{\n    'active':checked,\n    'btn-success':type == 'success',\n    'btn-warning':type == 'warning',\n    'btn-info':type == 'info',\n    'btn-danger':type == 'danger',\n    'btn-default':type == 'default',\n    'btn-primary':type == 'primary'\n  }\"><input type=checkbox autocomplete=off :checked=checked @click=\"handleClick\"><slot></slot></label>";
-  }, function (t, e, n) {
-    n(117), n(119), t.exports = n(121), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(122);
-  }, function (t, e, n) {
-    var i = n(118);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, "input.datepicker-input.with-reset-button{padding-right:25px}div.datepicker>button.close{position:absolute;top:calc(50% - 13px);right:10px;outline:none;z-index:2}div.datepicker>button.close:focus{opacity:.2}", ""]);
-  }, function (t, e, n) {
-    var i = n(120);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".datepicker{position:relative;display:inline-block}.datepicker-popup{position:absolute;border:1px solid #ccc;border-radius:5px;background:#fff;margin-top:2px;z-index:1000;box-shadow:0 6px 12px rgba(0,0,0,.175)}.datepicker-inner{width:218px}.datepicker-body{padding:10px}.datepicker-body span,.datepicker-ctrl p,.datepicker-ctrl span{display:inline-block;width:28px;line-height:28px;height:28px;border-radius:4px}.datepicker-ctrl p{width:65%}.datepicker-ctrl span{position:absolute}.datepicker-body span{text-align:center}.datepicker-monthRange span{width:48px;height:50px;line-height:45px}.datepicker-item-disable{background-color:#fff!important;cursor:not-allowed!important}.datepicker-item-disable,.datepicker-item-gray,.decadeRange span:first-child,.decadeRange span:last-child{color:#999}.datepicker-dateRange-item-active,.datepicker-dateRange-item-active:hover{background:#3276b1!important;color:#fff!important}.datepicker-monthRange{margin-top:10px}.datepicker-ctrl p,.datepicker-ctrl span,.datepicker-dateRange span,.datepicker-monthRange span{cursor:pointer}.datepicker-ctrl i:hover,.datepicker-ctrl p:hover,.datepicker-dateRange-item-hover,.datepicker-dateRange span:hover,.datepicker-monthRange span:hover{background-color:#eee}.datepicker-weekRange span{font-weight:700}.datepicker-label{background-color:#f8f8f8;font-weight:700;padding:7px 0;text-align:center}.datepicker-ctrl{position:relative;height:30px;line-height:30px;font-weight:700;text-align:center}.month-btn{font-weight:700;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.datepicker-preBtn{left:2px}.datepicker-nextBtn{right:2px}", ""]);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(91),
-        r = i(o);e["default"] = { props: { value: { type: String, twoWay: !0 }, format: { "default": "MMMM/dd/yyyy" }, disabledDaysOfWeek: { type: Array, "default": function _default() {
-            return [];
-          } }, width: { type: String, "default": "200px" }, showResetButton: { type: Boolean, "default": !1 } }, data: function data() {
-        return { weekRange: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], dateRange: [], decadeRange: [], currDate: new Date(), displayDayView: !1, displayMonthView: !1, displayYearView: !1, monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] };
-      }, watch: { currDate: function currDate() {
-          this.getDateRange();
-        } }, methods: { close: function close() {
-          this.displayDayView = this.displayMonthView = this.displayYearView = !1;
-        }, inputClick: function inputClick() {
-          this.displayMonthView || this.displayYearView ? this.displayDayView = !1 : this.displayDayView = !this.displayDayView;
-        }, preNextDecadeClick: function preNextDecadeClick(t) {
-          var e = this.currDate.getFullYear(),
-              n = this.currDate.getMonth(),
-              i = this.currDate.getDate();0 === t ? this.currDate = new Date(e - 10, n, i) : this.currDate = new Date(e + 10, n, i);
-        }, preNextMonthClick: function preNextMonthClick(t) {
-          var e = this.currDate.getFullYear(),
-              n = this.currDate.getMonth(),
-              i = this.currDate.getDate();if (0 === t) {
-            var o = this.getYearMonth(e, n - 1);this.currDate = new Date(o.year, o.month, i);
-          } else {
-            var r = this.getYearMonth(e, n + 1);this.currDate = new Date(r.year, r.month, i);
-          }
-        }, preNextYearClick: function preNextYearClick(t) {
-          var e = this.currDate.getFullYear(),
-              n = this.currDate.getMonth(),
-              i = this.currDate.getDate();0 === t ? this.currDate = new Date(e - 1, n, i) : this.currDate = new Date(e + 1, n, i);
-        }, yearSelect: function yearSelect(t) {
-          this.displayYearView = !1, this.displayMonthView = !0, this.currDate = new Date(t, this.currDate.getMonth(), this.currDate.getDate());
-        }, daySelect: function daySelect(t, e) {
-          return "datepicker-item-disable" === e.$el.classList[0] ? !1 : (this.currDate = t, this.value = this.stringify(this.currDate), this.displayDayView = !1, void 0);
-        }, switchMonthView: function switchMonthView() {
-          this.displayDayView = !1, this.displayMonthView = !0;
-        }, switchDecadeView: function switchDecadeView() {
-          this.displayMonthView = !1, this.displayYearView = !0;
-        }, monthSelect: function monthSelect(t) {
-          this.displayMonthView = !1, this.displayDayView = !0, this.currDate = new Date(this.currDate.getFullYear(), t, this.currDate.getDate());
-        }, getYearMonth: function getYearMonth(t, e) {
-          return e > 11 ? (t++, e = 0) : 0 > e && (t--, e = 11), { year: t, month: e };
-        }, stringifyDecadeHeader: function stringifyDecadeHeader(t) {
-          var e = t.getFullYear().toString(),
-              n = e.substring(0, e.length - 1) + 0,
-              i = parseInt(n, 10) + 10;return n + "-" + i;
-        }, stringifyDayHeader: function stringifyDayHeader(t) {
-          return this.monthNames[t.getMonth()] + " " + t.getFullYear();
-        }, parseMonth: function parseMonth(t) {
-          return this.monthNames[t.getMonth()];
-        }, stringifyYearHeader: function stringifyYearHeader(t) {
-          return t.getFullYear();
-        }, stringify: function stringify(t) {
-          var e = arguments.length <= 1 || void 0 === arguments[1] ? this.format : arguments[1],
-              n = t.getFullYear(),
-              i = t.getMonth() + 1,
-              o = t.getDate(),
-              r = this.parseMonth(t);return e.replace(/yyyy/g, n).replace(/MMMM/g, r).replace(/MMM/g, r.substring(0, 3)).replace(/MM/g, ("0" + i).slice(-2)).replace(/dd/g, ("0" + o).slice(-2)).replace(/yy/g, n).replace(/M(?!a)/g, i).replace(/d/g, o);
-        }, parse: function parse(t) {
-          10 != t.length || "dd-MM-yyyy" != this.format && "dd/MM/yyyy" != this.format || (t = t.substring(3, 5) + "-" + t.substring(0, 2) + "-" + t.substring(6, 10));var e = new Date(t);return isNaN(e.getFullYear()) ? null : e;
-        }, getDayCount: function getDayCount(t, e) {
-          var n = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];return 1 === e ? t % 400 === 0 || t % 4 === 0 && t % 100 !== 0 ? 29 : 28 : n[e];
-        }, getDateRange: function getDateRange() {
-          var t = this;this.dateRange = [], this.decadeRange = [];for (var e = { year: this.currDate.getFullYear(), month: this.currDate.getMonth(), day: this.currDate.getDate() }, n = e.year.toString(), i = n.substring(0, n.length - 1) + 0 - 1, o = 0; 12 > o; o++) {
-            this.decadeRange.push({ text: i + o });
-          }var r = new Date(e.year, e.month, 1),
-              s = r.getDay() + 1;0 === s && (s = 7);var a = this.getDayCount(e.year, e.month);if (s > 1) for (var l = this.getYearMonth(e.year, e.month - 1), c = this.getDayCount(l.year, l.month), o = 1; s > o; o++) {
-            var u = c - s + o + 1;this.dateRange.push({ text: u, date: new Date(l.year, l.month, u), sclass: "datepicker-item-gray" });
-          }for (var d = function d(n) {
-            var i = new Date(e.year, e.month, n),
-                o = i.getDay(),
-                r = "";if (t.disabledDaysOfWeek.forEach(function (t) {
-              o === parseInt(t, 10) && (r = "datepicker-item-disable");
-            }), n === e.day && t.value) {
-              var s = t.parse(t.value);s && s.getFullYear() === e.year && s.getMonth() === e.month && (r = "datepicker-dateRange-item-active");
-            }t.dateRange.push({ text: n, date: i, sclass: r });
-          }, o = 1; a >= o; o++) {
-            d(o);
-          }if (this.dateRange.length < 42) for (var p = 42 - this.dateRange.length, f = this.getYearMonth(e.year, e.month + 1), o = 1; p >= o; o++) {
-            this.dateRange.push({ text: o, date: new Date(f.year, f.month, o), sclass: "datepicker-item-gray" });
-          }
-        } }, ready: function ready() {
-        var t = this;this.$dispatch("child-created", this), this.currDate = this.parse(this.value) || this.parse(new Date()), this._closeEvent = r["default"].listen(window, "click", function (e) {
-          t.$el.contains(e.target) || t.close();
-        });
-      }, beforeDestroy: function beforeDestroy() {
-        this._closeEvent && this._closeEvent.remove();
-      } };
-  }, function (t, e) {
-    t.exports = '<div class=datepicker><input class="form-control datepicker-input" :class="{\'with-reset-button\': showResetButton}" v-bind:style={width:width} @click=inputClick v-model="value"> <button v-if=showResetButton type=button class=close @click="value = \'\'"><span>&times;</span></button><div class=datepicker-popup v-show=displayDayView><div class=datepicker-inner><div class=datepicker-body><div class=datepicker-ctrl><span class="month-btn datepicker-preBtn" @click=preNextMonthClick(0)>&lt;</span> <span class="month-btn datepicker-nextBtn" @click=preNextMonthClick(1)>&gt;</span><p @click=switchMonthView>{{stringifyDayHeader(currDate)}}</p></div><div class=datepicker-weekRange><span v-for="w in weekRange">{{w}}</span></div><div class=datepicker-dateRange><span v-for="d in dateRange" v-bind:class=d.sclass @click=daySelect(d.date,this)>{{d.text}}</span></div></div></div></div><div class=datepicker-popup v-show=displayMonthView><div class=datepicker-inner><div class=datepicker-body><div class=datepicker-ctrl><span class="month-btn datepicker-preBtn" @click=preNextYearClick(0)>&lt;</span> <span class="month-btn datepicker-nextBtn" @click=preNextYearClick(1)>&gt;</span><p @click=switchDecadeView>{{stringifyYearHeader(currDate)}}</p></div><div class=datepicker-monthRange><template v-for="m in monthNames"><span v-bind:class="{\'datepicker-dateRange-item-active\':\n                  (this.monthNames[this.parse(this.value).getMonth()]  === m) &&\n                  this.currDate.getFullYear() === this.parse(this.value).getFullYear()}" @click=monthSelect($index)>{{m.substr(0,3)}}</span></template></div></div></div></div><div class=datepicker-popup v-show=displayYearView><div class=datepicker-inner><div class=datepicker-body><div class=datepicker-ctrl><span class="month-btn datepicker-preBtn" @click=preNextDecadeClick(0)>&lt;</span> <span class="month-btn datepicker-nextBtn" @click=preNextDecadeClick(1)>&gt;</span><p>{{stringifyDecadeHeader(currDate)}}</p></div><div class="datepicker-monthRange decadeRange"><template v-for="decade in decadeRange"><span v-bind:class="{\'datepicker-dateRange-item-active\':\n                  this.parse(this.value).getFullYear() === decade.text}" @click.stop=yearSelect(decade.text)>{{decade.text}}</span></template></div></div></div></div></div>';
-  }, function (t, e, n) {
-    t.exports = n(124), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(125);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(91),
-        r = i(o);e["default"] = { methods: { toggleDropdown: function toggleDropdown(t) {
-          t.preventDefault(), this.$el.classList.toggle("open");
-        } }, ready: function ready() {
-        var t = this.$el,
-            e = t.querySelector('[data-toggle="dropdown"]');e && (e.style.borderRadius = "4px", e.addEventListener("click", this.toggleDropdown)), this._closeEvent = r["default"].listen(window, "click", function (e) {
-          t.contains(e.target) && "a" != e.target.nodeName.toLowerCase() || t.classList.remove("open");
-        });
-      }, beforeDestroy: function beforeDestroy() {
-        this._closeEvent && this._closeEvent.remove();
-      } };
-  }, function (t, e) {
-    t.exports = "<div class=btn-group><slot></slot><slot name=dropdown-menu></slot></div>";
-  }, function (t, e, n) {
-    n(127), t.exports = n(129), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(134);
-  }, function (t, e, n) {
-    var i = n(128);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".modal{-webkit-transition:all .3s ease;transition:all .3s ease}.modal.in{background-color:rgba(0,0,0,.5)}.modal.zoom .modal-dialog{-webkit-transform:scale(.1);transform:scale(.1);top:300px;opacity:0;-webkit-transition:all .3s;transition:all .3s}.modal.zoom.in .modal-dialog{-webkit-transform:scale(1);transform:scale(1);-webkit-transform:translate3d(0,-300px,0);transform:translate3d(0,-300px,0);opacity:1}", ""]);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(130),
-        r = i(o),
-        s = n(108),
-        a = i(s),
-        l = n(91),
-        c = i(l),
-        u = n(31),
-        d = i(u);e["default"] = { props: { okText: { type: String, "default": "Save changes" }, cancelText: { type: String, "default": "Close" }, title: { type: String, "default": "" }, show: { require: !0, type: Boolean, coerce: d["default"], twoWay: !0 }, width: { "default": null }, callback: { type: Function, "default": function _default() {} }, effect: { type: String, "default": null }, backdrop: { type: Boolean, coerce: d["default"], "default": !0 }, large: { type: Boolean, coerce: d["default"], "default": !1 }, small: { type: Boolean, coerce: d["default"], "default": !1 } }, ready: function ready() {
-        var t = this;this.$watch("show", function (e) {
-          var n = t.$el,
-              i = document.body,
-              o = (0, a["default"])();e ? (n.querySelector(".modal-content").focus(), n.style.display = "block", setTimeout(function () {
-            return n.classList.add("in");
-          }, 0), i.classList.add("modal-open"), 0 !== o && (i.style.paddingRight = o + "px"), t.backdrop && (t._blurModalContentEvent = c["default"].listen(t.$el, "click", function (e) {
-            e.target === n && (t.show = !1);
-          }))) : (t._blurModalContentEvent && t._blurModalContentEvent.remove(), n.classList.remove("in"), setTimeout(function () {
-            n.style.display = "none", i.classList.remove("modal-open"), i.style.paddingRight = "0";
-          }, 300));
-        }, { immediate: !0 });
-      }, computed: { optionalWidth: function optionalWidth() {
-          return null === this.width ? null : (0, r["default"])(this.width) ? this.width + "px" : this.width;
-        } }, methods: { close: function close() {
-          this.show = !1;
-        } } };
-  }, function (t, e, n) {
-    t.exports = { "default": n(131), __esModule: !0 };
-  }, function (t, e, n) {
-    n(132), t.exports = n(48).Number.isInteger;
-  }, function (t, e, n) {
-    var i = n(46);i(i.S, "Number", { isInteger: n(133) });
-  }, function (t, e, n) {
-    var i = n(54),
-        o = Math.floor;t.exports = function (t) {
-      return !i(t) && isFinite(t) && o(t) === t;
-    };
-  }, function (t, e) {
-    t.exports = "<div role=dialog v-bind:class=\"{\n    'modal':true,\n    'fade':effect === 'fade',\n    'zoom':effect === 'zoom'\n    }\"><div v-bind:class=\"{'modal-dialog':true,'modal-lg':large,'modal-sm':small}\" role=document v-bind:style=\"{width: optionalWidth}\"><div class=modal-content><slot name=modal-header><div class=modal-header><button type=button class=close @click=close><span>&times;</span></button><h4 class=modal-title><slot name=title>{{title}}</slot></h4></div></slot><slot name=modal-body><div class=modal-body></div></slot><slot name=modal-footer><div class=modal-footer><button type=button class=\"btn btn-default\" @click=close>{{ cancelText }}</button> <button type=button class=\"btn btn-primary\" @click=callback>{{ okText }}</button></div></slot></div></div></div>";
-  }, function (t, e, n) {
-    n(136), t.exports = n(138), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(139);
-  }, function (t, e, n) {
-    var i = n(137);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, "a span.check-mark[_v-7f8c06b1]{position:absolute;display:inline-block;right:15px;margin-top:5px}", ""]);
-  }, function (t, e) {
-    "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 }), e["default"] = { props: { value: { type: String } }, data: function data() {
-        return { chosen: !1 };
-      }, computed: { chosen: function chosen() {
-          return -1 !== this.$parent.value.indexOf(this.value);
-        } }, methods: { handleClick: function handleClick() {
-          var t = this.$parent;if (t.multiple) {
-            var e = t.value.indexOf(this.value);-1 === e ? t.value.push(this.value) : t.value.splice(e, 1);
-          } else t.value = [this.value], t.show = !1;
-        } } };
-  }, function (t, e) {
-    t.exports = '<li style=position:relative _v-7f8c06b1=""><a @mousedown.prevent=handleClick style=cursor:pointer _v-7f8c06b1=""><span v-el:v="" _v-7f8c06b1=""><slot _v-7f8c06b1=""></slot></span> <span class="glyphicon glyphicon-ok check-mark" v-show=chosen _v-7f8c06b1=""></span></a></li>';
-  }, function (t, e, n) {
-    n(141), t.exports = n(143), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(144);
-  }, function (t, e, n) {
-    var i = n(142);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".accordion-toggle{cursor:pointer}.collapse-transition{-webkit-transition:max-height .5s ease;transition:max-height .5s ease;overflow:hidden}.collapse-enter,.collapse-leave{max-height:0!important}", ""]);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(31),
-        r = i(o);e["default"] = { props: { isOpen: { type: Boolean, coerce: r["default"], "default": !1 }, header: { type: String } }, methods: { toggleIsOpen: function toggleIsOpen() {
-          this.isOpen = !this.isOpen, this.$dispatch("isOpenEvent", this);
-        } }, transitions: { collapse: { afterEnter: function afterEnter(t) {
-            t.style.maxHeight = "";
-          }, beforeLeave: function beforeLeave(t) {
-            return t.style.maxHeight = t.offsetHeight + "px", t.offsetHeight;
-          } } } };
-  }, function (t, e) {
-    t.exports = '<div class="panel panel-default"><div class=panel-heading><h4 class=panel-title><a class=accordion-toggle @click=toggleIsOpen()><slot name=header>{{ header }}</slot></a></h4></div><div class=panel-collapse v-el:panel v-show=isOpen transition=collapse><div class=panel-body><slot></slot></div></div></div>';
-  }, function (t, e, n) {
-    n(146), t.exports = n(148), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(150);
-  }, function (t, e, n) {
-    var i = n(147);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".fade-transition,.scale-transition{display:block}.scale-enter{-webkit-animation:scale-in .15s ease-in;animation:scale-in .15s ease-in}.scale-leave{-webkit-animation:scale-out .15s ease-out;animation:scale-out .15s ease-out}@-webkit-keyframes scale-in{0%{-webkit-transform:scale(0);transform:scale(0);opacity:0}to{-webkit-transform:scale(1);transform:scale(1);opacity:1}}@keyframes scale-in{0%{-webkit-transform:scale(0);transform:scale(0);opacity:0}to{-webkit-transform:scale(1);transform:scale(1);opacity:1}}@-webkit-keyframes scale-out{0%{-webkit-transform:scale(1);transform:scale(1);opacity:1}to{-webkit-transform:scale(0);transform:scale(0);opacity:0}}@keyframes scale-out{0%{-webkit-transform:scale(1);transform:scale(1);opacity:1}to{-webkit-transform:scale(0);transform:scale(0);opacity:0}}", ""]);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(149),
-        r = i(o);e["default"] = { mixins: [r["default"]] };
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(91),
-        r = i(o),
-        s = n(31),
-        a = i(s),
-        l = { props: { trigger: { type: String, "default": "click" }, effect: { type: String, "default": "fadein" }, title: { type: String }, content: { type: String }, header: { type: Boolean, coerce: a["default"], "default": !0 }, placement: { type: String } }, data: function data() {
-        return { position: { top: 0, left: 0 }, show: !0 };
-      }, methods: { toggle: function toggle() {
-          this.show = !this.show;
-        } }, ready: function ready() {
-        var t = this;if (!this.$els.popover) return console.error("Couldn't find popover v-el in your component that uses popoverMixin.");var e = this.$els.popover,
-            n = this.$els.trigger.children[0];switch ("hover" === this.trigger ? (this._mouseenterEvent = r["default"].listen(n, "mouseenter", function () {
-          return t.show = !0;
-        }), this._mouseleaveEvent = r["default"].listen(n, "mouseleave", function () {
-          return t.show = !1;
-        })) : "focus" === this.trigger ? (this._focusEvent = r["default"].listen(n, "focus", function () {
-          return t.show = !0;
-        }), this._blurEvent = r["default"].listen(n, "blur", function () {
-          return t.show = !1;
-        })) : this._clickEvent = r["default"].listen(n, "click", this.toggle), this.placement) {case "top":
-            this.position.left = n.offsetLeft - e.offsetWidth / 2 + n.offsetWidth / 2, this.position.top = n.offsetTop - e.offsetHeight;break;case "left":
-            this.position.left = n.offsetLeft - e.offsetWidth, this.position.top = n.offsetTop + n.offsetHeight / 2 - e.offsetHeight / 2;break;case "right":
-            this.position.left = n.offsetLeft + n.offsetWidth, this.position.top = n.offsetTop + n.offsetHeight / 2 - e.offsetHeight / 2;break;case "bottom":
-            this.position.left = n.offsetLeft - e.offsetWidth / 2 + n.offsetWidth / 2, this.position.top = n.offsetTop + n.offsetHeight;break;default:
-            console.log("Wrong placement prop");}e.style.top = this.position.top + "px", e.style.left = this.position.left + "px", e.style.display = "none", this.show = !this.show;
-      }, beforeDestroy: function beforeDestroy() {
-        this._blurEvent && (this._blurEvent.remove(), this._focusEvent.remove()), this._mouseenterEvent && (this._mouseenterEvent.remove(), this._mouseleaveEvent.remove()), this._clickEvent && this._clickEvent.remove();
-      } };e["default"] = l;
-  }, function (t, e) {
-    t.exports = "<span v-el:trigger><slot></slot></span><div class=popover v-bind:class=\"{\n    'top':placement === 'top',\n    'left':placement === 'left',\n    'right':placement === 'right',\n    'bottom':placement === 'bottom'\n    }\" v-el:popover v-show=show :transition=effect><div class=arrow></div><h3 class=popover-title v-show=title><slot name=title>{{title}}</slot></h3><div class=popover-content><slot name=content>{{{content}}}</slot></div></div>";
-  }, function (t, e, n) {
-    t.exports = n(152), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(153);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(31),
-        r = i(o);e["default"] = { props: { now: { type: Number, require: !0 }, label: { type: Boolean, coerce: r["default"], "default": !1 }, type: { type: String }, striped: { type: Boolean, coerce: r["default"], "default": !1 }, animated: { type: Boolean, coerce: r["default"], "default": !1 } } };
-  }, function (t, e) {
-    t.exports = "<div role=progressbar v-bind:class=\"{\n    'progress-bar' : true,\n    'progress-bar-success':type == 'success',\n    'progress-bar-warning':type == 'warning',\n    'progress-bar-info':type == 'info',\n    'progress-bar-danger':type == 'danger',\n    'progress-bar-striped':striped,\n    'active':animated\n    }\" v-bind:style=\"{width: now + '%'}\">{{label ? now + '%':'' }}</div>";
-  }, function (t, e, n) {
-    t.exports = n(155), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(156);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(31),
-        r = i(o);e["default"] = { props: { value: { type: String }, checked: { type: Boolean, coerce: r["default"], "default": !1 } }, computed: { type: function type() {
-          return this.$parent.type;
-        }, active: function active() {
-          return this.$parent.value === this.value;
-        } }, methods: { handleClick: function handleClick() {
-          this.$parent.value = this.value;
-        } }, created: function created() {
-        this.$parent.value === this.value ? this.checked = !0 : !this.$parent.value.length && this.checked && (this.$parent.value = this.value);
-      } };
-  }, function (t, e) {
-    t.exports = "<label class=btn v-bind:class=\"{\n    'active':active,\n    'btn-success':type == 'success',\n    'btn-warning':type == 'warning',\n    'btn-info':type == 'info',\n    'btn-danger':type == 'danger',\n    'btn-default':type == 'default',\n    'btn-primary':type == 'primary'\n  }\"><input type=radio autocomplete=off :checked=checked @click=\"handleClick\"><slot></slot></label>";
-  }, function (t, e, n) {
-    t.exports = n(158), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(159);
-  }, function (t, e) {
-    "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 }), e["default"] = { props: { value: { type: String, twoWay: !0 }, type: { type: String, "default": "default" } } };
-  }, function (t, e) {
-    t.exports = "<div class=btn-group data-toggle=buttons><slot></slot></div>";
-  }, function (t, e, n) {
-    n(161), t.exports = n(163), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(171);
-  }, function (t, e, n) {
-    var i = n(162);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".bs-searchbox[_v-6a0dd090]{padding:4px 8px}.btn-group .dropdown-menu .notify[_v-6a0dd090]{position:absolute;bottom:5px;width:96%;margin:0 2%;min-height:26px;padding:3px 5px;background:#f5f5f5;border:1px solid #e3e3e3;box-shadow:inset 0 1px 1px rgba(0,0,0,.05);pointer-events:none;opacity:.9}", ""]);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(164),
-        r = i(o),
-        s = n(31),
-        a = i(s);e["default"] = { props: { options: { type: Array, "default": function _default() {
-            return [];
-          } }, value: { twoWay: !0 }, placeholder: { type: String, "default": "Nothing Selected" }, multiple: { type: Boolean, coerce: a["default"], "default": !1 }, search: { type: Boolean, coerce: a["default"], "default": !1 }, limit: { type: Number, "default": 1024 }, closeOnSelect: { type: Boolean, coerce: a["default"], "default": !1 }, disabled: { type: Boolean, coerce: a["default"], "default": !1 } }, ready: function ready() {
-        this.value.constructor !== Array ? 0 === this.value.length ? this.value = [] : this.value = [this.value] : !this.multiple && this.value.length > 1 ? this.value = this.value.slice(0, 1) : this.multiple && this.value.length > this.limit && (this.value = this.value.slice(0, this.limit));
-      }, data: function data() {
-        return { searchText: null, show: !1, showNotify: !1 };
-      }, computed: { selectedItems: function selectedItems() {
-          var t = [];if (this.value.length) {
-            var e = !0,
-                n = !1,
-                i = void 0;try {
-              for (var o, s = (0, r["default"])(this.value); !(e = (o = s.next()).done); e = !0) {
-                var a = o.value;if (0 === this.options.length) t = this.value;else if ("string" == typeof a) {
-                  var l = void 0;this.options.some(function (t) {
-                    return t.value === a ? (l = t, !0) : void 0;
-                  }), l && t.push(l.label);
-                }
-              }
-            } catch (c) {
-              n = !0, i = c;
-            } finally {
-              try {
-                !e && s["return"] && s["return"]();
-              } finally {
-                if (n) throw i;
-              }
-            }return t.join(", ");
-          }
-        }, showPlaceholder: function showPlaceholder() {
-          return 0 === this.value.length;
-        } }, watch: { value: function value(t) {
-          var e = this;t.length > this.limit && (this.showNotify = !0, this.value.pop(), setTimeout(function () {
-            return e.showNotify = !1;
-          }, 1e3));
-        } }, methods: { select: function select(t) {
-          -1 === this.value.indexOf(t) ? this.multiple ? this.value.push(t) : this.value = [t] : this.multiple && this.value.$remove(t), this.closeOnSelect && this.toggleDropdown();
-        }, isSelected: function isSelected(t) {
-          return this.value.constructor !== Array ? this.value == t : -1 !== this.value.indexOf(t);
-        }, toggleDropdown: function toggleDropdown() {
-          this.show = !this.show;
-        } } };
-  }, function (t, e, n) {
-    t.exports = { "default": n(165), __esModule: !0 };
-  }, function (t, e, n) {
-    n(166), n(40), t.exports = n(170);
-  }, function (t, e, n) {
-    n(167);for (var i = n(47), o = n(51), r = n(63), s = n(81)("toStringTag"), a = ["NodeList", "DOMTokenList", "MediaList", "StyleSheetList", "CSSRuleList"], l = 0; 5 > l; l++) {
-      var c = a[l],
-          u = i[c],
-          d = u && u.prototype;d && !d[s] && o(d, s, c), r[c] = r.Array;
-    }
-  }, function (t, e, n) {
-    "use strict";
-    var i = n(168),
-        o = n(169),
-        r = n(63),
-        s = n(69);t.exports = n(44)(Array, "Array", function (t, e) {
-      this._t = s(t), this._i = 0, this._k = e;
-    }, function () {
-      var t = this._t,
-          e = this._k,
-          n = this._i++;return !t || n >= t.length ? (this._t = void 0, o(1)) : "keys" == e ? o(0, n) : "values" == e ? o(0, t[n]) : o(0, [n, t[n]]);
-    }, "values"), r.Arguments = r.Array, i("keys"), i("values"), i("entries");
-  }, function (t, e) {
-    t.exports = function () {};
-  }, function (t, e) {
-    t.exports = function (t, e) {
-      return { value: e, done: !!t };
-    };
-  }, function (t, e, n) {
-    var i = n(53),
-        o = n(88);t.exports = n(48).getIterator = function (t) {
-      var e = o(t);if ("function" != typeof e) throw TypeError(t + " is not iterable!");return i(e.call(t));
-    };
-  }, function (t, e) {
-    t.exports = '<div class=btn-group v-bind:class="{open: show}" _v-6a0dd090=""><button v-el:btn="" type=button class="btn btn-default dropdown-toggle" @click=toggleDropdown @blur="show = (search ? show : false)" v-bind="{disabled: disabled}" _v-6a0dd090=""><span class=btn-placeholder v-show=showPlaceholder _v-6a0dd090="">{{placeholder}}</span> <span class=btn-content _v-6a0dd090="">{{ selectedItems }}</span> <span class=caret _v-6a0dd090=""></span></button><ul class=dropdown-menu _v-6a0dd090=""><template v-if=options.length _v-6a0dd090=""><li v-if=search class=bs-searchbox _v-6a0dd090=""><input placeholder=Search v-model=searchText class=form-control autocomplete=off _v-6a0dd090=""></li><li v-for="option in options | filterBy searchText " v-bind:id=option.value style=position:relative _v-6a0dd090=""><a @mousedown.prevent=select(option.value) style=cursor:pointer _v-6a0dd090="">{{ option.label }} <span class="glyphicon glyphicon-ok check-mark" v-show=isSelected(option.value) _v-6a0dd090=""></span></a></li></template><slot v-else="" _v-6a0dd090=""></slot><div class=notify v-show=showNotify transition=fadein _v-6a0dd090="">Limit reached ({{limit}} items max).</div></ul></div>';
-  }, function (t, e, n) {
-    n(173), t.exports = n(175), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(176);
-  }, function (t, e, n) {
-    var i = n(174);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".tab-content>.tab-pane[_v-0c89e409]{display:block}", ""]);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(31),
-        r = i(o);e["default"] = { props: { header: { type: String }, disabled: { type: Boolean, coerce: r["default"], "default": !1 } }, data: function data() {
-        return { index: 0, show: !1 };
-      }, computed: { show: function show() {
-          return this.$parent.active == this.index;
-        }, transition: function transition() {
-          return this.$parent.effect;
-        } }, created: function created() {
-        this.$parent.renderData.push({ header: this.header, disabled: this.disabled });
-      }, ready: function ready() {
-        for (var t in this.$parent.$children) {
-          if (this.$parent.$children[t].$el == this.$el) {
-            this.index = t;break;
-          }
-        }
-      }, beforeDestroy: function beforeDestroy() {
-        this.$parent.renderData.splice(this.index, 1);
-      } };
-  }, function (t, e) {
-    t.exports = '<div role=tabpanel class=tab-pane v-bind:class={hide:!show} v-show=show :transition=transition _v-0c89e409=""><slot _v-0c89e409=""></slot></div>';
-  }, function (t, e, n) {
-    n(178), t.exports = n(180), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(181);
-  }, function (t, e, n) {
-    var i = n(179);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".nav-tabs[_v-4765fae9]{margin-bottom:15px}", ""]);
-  }, function (t, e) {
-    "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 }), e["default"] = { props: { navStyle: { type: String, "default": "tabs" }, effect: { type: String, "default": "fadein" }, active: { type: Number, "default": 0 } }, data: function data() {
-        return { renderData: [] };
-      }, methods: { handleTabListClick: function handleTabListClick(t, e) {
-          e.disabled || (this.active = t);
-        } } };
-  }, function (t, e) {
-    t.exports = '<div _v-4765fae9=""><ul class="nav nav-{{navStyle}}" role=tablist _v-4765fae9=""><li v-for="r in renderData" v-bind:class="{\n                  \'active\': ($index === active),\n                  \'disabled\': r.disabled\n                }" @click.prevent="handleTabListClick($index, r)" :disabled=r.disabled _v-4765fae9=""><a href=# _v-4765fae9=""><slot name=header _v-4765fae9="">{{{r.header}}}</slot></a></li></ul><div class=tab-content v-el:tab-content="" _v-4765fae9=""><slot _v-4765fae9=""></slot></div></div>';
-  }, function (t, e, n) {
-    n(183), t.exports = n(185), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(186);
-  }, function (t, e, n) {
-    var i = n(184);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".tooltip{opacity:.9}.fadein-enter{-webkit-animation:fadein-in .3s ease-in;animation:fadein-in .3s ease-in}.fadein-leave{-webkit-animation:fadein-out .3s ease-out;animation:fadein-out .3s ease-out}@-webkit-keyframes fadein-in{0%{opacity:0}to{opacity:1}}@keyframes fadein-in{0%{opacity:0}to{opacity:1}}@-webkit-keyframes fadein-out{0%{opacity:1}to{opacity:0}}@keyframes fadein-out{0%{opacity:1}to{opacity:0}}", ""]);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(149),
-        r = i(o);e["default"] = { mixins: [r["default"]], props: { trigger: { type: String, "default": "hover" }, effect: { type: String, "default": "scale" } } };
-  }, function (t, e) {
-    t.exports = "<span v-el:trigger><slot></slot></span><div class=tooltip v-bind:class=\"{\n    'top':    placement === 'top',\n    'left':   placement === 'left',\n    'right':  placement === 'right',\n    'bottom': placement === 'bottom'\n    }\" v-el:popover v-show=show :transition=effect role=tooltip><div class=tooltip-arrow></div><div class=tooltip-inner><slot name=content>{{{content}}}</slot></div></div>";
-  }, function (t, e, n) {
-    n(188), t.exports = n(190), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(192);
-  }, function (t, e, n) {
-    var i = n(189);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, ".dropdown-menu>li>a{cursor:pointer}", ""]);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(191),
-        r = i(o),
-        s = n(31),
-        a = i(s),
-        l = { created: function created() {
-        this.items = this.primitiveData;
-      }, partials: { "default": '<span v-html="item | highlight query"></span>' }, props: { data: { type: Array }, limit: { type: Number, "default": 8 }, async: { type: String }, template: { type: String }, templateName: { type: String, "default": "default" }, key: { type: String, "default": null }, matchCase: { type: Boolean, coerce: a["default"], "default": !1 }, matchStart: { type: Boolean, coerce: a["default"], "default": !1 }, onHit: { type: Function, "default": function _default(t) {
-            this.reset(), this.query = t;
-          } }, placeholder: { type: String } }, data: function data() {
-        return { query: "", showDropdown: !1, noResults: !0, current: 0, items: [] };
-      }, computed: { primitiveData: function primitiveData() {
-          var t = this;return this.data ? this.data.filter(function (e) {
-            e = t.matchCase ? e : e.toLowerCase();var n = t.matchCase ? t.query : t.query.toLowerCase();return t.matchStart ? 0 === e.indexOf(n) : -1 !== e.indexOf(n);
-          }).slice(0, this.limit) : void 0;
-        } }, ready: function ready() {
-        this.templateName && "default" !== this.templateName && Vue.partial(this.templateName, this.template);
-      }, methods: { update: function update() {
-          var t = this;return this.query ? (this.data && (this.items = this.primitiveData, this.showDropdown = this.items.length ? !0 : !1), void (this.async && (0, r["default"])(this.async + this.query, function (e) {
-            t.items = (t.key ? e[t.key] : e).slice(0, t.limit), t.showDropdown = t.items.length ? !0 : !1;
-          }))) : (this.reset(), !1);
-        }, reset: function reset() {
-          this.items = [], this.query = "", this.loading = !1, this.showDropdown = !1;
-        }, setActive: function setActive(t) {
-          this.current = t;
-        }, isActive: function isActive(t) {
-          return this.current === t;
-        }, hit: function hit(t) {
-          t.preventDefault(), this.onHit(this.items[this.current], this);
-        }, up: function up() {
-          this.current > 0 && this.current--;
-        }, down: function down() {
-          this.current < this.items.length - 1 && this.current++;
-        } }, filters: { highlight: function highlight(t, e) {
-          return t.replace(new RegExp("(" + e + ")", "gi"), "<strong>$1</strong>");
-        } } };e["default"] = l;
-  }, function (t, e) {
-    "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 }), e["default"] = function (t, e) {
-      var n = new XMLHttpRequest();n.onreadystatechange = function () {
-        if (4 === n.readyState && 200 === n.status) {
-          var t = JSON.parse(n.responseText);e && e(t);
-        }
-      }, n.open("GET", t), n.setRequestHeader("Accept", "application/json"), n.send();
-    };
-  }, function (t, e) {
-    t.exports = '<div style="position: relative" v-bind:class="{\'open\':showDropdown}"><input class=form-control :placeholder=placeholder autocomplete=off v-model=query @input=update @keydown.up=up @keydown.down=down @keydown.enter=hit @keydown.esc=reset @blur="showDropdown = false"><ul class=dropdown-menu v-el:dropdown><li v-for="item in items" v-bind:class="{\'active\': isActive($index)}"><a @mousedown.prevent=hit @mousemove=setActive($index)><partial :name=templateName></partial></a></li></ul></div>';
-  }, function (t, e, n) {
-    t.exports = n(194), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(195);
-  }, function (t, e, n) {
-    "use strict";
-    function i(t) {
-      return t && t.__esModule ? t : { "default": t };
-    }Object.defineProperty(e, "__esModule", { value: !0 });var o = n(91),
-        r = i(o);e["default"] = { methods: { toggleCollapse: function toggleCollapse(t) {
-          t.preventDefault();var e = this.$el.querySelector("[data-target]"),
-              n = e.getAttribute("data-target"),
-              i = document.getElementById(n.substring(1));i.classList.toggle("collapse");
-        } }, ready: function ready() {
-        var t = this,
-            e = this.$el.querySelector('[data-toggle="collapse"]');e && (e.style.borderRadius = "4px", e.addEventListener("click", this.toggleCollapse)), this._closeEvent = r["default"].listen(window, "click", function (e) {
-          t.$el.contains(e.target) || t.$el.classList.remove("open");
-        });
-      }, beforeDestroy: function beforeDestroy() {
-        this._closeEvent && this._closeEvent.remove();
-      } };
-  }, function (t, e) {
-    t.exports = "<div class=container-fluid><div class=navbar-header><slot></slot></div><slot name=dropdown-menu></slot></div>";
-  }, function (t, e, n) {
-    t.exports = n(197), t.exports.__esModule && (t.exports = t.exports["default"]), ("function" == typeof t.exports ? t.exports.options : t.exports).template = n(200);
-  }, function (t, e, n) {
-    "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 }), n(198);var i = 500;e["default"] = { data: function data() {
-        return { active: !1 };
-      }, props: { size: { type: String, "default": "md" }, text: { type: String, "default": "" }, fixed: { type: Boolean, "default": !1 } }, computed: { spinnerSize: function spinnerSize() {
-          return this.size ? "spinner-" + this.size : "spinner-sm";
-        } }, methods: { getMinWait: function getMinWait(t) {
-          return t = t || 0, new Date().getTime() - this._started.getTime() < i ? i - parseInt(new Date().getTime() - this._started.getTime(), 10) + t : 0 + t;
-        }, show: function show(t) {
-          t && t.text && (this.text = t.text), t && t.size && (this.size = t.size), t && t.fixed && (this.fixed = t.fixed), this._body.style.overflowY = "hidden", this._started = new Date(), this.active = !0, this.$root.$broadcast("shown::spinner");
-        }, hide: function hide() {
-          var t = this,
-              e = 0;this._spinnerAnimation = setTimeout(function () {
-            t.active = !1, t._body.style.overflowY = t._bodyOverflow, t.$root.$broadcast("hidden::spinner");
-          }, this.getMinWait(e));
-        } }, events: { "show::spinner": function showSpinner(t) {
-          this.show(t);
-        }, "hide::spinner": function hideSpinner() {
-          this.hide();
-        }, "start::ajax": function startAjax(t) {
-          this.show(t);
-        }, "end::ajax": function endAjax() {
-          this.hide();
-        } }, destroyed: function destroyed() {
-        clearTimeout(this._spinnerAnimation), this._body.style.overflowY = this._bodyOverflow;
-      }, ready: function ready() {
-        this._body = document.querySelector("body"), this._bodyOverflow = this._body.style.overflowY || "";
-      } };
-  }, function (t, e, n) {
-    var i = n(199);"string" == typeof i && (i = [[t.id, i, ""]]);n(29)(i, {});i.locals && (t.exports = i.locals);
-  }, function (t, e, n) {
-    e = t.exports = n(28)(), e.push([t.id, '/*!\n *\n * Spinner\n * With fallback to IE9\n *\n */@keyframes spin{to{transform:rotate(1turn)}}.spinner-gritcode{top:0;left:0;bottom:0;right:0;z-index:9998;position:absolute;width:100%;text-align:center;background:hsla(0,0%,100%,.9)}.spinner-gritcode.spinner-fixed{position:fixed}.spinner-gritcode .spinner-wrapper{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%)}.spinner-gritcode .spinner-circle{position:relative;border:4px solid #ccc;border-right-color:#337ab7;border-radius:50%;display:inline-block;animation:spin .6s linear;animation-iteration-count:infinite;width:3em;height:3em;z-index:2}.spinner-gritcode .spinner-text{position:relative;text-align:center;margin-top:.5em;z-index:2;width:100%;font-size:95%;color:#337ab7}.spinner-gritcode.spinner-sm .spinner-circle{width:1.5em;height:1.5em}.spinner-gritcode.spinner-md .spinner-circle{width:2em;height:2em}.spinner-gritcode.spinner-lg .spinner-circle{width:2.5em;height:2.5em}.spinner-gritcode.spinner-xl .spinner-circle{width:3.5em;height:3.5em}.ie9 .spinner-gritcode .spinner-circle,.lt-ie10 .spinner-gritcode .spinner-circle,.no-csstransforms3d .spinner-gritcode .spinner-circle,.no-csstransitions .spinner-gritcode .spinner-circle,.oldie .spinner-gritcode .spinner-circle{background:url("http://i2.wp.com/www.thegreatnovelingadventure.com/wp-content/plugins/wp-polls/images/loading.gif") center center no-repeat;animation:none;margin-left:0;margin-top:5px;border:none;width:32px;height:32px}', ""]);
-  }, function (t, e) {
-    t.exports = "<div class=\"spinner spinner-gritcode {{spinnerSize}} {{fixed ? 'spinner-fixed' : ''}}\" v-show=active><div class=spinner-wrapper><div class=spinner-circle></div><div class=spinner-text>{{text}}</div></div></div>";
-  }]);
-});
-
-},{}],116:[function(require,module,exports){
+},{}],117:[function(require,module,exports){
 (function (process){
 /*!
- * vue-validator v2.1.4
+ * vue-validator v2.1.7
  * (c) 2016 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -35934,13 +34608,14 @@ function Override (Vue) {
 }
 
 var VALIDATE_UPDATE = '__vue-validator-validate-update__';
-var PRIORITY_VALIDATE = 16;
+var PRIORITY_VALIDATE = 4096;
 var PRIORITY_VALIDATE_CLASS = 32;
 var REGEX_FILTER = /[^|]\|[^|]/;
 var REGEX_VALIDATE_DIRECTIVE = /^v-validate(?:$|:(.*)$)/;
 var REGEX_EVENT = /^v-on:|^@/;
 
 var classId = 0; // ID for validation class
+
 
 function ValidateClass (Vue) {
   var vIf = Vue.directive('if');
@@ -36020,7 +34695,6 @@ function ValidateClass (Vue) {
 }
 
 function Validate (Vue) {
-  var vIf = Vue.directive('if');
   var FragmentFactory = Vue.FragmentFactory;
   var parseDirective = Vue.parsers.directive.parseDirective;
   var _Vue$util = Vue.util;
@@ -36051,8 +34725,9 @@ function Validate (Vue) {
    */
 
   Vue.directive('validate', {
+    deep: true,
     terminal: true,
-    priority: vIf.priority + PRIORITY_VALIDATE,
+    priority: PRIORITY_VALIDATE,
     params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
 
     paramWatchers: {
@@ -36119,20 +34794,16 @@ function Validate (Vue) {
       }
 
       if (isPlainObject(value) || old && isPlainObject(old)) {
-        this.handleObject(value, old);
+        this.handleObject(value, old, this.params.initial);
       } else if (Array.isArray(value) || old && Array.isArray(old)) {
-        this.handleArray(value, old);
+        this.handleArray(value, old, this.params.initial);
       }
 
-      var options = { field: this.field, noopable: this._initialNoopValidation };
+      var options = { field: this.field };
       if (this.frag) {
         options.el = this.frag.node;
       }
       this.validator.validate(options);
-
-      if (this._initialNoopValidation) {
-        this._initialNoopValidation = null;
-      }
     },
     unbind: function unbind() {
       if (this._invalid) {
@@ -36164,8 +34835,6 @@ function Validate (Vue) {
       isPlainObject(params.classes) && this.validation.setValidationClasses(params.classes);
 
       params.group && validator.addGroupValidation(params.group, this.field);
-
-      this._initialNoopValidation = this.isInitialNoopValidation(params.initial);
     },
     listen: function listen() {
       var model = this.model;
@@ -36246,16 +34915,16 @@ function Validate (Vue) {
       replace(this.anchor, this.el);
       this.anchor = null;
     },
-    handleArray: function handleArray(value, old) {
+    handleArray: function handleArray(value, old, initial) {
       var _this = this;
 
       old && this.validation.resetValidation();
 
       each(value, function (val) {
-        _this.validation.setValidation(val);
+        _this.validation.setValidation(val, undefined, undefined, initial);
       });
     },
-    handleObject: function handleObject(value, old) {
+    handleObject: function handleObject(value, old, initial) {
       var _this2 = this;
 
       old && this.validation.resetValidation();
@@ -36264,11 +34933,11 @@ function Validate (Vue) {
         if (isPlainObject(val)) {
           if ('rule' in val) {
             var msg = 'message' in val ? val.message : null;
-            var initial = 'initial' in val ? val.initial : null;
-            _this2.validation.setValidation(key, val.rule, msg, initial);
+            var init = 'initial' in val ? val.initial : null;
+            _this2.validation.setValidation(key, val.rule, msg, init || initial);
           }
         } else {
-          _this2.validation.setValidation(key, val);
+          _this2.validation.setValidation(key, val, undefined, initial);
         }
       });
     },
@@ -36370,6 +35039,14 @@ var BaseValidation = function () {
     each(keys, function (key, index) {
       _this2._validators[key] = null;
       delete _this2._validators[key];
+    });
+  };
+
+  BaseValidation.prototype.resetValidationNoopable = function resetValidationNoopable() {
+    each(this._validators, function (descriptor, key) {
+      if (descriptor.initial && !descriptor._isNoopable) {
+        descriptor._isNoopable = true;
+      }
     });
   };
 
@@ -36553,11 +35230,7 @@ var BaseValidation = function () {
   };
 
   BaseValidation.prototype.reset = function reset() {
-    each(this._validators, function (descriptor, key) {
-      if (descriptor.initial && !descriptor._isNoopable) {
-        descriptor._isNoopable = true;
-      }
-    });
+    this.resetValidationNoopable();
     this.resetFlags();
     this._init = this._getValue(this._el);
   };
@@ -36770,7 +35443,7 @@ var BaseValidation = function () {
   BaseValidation.prototype._invokeValidator = function _invokeValidator(vm, validator, val, arg, cb) {
     var future = validator.call(this, val, arg);
     if (typeof future === 'function') {
-      // function
+      // function 
       future(function () {
         // resolve
         cb(true);
@@ -36929,6 +35602,7 @@ var CheckboxValidation = function (_BaseValidation) {
   };
 
   CheckboxValidation.prototype.reset = function reset() {
+    this.resetValidationNoopable();
     this.resetFlags();
     each(this._inits, function (item, index) {
       item.init = item.el.checked;
@@ -37108,6 +35782,7 @@ var RadioValidation = function (_BaseValidation) {
   };
 
   RadioValidation.prototype.reset = function reset() {
+    this.resetValidationNoopable();
     this.resetFlags();
     each(this._inits, function (item, index) {
       item.init = item.el.checked;
@@ -37267,10 +35942,6 @@ var SelectValidation = function (_BaseValidation) {
     this._unwatch && this._unwatch();
   };
 
-  SelectValidation.prototype.reset = function reset() {
-    this.resetFlags();
-  };
-
   SelectValidation.prototype._getValue = function _getValue(el) {
     var ret = [];
 
@@ -37360,8 +36031,8 @@ var Validator$1 = function () {
     delete vm['$setValidationErrors'];
     vm.$validate = null;
     delete vm['$validate'];
-    vm.$validatorReset = null;
-    delete vm['$validatorReset'];
+    vm.$resetValidation = null;
+    delete vm['$resetValidation'];
     vm._validatorMaps[this.name] = null;
     delete vm._validatorMaps[this.name];
     vm[this.name] = null;
@@ -37430,7 +36101,7 @@ var Validator$1 = function () {
     var validation = this._getValidationFrom(field);
     var validations = this._groupValidations[group];
 
-    validations && ! ~indexOf(validations, validation) && validations.push(validation);
+    validations && !~indexOf(validations, validation) && validations.push(validation);
   };
 
   Validator.prototype.removeGroupValidation = function removeGroupValidation(group, field) {
@@ -38113,7 +36784,7 @@ function plugin(Vue) {
   Validate(Vue);
 }
 
-plugin.version = '2.1.4';
+plugin.version = '2.1.7';
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
@@ -38121,10 +36792,10 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 module.exports = plugin;
 }).call(this,require('_process'))
-},{"_process":108}],117:[function(require,module,exports){
-(function (process,global){
+},{"_process":109}],118:[function(require,module,exports){
+(function (process){
 /*!
- * Vue.js v1.0.24
+ * Vue.js v1.0.28
  * (c) 2016 Evan You
  * Released under the MIT License.
  */
@@ -38280,7 +36951,7 @@ function stripQuotes(str) {
 }
 
 /**
- * Camelize a hyphen-delmited string.
+ * Camelize a hyphen-delimited string.
  *
  * @param {String} str
  * @return {String}
@@ -38303,10 +36974,10 @@ function toUpper(_, c) {
  * @return {String}
  */
 
-var hyphenateRE = /([a-z\d])([A-Z])/g;
+var hyphenateRE = /([^-])([A-Z])/g;
 
 function hyphenate(str) {
-  return str.replace(hyphenateRE, '$1-$2').toLowerCase();
+  return str.replace(hyphenateRE, '$1-$2').replace(hyphenateRE, '$1-$2').toLowerCase();
 }
 
 /**
@@ -38523,10 +37194,10 @@ var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
 // UA sniffing for working around browser-specific quirks
 var UA = inBrowser && window.navigator.userAgent.toLowerCase();
+var isIE = UA && UA.indexOf('trident') > 0;
 var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
 var isAndroid = UA && UA.indexOf('android') > 0;
-var isIos = UA && /(iphone|ipad|ipod|ios)/i.test(UA);
-var isWechat = UA && UA.indexOf('micromessenger') > 0;
+var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
 
 var transitionProp = undefined;
 var transitionEndEvent = undefined;
@@ -38543,6 +37214,12 @@ if (inBrowser && !isIE9) {
   animationEndEvent = isWebkitAnim ? 'webkitAnimationEnd' : 'animationend';
 }
 
+/* istanbul ignore next */
+function isNative(Ctor) {
+  return (/native code/.test(Ctor.toString())
+  );
+}
+
 /**
  * Defer a task to execute it asynchronously. Ideally this
  * should be executed as a microtask, so we leverage
@@ -38556,35 +37233,55 @@ if (inBrowser && !isIE9) {
 var nextTick = (function () {
   var callbacks = [];
   var pending = false;
-  var timerFunc;
+  var timerFunc = undefined;
+
   function nextTickHandler() {
     pending = false;
     var copies = callbacks.slice(0);
-    callbacks = [];
+    callbacks.length = 0;
     for (var i = 0; i < copies.length; i++) {
       copies[i]();
     }
   }
 
+  // the nextTick behavior leverages the microtask queue, which can be accessed
+  // via either native Promise.then or MutationObserver.
+  // MutationObserver has wider support, however it is seriously bugged in
+  // UIWebView in iOS >= 9.3.3 when triggered in touch event handlers. It
+  // completely stops working after triggering a few times... so, if native
+  // Promise is available, we will use it:
   /* istanbul ignore if */
-  if (typeof MutationObserver !== 'undefined' && !(isWechat && isIos)) {
+  if (typeof Promise !== 'undefined' && isNative(Promise)) {
+    var p = Promise.resolve();
+    var noop = function noop() {};
+    timerFunc = function () {
+      p.then(nextTickHandler);
+      // in problematic UIWebViews, Promise.then doesn't completely break, but
+      // it can get stuck in a weird state where callbacks are pushed into the
+      // microtask queue but the queue isn't being flushed, until the browser
+      // needs to do some other work, e.g. handle a timer. Therefore we can
+      // "force" the microtask queue to be flushed by adding an empty timer.
+      if (isIOS) setTimeout(noop);
+    };
+  } else if (typeof MutationObserver !== 'undefined') {
+    // use MutationObserver where native Promise is not available,
+    // e.g. IE11, iOS7, Android 4.4
     var counter = 1;
     var observer = new MutationObserver(nextTickHandler);
-    var textNode = document.createTextNode(counter);
+    var textNode = document.createTextNode(String(counter));
     observer.observe(textNode, {
       characterData: true
     });
     timerFunc = function () {
       counter = (counter + 1) % 2;
-      textNode.data = counter;
+      textNode.data = String(counter);
     };
   } else {
-    // webpack attempts to inject a shim for setImmediate
-    // if it is used as a global, so we have to work around that to
-    // avoid bundling unnecessary code.
-    var context = inBrowser ? window : typeof global !== 'undefined' ? global : {};
-    timerFunc = context.setImmediate || setTimeout;
+    // fallback to setTimeout
+    /* istanbul ignore next */
+    timerFunc = setTimeout;
   }
+
   return function (cb, ctx) {
     var func = ctx ? function () {
       cb.call(ctx);
@@ -38598,7 +37295,7 @@ var nextTick = (function () {
 
 var _Set = undefined;
 /* istanbul ignore if */
-if (typeof Set !== 'undefined' && Set.toString().match(/native code/)) {
+if (typeof Set !== 'undefined' && isNative(Set)) {
   // use native Set when available.
   _Set = Set;
 } else {
@@ -38639,12 +37336,12 @@ var p = Cache.prototype;
 
 p.put = function (key, value) {
   var removed;
-  if (this.size === this.limit) {
-    removed = this.shift();
-  }
 
   var entry = this.get(key, true);
   if (!entry) {
+    if (this.size === this.limit) {
+      removed = this.shift();
+    }
     entry = {
       key: key
     };
@@ -38719,7 +37416,6 @@ p.get = function (key, returnEntry) {
 };
 
 var cache$1 = new Cache(1000);
-var filterTokenRE = /[^\s'"]+|'[^']*'|"[^"]*"/g;
 var reservedArgRE = /^in$|^-?\d+/;
 
 /**
@@ -38728,35 +37424,167 @@ var reservedArgRE = /^in$|^-?\d+/;
 
 var str;
 var dir;
-var c;
-var prev;
-var i;
-var l;
-var lastFilterIndex;
-var inSingle;
-var inDouble;
-var curly;
-var square;
-var paren;
-/**
- * Push a filter to the current directive object
- */
+var len;
+var index;
+var chr;
+var state;
+var startState = 0;
+var filterState = 1;
+var filterNameState = 2;
+var filterArgState = 3;
 
-function pushFilter() {
-  var exp = str.slice(lastFilterIndex, i).trim();
-  var filter;
-  if (exp) {
-    filter = {};
-    var tokens = exp.match(filterTokenRE);
-    filter.name = tokens[0];
-    if (tokens.length > 1) {
-      filter.args = tokens.slice(1).map(processFilterArg);
+var doubleChr = 0x22;
+var singleChr = 0x27;
+var pipeChr = 0x7C;
+var escapeChr = 0x5C;
+var spaceChr = 0x20;
+
+var expStartChr = { 0x5B: 1, 0x7B: 1, 0x28: 1 };
+var expChrPair = { 0x5B: 0x5D, 0x7B: 0x7D, 0x28: 0x29 };
+
+function peek() {
+  return str.charCodeAt(index + 1);
+}
+
+function next() {
+  return str.charCodeAt(++index);
+}
+
+function eof() {
+  return index >= len;
+}
+
+function eatSpace() {
+  while (peek() === spaceChr) {
+    next();
+  }
+}
+
+function isStringStart(chr) {
+  return chr === doubleChr || chr === singleChr;
+}
+
+function isExpStart(chr) {
+  return expStartChr[chr];
+}
+
+function isExpEnd(start, chr) {
+  return expChrPair[start] === chr;
+}
+
+function parseString() {
+  var stringQuote = next();
+  var chr;
+  while (!eof()) {
+    chr = next();
+    // escape char
+    if (chr === escapeChr) {
+      next();
+    } else if (chr === stringQuote) {
+      break;
     }
   }
-  if (filter) {
-    (dir.filters = dir.filters || []).push(filter);
+}
+
+function parseSpecialExp(chr) {
+  var inExp = 0;
+  var startChr = chr;
+
+  while (!eof()) {
+    chr = peek();
+    if (isStringStart(chr)) {
+      parseString();
+      continue;
+    }
+
+    if (startChr === chr) {
+      inExp++;
+    }
+    if (isExpEnd(startChr, chr)) {
+      inExp--;
+    }
+
+    next();
+
+    if (inExp === 0) {
+      break;
+    }
   }
-  lastFilterIndex = i + 1;
+}
+
+/**
+ * syntax:
+ * expression | filterName  [arg  arg [| filterName arg arg]]
+ */
+
+function parseExpression() {
+  var start = index;
+  while (!eof()) {
+    chr = peek();
+    if (isStringStart(chr)) {
+      parseString();
+    } else if (isExpStart(chr)) {
+      parseSpecialExp(chr);
+    } else if (chr === pipeChr) {
+      next();
+      chr = peek();
+      if (chr === pipeChr) {
+        next();
+      } else {
+        if (state === startState || state === filterArgState) {
+          state = filterState;
+        }
+        break;
+      }
+    } else if (chr === spaceChr && (state === filterNameState || state === filterArgState)) {
+      eatSpace();
+      break;
+    } else {
+      if (state === filterState) {
+        state = filterNameState;
+      }
+      next();
+    }
+  }
+
+  return str.slice(start + 1, index) || null;
+}
+
+function parseFilterList() {
+  var filters = [];
+  while (!eof()) {
+    filters.push(parseFilter());
+  }
+  return filters;
+}
+
+function parseFilter() {
+  var filter = {};
+  var args;
+
+  state = filterState;
+  filter.name = parseExpression().trim();
+
+  state = filterArgState;
+  args = parseFilterArguments();
+
+  if (args.length) {
+    filter.args = args;
+  }
+  return filter;
+}
+
+function parseFilterArguments() {
+  var args = [];
+  while (!eof() && state !== filterState) {
+    var arg = parseExpression();
+    if (!arg) {
+      break;
+    }
+    args.push(processFilterArg(arg));
+  }
+
+  return args;
 }
 
 /**
@@ -38808,56 +37636,22 @@ function parseDirective(s) {
 
   // reset parser state
   str = s;
-  inSingle = inDouble = false;
-  curly = square = paren = 0;
-  lastFilterIndex = 0;
   dir = {};
+  len = str.length;
+  index = -1;
+  chr = '';
+  state = startState;
 
-  for (i = 0, l = str.length; i < l; i++) {
-    prev = c;
-    c = str.charCodeAt(i);
-    if (inSingle) {
-      // check single quote
-      if (c === 0x27 && prev !== 0x5C) inSingle = !inSingle;
-    } else if (inDouble) {
-      // check double quote
-      if (c === 0x22 && prev !== 0x5C) inDouble = !inDouble;
-    } else if (c === 0x7C && // pipe
-    str.charCodeAt(i + 1) !== 0x7C && str.charCodeAt(i - 1) !== 0x7C) {
-      if (dir.expression == null) {
-        // first filter, end of expression
-        lastFilterIndex = i + 1;
-        dir.expression = str.slice(0, i).trim();
-      } else {
-        // already has filter
-        pushFilter();
-      }
-    } else {
-      switch (c) {
-        case 0x22:
-          inDouble = true;break; // "
-        case 0x27:
-          inSingle = true;break; // '
-        case 0x28:
-          paren++;break; // (
-        case 0x29:
-          paren--;break; // )
-        case 0x5B:
-          square++;break; // [
-        case 0x5D:
-          square--;break; // ]
-        case 0x7B:
-          curly++;break; // {
-        case 0x7D:
-          curly--;break; // }
-      }
+  var filters;
+
+  if (str.indexOf('|') < 0) {
+    dir.expression = str.trim();
+  } else {
+    dir.expression = parseExpression().trim();
+    filters = parseFilterList();
+    if (filters.length) {
+      dir.filters = filters;
     }
-  }
-
-  if (dir.expression == null) {
-    dir.expression = str.slice(0, i).trim();
-  } else if (lastFilterIndex !== 0) {
-    pushFilter();
   }
 
   cache$1.put(s, dir);
@@ -38889,7 +37683,7 @@ function compileRegex() {
   var unsafeOpen = escapeRegex(config.unsafeDelimiters[0]);
   var unsafeClose = escapeRegex(config.unsafeDelimiters[1]);
   tagRE = new RegExp(unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '|' + open + '((?:.|\\n)+?)' + close, 'g');
-  htmlRE = new RegExp('^' + unsafeOpen + '.*' + unsafeClose + '$');
+  htmlRE = new RegExp('^' + unsafeOpen + '((?:.|\\n)+?)' + unsafeClose + '$');
   // reset cache
   cache = new Cache(1000);
 }
@@ -39676,7 +38470,8 @@ if (process.env.NODE_ENV !== 'production') {
       return (/HTMLUnknownElement/.test(el.toString()) &&
         // Chrome returns unknown for several HTML5 elements.
         // https://code.google.com/p/chromium/issues/detail?id=540526
-        !/^(data|time|rtc|rb)$/.test(tag)
+        // Firefox returns unknown for some "Interactive elements."
+        !/^(data|time|rtc|rb|details|dialog|summary)$/.test(tag)
       );
     }
   };
@@ -40012,7 +38807,9 @@ function mergeOptions(parent, child, vm) {
   }
   if (child.mixins) {
     for (var i = 0, l = child.mixins.length; i < l; i++) {
-      parent = mergeOptions(parent, child.mixins[i], vm);
+      var mixin = child.mixins[i];
+      var mixinOptions = mixin.prototype instanceof Vue ? mixin.options : mixin;
+      parent = mergeOptions(parent, mixinOptions, vm);
     }
   }
   for (key in parent) {
@@ -40440,10 +39237,10 @@ var util = Object.freeze({
 	hasProto: hasProto,
 	inBrowser: inBrowser,
 	devtools: devtools,
+	isIE: isIE,
 	isIE9: isIE9,
 	isAndroid: isAndroid,
-	isIos: isIos,
-	isWechat: isWechat,
+	isIOS: isIOS,
 	get transitionProp () { return transitionProp; },
 	get transitionEndEvent () { return transitionEndEvent; },
 	get animationProp () { return animationProp; },
@@ -40543,7 +39340,7 @@ function initMixin (Vue) {
 
     // fragment:
     // if this instance is compiled inside a Fragment, it
-    // needs to reigster itself as a child of that fragment
+    // needs to register itself as a child of that fragment
     // for attach/detach to work properly.
     this._frag = options._frag;
     if (this._frag) {
@@ -40848,7 +39645,7 @@ function parsePath(path) {
  */
 
 function getPath(obj, path) {
-  return parseExpression(path).get(obj);
+  return parseExpression$1(path).get(obj);
 }
 
 /**
@@ -40883,7 +39680,7 @@ function setPath(obj, path, val) {
     last = obj;
     key = path[i];
     if (key.charAt(0) === '*') {
-      key = parseExpression(key.slice(1)).get.call(original, original);
+      key = parseExpression$1(key.slice(1)).get.call(original, original);
     }
     if (i < l - 1) {
       obj = obj[key];
@@ -40927,11 +39724,13 @@ var improperKeywordsRE = new RegExp('^(' + improperKeywords.replace(/,/g, '\\b|'
 
 var wsRE = /\s/g;
 var newlineRE = /\n/g;
-var saveRE = /[\{,]\s*[\w\$_]+\s*:|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*\$\{|\}(?:[^`\\]|\\.)*`|`(?:[^`\\]|\\.)*`)|new |typeof |void /g;
+var saveRE = /[\{,]\s*[\w\$_]+\s*:|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*\$\{|\}(?:[^`\\"']|\\.)*`|`(?:[^`\\]|\\.)*`)|new |typeof |void /g;
 var restoreRE = /"(\d+)"/g;
 var pathTestRE = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['.*?'\]|\[".*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/;
 var identRE = /[^\w$\.](?:[A-Za-z_$][\w$]*)/g;
-var booleanLiteralRE = /^(?:true|false)$/;
+var literalValueRE$1 = /^(?:true|false|null|undefined|Infinity|NaN)$/;
+
+function noop() {}
 
 /**
  * Save / Rewrite / Restore
@@ -41013,7 +39812,7 @@ function compileGetter(exp) {
   // save strings and object literal keys
   var body = exp.replace(saveRE, save).replace(wsRE, '');
   // rewrite all paths
-  // pad 1 space here becaue the regex matches 1 extra char
+  // pad 1 space here because the regex matches 1 extra char
   body = (' ' + body).replace(identRE, rewrite).replace(restoreRE, restore);
   return makeGetterFn(body);
 }
@@ -41034,7 +39833,15 @@ function makeGetterFn(body) {
     return new Function('scope', 'return ' + body + ';');
     /* eslint-enable no-new-func */
   } catch (e) {
-    process.env.NODE_ENV !== 'production' && warn('Invalid expression. ' + 'Generated function body: ' + body);
+    if (process.env.NODE_ENV !== 'production') {
+      /* istanbul ignore if */
+      if (e.toString().match(/unsafe-eval|CSP/)) {
+        warn('It seems you are using the default build of Vue.js in an environment ' + 'with Content Security Policy that prohibits unsafe-eval. ' + 'Use the CSP-compliant build instead: ' + 'http://vuejs.org/guide/installation.html#CSP-compliant-build');
+      } else {
+        warn('Invalid expression. ' + 'Generated function body: ' + body);
+      }
+    }
+    return noop;
   }
 }
 
@@ -41064,7 +39871,7 @@ function compileSetter(exp) {
  * @return {Function}
  */
 
-function parseExpression(exp, needSet) {
+function parseExpression$1(exp, needSet) {
   exp = exp.trim();
   // try cache
   var hit = expressionCache.get(exp);
@@ -41096,14 +39903,14 @@ function parseExpression(exp, needSet) {
 
 function isSimplePath(exp) {
   return pathTestRE.test(exp) &&
-  // don't treat true/false as paths
-  !booleanLiteralRE.test(exp) &&
+  // don't treat literal values as paths
+  !literalValueRE$1.test(exp) &&
   // Math constants e.g. Math.PI, Math.E etc.
   exp.slice(0, 5) !== 'Math.';
 }
 
 var expression = Object.freeze({
-  parseExpression: parseExpression,
+  parseExpression: parseExpression$1,
   isSimplePath: isSimplePath
 });
 
@@ -41255,7 +40062,7 @@ function Watcher(vm, expOrFn, cb, options) {
     this.getter = expOrFn;
     this.setter = undefined;
   } else {
-    var res = parseExpression(expOrFn, this.twoWay);
+    var res = parseExpression$1(expOrFn, this.twoWay);
     this.getter = res.get;
     this.setter = res.set;
   }
@@ -41513,7 +40320,7 @@ function traverse(val, seen) {
   }
   var isA = isArray(val);
   var isO = isObject(val);
-  if (isA || isO) {
+  if ((isA || isO) && Object.isExtensible(val)) {
     if (val.__ob__) {
       var depId = val.__ob__.dep.id;
       if (seen.has(depId)) {
@@ -41576,6 +40383,7 @@ function isRealTemplate(node) {
 
 var tagRE$1 = /<([\w:-]+)/;
 var entityRE = /&#?\w+?;/;
+var commentRE = /<!--/;
 
 /**
  * Convert a string template to a DocumentFragment.
@@ -41598,8 +40406,9 @@ function stringToFragment(templateString, raw) {
   var frag = document.createDocumentFragment();
   var tagMatch = templateString.match(tagRE$1);
   var entityMatch = entityRE.test(templateString);
+  var commentMatch = commentRE.test(templateString);
 
-  if (!tagMatch && !entityMatch) {
+  if (!tagMatch && !entityMatch && !commentMatch) {
     // text only, return a single text node.
     frag.appendChild(document.createTextNode(templateString));
   } else {
@@ -42097,6 +40906,10 @@ var vFor = {
   params: ['track-by', 'stagger', 'enter-stagger', 'leave-stagger'],
 
   bind: function bind() {
+    if (process.env.NODE_ENV !== 'production' && this.el.hasAttribute('v-if')) {
+      warn('<' + this.el.tagName.toLowerCase() + ' v-for="' + this.expression + '" v-if="' + this.el.getAttribute('v-if') + '">: ' + 'Using v-if and v-for on the same element is not recommended - ' + 'consider filtering the source Array instead.', this.vm);
+    }
+
     // support "item in/of items" syntax
     var inMatch = this.expression.match(/(.*) (?:in|of) (.*)/);
     if (inMatch) {
@@ -42207,7 +41020,7 @@ var vFor = {
           });
         }
       } else {
-        // new isntance
+        // new instance
         frag = this.create(value, alias, i, key);
         frag.fresh = !init;
       }
@@ -42566,7 +41379,7 @@ var vFor = {
    * the filters. This is passed to and called by the watcher.
    *
    * It is necessary for this to be called during the
-   * wathcer's dependency collection phase because we want
+   * watcher's dependency collection phase because we want
    * the v-for to update when the source Object is mutated.
    */
 
@@ -42642,24 +41455,6 @@ function findPrevFrag(frag, anchor, id) {
 }
 
 /**
- * Find a vm from a fragment.
- *
- * @param {Fragment} frag
- * @return {Vue|undefined}
- */
-
-function findVmFromFrag(frag) {
-  var node = frag.node;
-  // handle multi-node frag
-  if (frag.end) {
-    while (!node.__vue__ && node !== frag.end && node.nextSibling) {
-      node = node.nextSibling;
-    }
-  }
-  return node.__vue__;
-}
-
-/**
  * Create a range array from given number.
  *
  * @param {Number} n
@@ -42692,6 +41487,24 @@ if (process.env.NODE_ENV !== 'production') {
   vFor.warnDuplicate = function (value) {
     warn('Duplicate value found in v-for="' + this.descriptor.raw + '": ' + JSON.stringify(value) + '. Use track-by="$index" if ' + 'you are expecting duplicate values.', this.vm);
   };
+}
+
+/**
+ * Find a vm from a fragment.
+ *
+ * @param {Fragment} frag
+ * @return {Vue|undefined}
+ */
+
+function findVmFromFrag(frag) {
+  var node = frag.node;
+  // handle multi-node frag
+  if (frag.end) {
+    while (!node.__vue__ && node !== frag.end && node.nextSibling) {
+      node = node.nextSibling;
+    }
+  }
+  return node.__vue__;
 }
 
 var vIf = {
@@ -42909,7 +41722,10 @@ var text$2 = {
   },
 
   update: function update(value) {
-    this.el.value = _toString(value);
+    // #3029 only update when the value changes. This prevent
+    // browsers from overwriting values like selectionStart
+    value = _toString(value);
+    if (value !== this.el.value) this.el.value = value;
   },
 
   unbind: function unbind() {
@@ -42958,6 +41774,8 @@ var radio = {
 var select = {
 
   bind: function bind() {
+    var _this = this;
+
     var self = this;
     var el = this.el;
 
@@ -42989,7 +41807,12 @@ var select = {
     // selectedIndex with value -1 to 0 when the element
     // is appended to a new parent, therefore we have to
     // force a DOM update whenever that happens...
-    this.vm.$on('hook:attached', this.forceUpdate);
+    this.vm.$on('hook:attached', function () {
+      nextTick(_this.forceUpdate);
+    });
+    if (!inDoc(el)) {
+      nextTick(this.forceUpdate);
+    }
   },
 
   update: function update(value) {
@@ -43081,15 +41904,16 @@ var checkbox = {
     }
 
     this.listener = function () {
-      var model = self._watcher.value;
+      var model = self._watcher.get();
       if (isArray(model)) {
         var val = self.getValue();
+        var i = indexOf(model, val);
         if (el.checked) {
-          if (indexOf(model, val) < 0) {
-            model.push(val);
+          if (i < 0) {
+            self.set(model.concat(val));
           }
-        } else {
-          model.$remove(val);
+        } else if (i > -1) {
+          self.set(model.slice(0, i).concat(model.slice(i + 1)));
         }
       } else {
         self.set(getBooleanValue());
@@ -43606,6 +42430,12 @@ var cloak = {
   }
 };
 
+// logic control
+// two-way binding
+// event handling
+// attributes
+// ref & el
+// cloak
 // must export plain object
 var directives = {
   text: text$1,
@@ -44097,6 +42927,7 @@ var settablePathRE = /^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\[[^\[\]]+\])*$/;
 
 function compileProps(el, propOptions, vm) {
   var props = [];
+  var propsData = vm.$options.propsData;
   var names = Object.keys(propOptions);
   var i = names.length;
   var options, name, attr, value, path, parsed, prop;
@@ -44164,13 +42995,16 @@ function compileProps(el, propOptions, vm) {
     } else if ((value = getAttr(el, attr)) !== null) {
       // has literal binding!
       prop.raw = value;
+    } else if (propsData && (value = propsData[name] || propsData[path]) !== null) {
+      // has propsData
+      prop.raw = value;
     } else if (process.env.NODE_ENV !== 'production') {
       // check possible camelCase prop usage
       var lowerCaseName = path.toLowerCase();
       value = /[A-Z\-]/.test(name) && (el.getAttribute(lowerCaseName) || el.getAttribute(':' + lowerCaseName) || el.getAttribute('v-bind:' + lowerCaseName) || el.getAttribute(':' + lowerCaseName + '.once') || el.getAttribute('v-bind:' + lowerCaseName + '.once') || el.getAttribute(':' + lowerCaseName + '.sync') || el.getAttribute('v-bind:' + lowerCaseName + '.sync'));
       if (value) {
         warn('Possible usage error for prop `' + lowerCaseName + '` - ' + 'did you mean `' + attr + '`? HTML is case-insensitive, remember to use ' + 'kebab-case for props in templates.', vm);
-      } else if (options.required) {
+      } else if (options.required && (!propsData || !(name in propsData) && !(path in propsData))) {
         // warn missing required
         warn('Missing required prop: ' + name, vm);
       }
@@ -44259,7 +43093,7 @@ function processPropValue(vm, prop, rawValue, fn) {
   if (value === undefined) {
     value = getPropDefaultValue(vm, prop);
   }
-  value = coerceProp(prop, value);
+  value = coerceProp(prop, value, vm);
   var coerced = value !== rawValue;
   if (!assertProp(prop, value, vm)) {
     value = undefined;
@@ -44378,13 +43212,17 @@ function assertProp(prop, value, vm) {
  * @return {*}
  */
 
-function coerceProp(prop, value) {
+function coerceProp(prop, value, vm) {
   var coerce = prop.options.coerce;
   if (!coerce) {
     return value;
   }
-  // coerce is a function
-  return coerce(value);
+  if (typeof coerce === 'function') {
+    return coerce(value);
+  } else {
+    process.env.NODE_ENV !== 'production' && warn('Invalid coerce for prop "' + prop.name + '": expected function, got ' + typeof coerce + '.', vm);
+    return value;
+  }
 }
 
 /**
@@ -44916,10 +43754,9 @@ var transition$1 = {
     // resolve on owner vm
     var hooks = resolveAsset(this.vm.$options, 'transitions', id);
     id = id || 'v';
+    oldId = oldId || 'v';
     el.__v_trans = new Transition(el, id, hooks, this.vm);
-    if (oldId) {
-      removeClass(el, oldId + '-transition');
-    }
+    removeClass(el, oldId + '-transition');
     addClass(el, id + '-transition');
   }
 };
@@ -45012,7 +43849,7 @@ function linkAndCapture(linker, vm) {
   var originalDirCount = vm._directives.length;
   linker();
   var dirs = vm._directives.slice(originalDirCount);
-  dirs.sort(directiveComparator);
+  sortDirectives(dirs);
   for (var i = 0, l = dirs.length; i < l; i++) {
     dirs[i]._bind();
   }
@@ -45020,16 +43857,37 @@ function linkAndCapture(linker, vm) {
 }
 
 /**
- * Directive priority sort comparator
+ * sort directives by priority (stable sort)
  *
- * @param {Object} a
- * @param {Object} b
+ * @param {Array} dirs
  */
+function sortDirectives(dirs) {
+  if (dirs.length === 0) return;
 
-function directiveComparator(a, b) {
-  a = a.descriptor.def.priority || DEFAULT_PRIORITY;
-  b = b.descriptor.def.priority || DEFAULT_PRIORITY;
-  return a > b ? -1 : a === b ? 0 : 1;
+  var groupedMap = {};
+  var i, j, k, l;
+  var index = 0;
+  var priorities = [];
+  for (i = 0, j = dirs.length; i < j; i++) {
+    var dir = dirs[i];
+    var priority = dir.descriptor.def.priority || DEFAULT_PRIORITY;
+    var array = groupedMap[priority];
+    if (!array) {
+      array = groupedMap[priority] = [];
+      priorities.push(priority);
+    }
+    array.push(dir);
+  }
+
+  priorities.sort(function (a, b) {
+    return a > b ? -1 : a === b ? 0 : 1;
+  });
+  for (i = 0, j = priorities.length; i < j; i++) {
+    var group = groupedMap[priorities[i]];
+    for (k = 0, l = group.length; k < l; k++) {
+      dirs[index++] = group[k];
+    }
+  }
 }
 
 /**
@@ -45147,7 +44005,13 @@ function compileRoot(el, options, contextOptions) {
     });
     if (names.length) {
       var plural = names.length > 1;
-      warn('Attribute' + (plural ? 's ' : ' ') + names.join(', ') + (plural ? ' are' : ' is') + ' ignored on component ' + '<' + options.el.tagName.toLowerCase() + '> because ' + 'the component is a fragment instance: ' + 'http://vuejs.org/guide/components.html#Fragment-Instance');
+
+      var componentName = options.el.tagName.toLowerCase();
+      if (componentName === 'component' && options.name) {
+        componentName += ':' + options.name;
+      }
+
+      warn('Attribute' + (plural ? 's ' : ' ') + names.join(', ') + (plural ? ' are' : ' is') + ' ignored on component ' + '<' + componentName + '> because ' + 'the component is a fragment instance: ' + 'http://vuejs.org/guide/components.html#Fragment-Instance');
     }
   }
 
@@ -45206,6 +44070,10 @@ function compileElement(el, options) {
   // textarea treats its text content as the initial value.
   // just bind it as an attr directive for value.
   if (el.tagName === 'TEXTAREA') {
+    // a textarea which has v-pre attr should skip complie.
+    if (getAttr(el, 'v-pre') !== null) {
+      return skip;
+    }
     var tokens = parseText(el.value);
     if (tokens) {
       el.setAttribute(':value', tokensToExp(tokens));
@@ -45344,7 +44212,7 @@ function makeTextNodeLinkFn(tokens, frag) {
           if (token.html) {
             replace(node, parseTemplate(value, true));
           } else {
-            node.data = value;
+            node.data = _toString(value);
           }
         } else {
           vm._bindDir(token.descriptor, node, host, scope);
@@ -45532,7 +44400,7 @@ function makeTerminalNodeLinkFn(el, dirName, value, options, def, rawName, arg, 
     modifiers: modifiers,
     def: def
   };
-  // check ref for v-for and router-view
+  // check ref for v-for, v-if and router-view
   if (dirName === 'for' || dirName === 'router-view') {
     descriptor.ref = findRef(el);
   }
@@ -45772,6 +44640,9 @@ function transcludeTemplate(el, options) {
   var frag = parseTemplate(template, true);
   if (frag) {
     var replacer = frag.firstChild;
+    if (!replacer) {
+      return frag;
+    }
     var tag = replacer.tagName && replacer.tagName.toLowerCase();
     if (options.replace) {
       /* istanbul ignore if */
@@ -46328,7 +45199,7 @@ function eventsMixin (Vue) {
   };
 }
 
-function noop() {}
+function noop$1() {}
 
 /**
  * A directive links a DOM element with a piece of data,
@@ -46427,7 +45298,7 @@ Directive.prototype._bind = function () {
         }
       };
     } else {
-      this._update = noop;
+      this._update = noop$1;
     }
     var preProcess = this._preProcess ? bind(this._preProcess, this) : null;
     var postProcess = this._postProcess ? bind(this._postProcess, this) : null;
@@ -46524,7 +45395,7 @@ Directive.prototype._setupParamWatcher = function (key, expression) {
 Directive.prototype._checkStatement = function () {
   var expression = this.expression;
   if (expression && this.acceptStatement && !isSimplePath(expression)) {
-    var fn = parseExpression(expression).get;
+    var fn = parseExpression$1(expression).get;
     var scope = this._scope || this.vm;
     var handler = function handler(e) {
       scope.$event = e;
@@ -46972,7 +45843,7 @@ function dataAPI (Vue) {
    */
 
   Vue.prototype.$get = function (exp, asStatement) {
-    var res = parseExpression(exp);
+    var res = parseExpression$1(exp);
     if (res) {
       if (asStatement) {
         var self = this;
@@ -47000,7 +45871,7 @@ function dataAPI (Vue) {
    */
 
   Vue.prototype.$set = function (exp, val) {
-    var res = parseExpression(exp, true);
+    var res = parseExpression$1(exp, true);
     if (res && res.set) {
       res.set.call(this, this, val);
     }
@@ -47763,7 +46634,7 @@ function filterBy(arr, search, delimiter) {
 }
 
 /**
- * Filter filter for arrays
+ * Order filter for arrays
  *
  * @param {String|Array<String>|Function} ...sortKeys
  * @param {Number} [order]
@@ -47865,7 +46736,7 @@ var filters = {
 
   json: {
     read: function read(value, indent) {
-      return typeof value === 'string' ? value : JSON.stringify(value, null, Number(indent) || 2);
+      return typeof value === 'string' ? value : JSON.stringify(value, null, arguments.length > 1 ? indent : 2);
     },
     write: function write(value) {
       try {
@@ -47938,7 +46809,13 @@ var filters = {
 
   pluralize: function pluralize(value) {
     var args = toArray(arguments, 1);
-    return args.length > 1 ? args[value % 10 - 1] || args[args.length - 1] : args[0] + (value === 1 ? '' : 's');
+    var length = args.length;
+    if (length > 1) {
+      var index = value % 10 - 1;
+      return index in args ? args[index] : args[length - 1];
+    } else {
+      return args[0] + (value === 1 ? '' : 's');
+    }
   },
 
   /**
@@ -48123,7 +47000,9 @@ function installGlobalAPI (Vue) {
           }
         }
         if (type === 'component' && isPlainObject(definition)) {
-          definition.name = id;
+          if (!definition.name) {
+            definition.name = id;
+          }
           definition = Vue.extend(definition);
         }
         this.options[type + 's'][id] = definition;
@@ -48138,7 +47017,7 @@ function installGlobalAPI (Vue) {
 
 installGlobalAPI(Vue);
 
-Vue.version = '1.0.24';
+Vue.version = '1.0.28';
 
 // devtools global hook
 /* istanbul ignore next */
@@ -48153,8 +47032,8 @@ setTimeout(function () {
 }, 0);
 
 module.exports = Vue;
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":108}],118:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":109}],119:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 exports.insert = function (css) {
@@ -48174,7 +47053,7 @@ exports.insert = function (css) {
   return elem
 }
 
-},{}],119:[function(require,module,exports){
+},{}],120:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48218,7 +47097,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0a8b2cde", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],120:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],121:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48241,7 +47120,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
 	name: 'campaign-create',
-	components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel },
+	components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel, 'alert': _vueStrap2.default.alert },
 	data: function data() {
 		return {
 			countries: [],
@@ -48261,7 +47140,8 @@ exports.default = {
 			selectedAvatar: null,
 			avatar_upload_id: null,
 			selectedBanner: null,
-			banner_upload_id: null
+			banner_upload_id: null,
+			showError: false
 		};
 	},
 
@@ -48306,7 +47186,10 @@ exports.default = {
 					window.location.href = '/admin' + resp.data.data.links[0].uri;
 				}, function (error) {
 					this.errors = error.data.errors;
+					this.showError = true;
 				});
+			} else {
+				this.showError = true;
 			}
 		}
 	},
@@ -48333,7 +47216,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateCampaign\">\n\t<form id=\"CreateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"country\">Country</label>\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"description\">Description</label>\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:120 }\" maxlength=\"120\" minlength=\"1\"></textarea>\n\t\t\t\t<div v-if=\"short_desc\" class=\"help-block\">{{short_desc.length}}/255 characters remaining</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"started_at\">Dates</label>\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.started_at\" class=\"help-block\">{{errors.started_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" :min=\"started_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.ended_at\" class=\"help-block\">{{errors.ended_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"published_at\">Published</label>\n\t\t\t\t<input type=\"datetime-local\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t</div>\n\t\t</div>\n\n\t\t<template v-if=\"published_at\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.page_url }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Url</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false }\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<div v-show=\"errors.page_url\" class=\"help-block\">{{errors.page_url}}</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('src') }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Source</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">/resources/views/sites/campaigns/partials/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_src\" v-model=\"page_src\" class=\"form-control\" v-validate:src=\"{ required: false,  }\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">.blade.php</span>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</template>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n\t\t\t\t\t\t\tSet Avatar\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"collapse\" id=\"avatarCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedBanner ? (selectedBanner.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedBanner ? selectedBanner.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedBanner ? selectedBanner.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#bannerCollapse\" aria-expanded=\"false\" aria-controls=\"bannerCollapse\">\n\t\t\t\t\t\t\tSet Banner\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"collapse\" id=\"bannerCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t</div><!-- end row -->\n\t\t<hr class=\"divider inv lg\">\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"text-center\">\n\t\t\t\t<a href=\"/admin/campaigns\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t<a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateCampaign\">\n\t<form id=\"CreateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"country\">Country</label>\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"description\">Description</label>\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:120 }\" maxlength=\"120\" minlength=\"1\"></textarea>\n\t\t\t\t<div v-if=\"short_desc\" class=\"help-block\">{{short_desc.length}}/255 characters remaining</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"started_at\">Dates</label>\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.started_at\" class=\"help-block\">{{errors.started_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" :min=\"started_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.ended_at\" class=\"help-block\">{{errors.ended_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"published_at\">Published</label>\n\t\t\t\t<input type=\"datetime-local\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t</div>\n\t\t</div>\n\n\t\t<template v-if=\"published_at\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.page_url }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Url</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false }\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<div v-show=\"errors.page_url\" class=\"help-block\">{{errors.page_url}}</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('src') }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Source</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">/resources/views/sites/campaigns/partials/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_src\" v-model=\"page_src\" class=\"form-control\" v-validate:src=\"{ required: false,  }\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">.blade.php</span>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</template>\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n\t\t\t\t\t\t\tSet Avatar\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"collapse\" id=\"avatarCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedBanner ? (selectedBanner.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedBanner ? selectedBanner.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedBanner ? selectedBanner.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#bannerCollapse\" aria-expanded=\"false\" aria-controls=\"bannerCollapse\">\n\t\t\t\t\t\t\tSet Banner\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"collapse\" id=\"bannerCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t</div><!-- end row -->\n\t\t<hr class=\"divider inv lg\">\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"text-center\">\n\t\t\t\t<a href=\"/admin/campaigns\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t<a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\t<alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n\t\t<span class=\"icon-info-circled alert-icon-float-left\"></span>\n\t\t<strong>Oh No!</strong>\n\t\t<p>There are errors on the form.</p>\n\t</alert>\n\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -48344,7 +47227,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-14d23642", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],121:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],122:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -48419,7 +47302,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2c5a08ec", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./details/details.vue":125,"./details/regions.vue":126,"./details/transports.vue":127,"./details/trips.vue":128,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],122:[function(require,module,exports){
+},{"./details/details.vue":126,"./details/regions.vue":127,"./details/transports.vue":128,"./details/trips.vue":129,"vue":118,"vue-hot-reload-api":113,"vueify/lib/insert-css":119}],123:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48442,7 +47325,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
 	name: 'campaign-edit',
-	components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel },
+	components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
 	props: ['campaignId'],
 	data: function data() {
 		return {
@@ -48465,7 +47348,11 @@ exports.default = {
 			avatar_upload_id: null,
 			selectedBanner: null,
 			banner_upload_id: null,
-			resource: this.$resource('campaigns{/id}')
+			resource: this.$resource('campaigns{/id}'),
+			showSuccess: false,
+			showError: false,
+			showSaveAlert: false,
+			hasChanged: false
 		};
 	},
 
@@ -48490,6 +47377,19 @@ exports.default = {
 		convertToSlug: function convertToSlug(text) {
 			return text.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
 		},
+		onTouched: function onTouched() {
+			this.hasChanged = true;
+		},
+		back: function back(force) {
+			if (this.hasChanged && !force) {
+				this.showSaveAlert = true;
+				return false;
+			}
+			window.location.href = '/admin/campaigns/';
+		},
+		forceBack: function forceBack() {
+			return this.back(true);
+		},
 		update: function update() {
 			// Touch fields for proper validation
 			if (_.isFunction(this.$validate)) this.$validate(true);
@@ -48511,10 +47411,15 @@ exports.default = {
 				}).then(function (resp) {
 					resp.data.data.published_at = moment(resp.data.data.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
 					$.extend(this, resp.data.data);
-					window.location.href = '/admin/campaigns/';
+					//						window.location.href = '/admin/campaigns/'
+					this.showSuccess = true;
+					this.hasChanged = false;
 				}, function (error) {
 					this.errors = error.data.errors;
+					this.showError = true;
 				});
+			} else {
+				this.showError = true;
 			}
 		},
 		deleteCampaign: function deleteCampaign() {
@@ -48561,7 +47466,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateCampaign\">\n\t<form id=\"UpdateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<a class=\"pull-right\" data-toggle=\"modal\" data-target=\"#deleteConfirmationModal\"><h6><i class=\"fa fa-trash\"></i> Delete</h6></a>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"country\">Country</label>\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"description\">Description</label>\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:255 }\" maxlength=\"255\" minlength=\"1\"></textarea>\n\t\t\t\t<div v-if=\"short_desc\" class=\"help-block\">{{short_desc.length}}/255 characters remaining</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"started_at\">Dates</label>\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.started_at\" class=\"help-block\">{{errors.started_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.ended_at\" class=\"help-block\">{{errors.ended_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"published_at\">Published Date</label>\n\t\t\t\t<input type=\"datetime-local\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t</div>\n\t\t</div>\n\n\t\t<template v-if=\"published_at\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.page_url }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Url</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false }\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<div v-if=\"errors.page_url\" class=\"help-block\">{{errors.page_url.toString()}}</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('src') }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Source</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">/resources/views/sites/campaigns/partials/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_src\" v-model=\"page_src\" class=\"form-control\" v-validate:src=\"{ required: false }\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">.blade.php</span>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</template>\n\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n\t\t\t\t\t\t\tSet Avatar\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"collapse\" id=\"avatarCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedBanner ? (selectedBanner.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedBanner ? selectedBanner.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedBanner ? selectedBanner.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#bannerCollapse\" aria-expanded=\"false\" aria-controls=\"bannerCollapse\">\n\t\t\t\t\t\t\tSet Banner\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"collapse\" id=\"bannerCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t</div><!-- end row -->\n\t\t<hr class=\"divider inv lg\">\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t<a href=\"/admin/campaigns/{{campaignId}}\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t<a @click=\"update()\" class=\"btn btn-primary\">Update</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\n\t<div class=\"modal fade\" id=\"deleteConfirmationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"deleteConfirmationModal\">\n\t\t<div class=\"modal-dialog modal-sm\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t\t\t<h4 class=\"modal-title text-center\" id=\"myModalLabel\">Are You Sure?</h4>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<p class=\"text-center\">Are you sure you want to delete this campaign?</p>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t\t<a class=\"btn btn-sm btn-default\" data-dismiss=\"modal\">No</a>\n\t\t\t\t\t\t\t<a @click=\"deleteCampaign()\" class=\"btn btn-sm btn-primary\">Yes</a>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateCampaign\" @touched=\"onTouched\">\n\t<form id=\"UpdateCampaignForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<a class=\"pull-right\" data-toggle=\"modal\" data-target=\"#deleteConfirmationModal\"><h6><i class=\"fa fa-trash\"></i> Delete</h6></a>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Campaign Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"country\">Country</label>\n\t\t\t\t<v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n\t\t\t\t<select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n\t\t\t\t\t<option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n\t\t\t\t</select>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"description\">Description</label>\n\t\t\t\t<textarea name=\"short_desc\" id=\"description\" rows=\"2\" v-model=\"short_desc\" class=\"form-control\" v-validate:description=\"{ required: true, minlength:1, maxlength:255 }\" maxlength=\"255\" minlength=\"1\"></textarea>\n\t\t\t\t<div v-if=\"short_desc\" class=\"help-block\">{{short_desc.length}}/255 characters remaining</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"started_at\">Dates</label>\n\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.started_at\" class=\"help-block\">{{errors.started_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t<div class=\"input-group\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div v-if=\"errors.ended_at\" class=\"help-block\">{{errors.ended_at.toString()}}</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t<label for=\"published_at\">Published Date</label>\n\t\t\t\t<input type=\"datetime-local\" class=\"form-control\" v-model=\"published_at\" id=\"published_at\">\n\t\t\t</div>\n\t\t</div>\n\n\t\t<template v-if=\"published_at\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.page_url }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Url</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">www.missions.me/campaigns/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_url\" v-model=\"page_url\" class=\"form-control\" v-validate:url=\"{ required: false }\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<div v-if=\"errors.page_url\" class=\"help-block\">{{errors.page_url.toString()}}</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('src') }\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<label for=\"description\">Page Source</label>\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">/resources/views/sites/campaigns/partials/</span>\n\t\t\t\t\t\t<input type=\"text\" id=\"page_src\" v-model=\"page_src\" class=\"form-control\" v-validate:src=\"{ required: false }\">\n\t\t\t\t\t\t<span class=\"input-group-addon\">.blade.php</span>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</template>\n\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n\t\t\t\t\t\t\tSet Avatar\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"collapse\" id=\"avatarCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t<div class=\"media\">\n\t\t\t\t\t<div class=\"media-left\">\n\t\t\t\t\t\t<a href=\"#\">\n\t\t\t\t\t\t\t<img class=\"media-object\" :src=\"selectedBanner ? (selectedBanner.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedBanner ? selectedBanner.name : ''\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"media-body\">\n\t\t\t\t\t\t<h4 class=\"media-heading\">{{selectedBanner ? selectedBanner.name : ''}}</h4>\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#bannerCollapse\" aria-expanded=\"false\" aria-controls=\"bannerCollapse\">\n\t\t\t\t\t\t\tSet Banner\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"collapse\" id=\"bannerCollapse\">\n\t\t\t\t\t<div class=\"well\">\n\t\t\t\t\t\t<upload-create-update type=\"banner\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- end col -->\n\t\t</div><!-- end row -->\n\t\t<hr class=\"divider inv lg\">\n\n\t\t<div class=\"form-group\">\n\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t<!--<a href=\"/admin/campaigns/{{campaignId}}\" class=\"btn btn-default\">Cancel</a>-->\n\t\t\t\t<a @click=\"update()\" class=\"btn btn-primary\">Update</a>\n\t\t\t\t<a @click=\"back()\" class=\"btn btn-success\">Done</a>\n\t\t\t</div>\n\t\t</div>\n\t</form>\n\n\t<alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n\t\t<span class=\"icon-ok-circled alert-icon-float-left\"></span>\n\t\t<strong>Well Done!</strong>\n\t\t<p>Profile updated!</p>\n\t</alert>\n\t<alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n\t\t<span class=\"icon-ok-circled alert-icon-float-left\"></span>\n\t\t<strong>Oh No!</strong>\n\t\t<p>There are errors on the form.</p>\n\t</alert>\n\n\t<modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n\t\t<div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n\t</modal>\n\n\t<div class=\"modal fade\" id=\"deleteConfirmationModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"deleteConfirmationModal\">\n\t\t<div class=\"modal-dialog modal-sm\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">×</span></button>\n\t\t\t\t\t<h4 class=\"modal-title text-center\" id=\"myModalLabel\">Are You Sure?</h4>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<p class=\"text-center\">Are you sure you want to delete this campaign?</p>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t\t<a class=\"btn btn-sm btn-default\" data-dismiss=\"modal\">No</a>\n\t\t\t\t\t\t\t<a @click=\"deleteCampaign()\" class=\"btn btn-sm btn-primary\">Yes</a>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -48572,7 +47477,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b5b1c060", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],123:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],124:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48646,7 +47551,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-71409450", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],124:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],125:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48685,7 +47590,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-483b544a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],125:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],126:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48726,7 +47631,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6f75c21c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],126:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],127:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48761,7 +47666,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e7533d4e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],127:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],128:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48795,7 +47700,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-368f8e80", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],128:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],129:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48869,7 +47774,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-43005348", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],129:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],130:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48934,7 +47839,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dark-bg-primary\">\n<div class=\"container\">\n\t<hr class=\"divider inv xlg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center\">\n\t\t\t<a :href=\"'/groups/' + group.url\"><img class=\"img-circle img-lg\" src=\"{{ group.avatar }}\"></a>\n\t\t\t<h3>{{ group.name }}</h3>\n\t\t</div>\n\t</div>\n\t<hr class=\"divider inv lg\">\n</div>\n</div>\n<div class=\"container\">\n\t<hr class=\"divider inv lg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t<h2>Choose A Trip</h2>\n\t\t\t<hr class=\"divider red-small lg\">\n\t\t</div>\n\t\t<div class=\"col-xs-12\">\n\t\t<table class=\"table table-hover\">\n\t\t\t<thead>\n\t\t\t<tr>\n\t\t\t\t<th>Type</th>\n\t\t\t\t<th>Dates</th>\n\t\t\t\t<th>Starting Cost</th>\n\t\t\t\t<th>Spots Left</th>\n\t\t\t\t<th>Ideal For</th>\n\t\t\t\t<th>Status</th>\n\t\t\t\t<th></th>\n\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t<tr v-for=\"trip in trips\" style=\"border-bottom: 1px solid #e6e6e6\">\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.type | capitalize }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.starting_cost | currency }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.spots }}</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">\n\t\t\t\t\t<span v-for=\"prospect in trip.prospects\">\n\t\t\t\t\t\t{{ prospect | capitalize }}<span v-show=\"$index + 1 != trip.prospects.length\">, </span> \n\t\t\t\t\t</span>\n\t\t\t\t</td>\n\t\t\t\t<td style=\"vertical-align:middle;\">{{ trip.status | capitalize }}</td>\n\t\t\t\t<td class=\"text-right\"><a href=\"/trips/{{ trip.id }}\" class=\"btn btn-primary-hollow btn-sm\">Select</a></td>\n\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t</div>\n\t</div><!-- end row -->\n\t<hr class=\"divider inv xlg\">\n</div><!-- end container -->\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"dark-bg-primary\">\n<div class=\"container\">\n\t<hr class=\"divider inv xlg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center\">\n\t\t\t<a :href=\"'/groups/' + group.url\"><img class=\"img-circle img-lg\" src=\"{{ group.avatar }}\"></a>\n\t\t\t<h3>{{ group.name }}</h3>\n\t\t</div>\n\t</div>\n\t<hr class=\"divider inv lg\">\n</div>\n</div>\n<div class=\"container\">\n\t<hr class=\"divider inv lg\">\n\t<div class=\"row\">\n\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t<h2>Choose A Trip</h2>\n\t\t\t<hr class=\"divider red-small lg\">\n\t\t</div>\n\t</div>\n\t<div class=\"row\">\n\t\t<div v-for=\"trip in trips\" class=\"col-xs-6 col-sm-3\">\n\t\t\t<div class=\"panel panel-default\">\n\t\t\t\t<div class=\"panel-heading\" :class=\"'panel-' + trip.type\">\n\t\t\t\t\t<h5 class=\"text-uppercase text-center\">{{ trip.type | capitalize }}</h5>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"panel-body text-center\">\n\t\t\t\t\t<p class=\"badge\">{{ trip.status | capitalize }}</p><br>\n\t\t\t\t\t<p class=\"small\">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</p>\n\t\t\t\t\t<label>Perfect For</label>\n\t\t\t\t\t<p class=\"small\"><span v-for=\"prospect in trip.prospects\">\n\t\t\t\t\t\t\t{{ prospect | capitalize }}<span v-show=\"$index + 1 != trip.prospects.length\">, </span> \n\t\t\t\t\t</span></p>\n\t\t\t\t\t<label>Spots Available</label>\n\t\t\t\t\t<p>{{ trip.spots }}</p>\n\t\t\t\t\t<h3 class=\"text-success\">{{ trip.starting_cost | currency }}</h3>\n\t\t\t\t\t<a href=\"/trips/{{ trip.id }}\" class=\"btn btn-primary-hollow btn-sm\">Select</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div><!-- end row -->\n\t<hr class=\"divider inv xlg\">\n</div><!-- end container -->\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -48945,7 +47850,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e0395672", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],130:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],131:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -49003,7 +47908,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f091c63", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./campaign-groups.vue":123,"./group-trips.vue":129,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],131:[function(require,module,exports){
+},{"./campaign-groups.vue":124,"./group-trips.vue":130,"vue":118,"vue-hot-reload-api":113,"vueify/lib/insert-css":119}],132:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -49455,7 +48360,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-342117a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],132:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],133:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -49590,7 +48495,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1c1b689a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],133:[function(require,module,exports){
+},{"marked":107,"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],134:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -49655,22 +48560,26 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0dcad7d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],134:[function(require,module,exports){
-'use strict';
+},{"vue":118,"vue-hot-reload-api":113}],135:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _vueSelect = require('vue-select');
+var _vueSelect = require("vue-select");
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require("vue-strap/dist/vue-strap.min");
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     name: 'group-create',
-    components: { vSelect: _vueSelect2.default },
+    components: { vSelect: _vueSelect2.default, 'alert': _vueStrap2.default.alert },
     data: function data() {
         return {
             name: '',
@@ -49692,12 +48601,12 @@ exports.default = {
             // logic variables
             typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
             attemptSubmit: false,
+            showError: false,
             countries: [],
             countryCodeObj: null,
             timezones: []
         };
     },
-    //timezoneObj: null,
 
     computed: {
         country_code: function country_code() {
@@ -49736,8 +48645,11 @@ exports.default = {
                     window.location.href = '/admin' + resp.data.data.links[0].uri;
                 }, function (error) {
                     console.log(error);
+                    this.showError = true;
                     debugger;
                 });
+            } else {
+                this.showError = true;
             }
         }
     },
@@ -49752,7 +48664,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateGroup\">\n    <form id=\"CreateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Name</label>\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"description\">Description</label>\n                <textarea class=\"form-control\" v-model=\"description\" id=\"description\" placeholder=\"Description of Group\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress\">Address 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress2\">Address 2</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n            </div>\n            <div class=\"col-sm-8\">\n                <div :class=\"{ 'has-error': checkForError('country') }\">\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"type\">Type</label>\n                <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                    <option value=\"\">-- please select --</option>\n                    <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"timezone\">Timezone</label>\n                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Email</label>\n                <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <div class=\"form-group\" v-if=\"!!public\">\n            <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n            <div class=\"col-sm-10\">\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon\">www.missions.me/groups/</span>\n                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:=\"{ required: !!public }\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-12 text-center\">\n                <a href=\"/admin/groups\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateGroup\">\n    <form id=\"CreateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Name</label>\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"description\">Description</label>\n                <textarea class=\"form-control\" v-model=\"description\" id=\"description\" placeholder=\"Description of Group\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress\">Address 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress2\">Address 2</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n            </div>\n            <div class=\"col-sm-8\">\n                <div :class=\"{ 'has-error': checkForError('country') }\">\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"type\">Type</label>\n                <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                    <option value=\"\">-- please select --</option>\n                    <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"timezone\">Timezone</label>\n                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Email</label>\n                <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <div class=\"form-group\" v-if=\"!!public\">\n            <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n            <div class=\"col-sm-10\">\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon\">www.missions.me/groups/</span>\n                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:=\"{ required: !!public }\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-12 text-center\">\n                <a href=\"/admin/groups\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n            </div>\n        </div>\n        <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-info-circled alert-icon-float-left\"></span>\n            <strong>Oh No!</strong>\n            <p>There are errors on the form.</p>\n        </alert>\n\n    </form>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -49763,7 +48675,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3fc3ff94", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],135:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],136:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49782,7 +48694,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
     name: 'group-edit',
-    components: { vSelect: _vueSelect2.default, 'alert': _vueStrap2.default.alert },
+    components: { vSelect: _vueSelect2.default, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
     props: ['groupId', 'managing'],
     data: function data() {
         return {
@@ -49805,15 +48717,19 @@ exports.default = {
 
             // logic variables
             typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
-            showSuccess: false,
             attemptSubmit: false,
             resource: this.$resource('groups{/id}'),
             countries: [],
             countryCodeObj: null,
-            timezones: []
+            timezones: [],
+            //timezoneObj: null,
+            showSuccess: false,
+            showError: false,
+            showSaveAlert: false,
+            hasChanged: false
+
         };
     },
-    //timezoneObj: null,
 
     computed: {
         country_code: function country_code() {
@@ -49827,6 +48743,19 @@ exports.default = {
             // if user clicked submit button while the field is invalid trigger error styles
 
             return this.$UpdateGroup[field].invalid && this.attemptSubmit;
+        },
+        onTouched: function onTouched() {
+            this.hasChanged = true;
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/admin/groups/' + this.groupId;
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
         },
         submit: function submit() {
             this.attemptSubmit = true;
@@ -49851,10 +48780,14 @@ exports.default = {
                     email: this.email
                 }).then(function (resp) {
                     this.showSuccess = true;
+                    this.hasChanged = false;
                 }, function (error) {
                     console.log(error);
+                    this.showError = true;
                     debugger;
                 });
+            } else {
+                this.showError = true;
             }
         }
     },
@@ -49893,7 +48826,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateGroup\">\n    <form id=\"UpdateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Name</label>\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"description\">Description</label>\n                <textarea class=\"form-control\" v-model=\"description\" id=\"description\" placeholder=\"Description of Group\"></textarea>\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress\">Address 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress2\">Address 2</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n            </div>\n            <div class=\"col-sm-8\">\n                <div :class=\"{ 'has-error': checkForError('country') }\">\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n            <div class=\"col-sm-6\">\n                <label for=\"country\">Type</label>\n                <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                    <option value=\"\">-- please select --</option>\n                    <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                </select>\n            </div>\n            <div :class=\"{ 'has-error': checkForError('timezone') }\">\n                <div class=\"col-sm-6\">\n                    <label for=\"country\">Timezone</label>\n                    <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                    <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                        <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                    </select>\n\n                </div>\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Email</label>\n                <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <select class=\"form-control\" name=\"status\" id=\"status\" v-model=\"status\">\n                    <option value=\"approved\">Approved</option>\n                    <option value=\"pending\">Pending</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"public\" class=\"col-sm-2 control-label\">Visibility</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n\n        <template v-if=\"!!public\">\n            <div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\">\n                <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n                <div class=\"col-sm-10\">\n                    <div class=\"input-group\">\n                        <span class=\"input-group-addon\">www.missions.me/groups/</span>\n                        <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" v-validate:url=\"{ required: !!public }\">\n                    </div>\n                </div>\n            </div>\n        </template>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-12 text-center\">\n                <a href=\"/admin/groups\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n                <a href=\"/admin/groups\" class=\"btn btn-success\">Finished</a>\n            </div>\n        </div>\n\n        <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n            <strong>Awesome!</strong>\n            <p>Group updated!</p>\n        </alert>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateGroup\" @touched=\"onTouched\">\n    <form id=\"UpdateGroupForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Name</label>\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Group Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"description\">Description</label>\n                <textarea class=\"form-control\" v-model=\"description\" id=\"description\" placeholder=\"Description of Group\"></textarea>\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress\">Address 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n            <div class=\"col-sm-6\">\n                <label for=\"infoAddress2\">Address 2</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n            </div>\n        </div>\n\n        <div class=\"row form-group col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n            </div>\n            <div class=\"col-sm-8\">\n                <div :class=\"{ 'has-error': checkForError('country') }\">\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n            <div class=\"col-sm-6\">\n                <label for=\"country\">Type</label>\n                <select name=\"type\" id=\"type\" class=\"form-control\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n                    <option value=\"\">-- please select --</option>\n                    <option :value=\"option\" v-for=\"option in typeOptions\">{{option|capitalize}}</option>\n                </select>\n            </div>\n            <div :class=\"{ 'has-error': checkForError('timezone') }\">\n                <div class=\"col-sm-6\">\n                    <label for=\"country\">Timezone</label>\n                    <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                    <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                        <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                    </select>\n\n                </div>\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-6\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n            </div>\n            <div class=\"col-sm-6\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"name\">Email</label>\n                <input type=\"text\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <select class=\"form-control\" name=\"status\" id=\"status\" v-model=\"status\">\n                    <option value=\"approved\">Approved</option>\n                    <option value=\"pending\">Pending</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"public\" class=\"col-sm-2 control-label\">Visibility</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n\n        <template v-if=\"!!public\">\n            <div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') }\">\n                <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n                <div class=\"col-sm-10\">\n                    <div class=\"input-group\">\n                        <span class=\"input-group-addon\">www.missions.me/groups/</span>\n                        <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" v-validate:url=\"{ required: !!public }\">\n                    </div>\n                </div>\n            </div>\n        </template>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-12 text-center\">\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n                <a @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n\n        <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n            <strong>Well Done!</strong>\n            <p>Group updated!</p>\n        </alert>\n        <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-info-circled alert-icon-float-left\"></span>\n            <strong>Oh No!</strong>\n            <p>There are errors on the form.</p>\n        </alert>\n\n        <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n            <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n        </modal>\n    </form>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -49904,7 +48837,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1df65278", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],136:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50005,7 +48938,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7e446020", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],137:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115}],138:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50087,7 +49020,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-647e220a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],138:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],139:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -50380,7 +49313,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"amount_raised\" :disabled=\"maxCheck('amount_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<span class=\"caret\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\tActive Filters:\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t</div>\n        <hr class=\"divider sm\">\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('amount_raised')\" :class=\"{'text-primary': orderByField === 'amount_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('amount_raised')\" v-if=\"orderByField !== 'amount_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'amount_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('amount_raised')\" v-text=\"reservation.amount_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <td><a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-pencil\"></i></a></td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <nav>\n                            <ul class=\"pagination pagination-sm\">\n                                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                        <span aria-hidden=\"true\">«</span>\n                                    </a>\n                                </li>\n                                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                        <span aria-hidden=\"true\">»</span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </nav>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<span class=\"caret\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\tActive Filters:\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t</div>\n        <hr class=\"divider sm\">\n\t\t<div class=\"col-xs-12 col-sm-6 col-md-4\">\n\t\t\t<div class=\"panel panel-default\" v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n\t\t\t\t<div class=\"panel-heading text-center\">\n\t\t\t\t\t<h5>{{ reservation.given_names }} {{ reservation.surname }}</h5>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"panel-body text-center\">\n\t\t\t\t\t<img :src=\"reservation.avatar\" class=\"img-circle img-lg\">\n\t\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t\t<h6 class=\" text-uppercase text-center\">Registered on <br>{{ reservation.created_at | moment 'll' }}</h6>\n\t\t\t\t\t<!--<div class=\"btn-group btn-group-justified\">\n\t\t\t\t\t\t<a class=\"btn btn-sm btn-primary\" href=\"/dashboard/groups{{reservation.links[0].uri}}\"><i class=\"fa fa-pencil\"></i> Manage</a>\n\t\t\t\t\t</div>-->\n\t\t\t\t</div>\n\t\t\t\t<div class=\"panel-footer text-center\">\n\t\t\t\t\t<h5 class=\"text-capitalize\">{{ reservation.percent_raised | number '2' }}% Raised</h5>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -50395,7 +49328,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4d7c267c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],139:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],140:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50443,7 +49376,110 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-29e82de9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],140:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],141:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'group-interest-signup',
+    props: ['id'],
+    components: { 'spinner': _vueStrap2.default.spinner, 'alert': _vueStrap2.default.alert },
+    data: function data() {
+        return {
+            group: {},
+            interest: {
+                communication_preferences: []
+            },
+            campaign_id: null,
+            campaigns: {},
+            allTrips: {},
+            attemptSubmit: false,
+            showSuccess: false,
+            showError: false
+        };
+    },
+
+    computed: {
+        trips: function trips() {
+            return _.where(this.allTrips, { campaign_id: this.campaign_id });
+        }
+    },
+    ready: function ready() {
+        this.$http.get('groups/' + this.id, { include: 'trips.campaign' }).then(function (response) {
+            this.group = response.data.data;
+            this.allTrips = response.data.data.trips.data;
+            var campaigns = _.mapObject(response.data.data.trips.data, 'campaign');
+            this.campaigns = this.removeDuplicates(campaigns, 'id');
+            console.log(this.campaigns);
+        });
+    },
+
+    methods: {
+        checkForError: function checkForError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+
+            return this.$Interest[field].invalid && this.attemptSubmit;
+        },
+        removeDuplicates: function removeDuplicates(arr, prop) {
+            var new_arr = [];
+            var lookup = {};
+
+            for (var i in arr) {
+                lookup[arr[i]['data'][prop]] = arr[i];
+            }
+
+            for (i in lookup) {
+                new_arr.push(lookup[i]);
+            }
+
+            return new_arr;
+        },
+        save: function save() {
+            this.attemptSubmit = true;
+            if (this.$Interest.valid) {
+                this.$refs.validationspinner.show();
+                this.$http.post('interests', this.interest).then(function (response) {
+                    this.$refs.validationspinner.hide();
+                    this.showSuccess = true;
+                    this.attemptSubmit = false;
+                    this.interest = {
+                        communication_preferences: []
+                    };
+                    this.campaign_id = '';
+                    console.log(response);
+                }).then(function (error) {
+                    this.$refs.validationspinner.hide();
+                    console.log(error);
+                    this.showError = true;
+                });
+            } else {
+                this.showError = true;
+            }
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <validator name=\"Interest\">\n    <form novalidate=\"\" id=\"TripInterestSignupForm\">\n        <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n            <strong>Awesome!</strong>\n            <p>Trip interest sent.</p>\n        </alert>\n        <spinner v-ref:validationspinner=\"\" size=\"xl\" :fixed=\"false\" text=\"Saving\"></spinner>\n        <div class=\"row\">\n            <div class=\"col-xs-12\" :class=\"{ 'has-error': checkForError('campaign')}\">\n                <label>Campaign of Interest</label>\n                <select v-model=\"campaign_id\" class=\"form-control\" v-validate:campaign=\"{required: true}\">\n                    <option v-for=\"campaign in campaigns\" :value=\"campaign.data.id\">\n                        {{   campaign.data.name }}\n                    </option>\n                </select>\n            </div>\n        </div>\n        <hr class=\"divider inv sm\">\n        <div class=\"row\" v-if=\"campaign_id\">\n            <div class=\"col-xs-12\" :class=\"{ 'has-error': checkForError('trip')}\">\n                <label>Trip Type</label>\n                <select v-model=\"interest.trip_id\" class=\"form-control\" v-validate:trip=\"{required: true}\">\n                    <option v-for=\"trip in trips\" :value=\"trip.id\">\n                        {{ trip.type | capitalize }} Trip\n                    </option>\n                </select>\n            </div>\n        </div>\n        <hr class=\"divider inv sm\">\n        <div class=\"row\">\n            <div class=\"col-xs-12\" :class=\"{ 'has-error': checkForError('name')}\">\n                <label>Name</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"interest.name\" v-validate:name=\"{required: true}\">\n            </div>\n        </div>\n        <hr class=\"divider inv sm\">\n        <div class=\"row\">\n            <div class=\"col-xs-12\" :class=\"{ 'has-error': checkForError('email')}\">\n                <label>Email</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"interest.email\" v-validate:email=\"{required: true, email: true}\">\n            </div>\n        </div>\n        <hr class=\"divider inv sm\">\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <label>Phone</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"interest.phone | phone\">\n            </div>\n        </div>\n        <hr class=\"divider inv sm\">\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <label>Communication Preference</label>\n                <hr class=\"divider inv sm\">\n                <div>\n                    <label class=\"checkbox-inline\">\n                        <input type=\"checkbox\" value=\"email\" v-model=\"interest.communication_preferences\"> Email\n                    </label>\n                    <label class=\"checkbox-inline\">\n                        <input type=\"checkbox\" value=\"phone\" v-model=\"interest.communication_preferences\"> Phone\n                    </label>\n                    <label class=\"checkbox-inline\">\n                        <input type=\"checkbox\" value=\"text\" v-model=\"interest.communication_preferences\"> Text\n                    </label>\n                </div>\n            </div>\n        </div>\n        <hr class=\"divider inv md\">\n        <div class=\"row\">\n            <div class=\"col-sm-12 text-center\">\n                <div class=\"form-group\">\n                    <a class=\"btn btn-primary\" @click=\"save()\">Submit</a>\n                </div>\n            </div>\n        </div>\n        <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-info-circled alert-icon-float-left\"></span>\n            <strong>Oh No!</strong>\n            <p>There are errors on the form.</p>\n        </alert>\n\n    </form>\n    </validator>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-0a67d362", module.exports)
+  } else {
+    hotAPI.update("_v-0a67d362", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],142:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50479,7 +49515,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-36a2fd50", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],141:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],143:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50533,7 +49569,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-495ecf63", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],142:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50566,7 +49602,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7dd5d87e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],143:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50640,7 +49676,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-264b7e0e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],144:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -50820,7 +49856,213 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-131fb342", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],145:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],147:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'admin-interests-list',
+    components: { vSelect: _vueSelect2.default, 'aside': _vueStrap2.default.aside },
+    data: function data() {
+        return {
+            interests: [],
+            orderByField: 'name',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {},
+            search: '',
+            groupObj: [],
+            groupsOptions: [],
+            campaignObj: null,
+            campaignOptions: [],
+            tripObj: null,
+            tripOptions: [],
+            // filter vars
+            filters: {
+                group: '',
+                campaign: '',
+                trip: '',
+                trip_type: ''
+            },
+            showFilters: false
+        };
+    },
+
+    watch: {
+        // watch filters obj
+        'filters': {
+            handler: function handler(val) {
+                // console.log(val);
+                this.searchInterests();
+            },
+            deep: true
+        },
+        'groupObj': function groupObj(val) {
+            this.filters.group = val ? val.id : '';
+        },
+        'tripObj': function tripObj(val) {
+            this.filters.trip = val ? val.id : '';
+        },
+        'campaignObj': function campaignObj(val) {
+            this.filters.campaign = val ? val.id : '';
+        },
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchInterests();
+        },
+        'direction': function direction(val) {
+            this.searchInterests();
+        },
+        'page': function page(val, oldVal) {
+            this.searchInterests();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchInterests();
+        }
+    },
+
+    methods: {
+        setOrderByField: function setOrderByField(field) {
+            return this.orderByField = field, this.direction = 1;
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'name';
+            this.direction = 1;
+            this.search = null;
+        },
+        getGroups: function getGroups(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('groups', { search: search }).then(function (response) {
+                this.groupsOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        getCampaigns: function getCampaigns(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('campaigns', { search: search }).then(function (response) {
+                this.campaignOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        getTrips: function getTrips(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('trips', { search: search }).then(function (response) {
+                this.tripOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        searchInterests: function searchInterests() {
+            var params = {
+                include: 'trip.group,trip.campaign',
+                search: this.searchText,
+                per_page: this.per_page,
+                page: this.page
+            };
+            $.extend(params, this.filters);
+
+            this.$http.get('interests', params).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.interests = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        // populate
+        this.getGroups();
+        this.getCampaigns();
+        this.getTrips();
+        this.searchInterests();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"groupFilter\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupObj\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Group\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <select id=\"type\" class=\"form-control input-sm\" v-model=\"filters.trip_type\">\n                    <option value=\"\">Any Trip Type</option>\n                    <option value=\"full\">Full</option>\n                    <option value=\"media\">Media</option>\n                    <option value=\"medical\">Medical</option>\n                    <option value=\"short\">Short</option>\n                </select>\n            </div>\n            <div class=\"form-group\" v-if=\"!tripId\">\n                <v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters <i class=\"fa fa-times\"></i></button>\n                <button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <span class=\"caret\"></span>\n                </button>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-striped\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'email'}\">\n                Email\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'phone'}\">\n                Phone\n                <i @click=\"setOrderByField('phone')\" v-if=\"orderByField !== 'phone'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'phone'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                Campaign\n                <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                Trip Type\n                <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                Group\n                <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"interest in interests|filterBy search|orderBy orderByField direction\">\n            <td>{{interest.name|capitalize}}</td>\n            <td>{{interest.email}}</td>\n            <td>{{interest.phone}}</td>\n            <td>{{interest.trip.data.campaign.data.name}}</td>\n            <td>{{interest.trip.data.type}}</td>\n            <td>{{interest.trip.data.group.data.name}}</td>\n            <td>\n                <a href=\"/admin{{interest.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <a href=\"/admin{{campaignId + interest.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-6dcfeea3", module.exports)
+  } else {
+    hotAPI.update("_v-6dcfeea3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],148:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'dashboard-interests-list',
+    props: ['groupId', 'tripId'],
+    data: function data() {
+        return {
+            interests: [],
+            // pagination vars
+            search: '',
+            page: 1,
+            per_page: 6,
+            pagination: {}
+
+        };
+    },
+
+    watch: {
+        'page': function page(val, oldVal) {
+            this.pagination.current_page = val;
+            this.searchInterests();
+        },
+        'search': function search(val) {
+            this.searchInterests();
+        }
+    },
+    methods: {
+        searchInterests: function searchInterests() {
+            this.$http.get('interests', {
+                group: this.groupId,
+                trip: this.tripId,
+                include: '',
+                search: this.search,
+                page: this.page,
+                per_page: this.per_page
+            }).then(function (response) {
+                this.interests = response.data.data;
+                this.pagination = response.data.meta.pagination;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchInterests();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-sm-12\">\n        <form class=\"form-inline text-right\" novalidate=\"\">\n            <div class=\"input-group input-group-sm\">\n                <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n            </div>\n            <!--<button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n                Filters\n                <span class=\"caret\"></span>\n            </button>-->\n            <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n        </form>\n    </div>\n</div>\n\n<hr class=\"divider sm\">\n\n<div class=\"col-sm-6 col-md-4\" v-for=\"interest in interests\">\n    <div class=\"panel panel-default\" :id=\"interest.id\">\n        <div class=\"panel-heading\"><h6>{{ interest.name }}</h6></div>\n        <div class=\"panel-body\">\n            <dl class=\"dl-hoizontal\">\n                <dt>Email</dt>\n                <dd><a :href=\"interest.email ? ('mailto:' + interest.email) : '#'\">{{ interest.email || 'None Provided'}}</a></dd>\n                <dt>Phone</dt>\n                <dd><a :href=\"interest.phone ? ('tel:' + interest.phone) : '#'\">{{ interest.phone || 'None Provided'}}</a></dd>\n                <dt>Contact Pref.</dt>\n                <dd>{{ interest.communication_preferences}}</dd>\n                <dt>Interested since</dt>\n                <dd>{{ interest.created | moment 'll'}}</dd>\n            </dl>\n        </div>\n    </div>\n</div>\n\n<div class=\"col-xs-12 text-center\">\n    <nav>\n        <ul class=\"pagination pagination-md\">\n            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                    <span aria-hidden=\"true\">«</span>\n                </a>\n            </li>\n            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                    <span aria-hidden=\"true\">»</span>\n                </a>\n            </li>\n        </ul>\n    </nav>\n</div>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-5e7a41be", module.exports)
+  } else {
+    hotAPI.update("_v-5e7a41be", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":118,"vue-hot-reload-api":113}],149:[function(require,module,exports){
 'use strict';
 
 var _vueSelect = require('vue-select');
@@ -50982,7 +50224,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d1dcd388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],146:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51135,7 +50377,178 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7119d0e8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./donate.vue":131,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],147:[function(require,module,exports){
+},{"./donate.vue":132,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],151:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'notes',
+    components: {
+        'alert': _vueStrap2.default.alert,
+        'modal': _vueStrap2.default.modal
+    },
+    props: {
+        'type': {
+            type: String
+        },
+        'id': {
+            type: String
+        },
+        'per_page': {
+            type: Number,
+            default: 5
+        },
+        'user_id': {
+            type: String
+        }
+    },
+    data: function data() {
+        return {
+            notes: {},
+            selectedNote: {
+                'id': null,
+                'subject': null,
+                'content': null,
+                'noteable_id': this.id,
+                'noteable_type': this.type,
+                'user_id': this.user_id
+            },
+            page: 1,
+            pagination: {},
+            search: null,
+            newMode: false,
+            editMode: false,
+            showSuccess: false,
+            showError: false,
+            deleteModal: false,
+            message: null
+        };
+    },
+
+    watch: {
+        'page': function page(val, oldVal) {
+            this.fetch();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.fetch();
+        },
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.fetch();
+        }
+    },
+    methods: {
+        prepareNew: function prepareNew() {
+            this.newMode = !this.newMode;
+            this.editMode = false;
+            this.selectedNote.id = null;
+            this.selectedNote.subject = null;
+            this.selectedNote.content = null;
+        },
+        prepareEdit: function prepareEdit(note) {
+            this.newMode = false;
+            this.editMode = true;
+            this.selectedNote.id = note.id;
+            this.selectedNote.subject = note.subject;
+            this.selectedNote.content = note.content;
+        },
+        fetch: function fetch() {
+            var params = '?sort=created_at|desc&include=user&per_page=' + this.per_page + '&page=' + this.page;
+
+            if (this.search) {
+                params = params + '&search=' + this.search;
+            }
+
+            if (this.type) {
+                params = params + '&type=' + this.type;
+            }
+
+            if (this.type && this.id) {
+                params = params + '|' + this.id;
+            }
+
+            this.$http.get('notes' + params).then(function (response) {
+                this.notes = response.data.data;
+                this.pagination = response.data.meta.pagination;
+            });
+        },
+        save: function save() {
+            if (this.editMode == true) {
+                this.edit();
+            } else {
+                this.create();
+            }
+        },
+        create: function create() {
+            event.preventDefault();
+            this.$http.post('notes', this.selectedNote).then(function () {
+                this.reset();
+                this.fetch();
+                this.message = 'Note created successfully.';
+                this.showSuccess = true;
+            }).error(function () {
+                this.message = 'There are errors on the form.';
+                this.showError = true;
+            });
+        },
+        edit: function edit() {
+            event.preventDefault();
+            this.$http.put('notes/' + this.selectedNote.id, this.selectedNote).then(function () {
+                this.reset();
+                this.fetch();
+                this.message = 'Note saved successfully.';
+                this.showSuccess = true;
+            }).error(function () {
+                this.message = 'There are errors on the form.';
+                this.showError = true;
+            });
+        },
+        reset: function reset() {
+            event.preventDefault();
+            this.selectedNote.id = null;
+            this.selectedNote.subject = null;
+            this.selectedNote.content = null;
+            this.newMode = false;
+            this.editMode = false;
+        },
+        remove: function remove(note) {
+            this.$http.delete('notes/' + note.id).then(function () {
+                this.reset();
+                this.fetch();
+                this.message = 'Note deleted.';
+                this.showSuccess = true;
+            }).error(function () {
+                this.message = 'Unable to delete note.';
+                this.showError = true;
+            });
+        }
+    },
+    ready: function ready() {
+        this.fetch();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <div class=\"panel-heading\">\n        <div class=\"row\">\n            <div class=\"col-xs-6\">\n                <h5>Notes</h5>\n            </div>\n            <div class=\"col-xs-6 text-right\">\n                <button class=\"btn btn-primary btn-xs\" @click=\"prepareNew\">\n                    <span v-if=\"! newMode\">New <i class=\"fa fa-plus\"></i></span>\n                    <span v-if=\"newMode\">List <i class=\"fa fa-list-ul\"></i></span>\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\" v-if=\"newMode || editMode\">\n        <form>\n            <div class=\"form-group\">\n                <label>Subject</label>\n                <input class=\"form-control\" type=\"text\" v-model=\"selectedNote.subject\" placeholder=\"subject\">\n            </div>\n            <div class=\"form-group\">\n                <label>Content</label>\n                <textarea class=\"form-control\" v-model=\"selectedNote.content\" placeholder=\"content\" rows=\"10\"></textarea>\n            </div>\n            <div class=\"form-group\">\n                <div class=\"row\">\n                    <div class=\"col-sm-offset-4 col-sm-4 col-xs-6\">\n                        <button class=\"btn btn-sm btn-default btn-block\" @click=\"reset\">Cancel</button>\n                    </div>\n                    <div class=\"col-sm-4 col-xs-6\">\n                        <button class=\"btn btn-sm btn-primary btn-block\" @click=\"save\">Save</button>\n                    </div>\n                </div>\n            </div>\n        </form>\n    </div>\n    <div class=\"list-group\" v-if=\"! newMode &amp;&amp; ! editMode\">\n        <div class=\"list-group-item\">\n            <div class=\"input-group input-group-md\">\n                <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search notes by subject, author or content...\">\n\n                <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n            </div>\n        </div>\n        <div class=\"list-group-item\" v-for=\"note in notes\">\n            <div class=\"row\" v-if=\"notes.length > 0\">\n                <div class=\"col-xs-8\">\n                    <h5 class=\"list-group-item-heading\">{{ note.subject }}\n                        <br> <small>\n                            By {{ note.user.data.name }} · {{ note.created_at | moment 'llll' }}\n                            <span v-if=\"note.created_at != note.updated_at\">(modified)</span>\n                        </small>\n                    </h5>\n                </div>\n                <div class=\"col-xs-4 text-right\" v-if=\"note.user.data.id == user_id\">\n                    <button class=\"btn btn-xs btn-link\" @click=\"prepareEdit(note)\">\n                        <i class=\"fa fa-pencil\"></i>\n                    </button>\n                    <button class=\"btn btn-xs btn-link\" @click=\"selectedNote.id = note.id,deleteModal = true\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n            </div>\n            <hr>\n            <p class=\"list-group-item-text\">{{ note.content }}</p>\n            <hr class=\"divider inv\">\n        </div>\n        <div class=\"list-group-item text-center text-muted\" v-if=\"notes.length < 1\">\n            <p class=\"lead\">No notes available.</p>\n        </div>\n        <div class=\"list-group-item text-center\" v-if=\"pagination.per_page < pagination.total\">\n            <nav>\n                <ul class=\"pager\">\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\" class=\"previous\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                            <span aria-hidden=\"true\">« Newer</span>\n                        </a>\n                    </li>\n                    <li>Viewing {{ pagination.count }} of {{ pagination.total }} Notes</li>\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\" class=\"next\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                            <span aria-hidden=\"true\">Older » </span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Note\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Note?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedNote)\">Confirm</button>\n        </div>\n    </modal>\n\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-68be8994", module.exports)
+  } else {
+    hotAPI.update("_v-68be8994", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51158,7 +50571,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
     name: 'passport-create-update',
-    components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel },
+    components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
     props: {
         isUpdate: {
             type: Boolean,
@@ -51189,8 +50602,11 @@ exports.default = {
             selectedAvatar: null,
             today: moment().format('YYYY-MM-DD'),
             yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
-            tomorrow: moment().add(1, 'days').format('YYYY-MM-DD')
-
+            tomorrow: moment().add(1, 'days').format('YYYY-MM-DD'),
+            showSuccess: false,
+            showError: false,
+            showSaveAlert: false,
+            hasChanged: false
         };
     },
 
@@ -51207,6 +50623,19 @@ exports.default = {
             // if user clicked submit button while the field is invalid trigger error styles
 
             return this.$CreateUpdatePassport[field].invalid && this.attemptSubmit;
+        },
+        onTouched: function onTouched() {
+            this.hasChanged = true;
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/dashboard/passports/';
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
         },
         submit: function submit() {
             this.attemptSubmit = true;
@@ -51225,9 +50654,14 @@ exports.default = {
                 }).then(function (resp) {
                     //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                     window.location.href = '/dashboard/passports';
+                    //                        this.showSuccess = true;
+                    //                        this.hasChanged = false;
                 }, function (error) {
+                    this.showError = true;
                     debugger;
                 });
+            } else {
+                this.showError = true;
             }
         },
         update: function update() {
@@ -51246,7 +50680,9 @@ exports.default = {
                     user_id: this.user_id
                 }).then(function (resp) {
                     //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                    window.location.href = '/dashboard/passports';
+                    //                        window.location.href = '/dashboard/passports';
+                    this.showSuccess = true;
+                    this.hasChanged = false;
                 }, function (error) {
                     debugger;
                 });
@@ -51286,7 +50722,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdatePassport\">\n    <form id=\"CreateUpdatePassport\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"given_names\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"surname\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"number\" class=\"col-sm-2 control-label\">Passport Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Passport Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" :max=\"today\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" :min=\"tomorrow\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('birth') }\">\n            <label for=\"birth\" class=\"col-sm-2 control-label\">Birth Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"birth\" :value.sync=\"birthCountryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"birth\" id=\"birth\" class=\"hidden\" v-model=\"birth_country\" v-validate:birth=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('citizenship') }\">\n            <label for=\"citizenship\" class=\"col-sm-2 control-label\">Citizenship</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"country\" :value.sync=\"citizenshipObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"citizenship\" id=\"citizenship\" class=\"hidden\" v-model=\"citizenship\" v-validate:citizenship=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Upload Copy\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'passport-'+given_names+'-'+surname\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/dashboard/passports\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdatePassport\" @touched=\"onTouched\">\n    <form id=\"CreateUpdatePassport\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"row\">\n            <div :class=\"{ 'has-error': checkForError('givennames') }\">\n                <div class=\"col-sm-5\">\n                    <label for=\"given_names\" class=\"control-label\">Given Names</label>\n                    <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n            <div :class=\"{ 'has-error': checkForError('surname') }\">\n                <div class=\"col-sm-5\">\n                    <label for=\"surname\" class=\"control-label\">Surname</label>\n                    <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n        </div><!-- end row -->\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <div class=\"col-sm-10\">\n                <label for=\"number\" class=\"control-label\">Passport Number</label>\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Passport Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"row\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <div class=\"col-sm-10\">\n                <label for=\"issued_at\" class=\"control-label\">Dates</label>\n                <div class=\"row\">\n                    <div class=\"col-lg-6\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" :max=\"today\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-lg-6\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Exp</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" :min=\"tomorrow\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('birth') }\">\n            <div class=\"col-sm-10\">\n                <label for=\"birth\" class=\"control-label\">Birth Country</label>\n                <v-select class=\"form-control\" id=\"birth\" :value.sync=\"birthCountryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"birth\" id=\"birth\" class=\"hidden\" v-model=\"birth_country\" v-validate:birth=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('citizenship') }\">\n            <div class=\"col-sm-10\">\n                <label for=\"citizenship\" class=\"control-label\">Citizenship</label>\n                <v-select class=\"form-control\" id=\"country\" :value.sync=\"citizenshipObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"citizenship\" id=\"citizenship\" class=\"hidden\" v-model=\"citizenship\" v-validate:citizenship=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-sm-10\">\n                <accordion :one-at-atime=\"true\">\n                    <panel header=\"Upload Photo Copy\" :is-open.sync=\"true\">\n                        <div class=\"panel-body\">\n                            <div class=\"media\" v-if=\"selectedAvatar\">\n                                <div class=\"media-left\">\n                                    <a href=\"#\">\n                                        <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                                    </a>\n                                </div>\n                                <div class=\"media-body\">\n                                    <h5 class=\"media-heading\">{{selectedAvatar.name}}</h5>\n                                </div>\n                            </div>\n                            <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'passport-'+given_names+'-'+surname\"></upload-create-update>\n                        </div>\n                    </panel>\n                </accordion>\n            </div><!-- end col -->\n        </div><!-- end row -->\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-10 text-center\">\n                <a v-if=\"!isUpdate\" href=\"/dashboard/passports\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n                <a v-if=\"isUpdate\" @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n    </form>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Awesome!</strong>\n        <p>Reservation updated!</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>There are errors on the form.</p>\n    </alert>\n\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -51297,7 +50733,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-50789c2c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],148:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51343,7 +50779,6 @@ exports.default = {
     },
     methods: {
         // emulate pagination
-
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -51374,7 +50809,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !passports.length\">\n        <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n    </div>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12 text-right\">\n            <a href=\"passports/create\" class=\"btn btn-xs btn-primary\"><i class=\"fa fa-plus\"></i> Add Passport</a>\n            <hr>\n        </div>\n    </div>\n\n\n    <div class=\"col-sm-4\" v-for=\"passport in paginatedPassports\">\n        <div class=\"panel panel-default\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{passport.citizenship_name}}</h6>\n                <a role=\"button\" :href=\"'/dashboard' + passport.links[0].uri\">\n                    <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                        {{passport.given_names}} {{passport.surname}}\n                    </h5>\n                </a>\n                <hr class=\"divider lg\">\n                <p class=\"small\">\n                    <b>ID:</b> {{passport.number}}\n                    <br>\n                    <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}\n                    <br>\n                    <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}\n                    <br>\n                    <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}\n                </p>\n            </div><!-- end panel-body -->\n            <div class=\"panel-footer\" style=\"padding: 0;\">\n                <div class=\"btn-group btn-group-justified btn-group-sm\" role=\"group\" aria-label=\"...\">\n                    <a class=\"btn btn-info\" :href=\"'/dashboard' + passport.links[0].uri + '/edit'\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger\" @click=\"selectedPassport = passport,deleteModal = true\"><i class=\"fa fa-times\"></i></a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n    <modal :show.sync=\"deleteModal\" title=\"Remove Passport\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body\">Are you sure you want to delete this Passport?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removePassport(selectedPassport)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !passports.length\">\n        <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n    </div>\n\n    <div class=\"col-sm-4\" v-for=\"passport in paginatedPassports\">\n        <div class=\"panel panel-default\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{passport.citizenship_name}}</h6>\n                <a role=\"button\" :href=\"'/dashboard' + passport.links[0].uri\">\n                    <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                        {{passport.given_names}} {{passport.surname}}\n                    </h5>\n                </a>\n                <hr class=\"divider lg\">\n                <p class=\"small\">\n                    <b>ID:</b> {{passport.number}}\n                    <br>\n                    <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}\n                    <br>\n                    <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}\n                    <br>\n                    <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}\n                </p>\n            </div><!-- end panel-body -->\n            <div class=\"panel-footer\" style=\"padding: 0;\">\n                <div class=\"btn-group btn-group-justified btn-group-sm\" role=\"group\" aria-label=\"...\">\n                    <a class=\"btn btn-info\" :href=\"'/dashboard' + passport.links[0].uri + '/edit'\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger\" @click=\"selectedPassport = passport,deleteModal = true\"><i class=\"fa fa-times\"></i></a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <nav>\n            <ul class=\"pagination pagination-sm\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n    <modal :show.sync=\"deleteModal\" title=\"Remove Passport\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Passport?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removePassport(selectedPassport)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -51385,7 +50820,52 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4e59a916", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],149:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],154:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'reconcile-fund',
+    props: ['id'],
+    components: {
+        'alert': _vueStrap2.default.alert
+    },
+    data: function data() {
+        return {
+            showSuccess: false
+        };
+    },
+
+    methods: {
+        reconcile: function reconcile() {
+            this.$http.put('funds/' + this.id + '/reconcile').then(function (response) {
+                this.showSuccess = true;
+            });
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <btn class=\"btn btn-sm btn-default\" @click=\"reconcile\"><i class=\"fa fa-calculator\"></i> Reconcile</btn>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Awesome!</strong>\n        <p>Fund has been reconciled!</p>\n    </alert>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-42896c21", module.exports)
+  } else {
+    hotAPI.update("_v-42896c21", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51411,7 +50891,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <h3>Passports <a href=\"/dashboard/passports\" class=\"btn btn-xs btn-primary\"><i class=\"fa fa-eye\"></i> View All</a></h3>\n    <div class=\"row\">\n        <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !passports.length\">\n            <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n        </div>\n\n        <div class=\"col-sm-4\" v-for=\"passport in passports\">\n            <div class=\"panel panel-default\">\n                <div style=\"min-height:220px;\" class=\"panel-body\">\n                    <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{passport.citizenship_name}}</h6>\n                    <a role=\"button\" :href=\"'/dashboard' + passport.links[0].uri\">\n                        <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                            {{passport.given_names}} {{passport.surname}}\n                        </h5>\n                    </a>\n                    <hr class=\"divider lg\">\n                    <p class=\"small\">\n                        <b>ID:</b> {{passport.number}}\n                        <br>\n                        <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}\n                        <br>\n                        <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}\n                        <br>\n                        <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}\n                    </p>\n                </div><!-- end panel-body -->\n            </div>\n        </div>\n    </div>\n\n    <hr>\n    <h3>Visas <a href=\"/dashboard/visas\" class=\"btn btn-xs btn-primary\"><i class=\"fa fa-eye\"></i> View All</a></h3>\n    <div class=\"row\">\n        <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !visas.length\">\n            <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n        </div>\n\n        <div class=\"col-sm-4\" v-for=\"visa in visas\">\n            <div class=\"panel panel-default\">\n                <div style=\"min-height:220px;\" class=\"panel-body\">\n                    <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{visa.country_name}}</h6>\n                    <a role=\"button\" :href=\"'/dashboard' + visa.links[0].uri\">\n                        <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                            {{visa.given_names}} {{visa.surname}}\n                        </h5>\n                    </a>\n                    <hr class=\"divider lg\">\n                    <p class=\"small\">\n                        <b>ID:</b> {{visa.number}}\n                        <br>\n                        <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}\n                        <br>\n                        <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}\n                    </p>\n                </div><!-- end panel-body -->\n            </div>\n        </div>\n    </div>\n\n\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <h3>Passports <a href=\"/dashboard/passports\" class=\"btn btn-xs btn-default-hollow\">View All</a></h3>\n    <div class=\"row\">\n        <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !passports.length\">\n            <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n        </div>\n\n        <div class=\"col-sm-4\" v-for=\"passport in passports\">\n            <div class=\"panel panel-default\">\n                <div style=\"min-height:220px;\" class=\"panel-body\">\n                    <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{passport.citizenship_name}}</h6>\n                    <a role=\"button\" :href=\"'/dashboard' + passport.links[0].uri\">\n                        <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                            {{passport.given_names}} {{passport.surname}}\n                        </h5>\n                    </a>\n                    <hr class=\"divider lg\">\n                    <p class=\"small\">\n                        <b>ID:</b> {{passport.number}}\n                        <br>\n                        <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}\n                        <br>\n                        <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}\n                        <br>\n                        <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}\n                    </p>\n                </div><!-- end panel-body -->\n            </div>\n        </div>\n    </div>\n\n    <hr class=\"divider\">\n    <h3>Visas <a href=\"/dashboard/visas\" class=\"btn btn-xs btn-default-hollow\">View All</a></h3>\n    <div class=\"row\">\n        <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !visas.length\">\n            <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n        </div>\n\n        <div class=\"col-sm-4\" v-for=\"visa in visas\">\n            <div class=\"panel panel-default\">\n                <div style=\"min-height:220px;\" class=\"panel-body\">\n                    <h6 class=\"text-uppercase\"><i class=\"fa fa-map-marker\"></i> {{visa.country_name}}</h6>\n                    <a role=\"button\" :href=\"'/dashboard' + visa.links[0].uri\">\n                        <h5 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                            {{visa.given_names}} {{visa.surname}}\n                        </h5>\n                    </a>\n                    <hr class=\"divider lg\">\n                    <p class=\"small\">\n                        <b>ID:</b> {{visa.number}}\n                        <br>\n                        <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}\n                        <br>\n                        <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}\n                    </p>\n                </div><!-- end panel-body -->\n            </div>\n        </div>\n    </div>\n</div>\n<hr class=\"divider inv lg\">\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -51422,7 +50902,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5bdfb51a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],150:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51520,21 +51000,30 @@ exports.default = {
             this.showNewModal = true;
         },
         edit: function edit(cost) {
+            cost.due_at = moment().format('YYYY-MM-DDTHH:mm:ss');
             this.editedCost = cost;
             this.attemptSubmit = false;
             this.showEditModal = true;
         },
-        update: function update(cost) {
+        updateCost: function updateCost() {
             // prep current costs
-            var currentDeadlineIds = [];
-            _.some(this.reservation.costs.data, function (cost) {
-                if (cost.id === this.editedCost.cost_id) {
-                    return cost = this.editedCost;
+            var costs = [];
+            _.each(this.reservation.costs.data, function (cost) {
+                if (cost.cost_id === this.editedCost.cost_id) {
+                    costs.push({
+                        id: this.editedCost.cost_id,
+                        locked: this.editedCost.locked,
+                        due_at: moment(this.editedCost.due_at).format('YYYY-MM-DD HH:mm:ss'),
+                        due_date: moment(this.editedCost.due_at).format('YYYY-MM-DD HH:mm:ss'),
+                        grace_period: 10
+                    });
+                } else {
+                    costs.push({ id: cost.cost_id, locked: cost.locked });
                 }
             }.bind(this));
 
             var reservation = this.preppedReservation;
-            reservation.costs = this.reservation.costs.data;
+            reservation.costs = costs;
 
             return this.doUpdate(reservation);
         },
@@ -51591,7 +51080,7 @@ exports.default = {
             var thisTrip = response.data.data;
             this.selectedcosts = new Array(this.newDeadline);
 
-            return this.addcosts();
+            return this.addCosts();
         });
     }), (0, _defineProperty3.default)(_methods, 'getCosts', function getCosts(search, loading) {
         loading(true);
@@ -51599,6 +51088,7 @@ exports.default = {
         return this.resource.update(reservation).then(function (response) {
             this.setReservationData(response.data.data);
             this.selectedCosts = [];
+            this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
         });
     }), (0, _defineProperty3.default)(_methods, 'setReservationData', function setReservationData(reservation) {
         this.reservation = reservation;
@@ -51625,7 +51115,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n        <button class=\"btn btn-primary btn-xs\" @click=\"add\"><span class=\"fa fa-plus\"></span> Add Existing\n        </button>\n        <!--<button class=\"btn btn-primary btn-xs\" @click=\"addNew\"><span\n                class=\"fa fa-plus\"></span> Create New\n        </button>-->\n\n        <hr class=\"divider sm\">\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th>Status</th>\n                <th>Name</th>\n                <th>Due Date</th>\n                <th>Amount</th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody v-if=\"reservation\">\n            <template v-for=\"due in reservation.dues.data\">\n                <tr>\n                    <td class=\"text-center\">\n\t\t\t\t\t\t<small class=\"badge\" :class=\"{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }\">{{due.status|capitalize}}</small>\n\t\t\t\t\t</td>\n                    <td>\n                        {{ due.cost }}\n                    </td>\n                    <td>{{ due.due_at| moment 'll' }}</td>\n                    <td>{{ due.amount| currency }}</td>\n                    <td>\n                        <a class=\"btn btn-default btn-xs\" @click=\"edit(due)\"><i class=\"fa fa-pencil\"></i></a>\n                        <a class=\"btn btn-danger btn-xs\" @click=\"remove(due)\"><i class=\"fa fa-times\"></i></a>\n                    </td>\n                </tr>\n            </template>\n\n            </tbody>\n        </table>\n\n        <modal title=\"Add Costs\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addCosts\">\n            <div slot=\"modal-body\" class=\"modal-body\">\n                <validator name=\"AddCost\">\n                    <form class=\"for\" novalidate=\"\">\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('costs') }\">\n                            <label class=\"control-label\">Available Costs</label>\n                            <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedCosts\" :options=\"availableCosts\" label=\"name\"></v-select>\n                            <select hidden=\"\" v-model=\"user_id\" v-validate:costs=\"{ required: true }\" multiple=\"\">\n                                <option :value=\"cost.id\" v-for=\"cost in costs\">{{cost.name}}</option>\n                            </select>\n                        </div>\n                    </form>\n                </validator>\n            </div>\n        </modal>\n\n        <modal title=\"Edit Cost\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\" :callback=\"update\">\n            <div slot=\"modal-body\" class=\"modal-body\">\n                <validator name=\"EditCost\">\n                    <form class=\"form\" novalidate=\"\">\n                        <div class=\"row\">\n                            <div class=\"col-sm-12\">\n\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('locked') }\" v-if=\"editedCost.type = 'incremental'\">\n                                    <label for=\"locked\">Locked</label>\n                                    <input id=\"locked\" type=\"checkbox\" class=\"form-control\" v-model=\"editedCost.locked\" v-validate:locked=\"{required: true, min:false}\">\n                                </div>\n\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                    <label for=\"grace_period\">Grace Period</label>\n                                    <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                        <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"editedCost.grace_period\" v-validate:grace=\"{required: { rule: true }}\">\n                                        <span class=\"input-group-addon\">Days</span>\n                                    </div>\n                                </div>\n                                <div class=\"form-group\">\n                                    <label for=\"due_date\">Due Date</label>\n                                    <input id=\"due_date\" type=\"datetime-local\" class=\"form-control\" v-model=\"editedCost.due_date\">\n                                </div>\n                            </div>\n                        </div>\n                    </form>\n                </validator>\n            </div>\n        </modal>\n\n        <modal title=\"New Cost\" :show.sync=\"showNewModal\" effect=\"fade\" width=\"800\" :callback=\"addNew\">\n            <div slot=\"modal-body\" class=\"modal-body\">\n                <validator name=\"NewCost\">\n                    <form class=\"form\" novalidate=\"\">\n                        <div class=\"row\">\n                            <div class=\"col-sm-12\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('name')}\">\n                                    <label for=\"name\">Name</label>\n                                    <input type=\"text\" id=\"name\" v-model=\"newCost.name\" v-validate:name=\"{require:true}\" class=\"form-control input-sm\">\n                                </div>\n\n                                <div class=\"row\">\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                            <label for=\"grace_period\">Grace Period</label>\n                                            <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                                <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newCost.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                                <span class=\"input-group-addon\">Days</span>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('due')}\">\n                                            <label for=\"due_at\">Due</label>\n                                            <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newCost.due_at\" v-validate:due=\"{required: true}\">\n                                        </div>\n\n                                    </div>\n                                </div>\n\n                                <br>\n                                <div class=\"checkbox\">\n                                    <label>\n                                        <input type=\"checkbox\" v-model=\"newCost.enforced\">\n                                        Enforced?\n                                    </label>\n                                </div>\n                            </div>\n                        </div>\n                    </form>\n                </validator>\n            </div>\n        </modal>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <button class=\"btn btn-primary btn-xs\" @click=\"add\">\n        <span class=\"fa fa-plus\"></span> Add Existing\n    </button>\n    <!--<button class=\"btn btn-primary btn-xs\" @click=\"addNew\"><span\n            class=\"fa fa-plus\"></span> Create New\n    </button>-->\n\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th>Locked</th>\n            <th>Name</th>\n            <th>Due Date</th>\n            <th>Amount</th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"reservation\">\n        <template v-for=\"cost in reservation.costs.data\">\n            <tr>\n                <!--<td class=\"text-center\">\n                    <small class=\"badge\" :class=\"{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }\">{{due.status|capitalize}}</small>\n                </td>-->\n                <td>{{ cost.locked ? 'Yes' : 'No' }}</td>\n                <td>{{ cost.name || cost.cost }}</td>\n                <td>{{ cost.due_at| moment 'll' }}</td>\n                <td>{{ cost.amount| currency }}</td>\n                <td>\n                    <a class=\"btn btn-default btn-xs\" @click=\"edit(cost)\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger btn-xs\" @click=\"remove(cost)\"><i class=\"fa fa-times\"></i></a>\n                </td>\n            </tr>\n        </template>\n        </tbody>\n    </table>\n\n    <modal title=\"Add Costs\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addCosts\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"AddCost\">\n                <form class=\"for\" novalidate=\"\">\n                    <div class=\"form-group\" :class=\"{ 'has-error': checkForError('costs') }\">\n                        <label class=\"control-label\">Available Costs</label>\n                        <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedCosts\" :options=\"availableCosts\" label=\"name\"></v-select>\n                        <select hidden=\"\" v-model=\"user_id\" v-validate:costs=\"{ required: true }\" multiple=\"\">\n                            <option :value=\"cost.id\" v-for=\"cost in costs\">{{cost.name}}</option>\n                        </select>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"Edit Cost\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\" :callback=\"updateCost\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"EditCost\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n\n                            <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('locked') }\" v-if=\"editedCost.type = 'incremental'\">\n                                <label for=\"locked\">Locked</label>\n                                <input id=\"locked\" type=\"checkbox\" class=\"form-control\" v-model=\"editedCost.locked\" v-validate:locked=\"{required: true, min:false}\">\n                            </div>\n\n                            <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                <label for=\"grace_period\">Grace Period</label>\n                                <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                    <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"editedCost.grace_period\" v-validate:grace=\"{required: { rule: true }}\">\n                                    <span class=\"input-group-addon\">Days</span>\n                                </div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"due_date\">Due Date</label>\n                                <input id=\"due_date\" type=\"datetime-local\" class=\"form-control\" v-model=\"editedCost.due_at\">\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"New Cost\" :show.sync=\"showNewModal\" effect=\"fade\" width=\"800\" :callback=\"addNew\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"NewCost\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('name')}\">\n                                <label for=\"name\">Name</label>\n                                <input type=\"text\" id=\"name\" v-model=\"newCost.name\" v-validate:name=\"{require:true}\" class=\"form-control input-sm\">\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newCost.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newCost.due_at\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"newCost.enforced\">\n                                    Enforced?\n                                </label>\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -51636,7 +51126,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-79b755c8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/defineProperty":14,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],151:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":15,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51841,7 +51331,232 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-46c63a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],152:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],158:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _methods;
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'admin-reservation-dues',
+    props: ['id'],
+    components: { vSelect: _vueSelect2.default, 'modal': _vueStrap2.default.modal },
+    data: function data() {
+        return {
+            reservation: null,
+            reservationsDues: [],
+            dues: [],
+            selectedDues: [],
+            availableDues: [],
+            editedDue: {
+                name: '',
+                date: null,
+                grace_period: 0,
+                enforced: false
+            },
+            newDue: {
+                name: '',
+                date: null,
+                grace_period: 0,
+                enforced: false
+            },
+            resource: this.$resource('reservations/' + this.id, { include: 'dues,costs.payments,trip.costs.payments' }),
+            showAddModal: false,
+            showNewModal: false,
+            showEditModal: false,
+            attemptSubmit: false,
+
+            preppedReservation: {}
+        };
+    },
+
+    computed: {},
+    methods: (_methods = {
+        dateIsBetween: function dateIsBetween(a, b) {
+            var start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
+            var stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
+            console.log(moment(a).isBetween(start, stop));
+            return moment(a).isBetween(start, stop);
+        },
+        checkForError: function checkForError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+            return this.$AddDue[field].invalid && this.attemptSubmit;
+        },
+        checkForEditDueError: function checkForEditDueError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+            return this.$EditDue[field].invalid && this.attemptSubmit;
+        },
+        checkForNewDueError: function checkForNewDueError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+            return this.$NewDue[field].invalid && this.attemptSubmit;
+        },
+        resetDue: function resetDue() {
+            this.newDue = {
+                item: '',
+                item_type: '',
+                due_at: null,
+                grace_period: 0,
+                enforced: false
+
+            };
+        },
+        isPast: function isPast(date) {
+            return moment().isAfter(date);
+        },
+        add: function add() {
+            this.attemptSubmit = false;
+            this.showAddModal = true;
+        },
+        addNew: function addNew() {
+            this.attemptSubmit = false;
+            this.showNewModal = true;
+        },
+        edit: function edit(due) {
+            due.due_at = moment(due).format('YYYY-MM-DDTHH:MM:SS');
+            this.editedDue = due;
+            this.attemptSubmit = false;
+            this.showEditModal = true;
+        },
+        updateDue: function updateDue() {
+            console.log(this.editedDue.due_at);
+            // prep current dues
+            var dues = [];
+            _.each(this.reservation.dues.data, function (due) {
+                if (due.cost_id === this.editedDue.cost_id) {
+                    dues.push({ id: this.editedDue.cost_id, grace_period: this.editedDue.grace_period, due_at: this.editedDue.due_at });
+                } else {
+                    dues.push({ id: due.cost_id, grace_period: due.grace_period });
+                }
+            }.bind(this));
+
+            var reservation = this.preppedReservation;
+            reservation.dues = dues;
+
+            return this.doUpdate(reservation);
+        },
+        remove: function remove(due) {
+            var reservation = this.preppedReservation;
+            reservation.dues = [];
+            _.each(this.reservation.dues.data, function (cs) {
+                if (cs.due_id !== due.due_id) {
+                    reservation.dues.push({ id: cs.due_id /*, locked: cs.locked*/ });
+                }
+            });
+            console.log(reservation.dues);
+
+            return this.doUpdate(reservation);
+        },
+        addDues: function addDues() {
+            // prep current dues
+            var currentDueIds = [];
+            _.each(this.reservation.dues.data, function (due) {
+                currentDueIds.push({ id: due.id || due.due_id, locked: due.locked });
+            });
+
+            // prep added dues
+            var selectedDueIds = [];
+            _.each(this.selectedDues, function (due) {
+                selectedDueIds.push({ id: due.id });
+            });
+
+            // merge arrays
+            var newDues = _.union(currentDueIds, selectedDueIds);
+            // filter possible duplicates
+            newDues = _.uniq(newDues);
+
+            var reservation = this.preppedReservation;
+            reservation.dues = newDues;
+
+            return this.doUpdate(reservation);
+        }
+    }, (0, _defineProperty3.default)(_methods, 'addNew', function addNew() {
+        // get trip object
+        var trip = this.reservation.trip.data;
+
+        // get only ids of current dues so we don't change anything
+        trip.dues = [];
+        _.each(this.reservation.trip.data.dues.data, function (dl) {
+            trip.dues.push({ id: dl.id });
+        });
+        trip.dues.push(this.newDeadline);
+        // remove tranformer modified values
+        delete trip.difficulty;
+        delete trip.rep_id;
+
+        this.$http.put('trips/' + trip.id, trip).then(function (response) {
+            var thisTrip = response.data.data;
+            this.selecteddues = new Array(this.newDeadline);
+
+            return this.adddues();
+        });
+    }), (0, _defineProperty3.default)(_methods, 'getDues', function getDues(search, loading) {
+        loading(true);
+    }), (0, _defineProperty3.default)(_methods, 'doUpdate', function doUpdate(reservation) {
+        return this.resource.update(reservation).then(function (response) {
+            this.setReservationData(response.data.data);
+            this.selectedDues = [];
+        });
+    }), (0, _defineProperty3.default)(_methods, 'setReservationData', function setReservationData(reservation) {
+        this.reservation = reservation;
+        this.preppedReservation = {
+            given_names: this.reservation.given_names,
+            surname: this.reservation.surname,
+            gender: this.reservation.gender,
+            status: this.reservation.status,
+            shirt_size: this.reservation.shirt_size,
+            birthday: this.reservation.birthday,
+            user_id: this.reservation.user_id,
+            trip_id: this.reservation.trip_id
+        };
+
+        // get available costs intersect with current
+        this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
+            return !_.findWhere(reservation.costs.data, { cost_id: cost.id, type: 'incremental' || 'optional' });
+        });
+
+        // Extend dues data
+    }), _methods),
+    ready: function ready() {
+        this.resource.get().then(function (response) {
+            this.setReservationData(response.data.data);
+        });
+
+        //Listen to Event Bus
+        this.$root.$on('AdminReservation:CostsUpdated', function (data) {
+            this.setReservationData(data);
+        }.bind(this));
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <!--<button class=\"btn btn-primary btn-xs\" @click=\"add\"><span\n            class=\"fa fa-plus\"></span> Add Existing\n    </button>-->\n    <!--<button class=\"btn btn-primary btn-xs\" @click=\"addNew\"><span\n            class=\"fa fa-plus\"></span> Create New\n    </button>-->\n\n    <!--<hr class=\"divider sm\">-->\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th>Status</th>\n            <th>Cost Name</th>\n            <th>Outstanding Balance</th>\n            <th>Grace Period</th>\n            <th>Due</th>\n            <th></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"reservation\">\n        <template v-for=\"due in reservation.dues.data\">\n            <tr>\n                <td class=\"text-center\">\n                    <small class=\"badge\" :class=\"{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }\">{{due.status|capitalize}}</small>\n                </td>\n                <td>{{ due.cost }}</td>\n                <td>{{ due.balance | currency }}</td>\n                <td>{{ due.grace_period }}</td>\n                <td>{{ due.due_at | moment 'll' }}</td>\n                <td>\n                    <a class=\"btn btn-default btn-xs\" @click=\"edit(due)\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger btn-xs\" @click=\"remove(due)\"><i class=\"fa fa-times\"></i></a>\n                </td>\n            </tr>\n        </template>\n        </tbody>\n    </table>\n\n    <modal title=\"Add Dues\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addDues\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"AddDue\">\n                <form class=\"for\" novalidate=\"\">\n                    <div class=\"form-group\" :class=\"{ 'has-error': checkForError('dues') }\">\n                        <label class=\"control-label\">Available Dues</label>\n                        <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedDues\" :options=\"availableDues\" label=\"name\"></v-select>\n                        <select hidden=\"\" v-model=\"user_id\" v-validate:dues=\"{ required: true }\" multiple=\"\">\n                            <option :value=\"due.id\" v-for=\"due in dues\">{{due.name}}</option>\n                        </select>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"Edit Due\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\" :callback=\"updateDue\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"EditDue\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForEditDueError('grace') }\">\n                                <label for=\"grace_period\">Grace Period</label>\n                                <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditDueError('grace') }\">\n                                    <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"editedDue.grace_period\" v-validate:grace=\"{required: { rule: true }}\">\n                                    <span class=\"input-group-addon\">Days</span>\n                                </div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"due_date\">Due Date</label>\n                                <input id=\"due_date\" type=\"datetime-local\" class=\"form-control\" v-model=\"editedDue.due_at\">\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-30690919", module.exports)
+  } else {
+    hotAPI.update("_v-30690919", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"babel-runtime/helpers/defineProperty":15,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51865,7 +51580,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     name: 'admin-reservation-edit',
     props: ['id'],
-    components: { vSelect: _vueSelect2.default, 'datepicker': _vueStrap2.default.datepicker, 'alert': _vueStrap2.default.alert, 'upload-create-update': _adminUploadCreateUpdate2.default },
+    components: { vSelect: _vueSelect2.default, 'datepicker': _vueStrap2.default.datepicker, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal, 'upload-create-update': _adminUploadCreateUpdate2.default },
     data: function data() {
         return {
             given_names: '',
@@ -51897,7 +51612,10 @@ exports.default = {
             userObj: null,
             errors: [],
             countries: [],
-            showSuccess: false
+            showSuccess: false,
+            showError: false,
+            showSaveAlert: false,
+            hasChanged: false
         };
     },
 
@@ -51916,6 +51634,9 @@ exports.default = {
             // if user clicked submit button while the field is invalid trigger error styles
 
             return this.$UpdateReservation[field].invalid && this.attemptSubmit;
+        },
+        onTouched: function onTouched() {
+            this.hasChanged = true;
         },
         searchUsers: function searchUsers(search, loading) {
             loading(true);
@@ -51951,10 +51672,24 @@ exports.default = {
                 }).then(function (response) {
                     $.extend(this, response.data.data);
                     this.showSuccess = true;
+                    this.hasChanged = false;
                 }, function (error) {
                     this.errors = error.data.errors;
+                    this.showError = true;
                 });
+            }{
+                this.showError = true;
             }
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/admin/reservations/' + this.id;
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
         }
     },
     events: {
@@ -52000,7 +51735,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateReservation\">\n    <form id=\"UpdateReservation\" novalidate=\"\" class=\"form-horizontal\">\n\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <div class=\"media\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n                        <button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n                            Set Avatar\n                        </button>\n                    </div>\n                </div>\n                <div class=\"collapse\" id=\"avatarCollapse\">\n                    <div class=\"well\">\n                        <upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n                    <label for=\"given_names\">Given Names</label>\n                    <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname')  }\">\n                <label for=\"surname\">Surname</label>\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <label>Date of Birth</label>\n                <datepicker v-if=\"loaded\" :value.sync=\"birthday\" format=\"yyyy-MM-dd\" :clear-button=\"true\" placeholder=\"Date of Birth\"></datepicker>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('size') }\">\n                    <label for=\"infoShirtSize\">Shirt Sizes</label>\n                    <select class=\"form-control\" v-model=\"shirt_size\" v-validate:size=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoShirtSize\">\n                        <option value=\"S\">S (Small)</option>\n                        <option value=\"M\">M (Medium)</option>\n                        <option value=\"L\">L (Large)</option>\n                        <option value=\"XL\">XL (Extra Large)</option>\n                        <option value=\"XXL\">XXL (2 Extra Large)</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <label>Gender</label>\n                <div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n                    <label>\n                        <input type=\"radio\" v-model=\"gender\" v-validate:gender=\"{ required: { rule: true} }\" value=\"male\"> Male\n                    </label>\n                </div>\n                <div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n                    <label>\n                        <input type=\"radio\" v-model=\"gender\" v-validate:gender=\"\" value=\"female\"> Female\n                    </label>\n                </div>\n                <span class=\"help-block\" v-show=\"checkForError('gender')\">Select a gender</span>\n\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n                    <label for=\"infoRelStatus\">Relationship Status</label>\n                    <select class=\"form-control\" v-model=\"status\" v-validate:status=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoRelStatus\">\n                        <option value=\"single\">Single</option>\n                        <option value=\"married\">Married</option>\n                        <option value=\"divorced\">Divorced</option>\n                        <option value=\"widowed\">Widowed</option>\n\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-sm-6\">\n                <label for=\"infoPhone\">Phone 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n            </div>\n            <div class=\"col-sm-6\">\n                <label for=\"infoMobile\">Phone 2</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n            </div>\n        </div>\n\n        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"infoEmail\">Email</label>\n                <input type=\"email\" class=\"form-control\" v-model=\"email\" id=\"infoEmail\" v-validate:email=\"['email']\" placeholder=\"Email˚\">\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"infoAddress\">Address 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"form-group col-sm-6\">\n                <label for=\"infoCity\">City</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n            </div>\n            <div class=\"form-group col-sm-6\">\n                <label for=\"infoState\">State/Prov.</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"form-group col-sm-4\">\n                <label for=\"infoZip\">ZIP/Postal Code</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\">\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"\" v-model=\"country_code\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('user') }\">\n                    <label for=\"manager\">Managing User</label>\n                    <v-select class=\"form-control\" :value.sync=\"userObj\" :options=\"users\" :debounce=\"250\" :on-search=\"searchUsers\" label=\"name\"></v-select>\n                    <select id=\"manager\" hidden=\"\" class=\"form-control hidden\" v-model=\"user_id\" v-validate:user=\"{require:true}\">\n                        <option v-for=\"user in users\" :value=\"user.id\">{{ user.name }}</option>\n                    </select>\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n                    <label for=\"companions\">Companions</label>\n                    <input type=\"number\" number=\"\" class=\"form-control\" v-validate:companions=\"{ require: true }\" v-model=\"companion_limit\" id=\"companions\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-12 text-center\">\n                <br>\n                <a href=\"/admin/reservations/{{id}}\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"update\" class=\"btn btn-primary\">Update</a>\n                <a href=\"/admin/reservations/{{id}}\" class=\"btn btn-success\">Finish</a>\n            </div>\n        </div>\n\n    </form>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Awesome!</strong>\n        <p>Reservation updated!</p>\n    </alert>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UpdateReservation\" @touched=\"onTouched\">\n    <form id=\"UpdateReservation\" novalidate=\"\" class=\"form-horizontal\">\n\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <div class=\"media\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar ? (selectedAvatar.source + '?w=100&amp;q=50') : ''\" width=\"100\" :alt=\"selectedAvatar ? selectedAvatar.name : ''\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>\n                        <button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\">\n                            Set Avatar\n                        </button>\n                    </div>\n                </div>\n                <div class=\"collapse\" id=\"avatarCollapse\">\n                    <div class=\"well\">\n                        <upload-create-update type=\"avatar\" :lock-type=\"true\" :is-child=\"true\" :tags=\"['campaign']\"></upload-create-update>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n                    <label for=\"given_names\">Given Names</label>\n                    <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname')  }\">\n                <label for=\"surname\">Surname</label>\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <label>Date of Birth</label>\n                <datepicker v-if=\"loaded\" :value.sync=\"birthday\" format=\"yyyy-MM-dd\" :clear-button=\"true\" placeholder=\"Date of Birth\"></datepicker>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('size') }\">\n                    <label for=\"infoShirtSize\">Shirt Sizes</label>\n                    <select class=\"form-control\" v-model=\"shirt_size\" v-validate:size=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoShirtSize\">\n                        <option value=\"S\">S (Small)</option>\n                        <option value=\"M\">M (Medium)</option>\n                        <option value=\"L\">L (Large)</option>\n                        <option value=\"XL\">XL (Extra Large)</option>\n                        <option value=\"XXL\">XXL (2 Extra Large)</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <label>Gender</label>\n                <div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n                    <label>\n                        <input type=\"radio\" v-model=\"gender\" v-validate:gender=\"{ required: { rule: true} }\" value=\"male\"> Male\n                    </label>\n                </div>\n                <div class=\"radio\" :class=\"{ 'has-error': checkForError('gender') }\">\n                    <label>\n                        <input type=\"radio\" v-model=\"gender\" v-validate:gender=\"\" value=\"female\"> Female\n                    </label>\n                </div>\n                <span class=\"help-block\" v-show=\"checkForError('gender')\">Select a gender</span>\n\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n                    <label for=\"infoRelStatus\">Relationship Status</label>\n                    <select class=\"form-control\" v-model=\"status\" v-validate:status=\"{ required: true }\" :classes=\"{ invalid: 'has-error' }\" id=\"infoRelStatus\">\n                        <option value=\"single\">Single</option>\n                        <option value=\"married\">Married</option>\n                        <option value=\"divorced\">Divorced</option>\n                        <option value=\"widowed\">Widowed</option>\n\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row form-group\">\n            <div class=\"col-sm-6\">\n                <label for=\"infoPhone\">Phone 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n            </div>\n            <div class=\"col-sm-6\">\n                <label for=\"infoMobile\">Phone 2</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n            </div>\n        </div>\n\n        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n            <div class=\"col-sm-12\">\n                <label for=\"infoEmail\">Email</label>\n                <input type=\"email\" class=\"form-control\" v-model=\"email\" id=\"infoEmail\" v-validate:email=\"['email']\" placeholder=\"Email˚\">\n            </div>\n        </div>\n        <div class=\"row form-group\">\n            <div class=\"col-sm-12\">\n                <label for=\"infoAddress\">Address 1</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"address\" id=\"infoAddress\" v-validate:address=\"{}\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"form-group col-sm-6\">\n                <label for=\"infoCity\">City</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" v-validate:city=\"{}\" placeholder=\"City\">\n            </div>\n            <div class=\"form-group col-sm-6\">\n                <label for=\"infoState\">State/Prov.</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" v-validate:state=\"{}\" placeholder=\"State/Province\">\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"form-group col-sm-4\">\n                <label for=\"infoZip\">ZIP/Postal Code</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" v-validate:zip=\"{}\" placeholder=\"12345\">\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\">\n                    <label for=\"country\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"\" v-model=\"country_code\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('user') }\">\n                    <label for=\"manager\">Managing User</label>\n                    <v-select class=\"form-control\" :value.sync=\"userObj\" :options=\"users\" :debounce=\"250\" :on-search=\"searchUsers\" label=\"name\"></v-select>\n                    <select id=\"manager\" hidden=\"\" class=\"form-control hidden\" v-model=\"user_id\" v-validate:user=\"{require:true}\">\n                        <option v-for=\"user in users\" :value=\"user.id\">{{ user.name }}</option>\n                    </select>\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n                    <label for=\"companions\">Companions</label>\n                    <input type=\"number\" number=\"\" class=\"form-control\" v-validate:companions=\"{ require: true }\" v-model=\"companion_limit\" id=\"companions\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-12 text-center\">\n                <br>\n                <a @click=\"update\" class=\"btn btn-primary\">Save</a>\n                <a @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n\n    </form>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Awesome!</strong>\n        <p>Reservation updated!</p>\n    </alert>\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>There are errors on the form.</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -52011,7 +51746,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1be1c0a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],153:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],160:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -52041,6 +51776,14 @@ exports.default = {
 		tripId: {
 			type: String,
 			default: null
+		},
+		storageName: {
+			type: String,
+			default: 'AdminReservationsListConfig'
+		},
+		type: {
+			type: String,
+			default: 'current'
 		}
 	},
 	data: function data() {
@@ -52142,15 +51885,12 @@ exports.default = {
 			this.searchReservations();
 		}
 	},
-	/*'groups':function () {
- 	this.searchReservations();
- }*/
 	methods: {
 		consoleCallback: function consoleCallback(val) {
 			console.dir((0, _stringify2.default)(val));
 		},
 		updateConfig: function updateConfig() {
-			localStorage.AdminReservationsListConfig = (0, _stringify2.default)({
+			localStorage[this.storageName] = (0, _stringify2.default)({
 				activeFields: this.activeFields,
 				maxActiveFields: this.maxActiveFields,
 				per_page: this.per_page,
@@ -52208,20 +51948,6 @@ exports.default = {
 		country: function country(code) {
 			return code;
 		},
-		totalAmountRaised: function totalAmountRaised(reservation) {
-			var total = 0;
-			_.each(reservation.fundraisers.data, function (fundraiser) {
-				total += fundraiser.raised_amount;
-			});
-			return total;
-		},
-		totalPercentRaised: function totalPercentRaised(reservation) {
-			var totalDue = 0;
-			_.each(reservation.costs.data, function (cost) {
-				totalDue += cost.amount;
-			});
-			return this.totalAmountRaised(reservation) / totalDue * 100;
-		},
 		age: function age(birthday) {
 			return moment().diff(birthday, 'years');
 		},
@@ -52235,6 +51961,18 @@ exports.default = {
 				sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
 			};
 
+			switch (this.type) {
+				case 'current':
+					params.current = true;
+					break;
+				case 'archived':
+					params.archived = true;
+					break;
+				case 'dropped':
+					params.dropped = true;
+					break;
+			}
+
 			$.extend(params, this.filters);
 			$.extend(params, {
 				age: [this.ageMin, this.ageMax]
@@ -52242,8 +51980,7 @@ exports.default = {
 			this.$http.get('reservations', params).then(function (response) {
 				var self = this;
 				_.each(response.data.data, function (reservation) {
-					reservation.amount_raised = this.totalAmountRaised(reservation);
-					reservation.percent_raised = this.totalPercentRaised(reservation);
+					reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100;
 				}, this);
 				this.reservations = response.data.data;
 				this.pagination = response.data.meta.pagination;
@@ -52275,8 +52012,8 @@ exports.default = {
 	},
 	ready: function ready() {
 		// load view state
-		if (localStorage.AdminReservationsListConfig) {
-			var config = JSON.parse(localStorage.AdminReservationsListConfig);
+		if (localStorage[this.storageName]) {
+			var config = JSON.parse(localStorage[this.storageName]);
 			this.activeFields = config.activeFields;
 			this.maxActiveFields = config.maxActiveFields;
 			this.filters = config.filters;
@@ -52310,7 +52047,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"groupFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupsArr\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" v-if=\"!tripId\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"amount_raised\" :disabled=\"maxCheck('amount_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<span class=\"caret\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\tActive Filters:\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t</div>\n        <hr class=\"divider sm\">\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('amount_raised')\" :class=\"{'text-primary': orderByField === 'amount_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('amount_raised')\" v-if=\"orderByField !== 'amount_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'amount_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('amount_raised')\" v-text=\"reservation.amount_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <td><a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-pencil\"></i></a></td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <nav>\n                            <ul class=\"pagination pagination-sm\">\n                                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                        <span aria-hidden=\"true\">«</span>\n                                    </a>\n                                </li>\n                                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                        <span aria-hidden=\"true\">»</span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </nav>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"groupFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupsArr\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" v-if=\"!tripId\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"total_raised\" :disabled=\"maxCheck('total_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<span class=\"caret\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\tActive Filters:\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t</div>\n        <hr class=\"divider sm\">\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('total_raised')\" :class=\"{'text-primary': orderByField === 'total_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('total_raised')\" v-if=\"orderByField !== 'total_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'total_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('total_raised')\" v-text=\"reservation.total_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <td><a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-pencil\"></i></a></td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <nav>\n                            <ul class=\"pagination pagination-sm\">\n                                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                        <span aria-hidden=\"true\">«</span>\n                                    </a>\n                                </li>\n                                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                        <span aria-hidden=\"true\">»</span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </nav>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -52325,7 +52062,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-02fd7dca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],154:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52376,7 +52113,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3cf658c5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],155:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52432,7 +52169,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2017324e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],156:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52487,7 +52224,6 @@ exports.default = {
     },
     methods: {
         // emulate pagination
-
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -52538,7 +52274,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1d893e54", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../passports/passport-create-update.vue":147,"vue":117,"vue-hot-reload-api":112}],157:[function(require,module,exports){
+},{"../passports/passport-create-update.vue":152,"vue":118,"vue-hot-reload-api":113}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52593,7 +52329,6 @@ exports.default = {
     },
     methods: {
         // emulate pagination
-
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -52644,7 +52379,191 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-277b5b87", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../visas/visa-create-update.vue":196,"vue":117,"vue-hot-reload-api":112}],158:[function(require,module,exports){
+},{"../visas/visa-create-update.vue":204,"vue":118,"vue-hot-reload-api":113}],165:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i {\n  margin-right: 10px; }\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'todos',
+    components: {
+        'alert': _vueStrap2.default.alert,
+        'modal': _vueStrap2.default.modal
+    },
+    props: {
+        'type': {
+            type: String
+        },
+        'id': {
+            type: String
+        },
+        'user_id': {
+            type: String
+        },
+        'per_page': {
+            type: Number,
+            default: 10
+        }
+    },
+    data: function data() {
+        return {
+            todos: {},
+            selectedTodo: {},
+            newTodo: {
+                'task': null,
+                'todoable_type': this.type,
+                'todoable_id': this.id
+            },
+            page: 1,
+            pagination: {},
+            search: null,
+            newMode: false,
+            editMode: false,
+            completeMode: false,
+            showSuccess: false,
+            showError: false,
+            deleteModal: false,
+            message: null,
+            filterBy: 'all'
+        };
+    },
+
+    watch: {
+        'page': function page(val, oldVal) {
+            this.fetch();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.fetch();
+        },
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.fetch();
+        },
+        'filterBy': function filterBy(val, oldVal) {
+            this.page = 1;
+            this.fetch();
+        }
+    },
+    methods: {
+        editTodo: function editTodo(todo) {
+            this.editMode = true;
+            this.selectedTodo = todo;
+        },
+        completeTodo: function completeTodo(todo) {
+            this.completeMode = true;
+
+            if (todo.completed_at) {
+                todo.complete = false;
+                this.selectedTodo = todo;
+            } else {
+                todo.complete = true;
+                todo.user_id = this.user_id;
+                this.selectedTodo = todo;
+            }
+
+            this.updateTodo();
+        },
+        changeFilter: function changeFilter(status) {
+            this.filterBy = status;
+        },
+        createTodo: function createTodo() {
+            if (!this.newTodo.task) return;
+
+            this.$http.post('todos', this.newTodo).then(function () {
+                this.newTodo.task = null;
+                this.message = 'Todo created successfully.';
+                this.showSuccess = true;
+                this.fetch();
+            }).error(function () {
+                this.message = 'Unable to add the todo.';
+                this.showError = true;
+            });
+        },
+        updateTodo: function updateTodo() {
+            if (!this.selectedTodo.task) return;
+            if (!this.editMode && !this.completeMode) return;
+
+            this.$http.put('todos/' + this.selectedTodo.id, this.selectedTodo).then(function () {
+                this.editMode = false;
+                this.completeMode = false;
+                this.selectedTodo = {};
+                this.fetch();
+            }).error(function () {
+                this.message = 'Unable to update the todo.';
+                this.showError = true;
+            });
+        },
+        remove: function remove(todo) {
+            this.$http.delete('todos/' + todo.id).then(function () {
+                this.fetch();
+                this.selectedTodo = {};
+                this.message = 'Todo deleted.';
+                this.showSuccess = true;
+            }).error(function () {
+                this.message = 'Unable to delete todo.';
+                this.showError = true;
+            });
+        },
+        fetch: function fetch() {
+            var params = '?sort=task&include=user&per_page=' + this.per_page + '&page=' + this.page;
+
+            if (this.filterBy == 'active') {
+                params = params + '&status=incomplete';
+            }
+
+            if (this.filterBy == 'completed') {
+                params = params + '&status=complete';
+            }
+
+            if (this.search) {
+                params = params + '&search=' + this.search;
+            }
+
+            if (this.type) {
+                params = params + '&type=' + this.type;
+            }
+
+            if (this.type && this.id) {
+                params = params + '|' + this.id;
+            }
+
+            this.$http.get('todos' + params).then(function (response) {
+                this.todos = response.data.data;
+                this.pagination = response.data.meta.pagination;
+            });
+        }
+    },
+    ready: function ready() {
+        this.fetch();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <div class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n            <h5>ToDos</h5>\n        </div>\n        <div class=\"list-group\">\n            <div class=\"list-group-item\">\n                <div class=\"row\">\n                    <div class=\"col-xs-2 col-sm-1 text-muted\" @click=\"completeTodo(todo)\">\n                        <i class=\"fa fa-lg fa-plus-square-o\" style=\"margin-right: 10px\"></i>\n                    </div>\n                    <div class=\"col-xs-10 col-sm-11\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"newTodo.task\" placeholder=\"What needs to be done?\" @keyup.enter=\"createTodo\">\n                    </div>\n                </div>\n            </div>\n            <div class=\"list-group-item todo-item\" v-for=\"todo in todos\">\n                    <div class=\"row\">\n                        <div class=\"col-xs-2 col-sm-1 text-muted todo-item-checkbox\" @click=\"completeTodo(todo)\">\n                            <i class=\"fa fa-lg\" :class=\"{\n                               'fa-check-square-o' : todo.completed_at,\n                               'fa-square-o' : !todo.completed_at\n                               }\">\n                            </i>\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" v-if=\"selectedTodo.id == todo.id &amp;&amp; editMode\">\n                            <input type=\"text\" class=\"form-control\" v-model=\"selectedTodo.task\" @blur=\"updateTodo\" @keyup.enter=\"updateTodo\">\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" @dblclick=\"editTodo(todo)\" v-else=\"\">\n                            <span :class=\"{ 'text-strike' : todo.completed_at }\">{{ todo.task }}</span>\n                            <small class=\"text-muted\" v-if=\"todo.completed_at\"><br>\n                                Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}\n                            </small>\n                        </div>\n                        <div class=\"col-xs-1 col-sm-1 text-right\">\n                            <i class=\"fa fa-times fa-lg text-muted remove-todo\" @click=\"selectedTodo = todo,deleteModal = true\">\n                            </i>\n                        </div>\n                    </div>\n            </div>\n        </div>\n        <div class=\"panel-body text-center\">\n            <nav>\n                <ul class=\"pager\">\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\" class=\"previous\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                            <span aria-hidden=\"true\">« <span class=\"hidden-xs\">Previous</span></span>\n                        </a>\n                    </li>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'all'}\" @click=\"changeFilter('all')\">\n                        All\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'active'}\" @click=\"changeFilter('active')\">\n                        Active\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'completed'}\" @click=\"changeFilter('completed')\">\n                        Completed\n                    </button>\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\" class=\"next\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                            <span aria-hidden=\"true\"><span class=\"hidden-xs\">Next</span> » </span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n    <p class=\"text-center\"><small class=\"text-muted\">Double-click to edit a todo.</small></p>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Todo\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Todo?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedTodo)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["/* line 2, stdin */\ndiv.list-group-item {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i {\n  margin-right: 10px; }\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-b5f43480", module.exports)
+  } else {
+    hotAPI.update("_v-b5f43480", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52712,7 +52631,7 @@ exports.default = {
 	ready: function ready() {}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div style=\"display:inline;\">\n\t<button class=\"navbar-toggle\" @click=\"showRight = true\">\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t</button>\n\t<aside :show.sync=\"showRight\" placement=\"right\" header=\"Missions.Me\" :width=\"275\">\n\t\t<ul class=\"nav navmenu-nav\">\n\t\t\t<li class=\"donate-nav\"><a class=\"navDonate\" href=\"/fundraisers\"><i class=\"fa fa-heart\"></i> Donate To A Cause</a>\n\t\t\t</li>\n\t\t\t<li v-if=\"auth\" id=\"userMenu\" class=\"dropdown-toggle visible-xs text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"img-xs img-circle av-left\" :src=\"avatar\" :alt=\"name\"> {{ name }}\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t<template v-if=\"auth\" class=\"dropdown-menu\" aria-labelledby=\"userMenu\">\n\t\t\t\t<li class=\"navlabel\">Account</li>\n\t\t\t\t<li class=\"\"><a :href=\"url\">My Profile</a></li>\n\t\t\t\t<li class=\"\"><a href=\"/dashboard\">Dashboard</a></li>\n\t\t\t\t<li v-if=\"admin\" class=\"\"><a href=\"/admin\">Admin</a></li>\n\t\t\t\t<li class=\"\"><a href=\"/logout\">Sign Out</a></li>\n\t\t\t</template>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Login</a></li>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Sign Up</a></li>\n\n\t\t\t<template v-if=\"isDashboard()\">\n\t\t\t\t<li class=\"navlabel\">User</li>\n\t\t\t\t<li><a href=\"/dashboard\"><i class=\"fa fa-tachometer\"></i> Dashboard</a></li>\n\t\t\t\t<li><a href=\"/dashboard/settings\"><i class=\"fa fa-cog\"></i> Settings</a></li>\n\t\t\t\t<li><a href=\"/dashboard/reservations\"><i class=\"fa fa-ticket\"></i> Reservations</a></li>\n\t\t\t\t<li><a href=\"/dashboard/records\"><i class=\"fa fa-archive\"></i> Records</a></li>\n\t\t\t\t<li v-if=\"managing\"><a href=\"/dashboard/groups\"><i class=\"fa fa-users\"></i> Groups</a></li>\n\t\t\t</template>\n\n\t\t\t<template v-if=\"isAdmin()\">\n\t\t\t\t<li class=\"navlabel\">Admin</li>\n\t\t\t\t<li><a href=\"/admin\"><i class=\"fa fa-tachometer\"></i> Dashboard</a></li>\n\t\t\t\t<li><a href=\"/admin/campaigns\"><i class=\"fa fa-globe\"></i> Campaings</a></li>\n\t\t\t\t<li><a href=\"/admin/reservations\"><i class=\"fa fa-ticket\"></i> Reservations</a></li>\n\t\t\t\t<li><a href=\"/admin/groups\"><i class=\"fa fa-users\"></i> Groups</a></li>\n\t\t\t\t<li><a href=\"/admin/users\"><i class=\"fa fa-user\"></i> Users</a></li>\n\t\t\t\t<li><a href=\"/admin/uploads\"><i class=\"fa fa-picture-o\"></i> Uploads</a></li>\n\t\t\t</template>\n\t\t\t<!-- Get Started -->\n\t\t\t<li class=\"navlabel\">Get Started</li>\n\t\t\t<li><a href=\"/campaigns\">Trips</a></li>\n\t\t\t<li><a href=\"/fundraisers\">Fundraisers</a></li>\n\t\t\t<li><a href=\"/groups\">Groups</a></li>\n\t\t\t<li><a href=\"/support\">Partnership</a></li>\n\n\t\t\t<!-- 1N1D-->\n\t\t\t<li class=\"navlabel\">1Nation1Day</li>\n\t\t\t<li><a href=\"http://1nation1day.com/\">2017 Nicaragua</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/dominican\">2015 Dominican</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/honduras\">2013 Honduras</a></li>\n\n\t\t\t<!-- Causes -->\n\t\t\t<li class=\"navlabel\">Causes</li>\n\t\t\t<li><a href=\"/water\">Clean Water</a></li>\n\t\t\t<li><a href=\"/orphans\">Rescue Orphans</a></li>\n\t\t\t<li><a href=\"/medical\">Medical Missions</a></li>\n\t\t\t<!--<li><a href=\"#\">Homes</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Trafficking Rescue</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Leadership Centers</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Sponsor A Project</a></li>-->\n\n\t\t\t<!-- Training -->\n\t\t\t<li class=\"navlabel\">Train</li>\n\t\t\t<li><a href=\"/college\">Missions.Me College</a></li>\n\t\t\t<li><a href=\"/speakers\">Speakers</a></li>\n\n\t\t\t<!-- M.Me -->\n\t\t\t<li class=\"navlabel\">About</li>\n\t\t\t<li><a href=\"/about-mm\">Missions.Me</a></li>\n\t\t\t<li><a href=\"#\">Contact Us</a></li>\n\t\t</ul>\n\t</aside>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div style=\"display:inline;\">\n\t<button class=\"navbar-toggle\" @click=\"showRight = true\">\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t</button>\n\t<aside :show.sync=\"showRight\" placement=\"right\" header=\"Missions.Me\" :width=\"275\">\n\t\t<ul class=\"nav navmenu-nav\">\n\t\t\t<li class=\"donate-nav\"><a class=\"navDonate\" href=\"/fundraisers\"><i class=\"fa fa-heart\"></i> Donate To A Cause</a>\n\t\t\t</li>\n\t\t\t<li v-if=\"auth\" id=\"userMenu\" class=\"dropdown-toggle visible-xs text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"img-xs img-circle av-left\" :src=\"avatar\" :alt=\"name\"> {{ name }}\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t<template v-if=\"auth\" class=\"dropdown-menu\" aria-labelledby=\"userMenu\">\n\t\t\t\t<li class=\"navlabel\">Account</li>\n\t\t\t\t<li class=\"\"><a :href=\"url\">My Profile</a></li>\n\t\t\t\t<li class=\"\"><a href=\"/dashboard\">Dashboard</a></li>\n\t\t\t\t<li v-if=\"admin\" class=\"\"><a href=\"/admin\">Admin</a></li>\n\t\t\t\t<li class=\"\"><a href=\"/logout\">Sign Out</a></li>\n\t\t\t</template>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Login</a></li>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Sign Up</a></li>\n\n\t\t\t<template v-if=\"isDashboard()\">\n\t\t\t\t<li class=\"navlabel\">User</li>\n\t\t\t\t<li><a href=\"/dashboard\"><i class=\"fa fa-tachometer\"></i> Dashboard</a></li>\n\t\t\t\t<li><a href=\"/dashboard/settings\"><i class=\"fa fa-cog\"></i> Settings</a></li>\n\t\t\t\t<li><a href=\"/dashboard/reservations\"><i class=\"fa fa-ticket\"></i> Reservations</a></li>\n\t\t\t\t<li><a href=\"/dashboard/records\"><i class=\"fa fa-archive\"></i> Records</a></li>\n\t\t\t\t<li v-if=\"managing\"><a href=\"/dashboard/groups\"><i class=\"fa fa-users\"></i> Groups</a></li>\n\t\t\t</template>\n\n\t\t\t<template v-if=\"isAdmin()\">\n\t\t\t\t<li class=\"navlabel\">Admin</li>\n\t\t\t\t<li><a href=\"/admin\"><i class=\"fa fa-tachometer\"></i> Dashboard</a></li>\n\t\t\t\t<li><a href=\"/admin/campaigns\"><i class=\"fa fa-globe\"></i> Campaings</a></li>\n\t\t\t\t<li><a href=\"/admin/reservations/current\"><i class=\"fa fa-ticket\"></i> Reservations</a></li>\n\t\t\t\t<li><a href=\"/admin/groups\"><i class=\"fa fa-users\"></i> Groups</a></li>\n\t\t\t\t<li><a href=\"/admin/interests\"><i class=\"fa fa-question-mark\"></i> Interests</a></li>\n\t\t\t\t<li><a href=\"/admin/users\"><i class=\"fa fa-user\"></i> Users</a></li>\n\t\t\t\t<li><a href=\"/admin/uploads\"><i class=\"fa fa-picture-o\"></i> Uploads</a></li>\n\t\t\t</template>\n\t\t\t<!-- Get Started -->\n\t\t\t<li class=\"navlabel\">Get Started</li>\n\t\t\t<li><a href=\"/campaigns\">Trips</a></li>\n\t\t\t<li><a href=\"/fundraisers\">Fundraisers</a></li>\n\t\t\t<li><a href=\"/groups\">Groups</a></li>\n\t\t\t<li><a href=\"/support\">Partnership</a></li>\n\n\t\t\t<!-- 1N1D-->\n\t\t\t<li class=\"navlabel\">1Nation1Day</li>\n\t\t\t<li><a href=\"http://1nation1day.com/\">2017 Nicaragua</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/dominican\">2015 Dominican</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/honduras\">2013 Honduras</a></li>\n\n\t\t\t<!-- Causes -->\n\t\t\t<li class=\"navlabel\">Causes</li>\n\t\t\t<li><a href=\"/water\">Clean Water</a></li>\n\t\t\t<li><a href=\"/orphans\">Rescue Orphans</a></li>\n\t\t\t<li><a href=\"/medical\">Medical Missions</a></li>\n\t\t\t<!--<li><a href=\"#\">Homes</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Trafficking Rescue</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Leadership Centers</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Sponsor A Project</a></li>-->\n\n\t\t\t<!-- Training -->\n\t\t\t<li class=\"navlabel\">Train</li>\n\t\t\t<li><a href=\"/college\">Missions.Me College</a></li>\n\t\t\t<li><a href=\"/speakers\">Speakers</a></li>\n\n\t\t\t<!-- M.Me -->\n\t\t\t<li class=\"navlabel\">About</li>\n\t\t\t<li><a href=\"/about-mm\">Missions.Me</a></li>\n\t\t\t<li><a href=\"/contact\">Contact Us</a></li>\n\t\t</ul>\n\t</aside>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -52723,7 +52642,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1699c084", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],159:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],167:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -52881,7 +52800,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-01e85f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":166,"./create/details.vue":167,"./create/pricing.vue":168,"./create/requirements.vue":169,"./create/settings.vue":170,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],160:[function(require,module,exports){
+},{"./create/deadlines.vue":174,"./create/details.vue":175,"./create/pricing.vue":176,"./create/requirements.vue":177,"./create/settings.vue":178,"vue":118,"vue-hot-reload-api":113,"vueify/lib/insert-css":119}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52917,7 +52836,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-19795487", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],161:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53010,7 +52929,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-41cb11df", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],162:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115}],170:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -53190,7 +53109,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-da7ed334", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":171,"./edit/details.vue":172,"./edit/pricing.vue":173,"./edit/requirements.vue":174,"./edit/settings.vue":175,"vue":117,"vue-hot-reload-api":112,"vueify/lib/insert-css":118}],163:[function(require,module,exports){
+},{"./edit/deadlines.vue":179,"./edit/details.vue":180,"./edit/pricing.vue":181,"./edit/requirements.vue":182,"./edit/settings.vue":183,"vue":118,"vue-hot-reload-api":113,"vueify/lib/insert-css":119}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53293,7 +53212,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1b17f8e3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],164:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53366,7 +53285,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-67217e50", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],165:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53437,7 +53356,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-637d2399", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],166:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53515,7 +53434,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4a198cf4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],167:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],175:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 'use strict';
@@ -53586,7 +53505,6 @@ exports.default = {
 				ended_at: this.ended_at
 			});
 		},
-		//rep_id: this.rep_id,
 		getGroups: function getGroups(search, loading) {
 			loading(true);
 			this.$http.get('groups', { search: search }).then(function (response) {
@@ -53629,7 +53547,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0ed0f026", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],168:[function(require,module,exports){
+},{"marked":107,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vueify/lib/insert-css":119}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53858,7 +53776,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-62c6591e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],169:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53937,7 +53855,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-790256f5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],170:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53992,7 +53910,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-305758f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],171:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54074,7 +53992,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-00aba794", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],172:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54210,7 +54128,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-cbdfbd0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-select":114}],173:[function(require,module,exports){
+},{"marked":107,"vue":118,"vue-hot-reload-api":113,"vue-select":115}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54443,7 +54361,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-70156cff", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],174:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54525,7 +54443,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0a518627", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],175:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54585,7 +54503,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-756eebba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],176:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54631,7 +54549,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-681de544", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],177:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54798,7 +54716,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b8072596", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],178:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54855,7 +54773,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-63f3eb1d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],179:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55153,7 +55071,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-830bbb3a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],180:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55198,7 +55116,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-fba89fc0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],181:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],189:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55235,7 +55153,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ee616aba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],182:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55272,7 +55190,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-45b743c0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],183:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],191:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55314,7 +55232,6 @@ exports.default = {
     },
     methods: {
         // emulate pagination
-
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -55344,7 +55261,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-71b990ff", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],184:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],192:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -55655,7 +55572,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5dcd5b95", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":145,"./registration/additional-trip-options.vue":176,"./registration/basic-info.vue":177,"./registration/deadline-agreement.vue":178,"./registration/payment-details.vue":179,"./registration/review.vue":180,"./registration/roca.vue":181,"./registration/tos.vue":182,"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],185:[function(require,module,exports){
+},{"../login.vue":149,"./registration/additional-trip-options.vue":184,"./registration/basic-info.vue":185,"./registration/deadline-agreement.vue":186,"./registration/payment-details.vue":187,"./registration/review.vue":188,"./registration/roca.vue":189,"./registration/tos.vue":190,"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55719,7 +55636,12 @@ exports.default = {
 		name: {
 			type: String,
 			default: ''
+		},
+		perPage: {
+			type: Number,
+			default: 6
 		}
+
 	},
 	data: function data() {
 		return {
@@ -55739,12 +55661,12 @@ exports.default = {
 			coords: 'Try to move/resize the selection',
 			constrained: true,
 			vueCropApi: null,
-			scaledWidth: 600,
-			scaledHeight: 600,
-			imageMaxWidth: 600,
-			imageMaxHeight: 600,
-			imageWidth: 600,
-			imageHeight: 600,
+			scaledWidth: 400,
+			scaledHeight: 400,
+			imageMaxWidth: 400,
+			imageMaxHeight: 400,
+			imageWidth: 400,
+			imageHeight: 400,
 			imageAspectRatio: null,
 			aspectRatio: this.width / this.height,
 			fileA: null,
@@ -55754,7 +55676,7 @@ exports.default = {
 			resource: this.$resource('uploads{/id}'),
 			uploads: [],
 			page: 1,
-			per_page: 6,
+			//				per_page: 6,
 			search: '',
 			pagination: {}
 		};
@@ -55788,11 +55710,7 @@ exports.default = {
 				this.searchUploads();
 			}
 		},
-		// Search Functionality
-		'search': function search(val, oldVal) {
-			this.page = 1;
-			this.searchUploads();
-		},
+		// Pagination Functionality
 		'orderByField': function orderByField(val, oldVal) {
 			this.searchUploads();
 		},
@@ -55802,15 +55720,28 @@ exports.default = {
 		'page': function page(val, oldVal) {
 			this.searchUploads();
 		},
-		'per_page': function per_page(val, oldVal) {
+		'perPage': function perPage(val, oldVal) {
 			this.searchUploads();
 		}
-
 	},
 	events: {
 		'vueCrop-api': function vueCropApi(api) {
 			// make api available on scope
 			window.vueCropApi = this.vueCropApi = api;
+		},
+		'uploads-complete': function uploadsComplete(data) {
+			switch (data.type) {
+				case 'avatar':
+					this.selectedAvatar = data;
+					this.avatar_upload_id = data.id;
+					jQuery('#avatarCollapse').collapse('hide');
+					break;
+				case 'banner':
+					this.selectedBanner = data;
+					this.banner_upload_id = data.id;
+					jQuery('#bannerCollapse').collapse('hide');
+					break;
+			}
 		}
 	},
 	methods: {
@@ -55935,8 +55866,7 @@ exports.default = {
 		searchUploads: function searchUploads() {
 			var params = {
 				include: '',
-				search: this.search,
-				per_page: this.per_page,
+				per_page: this.perPage,
 				page: this.page,
 				sort: this.orderByField + '|' + (this.direction ? 'asc' : 'desc'),
 				type: this.type,
@@ -55970,10 +55900,12 @@ exports.default = {
 				if (this.file) this.adjustSelectByType();
 			}
 		}
+
+		this.searchUploads();
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<form class=\"form-inline\" v-if=\"isChild &amp;&amp; !uiLocked\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector1\" v-model=\"uiSelector\" :value=\"1\"> Select file\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector2\" v-model=\"uiSelector\" :value=\"2\"> Upload file\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr v-if=\"uiSelector!==0\">\n\t</form>\n\t<div v-if=\"isChild &amp;&amp; uiSelector==1\">\n\t\t<form class=\"form-inline text-right\" novalidate=\"\">\n\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t</div>\n\t\t</form>\n\t\t<br>\n\t\t<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\t\t\t<div class=\"col-sm-2 col-md-2\" v-for=\"upload in uploads\" style=\"display:flex\">\n\t\t\t\t<div class=\"panel panel-default\">\n\n\t\t\t\t\t\t<a @click=\"selectExisting(upload)\" role=\"button\">\n\t\t\t\t\t\t\t<tooltip effect=\"scale\" placement=\"top\" :content=\"upload.name\">\n\t\t\t\t\t\t\t\t<img :src=\"upload.source + '?w=100&amp;q=50'\" :alt=\"upload.name\" class=\"img-responsive\">\n\t\t\t\t\t\t\t</tooltip>\n\t\t\t\t\t\t</a>\n\n\t\t\t\t\t<!--<div class=\"panel-body\">\n\t\t\t\t\t\t<h6 class=\"text-uppercase\">{{upload.name}}</h6>\n\t\t\t\t\t</div>--><!-- end panel-body -->\n\t\t\t\t\t<div class=\"panel-footer\">\n\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-block btn-primary\" @click=\"selectExisting(upload)\">Select</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end panel -->\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t\t<nav>\n\t\t\t\t\t<ul class=\"pagination pagination-sm\">\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</nav>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<validator v-if=\"!isChild||uiSelector===2\" name=\"CreateUpload\">\n\t\t<form id=\"CreateUploadForm\" class=\"form-horizontal\" novalidate=\"\" @submit=\"prevent\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('tags') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"tags\" class=\"col-sm-2 control-label\">Tags</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<v-select id=\"tags\" class=\"form-control\" multiple=\"\" :value.sync=\"tags\" :options=\"tagOptions\"></v-select>\n\t\t\t\t\t<select hidden=\"\" id=\"tags\" name=\"tags\" v-model=\"tags\" multiple=\"\" v-validate:tags=\"{ required:true }\">\n\t\t\t\t\t\t<option v-for=\"tag in tagOptions\" :value=\"tag\">{{tag}}</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\" :disabled=\"lockType\">\n\t\t\t\t\t\t<option :value=\"\">-- select type --</option>\n\t\t\t\t\t\t<option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type === 'other'\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions (px)\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">File</label>\n\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t<input type=\"file\" id=\"file\" :accept=\"allowedTypes\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t<!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row col-sm-offset-2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"col-sm-2 control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-10\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t\t<a v-if=\"!isChild\" href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" v-if=\"!isUpdate\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t\t<a @click=\"update()\" v-if=\"isUpdate\" class=\"btn btn-primary\">Update</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t</form>\n\t</validator>\n\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<form class=\"form-inline\" v-if=\"isChild &amp;&amp; !uiLocked\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector1\" v-model=\"uiSelector\" :value=\"1\"> Select file\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector2\" v-model=\"uiSelector\" :value=\"2\"> Upload file\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr v-if=\"uiSelector!==0\">\n\t</form>\n\t<div v-if=\"isChild &amp;&amp; uiSelector==1\">\n\t\t<!--<form class=\"form-inline text-right\" novalidate>\n\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t</div>\n\t\t</form>-->\n\t\t<br>\n\t\t<div class=\"\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\t\t\t<div class=\"col-sm-2 col-md-2\" v-for=\"upload in uploads\" style=\"display:flex;flex: 1\">\n\t\t\t\t<div class=\"panel panel-default\">\n\n\t\t\t\t\t\t<a @click=\"selectExisting(upload)\" role=\"button\">\n\t\t\t\t\t\t\t<tooltip effect=\"scale\" placement=\"top\" :content=\"upload.name\">\n\t\t\t\t\t\t\t\t<img :src=\"upload.source + '?w=100&amp;q=50'\" :alt=\"upload.name\" class=\"img-responsive\">\n\t\t\t\t\t\t\t</tooltip>\n\t\t\t\t\t\t</a>\n\n\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t<span class=\"text-uppercase\">{{upload.name}}</span>\n\t\t\t\t\t</div> end panel-body\n\t\t\t\t\t<div class=\"panel-footer\">\n\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-block btn-primary\" @click=\"selectExisting(upload)\">Select</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end panel -->\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t\t<nav>\n\t\t\t\t\t<ul class=\"pagination pagination-sm\">\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</nav>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<validator v-if=\"!isChild||uiSelector===2\" name=\"CreateUpload\">\n\t\t<form id=\"CreateUploadForm\" class=\"form\" novalidate=\"\" @submit=\"prevent\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"name\" class=\"control-label\">Name</label>\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('tags') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"tags\" class=\"control-label\">Tags</label>\n\t\t\t\t\t<v-select id=\"tags\" class=\"form-control\" multiple=\"\" :value.sync=\"tags\" :options=\"tagOptions\"></v-select>\n\t\t\t\t\t<select hidden=\"\" id=\"tags\" name=\"tags\" v-model=\"tags\" multiple=\"\" v-validate:tags=\"{ required:true }\">\n\t\t\t\t\t\t<option v-for=\"tag in tagOptions\" :value=\"tag\">{{tag}}</option>\n\t\t\t\t\t</select>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"type\" class=\"control-label\">Type</label>\n\t\t\t\t\t<select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\" :disabled=\"lockType\">\n\t\t\t\t\t\t<option :value=\"\">-- select type --</option>\n\t\t\t\t\t\t<option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t\t</select>\n\t\t\t</div>\n\n\t\t\t<div class=\"row\" v-if=\"type &amp;&amp; type === 'other'\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions (px)\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<label for=\"file\" class=\"control-label\">File</label>\n\t\t\t\t\t<input type=\"file\" id=\"file\" :accept=\"allowedTypes\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t<!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t</div>\n\n\t\t\t<div class=\"row2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-12\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<a v-if=\"!isChild\" href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" v-if=\"!isUpdate\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t\t<a @click=\"update()\" v-if=\"isUpdate\" class=\"btn btn-primary\">Update</a>\n\t\t\t</div>\n\n\t\t</form>\n\t</validator>\n\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -55984,7 +55916,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6ba4fc86", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],186:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],194:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -56124,22 +56056,26 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d3f25bde", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],187:[function(require,module,exports){
-'use strict';
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vueify/lib/insert-css":119}],195:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _vueSelect = require('vue-select');
+var _vueSelect = require("vue-select");
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require("vue-strap/dist/vue-strap.min");
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     name: 'user-create',
-    components: { vSelect: _vueSelect2.default },
+    components: { vSelect: _vueSelect2.default, 'alert': _vueStrap2.default.alert },
     data: function data() {
         return {
             name: '',
@@ -56167,6 +56103,7 @@ exports.default = {
             // logic variables
             //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
             attemptSubmit: false,
+            showError: false,
             countries: [],
             countryCodeObj: null,
             timezones: [],
@@ -56222,8 +56159,11 @@ exports.default = {
                 }).then(function (resp) {
                     window.location.href = '/admin' + resp.data.data.links[0].uri;
                 }, function (error) {
+                    this.showError = true;
                     console.log(error);
                 });
+            } else {
+                this.showError = true;
             }
         }
     },
@@ -56238,7 +56178,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUser\" :groups=\"['passwordGroup']\">\n    <form id=\"CreateUserForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"User Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Alt. Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Password</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ required: true, minlength:8 }\" placeholder=\"Enter password\" group=\"passwordGroup\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ required: true, minlength:8 }\" placeholder=\"Enter password again\" group=\"passwordGroup\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"help-block\" v-if=\"$CreateUser.passwordGroup.invalid &amp;&amp; attemptSubmit\">Passwords do not match!</div>\n                <div class=\"help-block\">Password must be at least 8 characters long</div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\">Date of Birth</label>\n\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-xs-5\">\n                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                            <option value=\"01\">January</option>\n                            <option value=\"02\">February</option>\n                            <option value=\"03\">March</option>\n                            <option value=\"04\">April</option>\n                            <option value=\"05\">May</option>\n                            <option value=\"06\">June</option>\n                            <option value=\"07\">July</option>\n                            <option value=\"08\">August</option>\n                            <option value=\"09\">September</option>\n                            <option value=\"10\">October</option>\n                            <option value=\"11\">November</option>\n                            <option value=\"12\">December</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Month</h6>\n                    </div>\n                    <div class=\"col-xs-3\">\n                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                            <option value=\"01\">1</option>\n                            <option value=\"02\">2</option>\n                            <option value=\"03\">3</option>\n                            <option value=\"04\">4</option>\n                            <option value=\"05\">5</option>\n                            <option value=\"06\">6</option>\n                            <option value=\"07\">7</option>\n                            <option value=\"08\">8</option>\n                            <option value=\"09\">9</option>\n                            <option value=\"10\">10</option>\n                            <option value=\"11\">11</option>\n                            <option value=\"12\">12</option>\n                            <option value=\"13\">13</option>\n                            <option value=\"14\">14</option>\n                            <option value=\"15\">15</option>\n                            <option value=\"16\">16</option>\n                            <option value=\"17\">17</option>\n                            <option value=\"18\">18</option>\n                            <option value=\"19\">19</option>\n                            <option value=\"20\">20</option>\n                            <option value=\"21\">21</option>\n                            <option value=\"22\">22</option>\n                            <option value=\"23\">23</option>\n                            <option value=\"24\">24</option>\n                            <option value=\"25\">25</option>\n                            <option value=\"26\">26</option>\n                            <option value=\"27\">27</option>\n                            <option value=\"28\">28</option>\n                            <option value=\"29\">29</option>\n                            <option value=\"30\">30</option>\n                            <option value=\"31\">31</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Day</h6>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                            <option value=\"1930\">1930</option>\n                            <option value=\"1931\">1931</option>\n                            <option value=\"1932\">1932</option>\n                            <option value=\"1933\">1933</option>\n                            <option value=\"1934\">1934</option>\n                            <option value=\"1935\">1935</option>\n                            <option value=\"1936\">1936</option>\n                            <option value=\"1937\">1937</option>\n                            <option value=\"1938\">1938</option>\n                            <option value=\"1939\">1939</option>\n                            <option value=\"1940\">1940</option>\n                            <option value=\"1941\">1941</option>\n                            <option value=\"1942\">1942</option>\n                            <option value=\"1943\">1943</option>\n                            <option value=\"1944\">1944</option>\n                            <option value=\"1945\">1945</option>\n                            <option value=\"1946\">1946</option>\n                            <option value=\"1947\">1947</option>\n                            <option value=\"1948\">1948</option>\n                            <option value=\"1949\">1949</option>\n                            <option value=\"1950\">1950</option>\n                            <option value=\"1951\">1951</option>\n                            <option value=\"1952\">1952</option>\n                            <option value=\"1953\">1953</option>\n                            <option value=\"1954\">1954</option>\n                            <option value=\"1955\">1955</option>\n                            <option value=\"1956\">1956</option>\n                            <option value=\"1957\">1957</option>\n                            <option value=\"1958\">1958</option>\n                            <option value=\"1959\">1959</option>\n                            <option value=\"1960\">1960</option>\n                            <option value=\"1961\">1961</option>\n                            <option value=\"1962\">1962</option>\n                            <option value=\"1963\">1963</option>\n                            <option value=\"1964\">1964</option>\n                            <option value=\"1965\">1965</option>\n                            <option value=\"1966\">1966</option>\n                            <option value=\"1967\">1967</option>\n                            <option value=\"1968\">1968</option>\n                            <option value=\"1969\">1969</option>\n                            <option value=\"1970\">1970</option>\n                            <option value=\"1971\">1971</option>\n                            <option value=\"1972\">1972</option>\n                            <option value=\"1973\">1973</option>\n                            <option value=\"1974\">1974</option>\n                            <option value=\"1975\">1975</option>\n                            <option value=\"1976\">1976</option>\n                            <option value=\"1977\">1977</option>\n                            <option value=\"1978\">1978</option>\n                            <option value=\"1979\">1979</option>\n                            <option value=\"1980\">1980</option>\n                            <option value=\"1981\">1981</option>\n                            <option value=\"1982\">1982</option>\n                            <option value=\"1983\">1983</option>\n                            <option value=\"1984\">1984</option>\n                            <option value=\"1985\">1985</option>\n                            <option value=\"1986\">1986</option>\n                            <option value=\"1987\">1987</option>\n                            <option value=\"1988\">1988</option>\n                            <option value=\"1989\">1989</option>\n                            <option value=\"1990\" selected=\"selected\">1990</option>\n                            <option value=\"1991\">1991</option>\n                            <option value=\"1992\">1992</option>\n                            <option value=\"1993\">1993</option>\n                            <option value=\"1994\">1994</option>\n                            <option value=\"1995\">1995</option>\n                            <option value=\"1996\">1996</option>\n                            <option value=\"1997\">1997</option>\n                            <option value=\"1998\">1998</option>\n                            <option value=\"1999\">1999</option>\n                            <option value=\"2000\">2000</option>\n                            <option value=\"2001\">2001</option>\n                            <option value=\"2002\">2002</option>\n                            <option value=\"2003\">2003</option>\n                            <option value=\"2004\">2004</option>\n                            <option value=\"2005\">2005</option>\n                            <option value=\"2006\">2006</option>\n                            <option value=\"2007\">2007</option>\n                            <option value=\"2008\">2008</option>\n                            <option value=\"2009\">2009</option>\n                            <option value=\"2010\">2010</option>\n                            <option value=\"2011\">2011</option>\n                            <option value=\"2012\">2012</option>\n                            <option value=\"2013\">2013</option>\n                            <option value=\"2014\">2014</option>\n                            <option value=\"2015\">2015</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Year</h6>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div><!-- end form-group -->\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n            <label for=\"gender\" class=\"col-sm-2 control-label\">Gender</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"bio\">Bio</label>\n            <div class=\"col-sm-10\">\n                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"User Bio\" maxlength=\"120\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress\">Address 1</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress2\">Address 2</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                <div class=\"form-group\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                </div>\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\n                    <label class=\"control-label\" for=\"country\" style=\"padding-top:0;margin-bottom: 5px;\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <label for=\"timezone\" class=\"col-sm-2 control-label\">Timezone</label>\n\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"public\" class=\"col-sm-2 control-label\">Public</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <div class=\"form-group\" v-if=\"!!public\">\n            <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n            <div class=\"col-sm-10\">\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon\">www.missions.me/users/</span>\n                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/admin/users\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUser\" :groups=\"['passwordGroup']\">\n    <form id=\"CreateUserForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"User Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Alt. Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Password</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ required: true, minlength:8 }\" placeholder=\"Enter password\" group=\"passwordGroup\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ required: true, minlength:8 }\" placeholder=\"Enter password again\" group=\"passwordGroup\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"help-block\" v-if=\"$CreateUser.passwordGroup.invalid &amp;&amp; attemptSubmit\">Passwords do not match!</div>\n                <div class=\"help-block\">Password must be at least 8 characters long</div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\">Date of Birth</label>\n\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-xs-5\">\n                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                            <option value=\"01\">January</option>\n                            <option value=\"02\">February</option>\n                            <option value=\"03\">March</option>\n                            <option value=\"04\">April</option>\n                            <option value=\"05\">May</option>\n                            <option value=\"06\">June</option>\n                            <option value=\"07\">July</option>\n                            <option value=\"08\">August</option>\n                            <option value=\"09\">September</option>\n                            <option value=\"10\">October</option>\n                            <option value=\"11\">November</option>\n                            <option value=\"12\">December</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Month</h6>\n                    </div>\n                    <div class=\"col-xs-3\">\n                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                            <option value=\"01\">1</option>\n                            <option value=\"02\">2</option>\n                            <option value=\"03\">3</option>\n                            <option value=\"04\">4</option>\n                            <option value=\"05\">5</option>\n                            <option value=\"06\">6</option>\n                            <option value=\"07\">7</option>\n                            <option value=\"08\">8</option>\n                            <option value=\"09\">9</option>\n                            <option value=\"10\">10</option>\n                            <option value=\"11\">11</option>\n                            <option value=\"12\">12</option>\n                            <option value=\"13\">13</option>\n                            <option value=\"14\">14</option>\n                            <option value=\"15\">15</option>\n                            <option value=\"16\">16</option>\n                            <option value=\"17\">17</option>\n                            <option value=\"18\">18</option>\n                            <option value=\"19\">19</option>\n                            <option value=\"20\">20</option>\n                            <option value=\"21\">21</option>\n                            <option value=\"22\">22</option>\n                            <option value=\"23\">23</option>\n                            <option value=\"24\">24</option>\n                            <option value=\"25\">25</option>\n                            <option value=\"26\">26</option>\n                            <option value=\"27\">27</option>\n                            <option value=\"28\">28</option>\n                            <option value=\"29\">29</option>\n                            <option value=\"30\">30</option>\n                            <option value=\"31\">31</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Day</h6>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                            <option value=\"1930\">1930</option>\n                            <option value=\"1931\">1931</option>\n                            <option value=\"1932\">1932</option>\n                            <option value=\"1933\">1933</option>\n                            <option value=\"1934\">1934</option>\n                            <option value=\"1935\">1935</option>\n                            <option value=\"1936\">1936</option>\n                            <option value=\"1937\">1937</option>\n                            <option value=\"1938\">1938</option>\n                            <option value=\"1939\">1939</option>\n                            <option value=\"1940\">1940</option>\n                            <option value=\"1941\">1941</option>\n                            <option value=\"1942\">1942</option>\n                            <option value=\"1943\">1943</option>\n                            <option value=\"1944\">1944</option>\n                            <option value=\"1945\">1945</option>\n                            <option value=\"1946\">1946</option>\n                            <option value=\"1947\">1947</option>\n                            <option value=\"1948\">1948</option>\n                            <option value=\"1949\">1949</option>\n                            <option value=\"1950\">1950</option>\n                            <option value=\"1951\">1951</option>\n                            <option value=\"1952\">1952</option>\n                            <option value=\"1953\">1953</option>\n                            <option value=\"1954\">1954</option>\n                            <option value=\"1955\">1955</option>\n                            <option value=\"1956\">1956</option>\n                            <option value=\"1957\">1957</option>\n                            <option value=\"1958\">1958</option>\n                            <option value=\"1959\">1959</option>\n                            <option value=\"1960\">1960</option>\n                            <option value=\"1961\">1961</option>\n                            <option value=\"1962\">1962</option>\n                            <option value=\"1963\">1963</option>\n                            <option value=\"1964\">1964</option>\n                            <option value=\"1965\">1965</option>\n                            <option value=\"1966\">1966</option>\n                            <option value=\"1967\">1967</option>\n                            <option value=\"1968\">1968</option>\n                            <option value=\"1969\">1969</option>\n                            <option value=\"1970\">1970</option>\n                            <option value=\"1971\">1971</option>\n                            <option value=\"1972\">1972</option>\n                            <option value=\"1973\">1973</option>\n                            <option value=\"1974\">1974</option>\n                            <option value=\"1975\">1975</option>\n                            <option value=\"1976\">1976</option>\n                            <option value=\"1977\">1977</option>\n                            <option value=\"1978\">1978</option>\n                            <option value=\"1979\">1979</option>\n                            <option value=\"1980\">1980</option>\n                            <option value=\"1981\">1981</option>\n                            <option value=\"1982\">1982</option>\n                            <option value=\"1983\">1983</option>\n                            <option value=\"1984\">1984</option>\n                            <option value=\"1985\">1985</option>\n                            <option value=\"1986\">1986</option>\n                            <option value=\"1987\">1987</option>\n                            <option value=\"1988\">1988</option>\n                            <option value=\"1989\">1989</option>\n                            <option value=\"1990\" selected=\"selected\">1990</option>\n                            <option value=\"1991\">1991</option>\n                            <option value=\"1992\">1992</option>\n                            <option value=\"1993\">1993</option>\n                            <option value=\"1994\">1994</option>\n                            <option value=\"1995\">1995</option>\n                            <option value=\"1996\">1996</option>\n                            <option value=\"1997\">1997</option>\n                            <option value=\"1998\">1998</option>\n                            <option value=\"1999\">1999</option>\n                            <option value=\"2000\">2000</option>\n                            <option value=\"2001\">2001</option>\n                            <option value=\"2002\">2002</option>\n                            <option value=\"2003\">2003</option>\n                            <option value=\"2004\">2004</option>\n                            <option value=\"2005\">2005</option>\n                            <option value=\"2006\">2006</option>\n                            <option value=\"2007\">2007</option>\n                            <option value=\"2008\">2008</option>\n                            <option value=\"2009\">2009</option>\n                            <option value=\"2010\">2010</option>\n                            <option value=\"2011\">2011</option>\n                            <option value=\"2012\">2012</option>\n                            <option value=\"2013\">2013</option>\n                            <option value=\"2014\">2014</option>\n                            <option value=\"2015\">2015</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Year</h6>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div><!-- end form-group -->\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n            <label for=\"gender\" class=\"col-sm-2 control-label\">Gender</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"bio\">Bio</label>\n            <div class=\"col-sm-10\">\n                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"User Bio\" maxlength=\"120\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress\">Address 1</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress2\">Address 2</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                <div class=\"form-group\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                </div>\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\n                    <label class=\"control-label\" for=\"country\" style=\"padding-top:0;margin-bottom: 5px;\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <label for=\"timezone\" class=\"col-sm-2 control-label\">Timezone</label>\n\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"public\" class=\"col-sm-2 control-label\">Public</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <div class=\"form-group\" v-if=\"!!public\">\n            <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n            <div class=\"col-sm-10\">\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon\">www.missions.me/users/</span>\n                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/admin/users\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n            </div>\n        </div>\n        <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-info-circled alert-icon-float-left\"></span>\n            <strong>Oh No!</strong>\n            <p>There are errors on the form.</p>\n        </alert>\n\n    </form>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -56249,7 +56189,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9535dce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],188:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56285,23 +56225,27 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6613f28a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],189:[function(require,module,exports){
-'use strict';
+},{"vue":118,"vue-hot-reload-api":113}],197:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _vueSelect = require('vue-select');
+var _vueSelect = require("vue-select");
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require("vue-strap/dist/vue-strap.min");
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     name: 'user-edit',
     props: ['userId'],
-    components: { vSelect: _vueSelect2.default },
+    components: { vSelect: _vueSelect2.default, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
     data: function data() {
         return {
             name: '',
@@ -56338,7 +56282,11 @@ exports.default = {
             dobMonth: null,
             dobDay: null,
             dobYear: null,
-            resource: this.$resource('users{/id}')
+            resource: this.$resource('users{/id}'),
+            showSuccess: false,
+            showError: false,
+            showSaveAlert: false,
+            hasChanged: false
         };
     },
 
@@ -56355,6 +56303,19 @@ exports.default = {
             // if user clicked submit button while the field is invalid trigger error styles
 
             return this.$EditUser[field].invalid && this.attemptSubmit;
+        },
+        onTouched: function onTouched() {
+            this.hasChanged = true;
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/admin/users/' + this.userId;
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
         },
         submit: function submit() {
             this.attemptSubmit = true;
@@ -56381,10 +56342,15 @@ exports.default = {
                     public: this.public,
                     url: this.public ? this.url : undefined
                 }).then(function (resp) {
-                    window.location.href = '/admin' + resp.data.data.links[0].uri;
+                    // window.location.href = '/admin' + resp.data.data.links[0].uri;
+                    this.showSuccess = true;
+                    this.hasChanged = false;
                 }, function (error) {
+                    this.showError = true;
                     console.log(error);
                 });
+            } else {
+                this.showError = true;
             }
         }
     },
@@ -56420,13 +56386,13 @@ exports.default = {
             this.status = user.status;
             this.alt_email = user.alt_email;
         }, function (response) {
-            console.log('Update Failed! :(');
+            console.log('Loading Failed! :(');
             console.log(response);
         });
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"EditUser\">\n    <form id=\"EditUserForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"User Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Alt. Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': !!changePassword &amp;&amp; (checkForError('password')||checkForError('passwordconfirmation')) }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Password</label>\n            <div class=\"col-sm-10\">\n                <div class=\"checkbox\">\n                    <label>\n                        <input type=\"checkbox\" v-model=\"changePassword\">\n                        Change Password\n                    </label>\n                </div>\n                <div v-if=\"changePassword\" class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ minlength:8 }\" placeholder=\"Enter password\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ minlength:8 }\" placeholder=\"Enter password again\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                </div>\n                <div v-if=\"changePassword\" class=\"help-block\">Password must be at least 8 characters long</div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\">Date of Birth</label>\n\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-xs-5\">\n                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                            <option value=\"01\">January</option>\n                            <option value=\"02\">February</option>\n                            <option value=\"03\">March</option>\n                            <option value=\"04\">April</option>\n                            <option value=\"05\">May</option>\n                            <option value=\"06\">June</option>\n                            <option value=\"07\">July</option>\n                            <option value=\"08\">August</option>\n                            <option value=\"09\">September</option>\n                            <option value=\"10\">October</option>\n                            <option value=\"11\">November</option>\n                            <option value=\"12\">December</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Month</h6>\n                    </div>\n                    <div class=\"col-xs-3\">\n                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                            <option value=\"01\">1</option>\n                            <option value=\"02\">2</option>\n                            <option value=\"03\">3</option>\n                            <option value=\"04\">4</option>\n                            <option value=\"05\">5</option>\n                            <option value=\"06\">6</option>\n                            <option value=\"07\">7</option>\n                            <option value=\"08\">8</option>\n                            <option value=\"09\">9</option>\n                            <option value=\"10\">10</option>\n                            <option value=\"11\">11</option>\n                            <option value=\"12\">12</option>\n                            <option value=\"13\">13</option>\n                            <option value=\"14\">14</option>\n                            <option value=\"15\">15</option>\n                            <option value=\"16\">16</option>\n                            <option value=\"17\">17</option>\n                            <option value=\"18\">18</option>\n                            <option value=\"19\">19</option>\n                            <option value=\"20\">20</option>\n                            <option value=\"21\">21</option>\n                            <option value=\"22\">22</option>\n                            <option value=\"23\">23</option>\n                            <option value=\"24\">24</option>\n                            <option value=\"25\">25</option>\n                            <option value=\"26\">26</option>\n                            <option value=\"27\">27</option>\n                            <option value=\"28\">28</option>\n                            <option value=\"29\">29</option>\n                            <option value=\"30\">30</option>\n                            <option value=\"31\">31</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Day</h6>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                            <option value=\"1930\">1930</option>\n                            <option value=\"1931\">1931</option>\n                            <option value=\"1932\">1932</option>\n                            <option value=\"1933\">1933</option>\n                            <option value=\"1934\">1934</option>\n                            <option value=\"1935\">1935</option>\n                            <option value=\"1936\">1936</option>\n                            <option value=\"1937\">1937</option>\n                            <option value=\"1938\">1938</option>\n                            <option value=\"1939\">1939</option>\n                            <option value=\"1940\">1940</option>\n                            <option value=\"1941\">1941</option>\n                            <option value=\"1942\">1942</option>\n                            <option value=\"1943\">1943</option>\n                            <option value=\"1944\">1944</option>\n                            <option value=\"1945\">1945</option>\n                            <option value=\"1946\">1946</option>\n                            <option value=\"1947\">1947</option>\n                            <option value=\"1948\">1948</option>\n                            <option value=\"1949\">1949</option>\n                            <option value=\"1950\">1950</option>\n                            <option value=\"1951\">1951</option>\n                            <option value=\"1952\">1952</option>\n                            <option value=\"1953\">1953</option>\n                            <option value=\"1954\">1954</option>\n                            <option value=\"1955\">1955</option>\n                            <option value=\"1956\">1956</option>\n                            <option value=\"1957\">1957</option>\n                            <option value=\"1958\">1958</option>\n                            <option value=\"1959\">1959</option>\n                            <option value=\"1960\">1960</option>\n                            <option value=\"1961\">1961</option>\n                            <option value=\"1962\">1962</option>\n                            <option value=\"1963\">1963</option>\n                            <option value=\"1964\">1964</option>\n                            <option value=\"1965\">1965</option>\n                            <option value=\"1966\">1966</option>\n                            <option value=\"1967\">1967</option>\n                            <option value=\"1968\">1968</option>\n                            <option value=\"1969\">1969</option>\n                            <option value=\"1970\">1970</option>\n                            <option value=\"1971\">1971</option>\n                            <option value=\"1972\">1972</option>\n                            <option value=\"1973\">1973</option>\n                            <option value=\"1974\">1974</option>\n                            <option value=\"1975\">1975</option>\n                            <option value=\"1976\">1976</option>\n                            <option value=\"1977\">1977</option>\n                            <option value=\"1978\">1978</option>\n                            <option value=\"1979\">1979</option>\n                            <option value=\"1980\">1980</option>\n                            <option value=\"1981\">1981</option>\n                            <option value=\"1982\">1982</option>\n                            <option value=\"1983\">1983</option>\n                            <option value=\"1984\">1984</option>\n                            <option value=\"1985\">1985</option>\n                            <option value=\"1986\">1986</option>\n                            <option value=\"1987\">1987</option>\n                            <option value=\"1988\">1988</option>\n                            <option value=\"1989\">1989</option>\n                            <option value=\"1990\" selected=\"selected\">1990</option>\n                            <option value=\"1991\">1991</option>\n                            <option value=\"1992\">1992</option>\n                            <option value=\"1993\">1993</option>\n                            <option value=\"1994\">1994</option>\n                            <option value=\"1995\">1995</option>\n                            <option value=\"1996\">1996</option>\n                            <option value=\"1997\">1997</option>\n                            <option value=\"1998\">1998</option>\n                            <option value=\"1999\">1999</option>\n                            <option value=\"2000\">2000</option>\n                            <option value=\"2001\">2001</option>\n                            <option value=\"2002\">2002</option>\n                            <option value=\"2003\">2003</option>\n                            <option value=\"2004\">2004</option>\n                            <option value=\"2005\">2005</option>\n                            <option value=\"2006\">2006</option>\n                            <option value=\"2007\">2007</option>\n                            <option value=\"2008\">2008</option>\n                            <option value=\"2009\">2009</option>\n                            <option value=\"2010\">2010</option>\n                            <option value=\"2011\">2011</option>\n                            <option value=\"2012\">2012</option>\n                            <option value=\"2013\">2013</option>\n                            <option value=\"2014\">2014</option>\n                            <option value=\"2015\">2015</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Year</h6>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div><!-- end form-group -->\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n            <label for=\"gender\" class=\"col-sm-2 control-label\">Gender</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"bio\">Bio</label>\n            <div class=\"col-sm-10\">\n                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"User Bio\" maxlength=\"120\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress\">Address 1</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress2\">Address 2</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                <div class=\"form-group\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                </div>\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\n                    <label class=\"control-label\" for=\"country\" style=\"padding-top:0;margin-bottom: 5px;\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <label for=\"timezone\" class=\"col-sm-2 control-label\">Timezone</label>\n\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"public\" class=\"col-sm-2 control-label\">Public</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <div class=\"form-group\" v-if=\"!!public\">\n            <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n            <div class=\"col-sm-10\">\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon\">www.missions.me/users/</span>\n                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/admin/users\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"EditUser\" @touched=\"onTouched\">\n    <form id=\"EditUserForm\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Name</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"User Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Alt. Email</label>\n            <div class=\"col-sm-10\">\n                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': !!changePassword &amp;&amp; (checkForError('password')||checkForError('passwordconfirmation')) }\">\n            <label for=\"name\" class=\"col-sm-2 control-label\">Password</label>\n            <div class=\"col-sm-10\">\n                <div class=\"checkbox\">\n                    <label>\n                        <input type=\"checkbox\" v-model=\"changePassword\">\n                        Change Password\n                    </label>\n                </div>\n                <div v-if=\"changePassword\" class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ minlength:8 }\" placeholder=\"Enter password\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ minlength:8 }\" placeholder=\"Enter password again\">\n                            <span class=\"input-group-btn\">\n                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                </button>\n                            </span>\n                        </div>\n                    </div>\n                </div>\n                <div v-if=\"changePassword\" class=\"help-block\">Password must be at least 8 characters long</div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\">Date of Birth</label>\n\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-xs-5\">\n                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                            <option value=\"01\">January</option>\n                            <option value=\"02\">February</option>\n                            <option value=\"03\">March</option>\n                            <option value=\"04\">April</option>\n                            <option value=\"05\">May</option>\n                            <option value=\"06\">June</option>\n                            <option value=\"07\">July</option>\n                            <option value=\"08\">August</option>\n                            <option value=\"09\">September</option>\n                            <option value=\"10\">October</option>\n                            <option value=\"11\">November</option>\n                            <option value=\"12\">December</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Month</h6>\n                    </div>\n                    <div class=\"col-xs-3\">\n                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                            <option value=\"01\">1</option>\n                            <option value=\"02\">2</option>\n                            <option value=\"03\">3</option>\n                            <option value=\"04\">4</option>\n                            <option value=\"05\">5</option>\n                            <option value=\"06\">6</option>\n                            <option value=\"07\">7</option>\n                            <option value=\"08\">8</option>\n                            <option value=\"09\">9</option>\n                            <option value=\"10\">10</option>\n                            <option value=\"11\">11</option>\n                            <option value=\"12\">12</option>\n                            <option value=\"13\">13</option>\n                            <option value=\"14\">14</option>\n                            <option value=\"15\">15</option>\n                            <option value=\"16\">16</option>\n                            <option value=\"17\">17</option>\n                            <option value=\"18\">18</option>\n                            <option value=\"19\">19</option>\n                            <option value=\"20\">20</option>\n                            <option value=\"21\">21</option>\n                            <option value=\"22\">22</option>\n                            <option value=\"23\">23</option>\n                            <option value=\"24\">24</option>\n                            <option value=\"25\">25</option>\n                            <option value=\"26\">26</option>\n                            <option value=\"27\">27</option>\n                            <option value=\"28\">28</option>\n                            <option value=\"29\">29</option>\n                            <option value=\"30\">30</option>\n                            <option value=\"31\">31</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Day</h6>\n                    </div>\n                    <div class=\"col-xs-4\">\n                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                            <option value=\"1930\">1930</option>\n                            <option value=\"1931\">1931</option>\n                            <option value=\"1932\">1932</option>\n                            <option value=\"1933\">1933</option>\n                            <option value=\"1934\">1934</option>\n                            <option value=\"1935\">1935</option>\n                            <option value=\"1936\">1936</option>\n                            <option value=\"1937\">1937</option>\n                            <option value=\"1938\">1938</option>\n                            <option value=\"1939\">1939</option>\n                            <option value=\"1940\">1940</option>\n                            <option value=\"1941\">1941</option>\n                            <option value=\"1942\">1942</option>\n                            <option value=\"1943\">1943</option>\n                            <option value=\"1944\">1944</option>\n                            <option value=\"1945\">1945</option>\n                            <option value=\"1946\">1946</option>\n                            <option value=\"1947\">1947</option>\n                            <option value=\"1948\">1948</option>\n                            <option value=\"1949\">1949</option>\n                            <option value=\"1950\">1950</option>\n                            <option value=\"1951\">1951</option>\n                            <option value=\"1952\">1952</option>\n                            <option value=\"1953\">1953</option>\n                            <option value=\"1954\">1954</option>\n                            <option value=\"1955\">1955</option>\n                            <option value=\"1956\">1956</option>\n                            <option value=\"1957\">1957</option>\n                            <option value=\"1958\">1958</option>\n                            <option value=\"1959\">1959</option>\n                            <option value=\"1960\">1960</option>\n                            <option value=\"1961\">1961</option>\n                            <option value=\"1962\">1962</option>\n                            <option value=\"1963\">1963</option>\n                            <option value=\"1964\">1964</option>\n                            <option value=\"1965\">1965</option>\n                            <option value=\"1966\">1966</option>\n                            <option value=\"1967\">1967</option>\n                            <option value=\"1968\">1968</option>\n                            <option value=\"1969\">1969</option>\n                            <option value=\"1970\">1970</option>\n                            <option value=\"1971\">1971</option>\n                            <option value=\"1972\">1972</option>\n                            <option value=\"1973\">1973</option>\n                            <option value=\"1974\">1974</option>\n                            <option value=\"1975\">1975</option>\n                            <option value=\"1976\">1976</option>\n                            <option value=\"1977\">1977</option>\n                            <option value=\"1978\">1978</option>\n                            <option value=\"1979\">1979</option>\n                            <option value=\"1980\">1980</option>\n                            <option value=\"1981\">1981</option>\n                            <option value=\"1982\">1982</option>\n                            <option value=\"1983\">1983</option>\n                            <option value=\"1984\">1984</option>\n                            <option value=\"1985\">1985</option>\n                            <option value=\"1986\">1986</option>\n                            <option value=\"1987\">1987</option>\n                            <option value=\"1988\">1988</option>\n                            <option value=\"1989\">1989</option>\n                            <option value=\"1990\" selected=\"selected\">1990</option>\n                            <option value=\"1991\">1991</option>\n                            <option value=\"1992\">1992</option>\n                            <option value=\"1993\">1993</option>\n                            <option value=\"1994\">1994</option>\n                            <option value=\"1995\">1995</option>\n                            <option value=\"1996\">1996</option>\n                            <option value=\"1997\">1997</option>\n                            <option value=\"1998\">1998</option>\n                            <option value=\"1999\">1999</option>\n                            <option value=\"2000\">2000</option>\n                            <option value=\"2001\">2001</option>\n                            <option value=\"2002\">2002</option>\n                            <option value=\"2003\">2003</option>\n                            <option value=\"2004\">2004</option>\n                            <option value=\"2005\">2005</option>\n                            <option value=\"2006\">2006</option>\n                            <option value=\"2007\">2007</option>\n                            <option value=\"2008\">2008</option>\n                            <option value=\"2009\">2009</option>\n                            <option value=\"2010\">2010</option>\n                            <option value=\"2011\">2011</option>\n                            <option value=\"2012\">2012</option>\n                            <option value=\"2013\">2013</option>\n                            <option value=\"2014\">2014</option>\n                            <option value=\"2015\">2015</option>\n                        </select>\n                        <h6 class=\"help-block lightcolor\">Year</h6>\n                    </div>\n                </div>\n            </div><!-- end col -->\n        </div><!-- end form-group -->\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n            <label for=\"gender\" class=\"col-sm-2 control-label\">Gender</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n            <label for=\"status\" class=\"col-sm-2 control-label\">Status</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                </label>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"bio\">Bio</label>\n            <div class=\"col-sm-10\">\n                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"User Bio\" maxlength=\"120\"></textarea>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress\">Address 1</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label class=\"col-sm-2 control-label\" for=\"infoAddress2\">Address 2</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoCity\">City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoState\">State/Prov.</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-4\">\n                <div class=\"form-group\">\n                    <label for=\"infoZip\">ZIP/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                </div>\n            </div>\n            <div class=\"col-sm-8\">\n                <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n\n                    <label class=\"control-label\" for=\"country\" style=\"padding-top:0;margin-bottom: 5px;\">Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                    </select>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n            <label for=\"timezone\" class=\"col-sm-2 control-label\">Timezone</label>\n\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                </select>\n            </div>\n        </div>\n\n        <div class=\"row col-sm-offset-2\">\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoPhone\">Phone 1</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                    <label for=\"infoMobile\">Phone 2</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group\">\n            <label for=\"public\" class=\"col-sm-2 control-label\">Public</label>\n            <div class=\"col-sm-10\">\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                </label>\n                <label class=\"radio-inline\">\n                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                </label>\n            </div>\n        </div>\n        <div class=\"form-group\" v-if=\"!!public\">\n            <label for=\"url\" class=\"col-sm-2 control-label\">Url Slug</label>\n            <div class=\"col-sm-10\">\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon\">www.missions.me/users/</span>\n                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n                <a @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n    </form>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>User updated!</p>\n    </alert>\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>There are errors on the form.</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -56437,7 +56403,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-fb2774cc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114}],190:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],198:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -56659,7 +56625,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-69475ae5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":1,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vueify/lib/insert-css":118}],191:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vueify/lib/insert-css":119}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56734,7 +56700,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d7753fb8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":106,"vue":117,"vue-hot-reload-api":112}],192:[function(require,module,exports){
+},{"marked":107,"vue":118,"vue-hot-reload-api":113}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56772,7 +56738,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d31ac078", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],193:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56812,7 +56778,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-95628cf4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112}],194:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56938,7 +56904,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ad6362de", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":106,"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],195:[function(require,module,exports){
+},{"marked":107,"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],203:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.alert.top, .alert.top-right {\n    top: 80px;\n}\n")
 'use strict';
@@ -56955,13 +56921,20 @@ var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
 
+var _adminUploadCreateUpdate = require('../uploads/admin-upload-create-update.vue');
+
+var _adminUploadCreateUpdate2 = _interopRequireDefault(_adminUploadCreateUpdate);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     name: 'user-settings',
-    components: { vSelect: _vueSelect2.default, 'alert': _vueStrap2.default.alert },
+    components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
     data: function data() {
         return {
+            id: '',
+            avatar: '',
+            banner: '',
             name: '',
             email: '',
             alt_email: '',
@@ -56983,6 +56956,11 @@ exports.default = {
             url: null,
             gender: false,
             admin: false,
+            facebook: '',
+            twitter: '',
+            instagram: '',
+            linkedIn: '',
+            website: '',
 
             // logic variables
             //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
@@ -56998,7 +56976,16 @@ exports.default = {
             dobYear: null,
             resource: this.$resource('users/me'),
             errors: {},
-            saved: false
+            showError: false,
+            showSuccess: false,
+            showSaveAlert: false,
+            hasChanged: false,
+
+            selectedAvatar: null,
+            avatar_upload_id: null,
+            selectedBanner: null,
+            banner_upload_id: null
+
         };
     },
 
@@ -57010,14 +56997,31 @@ exports.default = {
             return this.dobYear && this.dobMonth && this.dobDay ? moment().set({ year: this.dobYear, month: this.dobMonth, day: this.dobDay }).format('LL') : null;
         }
     },
+    events: {
+        'uploads-complete': function uploadsComplete(data) {
+            switch (data.type) {
+                case 'avatar':
+                    this.selectedAvatar = data;
+                    this.avatar_upload_id = data.id;
+                    jQuery('#avatarCollapse').collapse('hide');
+                    break;
+                case 'banner':
+                    this.selectedBanner = data;
+                    this.banner_upload_id = data.id;
+                    jQuery('#bannerCollapse').collapse('hide');
+                    break;
+            }
+            this.submit();
+        }
+    },
     methods: {
         checkForError: function checkForError(field) {
             // if user clicked submit button while the field is invalid trigger error styles
 
             return this.$UserSettings[field].invalid && this.attemptSubmit;
         },
-        onModified: function onModified() {
-            this.saved = false;
+        onTouched: function onTouched() {
+            this.hasChanged = true;
         },
         submit: function submit() {
             this.attemptSubmit = true;
@@ -57042,35 +57046,46 @@ exports.default = {
                     status: this.status,
                     gender: this.gender,
                     public: this.public,
-                    url: this.public ? this.url : undefined
-                }).then(function (resp) {
-                    //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                    this.saved = true;
-                    setTimeout(function () {
-                        this.saved = false;
-                    }.bind(this), 3000);
+                    url: this.public ? this.url : undefined,
+                    avatar_upload_id: this.avatar_upload_id,
+                    banner_upload_id: this.banner_upload_id,
+                    facebook: this.facebook,
+                    twitter: this.twitter,
+                    instagram: this.instagram,
+                    linkedIn: this.linkedIn,
+                    website: this.website
+                }).then(function (response) {
+                    this.setUserData(response.data.data);
+                    this.showSuccess = true;
+                    this.hasChanged = false;
                 }, function (error) {
                     console.log(error);
                     this.errors = error.data.errors;
+                    this.showError = true;
                 });
+            } else {
+                this.showError = true;
             }
-        }
-    },
-    ready: function ready() {
-        this.$http.get('utilities/countries').then(function (response) {
-            this.countries = response.data.countries;
-        });
-
-        this.$http.get('utilities/timezones').then(function (response) {
-            this.timezones = response.data.timezones;
-        });
-
-        this.resource.get().then(function (response) {
-            var user = response.data.data;
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/dashboard';
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
+        },
+        setUserData: function setUserData(user) {
+            this.id = user.id;
+            this.avatar = user.avatar;
+            this.banner = user.banner;
             this.name = user.name;
             this.bio = user.bio;
             this.type = user.type;
             this.countryCodeObj = _.findWhere(this.countries, { code: user.country_code });
+            console.log(this.countryCodeObj);
             this.country_code = user.country_code;
             this.timezone = user.timezone;
             this.phone_one = user.phone_one;
@@ -57087,6 +57102,26 @@ exports.default = {
             this.gender = user.gender;
             this.status = user.status;
             this.alt_email = user.alt_email;
+            this.avatar_upload_id = user.avatar_upload_id;
+            this.banner_upload_id = user.banner_upload_id;
+            this.facebook = user.facebook;
+            this.twitter = user.twitter;
+            this.instagram = user.instagram;
+            this.linkedIn = user.linkedIn;
+            this.website = user.website;
+        }
+    },
+    ready: function ready() {
+        this.$http.get('utilities/countries').then(function (response) {
+            this.countries = response.data.countries;
+        });
+
+        this.$http.get('utilities/timezones').then(function (response) {
+            this.timezones = response.data.timezones;
+        });
+
+        this.resource.get().then(function (response) {
+            this.setUserData(response.data.data);
         }, function (response) {
             console.log('Update Failed! :(');
             console.log(response);
@@ -57098,7 +57133,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UserSettings\">\n    <form id=\"UserSettingsForm\" class=\"\" novalidate=\"\">\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h5>Account</h5>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Name</label>\n                                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"User Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') || errors.email }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Email</label>\n                                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n                                <div v-show=\"errors.email\" class=\"help-block\">{{errors.email}}</div>\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': errors.alt_email }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Alt. Email</label>\n                                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n                                <div v-show=\"errors.alt_email\" class=\"help-block\">{{errors.alt_email}}</div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': !!changePassword &amp;&amp; (checkForError('password')||checkForError('passwordconfirmation')) }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Password</label>\n                                <div class=\"checkbox\">\n                                    <label>\n                                        <input type=\"checkbox\" v-model=\"changePassword\">\n                                        Change Password\n                                    </label>\n                                </div>\n                                <div v-if=\"changePassword\" class=\"row\">\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ minlength:8 }\" placeholder=\"Enter password\">\n                                            <span class=\"input-group-btn\">\n                                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                                </button>\n                                            </span>\n                                        </div>\n                                    </div>\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ minlength:8 }\" placeholder=\"Enter password again\">\n                                            <span class=\"input-group-btn\">\n                                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                                </button>\n                                            </span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div v-if=\"changePassword\" class=\"help-block\">Password must be at least 8 characters long</div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\">\n                            <div class=\"col-sm-12\">\n                                <label>Date of Birth</label>\n                                <div class=\"row\">\n                                    <div class=\"col-xs-5\">\n                                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                                            <option value=\"01\">January</option>\n                                            <option value=\"02\">February</option>\n                                            <option value=\"03\">March</option>\n                                            <option value=\"04\">April</option>\n                                            <option value=\"05\">May</option>\n                                            <option value=\"06\">June</option>\n                                            <option value=\"07\">July</option>\n                                            <option value=\"08\">August</option>\n                                            <option value=\"09\">September</option>\n                                            <option value=\"10\">October</option>\n                                            <option value=\"11\">November</option>\n                                            <option value=\"12\">December</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Month</h6>\n                                    </div>\n                                    <div class=\"col-xs-3\">\n                                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                                            <option value=\"01\">1</option>\n                                            <option value=\"02\">2</option>\n                                            <option value=\"03\">3</option>\n                                            <option value=\"04\">4</option>\n                                            <option value=\"05\">5</option>\n                                            <option value=\"06\">6</option>\n                                            <option value=\"07\">7</option>\n                                            <option value=\"08\">8</option>\n                                            <option value=\"09\">9</option>\n                                            <option value=\"10\">10</option>\n                                            <option value=\"11\">11</option>\n                                            <option value=\"12\">12</option>\n                                            <option value=\"13\">13</option>\n                                            <option value=\"14\">14</option>\n                                            <option value=\"15\">15</option>\n                                            <option value=\"16\">16</option>\n                                            <option value=\"17\">17</option>\n                                            <option value=\"18\">18</option>\n                                            <option value=\"19\">19</option>\n                                            <option value=\"20\">20</option>\n                                            <option value=\"21\">21</option>\n                                            <option value=\"22\">22</option>\n                                            <option value=\"23\">23</option>\n                                            <option value=\"24\">24</option>\n                                            <option value=\"25\">25</option>\n                                            <option value=\"26\">26</option>\n                                            <option value=\"27\">27</option>\n                                            <option value=\"28\">28</option>\n                                            <option value=\"29\">29</option>\n                                            <option value=\"30\">30</option>\n                                            <option value=\"31\">31</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Day</h6>\n                                    </div>\n                                    <div class=\"col-xs-4\">\n                                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                                            <option value=\"1930\">1930</option>\n                                            <option value=\"1931\">1931</option>\n                                            <option value=\"1932\">1932</option>\n                                            <option value=\"1933\">1933</option>\n                                            <option value=\"1934\">1934</option>\n                                            <option value=\"1935\">1935</option>\n                                            <option value=\"1936\">1936</option>\n                                            <option value=\"1937\">1937</option>\n                                            <option value=\"1938\">1938</option>\n                                            <option value=\"1939\">1939</option>\n                                            <option value=\"1940\">1940</option>\n                                            <option value=\"1941\">1941</option>\n                                            <option value=\"1942\">1942</option>\n                                            <option value=\"1943\">1943</option>\n                                            <option value=\"1944\">1944</option>\n                                            <option value=\"1945\">1945</option>\n                                            <option value=\"1946\">1946</option>\n                                            <option value=\"1947\">1947</option>\n                                            <option value=\"1948\">1948</option>\n                                            <option value=\"1949\">1949</option>\n                                            <option value=\"1950\">1950</option>\n                                            <option value=\"1951\">1951</option>\n                                            <option value=\"1952\">1952</option>\n                                            <option value=\"1953\">1953</option>\n                                            <option value=\"1954\">1954</option>\n                                            <option value=\"1955\">1955</option>\n                                            <option value=\"1956\">1956</option>\n                                            <option value=\"1957\">1957</option>\n                                            <option value=\"1958\">1958</option>\n                                            <option value=\"1959\">1959</option>\n                                            <option value=\"1960\">1960</option>\n                                            <option value=\"1961\">1961</option>\n                                            <option value=\"1962\">1962</option>\n                                            <option value=\"1963\">1963</option>\n                                            <option value=\"1964\">1964</option>\n                                            <option value=\"1965\">1965</option>\n                                            <option value=\"1966\">1966</option>\n                                            <option value=\"1967\">1967</option>\n                                            <option value=\"1968\">1968</option>\n                                            <option value=\"1969\">1969</option>\n                                            <option value=\"1970\">1970</option>\n                                            <option value=\"1971\">1971</option>\n                                            <option value=\"1972\">1972</option>\n                                            <option value=\"1973\">1973</option>\n                                            <option value=\"1974\">1974</option>\n                                            <option value=\"1975\">1975</option>\n                                            <option value=\"1976\">1976</option>\n                                            <option value=\"1977\">1977</option>\n                                            <option value=\"1978\">1978</option>\n                                            <option value=\"1979\">1979</option>\n                                            <option value=\"1980\">1980</option>\n                                            <option value=\"1981\">1981</option>\n                                            <option value=\"1982\">1982</option>\n                                            <option value=\"1983\">1983</option>\n                                            <option value=\"1984\">1984</option>\n                                            <option value=\"1985\">1985</option>\n                                            <option value=\"1986\">1986</option>\n                                            <option value=\"1987\">1987</option>\n                                            <option value=\"1988\">1988</option>\n                                            <option value=\"1989\">1989</option>\n                                            <option value=\"1990\" selected=\"selected\">1990</option>\n                                            <option value=\"1991\">1991</option>\n                                            <option value=\"1992\">1992</option>\n                                            <option value=\"1993\">1993</option>\n                                            <option value=\"1994\">1994</option>\n                                            <option value=\"1995\">1995</option>\n                                            <option value=\"1996\">1996</option>\n                                            <option value=\"1997\">1997</option>\n                                            <option value=\"1998\">1998</option>\n                                            <option value=\"1999\">1999</option>\n                                            <option value=\"2000\">2000</option>\n                                            <option value=\"2001\">2001</option>\n                                            <option value=\"2002\">2002</option>\n                                            <option value=\"2003\">2003</option>\n                                            <option value=\"2004\">2004</option>\n                                            <option value=\"2005\">2005</option>\n                                            <option value=\"2006\">2006</option>\n                                            <option value=\"2007\">2007</option>\n                                            <option value=\"2008\">2008</option>\n                                            <option value=\"2009\">2009</option>\n                                            <option value=\"2010\">2010</option>\n                                            <option value=\"2011\">2011</option>\n                                            <option value=\"2012\">2012</option>\n                                            <option value=\"2013\">2013</option>\n                                            <option value=\"2014\">2014</option>\n                                            <option value=\"2015\">2015</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Year</h6>\n                                    </div>\n                                </div>\n                            </div><!-- end col -->\n                        </div><!-- end form-group -->\n\n                        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n                            <label for=\"gender\" class=\"col-sm-2\">Gender</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n                            <label for=\"status\" class=\"col-sm-2\">Status</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\">\n                            <label for=\"public\" class=\"col-sm-2\">Public</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.url }\" v-if=\"!!public\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"url\" class=\"control-label\">Url Slug</label>\n                                <div class=\"input-group\">\n                                    <span class=\"input-group-addon\">www.missions.me/users/</span>\n                                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                                </div>\n                                <div v-show=\"errors.url\" class=\"help-block\">{{errors.url}}</div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h5>Contact Info</h5>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"bio\">Bio</label>\n                                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"User Bio\" maxlength=\"120\"></textarea>\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"infoAddress\">Address 1</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"infoAddress2\">Address 2</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoCity\">City</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoState\">State/Prov.</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-4\">\n                                <label for=\"infoZip\">ZIP/Postal Code</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                            </div>\n                            <div class=\"col-sm-8\">\n                                <div :class=\"{ 'has-error': checkForError('country') }\">\n                                    <label class=\"control-label\" for=\"country\" style=\"padding-top:0;margin-bottom: 5px;\">Country</label>\n                                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                                    </select>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"timezone\" class=\"control-label\">Timezone</label>\n                                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                                </select>\n                            </div>\n                        </div>\n\n\n                        <div class=\" form-group\">\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoPhone\">Phone 1</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoMobile\">Phone 2</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div><!-- end col -->\n            <div class=\"col-sm-12 text-center\">\n                <hr class=\"divider inv lg\">\n                <a href=\"/dashboard\" class=\"btn btn-default\">Cancel</a>\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n                <hr class=\"divider inv xlg\">\n            </div><!-- end col -->\n        </div><!-- end row -->\n        <alert :show.sync=\"saved\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n            <strong>Well Done!</strong>\n            <p>Profile updated successfully</p>\n        </alert>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"UserSettings\" @touched=\"onTouched\">\n    <form id=\"UserSettingsForm\" class=\"\" novalidate=\"\">\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h5>Account</h5>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"form-group\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"media\">\n                                    <div class=\"media-left\">\n                                        <a href=\"#\">\n                                            <img class=\"media-object img-rounded\" :src=\"avatar\" :alt=\"name\" width=\"64\">\n                                        </a>\n                                    </div>\n                                    <div class=\"media-body\">\n                                        <button class=\"btn btn-primary btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#avatarCollapse\" aria-expanded=\"false\" aria-controls=\"avatarCollapse\"><i class=\"fa fa-camera\"></i> Upload</button><br>\n                                        <small>Max file size: 2MB</small>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"media\">\n                                    <div class=\"media-left\">\n                                        <a href=\"#\">\n                                            <img class=\"media-object img-rounded\" :src=\"banner\" :alt=\"name\" width=\"64\">\n                                        </a>\n                                    </div>\n                                    <div class=\"media-body\">\n                                        <button class=\"btn btn-primary btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#bannerCollapse\" aria-expanded=\"false\" aria-controls=\"bannerCollapse\"><i class=\"fa fa-camera\"></i> Cover</button><br>\n                                        <small>Max file size: 2MB</small>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"col-sm-12\">\n                                <div class=\"collapse\" id=\"avatarCollapse\">\n                                    <div class=\"well\">\n                                        <upload-create-update type=\"avatar\" :name=\"id\" :lock-type=\"true\" :ui-locked=\"true\" :ui-selector=\"2\" :is-child=\"true\" :tags=\"['User']\"></upload-create-update>\n                                    </div>\n                                </div>\n                                <div class=\"collapse\" id=\"bannerCollapse\">\n                                    <div class=\"well\">\n                                        <upload-create-update type=\"banner\" :name=\"id\" :lock-type=\"true\" :ui-locked=\"true\" :ui-selector=\"1\" :per-page=\"2\" :is-child=\"true\" :tags=\"['User']\"></upload-create-update>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Name</label>\n                                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"User Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('email') || errors.email }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Email</label>\n                                <input type=\"email\" class=\"form-control\" name=\"email\" id=\"email\" v-model=\"email\" v-validate:email=\"{ required: true, minlength:1, maxlength:100 }\">\n                                <div v-show=\"errors.email\" class=\"help-block\">{{errors.email}}</div>\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': errors.alt_email }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Alt. Email</label>\n                                <input type=\"email\" class=\"form-control\" name=\"alt_email\" id=\"alt_email\" v-model=\"alt_email\">\n                                <div v-show=\"errors.alt_email\" class=\"help-block\">{{errors.alt_email}}</div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': !!changePassword &amp;&amp; (checkForError('password')||checkForError('passwordconfirmation')) }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"name\">Password</label>\n                                <div class=\"checkbox\">\n                                    <label>\n                                        <input type=\"checkbox\" v-model=\"changePassword\">\n                                        Change Password\n                                    </label>\n                                </div>\n                                <div v-if=\"changePassword\" class=\"row\">\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('password') }\">\n                                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password\" v-validate:password=\"{ minlength:8 }\" placeholder=\"Enter password\">\n                                            <span class=\"input-group-btn\">\n                                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                                </button>\n                                            </span>\n                                        </div>\n                                    </div>\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"input-group\" :class=\"{ 'has-error': checkForError('passwordconfirmation') }\">\n                                            <input :type=\"showPassword ? 'text' : 'password'\" class=\"form-control\" v-model=\"password_confirmation\" v-validate:passwordconfirmation=\"{ minlength:8 }\" placeholder=\"Enter password again\">\n                                            <span class=\"input-group-btn\">\n                                                <button class=\"btn btn-default\" type=\"button\" @click=\"showPassword=!showPassword\">\n                                                    <i class=\"fa fa-eye\" v-if=\"!showPassword\"></i>\n                                                    <i class=\"fa fa-eye-slash\" v-if=\"showPassword\"></i>\n                                                </button>\n                                            </span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div v-if=\"changePassword\" class=\"help-block\">Password must be at least 8 characters long</div>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\">\n                            <div class=\"col-sm-12\">\n                                <label>Date of Birth</label>\n                                <div class=\"row\">\n                                    <div class=\"col-xs-5\">\n                                        <select class=\"form-control\" name=\"dob_month\" v-model=\"dobMonth\" required=\"\">\n                                            <option value=\"01\">January</option>\n                                            <option value=\"02\">February</option>\n                                            <option value=\"03\">March</option>\n                                            <option value=\"04\">April</option>\n                                            <option value=\"05\">May</option>\n                                            <option value=\"06\">June</option>\n                                            <option value=\"07\">July</option>\n                                            <option value=\"08\">August</option>\n                                            <option value=\"09\">September</option>\n                                            <option value=\"10\">October</option>\n                                            <option value=\"11\">November</option>\n                                            <option value=\"12\">December</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Month</h6>\n                                    </div>\n                                    <div class=\"col-xs-3\">\n                                        <select class=\"form-control\" name=\"dob_day\" v-model=\"dobDay\" required=\"\">\n                                            <option value=\"01\">1</option>\n                                            <option value=\"02\">2</option>\n                                            <option value=\"03\">3</option>\n                                            <option value=\"04\">4</option>\n                                            <option value=\"05\">5</option>\n                                            <option value=\"06\">6</option>\n                                            <option value=\"07\">7</option>\n                                            <option value=\"08\">8</option>\n                                            <option value=\"09\">9</option>\n                                            <option value=\"10\">10</option>\n                                            <option value=\"11\">11</option>\n                                            <option value=\"12\">12</option>\n                                            <option value=\"13\">13</option>\n                                            <option value=\"14\">14</option>\n                                            <option value=\"15\">15</option>\n                                            <option value=\"16\">16</option>\n                                            <option value=\"17\">17</option>\n                                            <option value=\"18\">18</option>\n                                            <option value=\"19\">19</option>\n                                            <option value=\"20\">20</option>\n                                            <option value=\"21\">21</option>\n                                            <option value=\"22\">22</option>\n                                            <option value=\"23\">23</option>\n                                            <option value=\"24\">24</option>\n                                            <option value=\"25\">25</option>\n                                            <option value=\"26\">26</option>\n                                            <option value=\"27\">27</option>\n                                            <option value=\"28\">28</option>\n                                            <option value=\"29\">29</option>\n                                            <option value=\"30\">30</option>\n                                            <option value=\"31\">31</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Day</h6>\n                                    </div>\n                                    <div class=\"col-xs-4\">\n                                        <select class=\"form-control\" name=\"dob_year\" v-model=\"dobYear\">\n                                            <option value=\"1930\">1930</option>\n                                            <option value=\"1931\">1931</option>\n                                            <option value=\"1932\">1932</option>\n                                            <option value=\"1933\">1933</option>\n                                            <option value=\"1934\">1934</option>\n                                            <option value=\"1935\">1935</option>\n                                            <option value=\"1936\">1936</option>\n                                            <option value=\"1937\">1937</option>\n                                            <option value=\"1938\">1938</option>\n                                            <option value=\"1939\">1939</option>\n                                            <option value=\"1940\">1940</option>\n                                            <option value=\"1941\">1941</option>\n                                            <option value=\"1942\">1942</option>\n                                            <option value=\"1943\">1943</option>\n                                            <option value=\"1944\">1944</option>\n                                            <option value=\"1945\">1945</option>\n                                            <option value=\"1946\">1946</option>\n                                            <option value=\"1947\">1947</option>\n                                            <option value=\"1948\">1948</option>\n                                            <option value=\"1949\">1949</option>\n                                            <option value=\"1950\">1950</option>\n                                            <option value=\"1951\">1951</option>\n                                            <option value=\"1952\">1952</option>\n                                            <option value=\"1953\">1953</option>\n                                            <option value=\"1954\">1954</option>\n                                            <option value=\"1955\">1955</option>\n                                            <option value=\"1956\">1956</option>\n                                            <option value=\"1957\">1957</option>\n                                            <option value=\"1958\">1958</option>\n                                            <option value=\"1959\">1959</option>\n                                            <option value=\"1960\">1960</option>\n                                            <option value=\"1961\">1961</option>\n                                            <option value=\"1962\">1962</option>\n                                            <option value=\"1963\">1963</option>\n                                            <option value=\"1964\">1964</option>\n                                            <option value=\"1965\">1965</option>\n                                            <option value=\"1966\">1966</option>\n                                            <option value=\"1967\">1967</option>\n                                            <option value=\"1968\">1968</option>\n                                            <option value=\"1969\">1969</option>\n                                            <option value=\"1970\">1970</option>\n                                            <option value=\"1971\">1971</option>\n                                            <option value=\"1972\">1972</option>\n                                            <option value=\"1973\">1973</option>\n                                            <option value=\"1974\">1974</option>\n                                            <option value=\"1975\">1975</option>\n                                            <option value=\"1976\">1976</option>\n                                            <option value=\"1977\">1977</option>\n                                            <option value=\"1978\">1978</option>\n                                            <option value=\"1979\">1979</option>\n                                            <option value=\"1980\">1980</option>\n                                            <option value=\"1981\">1981</option>\n                                            <option value=\"1982\">1982</option>\n                                            <option value=\"1983\">1983</option>\n                                            <option value=\"1984\">1984</option>\n                                            <option value=\"1985\">1985</option>\n                                            <option value=\"1986\">1986</option>\n                                            <option value=\"1987\">1987</option>\n                                            <option value=\"1988\">1988</option>\n                                            <option value=\"1989\">1989</option>\n                                            <option value=\"1990\" selected=\"selected\">1990</option>\n                                            <option value=\"1991\">1991</option>\n                                            <option value=\"1992\">1992</option>\n                                            <option value=\"1993\">1993</option>\n                                            <option value=\"1994\">1994</option>\n                                            <option value=\"1995\">1995</option>\n                                            <option value=\"1996\">1996</option>\n                                            <option value=\"1997\">1997</option>\n                                            <option value=\"1998\">1998</option>\n                                            <option value=\"1999\">1999</option>\n                                            <option value=\"2000\">2000</option>\n                                            <option value=\"2001\">2001</option>\n                                            <option value=\"2002\">2002</option>\n                                            <option value=\"2003\">2003</option>\n                                            <option value=\"2004\">2004</option>\n                                            <option value=\"2005\">2005</option>\n                                            <option value=\"2006\">2006</option>\n                                            <option value=\"2007\">2007</option>\n                                            <option value=\"2008\">2008</option>\n                                            <option value=\"2009\">2009</option>\n                                            <option value=\"2010\">2010</option>\n                                            <option value=\"2011\">2011</option>\n                                            <option value=\"2012\">2012</option>\n                                            <option value=\"2013\">2013</option>\n                                            <option value=\"2014\">2014</option>\n                                            <option value=\"2015\">2015</option>\n                                        </select>\n                                        <h6 class=\"help-block lightcolor\">Year</h6>\n                                    </div>\n                                </div>\n                            </div><!-- end col -->\n                        </div><!-- end form-group -->\n\n                        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('gender') }\">\n                            <label for=\"gender\" class=\"col-sm-2\">Gender</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"gender\" id=\"gender\" value=\"Male\" v-model=\"gender\" v-validate:gender=\"{required: {rule: true}}\"> Male\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"gender2\" id=\"gender2\" value=\"Female\" v-model=\"gender\" v-validate:gender=\"\"> Female\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\" :class=\"{ 'has-error': checkForError('status') }\">\n                            <label for=\"status\" class=\"col-sm-2\">Status</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"status\" id=\"status\" value=\"Single\" v-model=\"status\" v-validate:status=\"{required: {rule: true}}\"> Single\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"status2\" id=\"status2\" value=\"Married\" v-model=\"status\" v-validate:status=\"\"> Married\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\">\n                            <label for=\"public\" class=\"col-sm-2\">Public</label>\n                            <div class=\"col-sm-10\">\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"public\" id=\"public\" :value=\"true\" v-model=\"public\"> Public\n                                </label>\n                                <label class=\"radio-inline\">\n                                    <input type=\"radio\" name=\"public2\" id=\"public2\" :value=\"false\" v-model=\"public\"> Private\n                                </label>\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('url') || errors.url }\" v-if=\"!!public\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"url\" class=\"control-label\">Url Slug</label>\n                                <div class=\"input-group\">\n                                    <span class=\"input-group-addon\">www.missions.me/users/</span>\n                                    <input type=\"text\" id=\"url\" v-model=\"url\" class=\"form-control\" required=\"\" v-validate:url=\"{ required: !!public }\">\n                                </div>\n                                <div v-show=\"errors.url\" class=\"help-block\">{{errors.url}}</div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h5>Contact Info</h5>\n                    </div>\n                    <div class=\"panel-body\">\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"bio\">Bio</label>\n                                <textarea class=\"form-control\" v-model=\"bio\" id=\"bio\" placeholder=\"User Bio\" maxlength=\"120\"></textarea>\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"infoAddress\">Address 1</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"address_one\" id=\"infoAddress\" placeholder=\"Street Address 1\">\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"infoAddress2\">Address 2</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"address_two\" id=\"infoAddress2\" placeholder=\"Street Address 2\">\n                            </div>\n                        </div>\n\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoCity\">City</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"city\" id=\"infoCity\" placeholder=\"City\">\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoState\">State/Prov.</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"state\" id=\"infoState\" placeholder=\"State/Province\">\n                            </div>\n                        </div>\n                        <div class=\"row form-group\">\n                            <div class=\"col-sm-4\">\n                                <label for=\"infoZip\">ZIP/Postal Code</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"zip\" id=\"infoZip\" placeholder=\"12345\">\n                            </div>\n                            <div class=\"col-sm-8\">\n                                <div :class=\"{ 'has-error': checkForError('country') }\">\n                                    <label class=\"control-label\" for=\"country\" style=\"padding-top:0;margin-bottom: 5px;\">Country</label>\n                                    <v-select class=\"form-control\" id=\"country\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\"></v-select>\n                                    <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                                        <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                                    </select>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('timezone') }\">\n                            <div class=\"col-sm-12\">\n                                <label for=\"timezone\" class=\"control-label\">Timezone</label>\n                                <v-select class=\"form-control\" id=\"timezone\" :value.sync=\"timezone\" :options=\"timezones\"></v-select>\n                                <select hidden=\"\" name=\"timezone\" id=\"timezone\" class=\"hidden\" v-model=\"timezone\" v-validate:timezone=\"{ required: true }\">\n                                    <option :value=\"timezone\" v-for=\"timezone in timezones\">{{ timezone }}</option>\n                                </select>\n                            </div>\n                        </div>\n\n\n                        <div class=\" form-group\">\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoPhone\">Phone 1</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"phone_one | phone\" id=\"infoPhone\" placeholder=\"123-456-7890\">\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <label for=\"infoMobile\">Phone 2</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"phone_two | phone\" id=\"infoMobile\" placeholder=\"123-456-7890\">\n                            </div>\n                        </div>\n\n                        <div class=\"form-group\">\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"facebook\">Facebook</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"facebook\" id=\"facebook\" placeholder=\"Facebook Profile\">\n                            </div>\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"twitter\">Twitter</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"twitter\" id=\"twitter\" placeholder=\"Twitter Profile\">\n                            </div>\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"instagram\">Instagram</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"instagram\" id=\"instagram\" placeholder=\"Instagram Profile\">\n                            </div>\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"linkedIn\">LinkedIn</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"linkedIn\" id=\"linkedIn\" placeholder=\"LinkedIn Profile\">\n                            </div>\n                            <div class=\"col-sm-12\">\n                                <label class=\"control-label\" for=\"website\">Website</label>\n                                <input type=\"text\" class=\"form-control\" v-model=\"website\" id=\"website\" placeholder=\"Website\">\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div><!-- end col -->\n            <div class=\"col-sm-12 text-center\">\n                <hr class=\"divider inv lg\">\n                <a @click=\"submit()\" class=\"btn btn-primary\">Update</a>\n                <a @click=\"back()\" class=\"btn btn-success\">Done</a>\n                <hr class=\"divider inv xlg\">\n            </div><!-- end col -->\n        </div><!-- end row -->\n        <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-info-circled alert-icon-float-left\"></span>\n            <strong>Oh No!</strong>\n            <p>There are errors on the form.</p>\n            <!--<ul v-if=\"errors.length\">\n                <li v-for=\"error in errors\">{{error}}</li>\n            </ul>-->\n        </alert>\n        <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n            <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n            <strong>Well Done!</strong>\n            <p>Profile updated successfully</p>\n        </alert>\n        <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n            <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n        </modal>\n    </form>\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -57113,7 +57148,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1d00ad31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115,"vueify/lib/insert-css":118}],196:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -57136,7 +57171,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
     name: 'visa-create-update',
-    components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel },
+    components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default, 'accordion': _vueStrap2.default.accordion, 'panel': _vueStrap2.default.panel, 'alert': _vueStrap2.default.alert, 'modal': _vueStrap2.default.modal },
     props: {
         isUpdate: {
             type: Boolean,
@@ -57162,6 +57197,8 @@ exports.default = {
             countries: [],
             countryObj: null,
             attemptSubmit: false,
+            showSuccess: false,
+            showError: false,
             selectedAvatar: null,
             today: moment().format('YYYY-MM-DD'),
             yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
@@ -57180,6 +57217,19 @@ exports.default = {
 
             return this.$CreateUpdateVisa[field].invalid && this.attemptSubmit;
         },
+        onTouched: function onTouched() {
+            this.hasChanged = true;
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/dashboard/visas/';
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
+        },
         submit: function submit() {
             this.attemptSubmit = true;
             if (this.$CreateUpdateVisa.valid) {
@@ -57194,11 +57244,15 @@ exports.default = {
                     upload_id: this.upload_id,
                     user_id: this.user_id
                 }).then(function (resp) {
+                    this.showSuccess = true;
                     //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                     window.location.href = '/dashboard/visas';
                 }, function (error) {
+                    this.showError = true;
                     debugger;
                 });
+            } else {
+                this.showError = true;
             }
         },
         update: function update() {
@@ -57216,7 +57270,7 @@ exports.default = {
                     user_id: this.user_id
                 }).then(function (resp) {
                     //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                    window.location.href = '/dashboard/visas';
+                    // window.location.href = '/dashboard/visas';
                 }, function (error) {
                     debugger;
                 });
@@ -57255,7 +57309,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdateVisa\">\n    <form id=\"CreateUpdateVisa\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"given_names\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"surname\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"number\" class=\"col-sm-2 control-label\">Visa Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Visa Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" :max=\"today\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" :min=\"tomorrow\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n            <label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"countryObj\" :value.sync=\"countryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Avatar\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'visa-'+given_names+'-'+surname\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a href=\"/dashboard/visas\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n            </div>\n        </div>\n    </form>\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdateVisa\" @touched=\"onTouched\">\n    <form id=\"CreateUpdateVisa\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('givennames') }\">\n            <label for=\"given_names\" class=\"col-sm-2 control-label\">Given Names</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"given_names\" id=\"given_names\" v-model=\"given_names\" placeholder=\"Given Names\" v-validate:givennames=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('surname') }\">\n            <label for=\"surname\" class=\"col-sm-2 control-label\">Surname</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"surname\" id=\"surname\" v-model=\"surname\" placeholder=\"Surname\" v-validate:surname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('number') }\">\n            <label for=\"number\" class=\"col-sm-2 control-label\">Visa Number</label>\n            <div class=\"col-sm-10\">\n                <input type=\"text\" class=\"form-control\" name=\"number\" id=\"number\" v-model=\"number\" placeholder=\"Visa Number\" v-validate:number=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"9\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"form-group\" :class=\"{ 'has-error': (checkForError('issued') || checkForError('expires')) }\">\n            <label for=\"issued_at\" class=\"col-sm-2 control-label\">Dates</label>\n            <div class=\"col-sm-10\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('issued') }\">\n                            <span class=\"input-group-addon\">Issued</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"issued_at\" id=\"issued_at\" :max=\"today\" v-validate:issued=\"{ required: true }\" required=\"\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-sm-12\">\n                        <div class=\"input-group input-group-sms\" :class=\"{ 'has-error': checkForError('expires') }\">\n                            <span class=\"input-group-addon\">Expires</span>\n                            <input type=\"date\" class=\"form-control\" v-model=\"expires_at\" id=\"expires_at\" :min=\"tomorrow\" v-validate:expires=\"{ required: true }\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('country') }\">\n            <label for=\"country\" class=\"col-sm-2 control-label\">Country</label>\n            <div class=\"col-sm-10\">\n                <v-select class=\"form-control\" id=\"countryObj\" :value.sync=\"countryObj\" :options=\"countries\" label=\"name\"></v-select>\n                <select hidden=\"\" name=\"country\" id=\"country\" class=\"hidden\" v-model=\"country_code\" v-validate:country=\"{ required: true }\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{country.name}}</option>\n                </select>\n\n            </div>\n        </div>\n\n        <accordion :one-at-atime=\"true\">\n            <panel header=\"Avatar\" :is-open.sync=\"true\">\n                <div class=\"media\" v-if=\"selectedAvatar\">\n                    <div class=\"media-left\">\n                        <a href=\"#\">\n                            <img class=\"media-object\" :src=\"selectedAvatar.source + '?w=100&amp;q=50'\" width=\"100\" :alt=\"selectedAvatar.name\">\n                        </a>\n                    </div>\n                    <div class=\"media-body\">\n                        <h4 class=\"media-heading\">{{selectedAvatar.name}}</h4>\n                    </div>\n                </div>\n                <upload-create-update type=\"other\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'visa-'+given_names+'-'+surname\"></upload-create-update>\n            </panel>\n        </accordion>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-offset-2 col-sm-10\">\n                <a v-if=\"!isUpdate\" href=\"/dashboard/visas\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n                <a v-if=\"isUpdate\" @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n    </form>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>Profile updated!</p>\n    </alert>\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>There are errors on the form.</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -57266,7 +57320,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1119a388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":185,"vue":117,"vue-hot-reload-api":112,"vue-select":114,"vue-strap/dist/vue-strap.min":115}],197:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -57312,7 +57366,6 @@ exports.default = {
     },
     methods: {
         // emulate pagination
-
         paginate: function paginate() {
             var array = [];
             var start = (this.pagination.current_page - 1) * this.per_page;
@@ -57354,7 +57407,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5bcb9b13", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":117,"vue-hot-reload-api":112,"vue-strap/dist/vue-strap.min":115}],198:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],206:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -57416,6 +57469,10 @@ var _groupProfileStories2 = _interopRequireDefault(_groupProfileStories);
 var _groupsTripsSelectionWrapper = require('./components/campaigns/groups-trips-selection-wrapper.vue');
 
 var _groupsTripsSelectionWrapper2 = _interopRequireDefault(_groupsTripsSelectionWrapper);
+
+var _groupInterestSignup = require('./components/groups/group-interest-signup.vue');
+
+var _groupInterestSignup2 = _interopRequireDefault(_groupInterestSignup);
 
 var _tripDetailsMissionaries = require('./components/trips/trip-details-missionaries.vue');
 
@@ -57497,6 +57554,18 @@ var _dashboardGroupReservations = require('./components/groups/dashboard-group-r
 
 var _dashboardGroupReservations2 = _interopRequireDefault(_dashboardGroupReservations);
 
+var _dashboardInterestsList = require('./components/interests/dashboard-interests-list.vue');
+
+var _dashboardInterestsList2 = _interopRequireDefault(_dashboardInterestsList);
+
+var _notes = require('./components/notes.vue');
+
+var _notes2 = _interopRequireDefault(_notes);
+
+var _todos = require('./components/todos.vue');
+
+var _todos2 = _interopRequireDefault(_todos);
+
 var _adminCampaignCreate = require('./components/campaigns/admin-campaign-create.vue');
 
 var _adminCampaignCreate2 = _interopRequireDefault(_adminCampaignCreate);
@@ -57537,6 +57606,10 @@ var _adminTripDelete = require('./components/trips/admin-trip-delete.vue');
 
 var _adminTripDelete2 = _interopRequireDefault(_adminTripDelete);
 
+var _adminInterestsList = require('./components/interests/admin-interests-list.vue');
+
+var _adminInterestsList2 = _interopRequireDefault(_adminInterestsList);
+
 var _adminGroupsList = require('./components/groups/admin-groups-list.vue');
 
 var _adminGroupsList2 = _interopRequireDefault(_adminGroupsList);
@@ -57564,6 +57637,10 @@ var _adminReservationEdit2 = _interopRequireDefault(_adminReservationEdit);
 var _adminReservationCosts = require('./components/reservations/admin-reservation-costs.vue');
 
 var _adminReservationCosts2 = _interopRequireDefault(_adminReservationCosts);
+
+var _adminReservationDues = require('./components/reservations/admin-reservation-dues.vue');
+
+var _adminReservationDues2 = _interopRequireDefault(_adminReservationDues);
 
 var _adminReservationDeadlines = require('./components/reservations/admin-reservation-deadlines.vue');
 
@@ -57593,6 +57670,10 @@ var _adminUploadCreateUpdate = require('./components/uploads/admin-upload-create
 
 var _adminUploadCreateUpdate2 = _interopRequireDefault(_adminUploadCreateUpdate);
 
+var _reconcileFund = require('./components/reconcile-fund.vue');
+
+var _reconcileFund2 = _interopRequireDefault(_reconcileFund);
+
 var _vueStrap = require('vue-strap/dist/vue-strap.min');
 
 var _vueStrap2 = _interopRequireDefault(_vueStrap);
@@ -57600,10 +57681,10 @@ var _vueStrap2 = _interopRequireDefault(_vueStrap);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // jQuery
-
+window.$ = window.jQuery = require('jquery');
 
 // admin components
-window.$ = window.jQuery = require('jquery');
+
 window.moment = require('moment');
 window._ = require('underscore');
 window.marked = require('marked');
@@ -57616,7 +57697,8 @@ require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
 
 require('jquery.cookie');
 require('bootstrap-sass');
-
+window.AOS = require('aos');
+AOS.init();
 $(document).ready(function () {
     console.log($.fn.tooltip.Constructor.VERSION);
     $('[data-toggle="offcanvas"]').click(function () {
@@ -57757,13 +57839,13 @@ new _vue2.default({
             public: false
         }
     },
-    components: [_login2.default, _fundraisers2.default, _campaigns2.default, _groups2.default, _campaignGroups2.default, _groupTrips2.default, _groupProfileTrips2.default, _groupProfileStories2.default, _groupProfileFundraisers2.default, _groupsTripsSelectionWrapper2.default, _tripDetailsMissionaries2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _fundraisersStories2.default, _topNav2.default, _actionTrigger2.default, _donate2.default, _modalDonate2.default,
+    components: [_login2.default, _fundraisers2.default, _campaigns2.default, _groups2.default, _campaignGroups2.default, _groupTrips2.default, _groupProfileTrips2.default, _groupProfileStories2.default, _groupProfileFundraisers2.default, _groupsTripsSelectionWrapper2.default, _groupInterestSignup2.default, _tripDetailsMissionaries2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _fundraisersStories2.default, _topNav2.default, _actionTrigger2.default, _donate2.default, _modalDonate2.default, _notes2.default, _todos2.default,
 
     //dashboard components
-    _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default, _groupsList2.default, _visaCreateUpdate2.default, _reservationsPassportsManager2.default, _reservationsVisasManager2.default, _userSettings2.default, _userProfileStories2.default, _userProfileFundraisers2.default, _userProfileFundraisersDonors2.default, _userProfileFundraisersProgress2.default, _dashboardGroupTrips2.default, _dashboardGroupReservations2.default,
+    _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default, _groupsList2.default, _visaCreateUpdate2.default, _reservationsPassportsManager2.default, _reservationsVisasManager2.default, _userSettings2.default, _userProfileStories2.default, _userProfileFundraisers2.default, _userProfileFundraisersDonors2.default, _userProfileFundraisersProgress2.default, _dashboardGroupTrips2.default, _dashboardGroupReservations2.default, _dashboardInterestsList2.default,
 
     // admin components
-    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminReservationEdit2.default, _adminReservationCosts2.default, _adminReservationDeadlines2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default],
+    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminInterestsList2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminReservationEdit2.default, _adminReservationCosts2.default, _adminReservationDues2.default, _adminReservationDeadlines2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default, _reconcileFund2.default],
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -57784,6 +57866,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/action-trigger.vue":119,"./components/campaigns/admin-campaign-create.vue":120,"./components/campaigns/admin-campaign-details.vue":121,"./components/campaigns/admin-campaign-edit.vue":122,"./components/campaigns/campaign-groups.vue":123,"./components/campaigns/campaigns.vue":124,"./components/campaigns/group-trips.vue":129,"./components/campaigns/groups-trips-selection-wrapper.vue":130,"./components/donate.vue":131,"./components/fundraisers/fundraisers-stories.vue":132,"./components/fundraisers/fundraisers.vue":133,"./components/groups/admin-group-create.vue":134,"./components/groups/admin-group-edit.vue":135,"./components/groups/admin-group-managers.vue":136,"./components/groups/admin-groups-list.vue":137,"./components/groups/dashboard-group-reservations.vue":138,"./components/groups/dashboard-group-trips.vue":139,"./components/groups/group-profile-fundraisers.vue":140,"./components/groups/group-profile-stories.vue":141,"./components/groups/group-profile-trips.vue":142,"./components/groups/groups-list.vue":143,"./components/groups/groups.vue":144,"./components/login.vue":145,"./components/modal-donate.vue":146,"./components/passports/passport-create-update.vue":147,"./components/passports/passports-list.vue":148,"./components/records/records-list.vue":149,"./components/reservations/admin-reservation-costs.vue":150,"./components/reservations/admin-reservation-deadlines.vue":151,"./components/reservations/admin-reservation-edit.vue":152,"./components/reservations/admin-reservations-list.vue":153,"./components/reservations/donations-list.vue":154,"./components/reservations/reservations-list.vue":155,"./components/reservations/reservations-passports-manager.vue":156,"./components/reservations/reservations-visas-manager.vue":157,"./components/top-nav.vue":158,"./components/trips/admin-trip-create.vue":159,"./components/trips/admin-trip-delete.vue":160,"./components/trips/admin-trip-duplicate.vue":161,"./components/trips/admin-trip-edit.vue":162,"./components/trips/admin-trip-facilitators.vue":163,"./components/trips/admin-trip-reservations-list.vue":164,"./components/trips/admin-trips-list.vue":165,"./components/trips/trip-details-missionaries.vue":183,"./components/trips/trip-registration-wizard.vue":184,"./components/uploads/admin-upload-create-update.vue":185,"./components/uploads/admin-uploads-list.vue":186,"./components/users/admin-user-create.vue":187,"./components/users/admin-user-delete.vue":188,"./components/users/admin-user-edit.vue":189,"./components/users/admin-users-list.vue":190,"./components/users/user-profile-fundraisers-donors.vue":191,"./components/users/user-profile-fundraisers-progress.vue":192,"./components/users/user-profile-fundraisers.vue":193,"./components/users/user-profile-stories.vue":194,"./components/users/user-settings.vue":195,"./components/visas/visa-create-update.vue":196,"./components/visas/visas-list.vue":197,"bootstrap-sass":16,"gsap":103,"jquery":105,"jquery.cookie":104,"marked":106,"moment":107,"scrollmagic":109,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":110,"underscore":111,"vue":117,"vue-resource":113,"vue-strap/dist/vue-strap.min":115,"vue-validator":116}]},{},[198]);
+},{"./components/action-trigger.vue":120,"./components/campaigns/admin-campaign-create.vue":121,"./components/campaigns/admin-campaign-details.vue":122,"./components/campaigns/admin-campaign-edit.vue":123,"./components/campaigns/campaign-groups.vue":124,"./components/campaigns/campaigns.vue":125,"./components/campaigns/group-trips.vue":130,"./components/campaigns/groups-trips-selection-wrapper.vue":131,"./components/donate.vue":132,"./components/fundraisers/fundraisers-stories.vue":133,"./components/fundraisers/fundraisers.vue":134,"./components/groups/admin-group-create.vue":135,"./components/groups/admin-group-edit.vue":136,"./components/groups/admin-group-managers.vue":137,"./components/groups/admin-groups-list.vue":138,"./components/groups/dashboard-group-reservations.vue":139,"./components/groups/dashboard-group-trips.vue":140,"./components/groups/group-interest-signup.vue":141,"./components/groups/group-profile-fundraisers.vue":142,"./components/groups/group-profile-stories.vue":143,"./components/groups/group-profile-trips.vue":144,"./components/groups/groups-list.vue":145,"./components/groups/groups.vue":146,"./components/interests/admin-interests-list.vue":147,"./components/interests/dashboard-interests-list.vue":148,"./components/login.vue":149,"./components/modal-donate.vue":150,"./components/notes.vue":151,"./components/passports/passport-create-update.vue":152,"./components/passports/passports-list.vue":153,"./components/reconcile-fund.vue":154,"./components/records/records-list.vue":155,"./components/reservations/admin-reservation-costs.vue":156,"./components/reservations/admin-reservation-deadlines.vue":157,"./components/reservations/admin-reservation-dues.vue":158,"./components/reservations/admin-reservation-edit.vue":159,"./components/reservations/admin-reservations-list.vue":160,"./components/reservations/donations-list.vue":161,"./components/reservations/reservations-list.vue":162,"./components/reservations/reservations-passports-manager.vue":163,"./components/reservations/reservations-visas-manager.vue":164,"./components/todos.vue":165,"./components/top-nav.vue":166,"./components/trips/admin-trip-create.vue":167,"./components/trips/admin-trip-delete.vue":168,"./components/trips/admin-trip-duplicate.vue":169,"./components/trips/admin-trip-edit.vue":170,"./components/trips/admin-trip-facilitators.vue":171,"./components/trips/admin-trip-reservations-list.vue":172,"./components/trips/admin-trips-list.vue":173,"./components/trips/trip-details-missionaries.vue":191,"./components/trips/trip-registration-wizard.vue":192,"./components/uploads/admin-upload-create-update.vue":193,"./components/uploads/admin-uploads-list.vue":194,"./components/users/admin-user-create.vue":195,"./components/users/admin-user-delete.vue":196,"./components/users/admin-user-edit.vue":197,"./components/users/admin-users-list.vue":198,"./components/users/user-profile-fundraisers-donors.vue":199,"./components/users/user-profile-fundraisers-progress.vue":200,"./components/users/user-profile-fundraisers.vue":201,"./components/users/user-profile-stories.vue":202,"./components/users/user-settings.vue":203,"./components/visas/visa-create-update.vue":204,"./components/visas/visas-list.vue":205,"aos":1,"bootstrap-sass":17,"gsap":104,"jquery":106,"jquery.cookie":105,"marked":107,"moment":108,"scrollmagic":110,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":111,"underscore":112,"vue":118,"vue-resource":114,"vue-strap/dist/vue-strap.min":116,"vue-validator":117}]},{},[206]);
 
 //# sourceMappingURL=main.js.map

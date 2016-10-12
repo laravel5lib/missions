@@ -136,6 +136,12 @@
 				</div>
 			</div>
 		</form>
+		<alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+			<span class="icon-info-circled alert-icon-float-left"></span>
+			<strong>Oh No!</strong>
+			<p>There are errors on the form.</p>
+		</alert>
+
 	</validator>
 </template>
 <script>
@@ -145,7 +151,7 @@
 
 	export default{
 		name: 'campaign-create',
-		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel},
+		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel, 'alert': VueStrap.alert},
 		data(){
 			return {
 				countries: [],
@@ -166,6 +172,7 @@
 				avatar_upload_id: null,
 				selectedBanner: null,
 				banner_upload_id: null,
+				showError: false
 			}
 		},
 		computed:{
@@ -208,7 +215,10 @@
 						window.location.href = '/admin' + resp.data.data.links[0].uri;
 					}, function (error) {
 						this.errors = error.data.errors;
+						this.showError = true;
 					});
+				} else {
+					this.showError = true;
 				}
 			}
 		},

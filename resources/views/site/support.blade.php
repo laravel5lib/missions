@@ -183,10 +183,6 @@
 					</div>
 				</div>
 			</div><!-- end row -->
-			<div class="row">
-				<hr class="divider inv">
-				<p class="text-center"><a class="btn btn-primary btn-lg" href="#">Become A Partner</a></p>
-			</div>
 	</div>
 	</div><!-- end container -->
 </div><!-- end white-bg -->
@@ -209,10 +205,6 @@
 				<p>Semi-Annual Missions.Me Report Magazine</p>
 			</div>
 		</div><!-- end row -->
-		<div class="row">
-			<hr class="divider inv">
-			<p class="text-center"><a class="btn btn-white-hollow btn-lg" href="#">Become A Partner</a></p>
-		</div>
 	</div>
 	</div><!-- end container -->
 </div><!-- end dark-bg-primary -->

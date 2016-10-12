@@ -18,35 +18,26 @@
 				<h2>Choose A Trip</h2>
 				<hr class="divider red-small lg">
 			</div>
-			<div class="col-xs-12">
-			<table class="table table-hover">
-				<thead>
-				<tr>
-					<th>Type</th>
-					<th>Dates</th>
-					<th>Starting Cost</th>
-					<th>Spots Left</th>
-					<th>Ideal For</th>
-					<th>Status</th>
-					<th></th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr v-for="trip in trips" style="border-bottom: 1px solid #e6e6e6">
-					<td style="vertical-align:middle;">{{ trip.type | capitalize }}</td>
-					<td style="vertical-align:middle;">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</td>
-					<td style="vertical-align:middle;">{{ trip.starting_cost | currency }}</td>
-					<td style="vertical-align:middle;">{{ trip.spots }}</td>
-					<td style="vertical-align:middle;">
-						<span v-for="prospect in trip.prospects">
-							{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
-						</span>
-					</td>
-					<td style="vertical-align:middle;">{{ trip.status | capitalize }}</td>
-					<td class="text-right"><a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a></td>
-				</tr>
-				</tbody>
-			</table>
+		</div>
+		<div class="row">
+			<div v-for="trip in trips" class="col-xs-6 col-sm-3">
+				<div class="panel panel-default">
+					<div class="panel-heading" :class="'panel-' + trip.type">
+						<h5 class="text-uppercase text-center">{{ trip.type | capitalize }}</h5>
+					</div>
+					<div class="panel-body text-center">
+						<p class="badge">{{ trip.status | capitalize }}</p><br>
+						<p class="small">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</p>
+						<label>Perfect For</label>
+						<p class="small"><span v-for="prospect in trip.prospects">
+								{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
+						</span></p>
+						<label>Spots Available</label>
+						<p>{{ trip.spots }}</p>
+						<h3 class="text-success">{{ trip.starting_cost | currency }}</h3>
+						<a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a>
+					</div>
+				</div>
 			</div>
 		</div><!-- end row -->
 		<hr class="divider inv xlg">

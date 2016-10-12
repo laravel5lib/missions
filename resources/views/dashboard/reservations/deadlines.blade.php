@@ -212,7 +212,7 @@
             <div class="col-sm-8">
                 <div class="row">
                     <ul class="timeline">
-                        @foreach($all_deadlines as $key => $deadline)
+                        @foreach($reservation->deadlines as $key => $deadline)
                         <li class="{{ $key % 2 ? 'timeline-inverted' : '' }}">
                             <div class="timeline-badge  {{ now()->gt(carbon($deadline['due_at'])) ? 'danger' : 'warning' }}"><i class="fa {{ now()->gt(carbon($deadline['due_at'])) ? 'fa-times' : 'fa-exclamation' }}"></i></div>
                             <div class="timeline-panel">

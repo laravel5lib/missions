@@ -23,10 +23,10 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a href="{{ $reservation->id }}/edit">Edit</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
+                        {{--<li><a href="#">Another action</a></li>--}}
+                        {{--<li><a href="#">Something else here</a></li>--}}
+                        {{--<li role="separator" class="divider"></li>--}}
+                        {{--<li><a href="#">Separated link</a></li>--}}
                     </ul>
                 </div>
             </div>
@@ -48,7 +48,6 @@
                     <li role="presentation"><a href="#deadlines" aria-controls="deadlines" role="tab" data-toggle="tab">Due Dates / Deadlines</a></li>
                     <li role="presentation"><a href="#requirements" aria-controls="requirements" role="tab" data-toggle="tab">Requirements</a></li>
                     <li role="presentation"><a href="#funding" aria-controls="funding" role="tab" data-toggle="tab">Funding</a></li>
-                    <li role="presentation"><a href="#dues" aria-controls="dues" role="tab" data-toggle="tab">Dues</a></li>
                     <li role="presentation"><a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">Notes</a></li>
                     <li role="presentation"><a href="#todos" aria-controls="notes" role="tab" data-toggle="tab">Todos</a></li>
                 </ul>
@@ -164,6 +163,16 @@
                         </div><!-- end panel-body -->
                         {{-- {{ $reservation->costs }} --}}
                     </div><!-- end panel -->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Dues</h5>
+                        </div><!-- end panel-heading -->
+                        <div class="panel-body">
+                            <admin-reservation-dues id="{{ $reservation->id }}"></admin-reservation-dues>
+                        </div><!-- end panel-body -->
+                    </div><!-- end panel -->
+
                 </div><!-- end tab -->
                     <div role="tabpanel" class="tab-pane" id="deadlines">
                         <div class="panel panel-default">
@@ -278,44 +287,6 @@
                                         </div>
                                     </div>
                                 </div>
-                        </div><!-- end panel-body -->
-                    </div><!-- end panel -->
-                </div><!-- end tab -->
-                <div role="tabpanel" class="tab-pane" id="dues">
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h5>Dues</h5>
-                        </div><!-- end panel-heading -->
-                        <div class="panel-body">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Status</th>
-                                    <th>Outstanding Balance</th>
-                                    <th>Grace Period</th>
-                                    <th>Due</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($reservation->dues as $due)
-                                    <tr>
-                                        <td>
-                                            @if ($due->getStatus() == 'late')
-                                                <span class="badge badge-danger">Past Due</span>
-                                            @elseif($due->getStatus() == 'paid')
-                                                <span class="badge badge-success">Paid</span>
-                                            @else
-                                                <span class="badge badge-info">Due in {{ $due->due_at->diffForHumans(null, true) }}</span>
-                                            @endif
-                                        </td>
-                                        <td>${{ $due->outstanding_balance }}</td>
-                                        <td>{{ $due->grace_period }}</td>
-                                        <td>{{ $due->due_at->toFormattedDateString() }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
                         </div><!-- end panel-body -->
                     </div><!-- end panel -->
                 </div><!-- end tab -->

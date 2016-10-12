@@ -170,6 +170,7 @@ return [
         Silber\Bouncer\BouncerServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         Haleks\Markdown\MarkdownServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
@@ -220,6 +221,7 @@ return [
         'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'Markdown' => Haleks\Markdown\Facades\Markdown::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

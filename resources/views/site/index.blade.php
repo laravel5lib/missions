@@ -29,8 +29,8 @@ $('.video-modal').on('hide.bs.modal', function(e) {
       <div class="col-md-8 col-md-offset-2 text-center">
         <h1 class="text-white text-hero" data-aos="fade-up">Where <span class="text-primary" data-aos="zoom-in" data-aos-delay="400">you</span> can change the world.</h1>
         <hr class="divider inv">
-        <a href="/campaigns" class="btn btn-primary" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
-        <a href="/fundraisers" class="btn btn-white-hollow" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
+        <a href="{{ url('campaigns') }}" class="btn btn-primary" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
+        <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
         <hr class="divider inv xlg">
         <hr class="divider inv xlg">
         <hr class="divider inv xlg">
@@ -62,7 +62,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           <hr class="divider inv">
           <p data-aos="fade-up">Missions.Me specializes in taking groups around the world on life-changing missions experiences. Missions.Me can provide your group with custom missions trips created especially for your group.</p>
           <hr class="divider inv">
-          <a data-aos="fade-up" href="#" class="btn btn-info">Take Your Group</a>
+          <a data-aos="fade-up" href="{{ url('groups') }}" class="btn btn-info">Take Your Group</a>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->
@@ -76,7 +76,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           <h1 class="dash-trailing" data-aos="fade-right">Angel House</h1>
           <p class="large-type" data-aos="fade-right">Our mission is to bring abandoned children from the slum to safety and into the loving arms of caretakers that will educate, love and raise them to become future leaders in their generation.</p>
           <hr class="divider inv">
-          <a href="/orphans" class="btn btn-info" data-aos="fade-right">Learn More</a>
+          <a href="{{ url('orphans') }}" class="btn btn-info" data-aos="fade-right">Learn More</a>
         </div><!-- end col -->
         <hr class="divider inv lg visible-xs visible-sm">
         <div class="col-sm-6">
@@ -103,7 +103,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
         <hr class="divider inv">
         <p class="text-white" data-aos="fade-up">We believe success is a byproduct of significance and strive to develop a premiere training facility where individuals are equipped with the tools to live impact filled lives.</p>
         <hr class="divider inv">
-        <a href="/college" class="btn btn-white-hollow" data-aos="fade-up">Learn More</a>
+        <a href="{{ url('college') }}" class="btn btn-white-hollow" data-aos="fade-up">Learn More</a>
         <hr class="divider inv xlg">
         <hr class="divider inv xlg">
         <hr class="divider inv xlg">
@@ -119,7 +119,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
         <div class="col-sm-12 text-center">
           <h1 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="200">Change The World</h1>
           <a data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="300" href="#" class="btn btn-primary btn-lg">Create Your Account</a>
-          <h5 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="400" class="text-uppercase"><a href="#">Or Donate</a></h5>
+          <h5 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="300" class="text-uppercase"><a href="#">Or Donate</a></h5>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->

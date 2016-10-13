@@ -149,6 +149,7 @@ $factory->defineAs(App\Models\v1\Campaign::class, 'active', function (Faker\Gene
         'country_code'     => strtolower($faker->countryCode),
         'short_desc'       => $faker->realText(255),
         'page_url'         => $faker->slug,
+        'page_src'         => $faker->randomElement(['_1n1d2017', '_generic', '_india']),
         'started_at'       => $startDate,
         'ended_at'         => $faker->dateTimeInInterval($startDate, '+ 10 days'),
         'published_at'     => $faker->dateTimeBetween('- 1 month', '+ 1 month'),

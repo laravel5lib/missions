@@ -318,6 +318,9 @@
 			}
 		},
         methods: {
+			reset(){
+
+			},
 			isSmall(){
 				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
 			},

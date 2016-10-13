@@ -1,14 +1,22 @@
 @extends('site.layouts.default')
+@section('styles')
+    @if( $fundraiser->sponsor_id === (auth()->check() ? auth()->id() : '') )
+        <link rel="stylesheet" href="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/css/Jcrop.css" type="text/css">
+    @endif
+@endsection
 @section('scripts')
-<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.14.2/TweenMax.min.js"></script>
-<script>
-    // init controller
-    var controller = new ScrollMagic.Controller({globalSceneOptions: {triggerHook: "onEnter", duration: "200%"}});
-    // build scenes
-    new ScrollMagic.Scene({triggerElement: "#parallax1"})
-        .setTween("#parallax1 > img", {y: "80%", ease: Linear.easeNone})
-        .addTo(controller);
-</script>
+    @if( $fundraiser->sponsor_id === (auth()->check() ? auth()->id() : '') )
+        <script src="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/js/Jcrop.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.14.2/TweenMax.min.js"></script>
+        <script>
+            // init controller
+            var controller = new ScrollMagic.Controller({globalSceneOptions: {triggerHook: "onEnter", duration: "200%"}});
+            // build scenes
+            new ScrollMagic.Scene({triggerElement: "#parallax1"})
+                .setTween("#parallax1 > img", {y: "80%", ease: Linear.easeNone})
+                .addTo(controller);
+        </script>
+    @endif
 @endsection
 
 @section('content')
@@ -23,6 +31,8 @@
                     <img src="{{ image($fundraiser->banner->source) }}" class="img-responsive">
                 @endif
                 <hr class="divider inv">
+                <fundraisers-uploads id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-uploads>
+                <hr class="divider inv">
                 <ul class="nav nav-tabs">
                     <li role="presentation" class="active"><a href="#desc" data-toggle="tab">Description</a></li>
                     <li role="presentation"><a href="#stories" data-toggle="tab">Stories</a>
@@ -33,7 +43,7 @@
                     {% $fundraiser->description %}
                     </div>
                     <div role="tabpanel" class="tab-pane" id="stories">
-                        <fundraisers-stories id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ auth()->check() ? auth()->id() : '' }}"></fundraisers-stories>
+                        <fundraisers-stories id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-stories>
                     </div>
                 </div> <!-- end tab-content -->
             </div><!-- end col -->

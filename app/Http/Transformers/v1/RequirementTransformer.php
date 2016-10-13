@@ -26,37 +26,33 @@ class RequirementTransformer extends TransformerAbstract
     public function transform(Requirement $requirement)
     {
         $array = [
-            'id'           => $requirement->id,
-            'item'         => $requirement->item,
-            'due_at'       => $requirement->due_at->toDateTimeString(),
-            'grace_period' => (int) $requirement->grace_period,
-            'enforced'     => (bool) $requirement->enforced,
-            'links'        => [
-                [
-                    'rel' => 'self',
-                    'uri' => '/requirements/' . $requirement->id,
-                ]
-            ]
+            'id'            => $requirement->id,
+            'name'          => $requirement->name,
+            'document_type' => $requirement->document_type,
+            'short_desc'    => $requirement->short_desc,
+            'due_at'        => $requirement->due_at->toDateTimeString(),
+            'grace_period'  => (int) $requirement->grace_period,
+            'created_at'    => $requirement->created_at->toDateTimeString(),
+            'updated_at'    => $requirement->updated_at->toDateTimeString()
         ];
 
         if ($requirement->pivot)
         {
-            $array = [
-                'requirement_id' => $requirement->id,
-                'item'           => $requirement->item,
-                'item_type'      => $requirement->item_type,
-                'due_at'         => $requirement->due_at->toDateTimeString(),
-                'grace_period'   => (int) $requirement->pivot->grace_period ? $requirement->pivot->grace_period : $requirement->grace_period,
-                'enforced'       => (bool) $requirement->enforced,
-                'status'         => $requirement->pivot->status,
-                'updated_at'     => $requirement->pivot->updated_at->toDateTimeString()
-            ];
+                $array['grace_period'] = (int) $requirement->pivot->grace_period
+                    ? $requirement->pivot->grace_period
+                    : $requirement->grace_period;
+                $array['status'] = $requirement->pivot->status;
+                $array['updated_at'] = $requirement->pivot->updated_at->toDateTimeString();
         }
 
         $array['links'] = [
             [
                 'rel' => 'self',
-                'uri' => '/requirements/' . $requirement->id,
+                'uri' => '/api/'
+                    . $requirement->requester_type
+                    . '/' . $requirement->requester_id
+                    . '/requirements/'
+                    . $requirement->id,
             ]
         ];
 

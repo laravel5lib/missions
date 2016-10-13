@@ -28,7 +28,7 @@
                 <div class="col-xs-6">
                     <h5>Notes</h5>
                 </div>
-                <div class="col-xs-6 text-right">
+                <div class="col-xs-6 text-right" v-if="canModify">
                     <button class="btn btn-primary btn-xs" @click="prepareNew">
                         <span v-if="! newMode">New <i class="fa fa-plus"></i></span>
                         <span v-if="newMode">List <i class="fa fa-list-ul"></i></span>
@@ -146,6 +146,10 @@
             },
             'user_id': {
                 type: String
+            },
+            'canModify': {
+                type: Number,
+                default: 0
             }
         },
         data() {

@@ -75,13 +75,14 @@
 				</div>
 				<div class="form-group" :class="{ 'has-error': checkForError('type') }" v-show="!uiLocked" >
 					<label for="type" class="control-label">Type</label>
-						<select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
-							<option :value="">-- select type --</option>
-							<option value="avatar">Image (Avatar) - 1280 x 1280</option>
-							<option value="banner">Image (Banner) - 1300 x 500</option>
-							<option value="other">Image (other) - no set dimensions</option>
-							<option value="file">File</option>
-						</select>
+					<select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
+						<option :value="">-- select type --</option>
+						<option value="avatar">Image (Avatar) - 1280 x 1280</option>
+						<option value="banner">Image (Banner) - 1300 x 500</option>
+						<option value="other">Image (other) - no set dimensions</option>
+						<option value="video">Video</option>
+						<option value="file">File</option>
+					</select>
 				</div>
 
 				<div class="row" v-if="type && type === 'other'">
@@ -112,7 +113,14 @@
 					</div>
 				</div>
 
-				<div class="form-group">
+				<div class="row" v-if="type && type === 'video'">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-play-circle"></i></span>
+						<input type="url" class="form-control" v-model="url" placeholder="Video Link (YouTube/Vimeo/etc)">
+					</div>
+				</div>
+
+				<div class="form-group" v-if="type && type !== 'video'">
 					<label for="file" class="control-label">File</label>
 						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="form-control">
 						<!--<h5>Coords: {{coords|json}}</h5>-->
@@ -203,10 +211,7 @@
 		},
         data(){
             return {
-//				showRight: false,
-
-//                name: '',
-//                type: null,
+                url: '',
                 path: '',
                 file: null,
                 x_axis: null,
@@ -232,6 +237,7 @@
 				typePaths: [
 					{type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
 					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
+					{type: 'video'},
 					{type: 'other', path: 'images/other'},
 					{type: 'file', path: 'resources/documents'},
 				],
@@ -239,7 +245,6 @@
 				resource: this.$resource('uploads{/id}'),
 				uploads: [],
 				page: 1,
-//				per_page: 6,
 				search: '',
 				pagination: {},
             }
@@ -258,7 +263,7 @@
 		watch:{
         	'type': function (val, oldVal) {
         		this.typeObj = _.findWhere(this.typePaths, {type: val});
-				if (this.typeObj) {
+				if (this.typeObj && val !== 'video') {
 					this.path = this.typeObj.path;
 					if (this.file)
 						this.adjustSelectByType();
@@ -305,9 +310,37 @@
 						jQuery('#bannerCollapse').collapse('hide');
 						break;
 				}
+				this.reset();
 			}
 		},
         methods: {
+			reset(){
+				_.extend(this, {
+					url: '',
+					path: '',
+					file: null,
+					x_axis: null,
+					y_axis: null,
+					width: 100,
+					height: 100,
+
+					// logic variables
+					attemptSubmit: false,
+					constrained: true,
+					scaledWidth: 400,
+					scaledHeight: 400,
+					imageMaxWidth: 400,
+					imageMaxHeight: 400,
+					imageWidth: 400,
+					imageHeight: 400,
+					imageAspectRatio: null,
+					aspectRatio: this.width/this.height,
+					fileA: null,
+					resultImage: null,
+					page: 1,
+					search: '',
+				});
+			},
 			isSmall(){
 				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
 			},
@@ -347,17 +380,24 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpload.valid) {
-                    this.resource.save(null, {
-                        name: this.name,
+					var params = {
+						name: this.name,
 						tags: this.tags,
 						type: this.type,
-                        path: this.path,
-						file: this.file,
-                        x_axis: parseInt(this.x_axis / this.imageAspectRatio),
-                        y_axis: parseInt(this.y_axis / this.imageAspectRatio),
-                        width: parseInt(this.coords.w / this.imageAspectRatio),
-                        height: parseInt(this.coords.h / this.imageAspectRatio),
-                    }).then(function (resp) {
+					};
+
+					if (this.type === 'video') {
+						params.url = this.url;
+					} else {
+						params.file = this.file;
+						params.path = this.path;
+						params.x_axis = parseInt(this.x_axis / this.imageAspectRatio);
+						params.y_axis = parseInt(this.y_axis / this.imageAspectRatio);
+						params.width = parseInt(this.coords.w / this.imageAspectRatio);
+						params.height = parseInt(this.coords.h / this.imageAspectRatio);
+					}
+
+                    this.resource.save(null, params).then(function (resp) {
 						this.handleSuccess(resp)
                     }, function (error) {
                         console.log(error);

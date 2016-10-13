@@ -12,7 +12,7 @@
                 <div class="carousel-caption">
                     <h6 class="text-uppercase"><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h6>
                     <h3>{{fundraiser.name}}</h3>
-                    <a :href="'/fundraisers/' + fundraiser.id" class="btn btn-primary btn-sm">More Details</a>
+                    <a :href="'/fundraisers/' + fundraiser.url" class="btn btn-primary btn-sm">More Details</a>
                     <hr class="divider inv" />
                 </div>
             </div>

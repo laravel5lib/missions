@@ -14864,6 +14864,39 @@ li.av-nav > a {
   color: #fff;
   background-color: #242424; }
 
+.onenation-vision {
+  color: #fff;
+  background: #3e3e3e url(../images/1n1d17/vision-bg.jpg) no-repeat center fixed;
+  background-size: cover;
+  padding: 200px 0 200px; }
+
+.onenation-exp {
+  background: #fff url(../images/1n1d17/experience-bg.jpg) no-repeat center fixed;
+  background-size: cover;
+  padding: 200px 0 200px; }
+
+.onenation-header {
+  background: #3e3e3e url(../images/1n1d17/reveal-bg.jpg) no-repeat center fixed;
+  background-size: cover;
+  padding: 150px 0 100px;
+  color: #f6323e; }
+
+img.onenation-logo {
+  width: 100%;
+  max-width: 500px;
+  margin: 50px 0 10px; }
+
+.india-vision {
+  color: #fff;
+  background: #3e3e3e url(../images/india/paperboard-bg.jpg) no-repeat center fixed;
+  background-size: cover;
+  padding: 100px 0 100px; }
+
+.india-exp {
+  background: #fff url(../images/india/experience-bg.jpg) no-repeat center fixed;
+  background-size: cover;
+  padding: 200px 0 200px; }
+
 .row-no-margin {
   margin-left: 0;
   margin-right: 0; }
@@ -15160,89 +15193,6 @@ a.socialIcon:hover, .socialHoverClass {
   .divider.sm {
     margin-top: 5px;
     margin-bottom: 5px; }
-
-/* CSS Onload Animations
-/*=== Trigger  ===*/
-.animate {
-  animation-duration: 1s;
-  animation-fill-mode: both; }
-
-/*=== Optional Delays, change values here  ===*/
-.one {
-  animation-delay: 0.4s; }
-
-.two {
-  animation-delay: 0.8s; }
-
-.three {
-  animation-delay: 1.3s; }
-
-.four {
-  animation-delay: 2.3s; }
-
-/*=== Animations start here  ===*/
-/*=== FADE IN  ===*/
-
-@keyframes fadeIn {
-  from {
-    opacity: 0; }
-  to {
-    opacity: 1; } }
-
-.fadeIn {
-  animation-name: fadeIn; }
-
-/*=== FADE IN DOWN ===*/
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -100%, 0); }
-  to {
-    opacity: 1;
-    transform: none; } }
-
-.fadeInDown {
-  animation-name: fadeInDown; }
-
-/*==== FADE IN UP ===*/
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 100%, 0); }
-  to {
-    opacity: 1;
-    transform: none; } }
-
-.fadeInUp {
-  animation-name: fadeInUp; }
-
-/*=== FADE IN LEFT ===*/
-
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translate3d(-100%, 0, 0); }
-  to {
-    opacity: 1;
-    transform: none; } }
-
-.fadeInLeft {
-  animation-name: fadeInLeft; }
-
-/*==== FADE IN RIGHT ===*/
-
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translate3d(100%, 0, 0); }
-  to {
-    opacity: 1;
-    transform: none; } }
-
-.fadeInRight {
-  animation-name: fadeInRight; }
 
 [v-cloak] {
   display: none; }

@@ -124,8 +124,8 @@
                 <hr class="divider inv lg">
               </div><!-- end col -->
             </div><!-- end row -->
-            <div class="row">
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+            <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
                 <div class="panel">
                   <a href="missionary.html"><img class="img-responsive" src="images/why-mm/missionary.jpg" alt=""></a>
                   <div class="panel-body">
@@ -134,7 +134,7 @@
                   </div>
                 </div>
               </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
                 <div class="panel">
                   <a href="medical-missionary.html"><img class="img-responsive" src="images/why-mm/medical-missionary.jpg" alt=""></a>
                   <div class="panel-body">
@@ -143,7 +143,7 @@
                   </div>
                 </div>
               </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
                 <div class="panel">
                   <a href="group-leader.html"><img class="img-responsive" src="images/why-mm/group-leader.jpg" alt=""></a>
                   <div class="panel-body">
@@ -153,8 +153,8 @@
                 </div>
               </div><!-- end col -->
             </div><!-- end row -->
-            <div class="row">
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+            <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
                 <div class="panel">
                   <a href="pastor-speaker.html"><img class="img-responsive" src="images/why-mm/speaker.jpg" alt=""></a>
                   <div class="panel-body">
@@ -163,7 +163,7 @@
                   </div><!-- end panel-body -->
                 </div><!-- end panel -->
               </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
                 <div class="panel">
                   <a href="business-leader.html"><img class="img-responsive" src="images/why-mm/business-person.jpg" alt=""></a>
                   <div class="panel-body">
@@ -172,7 +172,7 @@
                   </div>
                 </div>
               </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
                 <div class="panel">
                   <a href="media-missionary.html"><img class="img-responsive" src="images/why-mm/media-missionary.jpg" alt=""></a>
                   <div class="panel-body">
@@ -196,10 +196,11 @@
             <h1 class="text-primary dash-trailing">We've Got You</h1>
             <p class="large-type">Logistics, we got it covered. Missions.Me makes missions simple by taking care of all of your transportation, hotel, food, training, translators and ministry schedule needs.</p>
             <hr class="divider inv">
-            <a class="btn btn-primary" href="#">Speak to a rep</a>
+            <a class="btn btn-primary" href="#">Speak To A Rep</a>
+            <hr class="divider inv visible-xs visible-sm">
           </div><!-- end col -->
           <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <img class="img-responsive" src="images/why-mm/staff.jpg" />
+            <img class="img-responsive img-rounded" src="images/why-mm/staff.jpg" />
           </div><!-- end col -->
         </div><!-- end row -->
       </div><!-- end content-section-->
@@ -222,9 +223,10 @@
           <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
             <h1 class="text-primary-darker dash-trailing-dark">Level Of Impact</h1>
             <p class="large-type">We are interested in changing nations, communities, and individuals. Every outreach we organize deems to do just that. In just one week's time you and your team will be face to face with entire schools, neighborhoods, and churches. We believe a short-term team must serve a long-term and sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted.</p>
+            <hr class="divider inv visible-xs visible-sm">
           </div><!-- end col -->
           <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <img class="img-responsive" src="images/why-mm/stadium-impact.jpg" />
+            <img class="img-responsive img-rounded" src="images/why-mm/stadium-impact.jpg" />
           </div><!-- end col -->
         </div><!-- end row -->
       </div><!-- end content-section -->
@@ -235,7 +237,7 @@
       <div class="content-section">
         <div class="row">
           <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-            <img class="img-responsive" src="images/why-mm/group-security.jpg" />
+            <img class="img-responsive img-rounded" src="images/why-mm/group-security.jpg" />
           </div><!-- end col -->
           <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
             <h1 class="text-primary dash-trailing">Safety and Security</h1>

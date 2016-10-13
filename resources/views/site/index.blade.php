@@ -72,6 +72,24 @@ $('.video-modal').on('hide.bs.modal', function(e) {
   <div class="container">
     <div class="content-section">
       <div class="row">
+        <div class="col-sm-6">
+          <img data-aos="fade-right" class="img-responsive img-rounded" src="../images/home/1nation1day.jpg">
+        </div><!-- end col -->
+        <hr class="divider inv lg visible-xs visible-sm">
+        <div class="col-sm-6 home-half-section">
+          <h1 class="dash-trailing" data-aos="fade-left">1Nation1Day</h1>
+          <p class="large-type" data-aos="fade-left">1Nation1Day is the largest global missions outreach in history. But this isn’t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.</p>
+          <hr class="divider inv">
+          <a href="/orphans" class="btn btn-info" data-aos="fade-left">Learn More</a>
+        </div><!-- end col -->
+      </div><!-- end row -->
+    </div><!-- end content-section -->
+  </div><!-- end container -->
+</div><!-- end white-bg -->
+<div class="gray-light-bg">
+  <div class="container">
+    <div class="content-section">
+      <div class="row">
         <div class="col-sm-6 home-half-section">
           <h1 class="dash-trailing" data-aos="fade-right">Angel House</h1>
           <p class="large-type" data-aos="fade-right">Our mission is to bring abandoned children from the slum to safety and into the loving arms of caretakers that will educate, love and raise them to become future leaders in their generation.</p>
@@ -85,7 +103,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
       </div><!-- end row -->
     </div><!-- end content-section -->
   </div><!-- end container -->
-</div><!-- end white-bg -->
+</div><!-- end darker-bg -->
 <div class="college-vid-bg">
   <video muted autoplay loop poster="images/college/home-placeholder.jpg" class="college-vid-bg-video">
     <source src="images/college/mmc-vid-bg.webm" type="video/webm">

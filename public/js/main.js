@@ -47261,7 +47261,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":192,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],122:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],122:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -47511,7 +47511,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":192,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],124:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],124:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -49347,7 +49347,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"amount_raised\" :disabled=\"maxCheck('amount_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<span class=\"caret\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\tActive Filters:\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t</div>\n        <hr class=\"divider sm\">\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('amount_raised')\" :class=\"{'text-primary': orderByField === 'amount_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('amount_raised')\" v-if=\"orderByField !== 'amount_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'amount_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('amount_raised')\" v-text=\"reservation.amount_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <td><a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-pencil\"></i></a></td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <nav>\n                            <ul class=\"pagination pagination-sm\">\n                                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                        <span aria-hidden=\"true\">«</span>\n                                    </a>\n                                </li>\n                                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                        <span aria-hidden=\"true\">»</span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </nav>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<span class=\"caret\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\tActive Filters:\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t</div>\n        <hr class=\"divider sm\">\n\t\t<div class=\"col-xs-12 col-sm-6 col-md-4\">\n\t\t\t<div class=\"panel panel-default\" v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n\t\t\t\t<div class=\"panel-heading text-center\">\n\t\t\t\t\t<h5>{{ reservation.given_names }} {{ reservation.surname }}</h5>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"panel-body text-center\">\n\t\t\t\t\t<img :src=\"reservation.avatar\" class=\"img-circle img-lg\">\n\t\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t\t<h6 class=\" text-uppercase text-center\">Registered on <br>{{ reservation.created_at | moment 'll' }}</h6>\n\t\t\t\t\t<!--<div class=\"btn-group btn-group-justified\">\n\t\t\t\t\t\t<a class=\"btn btn-sm btn-primary\" href=\"/dashboard/groups{{reservation.links[0].uri}}\"><i class=\"fa fa-pencil\"></i> Manage</a>\n\t\t\t\t\t</div>-->\n\t\t\t\t</div>\n\t\t\t\t<div class=\"panel-footer text-center\">\n\t\t\t\t\t<h5 class=\"text-capitalize\">{{ reservation.percent_raised | number '2' }}% Raised</h5>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -50767,7 +50767,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-17773f82", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":192,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],153:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51034,21 +51034,30 @@ exports.default = {
             this.showNewModal = true;
         },
         edit: function edit(cost) {
+            cost.due_at = moment().format('YYYY-MM-DDTHH:mm:ss');
             this.editedCost = cost;
             this.attemptSubmit = false;
             this.showEditModal = true;
         },
-        update: function update(cost) {
+        updateCost: function updateCost() {
             // prep current costs
-            var currentDeadlineIds = [];
-            _.some(this.reservation.costs.data, function (cost) {
-                if (cost.id === this.editedCost.cost_id) {
-                    return cost = this.editedCost;
+            var costs = [];
+            _.each(this.reservation.costs.data, function (cost) {
+                if (cost.cost_id === this.editedCost.cost_id) {
+                    costs.push({
+                        id: this.editedCost.cost_id,
+                        locked: this.editedCost.locked,
+                        due_at: moment(this.editedCost.due_at).format('YYYY-MM-DD HH:mm:ss'),
+                        due_date: moment(this.editedCost.due_at).format('YYYY-MM-DD HH:mm:ss'),
+                        grace_period: 10
+                    });
+                } else {
+                    costs.push({ id: cost.cost_id, locked: cost.locked });
                 }
             }.bind(this));
 
             var reservation = this.preppedReservation;
-            reservation.costs = this.reservation.costs.data;
+            reservation.costs = costs;
 
             return this.doUpdate(reservation);
         },
@@ -51105,7 +51114,7 @@ exports.default = {
             var thisTrip = response.data.data;
             this.selectedcosts = new Array(this.newDeadline);
 
-            return this.addcosts();
+            return this.addCosts();
         });
     }), (0, _defineProperty3.default)(_methods, 'getCosts', function getCosts(search, loading) {
         loading(true);
@@ -51113,6 +51122,7 @@ exports.default = {
         return this.resource.update(reservation).then(function (response) {
             this.setReservationData(response.data.data);
             this.selectedCosts = [];
+            this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
         });
     }), (0, _defineProperty3.default)(_methods, 'setReservationData', function setReservationData(reservation) {
         this.reservation = reservation;
@@ -51139,7 +51149,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n        <button class=\"btn btn-primary btn-xs\" @click=\"add\"><span class=\"fa fa-plus\"></span> Add Existing\n        </button>\n        <!--<button class=\"btn btn-primary btn-xs\" @click=\"addNew\"><span\n                class=\"fa fa-plus\"></span> Create New\n        </button>-->\n\n        <hr class=\"divider sm\">\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th>Status</th>\n                <th>Name</th>\n                <th>Due Date</th>\n                <th>Amount</th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody v-if=\"reservation\">\n            <template v-for=\"due in reservation.dues.data\">\n                <tr>\n                    <td class=\"text-center\">\n\t\t\t\t\t\t<small class=\"badge\" :class=\"{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }\">{{due.status|capitalize}}</small>\n\t\t\t\t\t</td>\n                    <td>\n                        {{ due.cost }}\n                    </td>\n                    <td>{{ due.due_at| moment 'll' }}</td>\n                    <td>{{ due.amount| currency }}</td>\n                    <td>\n                        <a class=\"btn btn-default btn-xs\" @click=\"edit(due)\"><i class=\"fa fa-pencil\"></i></a>\n                        <a class=\"btn btn-danger btn-xs\" @click=\"remove(due)\"><i class=\"fa fa-times\"></i></a>\n                    </td>\n                </tr>\n            </template>\n\n            </tbody>\n        </table>\n\n        <modal title=\"Add Costs\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addCosts\">\n            <div slot=\"modal-body\" class=\"modal-body\">\n                <validator name=\"AddCost\">\n                    <form class=\"for\" novalidate=\"\">\n                        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('costs') }\">\n                            <label class=\"control-label\">Available Costs</label>\n                            <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedCosts\" :options=\"availableCosts\" label=\"name\"></v-select>\n                            <select hidden=\"\" v-model=\"user_id\" v-validate:costs=\"{ required: true }\" multiple=\"\">\n                                <option :value=\"cost.id\" v-for=\"cost in costs\">{{cost.name}}</option>\n                            </select>\n                        </div>\n                    </form>\n                </validator>\n            </div>\n        </modal>\n\n        <modal title=\"Edit Cost\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\" :callback=\"update\">\n            <div slot=\"modal-body\" class=\"modal-body\">\n                <validator name=\"EditCost\">\n                    <form class=\"form\" novalidate=\"\">\n                        <div class=\"row\">\n                            <div class=\"col-sm-12\">\n\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('locked') }\" v-if=\"editedCost.type = 'incremental'\">\n                                    <label for=\"locked\">Locked</label>\n                                    <input id=\"locked\" type=\"checkbox\" class=\"form-control\" v-model=\"editedCost.locked\" v-validate:locked=\"{required: true, min:false}\">\n                                </div>\n\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                    <label for=\"grace_period\">Grace Period</label>\n                                    <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                        <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"editedCost.grace_period\" v-validate:grace=\"{required: { rule: true }}\">\n                                        <span class=\"input-group-addon\">Days</span>\n                                    </div>\n                                </div>\n                                <div class=\"form-group\">\n                                    <label for=\"due_date\">Due Date</label>\n                                    <input id=\"due_date\" type=\"datetime-local\" class=\"form-control\" v-model=\"editedCost.due_date\">\n                                </div>\n                            </div>\n                        </div>\n                    </form>\n                </validator>\n            </div>\n        </modal>\n\n        <modal title=\"New Cost\" :show.sync=\"showNewModal\" effect=\"fade\" width=\"800\" :callback=\"addNew\">\n            <div slot=\"modal-body\" class=\"modal-body\">\n                <validator name=\"NewCost\">\n                    <form class=\"form\" novalidate=\"\">\n                        <div class=\"row\">\n                            <div class=\"col-sm-12\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('name')}\">\n                                    <label for=\"name\">Name</label>\n                                    <input type=\"text\" id=\"name\" v-model=\"newCost.name\" v-validate:name=\"{require:true}\" class=\"form-control input-sm\">\n                                </div>\n\n                                <div class=\"row\">\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                            <label for=\"grace_period\">Grace Period</label>\n                                            <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                                <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newCost.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                                <span class=\"input-group-addon\">Days</span>\n                                            </div>\n                                        </div>\n                                    </div>\n                                    <div class=\"col-sm-6\">\n                                        <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('due')}\">\n                                            <label for=\"due_at\">Due</label>\n                                            <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newCost.due_at\" v-validate:due=\"{required: true}\">\n                                        </div>\n\n                                    </div>\n                                </div>\n\n                                <br>\n                                <div class=\"checkbox\">\n                                    <label>\n                                        <input type=\"checkbox\" v-model=\"newCost.enforced\">\n                                        Enforced?\n                                    </label>\n                                </div>\n                            </div>\n                        </div>\n                    </form>\n                </validator>\n            </div>\n        </modal>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <button class=\"btn btn-primary btn-xs\" @click=\"add\">\n        <span class=\"fa fa-plus\"></span> Add Existing\n    </button>\n    <!--<button class=\"btn btn-primary btn-xs\" @click=\"addNew\"><span\n            class=\"fa fa-plus\"></span> Create New\n    </button>-->\n\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th>Locked</th>\n            <th>Name</th>\n            <th>Due Date</th>\n            <th>Amount</th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"reservation\">\n        <template v-for=\"cost in reservation.costs.data\">\n            <tr>\n                <!--<td class=\"text-center\">\n                    <small class=\"badge\" :class=\"{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }\">{{due.status|capitalize}}</small>\n                </td>-->\n                <td>{{ cost.locked ? 'Yes' : 'No' }}</td>\n                <td>{{ cost.name || cost.cost }}</td>\n                <td>{{ cost.due_at| moment 'll' }}</td>\n                <td>{{ cost.amount| currency }}</td>\n                <td>\n                    <a class=\"btn btn-default btn-xs\" @click=\"edit(cost)\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger btn-xs\" @click=\"remove(cost)\"><i class=\"fa fa-times\"></i></a>\n                </td>\n            </tr>\n        </template>\n        </tbody>\n    </table>\n\n    <modal title=\"Add Costs\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addCosts\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"AddCost\">\n                <form class=\"for\" novalidate=\"\">\n                    <div class=\"form-group\" :class=\"{ 'has-error': checkForError('costs') }\">\n                        <label class=\"control-label\">Available Costs</label>\n                        <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedCosts\" :options=\"availableCosts\" label=\"name\"></v-select>\n                        <select hidden=\"\" v-model=\"user_id\" v-validate:costs=\"{ required: true }\" multiple=\"\">\n                            <option :value=\"cost.id\" v-for=\"cost in costs\">{{cost.name}}</option>\n                        </select>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"Edit Cost\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\" :callback=\"updateCost\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"EditCost\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n\n                            <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('locked') }\" v-if=\"editedCost.type = 'incremental'\">\n                                <label for=\"locked\">Locked</label>\n                                <input id=\"locked\" type=\"checkbox\" class=\"form-control\" v-model=\"editedCost.locked\" v-validate:locked=\"{required: true, min:false}\">\n                            </div>\n\n                            <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                <label for=\"grace_period\">Grace Period</label>\n                                <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                    <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"editedCost.grace_period\" v-validate:grace=\"{required: { rule: true }}\">\n                                    <span class=\"input-group-addon\">Days</span>\n                                </div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"due_date\">Due Date</label>\n                                <input id=\"due_date\" type=\"datetime-local\" class=\"form-control\" v-model=\"editedCost.due_at\">\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"New Cost\" :show.sync=\"showNewModal\" effect=\"fade\" width=\"800\" :callback=\"addNew\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"NewCost\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('name')}\">\n                                <label for=\"name\">Name</label>\n                                <input type=\"text\" id=\"name\" v-model=\"newCost.name\" v-validate:name=\"{require:true}\" class=\"form-control input-sm\">\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newCost.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newCost.due_at\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"newCost.enforced\">\n                                    Enforced?\n                                </label>\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -51362,6 +51372,231 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _methods;
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'admin-reservation-dues',
+    props: ['id'],
+    components: { vSelect: _vueSelect2.default, 'modal': _vueStrap2.default.modal },
+    data: function data() {
+        return {
+            reservation: null,
+            reservationsDues: [],
+            dues: [],
+            selectedDues: [],
+            availableDues: [],
+            editedDue: {
+                name: '',
+                date: null,
+                grace_period: 0,
+                enforced: false
+            },
+            newDue: {
+                name: '',
+                date: null,
+                grace_period: 0,
+                enforced: false
+            },
+            resource: this.$resource('reservations/' + this.id, { include: 'dues,costs.payments,trip.costs.payments' }),
+            showAddModal: false,
+            showNewModal: false,
+            showEditModal: false,
+            attemptSubmit: false,
+
+            preppedReservation: {}
+        };
+    },
+
+    computed: {},
+    methods: (_methods = {
+        dateIsBetween: function dateIsBetween(a, b) {
+            var start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
+            var stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
+            console.log(moment(a).isBetween(start, stop));
+            return moment(a).isBetween(start, stop);
+        },
+        checkForError: function checkForError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+            return this.$AddDue[field].invalid && this.attemptSubmit;
+        },
+        checkForEditDueError: function checkForEditDueError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+            return this.$EditDue[field].invalid && this.attemptSubmit;
+        },
+        checkForNewDueError: function checkForNewDueError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+            return this.$NewDue[field].invalid && this.attemptSubmit;
+        },
+        resetDue: function resetDue() {
+            this.newDue = {
+                item: '',
+                item_type: '',
+                due_at: null,
+                grace_period: 0,
+                enforced: false
+
+            };
+        },
+        isPast: function isPast(date) {
+            return moment().isAfter(date);
+        },
+        add: function add() {
+            this.attemptSubmit = false;
+            this.showAddModal = true;
+        },
+        addNew: function addNew() {
+            this.attemptSubmit = false;
+            this.showNewModal = true;
+        },
+        edit: function edit(due) {
+            due.due_at = moment(due).format('YYYY-MM-DDTHH:MM:SS');
+            this.editedDue = due;
+            this.attemptSubmit = false;
+            this.showEditModal = true;
+        },
+        updateDue: function updateDue() {
+            console.log(this.editedDue.due_at);
+            // prep current dues
+            var dues = [];
+            _.each(this.reservation.dues.data, function (due) {
+                if (due.cost_id === this.editedDue.cost_id) {
+                    dues.push({ id: this.editedDue.cost_id, grace_period: this.editedDue.grace_period, due_at: this.editedDue.due_at });
+                } else {
+                    dues.push({ id: due.cost_id, grace_period: due.grace_period });
+                }
+            }.bind(this));
+
+            var reservation = this.preppedReservation;
+            reservation.dues = dues;
+
+            return this.doUpdate(reservation);
+        },
+        remove: function remove(due) {
+            var reservation = this.preppedReservation;
+            reservation.dues = [];
+            _.each(this.reservation.dues.data, function (cs) {
+                if (cs.due_id !== due.due_id) {
+                    reservation.dues.push({ id: cs.due_id /*, locked: cs.locked*/ });
+                }
+            });
+            console.log(reservation.dues);
+
+            return this.doUpdate(reservation);
+        },
+        addDues: function addDues() {
+            // prep current dues
+            var currentDueIds = [];
+            _.each(this.reservation.dues.data, function (due) {
+                currentDueIds.push({ id: due.id || due.due_id, locked: due.locked });
+            });
+
+            // prep added dues
+            var selectedDueIds = [];
+            _.each(this.selectedDues, function (due) {
+                selectedDueIds.push({ id: due.id });
+            });
+
+            // merge arrays
+            var newDues = _.union(currentDueIds, selectedDueIds);
+            // filter possible duplicates
+            newDues = _.uniq(newDues);
+
+            var reservation = this.preppedReservation;
+            reservation.dues = newDues;
+
+            return this.doUpdate(reservation);
+        }
+    }, (0, _defineProperty3.default)(_methods, 'addNew', function addNew() {
+        // get trip object
+        var trip = this.reservation.trip.data;
+
+        // get only ids of current dues so we don't change anything
+        trip.dues = [];
+        _.each(this.reservation.trip.data.dues.data, function (dl) {
+            trip.dues.push({ id: dl.id });
+        });
+        trip.dues.push(this.newDeadline);
+        // remove tranformer modified values
+        delete trip.difficulty;
+        delete trip.rep_id;
+
+        this.$http.put('trips/' + trip.id, trip).then(function (response) {
+            var thisTrip = response.data.data;
+            this.selecteddues = new Array(this.newDeadline);
+
+            return this.adddues();
+        });
+    }), (0, _defineProperty3.default)(_methods, 'getDues', function getDues(search, loading) {
+        loading(true);
+    }), (0, _defineProperty3.default)(_methods, 'doUpdate', function doUpdate(reservation) {
+        return this.resource.update(reservation).then(function (response) {
+            this.setReservationData(response.data.data);
+            this.selectedDues = [];
+        });
+    }), (0, _defineProperty3.default)(_methods, 'setReservationData', function setReservationData(reservation) {
+        this.reservation = reservation;
+        this.preppedReservation = {
+            given_names: this.reservation.given_names,
+            surname: this.reservation.surname,
+            gender: this.reservation.gender,
+            status: this.reservation.status,
+            shirt_size: this.reservation.shirt_size,
+            birthday: this.reservation.birthday,
+            user_id: this.reservation.user_id,
+            trip_id: this.reservation.trip_id
+        };
+
+        // get available costs intersect with current
+        this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
+            return !_.findWhere(reservation.costs.data, { cost_id: cost.id, type: 'incremental' || 'optional' });
+        });
+
+        // Extend dues data
+    }), _methods),
+    ready: function ready() {
+        this.resource.get().then(function (response) {
+            this.setReservationData(response.data.data);
+        });
+
+        //Listen to Event Bus
+        this.$root.$on('AdminReservation:CostsUpdated', function (data) {
+            this.setReservationData(data);
+        }.bind(this));
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <!--<button class=\"btn btn-primary btn-xs\" @click=\"add\"><span\n            class=\"fa fa-plus\"></span> Add Existing\n    </button>-->\n    <!--<button class=\"btn btn-primary btn-xs\" @click=\"addNew\"><span\n            class=\"fa fa-plus\"></span> Create New\n    </button>-->\n\n    <!--<hr class=\"divider sm\">-->\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th>Status</th>\n            <th>Cost Name</th>\n            <th>Outstanding Balance</th>\n            <th>Grace Period</th>\n            <th>Due</th>\n            <th></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"reservation\">\n        <template v-for=\"due in reservation.dues.data\">\n            <tr>\n                <td class=\"text-center\">\n                    <small class=\"badge\" :class=\"{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }\">{{due.status|capitalize}}</small>\n                </td>\n                <td>{{ due.cost }}</td>\n                <td>{{ due.balance | currency }}</td>\n                <td>{{ due.grace_period }}</td>\n                <td>{{ due.due_at | moment 'll' }}</td>\n                <td>\n                    <a class=\"btn btn-default btn-xs\" @click=\"edit(due)\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger btn-xs\" @click=\"remove(due)\"><i class=\"fa fa-times\"></i></a>\n                </td>\n            </tr>\n        </template>\n        </tbody>\n    </table>\n\n    <modal title=\"Add Dues\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addDues\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"AddDue\">\n                <form class=\"for\" novalidate=\"\">\n                    <div class=\"form-group\" :class=\"{ 'has-error': checkForError('dues') }\">\n                        <label class=\"control-label\">Available Dues</label>\n                        <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedDues\" :options=\"availableDues\" label=\"name\"></v-select>\n                        <select hidden=\"\" v-model=\"user_id\" v-validate:dues=\"{ required: true }\" multiple=\"\">\n                            <option :value=\"due.id\" v-for=\"due in dues\">{{due.name}}</option>\n                        </select>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"Edit Due\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\" :callback=\"updateDue\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"EditDue\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForEditDueError('grace') }\">\n                                <label for=\"grace_period\">Grace Period</label>\n                                <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditDueError('grace') }\">\n                                    <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"editedDue.grace_period\" v-validate:grace=\"{required: { rule: true }}\">\n                                    <span class=\"input-group-addon\">Days</span>\n                                </div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"due_date\">Due Date</label>\n                                <input id=\"due_date\" type=\"datetime-local\" class=\"form-control\" v-model=\"editedDue.due_at\">\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-30337481", module.exports)
+  } else {
+    hotAPI.update("_v-30337481", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"babel-runtime/helpers/defineProperty":15,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],159:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _vueSelect = require('vue-select');
 
 var _vueSelect2 = _interopRequireDefault(_vueSelect);
@@ -51545,7 +51780,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1bac2c0c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":192,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],159:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],160:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -51861,7 +52096,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],160:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51912,7 +52147,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],161:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -51968,7 +52203,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],162:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52073,7 +52308,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5d37e43e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../passports/passport-create-update.vue":152,"vue":118,"vue-hot-reload-api":113}],163:[function(require,module,exports){
+},{"../passports/passport-create-update.vue":152,"vue":118,"vue-hot-reload-api":113}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52178,7 +52413,9 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1bd1d2ef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../visas/visa-create-update.vue":203,"vue":118,"vue-hot-reload-api":113}],164:[function(require,module,exports){
+},{"../visas/visa-create-update.vue":204,"vue":118,"vue-hot-reload-api":113}],165:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i {\n  margin-right: 10px; }\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52216,15 +52453,22 @@ exports.default = {
         return {
             todos: {},
             selectedTodo: {},
+            newTodo: {
+                'task': null,
+                'todoable_type': this.type,
+                'todoable_id': this.id
+            },
             page: 1,
             pagination: {},
             search: null,
             newMode: false,
             editMode: false,
+            completeMode: false,
             showSuccess: false,
             showError: false,
             deleteModal: false,
-            message: null
+            message: null,
+            filterBy: 'all'
         };
     },
 
@@ -52238,17 +52482,82 @@ exports.default = {
         'search': function search(val, oldVal) {
             this.page = 1;
             this.fetch();
+        },
+        'filterBy': function filterBy(val, oldVal) {
+            this.page = 1;
+            this.fetch();
         }
     },
     methods: {
         editTodo: function editTodo(todo) {
+            this.editMode = true;
             this.selectedTodo = todo;
         },
+        completeTodo: function completeTodo(todo) {
+            this.completeMode = true;
+
+            if (todo.completed_at) {
+                todo.complete = false;
+                this.selectedTodo = todo;
+            } else {
+                todo.complete = true;
+                todo.user_id = this.user_id;
+                this.selectedTodo = todo;
+            }
+
+            this.updateTodo();
+        },
+        changeFilter: function changeFilter(status) {
+            this.filterBy = status;
+        },
+        createTodo: function createTodo() {
+            if (!this.newTodo.task) return;
+
+            this.$http.post('todos', this.newTodo).then(function () {
+                this.newTodo.task = null;
+                this.message = 'Todo created successfully.';
+                this.showSuccess = true;
+                this.fetch();
+            }).error(function () {
+                this.message = 'Unable to add the todo.';
+                this.showError = true;
+            });
+        },
         updateTodo: function updateTodo() {
-            this.selectedTodo = {};
+            if (!this.selectedTodo.task) return;
+            if (!this.editMode && !this.completeMode) return;
+
+            this.$http.put('todos/' + this.selectedTodo.id, this.selectedTodo).then(function () {
+                this.editMode = false;
+                this.completeMode = false;
+                this.selectedTodo = {};
+                this.fetch();
+            }).error(function () {
+                this.message = 'Unable to update the todo.';
+                this.showError = true;
+            });
+        },
+        remove: function remove(todo) {
+            this.$http.delete('todos/' + todo.id).then(function () {
+                this.fetch();
+                this.selectedTodo = {};
+                this.message = 'Todo deleted.';
+                this.showSuccess = true;
+            }).error(function () {
+                this.message = 'Unable to delete todo.';
+                this.showError = true;
+            });
         },
         fetch: function fetch() {
-            var params = '?sort=task|desc&include=user&per_page=' + this.per_page + '&page=' + this.page;
+            var params = '?sort=task&include=user&per_page=' + this.per_page + '&page=' + this.page;
+
+            if (this.filterBy == 'active') {
+                params = params + '&status=incomplete';
+            }
+
+            if (this.filterBy == 'completed') {
+                params = params + '&status=complete';
+            }
 
             if (this.search) {
                 params = params + '&search=' + this.search;
@@ -52273,18 +52582,22 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <h5>ToDos</h5>\n    </div>\n    <div class=\"list-group\">\n        <div class=\"list-group-item\" v-for=\"todo in todos\">\n                <input type=\"text\" class=\"form-control\" v-model=\"selectedTodo.task\" v-if=\"selectedTodo.id == todo.id\" @blur=\"updateTodo\">\n                <div class=\"row\" v-else=\"\">\n                    <div class=\"col-xs-2\">\n                        <i class=\"fa fa-lg\" :class=\"{ 'fa-check-square-o' : todo.completed_at, 'fa-square-o' : !todo.completed_at }\" style=\"margin-right: 10px\">\n                        </i>\n                    </div>\n                    <div class=\"col-xs-10\" @dblclick=\"editTodo(todo)\">\n                        <span :class=\"{ 'text-strike' : todo.completed_at }\">{{ todo.task }}</span>\n                        <small class=\"text-muted\" v-if=\"todo.completed_at\"><br>\n                            Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}\n                        </small>\n                    </div>\n                </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <div class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n            <h5>ToDos</h5>\n        </div>\n        <div class=\"list-group\">\n            <div class=\"list-group-item\">\n                <div class=\"row\">\n                    <div class=\"col-xs-2 col-sm-1 text-muted\" @click=\"completeTodo(todo)\">\n                        <i class=\"fa fa-lg fa-plus-square-o\" style=\"margin-right: 10px\"></i>\n                    </div>\n                    <div class=\"col-xs-10 col-sm-11\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"newTodo.task\" placeholder=\"What needs to be done?\" @keyup.enter=\"createTodo\">\n                    </div>\n                </div>\n            </div>\n            <div class=\"list-group-item todo-item\" v-for=\"todo in todos\">\n                    <div class=\"row\">\n                        <div class=\"col-xs-2 col-sm-1 text-muted todo-item-checkbox\" @click=\"completeTodo(todo)\">\n                            <i class=\"fa fa-lg\" :class=\"{\n                               'fa-check-square-o' : todo.completed_at,\n                               'fa-square-o' : !todo.completed_at\n                               }\">\n                            </i>\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" v-if=\"selectedTodo.id == todo.id &amp;&amp; editMode\">\n                            <input type=\"text\" class=\"form-control\" v-model=\"selectedTodo.task\" @blur=\"updateTodo\" @keyup.enter=\"updateTodo\">\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" @dblclick=\"editTodo(todo)\" v-else=\"\">\n                            <span :class=\"{ 'text-strike' : todo.completed_at }\">{{ todo.task }}</span>\n                            <small class=\"text-muted\" v-if=\"todo.completed_at\"><br>\n                                Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}\n                            </small>\n                        </div>\n                        <div class=\"col-xs-1 col-sm-1 text-right\">\n                            <i class=\"fa fa-times fa-lg text-muted remove-todo\" @click=\"selectedTodo = todo,deleteModal = true\">\n                            </i>\n                        </div>\n                    </div>\n            </div>\n        </div>\n        <div class=\"panel-body text-center\">\n            <nav>\n                <ul class=\"pager\">\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\" class=\"previous\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                            <span aria-hidden=\"true\">« <span class=\"hidden-xs\">Previous</span></span>\n                        </a>\n                    </li>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'all'}\" @click=\"changeFilter('all')\">\n                        All\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'active'}\" @click=\"changeFilter('active')\">\n                        Active\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'completed'}\" @click=\"changeFilter('completed')\">\n                        Completed\n                    </button>\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\" class=\"next\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                            <span aria-hidden=\"true\"><span class=\"hidden-xs\">Next</span> » </span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n    <p class=\"text-center\"><small class=\"text-muted\">Double-click to edit a todo.</small></p>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Todo\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Todo?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedTodo)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["/* line 2, stdin */\ndiv.list-group-item {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i {\n  margin-right: 10px; }\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
   if (!module.hot.data) {
     hotAPI.createRecord("_v-e87a91b0", module.exports)
   } else {
     hotAPI.update("_v-e87a91b0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],165:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52352,7 +52665,7 @@ exports.default = {
 	ready: function ready() {}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div style=\"display:inline;\">\n\t<button class=\"navbar-toggle\" @click=\"showRight = true\">\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t</button>\n\t<aside :show.sync=\"showRight\" placement=\"right\" header=\"Missions.Me\" :width=\"275\">\n\t\t<ul class=\"nav navmenu-nav\">\n\t\t\t<li class=\"donate-nav\"><a class=\"navDonate\" href=\"/fundraisers\"><i class=\"fa fa-heart\"></i> Donate To A Cause</a>\n\t\t\t</li>\n\t\t\t<li v-if=\"auth\" id=\"userMenu\" class=\"dropdown-toggle visible-xs text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"img-xs img-circle av-left\" :src=\"avatar\" :alt=\"name\"> {{ name }}\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t<template v-if=\"auth\" class=\"dropdown-menu\" aria-labelledby=\"userMenu\">\n\t\t\t\t<li class=\"navlabel\">Account</li>\n\t\t\t\t<li class=\"\"><a :href=\"url\">My Profile</a></li>\n\t\t\t\t<li class=\"\"><a href=\"/dashboard\">Dashboard</a></li>\n\t\t\t\t<li v-if=\"admin\" class=\"\"><a href=\"/admin\">Admin</a></li>\n\t\t\t\t<li class=\"\"><a href=\"/logout\">Sign Out</a></li>\n\t\t\t</template>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Login</a></li>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Sign Up</a></li>\n\n\t\t\t<template v-if=\"isDashboard()\">\n\t\t\t\t<li class=\"navlabel\">User</li>\n\t\t\t\t<li><a href=\"/dashboard\"><i class=\"fa fa-tachometer\"></i> Dashboard</a></li>\n\t\t\t\t<li><a href=\"/dashboard/settings\"><i class=\"fa fa-cog\"></i> Settings</a></li>\n\t\t\t\t<li><a href=\"/dashboard/reservations\"><i class=\"fa fa-ticket\"></i> Reservations</a></li>\n\t\t\t\t<li><a href=\"/dashboard/records\"><i class=\"fa fa-archive\"></i> Records</a></li>\n\t\t\t\t<li v-if=\"managing\"><a href=\"/dashboard/groups\"><i class=\"fa fa-users\"></i> Groups</a></li>\n\t\t\t</template>\n\n\t\t\t<template v-if=\"isAdmin()\">\n\t\t\t\t<li class=\"navlabel\">Admin</li>\n\t\t\t\t<li><a href=\"/admin\"><i class=\"fa fa-tachometer\"></i> Dashboard</a></li>\n\t\t\t\t<li><a href=\"/admin/campaigns\"><i class=\"fa fa-globe\"></i> Campaings</a></li>\n\t\t\t\t<li><a href=\"/admin/reservations/current\"><i class=\"fa fa-ticket\"></i> Reservations</a></li>\n\t\t\t\t<li><a href=\"/admin/groups\"><i class=\"fa fa-users\"></i> Groups</a></li>\n\t\t\t\t<li><a href=\"/admin/interests\"><i class=\"fa fa-question-mark\"></i> Interests</a></li>\n\t\t\t\t<li><a href=\"/admin/users\"><i class=\"fa fa-user\"></i> Users</a></li>\n\t\t\t\t<li><a href=\"/admin/uploads\"><i class=\"fa fa-picture-o\"></i> Uploads</a></li>\n\t\t\t</template>\n\t\t\t<!-- Get Started -->\n\t\t\t<li class=\"navlabel\">Get Started</li>\n\t\t\t<li><a href=\"/campaigns\">Trips</a></li>\n\t\t\t<li><a href=\"/fundraisers\">Fundraisers</a></li>\n\t\t\t<li><a href=\"/groups\">Groups</a></li>\n\t\t\t<li><a href=\"/support\">Partnership</a></li>\n\n\t\t\t<!-- 1N1D-->\n\t\t\t<li class=\"navlabel\">1Nation1Day</li>\n\t\t\t<li><a href=\"http://1nation1day.com/\">2017 Nicaragua</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/dominican\">2015 Dominican</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/honduras\">2013 Honduras</a></li>\n\n\t\t\t<!-- Causes -->\n\t\t\t<li class=\"navlabel\">Causes</li>\n\t\t\t<li><a href=\"/water\">Clean Water</a></li>\n\t\t\t<li><a href=\"/orphans\">Rescue Orphans</a></li>\n\t\t\t<li><a href=\"/medical\">Medical Missions</a></li>\n\t\t\t<!--<li><a href=\"#\">Homes</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Trafficking Rescue</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Leadership Centers</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Sponsor A Project</a></li>-->\n\n\t\t\t<!-- Training -->\n\t\t\t<li class=\"navlabel\">Train</li>\n\t\t\t<li><a href=\"/college\">Missions.Me College</a></li>\n\t\t\t<li><a href=\"/speakers\">Speakers</a></li>\n\n\t\t\t<!-- M.Me -->\n\t\t\t<li class=\"navlabel\">About</li>\n\t\t\t<li><a href=\"/about-mm\">Missions.Me</a></li>\n\t\t\t<li><a href=\"/contact\">Contact Us</a></li>\n\t\t</ul>\n\t</aside>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<li style=\"display:inline;\">\n\t<button class=\"navbar-toggle\" @click=\"showRight = true\">\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t\t<span class=\"icon-bar\"></span>\n\t</button>\n\t<aside :show.sync=\"showRight\" placement=\"right\" header=\"Missions.Me\" :width=\"275\">\n\t\t<ul class=\"nav navmenu-nav\">\n\t\t\t<li class=\"donate-nav\"><a class=\"navDonate\" href=\"/fundraisers\"><i class=\"fa fa-heart\"></i> Donate To A Cause</a>\n\t\t\t</li>\n\t\t\t<li v-if=\"auth\" id=\"userMenu\" class=\"dropdown-toggle visible-xs text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n\t\t\t\t<a href=\"#\">\n\t\t\t\t\t<img class=\"img-xs img-circle av-left\" :src=\"avatar\" :alt=\"name\"> {{ name }}\n\t\t\t\t</a>\n\t\t\t</li>\n\t\t\t<template v-if=\"auth\" class=\"dropdown-menu\" aria-labelledby=\"userMenu\">\n\t\t\t\t<li class=\"navlabel\">Account</li>\n\t\t\t\t<li class=\"\"><a :href=\"url\">My Profile</a></li>\n\t\t\t\t<li class=\"\"><a href=\"/dashboard\">Dashboard</a></li>\n\t\t\t\t<li v-if=\"admin\" class=\"\"><a href=\"/admin\">Admin</a></li>\n\t\t\t\t<li class=\"\"><a href=\"/logout\">Sign Out</a></li>\n\t\t\t</template>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Login</a></li>\n\t\t\t<li v-if=\"!auth\"><a href=\"/login\">Sign Up</a></li>\n\n\t\t\t<template v-if=\"isDashboard()\">\n\t\t\t\t<li class=\"navlabel\">User</li>\n\t\t\t\t<li><a href=\"/dashboard\"><i class=\"fa fa-tachometer\"></i> Dashboard</a></li>\n\t\t\t\t<li><a href=\"/dashboard/settings\"><i class=\"fa fa-cog\"></i> Settings</a></li>\n\t\t\t\t<li><a href=\"/dashboard/reservations\"><i class=\"fa fa-ticket\"></i> Reservations</a></li>\n\t\t\t\t<li><a href=\"/dashboard/records\"><i class=\"fa fa-archive\"></i> Records</a></li>\n\t\t\t\t<li v-if=\"managing\"><a href=\"/dashboard/groups\"><i class=\"fa fa-users\"></i> Groups</a></li>\n\t\t\t</template>\n\n\t\t\t<template v-if=\"isAdmin()\">\n\t\t\t\t<li class=\"navlabel\">Admin</li>\n\t\t\t\t<li><a href=\"/admin\"><i class=\"fa fa-tachometer\"></i> Dashboard</a></li>\n\t\t\t\t<li><a href=\"/admin/campaigns\"><i class=\"fa fa-globe\"></i> Campaings</a></li>\n\t\t\t\t<li><a href=\"/admin/reservations/current\"><i class=\"fa fa-ticket\"></i> Reservations</a></li>\n\t\t\t\t<li><a href=\"/admin/groups\"><i class=\"fa fa-users\"></i> Groups</a></li>\n\t\t\t\t<li><a href=\"/admin/interests\"><i class=\"fa fa-question-mark\"></i> Interests</a></li>\n\t\t\t\t<li><a href=\"/admin/users\"><i class=\"fa fa-user\"></i> Users</a></li>\n\t\t\t\t<li><a href=\"/admin/uploads\"><i class=\"fa fa-picture-o\"></i> Uploads</a></li>\n\t\t\t</template>\n\t\t\t<!-- Get Started -->\n\t\t\t<li class=\"navlabel\">Get Started</li>\n\t\t\t<li><a href=\"/campaigns\">Trips</a></li>\n\t\t\t<li><a href=\"/fundraisers\">Fundraisers</a></li>\n\t\t\t<li><a href=\"/groups\">Groups</a></li>\n\t\t\t<li><a href=\"/support\">Partnership</a></li>\n\n\t\t\t<!-- 1N1D-->\n\t\t\t<li class=\"navlabel\">1Nation1Day</li>\n\t\t\t<li><a href=\"http://1nation1day.com/\">2017 Nicaragua</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/dominican\">2015 Dominican</a></li>\n\t\t\t<li><a href=\"http://1nation1day.com/honduras\">2013 Honduras</a></li>\n\n\t\t\t<!-- Causes -->\n\t\t\t<li class=\"navlabel\">Causes</li>\n\t\t\t<li><a href=\"/water\">Clean Water</a></li>\n\t\t\t<li><a href=\"/orphans\">Rescue Orphans</a></li>\n\t\t\t<li><a href=\"/medical\">Medical Missions</a></li>\n\t\t\t<!--<li><a href=\"#\">Homes</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Trafficking Rescue</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Leadership Centers</a></li>-->\n\t\t\t<!--<li><a href=\"#\">Sponsor A Project</a></li>-->\n\n\t\t\t<!-- Training -->\n\t\t\t<li class=\"navlabel\">Train</li>\n\t\t\t<li><a href=\"/college\">Missions.Me College</a></li>\n\t\t\t<li><a href=\"/speakers\">Speakers</a></li>\n\n\t\t\t<!-- M.Me -->\n\t\t\t<li class=\"navlabel\">About</li>\n\t\t\t<li><a href=\"/about-mm\">Missions.Me</a></li>\n\t\t\t<li><a href=\"/contact\">Contact Us</a></li>\n\t\t</ul>\n\t</aside>\n</li>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -52363,7 +52676,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],166:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],167:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -52521,7 +52834,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":173,"./create/details.vue":174,"./create/pricing.vue":175,"./create/requirements.vue":176,"./create/settings.vue":177,"vue":118,"vue-hot-reload-api":113,"vueify/lib/insert-css":119}],167:[function(require,module,exports){
+},{"./create/deadlines.vue":174,"./create/details.vue":175,"./create/pricing.vue":176,"./create/requirements.vue":177,"./create/settings.vue":178,"vue":118,"vue-hot-reload-api":113,"vueify/lib/insert-css":119}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52557,7 +52870,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],168:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52650,7 +52963,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113,"vue-select":115}],169:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115}],170:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -52830,7 +53143,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":178,"./edit/details.vue":179,"./edit/pricing.vue":180,"./edit/requirements.vue":181,"./edit/settings.vue":182,"vue":118,"vue-hot-reload-api":113,"vueify/lib/insert-css":119}],170:[function(require,module,exports){
+},{"./edit/deadlines.vue":179,"./edit/details.vue":180,"./edit/pricing.vue":181,"./edit/requirements.vue":182,"./edit/settings.vue":183,"vue":118,"vue-hot-reload-api":113,"vueify/lib/insert-css":119}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52933,7 +53246,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113,"vue-select":115}],171:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53006,7 +53319,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],172:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53077,7 +53390,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],173:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53155,7 +53468,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],174:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],175:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 'use strict';
@@ -53268,7 +53581,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vueify/lib/insert-css":119}],175:[function(require,module,exports){
+},{"marked":107,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vueify/lib/insert-css":119}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53497,7 +53810,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],176:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53576,7 +53889,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],177:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53631,7 +53944,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],178:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53713,7 +54026,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],179:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -53849,7 +54162,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":118,"vue-hot-reload-api":113,"vue-select":115}],180:[function(require,module,exports){
+},{"marked":107,"vue":118,"vue-hot-reload-api":113,"vue-select":115}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54082,7 +54395,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],181:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54164,7 +54477,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],182:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54224,7 +54537,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],183:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54270,7 +54583,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],184:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54437,7 +54750,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113,"vue-select":115}],185:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54494,7 +54807,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],186:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54792,7 +55105,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],187:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54837,7 +55150,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],188:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],189:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54874,7 +55187,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],189:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54911,7 +55224,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],190:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],191:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -54982,7 +55295,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c5dc1f32", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],191:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],192:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -55293,7 +55606,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":149,"./registration/additional-trip-options.vue":183,"./registration/basic-info.vue":184,"./registration/deadline-agreement.vue":185,"./registration/payment-details.vue":186,"./registration/review.vue":187,"./registration/roca.vue":188,"./registration/tos.vue":189,"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],192:[function(require,module,exports){
+},{"../login.vue":149,"./registration/additional-trip-options.vue":184,"./registration/basic-info.vue":185,"./registration/deadline-agreement.vue":186,"./registration/payment-details.vue":187,"./registration/review.vue":188,"./registration/roca.vue":189,"./registration/tos.vue":190,"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55370,6 +55683,7 @@ exports.default = {
 
 			//                name: '',
 			//                type: null,
+			url: '',
 			path: '',
 			file: null,
 			x_axis: null,
@@ -55392,7 +55706,7 @@ exports.default = {
 			aspectRatio: this.width / this.height,
 			fileA: null,
 			resultImage: null,
-			typePaths: [{ type: 'avatar', path: 'images/avatars', width: 1280, height: 1280 }, { type: 'banner', path: 'images/banners', width: 1300, height: 500 }, { type: 'other', path: 'images/other' }, { type: 'file', path: 'resources/documents' }],
+			typePaths: [{ type: 'avatar', path: 'images/avatars', width: 1280, height: 1280 }, { type: 'banner', path: 'images/banners', width: 1300, height: 500 }, { type: 'video' }, { type: 'other', path: 'images/other' }, { type: 'file', path: 'resources/documents' }],
 			typeObj: null,
 			resource: this.$resource('uploads{/id}'),
 			uploads: [],
@@ -55417,7 +55731,7 @@ exports.default = {
 	watch: {
 		'type': function type(val, oldVal) {
 			this.typeObj = _.findWhere(this.typePaths, { type: val });
-			if (this.typeObj) {
+			if (this.typeObj && val !== 'video') {
 				this.path = this.typeObj.path;
 				if (this.file) this.adjustSelectByType();
 			}
@@ -55506,17 +55820,24 @@ exports.default = {
 		submit: function submit() {
 			this.attemptSubmit = true;
 			if (this.$CreateUpload.valid) {
-				this.resource.save(null, {
+				var params = {
 					name: this.name,
 					tags: this.tags,
-					type: this.type,
-					path: this.path,
-					file: this.file,
-					x_axis: parseInt(this.x_axis / this.imageAspectRatio),
-					y_axis: parseInt(this.y_axis / this.imageAspectRatio),
-					width: parseInt(this.coords.w / this.imageAspectRatio),
-					height: parseInt(this.coords.h / this.imageAspectRatio)
-				}).then(function (resp) {
+					type: this.type
+				};
+
+				if (this.type === 'video') {
+					params.url = this.url;
+				} else {
+					params.file = this.file;
+					params.path = this.path;
+					params.x_axis = parseInt(this.x_axis / this.imageAspectRatio);
+					params.y_axis = parseInt(this.y_axis / this.imageAspectRatio);
+					params.width = parseInt(this.coords.w / this.imageAspectRatio);
+					params.height = parseInt(this.coords.h / this.imageAspectRatio);
+				}
+
+				this.resource.save(null, params).then(function (resp) {
 					this.handleSuccess(resp);
 				}, function (error) {
 					console.log(error);
@@ -55626,7 +55947,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<form class=\"form-inline\" v-if=\"isChild &amp;&amp; !uiLocked\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector1\" v-model=\"uiSelector\" :value=\"1\"> Select file\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector2\" v-model=\"uiSelector\" :value=\"2\"> Upload file\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr v-if=\"uiSelector!==0\">\n\t</form>\n\t<div v-if=\"isChild &amp;&amp; uiSelector==1\">\n\t\t<!--<form class=\"form-inline text-right\" novalidate>\n\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t</div>\n\t\t</form>-->\n\t\t<br>\n\t\t<div class=\"\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\t\t\t<div class=\"col-sm-2 col-md-2\" v-for=\"upload in uploads\" style=\"display:flex;flex: 1\">\n\t\t\t\t<div class=\"panel panel-default\">\n\n\t\t\t\t\t\t<a @click=\"selectExisting(upload)\" role=\"button\">\n\t\t\t\t\t\t\t<tooltip effect=\"scale\" placement=\"top\" :content=\"upload.name\">\n\t\t\t\t\t\t\t\t<img :src=\"upload.source + '?w=100&amp;q=50'\" :alt=\"upload.name\" class=\"img-responsive\">\n\t\t\t\t\t\t\t</tooltip>\n\t\t\t\t\t\t</a>\n\n\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t<span class=\"text-uppercase\">{{upload.name}}</span>\n\t\t\t\t\t</div> end panel-body\n\t\t\t\t\t<div class=\"panel-footer\">\n\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-block btn-primary\" @click=\"selectExisting(upload)\">Select</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end panel -->\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t\t<nav>\n\t\t\t\t\t<ul class=\"pagination pagination-sm\">\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</nav>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<validator v-if=\"!isChild||uiSelector===2\" name=\"CreateUpload\">\n\t\t<form id=\"CreateUploadForm\" class=\"form\" novalidate=\"\" @submit=\"prevent\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"name\" class=\"control-label\">Name</label>\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('tags') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"tags\" class=\"control-label\">Tags</label>\n\t\t\t\t\t<v-select id=\"tags\" class=\"form-control\" multiple=\"\" :value.sync=\"tags\" :options=\"tagOptions\"></v-select>\n\t\t\t\t\t<select hidden=\"\" id=\"tags\" name=\"tags\" v-model=\"tags\" multiple=\"\" v-validate:tags=\"{ required:true }\">\n\t\t\t\t\t\t<option v-for=\"tag in tagOptions\" :value=\"tag\">{{tag}}</option>\n\t\t\t\t\t</select>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"type\" class=\"control-label\">Type</label>\n\t\t\t\t\t<select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\" :disabled=\"lockType\">\n\t\t\t\t\t\t<option :value=\"\">-- select type --</option>\n\t\t\t\t\t\t<option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t\t</select>\n\t\t\t</div>\n\n\t\t\t<div class=\"row\" v-if=\"type &amp;&amp; type === 'other'\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions (px)\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t<label for=\"file\" class=\"control-label\">File</label>\n\t\t\t\t\t<input type=\"file\" id=\"file\" :accept=\"allowedTypes\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t<!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t</div>\n\n\t\t\t<div class=\"row2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-12\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<a v-if=\"!isChild\" href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" v-if=\"!isUpdate\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t\t<a @click=\"update()\" v-if=\"isUpdate\" class=\"btn btn-primary\">Update</a>\n\t\t\t</div>\n\n\t\t</form>\n\t</validator>\n\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n\t<form class=\"form-inline\" v-if=\"isChild &amp;&amp; !uiLocked\" novalidate=\"\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-sm-offset-2 col-sm-10\">\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector1\" v-model=\"uiSelector\" :value=\"1\"> Select file\n\t\t\t\t</label>\n\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t<input type=\"radio\" name=\"uiSelector\" id=\"uiSelector2\" v-model=\"uiSelector\" :value=\"2\"> Upload file\n\t\t\t\t</label>\n\t\t\t</div>\n\t\t</div>\n\t\t<hr v-if=\"uiSelector!==0\">\n\t</form>\n\t<div v-if=\"isChild &amp;&amp; uiSelector==1\">\n\t\t<!--<form class=\"form-inline text-right\" novalidate>\n\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t<input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n\t\t\t</div>\n\t\t</form>-->\n\t\t<br>\n\t\t<div class=\"\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n\t\t\t<div class=\"col-sm-2 col-md-2\" v-for=\"upload in uploads\" style=\"display:flex;flex: 1\">\n\t\t\t\t<div class=\"panel panel-default\">\n\n\t\t\t\t\t\t<a @click=\"selectExisting(upload)\" role=\"button\">\n\t\t\t\t\t\t\t<tooltip effect=\"scale\" placement=\"top\" :content=\"upload.name\">\n\t\t\t\t\t\t\t\t<img :src=\"upload.source + '?w=100&amp;q=50'\" :alt=\"upload.name\" class=\"img-responsive\">\n\t\t\t\t\t\t\t</tooltip>\n\t\t\t\t\t\t</a>\n\n\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t<span class=\"text-uppercase\">{{upload.name}}</span>\n\t\t\t\t\t</div> end panel-body\n\t\t\t\t\t<div class=\"panel-footer\">\n\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-block btn-primary\" @click=\"selectExisting(upload)\">Select</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div><!-- end panel -->\n\t\t\t</div><!-- end col -->\n\t\t\t<div class=\"col-xs-12 text-center\">\n\t\t\t\t<nav>\n\t\t\t\t\t<ul class=\"pagination pagination-sm\">\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n\t\t\t\t\t\t\t<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">«</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t\t<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n\t\t\t\t\t\t<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n\t\t\t\t\t\t\t<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n\t\t\t\t\t\t\t\t<span aria-hidden=\"true\">»</span>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</li>\n\t\t\t\t\t</ul>\n\t\t\t\t</nav>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<validator v-if=\"!isChild||uiSelector===2\" name=\"CreateUpload\">\n\t\t<form id=\"CreateUploadForm\" class=\"form\" novalidate=\"\" @submit=\"prevent\">\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('name') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"name\" class=\"control-label\">Name</label>\n\t\t\t\t\t<input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('tags') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"tags\" class=\"control-label\">Tags</label>\n\t\t\t\t\t<v-select id=\"tags\" class=\"form-control\" multiple=\"\" :value.sync=\"tags\" :options=\"tagOptions\"></v-select>\n\t\t\t\t\t<select hidden=\"\" id=\"tags\" name=\"tags\" v-model=\"tags\" multiple=\"\" v-validate:tags=\"{ required:true }\">\n\t\t\t\t\t\t<option v-for=\"tag in tagOptions\" :value=\"tag\">{{tag}}</option>\n\t\t\t\t\t</select>\n\t\t\t</div>\n\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\" v-show=\"!uiLocked\">\n\t\t\t\t<label for=\"type\" class=\"control-label\">Type</label>\n\t\t\t\t<select class=\"form-control\" id=\"type\" v-model=\"type\" v-validate:type=\"{ required: true }\" :disabled=\"lockType\">\n\t\t\t\t\t<option :value=\"\">-- select type --</option>\n\t\t\t\t\t<option value=\"avatar\">Image (Avatar) - 1280 x 1280</option>\n\t\t\t\t\t<option value=\"banner\">Image (Banner) - 1300 x 500</option>\n\t\t\t\t\t<option value=\"other\">Image (other) - no set dimensions</option>\n\t\t\t\t\t<option value=\"video\">Video</option>\n\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t</select>\n\t\t\t</div>\n\n\t\t\t<div class=\"row\" v-if=\"type &amp;&amp; type === 'other'\">\n\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t<label>\n\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"constrained\">\n\t\t\t\t\t\tLock Proportions (px)\n\t\t\t\t\t</label>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"\" :class=\"{'col-sm-4': !constrained, 'col-sm-8': constrained}\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"!constrained\" id=\"basic-addon3\">Width</span>\n\t\t\t\t\t\t<span class=\"input-group-addon\" v-if=\"constrained\" id=\"basic-addon3\">Width/Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledWidth\" id=\"height\" min=\"100\" aria-describedby=\"basic-addon3\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t\t<br>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\" v-if=\"!constrained\">\n\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t<span class=\"input-group-addon\" id=\"basic-addon1\">Height</span>\n\t\t\t\t\t\t<input type=\"number\" number=\"\" class=\"form-control\" v-model=\"scaledHeight\" id=\"width\" min=\"100\" aria-describedby=\"basic-addon1\" placeholder=\"300\">\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-sm-4\">\n\t\t\t\t\t<button class=\"btn btn-default\" type=\"button\" @click=\"adjustSelect\">Set</button>\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"row\" v-if=\"type &amp;&amp; type === 'video'\">\n\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-play-circle\"></i></span>\n\t\t\t\t\t<input type=\"url\" class=\"form-control\" v-model=\"url\" placeholder=\"Video Link (YouTube/Vimeo/etc)\">\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"type &amp;&amp; type !== 'video'\">\n\t\t\t\t<label for=\"file\" class=\"control-label\">File</label>\n\t\t\t\t\t<input type=\"file\" id=\"file\" :accept=\"allowedTypes\" v-model=\"fileA\" @change=\"handleImage\" class=\"form-control\">\n\t\t\t\t\t<!--<h5>Coords: {{coords|json}}</h5>-->\n\t\t\t</div>\n\n\t\t\t<div class=\"row2\" v-if=\"type &amp;&amp; type !== 'file' &amp;&amp; file &amp;&amp; isSmall()\">\n\t\t\t\t<div class=\"alert alert-warning\" role=\"alert\">\n\t\t\t\t\tThe recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>\n\t\t\t\t\tThe current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<div class=\"form-group\" v-if=\"file\" v-show=\"type !== 'file'\">\n\t\t\t\t<label for=\"file\" class=\"control-label\">Crop Image</label>\n\t\t\t\t<div id=\"crop-wrapper\" class=\"col-sm-12\">\n\t\t\t\t\t<img :src=\"file\" :width=\"imageWidth\" :height=\"imageHeight\" :style=\"'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'\" v-crop:create=\"test\" v-crop:start=\"test\" v-crop:move=\"test\" v-crop:end=\"test\">\n\t\t\t\t\t<!--<hr>-->\n\t\t\t\t\t<!--<img :src=\"resultImage\" v-if=\"resultImage\">-->\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t<br>\n\n\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<a v-if=\"!isChild\" href=\"/admin/uploads\" class=\"btn btn-default\">Cancel</a>\n\t\t\t\t\t<a @click=\"submit()\" v-if=\"!isUpdate\" class=\"btn btn-primary\">Create</a>\n\t\t\t\t\t<a @click=\"update()\" v-if=\"isUpdate\" class=\"btn btn-primary\">Update</a>\n\t\t\t</div>\n\n\t\t</form>\n\t</validator>\n\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -55637,7 +55958,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],193:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],194:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -55777,7 +56098,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vueify/lib/insert-css":119}],194:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vueify/lib/insert-css":119}],195:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -55910,7 +56231,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],195:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -55946,7 +56267,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],196:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],197:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -56124,7 +56445,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],197:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],198:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -56346,7 +56667,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vueify/lib/insert-css":119}],198:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vueify/lib/insert-css":119}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56421,7 +56742,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-69badce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":118,"vue-hot-reload-api":113}],199:[function(require,module,exports){
+},{"marked":107,"vue":118,"vue-hot-reload-api":113}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56459,7 +56780,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ea6dd1a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],200:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56499,7 +56820,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-718e65c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113}],201:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -56625,7 +56946,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-63c1ee29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],202:[function(require,module,exports){
+},{"marked":107,"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],203:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.alert.top, .alert.top-right {\n    top: 80px;\n}\n")
 'use strict';
@@ -56869,7 +57190,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2d9ee899", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":192,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],203:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116,"vueify/lib/insert-css":119}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -57041,7 +57362,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-12a04920", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":192,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],204:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":193,"vue":118,"vue-hot-reload-api":113,"vue-select":115,"vue-strap/dist/vue-strap.min":116}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -57128,7 +57449,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4fbd58ab", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],205:[function(require,module,exports){
+},{"vue":118,"vue-hot-reload-api":113,"vue-strap/dist/vue-strap.min":116}],206:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -57359,6 +57680,10 @@ var _adminReservationCosts = require('./components/reservations/admin-reservatio
 
 var _adminReservationCosts2 = _interopRequireDefault(_adminReservationCosts);
 
+var _adminReservationDues = require('./components/reservations/admin-reservation-dues.vue');
+
+var _adminReservationDues2 = _interopRequireDefault(_adminReservationDues);
+
 var _adminReservationDeadlines = require('./components/reservations/admin-reservation-deadlines.vue');
 
 var _adminReservationDeadlines2 = _interopRequireDefault(_adminReservationDeadlines);
@@ -57398,10 +57723,10 @@ var _vueStrap2 = _interopRequireDefault(_vueStrap);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // jQuery
-
+window.$ = window.jQuery = require('jquery');
 
 // admin components
-window.$ = window.jQuery = require('jquery');
+
 window.moment = require('moment');
 window._ = require('underscore');
 window.marked = require('marked');
@@ -57562,7 +57887,7 @@ new _vue2.default({
     _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default, _groupsList2.default, _visaCreateUpdate2.default, _reservationsPassportsManager2.default, _reservationsVisasManager2.default, _userSettings2.default, _userProfileStories2.default, _userProfileFundraisers2.default, _userProfileFundraisersDonors2.default, _userProfileFundraisersProgress2.default, _dashboardGroupTrips2.default, _dashboardGroupReservations2.default, _dashboardInterestsList2.default,
 
     // admin components
-    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminInterestsList2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminReservationEdit2.default, _adminReservationCosts2.default, _adminReservationDeadlines2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default, _reconcileFund2.default],
+    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminInterestsList2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminReservationEdit2.default, _adminReservationCosts2.default, _adminReservationDues2.default, _adminReservationDeadlines2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default, _reconcileFund2.default],
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -57583,6 +57908,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/action-trigger.vue":120,"./components/campaigns/admin-campaign-create.vue":121,"./components/campaigns/admin-campaign-details.vue":122,"./components/campaigns/admin-campaign-edit.vue":123,"./components/campaigns/campaign-groups.vue":124,"./components/campaigns/campaigns.vue":125,"./components/campaigns/group-trips.vue":130,"./components/campaigns/groups-trips-selection-wrapper.vue":131,"./components/donate.vue":132,"./components/fundraisers/fundraisers-stories.vue":133,"./components/fundraisers/fundraisers.vue":134,"./components/groups/admin-group-create.vue":135,"./components/groups/admin-group-edit.vue":136,"./components/groups/admin-group-managers.vue":137,"./components/groups/admin-groups-list.vue":138,"./components/groups/dashboard-group-reservations.vue":139,"./components/groups/dashboard-group-trips.vue":140,"./components/groups/group-interest-signup.vue":141,"./components/groups/group-profile-fundraisers.vue":142,"./components/groups/group-profile-stories.vue":143,"./components/groups/group-profile-trips.vue":144,"./components/groups/groups-list.vue":145,"./components/groups/groups.vue":146,"./components/interests/admin-interests-list.vue":147,"./components/interests/dashboard-interests-list.vue":148,"./components/login.vue":149,"./components/modal-donate.vue":150,"./components/notes.vue":151,"./components/passports/passport-create-update.vue":152,"./components/passports/passports-list.vue":153,"./components/reconcile-fund.vue":154,"./components/records/records-list.vue":155,"./components/reservations/admin-reservation-costs.vue":156,"./components/reservations/admin-reservation-deadlines.vue":157,"./components/reservations/admin-reservation-edit.vue":158,"./components/reservations/admin-reservations-list.vue":159,"./components/reservations/donations-list.vue":160,"./components/reservations/reservations-list.vue":161,"./components/reservations/reservations-passports-manager.vue":162,"./components/reservations/reservations-visas-manager.vue":163,"./components/todos.vue":164,"./components/top-nav.vue":165,"./components/trips/admin-trip-create.vue":166,"./components/trips/admin-trip-delete.vue":167,"./components/trips/admin-trip-duplicate.vue":168,"./components/trips/admin-trip-edit.vue":169,"./components/trips/admin-trip-facilitators.vue":170,"./components/trips/admin-trip-reservations-list.vue":171,"./components/trips/admin-trips-list.vue":172,"./components/trips/trip-details-missionaries.vue":190,"./components/trips/trip-registration-wizard.vue":191,"./components/uploads/admin-upload-create-update.vue":192,"./components/uploads/admin-uploads-list.vue":193,"./components/users/admin-user-create.vue":194,"./components/users/admin-user-delete.vue":195,"./components/users/admin-user-edit.vue":196,"./components/users/admin-users-list.vue":197,"./components/users/user-profile-fundraisers-donors.vue":198,"./components/users/user-profile-fundraisers-progress.vue":199,"./components/users/user-profile-fundraisers.vue":200,"./components/users/user-profile-stories.vue":201,"./components/users/user-settings.vue":202,"./components/visas/visa-create-update.vue":203,"./components/visas/visas-list.vue":204,"aos":1,"bootstrap-sass":17,"gsap":104,"jquery":106,"jquery.cookie":105,"marked":107,"moment":108,"scrollmagic":110,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":111,"underscore":112,"vue":118,"vue-resource":114,"vue-strap/dist/vue-strap.min":116,"vue-validator":117}]},{},[205]);
+},{"./components/action-trigger.vue":120,"./components/campaigns/admin-campaign-create.vue":121,"./components/campaigns/admin-campaign-details.vue":122,"./components/campaigns/admin-campaign-edit.vue":123,"./components/campaigns/campaign-groups.vue":124,"./components/campaigns/campaigns.vue":125,"./components/campaigns/group-trips.vue":130,"./components/campaigns/groups-trips-selection-wrapper.vue":131,"./components/donate.vue":132,"./components/fundraisers/fundraisers-stories.vue":133,"./components/fundraisers/fundraisers.vue":134,"./components/groups/admin-group-create.vue":135,"./components/groups/admin-group-edit.vue":136,"./components/groups/admin-group-managers.vue":137,"./components/groups/admin-groups-list.vue":138,"./components/groups/dashboard-group-reservations.vue":139,"./components/groups/dashboard-group-trips.vue":140,"./components/groups/group-interest-signup.vue":141,"./components/groups/group-profile-fundraisers.vue":142,"./components/groups/group-profile-stories.vue":143,"./components/groups/group-profile-trips.vue":144,"./components/groups/groups-list.vue":145,"./components/groups/groups.vue":146,"./components/interests/admin-interests-list.vue":147,"./components/interests/dashboard-interests-list.vue":148,"./components/login.vue":149,"./components/modal-donate.vue":150,"./components/notes.vue":151,"./components/passports/passport-create-update.vue":152,"./components/passports/passports-list.vue":153,"./components/reconcile-fund.vue":154,"./components/records/records-list.vue":155,"./components/reservations/admin-reservation-costs.vue":156,"./components/reservations/admin-reservation-deadlines.vue":157,"./components/reservations/admin-reservation-dues.vue":158,"./components/reservations/admin-reservation-edit.vue":159,"./components/reservations/admin-reservations-list.vue":160,"./components/reservations/donations-list.vue":161,"./components/reservations/reservations-list.vue":162,"./components/reservations/reservations-passports-manager.vue":163,"./components/reservations/reservations-visas-manager.vue":164,"./components/todos.vue":165,"./components/top-nav.vue":166,"./components/trips/admin-trip-create.vue":167,"./components/trips/admin-trip-delete.vue":168,"./components/trips/admin-trip-duplicate.vue":169,"./components/trips/admin-trip-edit.vue":170,"./components/trips/admin-trip-facilitators.vue":171,"./components/trips/admin-trip-reservations-list.vue":172,"./components/trips/admin-trips-list.vue":173,"./components/trips/trip-details-missionaries.vue":191,"./components/trips/trip-registration-wizard.vue":192,"./components/uploads/admin-upload-create-update.vue":193,"./components/uploads/admin-uploads-list.vue":194,"./components/users/admin-user-create.vue":195,"./components/users/admin-user-delete.vue":196,"./components/users/admin-user-edit.vue":197,"./components/users/admin-users-list.vue":198,"./components/users/user-profile-fundraisers-donors.vue":199,"./components/users/user-profile-fundraisers-progress.vue":200,"./components/users/user-profile-fundraisers.vue":201,"./components/users/user-profile-stories.vue":202,"./components/users/user-settings.vue":203,"./components/visas/visa-create-update.vue":204,"./components/visas/visas-list.vue":205,"aos":1,"bootstrap-sass":17,"gsap":104,"jquery":106,"jquery.cookie":105,"marked":107,"moment":108,"scrollmagic":110,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":111,"underscore":112,"vue":118,"vue-resource":114,"vue-strap/dist/vue-strap.min":116,"vue-validator":117}]},{},[206]);
 
 //# sourceMappingURL=main.js.map

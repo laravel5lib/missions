@@ -11,7 +11,7 @@
 
         // Change hash for page-reload
         $('.nav-tabs a').on('shown.bs.tab', function (e) {
-            window.history.pushState({}, "Missions.me", e.target.hash.substr(1));
+            window.history.pushState({}, "Missions.me", '/admin/reservations/' + e.target.hash.substr(1));
         });
     </script>
 @endsection

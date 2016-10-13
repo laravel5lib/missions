@@ -55,7 +55,7 @@ class Requirement extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function requirable()
+    public function requester()
     {
         return $this->morphTo();
     }

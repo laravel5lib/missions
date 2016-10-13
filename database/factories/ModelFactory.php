@@ -358,12 +358,13 @@ $factory->define(App\Models\v1\Payment::class, function (Faker\Generator $faker)
 $factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $faker)
 {
     return [
-        'item'            => $faker->randomElement(['Passport', 'Medical Release', 'Visa', 'Referral']),
+        'name'            => $faker->randomElement(['Passport', 'Medical Release', 'Visa', 'Referral']),
+        'document_type'   => $faker->randomElement(['passports', 'medical_releases', 'visas', 'referrals']),
+        'short_desc'      => $faker->realText(120),
         'due_at'          => $faker->dateTimeThisYear('+ 6 months'),
         'grace_period'    => random_int(0, 10),
-        'enforced'        => $faker->boolean(25),
-        'requirable_type' => 'trips',
-        'requirable_id'   => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
+        'requester_type' => 'trips',
+        'requester_id'   => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
     ];
 });
 

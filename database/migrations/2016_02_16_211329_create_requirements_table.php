@@ -14,14 +14,15 @@ class CreateRequirementsTable extends Migration
     {
         Schema::create('requirements', function(Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('item');
-            $table->string('item_type')->nullable();
+            $table->string('name');
+            $table->string('short_desc')->nullable();
+            $table->string('document_type');
             $table->timestamp('due_at');
             $table->integer('grace_period');
-            $table->boolean('enforced')->default(false);
-            $table->uuid('requirable_id')->index();
-            $table->string('requirable_type');
+            $table->uuid('requester_id')->index();
+            $table->string('requester_type');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

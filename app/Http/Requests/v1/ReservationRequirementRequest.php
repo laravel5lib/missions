@@ -4,7 +4,7 @@ namespace App\Http\Requests\v1;
 
 use Dingo\Api\Http\FormRequest;
 
-class RequirementRequest extends FormRequest
+class ReservationRequirementRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,7 @@ class RequirementRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'document_type' => 'required|in:passports,visas,medical_releases,testimonies',
-            'short_desc' => 'string|max:120',
-            'due_at' => 'required|date',
+            'status' => 'string|in:incomplete,reviewing,complete,attention',
             'grace_period' => 'numeric'
         ];
     }

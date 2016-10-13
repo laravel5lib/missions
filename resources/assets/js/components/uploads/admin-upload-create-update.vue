@@ -211,10 +211,6 @@
 		},
         data(){
             return {
-//				showRight: false,
-
-//                name: '',
-//                type: null,
                 url: '',
                 path: '',
                 file: null,
@@ -249,7 +245,6 @@
 				resource: this.$resource('uploads{/id}'),
 				uploads: [],
 				page: 1,
-//				per_page: 6,
 				search: '',
 				pagination: {},
             }
@@ -315,9 +310,37 @@
 						jQuery('#bannerCollapse').collapse('hide');
 						break;
 				}
+				this.reset();
 			}
 		},
         methods: {
+			reset(){
+				_.extend(this, {
+					url: '',
+					path: '',
+					file: null,
+					x_axis: null,
+					y_axis: null,
+					width: 100,
+					height: 100,
+
+					// logic variables
+					attemptSubmit: false,
+					constrained: true,
+					scaledWidth: 400,
+					scaledHeight: 400,
+					imageMaxWidth: 400,
+					imageMaxHeight: 400,
+					imageWidth: 400,
+					imageHeight: 400,
+					imageAspectRatio: null,
+					aspectRatio: this.width/this.height,
+					fileA: null,
+					resultImage: null,
+					page: 1,
+					search: '',
+				});
+			},
 			isSmall(){
 				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
 			},

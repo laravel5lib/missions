@@ -27,9 +27,9 @@
             <h5>ToDos</h5>
         </div>
         <div class="list-group">
-            <div class="list-group-item">
+            <div class="list-group-item" v-if="canModify">
                 <div class="row">
-                    <div class="col-xs-2 col-sm-1 text-muted" @click="completeTodo(todo)">
+                    <div class="col-xs-2 col-sm-1 text-muted">
                         <i class="fa fa-lg fa-plus-square-o" style="margin-right: 10px"></i>
                     </div>
                     <div class="col-xs-10 col-sm-11">
@@ -40,6 +40,9 @@
                                @keyup.enter="createTodo">
                     </div>
                 </div>
+            </div>
+            <div class="list-group-item" v-if="todos.length < 1">
+                <p class="text-center text-muted lead">No tasks found.</p>
             </div>
             <div class="list-group-item todo-item" v-for="todo in todos">
                     <div class="row">
@@ -64,7 +67,7 @@
                                 Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}
                             </small>
                         </div>
-                        <div class="col-xs-1 col-sm-1 text-right">
+                        <div class="col-xs-1 col-sm-1 text-right" v-if="canModify">
                             <i class="fa fa-times fa-lg text-muted remove-todo"
                                @click="selectedTodo = todo,deleteModal = true">
                             </i>
@@ -136,6 +139,10 @@
             'per_page': {
                 type: Number,
                 default: 10
+            },
+            'canModify': {
+                type: Number,
+                default: 0
             }
         },
         data() {
@@ -178,6 +185,7 @@
         },
         methods: {
             editTodo(todo) {
+                if ( ! this.canModify) return;
                 this.editMode = true;
                 this.selectedTodo = todo;
             },
@@ -270,7 +278,7 @@
         }
     }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     div.list-group-item {
         cursor: pointer;
     }

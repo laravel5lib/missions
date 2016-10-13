@@ -296,14 +296,16 @@
                     <notes type="reservations"
                            id="{{ $reservation->id }}"
                            user_id="{{ auth()->user()->id }}"
-                           :per_page="3">
+                           :per_page="3"
+                           :can-modify="{{ auth()->user()->can('modify-notes') }}">
                     </notes>
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="todos">
                     <todos type="reservations"
                            id="{{ $reservation->id }}"
-                           user_id="{{ auth()->user()->id }}">
+                           user_id="{{ auth()->user()->id }}"
+                           :can-modify="{{ auth()->user()->can('modify-todos') }}">
                     </todos>
                 </div>
 

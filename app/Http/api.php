@@ -40,11 +40,11 @@ $api->version('v1', [
     $api->post('groups/submit', 'GroupsController@submit');
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
+    $api->resource('trips.requirements', 'TripRequirementsController');
     $api->post('trips/{id}/register', 'TripsController@register');
     $api->resource('interests', 'TripInterestsController');
     $api->resource('reservations', 'ReservationsController');
-    $api->put('reservations/{reservation}/requirements/{requirement}', 'ReservationsController@updateRequirement');
-    $api->put('reservations/{id}/payments/reconcile', 'ReservationsController@reconcile');
+    $api->resource('reservations.requirements', 'ReservationRequirementsController');
     $api->resource('assignments', 'AssignmentsController');
     $api->resource('fundraisers', 'FundraisersController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');

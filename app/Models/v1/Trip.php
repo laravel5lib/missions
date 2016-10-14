@@ -157,7 +157,7 @@ class Trip extends Model
      */
     public function requirements()
     {
-        return $this->morphMany(Requirement::class, 'requirable');
+        return $this->morphMany(Requirement::class, 'requester');
     }
 
     /**

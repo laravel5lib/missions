@@ -49,5 +49,9 @@ class BouncerSeeder extends Seeder
         Bouncer::allow('admin')->to('create', Upload::class);
         Bouncer::allow('admin')->to('edit', Upload::class);
         Bouncer::allow('admin')->to('delete', Upload::class);
+        // todos
+        Bouncer::allow('admin')->to('modify-todos');
+        // notes
+        Bouncer::allow('admin')->to('modify-notes');
     }
 }

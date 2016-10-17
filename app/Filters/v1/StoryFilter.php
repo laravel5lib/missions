@@ -1,8 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class StoryFilter extends ModelFilter
+class StoryFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -12,6 +10,26 @@ class StoryFilter extends ModelFilter
     */
     public $relations = [];
 
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = ['title', 'content', 'created_at', 'updated_at'];
+
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = ['title', 'content'];
+
+    /**
+     * By group.
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function group($id)
     {
         return $this->whereHas('groups', function($group) use($id) {
@@ -19,6 +37,12 @@ class StoryFilter extends ModelFilter
         });
     }
 
+    /**
+     * By user.
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function user($id)
     {
         return $this->whereHas('users', function($user) use($id) {
@@ -26,25 +50,16 @@ class StoryFilter extends ModelFilter
         });
     }
 
+    /**
+     * By fundraiser.
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function fundraiser($id)
     {
         return $this->whereHas('fundraisers', function($fundraiser) use($id) {
             $fundraiser->where('id', $id);
-        });
-    }
-
-    /**
-     * Find by search
-     *
-     * @param $search
-     * @return mixed
-     */
-    public function search($search)
-    {
-        return $this->where(function($q) use ($search)
-        {
-            return $q->where('title', 'LIKE', "%$search%")
-                ->orWhere('content', 'LIKE', "%$search%");
         });
     }
 }

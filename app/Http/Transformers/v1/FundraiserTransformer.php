@@ -37,15 +37,25 @@ class FundraiserTransformer extends TransformerAbstract
             'donors_count'   => (int) count($fundraiser->donors),
             'banner'         => $fundraiser->banner ? image($fundraiser->banner->source) : null,
             'url'            => $fundraiser->url,
+            'public'         => (bool) $fundraiser->public,
             'description'    => $fundraiser->description,
             'started_at'     => $fundraiser->started_at->toDateTimeString(),
             'ended_at'       => $fundraiser->ended_at->toDateTimeString(),
             'created_at'     => $fundraiser->created_at->toDateTimeString(),
             'updated_at'     => $fundraiser->updated_at->toDateTimeString(),
+            'tags'           => $fundraiser->tagSlugs(),
             'links'          => [
                 [
                     'rel' => 'self',
-                    'uri' => '/fundraisers/' . $fundraiser->id,
+                    'uri' => url('/api/fundraisers/' . $fundraiser->id),
+                ],
+                [
+                    'rel' => 'donors',
+                    'uri' => url('/api/fundraisers/' . $fundraiser->id . '/donors'),
+                ],
+                [
+                    'rel' => 'donations',
+                    'uri' => url('/api/fundraisers/' . $fundraiser->id . '/donations'),
                 ]
             ]
         ];

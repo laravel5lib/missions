@@ -108,6 +108,10 @@ class FundraisersController extends Controller
     {
         $fundraiser = $this->fundraiser->create($request->all());
 
+        if ($request->has('tags')) {
+            $fundraiser->tag($request->get('tags'));
+        }
+
         if ($request->has('upload_ids')) {
             $fundraiser->uploads()->attach($request->get('upload_ids'));
         }
@@ -127,6 +131,10 @@ class FundraisersController extends Controller
         $fundraiser = $this->fundraiser->findOrFail($id);
 
         $fundraiser->update($request->all());
+
+        if ($request->has('tags')) {
+            $fundraiser->retag($request->get('tags'));
+        }
 
         if ($request->has('upload_ids')) {
             $fundraiser->uploads()->sync($request->get('upload_ids'));

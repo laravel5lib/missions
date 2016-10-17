@@ -15,17 +15,21 @@ class FundTransformer extends TransformerAbstract {
      */
     public function transform(Fund $fund)
     {
+        $fund->load('tagged');
+
         $array = [
             'id'         => $fund->id,
             'name'       => $fund->name,
-            'balance'    => $fund->balance,
+            'balance'    => (int) $fund->balance,
             'type'       => str_singular($fund->fundable_type),
             'created_at' => $fund->created_at->toDateTimeString(),
             'updated_at' => $fund->updated_at->toDateTimeString(),
+            'deleted_at' => $fund->deleted_at ? $fund->deleted_at->toDateTimeString() : null,
+            'tags'       => $fund->tagNames(),
             'links'      => [
                 [
                     'rel' => 'self',
-                    'uri' => '/funds/' . $fund->id,
+                    'uri' => url('/api/funds/' . $fund->id),
                 ]
             ]
         ];

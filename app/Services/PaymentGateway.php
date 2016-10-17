@@ -153,7 +153,7 @@ class PaymentGateway {
     {
         $refund = $this->stripe->refunds()->create($charge_id, $amount);
 
-        return $refund[id];
+        return $refund['id'];
     }
 
 }

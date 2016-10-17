@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\TransactionHandler;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -37,6 +38,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // register and configure the transaction handler.
+        $this->app->singleton('App\TransactionHandler', function ($app) {
+            return new TransactionHandler(
+                $app->make('App\Models\v1\Transaction'),
+                $app->make('App\Services\PaymentGateway'),
+                $app->make('App\Models\v1\Donor')
+            );
+        });
+
         // register and configure media server.
         $this->app->singleton(Server::class, function () {
 

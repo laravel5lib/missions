@@ -63,8 +63,8 @@ class DonorsController extends Controller
     {
         $donor = $this->donor->create($request->all());
 
-        if ($request->has('donation'))
-            $donor->donations()->save($request->get('donation'));
+        if ($request->has('tags'))
+            $donor->tag($request->get('tags'));
 
         return $this->response->item($donor, new DonorTransformer);
     }
@@ -81,6 +81,9 @@ class DonorsController extends Controller
         $donor = $this->donor->findOrFail($id);
 
         $donor->update($request->all());
+
+        if ($request->has('tags'))
+            $donor->retag($request->get('tags'));
 
         return $this->response->item($donor, new DonorTransformer);
     }

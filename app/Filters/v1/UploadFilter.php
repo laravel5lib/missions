@@ -1,8 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class UploadFilter extends ModelFilter
+class UploadFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -13,28 +11,18 @@ class UploadFilter extends ModelFilter
     public $relations = [];
 
     /**
-     * Filter by tags
+     * Fields that can be sorted.
      *
-     * @param $tags
+     * @var array
      */
-    public function tags(array $tags)
-    {
-        $this->withAllTags($tags)->get();
-    }
+    public $sortable = ['name', 'type', 'created_at', 'updated_at'];
 
     /**
-     * Search by name
+     * Fields that can be searched.
      *
-     * @param $search
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @var array
      */
-    public function search($search)
-    {
-        return $this->where(function($q) use ($search)
-        {
-            return $q->where('name', 'LIKE', "%$search%");
-        });
-    }
+    public $searchable = ['name'];
 
     /**
      * Filter by type
@@ -45,27 +33,5 @@ class UploadFilter extends ModelFilter
     public function type($type)
     {
         return $this->where('type', $type);
-    }
-
-    /**
-     * Sort by fields
-     *
-     * @param $sort
-     * @return mixed
-     */
-    public function sort($sort)
-    {
-        $sortable = [
-            'name', 'type', 'created_at', 'updated_at'
-        ];
-
-        $param = preg_split('/\|+/', $sort);
-        $field = $param[0];
-        $direction = isset($param[1]) ? $param[1] : 'asc';
-
-        if ( in_array($field, $sortable) )
-            return $this->orderBy($field, $direction);
-
-        return $this;
     }
 }

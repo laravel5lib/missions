@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\v1\FundRequest;
 use App\Http\Transformers\v1\FundTransformer;
 use App\Models\v1\Fund;
 use Illuminate\Http\Request;
@@ -9,10 +10,6 @@ use App\Http\Controllers\Controller;
 
 class FundsController extends Controller
 {
-
-    // Funds can be held for future trips
-    // Deposits can never be transferred!
-
     /**
      * @var Fund
      */
@@ -27,13 +24,27 @@ class FundsController extends Controller
         $this->fund = $fund;
     }
 
+    /**
+     * Get all funds.
+     *
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
     public function index(Request $request)
     {
-        $funds = $this->fund->filter($request->all())->paginate($request->get('per_page', 10));
+        $funds = $this->fund
+                      ->filter($request->all())
+                      ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($funds, new FundTransformer);
     }
 
+    /**
+     * Get a fund by it's id.
+     *
+     * @param $id
+     * @return \Dingo\Api\Http\Response
+     */
     public function show($id)
     {
         $fund = $this->fund->findOrFail($id);
@@ -41,6 +52,47 @@ class FundsController extends Controller
         return $this->response->item($fund, new FundTransformer);
     }
 
+    /**
+     * Create a new fund.
+     *
+     * @param FundRequest $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function store(FundRequest $request)
+    {
+        $fund = $this->fund->create($request->all());
+
+        if ($request->has('tags'))
+            $fund->tag($request->get('tags'));
+
+        return $this->response->item($fund, new FundTransformer);
+    }
+
+    /**
+     * Update a fund.
+     *
+     * @param $id
+     * @param FundRequest $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function update($id, FundRequest $request)
+    {
+        $fund = $this->fund->findOrFail($id);
+
+        $fund->update($request->all());
+
+        if ($request->has('tags'))
+            $fund->retag($request->get('tags'));
+
+        return $this->response->item($fund, new FundTransformer);
+    }
+
+    /**
+     * Reconcile a fund's balance.
+     *
+     * @param $id
+     * @return \Dingo\Api\Http\Response
+     */
     public function reconcile($id)
     {
         $fund = $this->fund->findOrFail($id);
@@ -48,5 +100,20 @@ class FundsController extends Controller
         $fund->reconcile();
 
         return $this->response->item($fund, new FundTransformer);
+    }
+
+    /**
+     * Delete (close) a fund.
+     *
+     * @param $id
+     * @return \Dingo\Api\Http\Response
+     */
+    public function destroy($id)
+    {
+        $fund = $this->fund->findOrFail($id);
+
+        $fund->delete();
+
+        return $this->response->noContent();
     }
 }

@@ -1,8 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class FundFilter extends ModelFilter
+class FundFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -12,21 +10,48 @@ class FundFilter extends ModelFilter
     */
     public $relations = [];
 
-    public function name($name)
-    {
-        return $this->where('name', 'LIKE', "%$name%");
-    }
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = ['name', 'balance'];
 
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = ['name'];
+
+    /**
+     * From minimum balance amount.
+     *
+     * @param $amount
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function minBalance($amount)
     {
         return $this->where('balance', '>=', $amount);
     }
 
+    /**
+     * To maximum balance amount.
+     *
+     * @param $amount
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function maxBalance($amount)
     {
         return $this->where('balance', '<=', $amount);
     }
 
+    /**
+     * By type.
+     *
+     * @param $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function type($type)
     {
         return $this->where('fundable_type', str_plural($type));

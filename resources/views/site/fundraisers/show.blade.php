@@ -26,28 +26,7 @@
             <h3 class="text-center text-primary">{{ $fundraiser->name }}</h3>
             <h5 class="text-center">organized by {{ $fundraiser->sponsor->name }}</h5>
             <hr class="divider inv lg">
-            <div class="col-sm-8">
-                @if($fundraiser->banner)
-                    <img src="{{ image($fundraiser->banner->source) }}" class="img-responsive">
-                @endif
-                <hr class="divider inv">
-                <fundraisers-uploads id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-uploads>
-                <hr class="divider inv">
-                <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="#desc" data-toggle="tab">Description</a></li>
-                    <li role="presentation"><a href="#stories" data-toggle="tab">Stories</a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="desc">
-                    {% $fundraiser->description %}
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="stories">
-                        <fundraisers-stories id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-stories>
-                    </div>
-                </div> <!-- end tab-content -->
-            </div><!-- end col -->
-            <div class="col-sm-4">
+            <div class="col-sm-4 col-sm-push-8">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h1 class="text-center text-success">${{ $fundraiser->raised() }} <span style="font-size: 18px;">Raised</span></h1>
@@ -71,7 +50,28 @@
                     <user-profile-fundraisers-donors id="{{ $fundraiser->id }}"></user-profile-fundraisers-donors>
                 </div><!-- end panel-group -->
             </div>
-        </div>
+            <div class="col-sm-8 col-sm-pull-4">
+                @if($fundraiser->banner)
+                    <img src="{{ image($fundraiser->banner->source) }}" class="img-responsive">
+                @endif
+                <hr class="divider inv">
+                <fundraisers-uploads id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-uploads>
+                <hr class="divider inv">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" class="active"><a href="#desc" data-toggle="tab">Description</a></li>
+                    <li role="presentation"><a href="#stories" data-toggle="tab">Stories</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="desc">
+                    {% $fundraiser->description %}
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="stories">
+                        <fundraisers-stories id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-stories>
+                    </div>
+                </div> <!-- end tab-content -->
+            </div><!-- end col -->
+        </div><!-- end row -->
         <hr class="divider inv xlg">
     </div><!-- end container -->
 @stop

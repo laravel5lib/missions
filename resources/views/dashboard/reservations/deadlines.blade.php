@@ -45,6 +45,7 @@
         }
 
         .timeline > li > .timeline-panel {
+            background-color: #fff;
             width: 46%;
             float: left;
             border: 1px solid #d4d4d4;
@@ -81,15 +82,15 @@
 
         .timeline > li > .timeline-badge {
             color: #fff;
-            width: 50px;
-            height: 50px;
-            line-height: 50px;
-            font-size: 1.4em;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 1em;
             text-align: center;
             position: absolute;
-            top: 16px;
-            left: 50%;
-            margin-left: -25px;
+            top: 27px;
+            left: 51%;
+            margin-left: -23px;
             background-color: #999999;
             z-index: 100;
             border-top-right-radius: 50%;
@@ -152,7 +153,7 @@
 
         @media (max-width: 767px) {
             ul.timeline:before {
-                left: 40px;
+                left: 30px;
             }
 
             ul.timeline > li > .timeline-panel {
@@ -164,11 +165,12 @@
             ul.timeline > li > .timeline-badge {
                 left: 15px;
                 margin-left: 0;
-                top: 16px;
+                top: 25px;
             }
 
             ul.timeline > li > .timeline-panel {
                 float: right;
+                margin-right: 10px;
             }
 
             ul.timeline > li > .timeline-panel:before {
@@ -192,11 +194,24 @@
 <div class="white-header-bg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
-                <h3>
+            <div class="col-sm-8">
+                <h3 class="hidden-xs">
                     <img class="av-left img-sm img-circle" style="width:100px; height:100px" src="{{ image($reservation->trip->campaign->avatar->source . "?w=200") }}" alt="{{ $reservation->trip->campaign->name }}">{{ $reservation->trip->campaign->name }}
                     <small>&middot; {{ country($reservation->trip->campaign->country_code) }}</small>
                 </h3>
+                <div class="visible-xs text-center">
+                    <hr class="divider inv">
+                    <img class="av-left img-sm img-circle" style="width:100px; height:100px" src="{{ image($reservation->trip->campaign->avatar->source . "?w=200") }}" alt="{{ $reservation->trip->campaign->name }}">
+                    <h4>{{ $reservation->trip->campaign->name }}</h4>
+                    <h6 class="text-uppercase">{{ country($reservation->trip->campaign->country_code) }}</h6>
+                </div>
+            </div>
+            <div class="col-sm-4 text-right">
+                <hr class="divider inv">
+                <hr class="divider inv sm">
+                <a href="{{ url('dashboard/reservations') }}" class="btn icon-left btn-default hidden-xs"><span class="fa fa-chevron-left icon-left"></span> Return To All</a>
+                <a href="{{ url('dashboard/reservations') }}" class="btn icon-left btn-default btn-sm btn-block visible-xs"><span class="fa fa-chevron-left icon-left"></span> Return To All</a>
+                <hr class="divider inv">
             </div>
         </div>
     </div>

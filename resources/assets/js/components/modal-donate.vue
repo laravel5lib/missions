@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
         <div class="text-center">
-        <a class="btn btn-success" @click="launchDonate">Donate To The Cause</a>
+        <a class="btn btn-success" @click="launchDonate">Donate<span class="hidden-sm"> To The Cause</span></a>
         <!--<a class="btn btn-primary btn-justified show-xs" @click="showRight=!showRight">Donate</a>-->
         </div>
         <hr class="divider inv sm">

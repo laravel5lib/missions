@@ -16,7 +16,7 @@
     </div><!-- end page-header-outer -->
     <div class="container">
         <div class="row">
-            <div class="col-md-3 col-sm-offset-0 col-sm-4 col-xs-10 col-xs-offset-1">
+            <div class="col-md-3 col-sm-offset-0 col-sm-4 col-xs-12">
                 <div class="panel panel-default profile-pic-panel">
                     <img src="{{ image($user->avatar->source) }}" alt="{{ $user->name }}" class="img-responsive">
                     <div class="panel-body">
@@ -54,7 +54,7 @@
                 </div><!-- end panel -->
                 @endif
             </div><!-- end col -->
-            <div class="col-lg-6 col-sm-8 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+            <div class="col-lg-6 col-sm-8 col-sm-offset-0 col-xs-12">
                 <ul id="profTabs" class="nav nav-tabs" role="tablist">
                     <li data-toggle="tooltip" title="Fundraisers" role="presentation" class="active"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i> <span class="hidden-xs">Fundraisers</span></a></li>
                     <li data-toggle="tooltip" title="Stories" role="presentation"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-list-ul"></i> <span class="hidden-xs">Stories</span></a></li>
@@ -166,7 +166,7 @@
                     </div><!-- end row tab -->
                 </div><!-- end tab-content -->
             </div><!-- end col -->
-            <div class="col-lg-3 col-md-8 col-sm-offset-0 col-sm-8 col-xs-10 col-xs-offset-1">
+            <div class="col-lg-3 col-md-8 col-sm-offset-0 col-sm-8 col-xs-12">
                 <hr class="divider inv">
                 <div class="panel panel-default">
                     <div class="panel-heading">

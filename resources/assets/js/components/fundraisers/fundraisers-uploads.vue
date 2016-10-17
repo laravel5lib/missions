@@ -46,12 +46,19 @@
                         <modal title="View Upload" :show.sync="showView">
                             <div slot="modal-body" class="modal-body" v-if="selectedUpload && selectedUpload.hasOwnProperty('type')">
                                 <template v-if="selectedUpload.type === 'video'">
-                                    <iframe width="560" height="315" :src="selectedUpload.source" frameborder="0" allowfullscreen></iframe>
-                                    <!--<iframe width="560" height="315" src="https://www.youtube.com/embed/RwXqcOMw0ng" frameborder="0" allowfullscreen></iframe>  -->
+                                    <video id="preview" class="video-js vjs-default-skin vjs-big-play-centered" width="620">
+                                        <p class="vjs-no-js">
+                                            To view this video please enable JavaScript, and consider upgrading to a web browser that
+                                            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                                        </p>
+                                    </video>
                                 </template>
                                 <template v-else>
                                     <img :src="selectedUpload.source" class="img-responsive">
                                 </template>
+                            </div>
+                            <div slot="modal-footer" class="modal-footer">
+                                <button type="button" class="btn btn-default" @click="closeView">Close</button>
                             </div>
                         </modal>
 
@@ -81,8 +88,12 @@
         <div class="carousel-inner" role="listbox">
             <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="upload in fundraiser.uploads.data">
                 <template v-if="upload.type === 'video'">
-                    <iframe width="560" height="315" :src="upload.source" frameborder="0" allowfullscreen></iframe>
-                    <!--<iframe width="560" height="315" src="https://www.youtube.com/embed/RwXqcOMw0ng" frameborder="0" allowfullscreen></iframe>  -->
+                    <video :id="upload.id" class="video-js vjs-default-skin vjs-big-play-centered" width="620">
+                        <p class="vjs-no-js">
+                            To view this video please enable JavaScript, and consider upgrading to a web browser that
+                            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                        </p>
+                    </video>
                 </template>
                 <template v-else>
                     <img :src="upload.source">
@@ -101,6 +112,12 @@
     </div><!-- end carousel -->
 
 </template>
+<style>
+    video {
+        width: 100%;
+        height: auto;
+    }
+</style>
 <script>
     import VueStrap from 'vue-strap/dist/vue-strap.min';
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
@@ -113,7 +130,8 @@
                 fundraiser: {},
                 showView: false,
                 showDelete: false,
-                selectedUpload: null
+                selectedUpload: null,
+                selectedUploadPlayer: null
             }
         },
         events:{
@@ -143,6 +161,55 @@
             viewUpload(upload){
                 this.selectedUpload = upload;
                 this.showView = true;
+
+                if (this.selectedUpload.type === 'video') {
+                    // load preview player
+                    this.$nextTick(function () {
+                        if (this.selectedUploadPlayer === null) {
+                            var vjsOptions = {
+                                controls: true,
+                                autoplay: false,
+                                preload: 'metadata',
+                                fluid: true,
+                                techOrder: ['youtube', 'vimeo']
+                            };
+
+                            // Add conditional options based on video format/website
+                            switch (this.selectedUpload.meta.format) {
+                                case 'youtube':
+                                    //vjsOptions.techOrder = ['youtube'];
+                                    vjsOptions.sources = [{type: 'video/youtube', src: this.selectedUpload.source}];
+                                    break;
+                                case 'vimeo':
+                                    //vjsOptions.techOrder = ['vimeo'];
+                                    vjsOptions.sources = [{type: 'video/vimeo', src: this.selectedUpload.source}];
+                                    break;
+                            }
+
+                            this.selectedUploadPlayer = videojs('preview', vjsOptions, function () {
+                                // Player (this) is initialized and ready.
+                            });
+                        } else {
+                            debugger;
+                            switch (this.selectedUpload.meta.format) {
+                                case 'youtube':
+                                    //vjsOptions.techOrder = ['youtube'];
+                                    this.selectedUploadPlayer.src({type: 'video/youtube', src: this.selectedUpload.source});
+                                    break;
+                                case 'vimeo':
+                                    //vjsOptions.techOrder = ['vimeo'];
+                                    this.selectedUploadPlayer.src({type: 'video/vimeo', src: this.selectedUpload.source});
+                                    break;
+                            }
+                        }
+                    });
+                }
+            },
+            closeView(){
+                if (this.selectedUpload.type === 'video') {
+                    // do something with player
+                }
+                this.showView = false;
             },
             deleteUpload(upload){
                 this.selectedUpload = upload;
@@ -163,12 +230,51 @@
                 console.log(this);
                 this.$http.put('fundraisers/' + this.id + '?include=uploads', this.fundraiser).then(function (response) {
                     this.fundraiser = response.data.data;
+                    this.initVideoPlayers();
+                });
+            },
+            initVideoPlayers(){
+                // Handling Videos
+                // We must use $nexTick to allow the DOM to fully load first
+                // else videojs won't find the element
+                this.$nextTick(function () {
+                    // We need to filter the `upload.type: 'video'` objs
+                    var videos = _.filter(this.fundraiser.uploads.data, function (upload) {
+                        return upload.type === 'video';
+                    });
+
+                    // Initiate videojs players for each video
+                    _.each(videos, function (video) {
+                        var vjsId = video.id;
+                        var vjsOptions = {
+                            controls: true,
+                            autoplay: false,
+                            preload: 'metadata',
+                            fluid: true
+                        };
+
+                        // Add conditional options based on video format/website
+                        switch (video.meta.format) {
+                            case 'youtube':
+                                vjsOptions.techOrder = ['youtube'];
+                                vjsOptions.sources = [{ type: 'video/youtube', src: video.source}];
+                                break;
+                            case 'vimeo':
+                                vjsOptions.techOrder = ['vimeo'];
+                                vjsOptions.sources = [{ type: 'video/vimeo', src: video.source}];
+                                break;
+                        }
+                        videojs(vjsId, vjsOptions, function(){
+                            // Player (this) is initialized and ready.
+                        });
+                    });
                 });
             }
         },
         ready(){
             this.$http.get('fundraisers/' + this.id, { include: 'uploads'}).then(function (response) {
                 this.fundraiser = response.data.data;
+                this.initVideoPlayers();
             });
         }
     }

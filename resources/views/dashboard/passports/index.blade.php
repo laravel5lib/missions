@@ -1,6 +1,6 @@
-@extends('dashboard.layouts.default')
+@extends('dashboard.records.index')
 
-@section('content')
+@section('header')
 <div class="white-header-bg">
     <div class="container">
         <div class="row">
@@ -14,13 +14,9 @@
         </div>
     </div>
 </div>
-<hr class="divider inv lg">
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-            <passports-list></passports-list>
-        </div>
-    </div>
-</div>
-<hr class="divider inv lg">
-@endsection
+@stop
+
+@section('tab')
+    <passports-list></passports-list>
+    <hr class="divider inv lg">
+@stop

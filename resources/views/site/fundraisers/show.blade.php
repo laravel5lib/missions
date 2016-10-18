@@ -24,12 +24,12 @@
         <div class="row">
             <hr class="divider inv xlg">
             <h3 class="text-center text-primary">{{ $fundraiser->name }}</h3>
-            <h5 class="text-center">organized by {{ $fundraiser->sponsor->name }}</h5>
+            <h5 class="text-center">organized by <a href="{{ url($fundraiser->sponsor_type.'/'.$fundraiser->sponsor->url) }}">{{ $fundraiser->sponsor->name }}</a></h5>
             <hr class="divider inv lg">
             <div class="col-sm-4 col-sm-push-8">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h1 class="text-center text-success">${{ $fundraiser->raised() }} <span style="font-size: 18px;">Raised</span></h1>
+                        <h1 class="text-center text-success">${{ $fundraiser->raised() ? $fundraiser->raised() : 0 }} <span style="font-size: 18px;">Raised</span></h1>
                         <h4 class="text-center">${{ $fundraiser->goal_amount }} <span style="font-size: 14px;">Goal</span></h4>
                         <h6 class="text-center text-uppercase small text-muted"></h6>
                         {{--<h2 class="text-center">{{ $fundraiser->getPercentRaised() }}% <span style="font-size: 12px;">Percent Raised</span></h2>--}}
@@ -51,15 +51,11 @@
                 </div><!-- end panel-group -->
             </div>
             <div class="col-sm-8 col-sm-pull-4">
-                @if($fundraiser->banner)
-                    <img src="{{ image($fundraiser->banner->source) }}" class="img-responsive">
-                @endif
-                <hr class="divider inv">
                 <fundraisers-uploads id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-uploads>
                 <hr class="divider inv">
                 <ul class="nav nav-tabs">
                     <li role="presentation" class="active"><a href="#desc" data-toggle="tab">Description</a></li>
-                    <li role="presentation"><a href="#stories" data-toggle="tab">Stories</a>
+                    <li role="presentation"><a href="#stories" data-toggle="tab">Updates</a>
                     </li>
                 </ul>
                 <div class="tab-content">

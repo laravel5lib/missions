@@ -35,6 +35,8 @@ $api->version('v1', [
     $api->put('/users/me', 'UsersController@update');
     $api->resource('users', 'UsersController');
     $api->resource('users.contacts', 'ContactsController');
+    $api->get('{recipient}/{id}/accolades', 'AccoladesController@index');
+    $api->post('{recipient}/{id}/accolades', 'AccoladesController@store');
     $api->resource('groups', 'GroupsController');
     $api->get('groups/{id}/notes', 'GroupsController@notes');
     $api->post('groups/submit', 'GroupsController@submit');

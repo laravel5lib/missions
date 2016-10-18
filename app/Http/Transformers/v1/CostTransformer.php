@@ -43,7 +43,7 @@ class CostTransformer extends TransformerAbstract
                 'active_at'        => $cost->active_at->toDateTimeString(),
                 'type'             => $cost->type,
                 'updated_at'       => $cost->pivot->updated_at->toDateTimeString(),
-                'locked'           => (boolean) $cost->locked
+                'locked'           => (boolean) $cost->pivot->locked
             ];
         }
 

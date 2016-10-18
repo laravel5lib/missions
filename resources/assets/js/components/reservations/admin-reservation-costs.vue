@@ -24,10 +24,10 @@
                     <!--<td class="text-center">
                         <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
                     </td>-->
-                    <td>
+                    <td class="text-muted">
 
-                        <i class="fa fa-2x fa-lock" v-if="cost.locked" @click="costLocking(cost, false)"></i>
-                        <i class="fa fa-2x fa-unlock" v-else @click="costLocking(cost, true)"></i>
+                        <i class="fa fa-lock" v-if="cost.locked" @click="costLocking(cost, false)"></i>
+                        <i class="fa fa-unlock" v-else @click="costLocking(cost, true)"></i>
                     </td>
                     <td>{{ cost.name || cost.cost }}</td>
                     <td>{{ cost.type|capitalize}}</td>

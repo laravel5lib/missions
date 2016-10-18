@@ -318,7 +318,7 @@ class Reservation extends Model
 
         $data = $costs->keyBy('id')->map(function($item) {
             return [
-                'locked' => $item->locked,
+                'locked' => isset($item['locked']) and $item['locked'] ? true : false,
             ];
         })->toArray();
         

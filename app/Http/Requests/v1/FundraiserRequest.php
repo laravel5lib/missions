@@ -23,7 +23,7 @@ class FundraiserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name'             => 'required|string',
             'type'             => 'string|in:general',
             'url'              => 'string|unique:fundraisers,url',
@@ -38,5 +38,11 @@ class FundraiserRequest extends FormRequest
             'ended_at'         => 'required|date|after:started_at',
             'tags'             => 'array'
         ];
+
+        if ($this->isMethod('put')) {
+            $rules['url'] = 'string|unique:fundraisers,url,' .$this->id;
+        }
+
+        return $rules;
     }
 }

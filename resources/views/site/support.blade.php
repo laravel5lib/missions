@@ -146,36 +146,36 @@
 	<div class="content-section">
 		<h4 class="text-center text-uppercase">What Partnership Starts</h4>
 		<hr class="divider inv lg">
-			<div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-				<div class="col-sm-2 col-sm-offset-1 text-center" style="display:flex">
+			<div class="row">
+				<div class="col-sm-4 col-md-2 col-sm-offset-0 col-md-offset-1 text-center">
 					<div class="panel panel-default panel-body">
 						<img class="img-md" src="images/support/orphans.png" alt="Orphanages">
 						<hr class="divider inv">
 						<h6 class="text-primary text-uppercase">Orphanages</h6>
 					</div>
 				</div>
-				<div class="col-sm-2 text-center" style="display:flex">
+				<div class="col-sm-4 col-md-2 col-sm-offset-0 col-md-offset-0 text-center">
 					<div class="panel panel-default panel-body">
 						<img class="img-md" src="images/support/water-wells.png" alt="Water Wells">
 						<hr class="divider inv">
 						<h6 class="text-primary text-uppercase">Clean Water Wells</h6>
 					</div>
 				</div>
-				<div class="col-sm-2 text-center" style="display:flex">
+				<div class="col-sm-4 col-md-2 col-sm-offset-0 col-md-offset-0 text-center">
 					<div class="panel panel-default panel-body">
 						<img class="img-md" src="images/support/rescue-house.png" alt="Rescue">
 						<hr class="divider inv">
 						<h6 class="text-primary text-uppercase">Rescue Homes</h6>
 					</div>
 				</div>
-				<div class="col-sm-2 text-center" style="display:flex">
+				<div class="col-sm-4 col-md-2 col-sm-offset-0 col-md-offset-0 text-center">
 					<div class="panel panel-default panel-body">
 						<img class="img-md" src="images/support/medical-cross.png" alt="Medical">
 						<hr class="divider inv">
 						<h6 class="text-primary text-uppercase">Medical Clinics</h6>
 					</div>
 				</div>
-				<div class="col-sm-2 text-center" style="display:flex">
+				<div class="col-sm-4 col-md-2 col-sm-offset-0 col-md-offset-0 text-center">
 					<div class="panel panel-default panel-body">
 						<img class="img-md" src="images/support/national-hands.png" alt="National">
 						<hr class="divider inv">

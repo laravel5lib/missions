@@ -117,7 +117,7 @@
         <div class="row">
           <div class="col-xs-10 col-xs-offset-1">
             <div class="row">
-              <div class="col-xs-10 col-xs-offset-1">
+              <div class="col-xs-12">
                 <h6 class="text-uppercase text-center">A Trip For Everyone</h6>
                 <h1 class="text-center">Choose A Role</h1>
                 <hr class="divider red-small lg">
@@ -125,7 +125,7 @@
               </div><!-- end col -->
             </div><!-- end row -->
             <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
+              <div class="col-sm-4 col-xs-12" style="display:flex">
                 <div class="panel">
                   <a href="missionary.html"><img class="img-responsive" src="images/why-mm/missionary.jpg" alt=""></a>
                   <div class="panel-body">
@@ -134,7 +134,7 @@
                   </div>
                 </div>
               </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
+              <div class="col-sm-4 col-xs-12" style="display:flex">
                 <div class="panel">
                   <a href="medical-missionary.html"><img class="img-responsive" src="images/why-mm/medical-missionary.jpg" alt=""></a>
                   <div class="panel-body">
@@ -143,7 +143,7 @@
                   </div>
                 </div>
               </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
+              <div class="col-sm-4 col-xs-12" style="display:flex">
                 <div class="panel">
                   <a href="group-leader.html"><img class="img-responsive" src="images/why-mm/group-leader.jpg" alt=""></a>
                   <div class="panel-body">
@@ -154,7 +154,7 @@
               </div><!-- end col -->
             </div><!-- end row -->
             <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
+              <div class="col-sm-4 col-xs-12" style="display:flex">
                 <div class="panel">
                   <a href="pastor-speaker.html"><img class="img-responsive" src="images/why-mm/speaker.jpg" alt=""></a>
                   <div class="panel-body">
@@ -163,7 +163,7 @@
                   </div><!-- end panel-body -->
                 </div><!-- end panel -->
               </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
+              <div class="col-sm-4 col-xs-12" style="display:flex">
                 <div class="panel">
                   <a href="business-leader.html"><img class="img-responsive" src="images/why-mm/business-person.jpg" alt=""></a>
                   <div class="panel-body">
@@ -172,7 +172,7 @@
                   </div>
                 </div>
               </div><!-- end col -->
-              <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1" style="display:flex">
+              <div class="col-sm-4 col-xs-12" style="display:flex">
                 <div class="panel">
                   <a href="media-missionary.html"><img class="img-responsive" src="images/why-mm/media-missionary.jpg" alt=""></a>
                   <div class="panel-body">
@@ -265,16 +265,19 @@
             <img class="img-lg" src="images/why-mm/level1.png" alt="">
             <hr class="divider inv">
             <p>These trips are great for those just getting started in the world-changing business. First timers of all ages area welcome.</p>
+            <hr class="divider inv lg visible-xs">
           </div>
           <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
             <img class="img-lg" src="images/why-mm/level2.png" alt="">
             <hr class="divider inv">
             <p>If Level 1 proved to be a piece of cake, you’re ready for a Level 2 adventure. A little tougher, a little sweatier, but much more sweeter.</p>
+            <hr class="divider inv lg visible-xs">
           </div>
           <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1">
             <img class="img-lg" src="images/why-mm/level3.png" alt="">
             <hr class="divider inv">
             <p>Chuck Norris. Mr. T. Annie Oakley. Yep, they’re all level 3 missionaries. It may not be physically tough, but it’ll be a challenge.</p>
+            <hr class="divider inv lg visible-xs">
           </div>
         </div>
       </div><!-- end content-section -->

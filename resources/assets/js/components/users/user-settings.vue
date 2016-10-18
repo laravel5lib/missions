@@ -22,6 +22,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <hr class="divider inv visible-xs">
                                 <div class="col-sm-6">
                                     <div class="media">
                                         <div class="media-left">

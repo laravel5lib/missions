@@ -79,7 +79,9 @@ require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
 // require('vue-strap/src/index.js');
 // window.VueStrap = require('vue-strap/dist/vue-strap.min');
 import VueStrap from 'vue-strap/dist/vue-strap.min';
-
+window.videojs = require('video.js');
+require('videojs-youtube');
+// require('videojs-vimeo');
 require('jquery.cookie');
 require('bootstrap-sass');
 window.AOS = require('aos');
@@ -314,7 +316,12 @@ new Vue({
         // console.log('vue is ready'),
         this.$on('userHasLoggedIn', function (user) {
           this.setUser(user)
-        })
+        });
+
+        // Track window resizing
+        $(window).on('resize', function(){
+            this.$emit('Window:resize');
+        }.bind(this));
     },
     methods: {
         setUser: function (user) {

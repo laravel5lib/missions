@@ -1,8 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class StatFilter extends ModelFilter
+class StatFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -10,10 +8,28 @@ class StatFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [
-        'tags' => ['tags']
-    ];
+    public $relations = [];
 
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = [];
+
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = [];
+
+    /**
+     * By region.
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function region($id)
     {
         return $this->whereHas('team', function($team) use($id)
@@ -25,6 +41,12 @@ class StatFilter extends ModelFilter
         });
     }
 
+    /**
+     * By team.
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function team($id)
     {
         return $this->where('team_id', $id);

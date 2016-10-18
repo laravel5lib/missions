@@ -410,10 +410,12 @@ $factory->define(App\Models\v1\Donation::class, function (Faker\Generator $faker
 $factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker)
 {
     return [
-        'name'                => $faker->name,
-        'email'               => $faker->safeEmail,
-        'phone'               => $faker->phoneNumber,
-        'company'             => $faker->optional(0.7)->company
+        'name'         => $faker->name,
+        'email'        => $faker->safeEmail,
+        'phone'        => $faker->phoneNumber,
+        'company'      => $faker->optional(0.7)->company,
+        'zip'          => $faker->postcode,
+        'country_code' => $faker->countryCode,
     ];
 });
 
@@ -789,10 +791,10 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\
         'amount' => $faker->randomNumber(2),
         'payment' => [
             'type' => 'card',
-            'last_four' => '1234',
-            'cardholder' => 'John Doe',
-            'zip' => '56789',
-            'brand' => 'visa'
+            'last_four' => substr($faker->creditCardNumber, -4),
+            'cardholder' => $faker->name,
+            'zip' => $faker->postcode,
+            'brand' => $faker->creditCardType
         ],
         'created_at' => $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray()),
     ];

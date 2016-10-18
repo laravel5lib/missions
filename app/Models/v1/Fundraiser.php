@@ -3,12 +3,13 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 class Fundraiser extends Model
 {
-    use Filterable, UuidForKey;
+    use Filterable, UuidForKey, Taggable;
 
     /**
      * The table associated with the model.

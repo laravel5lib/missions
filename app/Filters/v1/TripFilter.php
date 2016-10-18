@@ -1,10 +1,8 @@
 <?php namespace App\Filters\v1;
 
 use Carbon\Carbon;
-use Dingo\Api\Auth\Auth;
-use EloquentFilter\ModelFilter;
 
-class TripFilter extends ModelFilter
+class TripFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -14,7 +12,30 @@ class TripFilter extends ModelFilter
     */
     public $relations = [];
 
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = [
+        'started_at', 'ended_at', 'published_at', 'created_at', 'updated_at'
+    ];
 
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = [
+        'type', 'prospects', 'group.name', 'campaign.name', 'costs.name',
+        'deadlines.name', 'facilitators.name'
+    ];
+
+    /**
+     * Only published.
+     *
+     * @return mixed
+     */
     public function onlyPublished()
     {
         return $this->whereNotNull('published_at')
@@ -232,74 +253,5 @@ class TripFilter extends ModelFilter
         if(count($endDates) < 2) return $this;
 
         return $this->whereBetween('ended_at', $endDates);
-    }
-
-    /**
-     * Find by search
-     *
-     * @param $search
-     * @return mixed
-     */
-    public function search($search)
-    {
-        return $this->where(function($q) use ($search)
-        {
-            // type
-            $q->where('type', 'LIKE', "%$search%"
-            // prospects
-            )->orWhere('prospects', 'LIKE', "%$search%"
-            // group name
-            )->orWhereHas('group', function ($g) use ($search)
-            {
-                return $g->where('name', 'LIKE', "%$search%");
-            }
-            // campaign name
-            )->orWhereHas('campaign', function ($c) use ($search)
-            {
-                return $c->where('name', 'LIKE', "%$search%");
-            }
-            // cost name
-            )->orWhereHas('costs', function ($c) use ($search)
-            {
-                return $c->where('name', 'LIKE', "%$search%");
-            }
-            // deadline name
-            )->orWhereHas('deadlines', function ($c) use ($search)
-            {
-                return $c->where('name', 'LIKE', "%$search%");
-            }
-            // facilitator's name
-            )->orWhereHas('facilitators', function ($f) use ($search)
-            {
-                return $f->where('name', 'LIKE', "%$search%");
-            });
-        });
-    }
-
-    public function tags($tags)
-    {
-        $this->withAllTag($tags)->get();
-    }
-
-    /**
-     * Sort by fields
-     *
-     * @param $sort
-     * @return mixed
-     */
-    public function sort($sort)
-    {
-        $sortable = [
-            'started_at', 'ended_at', 'published_at', 'created_at', 'updated_at'
-        ];
-
-        $param = preg_split('/\|+/', $sort);
-        $field = $param[0];
-        $direction = isset($param[1]) ? $param[1] : 'asc';
-
-        if ( in_array($field, $sortable) )
-            return $this->orderBy($field, $direction);
-
-        return $this;
     }
 }

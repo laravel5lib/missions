@@ -1,8 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class CampaignFilter extends ModelFilter
+class CampaignFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -10,9 +8,21 @@ class CampaignFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [
-        'tags' => ['tags']
-    ];
+    public $relations = [];
+
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = ['name', 'created_at', 'updated_at'];
+
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = ['name'];
 
     /**
      * Filter by has trips or not
@@ -56,41 +66,5 @@ class CampaignFilter extends ModelFilter
     public function country($country)
     {
         return $this->where('countries', 'LIKE', "%$country%");
-    }
-
-    /**
-     * Find by search
-     *
-     * @param $search
-     * @return mixed
-     */
-    public function search($search)
-    {
-        return $this->where(function($q) use ($search)
-        {
-            return $q->where('name', 'LIKE', "%$search%");
-        });
-    }
-
-    /**
-     * Sort by fields
-     *
-     * @param $sort
-     * @return mixed
-     */
-    public function sort($sort)
-    {
-        $sortable = [
-            'name', 'created_at', 'updated_at'
-        ];
-
-        $param = preg_split('/\|+/', $sort);
-        $field = $param[0];
-        $direction = isset($param[1]) ? $param[1] : 'asc';
-
-        if ( in_array($field, $sortable) )
-            return $this->orderBy($field, $direction);
-
-        return $this;
     }
 }

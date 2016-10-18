@@ -97,8 +97,7 @@ class ReservationTableSeeder extends Seeder
             'sponsor_id' => $res->user_id,
             'goal_amount' => $res->getTotalCost(),
             'started_at' => $res->created_at,
-            'ended_at' => $res->trip->started_at,
-            'banner_upload_id' => $res->trip->campaign->banner->id
+            'ended_at' => $res->trip->started_at
         ]);
     }
 }

@@ -96,7 +96,6 @@
                 showAddModal: false,
                 deleteModal: false,
                 showNewModal: false,
-                showEditModal: false,
                 attemptSubmit: false,
                 showSuccess: false,
                 successMessage: '',

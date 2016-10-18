@@ -1,44 +1,36 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <button class="btn btn-primary btn-xs" @click="add">
-            <span class="fa fa-plus"></span> Add Existing
-        </button>
-        <!--<button class="btn btn-primary btn-xs" @click="addNew"><span
-                class="fa fa-plus"></span> Create New
+        <!--<button class="btn btn-primary btn-xs" @click="add">
+            <span class="fa fa-plus"></span> Add Optional Costs
         </button>-->
+        <!--<hr class="divider sm">-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h5>Costs</h5>
+            </div><!-- end panel-heading -->
 
-        <hr class="divider sm">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>Locked</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Amount</th>
-                <th><i class="fa fa-cog"></i></th>
-            </tr>
-            </thead>
-            <tbody v-if="reservation">
-            <template v-for="cost in reservation.costs.data">
-                <tr>
-                    <!--<td class="text-center">
-                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
-                    </td>-->
-                    <td>
-
-                        <i class="fa fa-2x fa-lock" v-if="cost.locked" @click="costLocking(cost, false)"></i>
-                        <i class="fa fa-2x fa-unlock" v-else @click="costLocking(cost, true)"></i>
-                    </td>
-                    <td>{{ cost.name || cost.cost }}</td>
-                    <td>{{ cost.type|capitalize}}</td>
-                    <td>{{ cost.amount| currency }}</td>
-                    <td>
-                        <a class="btn btn-danger btn-xs" @click="confirmRemove(cost)"><i class="fa fa-times"></i></a>
-                    </td>
-                </tr>
-            </template>
-            </tbody>
-        </table>
+            <div class="list-group">
+            <div class="list-group-item" v-for="cost in reservation.costs.data">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Name</label>
+                        <p>{{ cost.name }}</p>
+                        <hr class="divider inv hidden-lg">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Amount</label>
+                        <p>{{ cost.amount|currency }}</p>
+                        <hr class="divider inv hidden-lg">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Description</label>
+                        <p>{{ cost.description }}</p>
+                        <hr class="divider inv hidden-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div><!-- end panel -->
 
         <modal title="Add Costs" :show.sync="showAddModal" effect="fade" width="800" :callback="addCosts">
             <div slot="modal-body" class="modal-body">
@@ -57,52 +49,6 @@
             </div>
         </modal>
 
-        <modal title="New Cost" :show.sync="showNewModal" effect="fade" width="800" :callback="addNew">
-            <div slot="modal-body" class="modal-body">
-                <validator name="NewCost">
-                    <form class="form" novalidate>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForNewCostError('name')}">
-                                    <label for="name">Name</label>
-                                    <input type="text" id="name" v-model="newCost.name" v-validate:name="{require:true}" class="form-control input-sm">
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForNewCostError('grace') }">
-                                            <label for="grace_period">Grace Period</label>
-                                            <div class="input-group input-group-sm" :class="{'has-error': checkForNewCostError('grace') }">
-                                                <input id="grace_period" type="number" class="form-control" number v-model="newCost.grace_period"
-                                                       v-validate:grace="{required: true, min:0}">
-                                                <span class="input-group-addon">Days</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForNewCostError('due')}">
-                                            <label for="due_at">Due</label>
-                                            <input type="date" id="due_at" class="form-control input-sm"
-                                                   v-model="newCost.due_at" v-validate:due="{required: true}">
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <br>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" v-model="newCost.enforced">
-                                        Enforced?
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </validator>
-            </div>
-        </modal>
-
         <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
             <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
@@ -110,7 +56,6 @@
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Confirm</button>
             </div>
         </modal>
-
 
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
@@ -124,7 +69,7 @@
     import vSelect from 'vue-select';
     import VueStrap from 'vue-strap/dist/vue-strap.min'
     export default{
-        name: 'admin-reservation-costs',
+        name: 'reservation-costs',
         props: ['id'],
         components:{ vSelect, 'modal': VueStrap.modal, 'alert': VueStrap.alert},
         data(){

@@ -33,7 +33,7 @@
                     <td>{{ cost.type|capitalize}}</td>
                     <td>{{ cost.amount| currency }}</td>
                     <td>
-                        <a class="btn btn-danger btn-xs" @click="remove(cost)"><i class="fa fa-times"></i></a>
+                        <a class="btn btn-danger btn-xs" @click="confirmRemove(cost)"><i class="fa fa-times"></i></a>
                     </td>
                 </tr>
             </template>
@@ -103,6 +103,15 @@
             </div>
         </modal>
 
+        <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
+            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete {{ selectedCost.name }}?</div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Confirm</button>
+            </div>
+        </modal>
+
+
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Well Done!</strong>
@@ -137,8 +146,10 @@
                     grace_period: 0,
                     enforced: false,
                 },
+                selectedCost: null,
                 resource: this.$resource('reservations/' + this.id, { include: 'dues,costs.payments,trip.costs.payments' }),
                 showAddModal: false,
+                deleteModal: false,
                 showNewModal: false,
                 showEditModal: false,
                 attemptSubmit: false,
@@ -178,13 +189,17 @@
 
                 };
             },
-            costLocking(cost, stats) {
+            costLocking(cost, status) {
                 cost.locked = status;
+                   var costs = [];
+                _.each(this.reservation.costs.data, function (c) {
+                    costs.push({id: c.cost_id, locked: c.locked});
+                });
 
                 var reservation = this.preppedReservation;
-                reservation.costs = this.reservation.costs.data;
+                reservation.costs = costs;
 
-                return this.doUpdate(reservation, 'Cost' + (status ? ' locked ' : ' unlocked ') + 'Successfully');
+                return this.doUpdate(reservation, 'Cost' + (status ? ' locked ' : ' unlocked ') + 'successfully');
 
             },
             isPast(date){
@@ -226,6 +241,10 @@
                 reservation.costs = costs;
 
                 return this.doUpdate(reservation);
+            },
+            confirmRemove(cost) {
+                this.selectedCost = cost;
+                this.deleteModal = true;
             },
             remove(cost){
                 var reservation = this.preppedReservation;
@@ -296,7 +315,7 @@
                     this.setReservationData(response.data.data);
                     this.selectedCosts = [];
                     this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
-                    this.successMessage = success || 'Cost updated Successfully';
+                    this.successMessage = success || 'Costs updated Successfully';
                     this.showSuccess = true;
                 });
             },

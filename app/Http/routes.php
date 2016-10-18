@@ -151,7 +151,12 @@ Route::get('/groups', function() {
 });
 Route::get('/groups/{slug}', 'GroupsController@profile');
 Route::get('groups/{slug}/signup', 'GroupsController@signup');
-Route::get('/profiles/{slug}', 'UsersController@profile');
+Route::get('/profiles/{slug}', function ($slug) {
+    return redirect('@'.$slug);
+});
+Route::get('/users/{slug}', function ($slug) {
+   return redirect('@'.$slug);
+});
 Route::get('/@{slug}', 'UsersController@profile');
 Route::get('@{slug}/donate', function ($slug) {
     $type = 'users';

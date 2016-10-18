@@ -29,6 +29,7 @@ import reservationCosts from './components/reservations/reservation-costs.vue';
 import reservationsPassportsManager from './components/reservations/reservations-passports-manager.vue';
 import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
 import userSettings from './components/users/user-settings.vue';
+import userProfileCountries from './components/users/user-profile-countries.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
 import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
 import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
@@ -272,6 +273,7 @@ new Vue({
         reservationsPassportsManager,
         reservationsVisasManager,
         userSettings,
+        userProfileCountries,
         userProfileStories,
         userProfileFundraisers,
         userProfileFundraisersDonors,

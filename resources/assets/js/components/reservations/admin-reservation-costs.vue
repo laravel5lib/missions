@@ -251,7 +251,7 @@
                 reservation.costs = [];
                 _.each(this.reservation.costs.data, function (cs) {
                     if (cs.cost_id !== cost.cost_id) {
-                        reservation.costs.push({ id: cs.cost_id/*, locked: cs.locked*/})
+                        reservation.costs.push({ id: cs.cost_id, locked: cs.locked})
                     }
                 });
                 console.log(reservation.costs);

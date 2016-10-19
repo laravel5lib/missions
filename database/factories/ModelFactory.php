@@ -373,16 +373,18 @@ $factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $fa
  */
 $factory->define(App\Models\v1\Fundraiser::class, function (Faker\Generator $faker)
 {
+    $start_date = \Carbon\Carbon::now();
+    $end_date = \Carbon\Carbon::parse($start_date)->addYear;
+
     return [
         'name'             => $faker->catchPhrase,
         'type'             => $faker->randomElement(['general', 'envelope']),
         'goal_amount'      => $faker->numberBetween(1000, 3000),
         'description'      => file_get_contents(resource_path('assets/sample_fundraiser.md')),
         'url'              => $faker->unique()->slug(3),
-        'started_at'       => $faker->dateTimeThisYear(),
-        'ended_at'         => $faker->dateTimeThisYear(),
-        'public'           => $faker->boolean(50),
-        'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::pluck('id')->toArray())
+        'started_at'       => $start_date,
+        'ended_at'         => $end_date,
+        'public'           => $faker->boolean(50)
     ];
 });
 

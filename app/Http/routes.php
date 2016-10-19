@@ -44,33 +44,23 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.groups.trips.show', compact('group', 'groupId', 'trip', 'id'));
     });
 
-    Route::get('records', function () {
-        return view('dashboard.records.index');
+    Route::get('records/{tab?}', function($tab = 'passports') {
+        return view('dashboard.'.$tab.'.index', compact('tab'));
     });
 
-    // Passports
-    Route::get('passports', function () {
-        return view('dashboard.passports.index');
-    });
-
-    Route::get('passports/create', function () {
+    Route::get('records/passports/create', function () {
         return view('dashboard.passports.create');
     });
 
-    Route::get('passports/{id}', function ($id) {
+    Route::get('records/passports/{id}', function ($id) {
         return view('dashboard.passports.index', compact('id'));
     });
 
-    Route::get('passports/{id}/edit', function ($id) {
+    Route::get('records/passports/{id}/edit', function ($id) {
         return view('dashboard.passports.edit', compact('id'));
     });
 
-    // Visas
-    Route::get('visas', function () {
-        return view('dashboard.visas.index');
-    });
-
-    Route::get('visas/create', function () {
+    Route::get('records/visas/create', function () {
         return view('dashboard.visas.create');
     });
 
@@ -78,7 +68,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.visas.index', compact('id'));
     });
 
-    Route::get('visas/{id}/edit', function ($id) {
+    Route::get('records/visas/{id}/edit', function ($id) {
         return view('dashboard.visas.edit', compact('id'));
     });
 
@@ -151,7 +141,12 @@ Route::get('/groups', function() {
 });
 Route::get('/groups/{slug}', 'GroupsController@profile');
 Route::get('groups/{slug}/signup', 'GroupsController@signup');
-Route::get('/profiles/{slug}', 'UsersController@profile');
+Route::get('/profiles/{slug}', function ($slug) {
+    return redirect('@'.$slug);
+});
+Route::get('/users/{slug}', function ($slug) {
+   return redirect('@'.$slug);
+});
 Route::get('/@{slug}', 'UsersController@profile');
 Route::get('@{slug}/donate', function ($slug) {
     $type = 'users';

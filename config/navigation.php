@@ -23,6 +23,20 @@ return [
                 'label' => 'Deadlines',
                 'url' => 'deadlines'
             ]
+        ],
+        'records' => [
+            [
+                'label' => 'Passports',
+                'url' => 'passports'
+            ],
+            [
+                'label' => 'Visas',
+                'url' => 'visas'
+            ],
+            [
+                'label' => 'Medical Releases',
+                'url' => 'medical-releases'
+            ]
         ]
     ]
 ];

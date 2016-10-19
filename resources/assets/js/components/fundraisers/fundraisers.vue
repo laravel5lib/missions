@@ -1,32 +1,32 @@
     <template>
-    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-            <!--<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>-->
-            <li data-target="#carousel-example-generic" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="fundraiser in featuredFundraisers"></li>
-        </ol>
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner" role="listbox">
-            <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="fundraiser in featuredFundraisers">
-                <img :src="fundraiser.banner">
-                <div class="carousel-caption">
-                    <h6 class="text-uppercase"><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h6>
-                    <h3>{{fundraiser.name}}</h3>
-                    <a :href="'/fundraisers/' + fundraiser.url" class="btn btn-primary btn-sm">More Details</a>
-                    <hr class="divider inv" />
-                </div>
-            </div>
-        </div>
-        <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-            <span class="fa fa-angle-left" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-            <span class="fa fa-angle-right" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div><!-- end carousel -->
+    <!--<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">-->
+        <!--&lt;!&ndash; Indicators &ndash;&gt;-->
+        <!--<ol class="carousel-indicators">-->
+            <!--&lt;!&ndash;<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>&ndash;&gt;-->
+            <!--<li data-target="#carousel-example-generic" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="fundraiser in featuredFundraisers"></li>-->
+        <!--</ol>-->
+        <!--&lt;!&ndash; Wrapper for slides &ndash;&gt;-->
+        <!--<div class="carousel-inner" role="listbox">-->
+            <!--<div class="item {{ $index == 0 ? 'active' : '' }}" v-for="fundraiser in featuredFundraisers">-->
+                <!--<img :src="fundraiser.banner">-->
+                <!--<div class="carousel-caption">-->
+                    <!--<h6 class="text-uppercase"><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h6>-->
+                    <!--<h3>{{fundraiser.name}}</h3>-->
+                    <!--<a :href="'/fundraisers/' + fundraiser.url" class="btn btn-primary btn-sm">More Details</a>-->
+                    <!--<hr class="divider inv" />-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash; Controls &ndash;&gt;-->
+        <!--<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">-->
+            <!--<span class="fa fa-angle-left" aria-hidden="true"></span>-->
+            <!--<span class="sr-only">Previous</span>-->
+        <!--</a>-->
+        <!--<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">-->
+            <!--<span class="fa fa-angle-right" aria-hidden="true"></span>-->
+            <!--<span class="sr-only">Next</span>-->
+        <!--</a>-->
+    <!--</div>&lt;!&ndash; end carousel &ndash;&gt;-->
     <hr class="divider inv xlg">
     <div class="container">
         <div class="col-xs-12">
@@ -41,7 +41,7 @@
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
         <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex" v-if="fundraisers.length">
             <div class="panel panel-default">
-                <img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">
+                <!--<img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">-->
                 <div class="panel-body">
                     <h5>{{ fundraiser.name }}</h5>
                     <h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;">Expires: {{ fundraiser.ended_at | moment 'll'  }}</h6>

@@ -24,8 +24,6 @@ class FundraiserTransformer extends TransformerAbstract
      */
     public function transform(Fundraiser $fundraiser)
     {
-        $fundraiser->load('banner');
-
         $array = [
             'id'             => $fundraiser->id,
             'name'           => $fundraiser->name,
@@ -35,7 +33,6 @@ class FundraiserTransformer extends TransformerAbstract
             'raised_amount'  => (int) $fundraiser->raised(),
             'raised_percent' => (int) $fundraiser->getPercentRaised(),
             'donors_count'   => (int) count($fundraiser->donors),
-            'banner'         => $fundraiser->banner ? image($fundraiser->banner->source) : null,
             'url'            => $fundraiser->url,
             'public'         => (bool) $fundraiser->public,
             'description'    => $fundraiser->description,

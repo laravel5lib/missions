@@ -5,19 +5,17 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3>My Visas</h3>
+                    <h3>My Medical Releases</h3>
                 </div>
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <a href="visas/create" class="btn btn-primary"><i class="fa fa-plus icon-left"></i> Add Visa</a>
+                    <a href="medical-releases/create" class="btn btn-primary"><i class="fa fa-plus icon-left"></i> Add Medical Release</a>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+@stop
 
 @section('tab')
-
-<visas-list></visas-list>
-
-@endsection
+    <hr class="divider inv lg">
+@stop

@@ -316,7 +316,11 @@ class Reservation extends Model
         if ( ! $costs instanceof Collection)
             $costs = collect($costs);
 
-        $data = $costs->pluck('id')->all();
+        $data = $costs->keyBy('id')->map(function($item) {
+            return [
+                'locked' => isset($item['locked']) and $item['locked'] ? true : false,
+            ];
+        })->toArray();
         
         $this->costs()->sync($data);
 

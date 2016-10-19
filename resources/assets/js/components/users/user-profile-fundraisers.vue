@@ -2,7 +2,6 @@
     <div>
         <div class="col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
             <div class="panel panel-default">
-                <img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">
                 <div class="panel-body">
                     <h4>{{ fundraiser.name }}</h4>
                     <h6>

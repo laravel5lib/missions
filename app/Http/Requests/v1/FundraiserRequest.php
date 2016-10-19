@@ -23,16 +23,26 @@ class FundraiserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name'             => 'required|string',
+            'type'             => 'string|in:general',
+            'url'              => 'string|unique:fundraisers,url',
             'fund_id'          => 'required|exists:funds,id',
             'goal_amount'      => 'required|min:1|numeric',
+            'public'           => 'boolean',
             'description'      => 'string',
             'banner_upload_id' => 'string|exists:uploads,id',
             'upload_ids'       => 'array',
             'upload_ids.*'     => 'required|exists:uploads,id',
             'started_at'       => 'required|date|before:ended_at',
-            'ended_at'         => 'required|date|after:started_at'
+            'ended_at'         => 'required|date|after:started_at',
+            'tags'             => 'array'
         ];
+
+        if ($this->isMethod('put')) {
+            $rules['url'] = 'string|unique:fundraisers,url,' .$this->id;
+        }
+
+        return $rules;
     }
 }

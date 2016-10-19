@@ -3,12 +3,13 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 class Fundraiser extends Model
 {
-    use Filterable, UuidForKey;
+    use Filterable, UuidForKey, Taggable;
 
     /**
      * The table associated with the model.
@@ -118,16 +119,6 @@ class Fundraiser extends Model
             return 0;
 
         return round(($this->raised()/$this->goal_amount) * 100);
-    }
-
-    /**
-     * Get the fundraiser's page banner.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function banner()
-    {
-        return $this->belongsTo(Upload::class, 'banner_upload_id');
     }
 
     /**

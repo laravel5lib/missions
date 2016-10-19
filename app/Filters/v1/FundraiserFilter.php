@@ -1,9 +1,8 @@
 <?php namespace App\Filters\v1;
 
 use Carbon\Carbon;
-use EloquentFilter\ModelFilter;
 
-class FundraiserFilter extends ModelFilter
+class FundraiserFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -13,21 +12,79 @@ class FundraiserFilter extends ModelFilter
     */
     public $relations = [];
 
+    /**
+     * Fields that are sortable.
+     *
+     * @var array
+     */
+    public $sortable = ['created_at'];
+
+    /**
+     * Fields that are searchable.
+     *
+     * @var array
+     */
+    public $searchable = ['name'];
+
+    /**
+     * Find public fundraisers.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function isPublic()
+    {
+        return $this->where('public', true);
+    }
+
+    /**
+     * Get active fundraisers.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function active()
     {
         return $this->where('ended_at', '>=', Carbon::now());
     }
 
+    /**
+     * Find by url.
+     *
+     * @param $slug
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function url($slug)
     {
         return $this->where('fundraisers.url', $slug);
     }
 
+    /**
+     * Find by fundraiser type.
+     *
+     * @param $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function type($type)
+    {
+        return $this->where('type', $type);
+    }
+
+    /**
+     * Find by sponsor type.
+     *
+     * @param $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function sponsorType($type)
     {
         return $this->where('sponsor_type', str_plural($type));
     }
 
+    /**
+     * Find by sponsor url.
+     *
+     * @param $url
+     * @return $this
+     */
     public function sponsor($url)
     {
         if (starts_with($url, 'groups/')) {
@@ -46,51 +103,6 @@ class FundraiserFilter extends ModelFilter
                 $join->on('users.id', '=', 'fundraisers.sponsor_id')
                     ->where('users.url', '=', $url);
             })->select('fundraisers.*');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Find by search
-     *
-     * @param $search
-     * @return mixed
-     */
-    public function search($search)
-    {
-        return $this->where(function($q) use ($search)
-        {
-            return $q->where('name', 'LIKE', "%$search%");
-        });
-    }
-
-    /**
-     * Sort by fields
-     *
-     * @param $sort
-     * @return mixed
-     */
-    public function sort($sort)
-    {
-        $sortable = [
-            'new', 'popular'
-        ];
-
-        $param = preg_split('/\|+/', $sort);
-        $field = $param[0];
-        $direction = isset($param[1]) ? $param[1] : 'asc';
-
-        if ( in_array($field, $sortable) ) {
-
-            switch ($field) {
-                case 'new':
-                    return $this->latest();
-                    break;
-                case 'popular':
-                    return $this; // doesn't work yet :(
-                    break;
-            }
         }
 
         return $this;

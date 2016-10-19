@@ -34,24 +34,32 @@ class DonorTransformer extends TransformerAbstract
         $donor->load('account');
 
         $array = [
-            'id'                  => $donor->id,
-            'name'                => $donor->name,
-            'company'             => $donor->company,
-            'email'               => $donor->email,
-            'phone'               => $donor->phone,
-            'zip'                 => $donor->zip,
-            'country_code'        => $donor->country_code,
-            'country_name'        => country($donor->country_code),
-            'total_donated'       => (int) $donor->donations($this->designation)->sum('amount'),
-            'account_id'          => $donor->account_id,
-            'account_type'        => $donor->account_type,
-            'account_url'         => $donor->account ? $donor->account->url : null,
-            'created_at'          => $donor->created_at->toDateTimeString(),
-            'updated_at'          => $donor->updated_at->toDateTimeString(),
-            'links'               => [
+            'id'            => $donor->id,
+            'name'          => $donor->name,
+            'company'       => $donor->company,
+            'email'         => $donor->email,
+            'phone'         => $donor->phone,
+            'zip'           => $donor->zip,
+            'country'       => [
+                'code' => $donor->country_code,
+                'name' => country($donor->country_code),
+            ],
+            'total_donated' => (int) $donor->donations($this->designation)->sum('amount'),
+            'account_id'    => $donor->account_id,
+            'account_type'  => $donor->account_type,
+            'account_url'   => $donor->account ? $donor->account->url : null,
+            'created_at'    => $donor->created_at->toDateTimeString(),
+            'updated_at'    => $donor->updated_at->toDateTimeString(),
+            'deleted_at'    => $donor->deleted_at ? $donor->deleted_at->toDateTimeString() : null,
+            'tags'          => $donor->tagSlugs(),
+            'links'         => [
                 [
                     'rel' => 'self',
-                    'uri' => '/donors/' . $donor->id,
+                    'uri' => url('/api/donors/' . $donor->id),
+                ],
+                [
+                    'rel' => 'donations',
+                    'uri' => url('/api/donations?donor=' . $donor->id)
                 ]
             ]
         ];

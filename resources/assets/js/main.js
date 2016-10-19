@@ -25,9 +25,11 @@ import visasList from './components/visas/visas-list.vue';
 import passportsList from './components/passports/passports-list.vue';
 import passportCreateUpdate from './components/passports/passport-create-update.vue';
 import visaCreateUpdate from './components/visas/visa-create-update.vue';
+import reservationCosts from './components/reservations/reservation-costs.vue';
 import reservationsPassportsManager from './components/reservations/reservations-passports-manager.vue';
 import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
 import userSettings from './components/users/user-settings.vue';
+import userProfileCountries from './components/users/user-profile-countries.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
 import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
 import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
@@ -79,7 +81,9 @@ require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
 // require('vue-strap/src/index.js');
 // window.VueStrap = require('vue-strap/dist/vue-strap.min');
 import VueStrap from 'vue-strap/dist/vue-strap.min';
-
+window.videojs = require('video.js');
+require('videojs-youtube');
+// require('videojs-vimeo');
 require('jquery.cookie');
 require('bootstrap-sass');
 window.AOS = require('aos');
@@ -265,9 +269,11 @@ new Vue({
         visasList,
         groupsList,
         visaCreateUpdate,
+        reservationCosts,
         reservationsPassportsManager,
         reservationsVisasManager,
         userSettings,
+        userProfileCountries,
         userProfileStories,
         userProfileFundraisers,
         userProfileFundraisersDonors,
@@ -314,7 +320,12 @@ new Vue({
         // console.log('vue is ready'),
         this.$on('userHasLoggedIn', function (user) {
           this.setUser(user)
-        })
+        });
+
+        // Track window resizing
+        $(window).on('resize', function(){
+            this.$emit('Window:resize');
+        }.bind(this));
     },
     methods: {
         setUser: function (user) {

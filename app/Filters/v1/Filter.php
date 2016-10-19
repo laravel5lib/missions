@@ -70,7 +70,8 @@ class Filter extends ModelFilter
                 }
             }
 
-            return $query;
+           return $query;
+
         });
     }
 

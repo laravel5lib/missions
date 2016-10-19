@@ -35,6 +35,8 @@ $api->version('v1', [
     $api->put('/users/me', 'UsersController@update');
     $api->resource('users', 'UsersController');
     $api->resource('users.contacts', 'ContactsController');
+    $api->get('{recipient}/{id}/accolades', 'AccoladesController@index');
+    $api->post('{recipient}/{id}/accolades', 'AccoladesController@store');
     $api->resource('groups', 'GroupsController');
     $api->get('groups/{id}/notes', 'GroupsController@notes');
     $api->post('groups/submit', 'GroupsController@submit');
@@ -63,8 +65,7 @@ $api->version('v1', [
     $api->resource('accommodations', 'AccommodationsController');
     $api->resource('accommodations.occupants', 'OccupantsController');
     $api->resource('stories', 'StoriesController');
-    $api->get('funds', 'FundsController@index');
-    $api->get('funds/{id}', 'FundsController@show');
+    $api->resource('funds', 'FundsController');
     $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
     $api->resource('transactions', 'TransactionsController');
     $api->resource('causes', 'CausesController');

@@ -1,6 +1,7 @@
 @extends('dashboard.reservations.show')
 
 @section('tab')
+    <reservation-costs id="{{ $reservation->id }}"></reservation-costs>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h5>Payments</h5>

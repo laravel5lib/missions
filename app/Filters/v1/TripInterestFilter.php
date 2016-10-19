@@ -1,8 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class TripInterestFilter extends ModelFilter
+class TripInterestFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -11,6 +9,20 @@ class TripInterestFilter extends ModelFilter
     * @var array
     */
     public $relations = [];
+
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = ['name', 'email', 'phone', 'created_at', 'updated_at'];
+
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = ['name', 'email', 'phone', 'communication_preferences'];
 
     /**
      * Find by trip id.
@@ -47,16 +59,5 @@ class TripInterestFilter extends ModelFilter
         return $this->whereHas('trip', function($trip) use($id) {
             return $trip->where('campaign_id', $id);
         });
-    }
-
-    /**
-     * Find my communication preference type.
-     *
-     * @param $type
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function preference($type)
-    {
-        return $this->where('communication_preferences', 'LIKE', "%$type%");
     }
 }

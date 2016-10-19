@@ -4,14 +4,14 @@
             <div class="alert alert-info" role="alert">No records found</div>
         </div>
 
-        <div class="col-sm-4" v-for="passport in paginatedPassports">
+        <div class="col-md-4 col-sm-6" v-for="passport in paginatedPassports">
             <div class="panel panel-default">
-                <div style="min-height:220px;" class="panel-body">
+                <div class="panel-body">
                     <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{passport.citizenship_name}}</h6>
                     <a role="button" :href="'/dashboard' + passport.links[0].uri">
-                        <h5 style="text-transform:capitalize;" class="text-primary">
+                        <h4 style="text-transform:capitalize;" class="text-primary">
                             {{passport.given_names}} {{passport.surname}}
-                        </h5>
+                        </h4>
                     </a>
                     <hr class="divider lg">
                     <p class="small">

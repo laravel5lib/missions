@@ -112,7 +112,6 @@ class ReservationsController extends Controller
         $reservation->syncCosts($request->get('costs'));
         $reservation->syncRequirements($request->get('requirements'));
         $reservation->syncDeadlines($request->get('deadlines'));
-        $reservation->syncTodos($request->get('todos'));
 
         if ($request->has('tags'))
             $reservation->retag($request->get('tags'));

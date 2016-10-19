@@ -39,8 +39,10 @@ class ReservationRequest extends FormRequest
             'passport_id'        => 'string|exists:passports,id',
             'visa_id'            => 'string|exists:visas,id',
             'medical_release_id' => 'string|exists:medical_releases,id',
-            'todos'              => 'array',
             'tags'               => 'array',
+            'costs'              => 'array',
+            'costs.*.id'         => 'required|exists:costs,id',
+            'costs.*.locked'     => 'boolean',
             'companion_limit'    => 'numeric'
         ];
 
@@ -59,8 +61,10 @@ class ReservationRequest extends FormRequest
                 'passport_id'        => 'string|exists:passports,id',
                 'visa_id'            => 'string|exists:visas,id',
                 'medical_release_id' => 'string|exists:medical_releases,id',
-                'todos'              => 'array',
                 'tags'               => 'array',
+                'costs'              => 'array',
+                'costs.*.id'         => 'required|exists:costs,id',
+                'costs.*.locked'     => 'boolean',
                 'companion_limit'    => 'numeric'
             ];
         }

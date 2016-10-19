@@ -13,7 +13,7 @@
             <tr>
                 <th>Locked</th>
                 <th>Name</th>
-                <th>Due Date</th>
+                <th>Type</th>
                 <th>Amount</th>
                 <th><i class="fa fa-cog"></i></th>
             </tr>
@@ -24,13 +24,16 @@
                     <!--<td class="text-center">
                         <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
                     </td>-->
-                    <td>{{ cost.locked ? 'Yes' : 'No' }}</td>
+                    <td class="text-muted">
+
+                        <i class="fa fa-lock" v-if="cost.locked" @click="costLocking(cost, false)"></i>
+                        <i class="fa fa-unlock" v-else @click="costLocking(cost, true)"></i>
+                    </td>
                     <td>{{ cost.name || cost.cost }}</td>
-                    <td>{{ cost.due_at| moment 'll' }}</td>
+                    <td>{{ cost.type|capitalize}}</td>
                     <td>{{ cost.amount| currency }}</td>
                     <td>
-                        <a class="btn btn-default btn-xs" @click="edit(cost)"><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger btn-xs" @click="remove(cost)"><i class="fa fa-times"></i></a>
+                        <a class="btn btn-danger btn-xs" @click="confirmRemove(cost)"><i class="fa fa-times"></i></a>
                     </td>
                 </tr>
             </template>
@@ -48,38 +51,6 @@
                             <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
                                 <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
                             </select>
-                        </div>
-                    </form>
-                </validator>
-            </div>
-        </modal>
-
-        <modal title="Edit Cost" :show.sync="showEditModal" effect="fade" width="800" :callback="updateCost">
-            <div slot="modal-body" class="modal-body">
-                <validator name="EditCost">
-                    <form class="form" novalidate>
-                        <div class="row">
-                            <div class="col-sm-12">
-
-                                <div class="form-group" :class="{'has-error': checkForEditCostError('locked') }" v-if="editedCost.type = 'incremental'">
-                                    <label for="locked">Locked</label>
-                                    <input id="locked" type="checkbox" class="form-control" v-model="editedCost.locked"
-                                           v-validate:locked="{required: true, min:false}">
-                                </div>
-
-                                <div class="form-group" :class="{'has-error': checkForEditCostError('grace') }">
-                                    <label for="grace_period">Grace Period</label>
-                                    <div class="input-group input-group-sm" :class="{'has-error': checkForEditCostError('grace') }">
-                                        <input id="grace_period" type="number" class="form-control" number v-model="editedCost.grace_period"
-                                               v-validate:grace="{required: { rule: true }}">
-                                        <span class="input-group-addon">Days</span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="due_date">Due Date</label>
-                                    <input id="due_date" type="datetime-local" class="form-control" v-model="editedCost.due_at">
-                                </div>
-                            </div>
                         </div>
                     </form>
                 </validator>
@@ -131,6 +102,21 @@
                 </validator>
             </div>
         </modal>
+
+        <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
+            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete {{ selectedCost.name }}?</div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Confirm</button>
+            </div>
+        </modal>
+
+
+        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <span class="icon-ok-circled alert-icon-float-left"></span>
+            <strong>Well Done!</strong>
+            <p>{{successMessage}}</p>
+        </alert>
     </div>
 </template>
 
@@ -140,7 +126,7 @@
     export default{
         name: 'admin-reservation-costs',
         props: ['id'],
-        components:{ vSelect, 'modal': VueStrap.modal},
+        components:{ vSelect, 'modal': VueStrap.modal, 'alert': VueStrap.alert},
         data(){
             return{
                 reservation: null,
@@ -160,11 +146,15 @@
                     grace_period: 0,
                     enforced: false,
                 },
+                selectedCost: null,
                 resource: this.$resource('reservations/' + this.id, { include: 'dues,costs.payments,trip.costs.payments' }),
                 showAddModal: false,
+                deleteModal: false,
                 showNewModal: false,
                 showEditModal: false,
                 attemptSubmit: false,
+                showSuccess: false,
+                successMessage: '',
 
                 preppedReservation : {}
             }
@@ -198,6 +188,19 @@
                     enforced: false,
 
                 };
+            },
+            costLocking(cost, status) {
+                cost.locked = status;
+                   var costs = [];
+                _.each(this.reservation.costs.data, function (c) {
+                    costs.push({id: c.cost_id, locked: c.locked});
+                });
+
+                var reservation = this.preppedReservation;
+                reservation.costs = costs;
+
+                return this.doUpdate(reservation, 'Cost' + (status ? ' locked ' : ' unlocked ') + 'successfully');
+
             },
             isPast(date){
                 return moment().isAfter(date);
@@ -239,12 +242,16 @@
 
                 return this.doUpdate(reservation);
             },
+            confirmRemove(cost) {
+                this.selectedCost = cost;
+                this.deleteModal = true;
+            },
             remove(cost){
                 var reservation = this.preppedReservation;
                 reservation.costs = [];
                 _.each(this.reservation.costs.data, function (cs) {
                     if (cs.cost_id !== cost.cost_id) {
-                        reservation.costs.push({ id: cs.cost_id/*, locked: cs.locked*/})
+                        reservation.costs.push({ id: cs.cost_id, locked: cs.locked})
                     }
                 });
                 console.log(reservation.costs);
@@ -301,11 +308,15 @@
                 loading(true);
 
             },
-            doUpdate(reservation){
+            doUpdate(reservation, success){
+
+
                 return this.resource.update(reservation).then(function (response) {
                     this.setReservationData(response.data.data);
                     this.selectedCosts = [];
                     this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
+                    this.successMessage = success || 'Costs updated Successfully';
+                    this.showSuccess = true;
                 });
             },
             setReservationData(reservation){

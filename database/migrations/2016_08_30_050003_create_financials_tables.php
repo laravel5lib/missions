@@ -34,6 +34,7 @@ class CreateFinancialsTables extends Migration
             $table->uuid('fundable_id');
             $table->uuid('fundable_type');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('transactions', function (Blueprint $table) {
@@ -70,7 +71,6 @@ class CreateFinancialsTables extends Migration
             $table->uuid('fund_id')->index();
             $table->uuid('sponsor_id')->index();
             $table->string('sponsor_type');
-            $table->uuid('banner_upload_id')->nullable();
             $table->timestamp('started_at');
             $table->timestamp('ended_at');
             $table->timestamps();

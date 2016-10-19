@@ -3,13 +3,22 @@
 @section('content')
 <div class="white-header-bg">
     <div class="container">
-        <div class="row">
+        <div class="row hidden-xs">
             <div class="col-sm-8">
                 <h3>Campaigns</h3>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 text-right">
                 <hr class="divider inv sm">
-                <a href="/admin/campaigns/create" class="btn btn-primary pull-right">New <i class="fa fa-plus"></i></a>
+                <a href="/admin/campaigns/create" class="btn btn-primary">New <i class="fa fa-plus"></i></a>
+            </div>
+        </div>
+        <div class="row visible-xs">
+            <div class="col-sm-8 text-center">
+                <h3>Campaigns</h3>
+            </div>
+            <div class="col-sm-4 text-center">
+                <a href="/admin/campaigns/create" class="btn btn-primary">New <i class="fa fa-plus"></i></a>
+                <hr class="divider inv sm">
             </div>
         </div>
     </div>

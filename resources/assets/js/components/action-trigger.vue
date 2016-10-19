@@ -1,5 +1,5 @@
 <template>
-    <a class="btn btn-primary pull-right" @click="execute">{{text}} <i v-if="icon" :class="icon"></i></a>
+    <a class="btn btn-primary" @click="execute">{{text}} <i v-if="icon" :class="icon"></i></a>
 </template>
 <script>
     export default{

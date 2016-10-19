@@ -24,8 +24,6 @@ class FundraiserTransformer extends TransformerAbstract
      */
     public function transform(Fundraiser $fundraiser)
     {
-        $fundraiser->load('banner');
-
         $array = [
             'id'             => $fundraiser->id,
             'name'           => $fundraiser->name,
@@ -35,17 +33,26 @@ class FundraiserTransformer extends TransformerAbstract
             'raised_amount'  => (int) $fundraiser->raised(),
             'raised_percent' => (int) $fundraiser->getPercentRaised(),
             'donors_count'   => (int) count($fundraiser->donors),
-            'banner'         => $fundraiser->banner ? image($fundraiser->banner->source) : null,
             'url'            => $fundraiser->url,
+            'public'         => (bool) $fundraiser->public,
             'description'    => $fundraiser->description,
             'started_at'     => $fundraiser->started_at->toDateTimeString(),
             'ended_at'       => $fundraiser->ended_at->toDateTimeString(),
             'created_at'     => $fundraiser->created_at->toDateTimeString(),
             'updated_at'     => $fundraiser->updated_at->toDateTimeString(),
+            'tags'           => $fundraiser->tagSlugs(),
             'links'          => [
                 [
                     'rel' => 'self',
-                    'uri' => '/fundraisers/' . $fundraiser->id,
+                    'uri' => url('/api/fundraisers/' . $fundraiser->id),
+                ],
+                [
+                    'rel' => 'donors',
+                    'uri' => url('/api/fundraisers/' . $fundraiser->id . '/donors'),
+                ],
+                [
+                    'rel' => 'donations',
+                    'uri' => url('/api/fundraisers/' . $fundraiser->id . '/donations'),
                 ]
             ]
         ];

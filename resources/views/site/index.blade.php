@@ -85,7 +85,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
         <hr class="divider inv lg visible-xs visible-sm">
         <div class="col-sm-6 home-half-section">
           <h1 class="dash-trailing" data-aos="fade-left">1Nation1Day</h1>
-          <p class="large-type" data-aos="fade-left">1Nation1Day is the largest global missions outreach in history. But this isn’t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.</p>
+          <p class="large-type" data-aos="fade-left">The mission of 1Nation1Day is to unite the global church for the salvation and transformation of nations.  We believe we are living in a New Missions Era.</p>
           <hr class="divider inv">
           <a href="/orphans" class="btn btn-info" data-aos="fade-left">Learn More</a>
         </div><!-- end col -->
@@ -142,9 +142,9 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     <div class="content-section">
       <div class="row">
         <div class="col-sm-12 text-center">
-          <h1 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="200">Change The World</h1>
-          <a data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="300" href="#" class="btn btn-primary btn-lg">Create Your Account</a>
-          <h5 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="300" class="text-uppercase"><a href="#">Or Donate</a></h5>
+          <h1 data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200">Change The World</h1>
+          <a data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="300" href="#" class="btn btn-primary btn-lg">Create Your Account</a>
+          <h5 data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="300" class="text-uppercase"><a href="#">Or Donate</a></h5>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->

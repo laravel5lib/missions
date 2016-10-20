@@ -38,20 +38,6 @@
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
                 @if(count($user->getCountriesVisited()))
-                <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h5>Countries Visited</h5>
-                        </div><!-- end panel-heading -->
-                        <div class="panel-body">
-                            <h4>
-                                @foreach($user->getCountriesVisited() as $country)
-                                    <p><span class="label label-primary">
-                                    <i class="fa fa-map-marker"></i> {{ country($country) }}
-                                </span></p>
-                                @endforeach
-                            </h4>
-                        </div><!-- end panel-body -->
-                    </div><!-- end panel -->
                     <user-profile-countries id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-countries>
                 @endif
             </div><!-- end col -->

@@ -10,9 +10,9 @@
                 <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button><br>
                 <small>Max file size: 2MB</small>
             </div>
-        </div>
 
-        <hr class="inv sm"/>
+            <hr class="divider inv sm"/>
+        </div>
 
         <div class="col-sm-12">
             <div class="collapse" id="avatarCollapse">
@@ -20,8 +20,9 @@
                     <upload-create-update type="avatar" :name="'reservation-' + id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['User']"></upload-create-update>
                 </div>
             </div>
+
+            <hr class="divider inv sm"/>
         </div>
-        <hr class="inv sm"/>
 
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>

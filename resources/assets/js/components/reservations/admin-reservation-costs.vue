@@ -120,7 +120,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select';
     import VueStrap from 'vue-strap/dist/vue-strap.min'
     export default{

@@ -1,9 +1,22 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <!--<button class="btn btn-primary btn-xs" @click="add">
-            <span class="fa fa-plus"></span> Add Optional Costs
-        </button>-->
-        <!--<hr class="divider sm">-->
+        <div class="row">
+            <div class="col-sm-4">
+                <button class="btn btn-primary btn-xs" @click="add">
+                    <span class="fa fa-plus"></span> Add Optional Costs
+                </button>
+            </div>
+            <div class="col-sm-8 text-right" v-if="">
+                <button class="btn btn-default btn-xs" @click="add">
+                    <span class="fa fa-refresh"></span> Revert Changes
+                </button>
+                <button class="btn btn-primary btn-xs" @click="doUpdate">
+                    <span class="fa fa-save"></span> Save Changes
+                </button>
+            </div>
+        </div>
+
+        <hr class="divider inv sm">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h5>Costs</h5>
@@ -65,7 +78,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select';
     import VueStrap from 'vue-strap/dist/vue-strap.min'
     export default{
@@ -80,12 +93,6 @@
                 selectedCosts: [],
                 availableCosts: [],
                 editedCost: {
-                    name: '',
-                    date: null,
-                    grace_period: 0,
-                    enforced: false,
-                },
-                newCost: {
                     name: '',
                     date: null,
                     grace_period: 0,
@@ -253,18 +260,16 @@
 
             },
             doUpdate(reservation, success){
-
-
                 return this.resource.update(reservation).then(function (response) {
                     this.setReservationData(response.data.data);
                     this.selectedCosts = [];
-                    this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
                     this.successMessage = success || 'Costs updated Successfully';
                     this.showSuccess = true;
                 });
             },
             setReservationData(reservation){
                 this.reservation = reservation;
+                this.$root.$emit('Reservation:CostsUpdated', reservation);
                 this.preppedReservation = {
                     given_names: this.reservation.given_names,
                     surname: this.reservation.surname,
@@ -276,9 +281,9 @@
                     trip_id: this.reservation.trip_id,
                 };
 
-                // get available costs intersect with current
+                // get available optional costs intersect with current
                 this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
-                    return !_.findWhere(reservation.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
+                    return !_.findWhere(reservation.costs.data, {cost_id: cost.id}) && cost.type === 'optional';
                 });
             }
         },

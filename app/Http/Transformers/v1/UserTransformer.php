@@ -14,7 +14,8 @@ class UserTransformer extends TransformerAbstract
      */
     protected $availableIncludes = [
         'reservations', 'notes', 'managing', 'facilitating',
-        'passports', 'visas', 'uploads', 'accolades', 'fundraisers'
+        'passports', 'visas', 'uploads', 'accolades', 'fundraisers',
+        'medical_releases'
     ];
 
     /**
@@ -93,6 +94,13 @@ class UserTransformer extends TransformerAbstract
         $passports = $user->passports;
 
         return $this->collection($passports, new PassportTransformer);
+    }
+
+    public function includeMedicalReleases(User $user)
+    {
+        $releases = $user->medicalReleases();
+
+        return $this->collection($releases, new MedicalReleaseTransformer);
     }
 
     public function includeVisas(User $user)

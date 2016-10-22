@@ -17,5 +17,6 @@
 @stop
 
 @section('tab')
+    <medicals-list></medicals-list>
     <hr class="divider inv lg">
 @stop

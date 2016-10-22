@@ -28,6 +28,7 @@ import visaCreateUpdate from './components/visas/visa-create-update.vue';
 import reservationAvatar from './components/reservations/reservation-avatar.vue';
 import reservationCosts from './components/reservations/reservation-costs.vue';
 import reservationDues from './components/reservations/reservation-dues.vue';
+import reservationFunding from './components/reservations/reservation-funding.vue';
 import reservationsPassportsManager from './components/reservations/reservations-passports-manager.vue';
 import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
 import userSettings from './components/users/user-settings.vue';
@@ -274,6 +275,7 @@ new Vue({
         reservationAvatar,
         reservationCosts,
         reservationDues,
+        reservationFunding,
         reservationsPassportsManager,
         reservationsVisasManager,
         userSettings,

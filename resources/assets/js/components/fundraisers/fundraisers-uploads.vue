@@ -67,7 +67,7 @@
                         </modal>
                     </div>
                     <div class="tab-pane fade" id="tab2">
-                        <upload-create-update type="other" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']"></upload-create-update>
+                        <upload-create-update type="other" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']" :width="1920" :height="1080"></upload-create-update>
                     </div>
                     <div class="tab-pane fade" id="tab3">
                         <upload-create-update type="video" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']"></upload-create-update>

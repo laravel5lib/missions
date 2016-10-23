@@ -57,52 +57,6 @@
             </div>
         </modal>
 
-        <modal title="New Cost" :show.sync="showNewModal" effect="fade" width="800" :callback="addNew">
-            <div slot="modal-body" class="modal-body">
-                <validator name="NewCost">
-                    <form class="form" novalidate>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForNewCostError('name')}">
-                                    <label for="name">Name</label>
-                                    <input type="text" id="name" v-model="newCost.name" v-validate:name="{require:true}" class="form-control input-sm">
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForNewCostError('grace') }">
-                                            <label for="grace_period">Grace Period</label>
-                                            <div class="input-group input-group-sm" :class="{'has-error': checkForNewCostError('grace') }">
-                                                <input id="grace_period" type="number" class="form-control" number v-model="newCost.grace_period"
-                                                       v-validate:grace="{required: true, min:0}">
-                                                <span class="input-group-addon">Days</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForNewCostError('due')}">
-                                            <label for="due_at">Due</label>
-                                            <input type="date" id="due_at" class="form-control input-sm"
-                                                   v-model="newCost.due_at" v-validate:due="{required: true}">
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <br>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" v-model="newCost.enforced">
-                                        Enforced?
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </validator>
-            </div>
-        </modal>
-
         <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
             <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">

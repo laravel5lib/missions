@@ -80,7 +80,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <a v-if="!isUpdate" href="/dashboard/visas" class="btn btn-default">Cancel</a>
+                    <a v-if="!isUpdate" href="/dashboard/records/visas" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
                     <a v-if="isUpdate" @click="back()" class="btn btn-success">Done</a>
@@ -161,7 +161,7 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/dashboard/visas/';
+                window.location.href = '/dashboard/records/visas/';
             },
             forceBack(){
                 return this.back(true);
@@ -182,7 +182,7 @@
                     }).then(function (resp) {
                         this.showSuccess = true;
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/visas';
+                        window.location.href = '/dashboard/records/visas';
                     }, function (error) {
                         this.showError = true;
                         debugger;

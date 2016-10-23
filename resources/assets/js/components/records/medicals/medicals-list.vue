@@ -6,7 +6,7 @@
 
         <div class="row">
             <div class="col-sm-12 text-right">
-                <a href="medical_releases/create" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i> Add Medical Release</a>
+                <a href="medical-releases/create" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i> Add Medical Release</a>
                 <hr>
             </div>
         </div>
@@ -14,20 +14,17 @@
 
         <div class="col-sm-4" v-for="medical_release in paginatedMedical_releases">
             <div class="panel panel-default">
-                <div style="min-height:220px;" class="panel-body">
-                    <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{medical_release.country_name}}</h6>
+                <div style="min-height:120px;" class="panel-body">
                     <a role="button" :href="'/dashboard' + medical_release.links[0].uri">
                         <h5 style="text-transform:capitalize;" class="text-primary">
-                            {{medical_release.given_names}} {{medical_release.surname}}
+                            {{medical_release.name}}
                         </h5>
                     </a>
                     <hr class="divider lg">
                     <p class="small">
-                        <b>ID:</b> {{medical_release.number}}
+                        <b>Medication:</b> {{medical_release.medication ? 'Yes' : 'No'}}
                         <br>
-                        <b>ISSUED ON:</b> {{medical_release.issued_at|moment 'll'}}
-                        <br>
-                        <b>EXPIRES ON:</b> {{medical_release.expires_at|moment 'll'}}
+                        <b>Diagnosed:</b> {{medical_release.diagnosed ? 'Yes' : 'No'}}
                     </p>
                 </div><!-- end panel-body -->
                 <div class="panel-footer" style="padding: 0;">

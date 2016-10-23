@@ -98,7 +98,7 @@ class UserTransformer extends TransformerAbstract
 
     public function includeMedicalReleases(User $user)
     {
-        $releases = $user->medicalReleases();
+        $releases = $user->medicalReleases;
 
         return $this->collection($releases, new MedicalReleaseTransformer);
     }

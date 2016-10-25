@@ -26,9 +26,9 @@
 												<div class="col-sm-12">
 													<div class="row">
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForError('item')}">
-																<label for="item">Item</label>
-																<select id="item" class="form-control input-sm" v-model="newReq.item" v-validate:item="{ required: true }">
+															<div class="form-group" :class="{'has-error': checkForError('name')}">
+																<label for="name">Name</label>
+																<select id="name" class="form-control input-sm" v-model="newReq.name" v-validate:name="{ required: true }">
 																	<option value="">-- select --</option>
 																	<option :value="option" v-for="option in resources">{{option}}</option>
 																</select>
@@ -36,8 +36,8 @@
 														</div>
 														<div class="col-sm-6">
 															<div class="form-group">
-																<label for="type">Item Type</label>
-																<select id="type" class="form-control input-sm" v-model="newReq.item_type">
+																<label for="type">Document Type</label>
+																<select id="type" class="form-control input-sm" v-model="newReq.document_type">
 																	<option value="">-- select --</option>
 																</select>
 															</div>
@@ -88,7 +88,7 @@
 							<table class="table table-striped table-hover">
 								<thead>
 								<tr>
-									<th>Item</th>
+									<th>Name</th>
 									<th>Type</th>
 									<th>Due</th>
 									<th>Grace</th>
@@ -98,8 +98,8 @@
 								</thead>
 								<tbody>
 								<tr v-for="requirement in requirements|orderBy 'due_at'">
-									<td>{{requirement.item}}</td>
-									<td>{{requirement.item_type}}</td>
+									<td>{{requirement.name}}</td>
+									<td>{{requirement.document_type}}</td>
 									<td>
 										{{requirement.due_at|moment}}
 									</td>
@@ -143,8 +143,8 @@
 				// requirements data
 				requirements:[],
 				newReq: {
-					item: '',
-					item_type: '',
+					name: '',
+					document_type: '',
 					due_at: null,
 					grace_period: 0,
 					enforced: false,
@@ -171,8 +171,8 @@
 			},
 			resetRequirement(){
 				this.newReq = {
-					item: '',
-					item_type: '',
+					name: '',
+					document_type: '',
 					due_at: null,
 					grace_period: 0,
 					enforced: false,

@@ -1,11 +1,29 @@
 @extends('dashboard.reservations.show')
 
+@section('styles')
+    <link rel="stylesheet" href="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/css/Jcrop.css" type="text/css">
+@endsection
+
+@section('scripts')
+    <script src="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/js/Jcrop.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.14.2/TweenMax.min.js"></script>
+    <script>
+        // init controller
+        var controller = new ScrollMagic.Controller({globalSceneOptions: {triggerHook: "onEnter", duration: "200%"}});
+        // build scenes
+        new ScrollMagic.Scene({triggerElement: "#parallax1"})
+                .setTween("#parallax1 > img", {y: "80%", ease: Linear.easeNone})
+                .addTo(controller);
+    </script>
+@endsection
+
 @section('tab')
     <div class="panel panel-default">
         <div class="panel-heading">
             <h5>Details</h5>
         </div>
         <div class="panel-body">
+            <reservation-avatar id="{{ $reservation->id }}"></reservation-avatar>
             <div class="col-md-7">
                 <div class="row">
                     <div class="col-md-6">

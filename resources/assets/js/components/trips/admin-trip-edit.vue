@@ -21,7 +21,8 @@
 				<a class="btn btn-link" @click="back()">Cancel</a>
 				<a class="btn btn-default" v-if="currentStep.view !== 'step1'" @click="backStep()">Back</a>
 				<a class="btn btn-primary" v-if="!wizardComplete" @click="nextStep()">Continue</a>
-				<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">Finish</a>
+				<a class="btn btn-success" v-if="wizardComplete" @click="finish()">Save</a>
+				<a class="btn btn-primary" v-if="wizardComplete" @click="back()">Finish</a>
 			</div>
 		</div>
 	</div>
@@ -37,7 +38,7 @@
 
 	.step1 {}
 </style>
-<script>
+<script type="text/javascript">
 	import details from './edit/details.vue';
 	import settings from './edit/settings.vue';
 	import pricing from './edit/pricing.vue';
@@ -125,10 +126,13 @@
 
 				var resource = this.$resource('trips{/id}');
 				resource.update({ id: this.tripId}, this.wizardData).then(function (resp) {
-					window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
+
 				}, function (error) {
 					console.log(error);
 				});
+			},
+			back(){
+				window.location.href = '/admin/trips/' + this.tripId;
 			}
 		},
 		created(){

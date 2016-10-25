@@ -72458,7 +72458,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":196,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],124:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":197,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],124:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -72708,7 +72708,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":196,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],126:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":197,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],126:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73918,7 +73918,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-02bfe2c1", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":196,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],137:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":197,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73972,7 +73972,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"carousel-example-generic\" class=\"carousel slide\" data-ride=\"carousel\">\n    <!-- Indicators -->\n    <ol class=\"carousel-indicators\">\n        <!--<li data-target=\"#carousel-example-generic\" data-slide-to=\"0\" class=\"active\"></li>-->\n        <li data-target=\"#carousel-example-generic\" class=\"{{ $index == 0 ? 'active' : '' }}\" :data-slide-to=\"$index\" v-for=\"fundraiser in featuredFundraisers\"></li>\n    </ol>\n    <!-- Wrapper for slides -->\n    <div class=\"carousel-inner\" role=\"listbox\">\n        <div class=\"item {{ $index == 0 ? 'active' : '' }}\" v-for=\"fundraiser in featuredFundraisers\">\n            <img :src=\"fundraiser.banner\">\n            <div class=\"carousel-caption\">\n                <h6 class=\"text-uppercase\"><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h6>\n                <h3>{{fundraiser.name}}</h3>\n                <a :href=\"'/fundraisers/' + fundraiser.url\" class=\"btn btn-primary btn-sm\">More Details</a>\n                <hr class=\"divider inv\">\n            </div>\n        </div>\n    </div>\n    <!-- Controls -->\n    <a class=\"left carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"prev\">\n        <span class=\"fa fa-angle-left\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Previous</span>\n    </a>\n    <a class=\"right carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"next\">\n        <span class=\"fa fa-angle-right\" aria-hidden=\"true\"></span>\n        <span class=\"sr-only\">Next</span>\n    </a>\n</div><!-- end carousel -->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-12\">\n        <h4>Current Fundraisers</h4>\n    </div>\n    <div class=\"col-md-6 col-xs-12\">\n        <div class=\"form-group form-group-md\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Start typing a fundraiser name...\" v-model=\"search\" debounce=\"250\">\n        </div><!-- /input-group -->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n    <div class=\"col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12\" v-for=\"fundraiser in fundraisers|limitBy fundraisersLimit\" style=\"display:flex\" v-if=\"fundraisers.length\">\n        <div class=\"panel panel-default\">\n            <img :src=\"fundraiser.banner||'images/india-prof-pic.jpg'\" alt=\"India\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h5>{{ fundraiser.name }}</h5>\n                <h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\">Expires: {{ fundraiser.ended_at | moment 'll'  }}</h6>\n                <h3><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>\n                <p><span>{{ fundraiser.raised_percent|number }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>\n                <div class=\"progress\">\n                    <div class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\" :style=\"{ width: fundraiser.raised_percent + '%'}\">\n                        <span class=\"sr-only\">{{ fundraiser.raised_percent|number }}% Complete (success)</span>\n                    </div>\n                </div>\n                <p><a class=\"btn btn-primary btn-block\" :href=\"pathName + '/' + fundraiser.url\">Details</a></p>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div class=\"col-xs-12 text-center\" v-if=\" ! fundraisers.length\">\n        <p class=\"lead text-muted\">Hmmmm. We couldn't find any fundraisers matching your search.</p>\n    </div>\n    <div class=\"col-xs-12 text-center\" v-if=\"fundraisers.length\">\n        <nav>\n            <ul class=\"pagination pagination-md\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<!--<div id=\"carousel-example-generic\" class=\"carousel slide\" data-ride=\"carousel\">-->\n    <!--&lt;!&ndash; Indicators &ndash;&gt;-->\n    <!--<ol class=\"carousel-indicators\">-->\n        <!--&lt;!&ndash;<li data-target=\"#carousel-example-generic\" data-slide-to=\"0\" class=\"active\"></li>&ndash;&gt;-->\n        <!--<li data-target=\"#carousel-example-generic\" class=\"{{ $index == 0 ? 'active' : '' }}\" :data-slide-to=\"$index\" v-for=\"fundraiser in featuredFundraisers\"></li>-->\n    <!--</ol>-->\n    <!--&lt;!&ndash; Wrapper for slides &ndash;&gt;-->\n    <!--<div class=\"carousel-inner\" role=\"listbox\">-->\n        <!--<div class=\"item {{ $index == 0 ? 'active' : '' }}\" v-for=\"fundraiser in featuredFundraisers\">-->\n            <!--<img :src=\"fundraiser.banner\">-->\n            <!--<div class=\"carousel-caption\">-->\n                <!--<h6 class=\"text-uppercase\"><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h6>-->\n                <!--<h3>{{fundraiser.name}}</h3>-->\n                <!--<a :href=\"'/fundraisers/' + fundraiser.url\" class=\"btn btn-primary btn-sm\">More Details</a>-->\n                <!--<hr class=\"divider inv\" />-->\n            <!--</div>-->\n        <!--</div>-->\n    <!--</div>-->\n    <!--&lt;!&ndash; Controls &ndash;&gt;-->\n    <!--<a class=\"left carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"prev\">-->\n        <!--<span class=\"fa fa-angle-left\" aria-hidden=\"true\"></span>-->\n        <!--<span class=\"sr-only\">Previous</span>-->\n    <!--</a>-->\n    <!--<a class=\"right carousel-control\" href=\"#carousel-example-generic\" role=\"button\" data-slide=\"next\">-->\n        <!--<span class=\"fa fa-angle-right\" aria-hidden=\"true\"></span>-->\n        <!--<span class=\"sr-only\">Next</span>-->\n    <!--</a>-->\n<!--</div>&lt;!&ndash; end carousel &ndash;&gt;-->\n<hr class=\"divider inv xlg\">\n<div class=\"container\">\n    <div class=\"col-xs-12\">\n        <h4>Current Fundraisers</h4>\n    </div>\n    <div class=\"col-md-6 col-xs-12\">\n        <div class=\"form-group form-group-md\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Start typing a fundraiser name...\" v-model=\"search\" debounce=\"250\">\n        </div><!-- /input-group -->\n    </div>\n</div>\n<div class=\"container\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n    <div class=\"col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12\" v-for=\"fundraiser in fundraisers|limitBy fundraisersLimit\" style=\"display:flex\" v-if=\"fundraisers.length\">\n        <div class=\"panel panel-default\">\n            <!--<img :src=\"fundraiser.banner||'images/india-prof-pic.jpg'\" alt=\"India\" class=\"img-responsive\">-->\n            <div class=\"panel-body\">\n                <h5>{{ fundraiser.name }}</h5>\n                <h6 style=\"text-transform:uppercase;letter-spacing:1px;font-size:10px;\">Expires: {{ fundraiser.ended_at | moment 'll'  }}</h6>\n                <h3><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>\n                <p><span>{{ fundraiser.raised_percent|number }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>\n                <div class=\"progress\">\n                    <div class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\" :style=\"{ width: fundraiser.raised_percent + '%'}\">\n                        <span class=\"sr-only\">{{ fundraiser.raised_percent|number }}% Complete (success)</span>\n                    </div>\n                </div>\n                <p><a class=\"btn btn-primary btn-block\" :href=\"pathName + '/' + fundraiser.url\">Details</a></p>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div class=\"col-xs-12 text-center\" v-if=\" ! fundraisers.length\">\n        <p class=\"lead text-muted\">Hmmmm. We couldn't find any fundraisers matching your search.</p>\n    </div>\n    <div class=\"col-xs-12 text-center\" v-if=\"fundraisers.length\">\n        <nav>\n            <ul class=\"pagination pagination-md\">\n                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                        <span aria-hidden=\"true\">«</span>\n                    </a>\n                </li>\n                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                        <span aria-hidden=\"true\">»</span>\n                    </a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -76160,7 +76160,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-17773f82", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":196,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],156:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":197,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76355,7 +76355,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     name: 'admin-reservation-costs',
     props: ['id'],
-    components: { vSelect: _vueSelect2.default, 'modal': _vueStrap2.default.modal },
+    components: { vSelect: _vueSelect2.default, 'modal': _vueStrap2.default.modal, 'alert': _vueStrap2.default.alert },
     data: function data() {
         return {
             reservation: null,
@@ -76375,11 +76375,15 @@ exports.default = {
                 grace_period: 0,
                 enforced: false
             },
+            selectedCost: null,
             resource: this.$resource('reservations/' + this.id, { include: 'dues,costs.payments,trip.costs.payments' }),
             showAddModal: false,
+            deleteModal: false,
             showNewModal: false,
             showEditModal: false,
             attemptSubmit: false,
+            showSuccess: false,
+            successMessage: '',
 
             preppedReservation: {}
         };
@@ -76414,6 +76418,18 @@ exports.default = {
                 enforced: false
 
             };
+        },
+        costLocking: function costLocking(cost, status) {
+            cost.locked = status;
+            var costs = [];
+            _.each(this.reservation.costs.data, function (c) {
+                costs.push({ id: c.cost_id, locked: c.locked });
+            });
+
+            var reservation = this.preppedReservation;
+            reservation.costs = costs;
+
+            return this.doUpdate(reservation, 'Cost' + (status ? ' locked ' : ' unlocked ') + 'successfully');
         },
         isPast: function isPast(date) {
             return moment().isAfter(date);
@@ -76454,12 +76470,16 @@ exports.default = {
 
             return this.doUpdate(reservation);
         },
+        confirmRemove: function confirmRemove(cost) {
+            this.selectedCost = cost;
+            this.deleteModal = true;
+        },
         remove: function remove(cost) {
             var reservation = this.preppedReservation;
             reservation.costs = [];
             _.each(this.reservation.costs.data, function (cs) {
                 if (cs.cost_id !== cost.cost_id) {
-                    reservation.costs.push({ id: cs.cost_id /*, locked: cs.locked*/ });
+                    reservation.costs.push({ id: cs.cost_id, locked: cs.locked });
                 }
             });
             console.log(reservation.costs);
@@ -76511,11 +76531,14 @@ exports.default = {
         });
     }), (0, _defineProperty3.default)(_methods, 'getCosts', function getCosts(search, loading) {
         loading(true);
-    }), (0, _defineProperty3.default)(_methods, 'doUpdate', function doUpdate(reservation) {
+    }), (0, _defineProperty3.default)(_methods, 'doUpdate', function doUpdate(reservation, success) {
+
         return this.resource.update(reservation).then(function (response) {
             this.setReservationData(response.data.data);
             this.selectedCosts = [];
             this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
+            this.successMessage = success || 'Costs updated Successfully';
+            this.showSuccess = true;
         });
     }), (0, _defineProperty3.default)(_methods, 'setReservationData', function setReservationData(reservation) {
         this.reservation = reservation;
@@ -76542,7 +76565,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <button class=\"btn btn-primary btn-xs\" @click=\"add\">\n        <span class=\"fa fa-plus\"></span> Add Existing\n    </button>\n    <!--<button class=\"btn btn-primary btn-xs\" @click=\"addNew\"><span\n            class=\"fa fa-plus\"></span> Create New\n    </button>-->\n\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th>Locked</th>\n            <th>Name</th>\n            <th>Due Date</th>\n            <th>Amount</th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"reservation\">\n        <template v-for=\"cost in reservation.costs.data\">\n            <tr>\n                <!--<td class=\"text-center\">\n                    <small class=\"badge\" :class=\"{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }\">{{due.status|capitalize}}</small>\n                </td>-->\n                <td>{{ cost.locked ? 'Yes' : 'No' }}</td>\n                <td>{{ cost.name || cost.cost }}</td>\n                <td>{{ cost.due_at| moment 'll' }}</td>\n                <td>{{ cost.amount| currency }}</td>\n                <td>\n                    <a class=\"btn btn-default btn-xs\" @click=\"edit(cost)\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger btn-xs\" @click=\"remove(cost)\"><i class=\"fa fa-times\"></i></a>\n                </td>\n            </tr>\n        </template>\n        </tbody>\n    </table>\n\n    <modal title=\"Add Costs\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addCosts\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"AddCost\">\n                <form class=\"for\" novalidate=\"\">\n                    <div class=\"form-group\" :class=\"{ 'has-error': checkForError('costs') }\">\n                        <label class=\"control-label\">Available Costs</label>\n                        <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedCosts\" :options=\"availableCosts\" label=\"name\"></v-select>\n                        <select hidden=\"\" v-model=\"user_id\" v-validate:costs=\"{ required: true }\" multiple=\"\">\n                            <option :value=\"cost.id\" v-for=\"cost in costs\">{{cost.name}}</option>\n                        </select>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"Edit Cost\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\" :callback=\"updateCost\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"EditCost\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n\n                            <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('locked') }\" v-if=\"editedCost.type = 'incremental'\">\n                                <label for=\"locked\">Locked</label>\n                                <input id=\"locked\" type=\"checkbox\" class=\"form-control\" v-model=\"editedCost.locked\" v-validate:locked=\"{required: true, min:false}\">\n                            </div>\n\n                            <div class=\"form-group\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                <label for=\"grace_period\">Grace Period</label>\n                                <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditCostError('grace') }\">\n                                    <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"editedCost.grace_period\" v-validate:grace=\"{required: { rule: true }}\">\n                                    <span class=\"input-group-addon\">Days</span>\n                                </div>\n                            </div>\n                            <div class=\"form-group\">\n                                <label for=\"due_date\">Due Date</label>\n                                <input id=\"due_date\" type=\"datetime-local\" class=\"form-control\" v-model=\"editedCost.due_at\">\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"New Cost\" :show.sync=\"showNewModal\" effect=\"fade\" width=\"800\" :callback=\"addNew\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"NewCost\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('name')}\">\n                                <label for=\"name\">Name</label>\n                                <input type=\"text\" id=\"name\" v-model=\"newCost.name\" v-validate:name=\"{require:true}\" class=\"form-control input-sm\">\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newCost.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newCost.due_at\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"newCost.enforced\">\n                                    Enforced?\n                                </label>\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <button class=\"btn btn-primary btn-xs\" @click=\"add\">\n        <span class=\"fa fa-plus\"></span> Add Existing\n    </button>\n    <!--<button class=\"btn btn-primary btn-xs\" @click=\"addNew\"><span\n            class=\"fa fa-plus\"></span> Create New\n    </button>-->\n\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th>Locked</th>\n            <th>Name</th>\n            <th>Type</th>\n            <th>Amount</th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"reservation\">\n        <template v-for=\"cost in reservation.costs.data\">\n            <tr>\n                <!--<td class=\"text-center\">\n                    <small class=\"badge\" :class=\"{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }\">{{due.status|capitalize}}</small>\n                </td>-->\n                <td class=\"text-muted\">\n\n                    <i class=\"fa fa-lock\" v-if=\"cost.locked\" @click=\"costLocking(cost, false)\"></i>\n                    <i class=\"fa fa-unlock\" v-else=\"\" @click=\"costLocking(cost, true)\"></i>\n                </td>\n                <td>{{ cost.name || cost.cost }}</td>\n                <td>{{ cost.type|capitalize}}</td>\n                <td>{{ cost.amount| currency }}</td>\n                <td>\n                    <a class=\"btn btn-danger btn-xs\" @click=\"confirmRemove(cost)\"><i class=\"fa fa-times\"></i></a>\n                </td>\n            </tr>\n        </template>\n        </tbody>\n    </table>\n\n    <modal title=\"Add Costs\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addCosts\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"AddCost\">\n                <form class=\"for\" novalidate=\"\">\n                    <div class=\"form-group\" :class=\"{ 'has-error': checkForError('costs') }\">\n                        <label class=\"control-label\">Available Costs</label>\n                        <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedCosts\" :options=\"availableCosts\" label=\"name\"></v-select>\n                        <select hidden=\"\" v-model=\"user_id\" v-validate:costs=\"{ required: true }\" multiple=\"\">\n                            <option :value=\"cost.id\" v-for=\"cost in costs\">{{cost.name}}</option>\n                        </select>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal title=\"New Cost\" :show.sync=\"showNewModal\" effect=\"fade\" width=\"800\" :callback=\"addNew\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"NewCost\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('name')}\">\n                                <label for=\"name\">Name</label>\n                                <input type=\"text\" id=\"name\" v-model=\"newCost.name\" v-validate:name=\"{require:true}\" class=\"form-control input-sm\">\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForNewCostError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newCost.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForNewCostError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newCost.due_at\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"newCost.enforced\">\n                                    Enforced?\n                                </label>\n                            </div>\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Cost\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete {{ selectedCost.name }}?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedCost)\">Confirm</button>\n        </div>\n    </modal>\n\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>{{successMessage}}</p>\n    </alert>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -77173,7 +77196,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1bac2c0c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":196,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],163:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":197,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],163:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -77474,7 +77497,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"groupFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupsArr\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" v-if=\"!tripId\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"total_raised\" :disabled=\"maxCheck('total_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<span class=\"caret\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\tActive Filters:\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t</div>\n        <hr class=\"divider sm\">\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('total_raised')\" :class=\"{'text-primary': orderByField === 'total_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('total_raised')\" v-if=\"orderByField !== 'total_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'total_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('total_raised')\" v-text=\"reservation.total_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <td><a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-pencil\"></i></a></td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <nav>\n                            <ul class=\"pagination pagination-sm\">\n                                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                        <span aria-hidden=\"true\">«</span>\n                                    </a>\n                                </li>\n                                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                        <span aria-hidden=\"true\">»</span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </nav>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"groupFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupsArr\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" v-if=\"!tripId\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"total_raised\" :disabled=\"maxCheck('total_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<span class=\"caret\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\tActive Filters:\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t</div>\n        <hr class=\"divider sm\">\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('total_raised')\" :class=\"{'text-primary': orderByField === 'total_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('total_raised')\" v-if=\"orderByField !== 'total_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'total_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('total_raised')\" v-text=\"reservation.total_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <td><a href=\"/admin/reservations/{{ reservation.id }}\"><i class=\"fa fa-pencil\"></i></a></td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <nav>\n                            <ul class=\"pagination pagination-sm\">\n                                <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                    <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                        <span aria-hidden=\"true\">«</span>\n                                    </a>\n                                </li>\n                                <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                                <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                    <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                        <span aria-hidden=\"true\">»</span>\n                                    </a>\n                                </li>\n                            </ul>\n                        </nav>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -77546,6 +77569,252 @@ if (module.hot) {(function () {  module.hot.accept()
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _methods;
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'reservation-costs',
+    props: ['id'],
+    components: { vSelect: _vueSelect2.default, 'modal': _vueStrap2.default.modal, 'alert': _vueStrap2.default.alert },
+    data: function data() {
+        return {
+            reservation: null,
+            reservationsCosts: [],
+            costs: [],
+            selectedCosts: [],
+            availableCosts: [],
+            editedCost: {
+                name: '',
+                date: null,
+                grace_period: 0,
+                enforced: false
+            },
+            newCost: {
+                name: '',
+                date: null,
+                grace_period: 0,
+                enforced: false
+            },
+            selectedCost: null,
+            resource: this.$resource('reservations/' + this.id, { include: 'dues,costs.payments,trip.costs.payments' }),
+            showAddModal: false,
+            deleteModal: false,
+            showNewModal: false,
+            attemptSubmit: false,
+            showSuccess: false,
+            successMessage: '',
+
+            preppedReservation: {}
+        };
+    },
+
+    computed: {},
+    methods: (_methods = {
+        dateIsBetween: function dateIsBetween(a, b) {
+            var start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
+            var stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
+            console.log(moment(a).isBetween(start, stop));
+            return moment(a).isBetween(start, stop);
+        },
+        checkForError: function checkForError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+            return this.$AddCost[field].invalid && this.attemptSubmit;
+        },
+        checkForEditCostError: function checkForEditCostError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+            return this.$EditCost[field].invalid && this.attemptSubmit;
+        },
+        checkForNewCostError: function checkForNewCostError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+            return this.$NewCost[field].invalid && this.attemptSubmit;
+        },
+        resetCost: function resetCost() {
+            this.newCost = {
+                item: '',
+                item_type: '',
+                due_at: null,
+                grace_period: 0,
+                enforced: false
+
+            };
+        },
+        costLocking: function costLocking(cost, status) {
+            cost.locked = status;
+            var costs = [];
+            _.each(this.reservation.costs.data, function (c) {
+                costs.push({ id: c.cost_id, locked: c.locked });
+            });
+
+            var reservation = this.preppedReservation;
+            reservation.costs = costs;
+
+            return this.doUpdate(reservation, 'Cost' + (status ? ' locked ' : ' unlocked ') + 'successfully');
+        },
+        isPast: function isPast(date) {
+            return moment().isAfter(date);
+        },
+        add: function add() {
+            this.attemptSubmit = false;
+            this.showAddModal = true;
+        },
+        addNew: function addNew() {
+            this.attemptSubmit = false;
+            this.showNewModal = true;
+        },
+        edit: function edit(cost) {
+            cost.due_at = moment().format('YYYY-MM-DDTHH:mm:ss');
+            this.editedCost = cost;
+            this.attemptSubmit = false;
+            this.showEditModal = true;
+        },
+        updateCost: function updateCost() {
+            // prep current costs
+            var costs = [];
+            _.each(this.reservation.costs.data, function (cost) {
+                if (cost.cost_id === this.editedCost.cost_id) {
+                    costs.push({
+                        id: this.editedCost.cost_id,
+                        locked: this.editedCost.locked,
+                        due_at: moment(this.editedCost.due_at).format('YYYY-MM-DD HH:mm:ss'),
+                        due_date: moment(this.editedCost.due_at).format('YYYY-MM-DD HH:mm:ss'),
+                        grace_period: 10
+                    });
+                } else {
+                    costs.push({ id: cost.cost_id, locked: cost.locked });
+                }
+            }.bind(this));
+
+            var reservation = this.preppedReservation;
+            reservation.costs = costs;
+
+            return this.doUpdate(reservation);
+        },
+        confirmRemove: function confirmRemove(cost) {
+            this.selectedCost = cost;
+            this.deleteModal = true;
+        },
+        remove: function remove(cost) {
+            var reservation = this.preppedReservation;
+            reservation.costs = [];
+            _.each(this.reservation.costs.data, function (cs) {
+                if (cs.cost_id !== cost.cost_id) {
+                    reservation.costs.push({ id: cs.cost_id /*, locked: cs.locked*/ });
+                }
+            });
+            console.log(reservation.costs);
+
+            return this.doUpdate(reservation);
+        },
+        addCosts: function addCosts() {
+            // prep current costs
+            var currentCostIds = [];
+            _.each(this.reservation.costs.data, function (cost) {
+                currentCostIds.push({ id: cost.id || cost.cost_id, locked: cost.locked });
+            });
+
+            // prep added costs
+            var selectedCostIds = [];
+            _.each(this.selectedCosts, function (cost) {
+                selectedCostIds.push({ id: cost.id });
+            });
+
+            // merge arrays
+            var newCosts = _.union(currentCostIds, selectedCostIds);
+            // filter possible duplicates
+            newCosts = _.uniq(newCosts);
+
+            var reservation = this.preppedReservation;
+            reservation.costs = newCosts;
+
+            return this.doUpdate(reservation);
+        }
+    }, (0, _defineProperty3.default)(_methods, 'addNew', function addNew() {
+        // get trip object
+        var trip = this.reservation.trip.data;
+
+        // get only ids of current costs so we don't change anything
+        trip.costs = [];
+        _.each(this.reservation.trip.data.costs.data, function (dl) {
+            trip.costs.push({ id: dl.id });
+        });
+        trip.costs.push(this.newDeadline);
+        // remove tranformer modified values
+        delete trip.difficulty;
+        delete trip.rep_id;
+
+        this.$http.put('trips/' + trip.id, trip).then(function (response) {
+            var thisTrip = response.data.data;
+            this.selectedcosts = new Array(this.newDeadline);
+
+            return this.addCosts();
+        });
+    }), (0, _defineProperty3.default)(_methods, 'getCosts', function getCosts(search, loading) {
+        loading(true);
+    }), (0, _defineProperty3.default)(_methods, 'doUpdate', function doUpdate(reservation, success) {
+
+        return this.resource.update(reservation).then(function (response) {
+            this.setReservationData(response.data.data);
+            this.selectedCosts = [];
+            this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
+            this.successMessage = success || 'Costs updated Successfully';
+            this.showSuccess = true;
+        });
+    }), (0, _defineProperty3.default)(_methods, 'setReservationData', function setReservationData(reservation) {
+        this.reservation = reservation;
+        this.preppedReservation = {
+            given_names: this.reservation.given_names,
+            surname: this.reservation.surname,
+            gender: this.reservation.gender,
+            status: this.reservation.status,
+            shirt_size: this.reservation.shirt_size,
+            birthday: this.reservation.birthday,
+            user_id: this.reservation.user_id,
+            trip_id: this.reservation.trip_id
+        };
+
+        // get available costs intersect with current
+        this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
+            return !_.findWhere(reservation.costs.data, { cost_id: cost.id, type: 'incremental' || 'optional' });
+        });
+    }), _methods),
+    ready: function ready() {
+        this.resource.get().then(function (response) {
+            this.setReservationData(response.data.data);
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <!--<button class=\"btn btn-primary btn-xs\" @click=\"add\">\n        <span class=\"fa fa-plus\"></span> Add Optional Costs\n    </button>-->\n    <!--<hr class=\"divider sm\">-->\n    <div class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n            <h5>Costs</h5>\n        </div><!-- end panel-heading -->\n\n        <div class=\"list-group\">\n        <div class=\"list-group-item\" v-for=\"cost in reservation.costs.data\">\n            <div class=\"row\">\n                <div class=\"col-md-3\">\n                    <label>Name</label>\n                    <p>{{ cost.name }}</p>\n                    <hr class=\"divider inv hidden-lg\">\n                </div>\n                <div class=\"col-md-3\">\n                    <label>Amount</label>\n                    <p>{{ cost.amount|currency }}</p>\n                    <hr class=\"divider inv hidden-lg\">\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Description</label>\n                    <p>{{ cost.description }}</p>\n                    <hr class=\"divider inv hidden-lg\">\n                </div>\n            </div>\n        </div>\n    </div>\n    </div><!-- end panel -->\n\n    <modal title=\"Add Costs\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\" :callback=\"addCosts\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"AddCost\">\n                <form class=\"for\" novalidate=\"\">\n                    <div class=\"form-group\" :class=\"{ 'has-error': checkForError('costs') }\">\n                        <label class=\"control-label\">Available Costs</label>\n                        <v-select class=\"form-control\" id=\"user\" multiple=\"\" :value.sync=\"selectedCosts\" :options=\"availableCosts\" label=\"name\"></v-select>\n                        <select hidden=\"\" v-model=\"user_id\" v-validate:costs=\"{ required: true }\" multiple=\"\">\n                            <option :value=\"cost.id\" v-for=\"cost in costs\">{{cost.name}}</option>\n                        </select>\n                    </div>\n                </form>\n            </validator>\n        </div>\n    </modal>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Cost\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete {{ selectedCost.name }}?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedCost)\">Confirm</button>\n        </div>\n    </modal>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>{{successMessage}}</p>\n    </alert>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-72fce31c", module.exports)
+  } else {
+    hotAPI.update("_v-72fce31c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"babel-runtime/helpers/defineProperty":15,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],166:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.default = {
     name: 'reservations-list',
     props: ['userId', 'type'],
@@ -77596,7 +77865,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],166:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77701,7 +77970,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5d37e43e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../passports/passport-create-update.vue":155,"vue":120,"vue-hot-reload-api":115}],167:[function(require,module,exports){
+},{"../passports/passport-create-update.vue":155,"vue":120,"vue-hot-reload-api":115}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77806,7 +78075,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1bd1d2ef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../visas/visa-create-update.vue":207,"vue":120,"vue-hot-reload-api":115}],168:[function(require,module,exports){
+},{"../visas/visa-create-update.vue":209,"vue":120,"vue-hot-reload-api":115}],169:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-e87a91b0] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo[_v-e87a91b0] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo[_v-e87a91b0] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo[_v-e87a91b0]:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox[_v-e87a91b0]:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i[_v-e87a91b0] {\n  margin-right: 10px; }\n")
 'use strict';
@@ -77995,7 +78264,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e87a91b0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],169:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78074,7 +78343,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],170:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],171:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -78232,7 +78501,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":177,"./create/details.vue":178,"./create/pricing.vue":179,"./create/requirements.vue":180,"./create/settings.vue":181,"vue":120,"vue-hot-reload-api":115,"vueify/lib/insert-css":121}],171:[function(require,module,exports){
+},{"./create/deadlines.vue":178,"./create/details.vue":179,"./create/pricing.vue":180,"./create/requirements.vue":181,"./create/settings.vue":182,"vue":120,"vue-hot-reload-api":115,"vueify/lib/insert-css":121}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78268,7 +78537,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],172:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78361,7 +78630,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],173:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],174:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -78541,7 +78810,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":182,"./edit/details.vue":183,"./edit/pricing.vue":184,"./edit/requirements.vue":185,"./edit/settings.vue":186,"vue":120,"vue-hot-reload-api":115,"vueify/lib/insert-css":121}],174:[function(require,module,exports){
+},{"./edit/deadlines.vue":183,"./edit/details.vue":184,"./edit/pricing.vue":185,"./edit/requirements.vue":186,"./edit/settings.vue":187,"vue":120,"vue-hot-reload-api":115,"vueify/lib/insert-css":121}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78644,7 +78913,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],175:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78717,7 +78986,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],176:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78788,7 +79057,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],177:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78866,7 +79135,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],178:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],179:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 'use strict';
@@ -78979,7 +79248,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],179:[function(require,module,exports){
+},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79208,7 +79477,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],180:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79287,7 +79556,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],181:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79342,7 +79611,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],182:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79424,7 +79693,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],183:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79560,7 +79829,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-select":117}],184:[function(require,module,exports){
+},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-select":117}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79793,7 +80062,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],185:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79875,7 +80144,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],186:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79935,7 +80204,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],187:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79981,7 +80250,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],188:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],189:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80148,7 +80417,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],189:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80205,7 +80474,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],190:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],191:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80503,7 +80772,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],191:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80548,7 +80817,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],192:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80585,7 +80854,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],193:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],194:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80622,7 +80891,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],194:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],195:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80693,7 +80962,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c5dc1f32", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],195:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],196:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -81004,7 +81273,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":152,"./registration/additional-trip-options.vue":187,"./registration/basic-info.vue":188,"./registration/deadline-agreement.vue":189,"./registration/payment-details.vue":190,"./registration/review.vue":191,"./registration/roca.vue":192,"./registration/tos.vue":193,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],196:[function(require,module,exports){
+},{"../login.vue":152,"./registration/additional-trip-options.vue":188,"./registration/basic-info.vue":189,"./registration/deadline-agreement.vue":190,"./registration/payment-details.vue":191,"./registration/review.vue":192,"./registration/roca.vue":193,"./registration/tos.vue":194,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81379,7 +81648,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],197:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],198:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -81519,7 +81788,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],198:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],199:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -81652,7 +81921,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],199:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81688,7 +81957,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],200:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],201:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -81866,7 +82135,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],201:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],202:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -82088,7 +82357,60 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],202:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],203:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'user-profile-countries',
+    components: { 'modal': _vueStrap2.default.modal },
+    props: ['id', 'authId'],
+    data: function data() {
+        return {
+            accolades: [],
+            deleteModal: false,
+            resource: this.$resource('users{/id}/accolades')
+        };
+    },
+
+    methods: {
+        isUser: function isUser() {
+            return this.id === this.authId;
+        },
+        removeAccolade: function removeAccolade(country) {},
+        addAccolade: function addAccolade(country) {},
+        getAccolades: function getAccolades() {
+            this.resource.get({ id: this.id }).then(function (response) {
+                this.accolades = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.getAccolades();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n            <h5>Countries Visited</h5>\n        </div><!-- end panel-heading -->\n        <div class=\"panel-body\">\n            <h4>\n                <p v-for=\"accolade in accolades.items\">\n                    <span class=\"label label-primary\">\n                        <i class=\"fa fa-map-marker\"></i> {{ country($country) }}\n                    </span>\n                </p>\n            </h4>\n        </div><!-- end panel-body -->\n    </div><!-- end panel -->\n\n    <modal class=\"text-center\" v-if=\"isUser()\" :show.sync=\"deleteModal\" title=\"Delete Country\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Country?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removeCountry(selectedCountry)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-0a7ed88a", module.exports)
+  } else {
+    hotAPI.update("_v-0a7ed88a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82152,7 +82474,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"btn-group btn-group-sm\" role=\"group\" aria-label=\"...\">\n        <div class=\"btn-group btn-group-sm\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-default\" :class=\"{'btn-primary': activeView === 'donors'}\" @click=\"toggleView('donors')\">Donors</button>\n        </div>\n        <div class=\"btn-group btn-group-sm\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-default\" :class=\"{'btn-primary': activeView === 'donations'}\" @click=\"toggleView('donations')\">Donations</button>\n        </div>\n    </div>\n\n    <hr class=\"divider inv sm\">\n\n    <div class=\"panel panel-default\" v-for=\"donor in donors\" v-if=\"activeView==='donors'\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ donor.id }}\">\n            <h5>\n                <a role=\"button\">\n                    {{ donor.name }} <span class=\"small\">{{donor.total_donated|currency}}</span>\n                </a>\n            </h5>\n        </div>\n    </div>\n    <div class=\"panel panel-default\" v-for=\"donation in donations\" v-if=\"activeView==='donations'\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ donation.id }}\">\n            <h5>\n                <span class=\"text-success\">{{ donation.amount|currency }}</span> was donated<br>\n                <small class=\"small\">by <a :href=\"'@' + donation.donor.data.account_url\">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>\n                <br><small>{{ donation.comment }}</small>\n            </h5>\n        </div>\n    </div>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12 text-center\">\n            <nav>\n                <ul class=\"pagination pagination-sm\">\n                    <li>\n                        <a>{{ pagination.total }} {{ activeView === 'donors' ? 'Donors' : 'Donations' }}</a>\n                    </li>\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                            <span aria-hidden=\"true\">« Back</span>\n                        </a>\n                    </li>\n                    <!--<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>-->\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                            <span aria-hidden=\"true\">Next »</span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div v-if=\"donors.length > 0\">\n    <div class=\"btn-group btn-group-sm\" role=\"group\" aria-label=\"...\">\n        <div class=\"btn-group btn-group-sm\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-default\" :class=\"{'btn-primary': activeView === 'donors'}\" @click=\"toggleView('donors')\">Donors</button>\n        </div>\n        <div class=\"btn-group btn-group-sm\" role=\"group\">\n            <button type=\"button\" class=\"btn btn-default\" :class=\"{'btn-primary': activeView === 'donations'}\" @click=\"toggleView('donations')\">Donations</button>\n        </div>\n    </div>\n\n    <hr class=\"divider inv sm\">\n\n    <div class=\"panel panel-default\" v-for=\"donor in donors\" v-if=\"activeView==='donors'\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ donor.id }}\">\n            <h5>\n                <a role=\"button\">\n                    {{ donor.name }} <span class=\"small\">{{donor.total_donated|currency}}</span>\n                </a>\n            </h5>\n        </div>\n    </div>\n    <div class=\"panel panel-default\" v-for=\"donation in donations\" v-if=\"activeView==='donations'\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"heading-{{ donation.id }}\">\n            <h5>\n                <span class=\"text-success\">{{ donation.amount|currency }}</span> was donated<br>\n                <small class=\"small\">by <a :href=\"'@' + donation.donor.data.account_url\">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>\n                <br><small>{{ donation.comment }}</small>\n            </h5>\n        </div>\n    </div>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12 text-center\">\n            <nav>\n                <ul class=\"pagination pagination-sm\">\n                    <li>\n                        <a>{{ pagination.total }} {{ activeView === 'donors' ? 'Donors' : 'Donations' }}</a>\n                    </li>\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                            <span aria-hidden=\"true\">« Back</span>\n                        </a>\n                    </li>\n                    <!--<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>-->\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                            <span aria-hidden=\"true\">Next »</span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -82163,7 +82485,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-69badce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":120,"vue-hot-reload-api":115}],203:[function(require,module,exports){
+},{"marked":107,"vue":120,"vue-hot-reload-api":115}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82201,7 +82523,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ea6dd1a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],204:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82230,7 +82552,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12\" v-for=\"fundraiser in fundraisers\">\n        <div class=\"panel panel-default\">\n            <img :src=\"fundraiser.banner||'images/india-prof-pic.jpg'\" alt=\"India\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h4>{{ fundraiser.name }}</h4>\n                <h6>\n                    Expires: {{ fundraiser.expires_at | moment 'll'  }}\n                </h6>\n                <h3><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>\n                <p><span>{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100)|number 1 }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>\n                <div class=\"progress\">\n                    <div class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\" :style=\"{ width: (fundraiser.raised_amount/fundraiser.goal_amount * 100) + '%'}\">\n                        <span class=\"sr-only\">{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100) }}% Complete (success)</span>\n                    </div>\n                </div>\n                <p><a class=\"btn btn-primary btn-block\" :href=\"pathName + '/' + fundraiser.url\">Details</a></p>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12\" v-for=\"fundraiser in fundraisers\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-body\">\n                <h4>{{ fundraiser.name }}</h4>\n                <h6>\n                    Expires: {{ fundraiser.expires_at | moment 'll'  }}\n                </h6>\n                <h3><span class=\"text-success\">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>\n                <p><span>{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100)|number 1 }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>\n                <div class=\"progress\">\n                    <div class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\" :style=\"{ width: (fundraiser.raised_amount/fundraiser.goal_amount * 100) + '%'}\">\n                        <span class=\"sr-only\">{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100) }}% Complete (success)</span>\n                    </div>\n                </div>\n                <p><a class=\"btn btn-primary btn-block\" :href=\"pathName + '/' + fundraiser.url\">Details</a></p>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -82241,7 +82563,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-718e65c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],205:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82367,7 +82689,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-63c1ee29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],206:[function(require,module,exports){
+},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],208:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.alert.top, .alert.top-right {\n    top: 80px;\n}\n")
 'use strict';
@@ -82611,7 +82933,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2d9ee899", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":196,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],207:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":197,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82783,7 +83105,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-12a04920", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":196,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],208:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":197,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82870,7 +83192,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4fbd58ab", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],209:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],211:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -82981,6 +83303,10 @@ var _visaCreateUpdate = require('./components/visas/visa-create-update.vue');
 
 var _visaCreateUpdate2 = _interopRequireDefault(_visaCreateUpdate);
 
+var _reservationCosts = require('./components/reservations/reservation-costs.vue');
+
+var _reservationCosts2 = _interopRequireDefault(_reservationCosts);
+
 var _reservationsPassportsManager = require('./components/reservations/reservations-passports-manager.vue');
 
 var _reservationsPassportsManager2 = _interopRequireDefault(_reservationsPassportsManager);
@@ -82992,6 +83318,10 @@ var _reservationsVisasManager2 = _interopRequireDefault(_reservationsVisasManage
 var _userSettings = require('./components/users/user-settings.vue');
 
 var _userSettings2 = _interopRequireDefault(_userSettings);
+
+var _userProfileCountries = require('./components/users/user-profile-countries.vue');
+
+var _userProfileCountries2 = _interopRequireDefault(_userProfileCountries);
 
 var _userProfileStories = require('./components/users/user-profile-stories.vue');
 
@@ -83311,7 +83641,7 @@ new _vue2.default({
     components: [_login2.default, _fundraisers2.default, _campaigns2.default, _groups2.default, _campaignGroups2.default, _groupTrips2.default, _groupProfileTrips2.default, _groupProfileStories2.default, _groupProfileFundraisers2.default, _groupsTripsSelectionWrapper2.default, _groupInterestSignup2.default, _tripDetailsMissionaries2.default, _tripRegistrationWizard2.default, _reservationsList2.default, _donationsList2.default, _fundraisersStories2.default, _fundraisersUploads2.default, _topNav2.default, _actionTrigger2.default, _donate2.default, _modalDonate2.default, _notes2.default, _todos2.default,
 
     //dashboard components
-    _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default, _groupsList2.default, _visaCreateUpdate2.default, _reservationsPassportsManager2.default, _reservationsVisasManager2.default, _userSettings2.default, _userProfileStories2.default, _userProfileFundraisers2.default, _userProfileFundraisersDonors2.default, _userProfileFundraisersProgress2.default, _dashboardGroupTrips2.default, _dashboardGroupReservations2.default, _dashboardInterestsList2.default,
+    _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default, _groupsList2.default, _visaCreateUpdate2.default, _reservationCosts2.default, _reservationsPassportsManager2.default, _reservationsVisasManager2.default, _userSettings2.default, _userProfileCountries2.default, _userProfileStories2.default, _userProfileFundraisers2.default, _userProfileFundraisersDonors2.default, _userProfileFundraisersProgress2.default, _dashboardGroupTrips2.default, _dashboardGroupReservations2.default, _dashboardInterestsList2.default,
 
     // admin components
     _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminInterestsList2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminReservationEdit2.default, _adminReservationCosts2.default, _adminReservationDues2.default, _adminReservationDeadlines2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default, _reconcileFund2.default],
@@ -83340,6 +83670,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/action-trigger.vue":122,"./components/campaigns/admin-campaign-create.vue":123,"./components/campaigns/admin-campaign-details.vue":124,"./components/campaigns/admin-campaign-edit.vue":125,"./components/campaigns/campaign-groups.vue":126,"./components/campaigns/campaigns.vue":127,"./components/campaigns/group-trips.vue":132,"./components/campaigns/groups-trips-selection-wrapper.vue":133,"./components/donate.vue":134,"./components/fundraisers/fundraisers-stories.vue":135,"./components/fundraisers/fundraisers-uploads.vue":136,"./components/fundraisers/fundraisers.vue":137,"./components/groups/admin-group-create.vue":138,"./components/groups/admin-group-edit.vue":139,"./components/groups/admin-group-managers.vue":140,"./components/groups/admin-groups-list.vue":141,"./components/groups/dashboard-group-reservations.vue":142,"./components/groups/dashboard-group-trips.vue":143,"./components/groups/group-interest-signup.vue":144,"./components/groups/group-profile-fundraisers.vue":145,"./components/groups/group-profile-stories.vue":146,"./components/groups/group-profile-trips.vue":147,"./components/groups/groups-list.vue":148,"./components/groups/groups.vue":149,"./components/interests/admin-interests-list.vue":150,"./components/interests/dashboard-interests-list.vue":151,"./components/login.vue":152,"./components/modal-donate.vue":153,"./components/notes.vue":154,"./components/passports/passport-create-update.vue":155,"./components/passports/passports-list.vue":156,"./components/reconcile-fund.vue":157,"./components/records/records-list.vue":158,"./components/reservations/admin-reservation-costs.vue":159,"./components/reservations/admin-reservation-deadlines.vue":160,"./components/reservations/admin-reservation-dues.vue":161,"./components/reservations/admin-reservation-edit.vue":162,"./components/reservations/admin-reservations-list.vue":163,"./components/reservations/donations-list.vue":164,"./components/reservations/reservations-list.vue":165,"./components/reservations/reservations-passports-manager.vue":166,"./components/reservations/reservations-visas-manager.vue":167,"./components/todos.vue":168,"./components/top-nav.vue":169,"./components/trips/admin-trip-create.vue":170,"./components/trips/admin-trip-delete.vue":171,"./components/trips/admin-trip-duplicate.vue":172,"./components/trips/admin-trip-edit.vue":173,"./components/trips/admin-trip-facilitators.vue":174,"./components/trips/admin-trip-reservations-list.vue":175,"./components/trips/admin-trips-list.vue":176,"./components/trips/trip-details-missionaries.vue":194,"./components/trips/trip-registration-wizard.vue":195,"./components/uploads/admin-upload-create-update.vue":196,"./components/uploads/admin-uploads-list.vue":197,"./components/users/admin-user-create.vue":198,"./components/users/admin-user-delete.vue":199,"./components/users/admin-user-edit.vue":200,"./components/users/admin-users-list.vue":201,"./components/users/user-profile-fundraisers-donors.vue":202,"./components/users/user-profile-fundraisers-progress.vue":203,"./components/users/user-profile-fundraisers.vue":204,"./components/users/user-profile-stories.vue":205,"./components/users/user-settings.vue":206,"./components/visas/visa-create-update.vue":207,"./components/visas/visas-list.vue":208,"aos":1,"bootstrap-sass":17,"gsap":104,"jquery":106,"jquery.cookie":105,"marked":107,"moment":108,"scrollmagic":110,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":111,"underscore":112,"video.js":113,"videojs-youtube":114,"vue":120,"vue-resource":116,"vue-strap/dist/vue-strap.min":118,"vue-validator":119}]},{},[209]);
+},{"./components/action-trigger.vue":122,"./components/campaigns/admin-campaign-create.vue":123,"./components/campaigns/admin-campaign-details.vue":124,"./components/campaigns/admin-campaign-edit.vue":125,"./components/campaigns/campaign-groups.vue":126,"./components/campaigns/campaigns.vue":127,"./components/campaigns/group-trips.vue":132,"./components/campaigns/groups-trips-selection-wrapper.vue":133,"./components/donate.vue":134,"./components/fundraisers/fundraisers-stories.vue":135,"./components/fundraisers/fundraisers-uploads.vue":136,"./components/fundraisers/fundraisers.vue":137,"./components/groups/admin-group-create.vue":138,"./components/groups/admin-group-edit.vue":139,"./components/groups/admin-group-managers.vue":140,"./components/groups/admin-groups-list.vue":141,"./components/groups/dashboard-group-reservations.vue":142,"./components/groups/dashboard-group-trips.vue":143,"./components/groups/group-interest-signup.vue":144,"./components/groups/group-profile-fundraisers.vue":145,"./components/groups/group-profile-stories.vue":146,"./components/groups/group-profile-trips.vue":147,"./components/groups/groups-list.vue":148,"./components/groups/groups.vue":149,"./components/interests/admin-interests-list.vue":150,"./components/interests/dashboard-interests-list.vue":151,"./components/login.vue":152,"./components/modal-donate.vue":153,"./components/notes.vue":154,"./components/passports/passport-create-update.vue":155,"./components/passports/passports-list.vue":156,"./components/reconcile-fund.vue":157,"./components/records/records-list.vue":158,"./components/reservations/admin-reservation-costs.vue":159,"./components/reservations/admin-reservation-deadlines.vue":160,"./components/reservations/admin-reservation-dues.vue":161,"./components/reservations/admin-reservation-edit.vue":162,"./components/reservations/admin-reservations-list.vue":163,"./components/reservations/donations-list.vue":164,"./components/reservations/reservation-costs.vue":165,"./components/reservations/reservations-list.vue":166,"./components/reservations/reservations-passports-manager.vue":167,"./components/reservations/reservations-visas-manager.vue":168,"./components/todos.vue":169,"./components/top-nav.vue":170,"./components/trips/admin-trip-create.vue":171,"./components/trips/admin-trip-delete.vue":172,"./components/trips/admin-trip-duplicate.vue":173,"./components/trips/admin-trip-edit.vue":174,"./components/trips/admin-trip-facilitators.vue":175,"./components/trips/admin-trip-reservations-list.vue":176,"./components/trips/admin-trips-list.vue":177,"./components/trips/trip-details-missionaries.vue":195,"./components/trips/trip-registration-wizard.vue":196,"./components/uploads/admin-upload-create-update.vue":197,"./components/uploads/admin-uploads-list.vue":198,"./components/users/admin-user-create.vue":199,"./components/users/admin-user-delete.vue":200,"./components/users/admin-user-edit.vue":201,"./components/users/admin-users-list.vue":202,"./components/users/user-profile-countries.vue":203,"./components/users/user-profile-fundraisers-donors.vue":204,"./components/users/user-profile-fundraisers-progress.vue":205,"./components/users/user-profile-fundraisers.vue":206,"./components/users/user-profile-stories.vue":207,"./components/users/user-settings.vue":208,"./components/visas/visa-create-update.vue":209,"./components/visas/visas-list.vue":210,"aos":1,"bootstrap-sass":17,"gsap":104,"jquery":106,"jquery.cookie":105,"marked":107,"moment":108,"scrollmagic":110,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":111,"underscore":112,"video.js":113,"videojs-youtube":114,"vue":120,"vue-resource":116,"vue-strap/dist/vue-strap.min":118,"vue-validator":119}]},{},[211]);
 
 //# sourceMappingURL=main.js.map

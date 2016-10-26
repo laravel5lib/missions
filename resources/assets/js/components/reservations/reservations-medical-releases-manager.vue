@@ -3,21 +3,20 @@
         <div class="col-sm-6">
             <div class="panel panel-default" v-if="medicalRelease">
                 <div style="min-height:220px;" class="panel-body">
-                    <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{medicalRelease.citizenship_name}}</h6>
                     <a role="button" :href="'/dashboard' + medicalRelease.links[0].uri">
                         <h5 style="text-transform:capitalize;" class="text-primary">
-                            {{medicalRelease.given_names}} {{medicalRelease.surname}}
+                            {{medicalRelease.name}}
                         </h5>
                     </a>
                     <hr class="divider lg">
                     <p class="small">
-                        <b>ID:</b> {{medicalRelease.number}}
+                        <b>Insurance Provider:</b> {{medicalRelease.ins_provider}}
                         <br>
-                        <b>BIRTH COUNTRY:</b> {{medicalRelease.citizenship_name}}
+                        <b>Insurance Policy #:</b> {{medicalRelease.ins_policy_no}}
                         <br>
-                        <b>ISSUED ON:</b> {{medicalRelease.issued_at|moment 'll'}}
-                        <br>
-                        <b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment 'll'}}
+                        <b>Emergency Contact:</b> {{medicalRelease.emergency_contact}}
+                        <!--<br>-->
+                        <!--<b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment 'll'}}-->
                     </p>
                 </div>
             </div>
@@ -57,13 +56,13 @@
                             </a>
                             <hr class="divider lg">
                             <p class="small">
-                                <b>ID:</b> {{medicalRelease.number}}
+                                <b>Insurance Provider:</b> {{medicalRelease.ins_provider}}
                                 <br>
-                                <b>BIRTH COUNTRY:</b> {{medicalRelease.citizenship_name}}
+                                <b>Insurance Policy #:</b> {{medicalRelease.ins_policy_no}}
                                 <br>
-                                <b>ISSUED ON:</b> {{medicalRelease.issued_at|moment 'll'}}
-                                <br>
-                                <b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment 'll'}}
+                                <b>Emergency Contact:</b> {{medicalRelease.emergency_contact}}
+                                <!--<br>-->
+                                <!--<b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment 'll'}}-->
                             </p>
                         </div><!-- end panel-body -->
                         <div class="panel-footer" style="padding: 0;">
@@ -105,7 +104,7 @@
     import medicalCreateUpdate from '../records/medicals/medical-create-update.vue';
     export default{
         name: 'reservations-medical-releases-manager',
-        components:{medicalReleaseCreateUpdate},
+        components:{medicalCreateUpdate},
         props:['reservationId', 'medicalReleaseId'],
         data(){
             return{

@@ -4,7 +4,7 @@
             <div class="panel panel-default" v-if="passport">
                 <div style="min-height:220px;" class="panel-body">
                     <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{passport.citizenship_name}}</h6>
-                    <a role="button" :href="'/dashboard' + passport.links[0].uri">
+                    <a role="button" :href="'/dashboard/records' + passport.links[0].uri">
                         <h5 style="text-transform:capitalize;" class="text-primary">
                             {{passport.given_names}} {{passport.surname}}
                         </h5>
@@ -32,7 +32,7 @@
                         <a class="btn btn-block btn-info btn-sm" @click="toggleChangeState()">
                             <i class="fa fa-pencil"></i> Change Passport
                         </a>
-                        <a class="btn btn-block btn-primary btn-sm" href="/dashboard/passports/create">
+                        <a class="btn btn-block btn-primary btn-sm" href="/dashboard/records/passports/create">
                             <i class="fa fa-plus"></i> Add New Passport
                         </a>
                     </form>
@@ -47,7 +47,7 @@
                     <div class="panel panel-default">
                         <div style="min-height:220px;" class="panel-body">
                             <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{passport.citizenship_name}}</h6>
-                            <a role="button" :href="'/dashboard' + passport.links[0].uri">
+                            <a role="button" :href="'/dashboard/records' + passport.links[0].uri">
                                 <h5 style="text-transform:capitalize;" class="text-primary">
                                     {{passport.given_names}} {{passport.surname}}
                                 </h5>

@@ -12,7 +12,7 @@
     @foreach($reservation->requirements as $requirement)
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h5>{{ $requirement->item }}
+                    <h5>{{ $requirement->name }}
                         <small> Due: {{ carbon($requirement->due_at)->toFormattedDateString() }} <i class="fa fa-calendar"></i></small>
                         @if($requirement->pivot->status == 'complete')
                             <span class="badge {{ $requirement->pivot->status }} badge-success pull-right"><i class="fa fa-check"></i> Complete</span>

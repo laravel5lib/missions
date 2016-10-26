@@ -99,7 +99,7 @@
     </div>
 </template>
 <script>
-    import passportCreateUpdate from '../passports/passport-create-update.vue';
+    import passportCreateUpdate from '../records/passports/passport-create-update.vue';
     export default{
         name: 'reservations-passports-manager',
         components:{passportCreateUpdate},

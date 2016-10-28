@@ -27,7 +27,7 @@
                         @if($requirement->name === 'Medical Release')
                             <reservations-medical-releases-manager
                                     reservation-id="{{ $reservation->id }}"
-                                    passport-id="{{ $reservation->passport_id }}">
+                                    medical-release-id="{{ $reservation->medical_release_id }}">
                             </reservations-medical-releases-manager>
                         @endif
 

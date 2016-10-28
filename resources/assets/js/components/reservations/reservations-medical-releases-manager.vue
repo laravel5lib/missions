@@ -3,7 +3,7 @@
         <div class="col-sm-6">
             <div class="panel panel-default" v-if="medicalRelease">
                 <div style="min-height:220px;" class="panel-body">
-                    <a role="button" :href="'/dashboard' + medicalRelease.links[0].uri">
+                    <a role="button" :href="'/dashboard/records' + medicalRelease.links[0].uri">
                         <h5 style="text-transform:capitalize;" class="text-primary">
                             {{medicalRelease.name}}
                         </h5>
@@ -14,13 +14,16 @@
                         <br>
                         <b>Insurance Policy #:</b> {{medicalRelease.ins_policy_no}}
                         <br>
-                        <b>Emergency Contact:</b> {{medicalRelease.emergency_contact}}
+                        <b>Emergency Contact:</b><br>
+                        {{medicalRelease.emergency_contact.name}} - {{medicalRelease.emergency_contact.relationship}}<br>
+                        {{medicalRelease.emergency_contact.email}}<br>
+                        {{medicalRelease.emergency_contact.phone | phone}}<br>
                         <!--<br>-->
                         <!--<b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment 'll'}}-->
                     </p>
                 </div>
             </div>
-            <div v-if="!medicalRelease" class="alert alert-info" role="alert">This reservation has no medicalRelease(s) assigned to it. Please select one or add one.</div>
+            <div v-if="!medicalRelease" class="alert alert-info" role="alert">This reservation has no Medical Release(s) assigned to it. Please select one or add one.</div>
         </div>
 
         <div class="col-sm-6">
@@ -29,10 +32,10 @@
                     <form novalidate>
                         <label>Actions</label>
                         <a class="btn btn-block btn-info btn-sm" @click="toggleChangeState()">
-                            <i class="fa fa-pencil"></i> Change MedicalRelease
+                            <i class="fa fa-pencil"></i> Change Medical Release
                         </a>
-                        <a class="btn btn-block btn-primary btn-sm" href="/dashboard/medicalReleases/create">
-                            <i class="fa fa-plus"></i> Add New MedicalRelease
+                        <a class="btn btn-block btn-primary btn-sm" href="/dashboard/records/medical-releases/create">
+                            <i class="fa fa-plus"></i> Add New Medical Release
                         </a>
                     </form>
 
@@ -42,16 +45,15 @@
 
         <div class="col-sm-12" v-if="changeState">
             <div class="col-sm-12" v-if="loaded && !medicalReleases.length">
-                <div class="alert alert-info" role="alert">No medicalReleases found. Please create add one.</div>
+                <div class="alert alert-info" role="alert">No Medical Releases found. Please create add one.</div>
             </div>
             <div class="row" v-if="loaded && medicalReleases.length">
-                <div class="col-sm-4" v-for="medicalRelease in paginatedMedicalReleases">
+                <div class="col-sm-6" v-for="medicalRelease in paginatedMedicalReleases">
                     <div class="panel panel-default">
                         <div style="min-height:220px;" class="panel-body">
-                            <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{medicalRelease.citizenship_name}}</h6>
-                            <a role="button" :href="'/dashboard' + medicalRelease.links[0].uri">
+                            <a role="button" :href="'/dashboard/records' + medicalRelease.links[0].uri">
                                 <h5 style="text-transform:capitalize;" class="text-primary">
-                                    {{medicalRelease.given_names}} {{medicalRelease.surname}}
+                                    {{medicalRelease.name}}
                                 </h5>
                             </a>
                             <hr class="divider lg">
@@ -60,7 +62,10 @@
                                 <br>
                                 <b>Insurance Policy #:</b> {{medicalRelease.ins_policy_no}}
                                 <br>
-                                <b>Emergency Contact:</b> {{medicalRelease.emergency_contact}}
+                                <b>Emergency Contact:</b><br>
+                                {{medicalRelease.emergency_contact.name}} - {{medicalRelease.emergency_contact.relationship}}<br>
+                                {{medicalRelease.emergency_contact.email}}<br>
+                                {{medicalRelease.emergency_contact.phone | phone}}<br>
                                 <!--<br>-->
                                 <!--<b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment 'll'}}-->
                             </p>
@@ -68,7 +73,7 @@
                         <div class="panel-footer" style="padding: 0;">
                             <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
                                 <a class="btn btn-danger" @click="setMedicalRelease(medicalRelease)">
-                                    Select MedicalRelease
+                                    Select Medical Release
                                 </a>
                             </div>
                         </div>
@@ -100,7 +105,7 @@
 
     </div>
 </template>
-<script>
+<script type="text/javascript">
     import medicalCreateUpdate from '../records/medicals/medical-create-update.vue';
     export default{
         name: 'reservations-medical-releases-manager',
@@ -158,7 +163,7 @@
                 if(medicalRelease) {
                     this.medicalRelease = medicalRelease;
                     this.reservationResource.update({id: this.reservationId}, {
-                        medicalRelease_id: medicalRelease.id
+                        medical_release_id: medicalRelease.id
                     }).then(function (response) {
                         this.toggleChangeState();
                     });
@@ -175,12 +180,13 @@
             },
         },
         ready(){
-            this.$http('users/me?include=medicalReleases').then(function (response) {
-                this.medicalReleases = response.data.data.medicalReleases.data;
+            this.$http('users/me?include=medical_releases').then(function (response) {
+                this.medicalReleases = response.data.data.medical_releases.data;
                 this.pagination.total_pages = Math.ceil(this.medicalReleases.length / this.per_page);
-                this.medicalRelease = _.findWhere(response.data.data.medicalReleases.data, {id: this.medicalReleaseId});
+                this.medicalRelease = _.findWhere(this.medicalReleases, {id: this.medicalReleaseId});
                 this.loaded = true;
             });
+
         }
     }
 </script>

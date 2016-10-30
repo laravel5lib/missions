@@ -648,7 +648,7 @@
 				return params;
 			},
             searchReservations(){
-            	var params = getListSettings();
+            	var params = this.getListSettings();
                 this.$http.get('reservations', params).then(function (response) {
                     var self = this;
                     _.each(response.data.data, function (reservation) {
@@ -682,7 +682,7 @@
 				})
 			},
 			exportList(){
-				var params = getListSettings();
+				var params = this.getListSettings();
 				$.extend(params, this.exportSettings);
 				// Send to api route
 

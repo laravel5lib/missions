@@ -58,11 +58,11 @@
                     </a>
                 </h5>
             </div>
-            <div id="collapse-{{ story.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
+            <div id="collapse-{{ story.id }}" class="panel-collapse collapse {{ $index == 0 ? 'in' : '' }}" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
                 <div class="panel-body" v-if="editMode !== story.id">
                 <div class="row">
                     <div class="col-sm-8">
-                        <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
+                        <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>{{$index}}published a story {{ story.updated_at|moment 'll' }}.</small></h5>
                     </div>
                     <div class="col-sm-4">
                         <div style="padding: 0;" v-if="isUser()">

@@ -115,8 +115,9 @@
                     // include: '',
                     search: this.search,
                     page: this.page,
-                    per_page: this.per_page
-                }).then(function (response) {
+                    per_page: this.per_page,
+					isPublic: true,
+				}).then(function (response) {
                     this.fundraisers = response.data.data;
                     this.featuredFundraisers = _.first(this.fundraisers, 5);
                     this.pagination = response.data.meta.pagination;

@@ -7,6 +7,7 @@ import modalDonate from './components/modal-donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import groups from './components/groups/groups.vue';
 import fundraisers from './components/fundraisers/fundraisers.vue';
+import fundraisersManager from './components/fundraisers/fundraisers-manager.vue';
 import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
 import fundraisersUploads from './components/fundraisers/fundraisers-uploads.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
@@ -259,6 +260,7 @@ new Vue({
         tripRegWizard,
         reservationsList,
         donationsList,
+        fundraisersManager,
         fundraisersStories,
         fundraisersUploads,
         topNav,

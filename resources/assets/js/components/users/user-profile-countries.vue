@@ -1,39 +1,92 @@
-`<template>
+`
+<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h5>Countries Visited</h5>
+				<div class="row">
+					<div class="col-xs-8">
+						<h5>Countries Visited</h5>
+					</div>
+					<div class="col-xs-4 text-right" v-if="isUser()">
+						<button class="btn btn-primary btn-xs" @click="manageModal = true"><i class="fa fa-edit"></i></button>
+					</div>
+				</div>
             </div><!-- end panel-heading -->
             <div class="panel-body">
                 <h4>
                     <p v-for="accolade in accolades.items">
                         <span class="label label-primary">
-                            <i class="fa fa-map-marker"></i> {{ country($country) }}
+                            <i class="fa fa-map-marker"></i> {{ accolade.name }}
                         </span>
                     </p>
                 </h4>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 
-        <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Delete Country" small="true">
-            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete this Country?</div>
+        <modal class="text-center" v-if="isUser()" :show.sync="manageModal" title="Manage Accolades" width="800" :callback="updateAccolades">
+            <div slot="modal-body" class="modal-body text-center">
+				<validator name="AddCountry">
+					<form class="for" novalidate>
+						<div class="form-group" :class="">
+							<label class="control-label">Countries</label>
+							<v-select class="form-control" multiple :value.sync="selectedCountries" :options="availableCountries"
+									  label="name"></v-select>
+							<select hidden="" v-model="selectedCodes" multiple v-validate:code="{ required: true }">
+								<option :value="country.code" v-for="country in availableCountries">{{country.name}}</option>
+							</select>
+						</div>
+					</form>
+				</validator>
+
+				<ul class="list-group">
+					<li class="list-group-item" v-for="accolade in accolades.items">
+						<div class="row">
+							<div class="col-xs-8 text-left">
+								<i class="fa fa-map-marker"></i> {{ accolade.name }}
+							</div>
+							<div class="col-xs-4 text-right">
+								<button class="btn btn-danger btn-xs" @click="removeAccolade(accolade)"><i class="fa fa-trash"></i></button>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</modal>
+
+        <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Remove Country Visited" small="true">
+            <div slot="modal-body" class="modal-body text-center">Are you sure you want to remove {{ selectedCountryRemove.name|capitalize }} from your list?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeCountry(selectedCountry)'>Confirm</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,doRemove(selectedCountryRemove)'>Confirm</button>
             </div>
         </modal>
-    </div>
+
+		<alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+			<span class="icon-ok-circled alert-icon-float-left"></span>
+			<strong>Well Done!</strong>
+			<p>Countries Visited Updated!</p>
+		</alert>
+
+	</div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
+	import vSelect from 'vue-select';
+    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'user-profile-countries',
-        components: {'modal': VueStrap.modal},
+        components: {vSelect, 'modal': VueStrap.modal, 'alert': VueStrap.alert},
         props:['id', 'authId'],
         data(){
             return{
                 accolades: [],
+                countries: [],
+                availableCountries: [],
+                selectedCountries: null,
+                selectedCodes: null,
+                selectedCountryRemove: null,
+                manageModal: false,
                 deleteModal: false,
+                showSuccess: false,
                 resource: this.$resource('users{/id}/accolades')
             }
         },
@@ -42,19 +95,67 @@
                 return this.id === this.authId;
             },
             removeAccolade(country){
-
+				this.deleteModal = true;
+				this.selectedCountryRemove = country;
+            },
+            doRemove(country){
+            	this.accolades.items = _.reject(this.accolades.items, function(accolade) {
+            		return accolade.code === country.code
+            	});
             },
             addAccolade(country){
+				this.addModal = true;
+            },
+            updateAccolades(){
+				var allCodes = _.union(_.pluck(this.accolades.items, 'code'), _.pluck(this.selectedCountries, 'code'));
 
+				// Uppercase all codes for consistency
+				_.each(allCodes, function(code, index) {
+					allCodes[index] = code.toUpperCase();
+				});
+
+				// save to API
+				this.resource.save({id: this.id}, {
+					name: "countries_visited",
+					display_name: "Countries Visited",
+					items: allCodes
+				}).then(function(response) {
+					this.showSuccess = true;
+                    this.accolades = response.data.data;
+                    this.selectedCountries = [];
+                    this.filterAccolades();
+				});
             },
             getAccolades(){
                 this.resource.get({id: this.id}).then(function (response) {
-                    this.accolades = response.data.data;
+                    this.accolades = response.data.data[0];
+
+					if (this.isUser()) {
+   						this.filterAccolades();
+					}
                 });
+            },
+            filterAccolades(){
+            	// If isUser() filter only countries not already included in accolades
+				var accolades = _.pluck(this.accolades.items, 'code');
+
+				this.availableCountries = _.filter(this.countries, function(country) {
+					return !_.contains(accolades, country.code.toUpperCase());
+				});
+			},
+            searchCountries() {
+				this.$http.get('utilities/countries').then(function(response) {
+					this.countries = response.data.countries;
+				});
             }
         },
         ready(){
-            this.getAccolades();
+			if (this.isUser()) {
+				this.searchCountries();
+			}
+
+			this.getAccolades();
+
         }
     }
 </script>

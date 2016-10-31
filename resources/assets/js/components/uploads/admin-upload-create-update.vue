@@ -85,7 +85,7 @@
 					</select>
 				</div>
 
-				<div class="row" v-if="type && type === 'other'">
+				<div class="row" v-if="type && type === 'other' && !uiLocked">
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" v-model="constrained">
@@ -206,7 +206,15 @@
 			perPage: {
 				type: Number,
 				default: 6
-			}
+			},
+			width: {
+				type: Number,
+				default: 100
+			},
+			height: {
+				type: Number,
+				default: 100
+			},
 
 		},
         data(){
@@ -216,8 +224,6 @@
                 file: null,
                 x_axis: null,
                 y_axis: null,
-                width: 100,
-				height: 100,
 
 				// logic variables
 				attemptSubmit: false,
@@ -238,7 +244,7 @@
 					{type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
 					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
 					{type: 'video'},
-					{type: 'other', path: 'images/other'},
+					{type: 'other', path: 'images/other', width: this.width, height: this.height},
 					{type: 'file', path: 'resources/documents'},
 				],
 				typeObj: null,

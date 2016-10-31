@@ -16,9 +16,13 @@ class TripTableSeeder extends Seeder
     {
         factory(App\Models\v1\Trip::class, config('seeders.trips'))->create()->each(function($t) {
 
-            $incrementalCosts = $t->costs()->saveMany(factory(App\Models\v1\Cost::class, 'incremental', 3)->make());
+            $incrementalCosts = $t->costs()->saveMany([
+                factory(App\Models\v1\Cost::class, 'super')->make(),
+                factory(App\Models\v1\Cost::class, 'early')->make(),
+                factory(App\Models\v1\Cost::class, 'general')->make()
+            ]);
 
-            $incrementalCosts->each(function($ic) {
+            collect($incrementalCosts)->each(function($ic) {
                 Cost::findOrFail($ic->id)->payments()->saveMany([
                     factory(App\Models\v1\Payment::class)->make([
                         'due_at' => $ic->active_at->addMonths(6),
@@ -35,16 +39,42 @@ class TripTableSeeder extends Seeder
                 ]);
             });
 
-            $staticCost = $t->costs()->save(factory(App\Models\v1\Cost::class, 'static')->make());
+            $late = $t->costs()->save(factory(App\Models\v1\Cost::class, 'late')->make());
+            $late->payments()->save(
+                factory(App\Models\v1\Payment::class)->make([
+                    'due_at' => $late->active_at,
+                    'amount_owed' => $late->amount,
+                    'percent_owed' => 100,
+                    'upfront' => false
+                ])
+            );
 
-            $staticCost->payments()->save(
+            $deposit = $t->costs()->save(factory(App\Models\v1\Cost::class, 'deposit')->make());
+
+            $deposit->payments()->save(
                 factory(App\Models\v1\Payment::class)->make([
                     'due_at' => null,
-                    'amount_owed' => $staticCost->amount,
+                    'amount_owed' => $deposit->amount,
                     'percent_owed' => 100,
                     'upfront' => true
                 ])
             );
+
+            $optionalCosts = $t->costs()->saveMany([
+                factory(App\Models\v1\Cost::class, 'double')->make(),
+                factory(App\Models\v1\Cost::class, 'triple')->make(),
+            ]);
+
+            collect($optionalCosts)->each(function($oc) use($late) {
+                Cost::findOrFail($oc->id)->payments()->save(
+                    factory(App\Models\v1\Payment::class)->make([
+                        'due_at' => $late->active_at,
+                        'amount_owed' => $oc->amount,
+                        'percent_owed' => 100,
+                        'upfront' => false
+                    ])
+                );
+            });
 
             $t->deadlines()->saveMany(factory(App\Models\v1\Deadline::class, 2)->make());
 

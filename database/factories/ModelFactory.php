@@ -4,15 +4,15 @@
  */
 $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
 {
-    $name = $faker->name;
+    $name = $faker->firstName;
 
     return [
         'name'             => $name,
         'email'            => $faker->unique()->safeEmail,
         'alt_email'        => $faker->optional(0.5)->safeEmail,
         'password'         => str_random(10),
-        'gender'           => $faker->optional(0.5)->randomElement(['male', 'female']),
-        'status'           => $faker->optional(0.5)->randomElement(['single', 'married']),
+        'gender'           => $faker->randomElement(['male', 'female']),
+        'status'           => $faker->randomElement(['single', 'married']),
         'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
         'phone_one'        => $faker->optional(0.5)->phoneNumber,
         'phone_two'        => $faker->optional(0.5)->phoneNumber,
@@ -140,48 +140,48 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
 /**
  * Campaign Factory
  */
-$factory->defineAs(App\Models\v1\Campaign::class, 'active', function (Faker\Generator $faker)
+$factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Generator $faker)
 {
-    $startDate = $faker->dateTimeBetween('+6 months', '+1 year');
-
     return [
-        'name'             => $faker->catchPhrase,
-        'country_code'     => strtolower($faker->countryCode),
-        'short_desc'       => $faker->realText(255),
-        'page_url'         => $faker->slug,
-        'page_src'         => $faker->randomElement(['_1n1d2017', '_generic', '_india']),
-        'started_at'       => $startDate,
-        'ended_at'         => $faker->dateTimeInInterval($startDate, '+ 10 days'),
-        'published_at'     => $faker->dateTimeBetween('- 1 month', '+ 1 month'),
+        'name'             => 'One Nation One Day 2017',
+        'country_code'     => 'ni',
+        'short_desc'       => '1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn’t just about numbers; it\'s about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.',
+        'page_url'         => '1n1d17',
+        'page_src'         => '_1n1d2017',
+        'started_at'       => '2017-07-22 00:00:00',
+        'ended_at'         => '2017-07-30 22:59:59',
+        'published_at'     => '2016-01-01 00:00:00',
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];
 });
 
-$factory->defineAs(App\Models\v1\Campaign::class, 'archived', function (Faker\Generator $faker)
+$factory->defineAs(App\Models\v1\Campaign::class, 'india', function (Faker\Generator $faker)
 {
-    $startDate = $faker->dateTimeBetween('- 1 year', '- 6 months');
-
     return [
-        'name'             => $faker->catchPhrase,
-        'country_code'     => strtolower($faker->countryCode),
-        'short_desc'       => $faker->realText(255),
-        'page_url'         => $faker->slug,
-        'started_at'       => $startDate,
-        'ended_at'         => $faker->dateTimeInInterval($startDate, '+ 10 days'),
-        'published_at'     => $faker->dateTimeBetween('- 1 year', '- 6 months'),
+        'name'             => 'Christmas in India 2016',
+        'country_code'     => 'in',
+        'short_desc'       => 'Venture deep into southern India as together we Rescue EVERY Child in several villages in the state of Andhra Pradesh. Watch as they enjoy their first Christmas and shower them with more Christmas gifts than their little arms can hold.',
+        'page_url'         => 'christmasinindia2016',
+        'page_src'         => '_india',
+        'started_at'       => '2016-12-03 00:00:00',
+        'ended_at'         => '2016-12-11 22:59:59',
+        'published_at'     => '2016-01-01 00:00:00',
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];
 });
+
 
 /**
  * Group Factory
  */
 $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
 {
+    $company = $faker->company;
+
     return [
-        'name'             => $faker->company,
+        'name'             => $company,
         'type'             => $faker->randomElement(['church', 'business', 'youth', 'nonprofit', 'other']),
         'description'      => $faker->realText(120),
         'timezone'         => $faker->timezone,
@@ -194,8 +194,8 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
         'phone_one'        => $faker->optional(0.5)->phoneNumber,
         'phone_two'        => $faker->optional(0.5)->phoneNumber,
         'email'            => $faker->safeEmail,
-        'public'           => $faker->boolean(50),
-        'url'              => $faker->userName,
+        'public'           => $faker->boolean(75),
+        'url'              => str_slug($company),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];
@@ -239,30 +239,6 @@ $factory->define(App\Models\v1\Deadline::class, function (Faker\Generator $faker
 });
 
 /**
- * Todo Factory
- */
-$factory->define(App\Models\v1\Todo::class, function (Faker\Generator $faker)
-{
-    return [
-        'task'          => $faker->realText(25),
-        'completed_at'  => null,
-        'todoable_type' => 'reservations',
-        'todoable_id'   => $faker->randomElement(App\Models\v1\Reservation::lists('id')->toArray()),
-    ];
-});
-
-$factory->defineAs(App\Models\v1\Todo::class, 'completed', function (Faker\Generator $faker)
-{
-    return [
-        'task'          => $faker->realText(25),
-        'completed_at'  => $faker->dateTimeThisYear,
-        'user_id'       => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
-        'todoable_type' => 'reservations',
-        'todoable_id'   => $faker->randomElement(App\Models\v1\Reservation::pluck('id')->toArray()),
-    ];
-});
-
-/**
  * Note Factory
  */
 $factory->define(App\Models\v1\Note::class, function (Faker\Generator $faker)
@@ -295,42 +271,104 @@ $factory->define(App\Models\v1\Companion::class, function (Faker\Generator $fake
 /**
  * Cost Factory
  */
-$factory->defineAs(App\Models\v1\Cost::class, 'incremental', function (Faker\Generator $faker)
+$factory->define(App\Models\v1\Cost::class, function (Faker\Generator $faker)
 {
     return [
         'name'                 => $faker->catchPhrase,
-        'description'          => $faker->optional(0.5)->sentence(10),
+        'description'          => $faker->sentence(10),
         'active_at'            => $faker->dateTimeThisYear('+ 6 months'),
         'amount'               => $faker->numberBetween($min = 1000, $max = 3000),
-        'type'                 => 'incremental',
+        'type'                 => $faker->randomElement(['incremental', 'static', 'optional']),
         'cost_assignable_type' => 'trips',
         'cost_assignable_id'   => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
     ];
 });
 
+// Super Early
+$factory->defineAs(App\Models\v1\Cost::class, 'super', function (Faker\Generator $faker)
+{
+    return [
+        'name'                 => 'Super Early Registration',
+        'active_at'            => '2016-01-01 00:00:00',
+        'amount'               => $faker->numberBetween($min = 1000, $max = 1200),
+        'type'                 => 'incremental',
+    ];
+});
+
+// Early
+$factory->defineAs(App\Models\v1\Cost::class, 'early', function (Faker\Generator $faker)
+{
+    return [
+        'name'                 => 'Early Registration',
+        'active_at'            => '2017-01-01 00:00:00',
+        'amount'               => $faker->numberBetween($min = 1300, $max = 1500),
+        'type'                 => 'incremental',
+    ];
+});
+
+// General Registration
+$factory->defineAs(App\Models\v1\Cost::class, 'general', function (Faker\Generator $faker)
+{
+    return [
+        'name'                 => 'General Registration',
+        'active_at'            => '2017-03-01 00:00:00',
+        'amount'               => $faker->numberBetween($min = 1600, $max = 1800),
+        'type'                 => 'incremental',
+    ];
+});
+
+// Late Registration
+$factory->defineAs(App\Models\v1\Cost::class, 'late', function (Faker\Generator $faker)
+{
+    return [
+        'name'                 => 'Late Registration',
+        'active_at'            => '2017-07-01 00:00:00',
+        'amount'               => $faker->numberBetween($min = 1900, $max = 2000),
+        'type'                 => 'incremental',
+    ];
+});
+
+// Double Room Request
+$factory->defineAs(App\Models\v1\Cost::class, 'double', function (Faker\Generator $faker)
+{
+    return [
+        'name'                 => 'Double Room Request',
+        'active_at'            => '2016-01-01 00:00:00',
+        'amount'               => 225,
+        'type'                 => 'optional',
+    ];
+});
+
+// Triple Room Request
+$factory->defineAs(App\Models\v1\Cost::class, 'triple', function (Faker\Generator $faker)
+{
+    return [
+        'name'                 => 'Triple Room Request',
+        'active_at'            => '2016-01-01 00:00:00',
+        'amount'               => 150,
+        'type'                 => 'optional',
+    ];
+});
+
+// Deposit
+$factory->defineAs(App\Models\v1\Cost::class, 'deposit', function (Faker\Generator $faker)
+{
+    return [
+        'name'                 => 'Deposit',
+        'active_at'            => '2016-01-01 00:00:00',
+        'amount'               => 100,
+        'type'                 => 'static',
+    ];
+});
+
+// Static
 $factory->defineAs(App\Models\v1\Cost::class, 'static', function (Faker\Generator $faker)
 {
     return [
         'name'                 => $faker->catchPhrase,
-        'description'          => $faker->optional(0.5)->sentence(10),
-        'active_at'            => $faker->dateTimeThisYear(),
-        'amount'               => $faker->numberBetween($min = 50, $max = 200),
+        'active_at'            => '2016-01-01 00:00:00',
+        'amount'               => random_int(25000, 100000),
         'type'                 => 'static',
-        'cost_assignable_type' => 'trips',
-        'cost_assignable_id'   => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
-    ];
-});
-
-$factory->defineAs(App\Models\v1\Cost::class, 'optional', function (Faker\Generator $faker)
-{
-    return [
-        'name'                 => $faker->catchPhrase,
-        'description'          => $faker->optional(0.5)->sentence(10),
-        'active_at'            => $faker->dateTimeThisYear('+ 6 months'),
-        'amount'               => $faker->numberBetween($min = 100, $max = 500),
-        'type'                 => 'optional',
-        'cost_assignable_type' => 'trips',
-        'cost_assignable_id'   => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
     ];
 });
 
@@ -857,7 +895,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Fak
 $factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $faker) {
     return [
         'trip_id' => $faker->randomElement(App\Models\v1\Trip::pluck('id')->toArray()),
-        'name' => $faker->name,
+        'name' => $faker->firstName. ' ' .$faker->lastName,
         'email' => $faker->safeEmail,
         'phone' => $faker->optional(0.5)->phoneNumber,
         'communication_preferences' => $faker->randomElements(['email', 'phone', 'text'], 2)

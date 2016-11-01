@@ -60,7 +60,8 @@
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="desc">
-                    {% $fundraiser->description %}
+                        <fundraisers-manager id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-manager>
+                        {{--{% $fundraiser->description %}--}}
                     </div>
                     <div role="tabpanel" class="tab-pane" id="stories">
                         <fundraisers-stories id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-stories>

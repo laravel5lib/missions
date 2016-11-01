@@ -37,7 +37,7 @@ class FundraisersController extends Controller
      */
     public function index(Request $request)
     {
-        $fundraisers = $this->fundraiser->filter($request->all())->paginate(25);
+        $fundraisers = $this->fundraiser->filter($request->all())->paginate($request->get('per_page', 25));
 
         return $this->response->paginator($fundraisers, new FundraiserTransformer);
     }

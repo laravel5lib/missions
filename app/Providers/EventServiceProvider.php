@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\v1\Trip;
+use App\Models\v1\User;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -53,6 +54,10 @@ class EventServiceProvider extends ServiceProvider
                 'name' => generateFundName($trip),
                 'balance' => 0
             ]);
+        });
+
+        User::created(function ($user) {
+            $user->assign('member');
         });
     }
 }

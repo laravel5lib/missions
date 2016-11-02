@@ -75,7 +75,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $router->group([
             'prefix' => 'admin',
-            'namespace' => $this->adminNamespace, 'middleware' => ['web','auth', 'can:view-admin'],
+            'namespace' => $this->adminNamespace, 'middleware' => ['web','auth', 'can:access-admin'],
         ], function ($router) {
             require app_path('Http/admin.php');
         });

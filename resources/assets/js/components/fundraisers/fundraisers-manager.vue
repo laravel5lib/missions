@@ -5,28 +5,33 @@
                 <!--<div class="panel-body">-->
                     <form>
                         <div class="form-group">
-                            <div class="row">
-                                <div class="col-sm-xs-12 text-right">
-                                    <div style="padding: 0;">
+                            <div class="alert alert-info">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <i class="fa fa-info-circle"></i> Update Fundraiser
+                                        <hr class="inv divider visible-xs-block" />
+                                    </div>
+                                    <div class="col-sm-8 text-right">
                                         <div role="group" aria-label="...">
-                                            <a class="btn btn-xs btn-default-hollow small" @click="newMarkedContentToggle = !newMarkedContentToggle">
+                                            <a class="btn btn-xs btn-white-hollow small" @click="newMarkedContentToggle = !newMarkedContentToggle">
                                                 <span v-show="!newMarkedContentToggle">Preview</span>
                                                 <span v-show="newMarkedContentToggle"><i class="fa fa-pencil"></i> Edit Description</span>
 
                                             </a>
                                             <span class="form-group" v-if="fundraiser" v-show="description !== fundraiser.description">
-                                                <button class="btn btn-xs btn-default-hollow small" type="button" @click="reset">Cancel</button>
-                                                <button class="btn btn-xs btn-success-hollow small" type="button" @click="saveDescription">Publish</button>
+                                                <button class="btn btn-xs btn-white-hollow small" type="button" @click="reset">Cancel</button>
+                                                <button class="btn btn-xs btn-white-hollow small" type="button" @click="saveDescription">Publish</button>
                                             </span>
-                                            <a class="btn btn-xs btn-default-hollow small" @click="settingsModal = true"><i class="fa fa-cog"></i></a>
+                                            <a class="btn btn-xs btn-white-hollow small" @click="settingsModal = true"><i class="fa fa-cog"></i> Settings</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="description" minlength="1" rows="10"></textarea>
-                            <div class="collapse" :class="{ 'in': newMarkedContentToggle }">
-                                <div v-html="description | marked"></div>
-                            </div>
+                        </div>
+                        <hr class="divider inv">
+                        <textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="description" minlength="1" rows="20"></textarea>
+                        <div class="collapse" :class="{ 'in': newMarkedContentToggle }">
+                            <div v-html="description | marked"></div>
                         </div>
                     </form>
                 <!--</div>-->
@@ -47,7 +52,7 @@
 
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" v-model="fundraiser.public"> Public Fundraiser - {{fundraiser.public ? 'Yes' : 'No'}}
+                                    <input type="checkbox" v-model="fundraiser.public"> Make Public
                                 </label>
                             </div>
                         </form>

@@ -170,7 +170,18 @@
     line-height: 1;
     font-family: serif;
   }
-
+  @media screen and (max-width: 767px) {
+    .icon-prev,
+    .fa-angle-left {
+      left: 50%;
+      margin-left: 0px;
+    }
+    .icon-next,
+    .fa-angle-right {
+      right: 50%;
+      margin-right: 0px;
+    }
+  }
 
   .icon-prev {
     &:before {

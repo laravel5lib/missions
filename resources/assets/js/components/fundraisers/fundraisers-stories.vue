@@ -1,23 +1,16 @@
 <template>
     <div>
         <template v-if="isUser()">
-        <div class="row hidden-xs">
-            <div class="col-sm-8">
-                <h5>Share your amazing stories with the world!</h5>
-            </div>
-            <div class="col-sm-4 text-right">
-                <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
-            </div>
-        </div>
-        <div class="row visible-xs">
-            <div class="col-sm-12 text-center">
-                <h5>Share your amazing stories with the world!</h5>
-            </div>
-            <div class="col-sm-12 text-center">
-                <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
+        <div class="alert alert-info">
+            <div class="row">
+                <div class="col-xs-8">
+                    <i class="fa fa-info-circle"></i> Share your amazing stories with the world!
+                </div>
+                <div class="col-xs-4 text-right">
+                    <button class="btn btn-white-hollow btn-xs" @click="newMode=!newMode"><i class="fa fa-plus"></i> Post Story</button>
+                </div>
             </div>
         </div>
-        <hr class="divider inv">
         </template>
         <div class="panel panel-default" v-if="newMode">
             <div class="panel-body">
@@ -28,7 +21,7 @@
                     </div>
                     <div class="form-group">
                         <label for="newStoryContent">Content 
-                            <button class="btn btn-default-hollow btn-sm" type="button" @click="newMarkedContentToggle = !newMarkedContentToggle">
+                            <button class="btn btn-default-hollow btn-xs" type="button" @click="newMarkedContentToggle = !newMarkedContentToggle">
                                 <span v-show="!newMarkedContentToggle">Preview</span>
                                 <span v-show="newMarkedContentToggle">Edit</span>
                             </button>
@@ -48,6 +41,11 @@
                         <button class="btn btn-sm btn-primary" type="button" @click="createStory(selectedStory)">Publish</button>
                     </div>
                 </form>
+            </div>
+        </div>
+        <div class="row" v-if="stories.length < 1">
+            <div class="col-xs-12">
+                <p class="lead text-muted text-center">No stories yet.</p>
             </div>
         </div>
         <div class="panel panel-default" v-for="story in stories">

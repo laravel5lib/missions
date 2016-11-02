@@ -194,7 +194,7 @@
                                     @foreach($reservation->requirements as $requirement)
 
                                     <h4>
-                                        {{ $requirement->item }} <small> Due: {{ carbon($requirement->due_at)->toFormattedDateString() }} <i class="fa fa-calendar"></i></small>
+                                        {{ $requirement->name }} <small> Due: {{ carbon($requirement->due_at)->toFormattedDateString() }} <i class="fa fa-calendar"></i></small>
                                         @if($requirement->pivot->status == 'complete')
                                             <span class="badge {{ $requirement->pivot->status }} badge-success pull-right"><i class="fa fa-check"></i> Complete</span>
                                         @elseif($requirement->pivot->status == 'reviewing')
@@ -204,19 +204,26 @@
                                         @endif
                                     </h4>
 
-                                    @if($requirement->item === 'Passport')
+                                    @if($requirement->name === 'Medical Release')
+                                        <reservations-medical-releases-manager
+                                                reservation-id="{{ $reservation->id }}"
+                                                medical-release-id="{{ $reservation->medical_release_id }}">
+                                        </reservations-medical-releases-manager>
+                                    @endif
+
+                                    @if($requirement->name === 'Passport')
                                         <reservations-passports-manager
                                                 reservation-id="{{ $reservation->id }}"
                                                 passport-id="{{ $reservation->passport_id }}">
                                         </reservations-passports-manager>
                                     @endif
 
-                                        @if($requirement->item === 'Visa')
-                                            <reservations-visas-manager
-                                                    reservation-id="{{ $reservation->id }}"
-                                                    visa-id="{{ $reservation->passport_id }}">
-                                            </reservations-visas-manager>
-                                        @endif
+                                    @if($requirement->name === 'Visa')
+                                        <reservations-visas-manager
+                                                reservation-id="{{ $reservation->id }}"
+                                                visa-id="{{ $reservation->visa_id }}">
+                                        </reservations-visas-manager>
+                                    @endif
 
                                     <hr />
                                 @endforeach

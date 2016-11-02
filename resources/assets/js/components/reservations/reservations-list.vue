@@ -34,7 +34,7 @@
             getReservations(){
                 this.$http.get('reservations', {
                     include: 'trip.campaign,trip.group',
-                    user: new Array(this.userId)
+                    user: new Array(this.userId),
                 }).then(function (response) {
 
                     switch (this.type) {

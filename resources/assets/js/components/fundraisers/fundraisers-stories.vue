@@ -58,7 +58,7 @@
                     </a>
                 </h5>
             </div>
-            <div id="collapse-{{ story.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
+            <div id="collapse-{{ story.id }}" class="panel-collapse collapse {{ $index == 0 ? 'in' : '' }}" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
                 <div class="panel-body" v-if="editMode !== story.id">
                 <div class="row">
                     <div class="col-sm-8">

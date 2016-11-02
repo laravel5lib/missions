@@ -23,7 +23,7 @@
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 
-        <modal class="text-center" v-if="isUser()" :show.sync="manageModal" title="Manage Accolades" width="800" :callback="updateAccolades">
+        <modal class="text-center" v-if="isUser()" :show.sync="manageModal" title="Manage Countries" width="800" :callback="updateAccolades">
             <div slot="modal-body" class="modal-body text-center">
 				<validator name="AddCountry">
 					<form class="for" novalidate>

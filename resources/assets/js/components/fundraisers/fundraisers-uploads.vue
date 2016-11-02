@@ -1,24 +1,16 @@
 <template>
     <template v-if="isUser()">
-        <div class="row hidden-xs">
-            <div class="col-sm-8">
-                <h5>Add photos and videos!</h5>
-            </div>
-            <div class="col-sm-4 text-right">
-                <button class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse">Manage Media <i class="fa fa-plus"></i></button>
-            </div>
-        </div>
-        <div class="row visible-xs">
-            <div class="col-sm-12 text-center">
-                <h5>Add photos and videos!</h5>
-            </div>
-            <div class="col-sm-12 text-center">
-                <button class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse">Manage Media <i class="fa fa-plus"></i></button>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="alert alert-info">
+                            <i class="fa fa-info-circle"></i> Add photos and videos!
+                            <button class="btn btn-white-hollow btn-xs pull-right" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse"><i class="fa fa-picture-o"></i> Manage Media</button>
+                </div>
             </div>
         </div>
-        <hr class="divider inv">
+
         <div class="collapse" id="mediaCollapse">
-            <div class="well">
+            <div class="panel panel-default"><div class="panel-body">
                 <!-- TAB NAVIGATION -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="active"><a href="#tab1" role="tab" data-toggle="tab">Media</a></li>
@@ -74,7 +66,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div></div>
         </div>
     </template>
 

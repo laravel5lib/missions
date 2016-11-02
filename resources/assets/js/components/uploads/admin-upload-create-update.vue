@@ -156,7 +156,7 @@
 
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	import vSelect from 'vue-select'
 	import VueStrap from 'vue-strap/dist/vue-strap.min'
 	export default{
@@ -351,7 +351,7 @@
 				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
 			},
 			adjustSelectByType(){
-				if (this.vueCropApi && _.contains(['banner', 'avatar'], this.typeObj.type)) {
+				if (this.vueCropApi && _.contains(['banner', 'avatar', 'other'], this.typeObj.type)) {
 					// update dimensions
 					this.scaledWidth = this.typeObj.width;
 					this.scaledHeight = this.typeObj.height;
@@ -452,7 +452,7 @@
 
 						// adjust container
 						self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
-						if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type) ) {
+						if (self.typeObj && _.contains(['banner', 'avatar', 'other'], self.typeObj.type) ) {
 							self.adjustSelectByType()
 						} else {
 							self.vueCropApi.setSelect([(self.imageWidth / 2) - 50, (self.imageHeight / 2) - 50, self.width * self.imageAspectRatio, self.height * self.imageAspectRatio]);

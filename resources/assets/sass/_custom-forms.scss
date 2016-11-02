@@ -420,17 +420,6 @@ input[type="checkbox"] {
   line-height: $input-height-small;
 }
 
-// Feedback states
-.has-success {
-  @include form-control-validation($state-success-text, $state-success-border, $state-success-bg);
-}
-.has-warning {
-  @include form-control-validation($state-warning-text, $state-warning-border, $state-warning-bg);
-}
-.has-error {
-  @include form-control-validation($alert-danger-text, $state-danger-border, $alert-danger-bg);
-}
-
 // Reposition feedback icon if input has visible label above
 .has-feedback label {
 

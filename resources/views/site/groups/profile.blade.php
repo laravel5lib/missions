@@ -18,12 +18,12 @@
     </div><!-- end page-header-outer -->
     <div class="container">
         <div class="row">
-            <div class="col-md-3 col-sm-offset-0 col-sm-4 col-xs-10 col-xs-offset-1">
+            <div class="col-md-3 col-sm-4 col-xs-12">
                 <div class="panel panel-default profile-pic-panel">
                     <img src="{{ image($group->avatar->source) }}" alt="{{ $group->name }}" class="img-responsive">
                     <div class="panel-body">
                         <h4>{{ $group->name }}</h4>
-                        <h6>/{{ $group->url }}</h6>
+                        <h6 class="small">/groups/{{ $group->url }}</h6>
                         <p>{{ $group->description }}</p>
                         <p><i class="fa fa-map-marker"></i>
                             {{ $group->city ? $group->city.', ' : null }}
@@ -44,7 +44,7 @@
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
             </div><!-- end col -->
-            <div class="col-lg-9 col-sm-8 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+            <div class="col-md-9 col-sm-8 col-xs-12">
                 <ul id="profTabs" class="nav nav-tabs" role="tablist">
                     <li data-toggle="tooltip" title="Current Trips" role="presentation" class="active"><a href="#current-trips" aria-controls="current-trips" role="tab" data-toggle="tab"><i class="fa fa-plane"></i></a></li>
                     <li data-toggle="tooltip" title="Fundraisers" role="presentation"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i></a></li>
@@ -54,13 +54,13 @@
                     @endcan
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="row tab-pane active" id="current-trips">
+                    <div role="tabpanel" class="tab-pane active" id="current-trips">
                         <group-profile-trips id="{{ $group->id }}"></group-profile-trips>
                     </div><!-- end tab-pane -->
-                    <div role="tabpanel" class="row tab-pane active" id="fundraisers">
+                    <div role="tabpanel" class="tab-pane active" id="fundraisers">
                         <group-profile-fundraisers id="{{ $group->id }}" group-url="{{ $group->url }}"></group-profile-fundraisers>
                     </div><!-- end tab-pane -->
-                    <div role="tabpanel" class="row tab-pane" id="stories">
+                    <div role="tabpanel" class="tab-pane" id="stories">
                         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                             <group-profile-stories id="{{ $group->id }}"></group-profile-stories>
                         </div>

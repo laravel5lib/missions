@@ -27,6 +27,12 @@
             <!--<span class="sr-only">Next</span>-->
         <!--</a>-->
     <!--</div>&lt;!&ndash; end carousel &ndash;&gt;-->
+    <div class="content-page-header">
+        <img class="img-responsive" src="images/fundraising/fundraisers-header.jpg" alt="Fundraisers">
+        <div class="c-page-header-text">
+            <h1 class="text-uppercase dash-trailing">Fundraisers</h1>
+        </div><!-- end c-page-header-content -->
+    </div><!-- end c-page-header -->
     <hr class="divider inv xlg">
     <div class="container">
         <div class="col-xs-12">

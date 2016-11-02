@@ -23,6 +23,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <hr class="divider inv">
                             <textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="description" minlength="1" rows="10"></textarea>
                             <div class="collapse" :class="{ 'in': newMarkedContentToggle }">
                                 <div v-html="description | marked"></div>

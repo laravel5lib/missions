@@ -55,7 +55,7 @@
                 <h5>
                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ story.id }}" aria-expanded="true" aria-controls="collapseOne">
                         {{ story.title }}
-                    </a>
+                    <i class="fa fa-chevron-down pull-right"></i></a>
                 </h5>
             </div>
             <div id="collapse-{{ story.id }}" class="panel-collapse collapse {{ $index == 0 ? 'in' : '' }}" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
@@ -64,7 +64,15 @@
                     <div class="col-sm-8">
                         <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 text-right hidden-xs">
+                        <div style="padding: 0;" v-if="isUser()">
+                            <div role="group" aria-label="...">
+                                <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a>
+                                <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,deleteModal = true"><i class="fa fa-trash"></i> Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 text-center visible-xs">
                         <div style="padding: 0;" v-if="isUser()">
                             <div role="group" aria-label="...">
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a>
@@ -73,7 +81,7 @@
                         </div>
                     </div>
                 </div>
-                    {{{ story.content | marked }}}
+                    <p class="small">{{{ story.content | marked }}}</p>
                 </div>
                 <div class="panel-body" v-if="editMode === story.id">
                     <form>

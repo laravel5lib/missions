@@ -16,12 +16,12 @@
     </div><!-- end page-header-outer -->
     <div class="container">
         <div class="row">
-            <div class="col-md-3 col-sm-offset-0 col-sm-4 col-xs-12">
+            <div class="col-md-3 col-sm-4 col-xs-12">
                 <div class="panel panel-default profile-pic-panel">
                     <img src="{{ image($user->avatar->source) }}" alt="{{ $user->name }}" class="img-responsive">
                     <div class="panel-body">
                         <h4>{{ $user->name }}</h4>
-                        <h6>/{{ $user->url }}</h6>
+                        <h6 class="small">/{{ $user->url }}</h6>
                         <p>{{ $user->bio }}</p>
                         <p><i class="fa fa-map-marker"></i> {{ $user->city }}, {{ $user->state }}, {{ country($user->country_code) }}</p>
                         <ul class="list-unstyled list-inline">
@@ -41,7 +41,7 @@
                     <user-profile-countries id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-countries>
                 @endif
             </div><!-- end col -->
-            <div class="col-lg-8 col-sm-8 col-sm-offset-0 col-xs-12">
+            <div class="col-md-9 col-sm-8 col-xs-12">
                 <ul id="profTabs" class="nav nav-tabs" role="tablist">
                     <li data-toggle="tooltip" title="Fundraisers" role="presentation" class="active"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i> <span class="hidden-xs">Fundraisers</span></a></li>
                     <li data-toggle="tooltip" title="Stories" role="presentation"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-list-ul"></i> <span class="hidden-xs">Stories</span></a></li>

@@ -6,7 +6,7 @@
         <tbody>
         @foreach(auth()->user()->outstandingRequirements() as $requirement)
             <tr>
-                <td>{{ $requirement->item }}</td>
+                <td>{{ $requirement->name }}</td>
                 <td class="text-right text-muted">{{ $requirement->due_at->format('M j') }}</td>
             </tr>
         @endforeach

@@ -22,6 +22,10 @@ return [
             [
                 'label' => 'Deadlines',
                 'url' => 'deadlines'
+            ],
+            [
+                'label' => 'Legal',
+                'url' => 'legal'
             ]
         ],
         'records' => [

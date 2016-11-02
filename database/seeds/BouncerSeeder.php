@@ -22,7 +22,9 @@ class BouncerSeeder extends Seeder
 
         Bouncer::allow('member')->to('access-dashboard');
         Bouncer::allow('intern')->to('access-admin');
+        Bouncer::allow('intern')->to('access-dashboard');
         Bouncer::allow('admin')->to('access-admin');
+        Bouncer::allow('admin')->to('access-dashboard');
 
         // users
         Bouncer::allow('admin')->to('view', User::class);

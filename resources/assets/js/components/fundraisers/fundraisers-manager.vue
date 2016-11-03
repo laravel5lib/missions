@@ -117,6 +117,9 @@
                 this.fundraiser.description = this.description;
                 this.doUpdate('description');
             },
+            validateUrl(url){
+                this.$http.get('fundraisers', {url: this.fundraiser.url})
+            },
             saveSettings(){
                 this.fundraiser.description = this.description;
                 this.doUpdate('settings');

@@ -26,7 +26,7 @@ class AccoladeRequest extends FormRequest
         return [
             'display_name' => 'required|string',
             'name' => 'required|string',
-            'items' => 'required|array'
+            'items' => 'array'
         ];
     }
 }

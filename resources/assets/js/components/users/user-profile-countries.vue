@@ -8,7 +8,7 @@
 						<h5>Countries Visited</h5>
 					</div>
 					<div class="col-xs-4 text-right" v-if="isUser()">
-						<button class="btn btn-primary btn-xs" @click="manageModal = true"><i class="fa fa-edit"></i></button>
+						<h5><a class="text-muted" @click="manageModal = true"><i class="fa fa-edit"></i></a></h5>
 					</div>
 				</div>
             </div><!-- end panel-heading -->
@@ -20,6 +20,7 @@
                         </span>
                     </p>
                 </h4>
+				<p class="text-muted text-center" v-if="accolades.items.length < 1">No visits yet.</p>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 

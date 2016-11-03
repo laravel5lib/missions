@@ -13,7 +13,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <a href="#">
-                                                <img class="media-object img-rounded" :src="avatar" :alt="name" width="64">
+                                                <img class="media-object img-rounded" :src="avatar + '?w=64&h=64'" :alt="name" width="64">
                                             </a>
                                         </div>
                                         <div class="media-body">
@@ -27,7 +27,9 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <a href="#">
-                                                <img class="media-object img-rounded" :src="banner" :alt="name" width="64">
+                                                <img class="media-object img-rounded"
+                                                     :src="banner + '?w=64&h=64&fit=crop-center'"
+                                                     :alt="name" width="64">
                                             </a>
                                         </div>
                                         <div class="media-body">
@@ -47,6 +49,7 @@
                                             <upload-create-update type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="2" :is-child="true" :tags="['User']"></upload-create-update>
                                         </div>
                                     </div>
+                                    <hr class="divider inv" />
                                 </div>
                             </div>
 

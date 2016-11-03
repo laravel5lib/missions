@@ -30,9 +30,8 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h1 class="text-center text-success">${{ $fundraiser->raised() ? $fundraiser->raised() : 0 }} <span style="font-size: 18px;">Raised</span></h1>
+                        @unless($fundraiser->ended_at->isPast())
                         <h4 class="text-center">${{ $fundraiser->goal_amount }} <span style="font-size: 14px;">Goal</span></h4>
-                        <h6 class="text-center text-uppercase small text-muted"></h6>
-                        {{--<h2 class="text-center">{{ $fundraiser->getPercentRaised() }}% <span style="font-size: 12px;">Percent Raised</span></h2>--}}
                         <div class="panel panel-default" style="background-color: #f7f7f7">
                             <div class="panel-body">
                                 <user-profile-fundraisers-progress :now="{{ $fundraiser->getPercentRaised() }}"></user-profile-fundraisers-progress>
@@ -44,6 +43,15 @@
                             <modal-donate title="{{ $fundraiser->fund->name }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"
                               type="{{ $type or '' }}" type-id="{{ $slug or '' }}" fund-id="{{ $fundraiser->fund->id }}" recipient="{{ $fundraiser->sponsor->name }}"></modal-donate>
                         </div>
+                        @endunless
+
+                        @unless($fundraiser->ended_at->isFuture())
+                            <h6 class="text-center small text-muted">This fundraiser closed on {{ $fundraiser->ended_at->format('F j, Y') }}.</h6>
+                            <p class="text-center small text-muted">You can still make a general donation to Missions.Me by clicking the button below.</p>
+                            <div class="text-center">
+                                <a class="btn btn-success" href="{{ url('donate') }}">Donate<span class="hidden-sm"> to Missions.Me</span></a>
+                            </div>
+                        @endunless
                     </div>
                 </div>
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">

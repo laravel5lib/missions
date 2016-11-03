@@ -45,9 +45,16 @@
                                 <label for="name">Fundraiser Name</label>
                                 <input type="text" class="form-control" id="name" v-model="fundraiser.name">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" :class="{ 'has-error': validUrl === false, 'has-success': validUrl === true }">
                                 <label for="url">Fundraiser Url</label>
-                                <input type="text" class="form-control" id="url" v-model="fundraiser.url">
+                                <div class="input-group">
+                                <span class="input-group-addon" id="url_addon">
+                                    <i class="fa fa-spinner fa-spin" v-if="checkingUrl"></i>
+                                    <i class="fa fa-check" v-if="checkingUrl === false && validUrl === true"></i>
+                                    <i class="fa fa-times" v-if="checkingUrl === false && validUrl === false"></i>
+                                </span>
+                                    <input type="text" class="form-control" id="url" v-model="fundraiser.url" debounce="500" @change="validateUrl">
+                                </div>
                             </div>
 
                             <div class="checkbox">
@@ -96,11 +103,17 @@
 
                 // settings vars
                 settingsModal: false,
+                checkingUrl: false,
+                validUrl: true,
             }
         },
         watch: {
-            'fundraiser' :function (val, oldVal) {
+            'fundraiser': function (val, oldVal) {
                 this.description = val.hasOwnProperty('description') ? val.description : '';
+                // watch url value for checking
+                /*if (val.hasOwnProperty('url') && oldVal !== null && val.url !== oldVal.url) {
+                 debugger;
+                 }*/
             }
         },
         filters: {
@@ -117,18 +130,30 @@
                 this.fundraiser.description = this.description;
                 this.doUpdate('description');
             },
-            validateUrl(url){
-                this.$http.get('fundraisers', {url: this.fundraiser.url})
+            validateUrl(){
+                this.checkingUrl = true;
+                this.$http.get('fundraisers', { url: this.fundraiser.url }).then(function (response) {
+                    if (response.data.data.length) {
+                        this.validUrl = response.data.data[0].id === this.fundraiser.id;
+                    } else {
+                        this.validUrl = true;
+                    }
+                    this.checkingUrl = false;
+                }, function (error) {
+                    console.log(error);
+                });
             },
             saveSettings(){
-                this.fundraiser.description = this.description;
-                this.doUpdate('settings');
+                if (this.validUrl) {
+                    this.fundraiser.description = this.description;
+                    this.doUpdate('settings');
+                }
             },
             doUpdate(type){
                 this.resource.update({id: this.id}, this.fundraiser).then(function (response) {
                     this.fundraiser = response.data.data;
                     this.newMarkedContentToggle = true;
-                    if(type === 'description'){
+                    if (type === 'description') {
                         this.showDescriptionSuccess = true;
                     } else {
                         this.showSettingsSuccess = true;

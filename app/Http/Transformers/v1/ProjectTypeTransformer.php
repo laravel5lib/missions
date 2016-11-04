@@ -19,17 +19,21 @@ class ProjectTypeTransformer extends Fractal\TransformerAbstract
         $type->load('image');
 
         return [
-            'id'            => $type->id,
-            'name'          => $type->name,
-            'short_desc'    => $type->short_desc,
-            'image'         => $type->image ? image($type->image->source) : null,
-            'active'        => (boolean) $type->active,
-            'created_at'    => $type->created_at->toDateTimeString(),
-            'updated_at'    => $type->updated_at->toDateTimeString(),
-            'links'         => [
+            'id'             => $type->id,
+            'name'           => $type->name,
+            'country'        => [
+                'code' => $type->country_code,
+                'name' => country($type->country_code)
+            ],
+            'short_desc'     => $type->short_desc,
+//            'image'         => $type->image ? image($type->image->source) : null,
+            'projects_count' => $type->projects_count,
+            'created_at'     => $type->created_at->toDateTimeString(),
+            'updated_at'     => $type->updated_at->toDateTimeString(),
+            'links'          => [
                 [
                     'rel' => 'self',
-                    'uri' => url('/api/projects/types/'.$type->id),
+                    'uri' => url('/api/causes/' . $type->project_cause_id . '/types/' . $type->id),
                 ]
             ]
         ];

@@ -21,7 +21,7 @@ class CauseTransformer extends Fractal\TransformerAbstract
             'id'            => $cause->id,
             'name'          => $cause->name,
             'short_desc'    => $cause->short_desc,
-            'countries'     => $cause->getCountries(),
+            'countries'     => $cause->countries,
             'image'         => $cause->image ? image($cause->image->source) : null,
             'created_at'    => $cause->created_at->toDateTimeString(),
             'updated_at'    => $cause->updated_at->toDateTimeString(),

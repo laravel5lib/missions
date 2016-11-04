@@ -26,6 +26,7 @@ class CreateProjectsTables extends Migration
             $table->uuid('id')->primary();
             $table->uuid('project_cause_id');
             $table->string('name');
+            $table->string('country_code');
             $table->string('short_desc')->nullable();
             $table->uuid('upload_id')->nullable();
             $table->timestamps();

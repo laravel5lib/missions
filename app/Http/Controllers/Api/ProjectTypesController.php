@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\v1\ProjectTypeRequest;
 use App\Http\Transformers\v1\ProjectTypeTransformer;
+use App\Models\v1\ProjectCause;
 use App\Models\v1\ProjectType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,14 +16,20 @@ class ProjectTypesController extends Controller
      * @var ProjectType
      */
     private $type;
+    /**
+     * @var ProjectCause
+     */
+    private $cause;
 
     /**
      * ProjectTypesController constructor.
      * @param ProjectType $type
+     * @param ProjectCause $cause
      */
-    public function __construct(ProjectType $type)
+    public function __construct(ProjectType $type, ProjectCause $cause)
     {
         $this->type = $type;
+        $this->cause = $cause;
     }
 
     /**
@@ -31,9 +38,13 @@ class ProjectTypesController extends Controller
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function index(Request $request)
+    public function index($id, Request $request)
     {
-        $types = $this->type->paginate($request->get('per_page'));
+        $types = $this->cause
+                      ->findOrFail($id)
+                      ->types()
+                      ->withCount('projects')
+                      ->paginate($request->get('per_page'));
 
         return $this->response->paginator($types, new ProjectTypeTransformer);
     }

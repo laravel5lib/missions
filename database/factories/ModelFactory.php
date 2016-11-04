@@ -921,6 +921,7 @@ $factory->define(App\Models\v1\ProjectType::class, function(Faker\Generator $fak
     return [
         'name' => $faker->word,
         'short_desc' => $faker->realText(200),
+        'country_code' => strtolower($faker->countryCode),
         'upload_id' => $faker->randomElement(App\Models\v1\Upload::pluck('id')->toArray())
     ];
 });

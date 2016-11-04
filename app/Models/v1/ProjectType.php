@@ -53,6 +53,16 @@ class ProjectType extends Model
     }
 
     /**
+     * Get all the type's projects.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    /**
      * Get the project type's costs.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany

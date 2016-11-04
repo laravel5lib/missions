@@ -53,13 +53,23 @@ class ProjectCause extends Model
     }
 
     /**
-     * Get the initiatives for the cause.
+     * Get the project types for the cause.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function types()
     {
         return $this->hasMany(ProjectType::class);
+    }
+
+    /**
+     * Get all the projects for the cause.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function projects()
+    {
+        return $this->hasManyThrough(Project::class, ProjectType::class);
     }
 
     /**

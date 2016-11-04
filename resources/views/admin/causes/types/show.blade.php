@@ -5,19 +5,23 @@
         <div class="container">
             <div class="row hidden-xs">
                 <div class="col-sm-8">
-                    <h3>{{ $cause->name }}</h3>
+                    <h3>{{ $type->name }}</h3>
                 </div>
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <a href="/admin/causes" class="btn btn-default"><i class="fa fa-chevron-left icon-left"></i> Causes</a>
+                    <a href="/admin/causes/{{ $type->project_cause_id }}" class="btn btn-default">
+                        <i class="fa fa-chevron-left icon-left"></i> Types
+                    </a>
                 </div>
             </div>
             <div class="row visible-xs">
                 <div class="col-sm-8 text-center">
-                    <h3>Project Causes</h3>
+                    <h3>{{ $type->name }}</h3>
                 </div>
                 <div class="col-sm-4 text-center">
-                    <a href="/admin/causes" class="btn btn-default"><i class="fa fa-chevron-left icon-left"></i> Causes</a>
+                    <a href="/admin/causes/{{ $type->project_cause_id }}" class="btn btn-default">
+                        <i class="fa fa-chevron-left icon-left"></i> Types
+                    </a>
                     <hr class="divider inv sm">
                 </div>
             </div>
@@ -27,15 +31,10 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-               <cause-editor id="{{ $cause->id }}"></cause-editor>
+                ...
             </div>
             <div class="col-md-6">
-                <project-types cause-id="{{ $cause->id }}"></project-types>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <projects-list cause-id="{{ $cause->id }}"></projects-list>
+                ...
             </div>
         </div>
     </div>

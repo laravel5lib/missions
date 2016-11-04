@@ -4,13 +4,6 @@
             <div class="alert alert-info" role="alert">No records found</div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-12 text-right">
-                <a href="visas/create" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i> Add Visa</a>
-                <hr>
-            </div>
-        </div>
-
 
         <div class="col-sm-4" v-for="visa in paginatedVisas">
             <div class="panel panel-default">

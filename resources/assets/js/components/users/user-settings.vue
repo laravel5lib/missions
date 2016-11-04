@@ -8,7 +8,7 @@
                             <h5>Account</h5>
                         </div>
                         <div class="panel-body">
-                            <div class="form-group">
+                            <div class="row form-group">
                                 <div class="col-sm-6">
                                     <div class="media">
                                         <div class="media-left">
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" :class="{ 'has-error': checkForError('name') }">
+                            <div class="row form-group" :class="{ 'has-error': checkForError('name') }">
                                 <div class="col-sm-12">
                                     <label for="name">Name</label>
                                     <input type="text" class="form-control" name="name" id="name" v-model="name"
@@ -58,7 +58,7 @@
                                            maxlength="100" minlength="1" required>
                                 </div>
                             </div>
-                            <div class="form-group" :class="{ 'has-error': checkForError('email') || errors.email }">
+                            <div class="row form-group" :class="{ 'has-error': checkForError('email') || errors.email }">
                                 <div class="col-sm-12">
                                     <label for="name">Email</label>
                                     <input type="email" class="form-control" name="email" id="email" v-model="email"
@@ -66,7 +66,7 @@
                                     <div v-show="errors.email" class="help-block">{{errors.email}}</div>
                                 </div>
                             </div>
-                            <div class="form-group" :class="{ 'has-error': errors.alt_email }">
+                            <div class="row form-group" :class="{ 'has-error': errors.alt_email }">
                                 <div class="col-sm-12">
                                     <label for="name">Alt. Email</label>
                                     <input type="email" class="form-control" name="alt_email" id="alt_email" v-model="alt_email">
@@ -74,7 +74,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" :class="{ 'has-error': !!changePassword && (checkForError('password')||checkForError('passwordconfirmation')) }">
+                            <div class="row form-group" :class="{ 'has-error': !!changePassword && (checkForError('password')||checkForError('passwordconfirmation')) }">
                                 <div class="col-sm-12">
                                     <label for="name">Password</label>
                                     <div class="checkbox">
@@ -113,7 +113,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="row form-group">
                                 <div class="col-sm-12">
                                     <label>Date of Birth</label>
                                     <div class="row">
@@ -364,7 +364,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group" :class="{ 'has-error': checkForError('timezone') }">
+                            <div class="row form-group" :class="{ 'has-error': checkForError('timezone') }">
                                 <div class="col-sm-12">
                                     <label for="timezone" class="control-label">Timezone</label>
                                     <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
@@ -375,7 +375,7 @@
                             </div>
 
 
-                            <div class=" form-group">
+                            <div class="row form-group">
                                 <div class="col-sm-6">
                                     <label for="infoPhone">Phone 1</label>
                                     <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
@@ -385,8 +385,16 @@
                                     <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
                                 </div>
                             </div>
-
-                            <div class="form-group">
+                        </div>
+                    </div>
+                </div><!-- end col -->
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Social Media</h5>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row form-group">
                                 <div class="col-sm-12">
                                     <label class="control-label" for="facebook">Facebook</label>
                                     <input type="text" class="form-control" v-model="facebook" id="facebook" placeholder="Facebook Profile">
@@ -408,8 +416,8 @@
                                     <input type="text" class="form-control" v-model="website" id="website" placeholder="Website">
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </div><!-- end panel-body -->
+                    </div><!-- end panel -->
                 </div><!-- end col -->
                 <div class="col-sm-12 text-center">
                     <hr class="divider inv lg">

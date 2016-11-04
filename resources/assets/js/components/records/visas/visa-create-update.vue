@@ -1,36 +1,38 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="CreateUpdateVisa" @touched="onTouched">
         <form id="CreateUpdateVisa" class="form-horizontal" novalidate>
-            <div class="form-group" :class="{ 'has-error': checkForError('givennames') }">
-                <label for="given_names" class="col-sm-2 control-label">Given Names</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
-                           placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
-                           maxlength="150" minlength="1" required>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div :class="{ 'has-error': checkForError('givennames') }">
+                        <label for="given_names" class="control-label">Given Names</label>
+                        <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
+                               placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
+                               maxlength="150" minlength="1" required>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('surname') }">
-                <label for="surname" class="col-sm-2 control-label">Surname</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
-                           placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
-                           maxlength="100" minlength="1" required>
+                <div class="col-sm-6">
+                    <div :class="{ 'has-error': checkForError('surname') }">
+                        <label for="surname" class="control-label">Surname</label>
+                        <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
+                               placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
+                               maxlength="100" minlength="1" required>
+                    </div>
                 </div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('number') }">
-                <label for="number" class="col-sm-2 control-label">Visa Number</label>
-                <div class="col-sm-10">
+                <div class="col-sm-12">
+                    <label for="number" class="control-label">Visa Number</label>
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
                            placeholder="Visa Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="9" required>
                 </div>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': (checkForError('issued') || checkForError('expires')) }">
-                <label for="issued_at" class="col-sm-2 control-label">Dates</label>
-                <div class="col-sm-10">
+            <div class="row" :class="{ 'has-error': (checkForError('issued') || checkForError('expires')) }">
+                <div class="col-sm-12">
+                    <label for="issued_at" class="control-label">Dates</label>
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-lg-6">
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('issued') }">
                                 <span class="input-group-addon">Issued</span>
@@ -39,7 +41,7 @@
                             </div>
                             <br>
                         </div>
-                        <div class="col-sm-12">
+                        <div class="col-lg-6">
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('expires') }">
                                 <span class="input-group-addon">Expires</span>
@@ -52,8 +54,8 @@
             </div>
             
             <div class="form-group" :class="{ 'has-error': checkForError('country') }">
-                <label for="country" class="col-sm-2 control-label">Country</label>
-                <div class="col-sm-10">
+                <div class="col-sm-12">
+                    <label for="country" class="control-label">Country</label>
                     <v-select class="form-control" id="countryObj" :value.sync="countryObj" :options="countries" label="name"></v-select>
                     <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
@@ -79,7 +81,7 @@
             </accordion>
 
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-sm-12 text-center">
                     <a v-if="!isUpdate" href="/dashboard/records/visas" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>

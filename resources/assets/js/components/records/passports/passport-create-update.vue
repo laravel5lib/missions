@@ -2,16 +2,16 @@
     <validator name="CreateUpdatePassport" @touched="onTouched">
         <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
             <div class="row">
-                <div :class="{ 'has-error': checkForError('givennames') }">
-                    <div class="col-sm-5">
+                <div class="col-sm-6">
+                    <div :class="{ 'has-error': checkForError('givennames') }">
                         <label for="given_names" class="control-label">Given Names</label>
                         <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
                                placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="150" minlength="1" required>
                     </div>
                 </div>
-                <div :class="{ 'has-error': checkForError('surname') }">
-                    <div class="col-sm-5">
+                <div class="col-sm-6">
+                    <div :class="{ 'has-error': checkForError('surname') }">
                         <label for="surname" class="control-label">Surname</label>
                         <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
                                placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
@@ -20,7 +20,7 @@
                 </div>
             </div><!-- end row -->
             <div class="form-group" :class="{ 'has-error': checkForError('number') }">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <label for="number" class="control-label">Passport Number</label>
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
                            placeholder="Passport Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
@@ -29,7 +29,7 @@
             </div>
 
             <div class="row" :class="{ 'has-error': (checkForError('issued') || checkForError('expires')) }">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <label for="issued_at" class="control-label">Dates</label>
                     <div class="row">
                         <div class="col-lg-6">
@@ -54,7 +54,7 @@
             </div>
             
             <div class="form-group" :class="{ 'has-error': checkForError('birth') }">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <label for="birth" class="control-label">Birth Country</label>
                     <v-select class="form-control" id="birth" :value.sync="birthCountryObj" :options="countries" label="name"></v-select>
                     <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate:birth="{ required: true }">
@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="form-group" :class="{ 'has-error': checkForError('citizenship') }">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <label for="citizenship" class="control-label">Citizenship</label>
                     <v-select class="form-control" id="country" :value.sync="citizenshipObj" :options="countries" label="name"></v-select>
                     <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate:citizenship="{ required: true }">
@@ -72,7 +72,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <accordion :one-at-atime="true">
                         <panel header="Upload Photo Copy" :is-open.sync="true">
                             <div class="panel-body">
@@ -94,7 +94,7 @@
             </div><!-- end row -->
 
             <div class="form-group">
-                <div class="col-sm-10 text-center">
+                <div class="col-sm-12 text-center">
                     <a v-if="!isUpdate" href="/dashboard/passports" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>

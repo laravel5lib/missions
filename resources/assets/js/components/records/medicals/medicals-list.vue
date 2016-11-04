@@ -4,14 +4,6 @@
             <div class="alert alert-info" role="alert">No records found</div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-12 text-right">
-                <a href="medical-releases/create" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i> Add Medical Release</a>
-                <hr>
-            </div>
-        </div>
-
-
         <div class="col-sm-4" v-for="medical_release in paginatedMedical_releases">
             <div class="panel panel-default">
                 <div style="min-height:120px;" class="panel-body">

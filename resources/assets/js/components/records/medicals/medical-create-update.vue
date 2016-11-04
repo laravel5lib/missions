@@ -1,31 +1,47 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="CreateUpdateMedicalRelease" @touched="onTouched">
         <form id="CreateUpdateMedicalRelease" class="form-horizontal" novalidate>
-            <div class="form-group" :class="{ 'has-error': checkForError('name') }">
-                <label for="name" class="col-sm-2 control-label">Name</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
-                           minlength="1" required>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h5 class="panel-header">Basic Information</h5>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('provider') }">
-                <label for="ins_provider" class="col-sm-2 control-label">Insurance Provider</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="ins_provider" id="ins_provider" v-model="ins_provider"
-                           placeholder="Insurance Provider" v-validate:provider="{ required: true, minlength:1, maxlength:100 }"
-                           maxlength="100" minlength="1" required>
-                </div>
-            </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('policy') }">
-                <label for="ins_policy_no" class="col-sm-2 control-label">Insurance Policy Number</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="ins_policy_no" id="ins_policy_no" v-model="ins_policy_no"
-                           placeholder="Insurance Policy Number" v-validate:policy="{ required: true, minlength:1 }"
-                           maxlength="100" minlength="1" required>
-                </div>
-            </div>
-
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div :class="{ 'has-error': checkForError('name') }">
+                                <label for="name" class="control-label">Name</label>
+                                <input type="text" class="form-control" name="name" id="name" v-model="name"
+                                       placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
+                                       minlength="1" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div :class="{ 'has-error': checkForError('provider') }">
+                                <label for="ins_provider" class="control-label">Insurance Provider</label>
+                                <input type="text" class="form-control" name="ins_provider" id="ins_provider" v-model="ins_provider"
+                                       placeholder="Insurance Provider" v-validate:provider="{ required: true, minlength:1, maxlength:100 }"
+                                       maxlength="100" minlength="1" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div :class="{ 'has-error': checkForError('policy') }">
+                                <label for="ins_policy_no" class=control-label">Insurance Policy Number</label>
+                                <input type="text" class="form-control" name="ins_policy_no" id="ins_policy_no" v-model="ins_policy_no"
+                                       placeholder="Insurance Policy Number" v-validate:policy="{ required: true, minlength:1 }"
+                                       maxlength="100" minlength="1" required>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end panel-body -->
+            </div><!-- end panel -->
+    <div class="row">
+        <div class="col-sm-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
@@ -33,9 +49,9 @@
                             <h5 class="panel-header">Conditions</h5>
                         </div>
                         <div class="col-xs-4 text-right">
-                            <button class="btn btn-xs btn-primary" type="button" data-toggle="collapse" 
+                            <button class="btn btn-xs btn-default-hollow" type="button" data-toggle="collapse" 
                                     data-target="#newCondition" aria-expanded="false" aria-controls="newCondition">
-                                <i class="fa fa-plus"></i>&nbsp;Add
+                                <i class="icon-left fa fa-plus"></i> Add
                             </button>
                         </div>
                     </div>
@@ -48,10 +64,8 @@
                         <div class="list-group-item">
                             <validator name="NewCondition">
                                 <form name="NewCondition">
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        <input type="text" class="form-control" v-model="newCondition.name">
-                                    </div>
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" v-model="newCondition.name">
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="checkbox">
@@ -68,17 +82,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <hr class="divider sm">
-                                    <div class="form-group">
-                                        <button class="btn btn-sm btn-success" type="button" @click="addCondition(newCondition)">Add Condition</button>
-                                    </div>
+                                    <hr class="divider inv sm">
+                                    <button class="btn btn-sm btn-success" type="button" @click="addCondition(newCondition)">Add Condition</button>
                                 </form>
                             </validator>
                         </div>
                     </div>
                 </div>
             </div>
-
+        </div>
+        <div class="col-sm-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
@@ -86,9 +99,9 @@
                             <h5 class="panel-header">Allergies</h5>
                         </div>
                         <div class="col-xs-4 text-right">
-                            <button class="btn btn-xs btn-primary" type="button" data-toggle="collapse"
+                            <button class="btn btn-xs btn-default-hollow" type="button" data-toggle="collapse"
                                     data-target="#newAllergy" aria-expanded="false" aria-controls="newAllergy">
-                                <i class="fa fa-plus"></i>&nbsp;Add
+                                <i class="icon-left fa fa-plus"></i> Add
                             </button>
                         </div>
                     </div>
@@ -101,10 +114,8 @@
                         <div class="list-group-item">
                             <validator name="newAllergy">
                                 <form name="newAllergy">
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        <input type="text" class="form-control" v-model="newAllergy.name">
-                                    </div>
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" v-model="newAllergy.name">
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="checkbox">
@@ -122,51 +133,54 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <hr class="divider sm">
-                                    <div class="form-group">
-                                        <button class="btn btn-sm btn-success" type="button" @click="addAllergy(newAllergy)">Add Allergy</button>
-                                    </div>
+                                    <hr class="divider inv sm">
+                                    <button class="btn btn-sm btn-success" type="button" @click="addAllergy(newAllergy)">Add Allergy</button>
                                 </form>
                             </validator>
                         </div>
                     </div>
                 </div>
             </div>
-
+        </div>
+    </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h5 class="panel-header">Emergency Contact</h5>
                 </div>
                 <div class="panel-body">
                     <form name="newContact">
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" v-model="emergency_contact.name">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Name</label>
+                                <input type="text" class="form-control" v-model="emergency_contact.name">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Email</label>
+                                <input type="email" class="form-control" v-model="emergency_contact.email">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" class="form-control" v-model="emergency_contact.email">
-                        </div>
-                        <div class="form-group">
-                            <label>Phone</label>
-                            <input type="tel" class="form-control" v-model="emergency_contact.phone|phone">
-                        </div>
-                        <div class="form-group">
-                            <label>Relationship</label>
-                            <select type="tel" class="form-control" v-model="emergency_contact.relationship">
-                                <option value="friend">Friend</option>
-                                <option value="spouse">Spouse</option>
-                                <option value="family">Family</option>
-                                <option value="guardian">Guardian</option>
-                                <option value="other">Other</option>
-                            </select>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Phone</label>
+                                <input type="tel" class="form-control" v-model="emergency_contact.phone|phone">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Relationship</label>
+                                <select type="tel" class="form-control" v-model="emergency_contact.relationship">
+                                    <option value="friend">Friend</option>
+                                    <option value="spouse">Spouse</option>
+                                    <option value="family">Family</option>
+                                    <option value="guardian">Guardian</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+            <div class="form-group text-center">
+                <div class="col-xs-12">
                     <a v-if="!isUpdate" href="/dashboard/records/medical-releases" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>

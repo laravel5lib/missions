@@ -26,7 +26,7 @@ class CauseRequest extends Request
         return [
             'name' => 'required|max:50',
             'short_desc' => 'max:255',
-            'active' => 'boolean',
+            'countries' => 'required|array',
             'upload_id' => 'exists:uploads,id'
         ];
     }

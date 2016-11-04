@@ -6,7 +6,7 @@ use App\UuidForKey;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Cause extends Model
+class ProjectCause extends Model
 {
     use SoftDeletes, UuidForKey;
 
@@ -30,17 +30,36 @@ class Cause extends Model
         'name',
         'short_desc',
         'upload_id',
-        'active'
+        'countries'
     ];
+
+    /**
+     * Attributes that should be cast to native types.
+     * @var array
+     */
+    protected $casts = [
+        'countries' => 'array'
+    ];
+
+    /**
+     * Set the countries attribute.
+     *
+     * @param $value
+     * @return string
+     */
+    public function setCountriesAttribute($value)
+    {
+        return $this->attributes['countries'] = json_encode($value);
+    }
 
     /**
      * Get the initiatives for the cause.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function initiatives()
+    public function types()
     {
-        return $this->hasMany(ProjectInitiative::class);
+        return $this->hasMany(ProjectType::class);
     }
 
     /**
@@ -51,6 +70,23 @@ class Cause extends Model
     public function image()
     {
         return $this->belongsTo(Upload::class, 'upload_id');
+    }
+
+    /**
+     * Get the project causes' countries.
+     *
+     * @return array
+     */
+    public function getCountries()
+    {
+        $countries = collect($this->countries)->map(function($country) {
+           return  [
+               'code' => $country,
+               'name' => country($country)
+           ];
+        });
+
+        return $countries->all();
     }
 
 }

@@ -25,6 +25,8 @@ Route::resource('interests', 'TripInterestsController');
 Route::get('reservations/{tab?}', 'ReservationsController@index')->where('tab', 'current|archived|dropped|prospects');
 Route::resource('reservations', 'ReservationsController');
 
+Route::resource('causes', 'ProjectCausesController');
+
 Route::resource('users', 'UsersController');
 
 Route::resource('uploads', 'UploadsController');

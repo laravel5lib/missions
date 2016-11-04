@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\v1\CauseRequest;
 use App\Http\Transformers\v1\CauseTransformer;
-use App\Models\v1\Cause;
+use App\Models\v1\ProjectCause;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CausesController extends Controller
+class ProjectCausesController extends Controller
 {
 
     /**
@@ -18,9 +18,9 @@ class CausesController extends Controller
 
     /**
      * CausesController constructor.
-     * @param Cause $cause
+     * @param ProjectCause $cause
      */
-    public function __construct(Cause $cause)
+    public function __construct(ProjectCause $cause)
     {
         $this->cause = $cause;
     }

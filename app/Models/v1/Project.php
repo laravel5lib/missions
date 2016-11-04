@@ -30,7 +30,7 @@ class Project extends Model
      * @var array
      */
     protected $fillable = [
-        'project_package_id',
+        'project_type_id',
         'rep_id',
         'sponsor_id',
         'sponsor_type',
@@ -40,6 +40,16 @@ class Project extends Model
         'launched_at',
         'completed_at'
     ];
+
+    /**
+     * Get the project's type.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function type()
+    {
+        return $this->belongsTo(ProjectType::class);
+    }
 
     /**
      * Notes attached to the project.

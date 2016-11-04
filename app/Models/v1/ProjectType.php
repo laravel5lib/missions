@@ -29,8 +29,7 @@ class ProjectType extends Model
     protected $fillable = [
         'name',
         'short_desc',
-        'upload_id',
-        'active'
+        'upload_id'
     ];
 
     /**
@@ -41,5 +40,25 @@ class ProjectType extends Model
     public function image()
     {
         return $this->belongsTo(Upload::class, 'upload_id');
+    }
+
+    /**
+     * Get the project type's cause.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function cause()
+    {
+        return $this->belongsTo(ProjectCause::class);
+    }
+
+    /**
+     * Get the project type's costs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function costs()
+    {
+        return $this->morphMany(Cost::class, 'cost_assignable');
     }
 }

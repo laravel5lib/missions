@@ -15402,7 +15402,7 @@ $fa-font-path: "~font-awesome/fonts/";*/
 
 .v-select.form-control .dropdown-toggle .form-control {
   font-size: 14px;
-  min-height: 40px !important;
+  min-height: 33px !important;
   height: 100%; }
 
 .v-select .open-indicator {
@@ -16065,6 +16065,66 @@ img.onenation-logo {
   @media screen and (max-width: 767px) {
     .profile-pic-panel {
       margin-top: 40px; } }
+
+/* Dashboard Styles */
+.circle-tile {
+  margin-bottom: 15px;
+  text-align: center; }
+  .circle-tile .circle-tile-heading {
+    background-color: #bcbcbc;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    color: #FFFFFF;
+    height: 80px;
+    margin: 0 auto -40px;
+    position: relative;
+    transition: all 0.3s ease-in-out 0s;
+    width: 80px; }
+  .circle-tile .circle-tile-heading .fa {
+    line-height: 80px; }
+  .circle-tile .circle-tile-content {
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+    padding-top: 50px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); }
+  .circle-tile .circle-tile-number {
+    color: #3e3e3e;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 5px 0 15px; }
+  .circle-tile .circle-tile-description {
+    color: #808080;
+    font-size: 10px;
+    line-height: 20px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2px; }
+  .circle-tile .circle-tile-name {
+    color: #3e3e3e;
+    font-size: 16px;
+    padding: 0 20px;
+    line-height: 25px;
+    font-weight: 400; }
+  .circle-tile .circle-tile-footer {
+    font-size: 12px;
+    background-color: #f7f7f7;
+    color: #bcbcbc;
+    display: block;
+    padding: 5px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    transition: all 0.3s ease-in-out 0s; }
+  .circle-tile .circle-tile-footer:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-decoration: none; }
+  .circle-tile .tile-img {
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.9); }
 
 /* Home Page */
 .home-half-section {

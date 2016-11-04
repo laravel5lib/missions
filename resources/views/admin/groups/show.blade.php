@@ -20,7 +20,7 @@
                         <li><a href="{{ Request::url() }}/edit">Edit</a></li>
                         {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
                         {{--<li role="separator" class="divider"></li>--}}
-                        {{--<li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>--}}
+                        <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
                     </ul>
                 </div>
             </div>
@@ -90,17 +90,19 @@
                             </div>
                 	  </div>
                 </div>
-                <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-8">
                 <notes type="groups"
                        id="{{ $group->id }}"
                        user_id="{{ auth()->user()->id }}"
                        :per_page="3">
                 </notes>
+            </div>
+            <div class="col-sm-4">
+                <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
             </div>
         </div>
     </div>

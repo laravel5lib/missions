@@ -2,18 +2,19 @@
     <div class="panel-heading">
         <h5 class="panel-header">Recent Donations</h5>
     </div>
-    <table class="table table-hover" style="min-height:220px;">
-        <tbody>
-        @foreach(auth()->user()->recentDonations() as $donation)
-            <tr>
-                <td class="text-success">${{ $donation->amount }}</td>
-                <td>{{ $donation->donor->name }}</td>
-                <td class="text-right text-muted">{{ $donation->created_at->diffForHumans() }}</td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-    <div class="panel-footer text-center">
-        <a class="btn btn-default-hollow btn-xs">See All</a>
+    <div style="height:250px;overflow:scroll;margin-top:-1px;">
+        <table class="table table-hover table-responsive">
+            <tbody>
+            @foreach(auth()->user()->recentDonations() as $donation)
+                <tr>
+                    <td style="padding:20px;"><h3 class="text-success" style="margin:0px;">${{ $donation->amount }}</h3><span class="small">{{ $donation->donor->name }}</span></td>
+                    <td class="text-right text-muted" style="padding:20px;vertical-align:middle;">{{ $donation->created_at->diffForHumans() }}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-footer text-center" style="padding:10px;">
+        <a class="small" style="color:#bcbcbc;" href="#">View All Donations</a>
     </div>
 </div>

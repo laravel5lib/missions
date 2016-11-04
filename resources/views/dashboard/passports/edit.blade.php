@@ -20,12 +20,10 @@
 <hr class="divider inv lg">
 <div class="container">
     <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8 col-sm-offset-2">
                 <passport-create-update :is-update="true" id="{{ $id }}"></passport-create-update>
-            </div>
-            <div class="col-sm-4">
-                <img src="/images/passport-placeholder.png" alt="" style="width: 100%;height: auto;">
             </div>
     </div>
 </div>
+<hr class="divider inv xlg">
 @endsection

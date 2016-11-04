@@ -9353,6 +9353,8 @@ a.thumbnail.active {
 
 .alert {
   padding: 15px;
+  padding-left: 22.5px;
+  padding-right: 22.5px;
   margin-bottom: 21px;
   border: 1px solid transparent;
   border-radius: 4px; }

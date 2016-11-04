@@ -8,19 +8,22 @@
 @endsection
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h1 class="text-muted text-center">My Visa <small>Edit</small></h1>
+<div class="white-header-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h3>My Visas <small>Edit</small></h3>
+                </div>
             </div>
         </div>
+</div>
+<hr class="divider inv lg">
+    <div class="container">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8 col-sm-offset-2">
                 <visa-create-update :is-update="true" id="{{ $id }}"></visa-create-update>
-            </div>
-            <div class="col-sm-4">
-                <img src="/images/passport-placeholder.png" alt="" style="width: 100%;height: auto;">
             </div>
         </div>
     </div>
+<hr class="divider inv xlg">
 @endsection

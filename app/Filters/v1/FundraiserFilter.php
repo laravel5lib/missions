@@ -43,7 +43,18 @@ class FundraiserFilter extends Filter
      */
     public function active()
     {
-        return $this->where('ended_at', '>=', Carbon::now());
+        return $this->where('ended_at', '>=', Carbon::now())
+                    ->where('started_at', '<=', Carbon::now());
+    }
+
+    /**
+     * Get archived fundraisers.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function archived()
+    {
+        return $this->where('ended_at', '<', Carbon::now());
     }
 
     /**

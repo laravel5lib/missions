@@ -26,14 +26,10 @@
 					<div class="panel panel-default">
 
 							<a @click="selectExisting(upload)" role="button">
-								<tooltip effect="scale" placement="top" :content="upload.name">
-									<img :src="upload.source + '?w=100&q=50'" :alt="upload.name" class="img-responsive">
+								<tooltip effect="scale" placement="top" content="Preview">
+									<img :src="upload.source + '?w=100&h=100&fit=crop-center&q=50'" :alt="upload.name" class="img-responsive">
 								</tooltip>
 							</a>
-
-						<div class="panel-body">
-							<span class="text-uppercase">{{upload.name}}</span>
-						</div> end panel-body
 						<div class="panel-footer">
 							<button type="button" class="btn btn-xs btn-block btn-primary" @click="selectExisting(upload)">Select</button>
 						</div>
@@ -44,13 +40,13 @@
 						<ul class="pagination pagination-sm">
 							<li :class="{ 'disabled': pagination.current_page == 1 }">
 								<a aria-label="Previous" @click="page=pagination.current_page-1">
-									<span aria-hidden="true">&laquo;</span>
+									<span aria-hidden="true">&laquo; Previous</span>
 								</a>
 							</li>
-							<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
+							<!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
 							<li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
 								<a aria-label="Next" @click="page=pagination.current_page+1">
-									<span aria-hidden="true">&raquo;</span>
+									<span aria-hidden="true">Next &raquo;</span>
 								</a>
 							</li>
 						</ul>

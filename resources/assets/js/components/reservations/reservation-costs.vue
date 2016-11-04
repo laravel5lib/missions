@@ -113,6 +113,7 @@
                 successMessage: '',
 
                 listedCosts: [],
+                originalCosts: [],
                 temporaryCosts: [],
 
                 preppedReservation: {}
@@ -269,6 +270,7 @@
 
                 this.getAvailableCosts();
                 this.listedCosts = reservation.costs.data;
+                this.originalCosts = jQuery.extend(true, {}, this.listedCosts);
             },
             getAvailableCosts(){
                 this.selectedCosts = [];
@@ -284,16 +286,15 @@
             },
             revert(){
                 this.temporaryCosts = [];
-                this.listedCosts = this.reservation.costs.data;
-                this.getAvailableCosts();
-                this.$root.$emit('Reservation:CostsReverted', this.reservation);
+                this.resource.get().then(function (response) {
+                    this.setReservationData(response.data.data);
+                });
             },
         },
         ready(){
             this.resource.get().then(function (response) {
                 this.setReservationData(response.data.data);
             });
-
         }
     }
 </script>

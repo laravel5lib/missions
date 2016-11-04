@@ -21,6 +21,9 @@
                 <div class="tab-content">
                     <div class="active tab-pane fade in" id="tab1">
                         <div class="row" v-if="fundraiser.hasOwnProperty('uploads')">
+                            <p class="lead text-center text-muted" v-if="fundraiser.uploads.data.length < 1">
+                                No media found. Add a video or image.
+                            </p>
                             <div class="col-sm-4 col-md-3" v-for="upload in fundraiser.uploads.data">
                                 <div class="thumbnail">
                                     <img :src="upload.type === 'video' ? 'https://placehold.it/150x150?text=Video' : upload.source" :alt="upload.name">

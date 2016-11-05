@@ -573,9 +573,6 @@
                 var params = this.getListSettings();
                 this.$http.get('donors', params).then(function (response) {
                     var self = this;
-                    _.each(response.data.data, function (donor) {
-                        donor.amount = donor.total_raised / donor.total_cost * 100
-                    }, this);
                     this.donors = response.data.data;
                     this.pagination = response.data.meta.pagination;
                 }).then(function () {

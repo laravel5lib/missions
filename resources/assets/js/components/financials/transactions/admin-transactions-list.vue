@@ -4,89 +4,40 @@
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
-                    <input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
-                           :debounce="250" placeholder="Tag, tag2, tag3...">
-                </div>
-                <div class="form-group">
-                    <v-select class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-                              :value.sync="groupsArr" :options="groupsOptions" label="name"
-                              placeholder="Filter Groups"></v-select>
-                </div>
-                <div class="form-group">
-                    <v-select class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
-                              :value.sync="usersArr" :options="usersOptions" label="name"
-                              placeholder="Filter Users"></v-select>
-                </div>
-                <div class="form-group" v-if="!tripId">
-                    <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-                              :value.sync="campaignObj" :options="campaignOptions" label="name"
-                              placeholder="Filter by Campaign"></v-select>
-                </div>
-                <div class="form-group">
-                    <select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
-                        <option value="">Any Genders</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
+                    <label>Type</label>
+                    <select class="form-control" v-model="filters.type">
+                        <option value="">All Types</option>
+                        <option value="donation">Donation</option>
+                        <option value="transfer">Transfer</option>
+                        <option value="payment">Payment</option>
+                        <option value="refund">Refund</option>
+                        <option value="fee">Fee</option>
                     </select>
                 </div>
-
                 <div class="form-group">
-                    <select class="form-control input-sm" v-model="filters.status" style="width:100%;">
-                        <option value="">Any Status</option>
-                        <option value="single">Single</option>
-                        <option value="married">Married</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <v-select class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
-                              :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
+                    <v-select class="form-control" id="donorFilter" :debounce="250" :on-search="getDonors"
+                              :value.sync="donorObj" :options="donorsOptions" label="name"
+                              placeholder="Filter by Donor"></v-select>
                 </div>
 
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-xs-6">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon">Age Min</span>
-                                <input type="number" class="form-control" number v-model="ageMin" min="0">
-                            </div>
+                        <div class="col-xs-12">
+                            <label>Amount</label>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="input-group input-group-sm">
+                        <div class="col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon">Min</span>
+                                <input type="number" class="form-control" v-model="filters.minAmount"/>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="input-group">
                                 <span class="input-group-addon">Max</span>
-                                <input type="number" class="form-control" number v-model="ageMax" max="120">
+                                <input type="number" class="form-control" v-model="filters.maxAmount"/>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="form-group" style="padding: 3px 20px;">
-                    <label class="control-label small">Travel Companions</label>
-                    <div>
-                        <label class="radio-inline">
-                            <input type="radio" name="companions" id="companions1" v-model="filters.hasCompanions" :value="null"> Any
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="companions" id="companions2" v-model="filters.hasCompanions" value="yes"> Yes
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="companions" id="companions3" v-model="filters.hasCompanions" value="no"> No
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-group" style="padding: 3px 20px;">
-                    <label class="control-label small">Passport</label>
-                    <div>
-                        <label class="radio-inline">
-                            <input type="radio" name="passports" id="passports1" v-model="filters.hasPassport" :value="null"> Any
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="passports" id="passports2" v-model="filters.hasPassport" value="yes"> Yes
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="passports" id="passports3" v-model="filters.hasPassport" value="no"> No
-                        </label>
                     </div>
                 </div>
 
@@ -118,22 +69,7 @@
                         <ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="given_names" :disabled="maxCheck('given_names')"> Given Names
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="surname" :disabled="maxCheck('surname')"> Surname
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="group" :disabled="maxCheck('group')"> Group
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="campaign" :disabled="maxCheck('campaign')"> Campaign
+                                    <input type="checkbox" v-model="activeFields" value="description" :disabled="maxCheck('description')"> Description
                                 </label>
                             </li>
                             <li>
@@ -143,37 +79,7 @@
                             </li>
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="total_raised" :disabled="maxCheck('total_raised')"> Amout Raised
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="percent_raised" :disabled="maxCheck('percent_failed')"> Percent Raised
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="registered" :disabled="maxCheck('registered')"> Registered On
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="gender" :disabled="maxCheck('gender')"> Gender
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="status" :disabled="maxCheck('status')"> Status
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="age" :disabled="maxCheck('age')"> Age
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="email" :disabled="maxCheck('email')"> Email
+                                    <input type="checkbox" v-model="activeFields" value="amount" :disabled="maxCheck('amount')"> Amount
                                 </label>
                             </li>
                             <li role="separator" class="divider"></li>
@@ -195,47 +101,27 @@
                         Export
                         <span class="fa fa-download"></span>
                     </button>
-                    <!--<a class="btn btn-primary btn-sm" href="reservations/create">New <i class="fa fa-plus"></i> </a>-->
+                    <!--<a class="btn btn-primary btn-sm" href="transactions/create">New <i class="fa fa-plus"></i> </a>-->
                 </form>
             </div>
         </div>
         <hr class="divider sm">
         <div>
             Active Filters:
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.tags.length" @click="filters.tags = []" >
-                Tags
+            <button type="button"class="btn btn-xs btn-default" v-show="filters.donor" @click="filters.donor = ''" >
+                Donor
                 <span class="badge">x</span>
             </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.user.length" @click="filters.user = []" >
-                Users
+            <button type="button"class="btn btn-xs btn-default" v-show="filters.minAmount" @click="filters.minAmount = ''" >
+                Min Amount
                 <span class="badge">x</span>
             </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.groups.length" @click="filters.groups = []" >
-                Groups
+            <button type="button"class="btn btn-xs btn-default" v-show="filters.maxAmount" @click="filters.maxAmount = ''" >
+                Max Amount
                 <span class="badge">x</span>
             </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
-                Campaign
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.gender.length" @click="filters.gender = ''" >
-                Gender
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.status.length" @click="filters.status = ''" >
-                Status
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.shirtSize.length" @click="filters.shirtSize = ''" >
-                Shirt Size
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.hasCompanions !== null" @click="filters.hasCompanions = null" >
-                Companions
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.hasPassport !== null" @click="filters.hasPassport = null" >
-                Passport
+            <button type="button"class="btn btn-xs btn-default" v-show="filters.type && filters.type.length" @click="filters.type = ''" >
+                Type
                 <span class="badge">x</span>
             </button>
         </div>
@@ -243,74 +129,35 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th v-if="isActive('given_names')" :class="{'text-primary': orderByField === 'given_names'}">
-                    Given Names
-                    <i @click="setOrderByField('given_names')" v-if="orderByField !== 'given_names'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'given_names'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('surname')" :class="{'text-primary': orderByField === 'surname'}">
-                    Surname
-                    <i @click="setOrderByField('surname')" v-if="orderByField !== 'surname'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'surname'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('group')" :class="{'text-primary': orderByField === 'trip.data.group.data.name'}">
-                    Group
-                    <i @click="setOrderByField('trip.data.group.data.name')" v-if="orderByField !== 'trip.data.group.data.name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.group.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('campaign')" :class="{'text-primary': orderByField === 'trip.data.campaign.data.name'}">
-                    Campaign
-                    <i @click="setOrderByField('trip.data.campaign.data.name')" v-if="orderByField !== 'trip.data.campaign.data.name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('type')" :class="{'text-primary': orderByField === 'trip.data.type'}">
+                <th v-if="isActive('type')" :class="{'text-primary': orderByField === 'type'}">
                     Type
-                    <i @click="setOrderByField('trip.data.type')" v-if="orderByField !== 'trip.data.type'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th v-if="isActive('total_raised')" :class="{'text-primary': orderByField === 'total_raised'}">
-                    $ Raised
-                    <i @click="setOrderByField('total_raised')" v-if="orderByField !== 'total_raised'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'total_raised'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                <th v-if="isActive('description')" :class="{'text-primary': orderByField === 'description'}">
+                    Description
+                    <i @click="setOrderByField('description')" v-if="orderByField !== 'description'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'description'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th v-if="isActive('percent_raised')" :class="{'text-primary': orderByField === 'percent_raised'}">
-                    % Raised
-                    <i @click="setOrderByField('percent_raised')" v-if="orderByField !== 'percent_raised'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'percent_raised'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('registered')">
-                    Registered On
-                </th>
-                <th v-if="isActive('gender')">
-                    Gender
-                </th>
-                <th v-if="isActive('status')">
-                    Status
-                </th>
-                <th v-if="isActive('age')">
-                    Age
-                </th>
-                <th v-if="isActive('email')">
-                    Email
+
+                <th v-if="isActive('amount')" :class="{'text-primary': orderByField === 'amount'}">
+                    Amount
+                    <i @click="setOrderByField('amount')" v-if="orderByField !== 'amount'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'amount'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
-                <td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
-                <td v-if="isActive('surname')" v-text="reservation.surname"></td>
-                <td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
-                <td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
-                <td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
-                <td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
-                <td v-if="isActive('percent_raised')">{{reservation.percent_raised|number '2'}}%</td>
-                <td v-if="isActive('registered')" v-text="reservation.created_at|moment 'll'"></td>
-                <td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
-                <td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
-                <td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
-                <td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
-                <td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-pencil"></i></a></td>
+            <tr v-for="transaction in transactions|filterBy search|orderBy orderByField direction">
+                <td v-if="isActive('type')">
+                    <span class="label label-default" v-text="transaction.type|capitalize"></span>
+                </td>
+                <td v-if="isActive('description')" v-text="transaction.description"></td>
+                <td v-if="isActive('amount')">
+                    <span v-text="transaction.amount|currency" :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}"></span>
+                </td>
+                <td><a href="/admin/transactions/{{ transaction.id }}"><i class="fa fa-cog"></i></a></td>
             </tr>
             </tbody>
             <tfoot>
@@ -337,27 +184,12 @@
             </tr>
             </tfoot>
         </table>
-        <modal title="Export Reservations List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
+        <modal title="Export Transactions List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
             <div slot="modal-body" class="modal-body">
                 <ul class="list-unstyled">
                     <li>
                         <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="given_names"> Given Names
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="surname"> Surname
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="group"> Group
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="campaign"> Campaign
+                            <input type="checkbox" v-model="exportSettings.fields" value="description"> Description
                         </label>
                     </li>
                     <li>
@@ -367,37 +199,7 @@
                     </li>
                     <li>
                         <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="total_raised"> Amout Raised
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="percent_raised"> Percent Raised
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="registered"> Registered On
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="gender"> Gender
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="status"> Status
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="age"> Age
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="email"> Email
+                            <input type="checkbox" v-model="exportSettings.fields" value="amount"> Amount
                         </label>
                     </li>
                 </ul>
@@ -417,15 +219,210 @@
 	}
 </style>
 <script type="text/javascript">
-	import vSelect from "vue-select";
-	import VueStrap from 'vue-strap/dist/vue-strap.min';
+    import vSelect from "vue-select";
+    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'admin-transactions-list',
         components: {vSelect, 'aside': VueStrap.aside, 'modal': VueStrap.modal},
+        props:{
+            storageName: {
+                type: String,
+                default: 'AdminTransactionsListConfig'
+            },
+        },
         data(){
-            return{
-                msg:'hello vue'
+            return {
+                transactions: [],
+                orderByField: 'description',
+                direction: 1,
+                page: 1,
+                per_page: 10,
+                perPageOptions: [5, 10, 25, 50, 100],
+                pagination: {},
+                search: '',
+                activeFields: ['description', 'type', 'amount'],
+                maxActiveFields: 3,
+
+                // filter vars
+                donorsOptions: [],
+                donorObj: null,
+                filters: {
+                    tags: [],
+                    donor: '',
+                    minAmount: null,
+                    maxAmount: null,
+                    type: null,
+                },
+                showFilters: false,
+                showExportModal: false,
+                exportSettings: {
+                    fields: [],
+                }
+
             }
         },
+        watch: {
+            // watch filters obj
+            'filters': {
+                handler: function (val) {
+                    console.log(val);
+                    this.searchTransactions();
+                },
+                deep: true
+            },
+            'donorObj': function (val) {
+                this.filters.donor = val ? val.id : '';
+                this.searchTransactions();
+            },
+            'direction': function (val) {
+                this.searchTransactions();
+            },
+            'tagsString': function (val) {
+                var tags = val.split(/[\s,]+/);
+                this.filters.tags = tags[0] !== '' ? tags : '';
+                this.searchTransactions();
+            },
+            'activeFields': function (val, oldVal) {
+                // if the orderBy field is removed from view
+                if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
+                    // default to first visible field
+                    this.orderByField = val[0];
+                }
+                this.updateConfig();
+            },
+            'search': function (val, oldVal) {
+                this.page = 1;
+                this.searchTransactions();
+            },
+            'page': function (val, oldVal) {
+                this.searchTransactions();
+            },
+            'per_page': function (val, oldVal) {
+                this.searchTransactions();
+            },
+
+        },
+        methods: {
+            updateConfig(){
+                localStorage[this.storageName] = JSON.stringify({
+                    activeFields: this.activeFields,
+                    maxActiveFields: this.maxActiveFields,
+                    per_page: this.per_page,
+                    filters: {
+                        tags: this.filters.tags,
+                        donor: this.filters.donor,
+                        minAmount: this.filters.minAmount,
+                        maxAmount: this.filters.maxAmount,
+                        type: this.filters.type,
+                    }
+                });
+
+            },
+            isActive(field){
+                return _.contains(this.activeFields, field);
+            },
+            maxCheck(field){
+                return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields
+            },
+            setOrderByField(field){
+                this.orderByField = field;
+                this.direction = 1;
+                this.searchTransactions();
+            },
+            resetFilter(){
+                $.extend(this, {
+                    orderByField: 'description',
+                    direction: 1,
+                    page: 1,
+                    per_page: 10,
+                    perPageOptions: [5, 10, 25, 50, 100],
+                    pagination: {},
+                    search: '',
+                    activeFields: ['description', 'type', 'amount'],
+                    maxActiveFields: 8,
+                    filters: {
+                        tags: [],
+                        donor: '',
+                        minAmount: null,
+                        maxAmount: null,
+                        type: '',
+                    }
+                });
+            },
+            getListSettings(){
+                var params = {
+                    include: '',
+                    search: this.search,
+                    per_page: this.per_page,
+                    page: this.page,
+                    sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
+                };
+
+
+                $.extend(params, this.filters);
+
+                return params;
+            },
+            getDonors(search, loading){
+                loading ? loading(true) : void 0;
+                this.$http.get('donors', { search: search}).then(function (response) {
+                    this.donorsOptions = response.data.data;
+                    loading ? loading(false) : void 0;
+                })
+            },
+            searchTransactions(){
+                var params = this.getListSettings();
+                this.$http.get('transactions', params).then(function (response) {
+                    var self = this;
+                    this.transactions = response.data.data;
+                    this.pagination = response.data.meta.pagination;
+                }).then(function () {
+                    this.updateConfig();
+                });
+            },
+            exportList(){
+                var params = this.getListSettings();
+                $.extend(params, this.exportSettings);
+                // Send to api route
+
+                this.$http.post('transactions/export', params).then(function (response) {
+                    console.log(response);
+                }, function (error) {
+                    console.log(error);
+                })
+            }
+        },
+        ready() {
+            // load view state
+            if (localStorage[this.storageName]) {
+                var config = JSON.parse(localStorage[this.storageName]);
+                this.filters = config.filters;
+            }
+            // populate
+            this.searchTransactions();
+
+            //Manually handle dropdown functionality to keep dropdown open until finished
+            $('.form-toggle-menu .dropdown-menu').on('click', function(event){
+                var events = $._data(document, 'events') || {};
+                events = events.click || [];
+                for(var i = 0; i < events.length; i++) {
+                    if(events[i].selector) {
+
+                        //Check if the clicked element matches the event selector
+                        if($(event.target).is(events[i].selector)) {
+                            events[i].handler.call(event.target, event);
+                        }
+
+                        // Check if any of the clicked element parents matches the
+                        // delegated event selector (Emulating propagation)
+                        $(event.target).parents(events[i].selector).each(function(){
+                            events[i].handler.call(this, event);
+                        });
+                    }
+                }
+                event.stopPropagation(); //Always stop propagation
+            });
+
+        }
     }
 </script>

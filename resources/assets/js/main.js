@@ -77,6 +77,9 @@ import adminUserDelete from './components/users/admin-user-delete.vue';
 import adminUploads from './components/uploads/admin-uploads-list.vue';
 import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
 import reconcileFund from './components/reconcile-fund.vue';
+import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
+import adminFundsList from './components/financials/funds/admin-funds-list.vue';
+import adminTransactionsList from './components/financials/transactions/admin-transactions-list.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -325,7 +328,10 @@ new Vue({
         adminUserDelete,
         adminUploads,
         adminUploadCreateUpdate,
-        reconcileFund
+        reconcileFund,
+        adminDonorsList,
+        adminFundsList,
+        adminTransactionsList,
     ],
     http: {
         headers: {

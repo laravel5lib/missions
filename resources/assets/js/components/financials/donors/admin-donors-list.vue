@@ -3,17 +3,22 @@
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
+                <div class="form-group">
+                    <input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
+                           :debounce="250" placeholder="Tag, tag2, tag3...">
+                </div>
+
                 <legend>By Designation</legend>
                 <div class="form-group">
                     <v-select class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
                               :value.sync="groupObj" :options="groupsOptions" label="name"
                               placeholder="Filter by Group"></v-select>
                 </div>
-                <!--<div class="form-group">
+                <div class="form-group">
                     <v-select class="form-control" id="reservationFilter" :debounce="250" :on-search="getReservations"
                               :value.sync="reservationObj" :options="reservationsOptions" label="given_names"
                               placeholder="Filter by Reservation"></v-select>
-                </div>-->
+                </div>
                 <div class="form-group">
                     <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
                               :value.sync="campaignObj" :options="campaignsOptions" label="name"
@@ -24,11 +29,11 @@
                               :value.sync="causeObj" :options="causesOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>
-                <!--<div class="form-group">
+                <div class="form-group">
                     <v-select class="form-control" id="tripsFilter" :debounce="250" :on-search="getTrips"
                               :value.sync="tripObj" :options="tripsOptions" label="name"
                               placeholder="Filter by Trip"></v-select>
-                </div>-->
+                </div>
                 <div class="form-group">
                     <v-select class="form-control" id="projectsFilter" :debounce="250" :on-search="getProjects"
                               :value.sync="projectObj" :options="projectsOptions" label="name"
@@ -340,6 +345,7 @@
                 projectsOptions: [],
                 projectObj: null,
                 filters: {
+                    tags: [],
                     reservation:'',
                     group:'',
                     campaign:'',
@@ -403,6 +409,11 @@
             'direction': function (val) {
                 this.searchDonors();
             },
+            'tagsString': function (val) {
+                var tags = val.split(/[\s,]+/);
+                this.filters.tags = tags[0] !== '' ? tags : '';
+                this.searchDonors();
+            },
             'activeFields': function (val, oldVal) {
                 // if the orderBy field is removed from view
                 if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
@@ -437,6 +448,7 @@
                     tripObj: this.tripObj,
                     projectObj: this.projectObj,
                     filters: {
+                        tags:this.filters.tags,
                         reservation: this.filters.reservation,
                         group: this.filters.group,
                         campaign: this.filters.campaign,
@@ -474,6 +486,7 @@
                     activeFields: ['name', 'company', 'email', 'phone', 'zip', 'total_donated'],
                     maxActiveFields: 8,
                     filters: {
+                        tags: '',
                         reservation:'',
                         group:'',
                         campaign:'',
@@ -518,7 +531,7 @@
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
                 this.$http.get('campaigns', { search: search}).then(function (response) {
-                    this.campaignOptions = response.data.data;
+                    this.campaignsOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -531,8 +544,11 @@
             },
             getTrips(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('trips', { search: search}).then(function (response) {
+                this.$http.get('trips', { search: search, include: 'group'}).then(function (response) {
                     this.tripsOptions = response.data.data;
+                    _.each(this.tripsOptions, function (trip) {
+                        trip.name = trip.type + ' | ' + trip.country_name + ' | ' + trip.group.data.name;
+                    });
                     loading ? loading(false) : void 0;
                 })
             },
@@ -540,6 +556,9 @@
                 loading ? loading(true) : void 0;
                 this.$http.get('projects', { search: search}).then(function (response) {
                     this.projectsOptions = response.data.data;
+                    _.each(this.projectsOptions, function (project) {
+                        project.name = project.plaque.prefix + ' ' + project.plaque.message;
+                    });
                     loading ? loading(false) : void 0;
                 })
             },

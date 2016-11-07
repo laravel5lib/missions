@@ -268,7 +268,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
 	export default{
 		name: 'basic-info',

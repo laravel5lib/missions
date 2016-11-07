@@ -137,7 +137,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	var marked = require('marked');
 
 	import vSelect from "vue-select"

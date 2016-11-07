@@ -77,7 +77,7 @@
 
 	.step1 {}
 </style>
-<script>
+<script type="text/javascript">
 	import login from '../login.vue';
 	import tos from './registration/tos.vue';
 	import roca from './registration/roca.vue';
@@ -86,7 +86,6 @@
 	import paymentDetails from './registration/payment-details.vue';
 	import deadlineAgreement from './registration/deadline-agreement.vue';
 	import review from './registration/review.vue';
-	import VueStrap from 'vue-strap/dist/vue-strap.min';
 	export default{
 		name: 'trip-registration-wizard',
 		props: ['tripId', 'stripeKey'],
@@ -276,7 +275,6 @@
 			'step6': paymentDetails,
 			'step7': deadlineAgreement,
 			'step8': review,
-			'spinner': VueStrap.spinner
 		},
 		created(){
 			// login component skipped for now

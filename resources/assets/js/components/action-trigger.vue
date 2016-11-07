@@ -1,7 +1,7 @@
 <template>
     <a class="btn btn-primary" @click="execute">{{text}} <i v-if="icon" :class="icon"></i></a>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'action-trigger',
         props: {

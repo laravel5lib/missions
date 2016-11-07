@@ -302,7 +302,7 @@
 		margin-bottom: 3px;
 	}
 </style>
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
 	export default{
         name: 'admin-users-list',

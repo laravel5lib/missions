@@ -133,12 +133,10 @@
         </modal>
     </div>
 </template>
-<script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
+<script type="text/javascript">
     var marked = require('marked');
     export default{
         name: 'user-profile-stories',
-        components: {'modal': VueStrap.modal},
         props:['id', 'authId'],
         data(){
             return{

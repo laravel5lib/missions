@@ -305,10 +305,9 @@
 </style>
 <script type="text/javascript">
     import vSelect from "vue-select";
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'admin-donors-list',
-        components: {vSelect, 'aside': VueStrap.aside, 'modal': VueStrap.modal},
+        components: {vSelect},
         props:{
             storageName: {
                 type: String,

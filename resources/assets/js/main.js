@@ -123,7 +123,7 @@ Vue.component('popover', VueStrap.popover);
 Vue.component('tabs', VueStrap.tabs);
 Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
-Vue.component('v-select', require('vue-select'));
+// Vue.component('vSelect', require('vue-select'));
 
 
 Vue.http.options.root = '/api';

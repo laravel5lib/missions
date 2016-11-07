@@ -215,11 +215,10 @@
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     export default{
         name: 'medical-create-update',
-        components: {vSelect, 'upload-create-update': uploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
+        components: {vSelect, 'upload-create-update': uploadCreateUpdate},
         props: {
             isUpdate: {
                 type:Boolean,

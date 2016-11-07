@@ -36,7 +36,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/javascript">
     export default{
         name: 'trip-details-missionaries',
         props: {

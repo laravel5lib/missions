@@ -31,11 +31,10 @@
 
 <script type="text/javascript">
     // inmport vSelect from 'vue-select';
-    // import VueStrap from 'vue-strap/dist/vue-strap.min'
     export default{
         name: 'reservation-dues',
         props: ['id'],
-        // components:{ vSelect, 'modal': VueStrap.modal},
+        // components:{ vSelect },
         data(){
             return{
                 reservation: null,

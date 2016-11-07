@@ -91,7 +91,7 @@
         </table>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'admin-trip-reservations',
         props: ['tripId'],

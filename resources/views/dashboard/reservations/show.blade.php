@@ -30,6 +30,21 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
+
+                @unless(! $reservation->rep)
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Your Missions.Me Rep</h5>
+                    </div>
+                    <div class="panel-body">
+                        <p><img src="{{ image($reservation->rep->avatar->source.'?w=50&h=50') }}" /></p>
+                        <li>Name: {{ $reservation->rep->name }}</li>
+                        <li>Phone: {{ $reservation->rep->phone_one }}</li>
+                        <li>Email: {{ $reservation->rep->email }}</li>
+                    </div>
+                </div>
+                @endunless
+
                 @include('dashboard.reservations.layouts.menu', [
                 'links' => config('navigation.dashboard.reservation')
                 ])

@@ -54,11 +54,13 @@
                     <div class="panel-heading">
                         <h5 class="panel-header">Transactions</h5>
                     </div>
-                    <div class="list-group">
+                    <admin-transactions-list fund="{{ $fund->id }}" storage-name="AdminFundTransactionsConfig"></admin-transactions-list>
+
+                    {{--<div class="list-group">
                         <div class="list-group-item">
                             ...
                         </div>
-                    </div>
+                    </div>--}}
                 </div>
             </div>
         </div>

@@ -54,7 +54,7 @@
         </div>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     var marked = require('marked');
     export default{
         name:'user-profile-fundraisers-donors',

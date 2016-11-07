@@ -126,13 +126,8 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'notes',
-        components: {
-            'alert': VueStrap.alert,
-            'modal': VueStrap.modal
-        },
         props: {
             'type': {
                 type: String

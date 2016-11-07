@@ -325,10 +325,9 @@
 
 <script>
     import vSelect from 'vue-select';
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
     export default{
 		name: 'groups',
-        components: { vSelect, 'alert': VueStrap.alert },
+        components: { vSelect },
         data(){
             return{
                 // logic vars

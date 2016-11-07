@@ -136,11 +136,9 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
     var marked = require('marked');
     export default{
         name: 'fundraisers-stories',
-        components: {'modal': VueStrap.modal},
         props:['id', 'sponsorId', 'authId'],
         data(){
             return{

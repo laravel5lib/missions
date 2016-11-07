@@ -91,11 +91,10 @@
 
 <script type="text/javascript">
     import vSelect from 'vue-select';
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
     export default{
         name: 'reservation-costs',
         props: ['id'],
-        components: {vSelect, 'modal': VueStrap.modal, 'alert': VueStrap.alert},
+        components: {vSelect},
         data(){
             return {
                 reservation: null,

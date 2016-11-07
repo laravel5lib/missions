@@ -288,7 +288,7 @@
 	</div><!-- end panel-body -->
 </template>
 
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
 	module.exports = {
 		name: 'login',

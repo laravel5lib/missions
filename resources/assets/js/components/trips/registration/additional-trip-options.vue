@@ -21,7 +21,7 @@
         </div>
     </div>
 </template>
-<script>
+<script type="text/javascript">
 	export default{
 		name: 'additional-trip-options',
 		data(){

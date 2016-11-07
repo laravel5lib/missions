@@ -183,11 +183,10 @@
 </template>
 <script>
 	import vSelect from "vue-select";
-	import VueStrap from 'vue-strap/dist/vue-strap.min';
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
 	export default{
 		name: 'campaign-edit',
-		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
+		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate},
 		props: ['campaignId'],
 		data(){
 			return {

@@ -38,7 +38,7 @@
 
 	.step1 {}
 </style>
-<script>
+<script type="text/javascript">
 	import details from './create/details.vue';
 	import settings from './create/settings.vue';
 	import pricing from './create/pricing.vue';

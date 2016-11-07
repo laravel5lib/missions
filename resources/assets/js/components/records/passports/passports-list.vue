@@ -59,10 +59,8 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'passports-list',
-        components: {'modal': VueStrap.modal},
         data(){
             return{
                 passports: [],

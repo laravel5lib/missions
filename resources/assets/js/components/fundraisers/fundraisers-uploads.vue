@@ -114,12 +114,11 @@
     }
 </style>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'fundraisers-uploads',
         props: ['id', 'sponsorId', 'authId'],
-        components: {'upload-create-update': uploadCreateUpdate, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
+        components: {'upload-create-update': uploadCreateUpdate},
         data(){
             return{
                 fundraiser: {},

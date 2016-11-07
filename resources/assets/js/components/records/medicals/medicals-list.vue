@@ -54,10 +54,8 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'medicals-list',
-        components: {'modal': VueStrap.modal},
         data(){
             return{
                 medical_releases: [],

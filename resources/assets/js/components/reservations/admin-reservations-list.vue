@@ -418,10 +418,9 @@
 </style>
 <script type="text/javascript">
 	import vSelect from "vue-select";
-	import VueStrap from 'vue-strap/dist/vue-strap.min';
 	export default{
         name: 'admin-reservations-list',
-		components: {vSelect, 'aside': VueStrap.aside, 'modal': VueStrap.modal},
+		components: {vSelect},
 		props:{
 			tripId: {
 				type: String,
@@ -704,7 +703,22 @@
 			// populate
             this.getGroups();
             this.getCampaigns();
-            this.searchReservations();
+
+			// assign values from url search
+			if (window.location.search !== '') {
+				_.each(location.search.substr(1).split('&'), function (search) {
+					var arr = search.split('=');
+					switch (arr[0]) {
+						case 'campaign':
+							this.$http.get('campaigns/' + arr[1]).then(function (response) {
+								this.campaignObj = response.data.data;
+							});
+							// this.campaignObj = _.findWhere(this.campaignOptions, {id: arr[1]})
+					}
+				}.bind(this));
+			}
+
+			this.searchReservations();
 
 			//Manually handle dropdown functionality to keep dropdown open until finished
 			$('.form-toggle-menu .dropdown-menu').on('click', function(event){

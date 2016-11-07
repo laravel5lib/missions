@@ -33,11 +33,10 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'reservation-avatar',
-        components: {'upload-create-update': uploadCreateUpdate, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
+        components: {'upload-create-update': uploadCreateUpdate},
         props: ['id'],
         data(){
             return{

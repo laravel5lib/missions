@@ -150,10 +150,9 @@
 </template>
 <script>
     import vSelect from "vue-select";
-    import VueStrap from "vue-strap/dist/vue-strap.min";
     export default{
         name: 'group-edit',
-        components: { vSelect, 'alert': VueStrap.alert, 'modal': VueStrap.modal },
+        components: { vSelect },
         props: ['groupId', 'managing'],
         data(){
             return {

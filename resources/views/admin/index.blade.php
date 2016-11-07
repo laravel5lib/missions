@@ -20,6 +20,8 @@
         <h4>Current Numbers</h4>
         <hr class="divider lg">
       </div>
+    </div>
+    <div class="row">
       @foreach($campaigns->active()->get() as $campaign)
       <div class="col-lg-3 col-sm-6">
         <div class="circle-tile ">
@@ -35,6 +37,7 @@
       @endforeach
     </div>
     <div class="row">
+      <hr class="divider inv">
       <div class="col-xs-12">
         <h4>Latest Records</h4>
         <hr class="divider lg">

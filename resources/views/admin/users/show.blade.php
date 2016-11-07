@@ -11,10 +11,10 @@
                 <div class="col-sm-4">
                     <hr class="divider inv sm">
                     <div class="btn-group pull-right">
-                        <a href="/admin/users" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></a>
-                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a href="/admin/users" class="btn btn-primary"><i class="fa fa-chevron-left"></i></a>
+                        <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Action <span class="caret"></span>
-                        </button>
+                        </a>
                         <ul class="dropdown-menu">
                             <li><a href="create">New</a></li>
                             <li><a href="{{ Request::url() }}/edit">Edit</a></li>

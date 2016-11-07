@@ -70,6 +70,14 @@ class Reservation extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rep()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * Get the trip that owns the reservation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

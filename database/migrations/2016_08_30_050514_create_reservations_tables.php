@@ -28,12 +28,15 @@ class CreateReservationsTables extends Migration
             $table->string('state', 100)->nullable();
             $table->string('zip', 15)->nullable();
             $table->string('country_code', 2)->default('us');
+            $table->string('arrival_designation')->nullable();
             $table->uuid('user_id')->index();
             $table->uuid('trip_id')->index();
             $table->uuid('rep_id')->index()->nullable();
             $table->uuid('passport_id')->index()->nullable();
             $table->uuid('visa_id')->index()->nullable();
             $table->uuid('medical_release_id')->index()->nullable();
+            $table->uuid('testimony_id')->index()->nullable();
+            $table->uuid('recommendation_id')->index()->nullable();
             $table->uuid('avatar_upload_id')->nullable();
             $table->integer('companion_limit')->unsigned()->default(0);
             $table->timestamps();

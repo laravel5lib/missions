@@ -182,10 +182,9 @@
 </style>
 <script>
 	import vSelect from "vue-select";
-	import VueStrap from 'vue-strap/dist/vue-strap.min';
 	export default{
         name: 'dashboard-group-reservations',
-		components: {vSelect, 'aside': VueStrap.aside},
+		components: {vSelect},
 		props:{
 			tripId: {
 				type: String,

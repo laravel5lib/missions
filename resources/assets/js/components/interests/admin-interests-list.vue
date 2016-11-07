@@ -130,10 +130,9 @@
 </template>
 <script>
     import vSelect from "vue-select";
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'admin-interests-list',
-        components: {vSelect, 'aside': VueStrap.aside},
+        components: {vSelect},
         data(){
             return{
                 interests: [],

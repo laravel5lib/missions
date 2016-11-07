@@ -114,6 +114,11 @@
                 /*if (val.hasOwnProperty('url') && oldVal !== null && val.url !== oldVal.url) {
                  debugger;
                  }*/
+            },
+            'fundraiser.url': function() {
+                debugger;
+                // checkbox active state has changed
+                //this.block.someotherprop.changeme = 5;
             }
         },
         filters: {
@@ -136,6 +141,11 @@
                     if (response.data.data.length) {
                         this.validUrl = response.data.data[0].id === this.fundraiser.id;
                     } else {
+                        this.validUrl = true;
+                    }
+
+                    // validat empty url string for private fundraisers
+                    if (this.fundraiser.public === false && this.fundraiser.url === '') {
                         this.validUrl = true;
                     }
                     this.checkingUrl = false;

@@ -29,13 +29,7 @@
     </div>
     <hr class="divider inv lg">
     <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                ...
-            </div>
-            <div class="col-md-6">
-                ...
-            </div>
+            <project-type-editor id="{{ $type->id }}"></project-type-editor>
         </div>
     </div>
 @endsection

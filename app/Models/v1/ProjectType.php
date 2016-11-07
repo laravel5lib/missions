@@ -29,6 +29,7 @@ class ProjectType extends Model
     protected $fillable = [
         'name',
         'short_desc',
+        'country_code',
         'upload_id'
     ];
 
@@ -70,5 +71,15 @@ class ProjectType extends Model
     public function costs()
     {
         return $this->morphMany(Cost::class, 'cost_assignable');
+    }
+
+    /**
+     * Get all the project type's active costs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function activeCosts()
+    {
+        return $this->costs()->active();
     }
 }

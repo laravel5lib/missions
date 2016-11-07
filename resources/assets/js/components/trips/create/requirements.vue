@@ -134,7 +134,8 @@
 					'Credentials',
 					'Minor Release',
 					'Immunization',
-					'Itinerary'
+					'Itinerary',
+					'Arrival Designation'
 				],
 				toggleNewRequirement: false,
 				attemptedAddRequirement: false,

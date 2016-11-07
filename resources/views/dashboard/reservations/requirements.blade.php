@@ -24,25 +24,31 @@
                     </h5>
                 </div>
                 <div class="panel-body">
-                        @if($requirement->name === 'Medical Release')
+                        @if($requirement->document_type === 'medical_releases')
                             <reservations-medical-releases-manager
                                     reservation-id="{{ $reservation->id }}"
                                     medical-release-id="{{ $reservation->medical_release_id }}">
                             </reservations-medical-releases-manager>
                         @endif
 
-                        @if($requirement->name === 'Passport')
+                        @if($requirement->document_type === 'passports')
                             <reservations-passports-manager
                                     reservation-id="{{ $reservation->id }}"
                                     passport-id="{{ $reservation->passport_id }}">
                             </reservations-passports-manager>
                         @endif
 
-                        @if($requirement->name === 'Visa')
+                        @if($requirement->document_type === 'visas')
                             <reservations-visas-manager
                                     reservation-id="{{ $reservation->id }}"
                                     visa-id="{{ $reservation->passport_id }}">
                             </reservations-visas-manager>
+                        @endif
+
+                        @if($requirement->document_type === 'arrival_designation')
+                            <reservations-arrival-designation
+                                    reservation-id="{{ $reservation->id }}">
+                            </reservations-arrival-designation>
                         @endif
                 </div>
             </div>

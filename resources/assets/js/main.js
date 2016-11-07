@@ -36,6 +36,7 @@ import reservationFunding from './components/reservations/reservation-funding.vu
 import reservationsPassportsManager from './components/reservations/reservations-passports-manager.vue';
 import reservationsMedicalReleasesManager from './components/reservations/reservations-medical-releases-manager.vue';
 import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
+import reservationsArrivalDesignation from './components/reservations/reservations-arrival-designation.vue';
 import userSettings from './components/users/user-settings.vue';
 import userProfileCountries from './components/users/user-profile-countries.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
@@ -308,6 +309,7 @@ new Vue({
         reservationsPassportsManager,
         reservationsMedicalReleasesManager,
         reservationsVisasManager,
+        reservationsArrivalDesignation,
         userSettings,
         userProfileCountries,
         userProfileStories,

@@ -27,6 +27,7 @@ Route::resource('reservations', 'ReservationsController');
 
 Route::resource('causes', 'ProjectCausesController');
 Route::resource('causes.types', 'ProjectTypesController');
+Route::resource('projects', 'ProjectsController');
 
 Route::resource('users', 'UsersController');
 

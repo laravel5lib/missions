@@ -35,6 +35,7 @@ class CreateProjectsTables extends Migration
 
         Schema::create('projects', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('name');
             $table->uuid('project_type_id')->index();
             $table->uuid('rep_id')->index()->nullable();
             $table->uuid('sponsor_id')->index();

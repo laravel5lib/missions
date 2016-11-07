@@ -931,6 +931,7 @@ $factory->define(App\Models\v1\ProjectType::class, function(Faker\Generator $fak
  */
 $factory->define(App\Models\v1\Project::class, function(Faker\Generator $faker) {
     return [
+        'name' => $faker->sentence(3),
         'project_type_id' => $faker->randomElement(App\Models\v1\ProjectType::pluck('id')->toArray()),
         'rep_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
         'sponsor_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),

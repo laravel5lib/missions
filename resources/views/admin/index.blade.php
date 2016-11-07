@@ -16,91 +16,79 @@
   <hr class="divider inv lg">
   <div class="container">
     <div class="row">
-      <div class="col-xs-12"><h3>Current Numbers</h3></div>
-      <div class="col-md-4">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h5 class="panel-header">Reservations</h5>
+      <div class="col-xs-12">
+        <h4>Current Numbers</h4>
+        <hr class="divider lg">
+      </div>
+      @foreach($campaigns->active()->get() as $campaign)
+      <div class="col-lg-3 col-sm-6">
+        <div class="circle-tile ">
+          <a href="#"><div class="circle-tile-heading"><img class="img-responsive img-circle" src="{{ image($campaign->avatar->source) }}"></div></a>
+          <div class="circle-tile-content">
+            <div class="circle-tile-description">Reservations</div>
+            <div class="circle-tile-name">{{ $campaign->name }}</div>
+            <div class="circle-tile-number">{{ $campaign->reservationsCount() }}</div>
+            <a class="circle-tile-footer" href="#">View All</a>
           </div>
-          <table class="table table-hover">
-            <tbody>
-            @foreach($campaigns->active()->get() as $campaign)
-              <tr>
-                <td>{{ $campaign->name }}</td>
-                <td class="text-right">{{ $campaign->reservationsCount() }}</td>
-              </tr>
-            @endforeach
-            </tbody>
-          </table>
         </div>
       </div>
+      @endforeach
     </div>
-
     <div class="row">
-
-      <div class="col-xs-12"><h3>Latest Records</h3></div>
-
+      <div class="col-xs-12">
+        <h4>Latest Records</h4>
+        <hr class="divider lg">
+      </div>
       <div class="col-md-6">
-
-        <div class="panel panel-info">
+        <div class="panel panel-default">
           <div class="panel-heading">
-            <div class="row">
-              <div class="col-xs-6">
-                <h5 class="panel-header">Newest Prospects</h5>
-              </div>
-              <div class="col-xs-6 text-right">
-                <a href="{{ url('/admin/reservations/prospects') }}" class="btn btn-white-hollow btn-xs">See All</a>
-              </div>
-            </div>
+            <h5>Newest Prospects</h5>
           </div>
           <table class="table table-hover">
             <tbody>
             @foreach($interests->latest()->take(5)->get() as $interest)
               <tr>
-                <td>{{ $interest->name }}</td>
-                <td>
+                <td style="padding:5px 15px;vertical-align:middle;font-size:12px;">{{ $interest->name }}</td>
+                <td style="padding:5px 15px;vertical-align:middle;font-size:12px;">
                   {{ $interest->trip->campaign->name }}
-                  <br /><small>{{ $interest->trip->group->name }}</small>
+                  <br /><small class="text-muted">{{ $interest->trip->group->name }}</small>
                 </td>
-                <td>
-                  <small class="text-muted">{{ $interest->created_at->diffForHumans() }}</small>
+                <td style="padding:5px 15px;vertical-align:middle;line-height:12px;">
+                  <small class="text-muted" style="font-size:10px;">{{ $interest->created_at->diffForHumans() }}</small>
                 </td>
               </tr>
               @endforeach
             </tbody>
           </table>
+          <div class="panel-footer text-center" style="padding:10px;">
+            <a class="small" style="color:#bcbcbc;" href="{{ url('/admin/reservations/prospects') }}">View All Prospects</a>
+          </div><!-- end panel-footer -->
         </div>
       </div>
-
       <div class="col-md-6">
-
-        <div class="panel panel-success">
+        <div class="panel panel-default">
           <div class="panel-heading">
-            <div class="row">
-              <div class="col-xs-6">
-                <h5 class="panel-header">Newest Reservations</h5>
-              </div>
-              <div class="col-xs-6 text-right">
-                <a href="{{ url('/admin/reservations/current') }}" class="btn btn-white-hollow btn-xs">See All</a>
-              </div>
-            </div>
+            <h5>Newest Reservations</h5>
           </div>
           <table class="table table-hover">
             <tbody>
             @foreach($reservations->current()->latest()->take(5)->get() as $reservation)
               <tr>
-                <td>{{ $reservation->given_names }}</td>
-                <td>
+                <td style="padding:5px 15px;vertical-align:middle;font-size:12px;">{{ $reservation->given_names }}</td>
+                <td style="padding:5px 15px;vertical-align:middle;font-size:12px;">
                   {{ $reservation->trip->campaign->name }}
-                  <br /><small>{{ $reservation->trip->group->name }}</small>
+                  <br /><small class="text-muted">{{ $reservation->trip->group->name }}</small>
                 </td>
-                <td>
-                  <small class="text-muted">{{ $reservation->created_at->diffForHumans() }}</small>
+                <td style="padding:5px 15px;vertical-align:middle;line-height:12px;">
+                  <small class="text-muted" style="font-size:10px;">{{ $reservation->created_at->diffForHumans() }}</small>
                 </td>
               </tr>
             @endforeach
             </tbody>
           </table>
+          <div class="panel-footer text-center" style="padding:10px;">
+            <a class="small" style="color:#bcbcbc;" href="{{ url('/admin/reservations/current') }}">View All Reservations</a>
+          </div>
         </div>
       </div>
 

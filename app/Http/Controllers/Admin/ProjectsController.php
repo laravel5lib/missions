@@ -25,10 +25,12 @@ class ProjectsController extends Controller
         $this->project = $project;
     }
 
-    public function index($tab = null)
+    public function show($id)
     {
-        $this->authorize('view', $this->project);
+        $this->authorize('manage-projects');
 
-        return view('admin.projects.index', compact('tab'));
+        $project = $this->project->findOrFail($id);
+
+        return view('admin.causes.projects.show', compact('project'));
     }
 }

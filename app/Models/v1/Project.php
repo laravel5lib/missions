@@ -42,13 +42,23 @@ class Project extends Model
     ];
 
     /**
+     * Get the project's sponsor.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function sponsor()
+    {
+        return $this->morphTo('sponsor');
+    }
+
+    /**
      * Get the project's type.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function type()
     {
-        return $this->belongsTo(ProjectType::class);
+        return $this->belongsTo(ProjectType::class, 'project_type_id');
     }
 
     /**

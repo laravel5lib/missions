@@ -23,7 +23,6 @@
     "video.js": "^5.11.7",
     "videojs-vimeo": "^2.0.2",
     "videojs-youtube": "^2.1.1",
-    "vue-bootstrap-pagination": "^1.11.0",
     "vue-resource": "^0.7.4",
     "vue-select": "^1.3.3",
     "vue-strap": "^1.1.29",

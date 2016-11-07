@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import login from './components/login.vue';
+import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
 import actionTrigger from './components/action-trigger.vue';
 import donate from './components/donate.vue';
@@ -110,7 +111,7 @@ Vue.use(require('vue-resource'));
 // Vue Validator
 Vue.use(require('vue-validator'));
 // Global Components
-Vue.component('pagination', require('vue-bootstrap-pagination'));
+Vue.component('pagination', pagination);
 Vue.component('modal', VueStrap.modal);
 Vue.component('accordion', VueStrap.accordion);
 Vue.component('alert', VueStrap.alert);

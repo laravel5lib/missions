@@ -27,6 +27,7 @@ import visasList from './components/records/visas/visas-list.vue';
 import medicalsList from './components/records/medicals/medicals-list.vue';
 import passportsList from './components/records/passports/passports-list.vue';
 import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
+import essaysList from './components/records/essays/essays-list.vue';
 import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
 import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
 import reservationAvatar from './components/reservations/reservation-avatar.vue';
@@ -296,6 +297,7 @@ new Vue({
         //dashboard components
         recordsList,
         passportsList,
+        essaysList,
         passportCreateUpdate,
         visasList,
         visaCreateUpdate,

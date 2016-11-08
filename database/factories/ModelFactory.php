@@ -966,3 +966,15 @@ $factory->define(App\Models\v1\Project::class, function(Faker\Generator $faker) 
         'launched_at' => $faker->dateTimeThisYear('+ 1 year')
     ];
 });
+
+/*
+ * Essay Factory
+ */
+$factory->define(App\Models\v1\Essay::class, function(Faker\Generator $faker) {
+    return [
+        'author_name' => $faker->firstName . ' ' . $faker->lastName,
+        'user_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
+        'subject' => 'Testimony',
+        'content' => json_decode(file_get_contents(resource_path('assets/sample_testimony.json')))
+    ];
+});

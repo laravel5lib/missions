@@ -77,7 +77,7 @@ import adminUsersList from './components/users/admin-users-list.vue';
 import adminUserCreate from './components/users/admin-user-create.vue';
 import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
-import adminUploads from './components/uploads/admin-uploads-list.vue';
+import adminUploadsList from './components/uploads/admin-uploads-list.vue';
 import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
 import reconcileFund from './components/reconcile-fund.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
@@ -345,7 +345,7 @@ new Vue({
         adminUserCreate,
         adminUserEdit,
         adminUserDelete,
-        adminUploads,
+        adminUploadsList,
         adminUploadCreateUpdate,
         reconcileFund,
         adminDonorsList,

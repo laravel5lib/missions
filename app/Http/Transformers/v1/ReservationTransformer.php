@@ -20,7 +20,7 @@ class ReservationTransformer extends TransformerAbstract
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
         'fundraisers', 'member', 'passport', 'visa', 'dues',
-        'medicalRelease', 'fund'
+        'medicalRelease', 'fund', 'testimony'
     ];
 
     /**
@@ -277,6 +277,15 @@ class ReservationTransformer extends TransformerAbstract
         if ( ! $passport) return null;
 
         return $this->item($passport, new PassportTransformer);
+    }
+
+    public function includeTestimony(Reservation $reservation)
+    {
+        $testimony = $reservation->testimony;
+
+        if ( ! $testimony) return null;
+
+        return $this->item($testimony, new EssayTransformer);
     }
 
     public function includeVisa(Reservation $reservation)

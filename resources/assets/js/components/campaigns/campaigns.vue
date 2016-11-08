@@ -295,8 +295,7 @@
       </div><!-- end container -->
     </div><!-- end dark-bg-primary -->
 </template>
-
-<script>
+<script type="text/javascript">
     export default{
 		name: 'campaigns',
         data(){

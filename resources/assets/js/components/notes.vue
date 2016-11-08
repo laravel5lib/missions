@@ -159,7 +159,7 @@
                     'user_id': this.user_id
                 },
                 page: 1,
-                pagination: {},
+                pagination: { current_page: 1 },
                 search: null,
                 newMode: false,
                 editMode: false,

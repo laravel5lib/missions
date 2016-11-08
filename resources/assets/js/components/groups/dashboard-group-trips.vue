@@ -20,21 +20,7 @@
             </div><!-- end panel -->
         </div><!-- end col -->
         <div v-if="trips.length" class="col-sm-12 text-center">
-            <nav>
-                <ul class="pagination pagination-sm">
-                    <li :class="{ 'disabled': pagination.current_page == 1 }">
-                        <a aria-label="Previous" @click="page=pagination.current_page-1">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                        <a aria-label="Next" @click="page=pagination.current_page+1">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <pagination :pagination.sync="pagination" :callback="searchTrips"></pagination>
         </div>
     </div>
 </template>
@@ -46,15 +32,9 @@
             return {
                 trips:[],
                 resource: this.$resource('trips?include=campaign&onlyPublished=true&groups[]=' + this.id),
-                pagination: {},
-                page: 1,
+                pagination: { current_page: 1 },
                 per_page: 3,
             }
-        },
-        watch: {
-            'page': function (val, oldVal) {
-                this.searchTrips();
-            },
         },
         methods:{
             searchTrips(){

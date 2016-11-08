@@ -36,26 +36,12 @@
 	</div>
 	<div class="container">
 			<div class="col-sm-12 text-center">
-				<nav>
-					<ul class="pagination">
-						<li :class="{ 'disabled': pagination.current_page == 1 }">
-							<a aria-label="Previous" @click="page=pagination.current_page-1">
-								<span aria-hidden="true">&laquo;</span>
-							</a>
-						</li>
-						<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-						<li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-							<a aria-label="Next" @click="page=pagination.current_page+1">
-								<span aria-hidden="true">&raquo;</span>
-							</a>
-						</li>
-					</ul>
-				</nav>
+				<pagination :pagination.sync="pagination" :callback="searchGroups"></pagination>
 			</div>
 	</div><!-- end container -->
 </div>
 </template>
-<script>
+<script type="text/javascript">
 	export default {
 		name: 'campaign-groups',
 		props: ['id'],
@@ -63,7 +49,7 @@
 			return {
 				groups: [],
 				page: 1,
-				pagination: {},
+				pagination: { current_page: 1 },
 				searchText: ''
 			}
 		},
@@ -84,7 +70,7 @@
 					campaign: this.id,
 					per_page: 8,
 					search: this.searchText,
-					page: this.page
+					page: this.pagination.current_page
 				});
 
 				resource.query().then(function (trips) {

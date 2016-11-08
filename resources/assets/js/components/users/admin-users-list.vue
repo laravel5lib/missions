@@ -275,21 +275,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <nav>
-                            <ul class="pagination pagination-sm">
-                                <li :class="{ 'disabled': pagination.current_page == 1 }">
-                                    <a aria-label="Previous" @click="page=pagination.current_page-1">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                                <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                                    <a aria-label="Next" @click="page=pagination.current_page+1">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+						<pagination :pagination.sync="pagination" :callback="searchUsers"></pagination>
                     </div>
                 </td>
             </tr>
@@ -315,7 +301,7 @@
                 page: 1,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
-                pagination: {},
+                pagination: { current_page: 1 },
                 search: '',
 				activeFields: ['name', 'email', 'birthday', 'status', 'public', 'isAdmin'],
 				maxActiveFields: 6,
@@ -440,7 +426,7 @@
 					include: '',
 					search: this.search,
 					per_page: this.per_page,
-					page: this.page,
+					page: this.pagination.current_page,
 				};
 
 				$.extend(params, this.filters);

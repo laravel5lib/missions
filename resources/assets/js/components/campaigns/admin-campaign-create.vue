@@ -146,12 +146,11 @@
 </template>
 <script>
 	import vSelect from "vue-select";
-	import VueStrap from 'vue-strap/dist/vue-strap.min';
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
 
 	export default{
 		name: 'campaign-create',
-		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel, 'alert': VueStrap.alert},
+		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate},
 		data(){
 			return {
 				countries: [],

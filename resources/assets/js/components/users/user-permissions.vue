@@ -41,13 +41,10 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     import vSelect from 'vue-select';
     export default {
         name: 'user-permissions',
         components: {
-            'alert': VueStrap.alert,
-            'modal': VueStrap.modal,
             'vSelect': vSelect
         },
         props: {

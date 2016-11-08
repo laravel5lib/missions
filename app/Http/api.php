@@ -76,6 +76,7 @@ $api->version('v1', [
     $api->resource('projects', 'ProjectsController');
     $api->resource('notes', 'NotesController');
     $api->resource('todos', 'TodosController');
+    $api->resource('essays', 'EssaysController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

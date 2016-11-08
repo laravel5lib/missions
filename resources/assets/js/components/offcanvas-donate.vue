@@ -163,11 +163,10 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     import vSelect from 'vue-select';
     export default{
         name: 'donate',
-        components:{ vSelect, 'aside': VueStrap.aside },
+        components:{ vSelect },
         props: {
             type: {
                 type: String,

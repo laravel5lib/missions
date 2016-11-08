@@ -84,11 +84,10 @@
 
 <script>
     import vSelect from 'vue-select';
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
     export default{
         name: 'admin-reservation-dues',
         props: ['id'],
-        components:{ vSelect, 'modal': VueStrap.modal},
+        components:{ vSelect},
         data(){
             return{
                 reservation: null,

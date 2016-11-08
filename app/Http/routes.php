@@ -84,6 +84,18 @@ Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
         return view('dashboard.medical-releases.edit', compact('id'));
     });
 
+    Route::get('records/medical-releases/create', function () {
+        return view('dashboard.medical-releases.create');
+    });
+
+    Route::get('records/essays/{id}', function ($id) {
+        return view('dashboard.essays.index', compact('id'));
+    });
+
+    Route::get('records/essays/{id}/edit', function ($id) {
+        return view('dashboard.essays.edit', compact('id'));
+    });
+
     Route::get('reservations', 'ReservationsController@index');
     Route::get('reservations/{id}/{tab?}', 'ReservationsController@show');
 });

@@ -107,21 +107,7 @@
             </div>
         </div>
         <div class="col-sm-12 text-center">
-            <nav>
-                <ul class="pagination pagination-sm">
-                    <li :class="{ 'disabled': pagination.current_page == 1 }">
-                        <a aria-label="Previous" @click="page=pagination.current_page-1">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                        <a aria-label="Next" @click="page=pagination.current_page+1">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <pagination :pagination.sync="pagination" :callback="searchStories"></pagination>
         </div>
 
         <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Delete Story" small="true">
@@ -133,12 +119,10 @@
         </modal>
     </div>
 </template>
-<script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
+<script type="text/javascript">
     var marked = require('marked');
     export default{
         name: 'user-profile-stories',
-        components: {'modal': VueStrap.modal},
         props:['id', 'authId'],
         data(){
             return{
@@ -161,7 +145,7 @@
                 // pagination vars
                 page: 1,
                 per_page: 5,
-                pagination: {},
+                pagination: { current_page: 1 },
 
             }
         },
@@ -219,7 +203,7 @@
             searchStories(){
                 this.$http.get('stories', {
                     user: this.id,
-                    page: this.page,
+                    page: this.pagination.current_page,
                     per_page: this.per_page,
                 }).then(function(response) {
                     this.stories = response.data.data;

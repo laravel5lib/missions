@@ -38,12 +38,11 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     import vSelect from 'vue-select';
     import donateComponent from './donate.vue';
     export default{
         name: 'modal-donate',
-        components:{ donate: donateComponent, vSelect, 'aside': VueStrap.aside, 'modal': VueStrap.modal },
+        components:{ donate: donateComponent, vSelect },
         props: {
             type: {
                 type: String,

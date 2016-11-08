@@ -40,6 +40,10 @@ return [
             [
                 'label' => 'Medical Releases',
                 'url' => 'medical-releases'
+            ],
+            [
+                'label' => 'Essays',
+                'url' => 'essays'
             ]
         ]
     ]

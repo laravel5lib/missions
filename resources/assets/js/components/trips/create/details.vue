@@ -144,7 +144,7 @@
 		padding-top: 0;
 	}
 </style>
-<script>
+<script type="text/javascript">
 	var marked = require('marked');
 	import vSelect from "vue-select"
 	export default{

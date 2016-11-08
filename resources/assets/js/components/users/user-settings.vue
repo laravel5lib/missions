@@ -453,13 +453,12 @@
         top: 80px;
     }
 </style>
-<script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
+<script type="text/javascript">
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'user-settings',
-        components: {vSelect, 'upload-create-update': uploadCreateUpdate, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
+        components: {vSelect, 'upload-create-update': uploadCreateUpdate},
         data(){
             return {
                 id: '',

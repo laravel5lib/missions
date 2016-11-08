@@ -70,12 +70,11 @@
 
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	import vSelect from 'vue-select';
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'user-profile-countries',
-        components: {vSelect, 'modal': VueStrap.modal, 'alert': VueStrap.alert},
+        components: {vSelect},
         props:['id', 'authId'],
         data(){
             return{

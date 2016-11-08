@@ -46,7 +46,7 @@
                 // pagination vars
                 page: 1,
                 per_page: 5,
-                pagination: {},
+                pagination: { current_page: 1 },
 
             }
         },
@@ -59,7 +59,7 @@
             searchStories(){
                 this.$http.get('stories', {
                     group: this.id,
-                    page: this.page,
+                    page: this.pagination.current_page,
                     per_page: this.per_page,
                 }).then(function(response) {
                     this.stories = response.data.data;

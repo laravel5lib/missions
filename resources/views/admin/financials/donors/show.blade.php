@@ -43,6 +43,20 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5 class="panel-header">Transactions</h5>
+                    </div>
+                    <admin-transactions-list donor="{{ $donor->id }}" storage-name="AdminDonorTransactionsConfig"></admin-transactions-list>
+
+                    {{--<div class="list-group">
+                        <div class="list-group-item">
+                            ...
+                        </div>
+                    </div>--}}
+                </div>
+            </div>
         </div>
     </div>
 @stop

@@ -86,11 +86,9 @@
     </div>
 </template>
 <script type="text/javascript">
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
     var marked = require('marked');
     export default{
         name: 'fundraisers-manager',
-        components: {'modal': VueStrap.modal, 'alert': VueStrap.alert},
         props: ['id', 'sponsorId', 'authId'],
         data(){
             return {

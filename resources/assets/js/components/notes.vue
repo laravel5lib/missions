@@ -126,13 +126,8 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'notes',
-        components: {
-            'alert': VueStrap.alert,
-            'modal': VueStrap.modal
-        },
         props: {
             'type': {
                 type: String
@@ -164,7 +159,7 @@
                     'user_id': this.user_id
                 },
                 page: 1,
-                pagination: {},
+                pagination: { current_page: 1 },
                 search: null,
                 newMode: false,
                 editMode: false,

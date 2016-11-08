@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import login from './components/login.vue';
+import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
 import actionTrigger from './components/action-trigger.vue';
 import donate from './components/donate.vue';
@@ -26,6 +27,7 @@ import visasList from './components/records/visas/visas-list.vue';
 import medicalsList from './components/records/medicals/medicals-list.vue';
 import passportsList from './components/records/passports/passports-list.vue';
 import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
+import essaysList from './components/records/essays/essays-list.vue';
 import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
 import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
 import reservationAvatar from './components/reservations/reservation-avatar.vue';
@@ -35,6 +37,7 @@ import reservationFunding from './components/reservations/reservation-funding.vu
 import reservationsPassportsManager from './components/reservations/reservations-passports-manager.vue';
 import reservationsMedicalReleasesManager from './components/reservations/reservations-medical-releases-manager.vue';
 import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
+import reservationsArrivalDesignation from './components/reservations/reservations-arrival-designation.vue';
 import userSettings from './components/users/user-settings.vue';
 import userProfileCountries from './components/users/user-profile-countries.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
@@ -48,6 +51,7 @@ import dashboardInterestsList from './components/interests/dashboard-interests-l
 import notes from './components/notes.vue';
 import todos from './components/todos.vue';
 import userPermissions from './components/users/user-permissions.vue';
+import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
 
 // admin components
 import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -61,20 +65,20 @@ import adminTripsFacilitators from './components/trips/admin-trip-facilitators.v
 import adminTripsDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripsDelete from './components/trips/admin-trip-delete.vue';
 import adminInterestsList from './components/interests/admin-interests-list.vue';
-import adminGoups from './components/groups/admin-groups-list.vue';
+import adminGroups from './components/groups/admin-groups-list.vue';
 import adminGroupCreate from './components/groups/admin-group-create.vue';
 import adminGroupEdit from './components/groups/admin-group-edit.vue';
 import adminGroupManagers from './components/groups/admin-group-managers.vue';
-import adminReservations from './components/reservations/admin-reservations-list.vue';
+import adminReservationsList from './components/reservations/admin-reservations-list.vue';
 import adminReservationEdit from './components/reservations/admin-reservation-edit.vue';
 import adminReservationCosts from './components/reservations/admin-reservation-costs.vue';
 import adminReservationDues from './components/reservations/admin-reservation-dues.vue';
 import adminReservationDeadlines from './components/reservations/admin-reservation-deadlines.vue';
-import adminUsers from './components/users/admin-users-list.vue';
+import adminUsersList from './components/users/admin-users-list.vue';
 import adminUserCreate from './components/users/admin-user-create.vue';
 import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
-import adminUploads from './components/uploads/admin-uploads-list.vue';
+import adminUploadsList from './components/uploads/admin-uploads-list.vue';
 import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
 import reconcileFund from './components/reconcile-fund.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
@@ -89,8 +93,6 @@ window.marked = require('marked');
 require('gsap');
 window.ScrollMagic = require('scrollmagic');
 require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
-// require('vue-strap/src/index.js');
-// window.VueStrap = require('vue-strap/dist/vue-strap.min');
 import VueStrap from 'vue-strap/dist/vue-strap.min';
 window.videojs = require('video.js');
 require('videojs-youtube');
@@ -110,6 +112,22 @@ $( document ).ready(function() {
 Vue.use(require('vue-resource'));
 // Vue Validator
 Vue.use(require('vue-validator'));
+// Global Components
+Vue.component('pagination', pagination);
+Vue.component('modal', VueStrap.modal);
+Vue.component('accordion', VueStrap.accordion);
+Vue.component('alert', VueStrap.alert);
+Vue.component('aside', VueStrap.aside);
+Vue.component('datepicker', VueStrap.datepicker);
+Vue.component('panel', VueStrap.panel);
+Vue.component('progressbar', VueStrap.progressbar);
+Vue.component('spinner', VueStrap.spinner);
+Vue.component('popover', VueStrap.popover);
+Vue.component('tabs', VueStrap.tabs);
+Vue.component('tab', VueStrap.tab);
+Vue.component('tooltip', VueStrap.tooltip);
+// Vue.component('vSelect', require('vue-select'));
+
 
 Vue.http.options.root = '/api';
 Vue.http.interceptors.push({
@@ -248,7 +266,7 @@ new Vue({
         public: false
       }
     },
-    components: [
+    components: {
         login,
         fundraisers,
         campaigns,
@@ -274,10 +292,12 @@ new Vue({
         notes,
         todos,
         userPermissions,
+        uploadCreateUpdate,
 
         //dashboard components
         recordsList,
         passportsList,
+        essaysList,
         passportCreateUpdate,
         visasList,
         visaCreateUpdate,
@@ -291,6 +311,7 @@ new Vue({
         reservationsPassportsManager,
         reservationsMedicalReleasesManager,
         reservationsVisasManager,
+        reservationsArrivalDesignation,
         userSettings,
         userProfileCountries,
         userProfileStories,
@@ -313,26 +334,26 @@ new Vue({
         adminTripsDuplicate,
         adminTripsDelete,
         adminInterestsList,
-        adminGoups,
+        adminGroups,
         adminGroupCreate,
         adminGroupEdit,
         adminGroupManagers,
-        adminReservations,
+        adminReservationsList,
         adminReservationEdit,
         adminReservationCosts,
         adminReservationDues,
         adminReservationDeadlines,
-        adminUsers,
+        adminUsersList,
         adminUserCreate,
         adminUserEdit,
         adminUserDelete,
-        adminUploads,
+        adminUploadsList,
         adminUploadCreateUpdate,
         reconcileFund,
         adminDonorsList,
         adminFundsList,
         adminTransactionsList,
-    ],
+    },
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

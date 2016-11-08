@@ -10,9 +10,9 @@
                 <hr class="divider inv sm">
                 <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>
                 <h6 class="text-capitalize small">{{ reservation.trip.data.group.data.name }}</h6>
-                <label style="margin-bottom:2px;font-size:10px;">Campaign</label>
+                <label style="margin-bottom:2px;">Campaign</label>
                 <h6 class="text-capitalize small" style="margin-top:2px;">{{ reservation.trip.data.campaign.data.name }}</h6>
-                <label style="margin-bottom:2px;font-size:10px;">Country</label>
+                <label style="margin-bottom:2px;">Country</label>
                 <h6 class="text-capitalize small" style="margin-top:2px;">{{ reservation.country }}</h6>
                 <hr class="divider inv sm">
                 <a class="btn btn-sm btn-primary" href="/dashboard/reservations/{{ reservation.id }}">View Reservation</a>

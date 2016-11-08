@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3>{{ $fund->name }}</h3>
+                    <h3>{{ $fund->name }} <small>&middot; Fund</small></h3>
                 </div>
                 <div class="col-sm-4">
                     <hr class="divider inv sm">
@@ -29,7 +29,7 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5 class="panel-header">Details</h5>
@@ -49,19 +49,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h5 class="panel-header">Transactions</h5>
-                    </div>
-                    <admin-transactions-list fund="{{ $fund->id }}" storage-name="AdminFundTransactionsConfig"></admin-transactions-list>
-
-                    {{--<div class="list-group">
-                        <div class="list-group-item">
-                            ...
-                        </div>
-                    </div>--}}
-                </div>
+            <div class="col-md-8">
+                <h5>Transactions</h5>
+                <admin-transactions-list fund="{{ $fund->id }}"
+                                         storage-name="AdminFundTransactionsConfig">
+                </admin-transactions-list>
             </div>
         </div>
     </div>

@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3>{{ $donor->name }}</h3>
+                    <h3>{{ $donor->name }} <small>&middot; Donor</small></h3>
                 </div>
                 <div class="col-sm-4">
                     <hr class="divider inv sm">
@@ -28,7 +28,7 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5 class="panel-header">Details</h5>
@@ -36,26 +36,36 @@
                     <div class="panel-body">
                         <label>Donor Name</label>
                         <p>{{ $donor->name }}</p>
+                        @unless(! $donor->compnay)
+                        <label>Company/Organization</label>
+                        <p>{{ $donor->company }}</p>
+                        @endunless
                         <label>Type</label>
                         <p>{{ str_singular(ucwords($donor->account_type)) }}</p>
+                        <label>Stripe Customer ID</label>
+                        <p>{{ $donor->customer_id or 'n/a' }}</p>
+                        <label>Email</label>
+                        <p>{{ $donor->email or 'n/a' }}</p>
+                        <label>Phone</label>
+                        <p>{{ $donor->phone or 'n/a' }}</p>
+                        <label>Zip/Postal Code</label>
+                        <p>{{ $donor->zip or 'n/a' }}</p>
+                        <label>Country</label>
+                        <p>{{ country($donor->country_code) }}</p>
                         <label>Last Update</label>
                         <p>{{ $donor->updated_at->format('F j, Y h:i a') }}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h5 class="panel-header">Transactions</h5>
-                    </div>
-                    <admin-transactions-list donor="{{ $donor->id }}" storage-name="AdminDonorTransactionsConfig"></admin-transactions-list>
-
-                    {{--<div class="list-group">
-                        <div class="list-group-item">
-                            ...
-                        </div>
-                    </div>--}}
-                </div>
+            <div class="col-md-8">
+                {{--<div class="panel panel-default">--}}
+                    {{--<div class="panel-heading">--}}
+                        <h5>Transactions</h5>
+                    {{--</div>--}}
+                    {{--<div class="panel-body">--}}
+                        <admin-transactions-list donor="{{ $donor->id }}" storage-name="AdminDonorTransactionsConfig"></admin-transactions-list>
+                    {{--</div>--}}
+                {{--</div>--}}
             </div>
         </div>
     </div>

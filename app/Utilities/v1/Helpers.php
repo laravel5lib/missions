@@ -79,3 +79,8 @@ function generateFundraiserNameFromTrip($trip)
 {
     return 'Send ' . $trip->group->name . ' to ' . country($trip->country_code);
 }
+
+function set_active($path, $active = 'active')
+{
+    return Request::is($path) ? $active : '';
+}

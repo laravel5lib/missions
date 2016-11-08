@@ -118,7 +118,7 @@
     </modal>
 </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'todos',
         props: {
@@ -150,7 +150,7 @@
                     'todoable_id': this.id
                 },
                 page: 1,
-                pagination: {},
+                pagination: { current_page: 1 },
                 search: null,
                 newMode: false,
                 editMode: false,

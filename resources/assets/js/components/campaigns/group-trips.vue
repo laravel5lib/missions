@@ -43,7 +43,7 @@
 		<hr class="divider inv xlg">
 	</div><!-- end container -->
 </template>
-<script>
+<script type="text/javascript">
 	export default{
 		name: 'group-trips',
 		props: ['id', 'campaignId'],
@@ -61,7 +61,7 @@
 					//campaign: this.id,
 					//per_page: 8,
 					//search: this.searchText,
-					page: this.page
+					page: this.page,
 				});
 
 				resource.query({id: this.id}).then(function (group) {

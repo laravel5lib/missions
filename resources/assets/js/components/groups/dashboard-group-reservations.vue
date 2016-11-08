@@ -180,7 +180,7 @@
 		}
 	}
 </style>
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
 	export default{
         name: 'dashboard-group-reservations',
@@ -196,10 +196,9 @@
                 reservations: [],
                 orderByField: 'surname',
                 direction: 1,
-                page: 1,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
-                pagination: {},
+                pagination: { current_page: 1 },
                 search: '',
 				activeFields: ['given_names', 'surname', 'group', 'campaign', 'type', 'registered'],
 				maxActiveFields: 6,
@@ -387,7 +386,7 @@
 					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
 					search: this.search,
 					per_page: this.per_page,
-					page: this.page,
+					page: this.pagination.current_page,
 				};
 
 				$.extend(params, this.filters);

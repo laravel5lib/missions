@@ -189,21 +189,7 @@
             <hr class="divider inv">
         </div>
         <div class="col-xs-12 text-center" v-if="groups.length">
-            <nav>
-                <ul class="pagination pagination-md">
-                    <li :class="{ 'disabled': pagination.current_page == 1 }">
-                        <a aria-label="Previous" @click="page=pagination.current_page-1">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                        <a aria-label="Next" @click="page=pagination.current_page+1">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <pagination :pagination.sync="pagination" :callback="searchGroups"></pagination>
         </div>
     </div>
     <div class="dark-bg-primary">
@@ -323,7 +309,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select';
     export default{
 		name: 'groups',
@@ -365,9 +351,8 @@
 
                 // pagination vars
                 search: '',
-                page: 1,
                 per_page: 8,
-                pagination: {},
+                pagination: { current_page: 1 },
             }
         },
         computed: {
@@ -376,10 +361,6 @@
             },
         },
         watch: {
-            'page': function (val, oldVal) {
-                this.pagination.current_page = val;
-                this.searchGroups();
-            },
             'search': function (val) {
                 this.searchGroups();
             }
@@ -395,7 +376,7 @@
             searchGroups(){
                 this.resource.query(null, {
                     search: this.search,
-                    page: this.page,
+                    page: this.pagination.current_page,
                     per_page: this.per_page
                 }).then(function(groups){
                     this.groups = groups.data.data;

@@ -68,7 +68,7 @@
                 // pagination vars
                 page: 1,
                 per_page: 10,
-                pagination: {},
+                pagination: { current_page: 1 },
             }
         },
         filters: {

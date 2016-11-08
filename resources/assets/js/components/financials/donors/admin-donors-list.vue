@@ -305,7 +305,6 @@
                 donors: [],
                 orderByField: 'name',
                 direction: 1,
-                // page: 1,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: {

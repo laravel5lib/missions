@@ -36,21 +36,7 @@
 					</div><!-- end panel -->
 				</div><!-- end col -->
 				<div class="col-xs-12 text-center">
-					<nav>
-						<ul class="pagination pagination-sm">
-							<li :class="{ 'disabled': pagination.current_page == 1 }">
-								<a aria-label="Previous" @click="page=pagination.current_page-1">
-									<span aria-hidden="true">&laquo; Previous</span>
-								</a>
-							</li>
-							<!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-							<li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-								<a aria-label="Next" @click="page=pagination.current_page+1">
-									<span aria-hidden="true">Next &raquo;</span>
-								</a>
-							</li>
-						</ul>
-					</nav>
+					<pagination :pagination.sync="pagination" :callback="searchUploads"></pagination>
 				</div>
 			</div>
 		</div>
@@ -247,7 +233,7 @@
 				uploads: [],
 				page: 1,
 				search: '',
-				pagination: {},
+				pagination: { current_page: 1 },
             }
         },
 		computed:{
@@ -470,7 +456,7 @@
 				var params = {
 					include: '',
 					per_page: this.perPage,
-					page: this.page,
+					page: this.pagination.current_page,
 					sort: this.orderByField + '|' + (this.direction?'asc':'desc'),
 					type: this.type,
 					tags: this.tags

@@ -1,7 +1,11 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h5 class="panel-header">Permissions</h5>
+            <h5 class="panel-header">Permissions <button class="btn btn-xs btn-default-hollow pull-right" style="margin-top:-3px"
+                    @click="showAbilities = !showAbilities">
+                Mange <i class="fa fa-cog"></i>
+            </button></h5>
+
         </div>
         <div class="panel-body">
             <label>User Roles</label>
@@ -11,11 +15,6 @@
                       :options="availableRoles"
                       label="roles">
             </v-select>
-
-            <button class="btn btn-xs btn-link"
-                    @click="showAbilities = !showAbilities">
-                Mange user abilities <i class="fa fa-cog"></i>
-            </button>
         </div>
         <div class="panel-body" v-if="showAbilities">
             <div class="list-gorup-item">

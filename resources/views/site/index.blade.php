@@ -22,27 +22,20 @@ $('.video-modal').on('hide.bs.modal', function(e) {
   </video>
   <div class="container">
     <div class="row">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
       <div class="col-md-8 col-md-offset-2 text-center">
-        <h1 class="text-white text-hero" data-aos="fade-up">Where <span class="text-primary" data-aos="zoom-in" data-aos-delay="400">you</span> can change the world.</h1>
-        <hr class="divider inv">
-        <a href="{{ url('campaigns') }}" class="btn btn-primary hidden-xs" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
-        <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow hidden-xs" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
-        <div class="row visible-xs">
-          <div class="col-xs-8 col-xs-offset-2">
-            <a href="{{ url('campaigns') }}" class="btn btn-primary btn-block" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
-            <hr class="divider inv visible-xs">
-            <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow btn-block" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
+        <div class="vid-bg-caption">
+          <h1 class="text-white text-hero" data-aos="fade-up">Where <span class="text-primary" data-aos="zoom-in" data-aos-delay="400">you</span> can change the world.</h1>
+          <hr class="divider inv">
+          <a href="{{ url('campaigns') }}" class="btn btn-primary hidden-xs" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
+          <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow hidden-xs" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
+          <div class="row visible-xs">
+            <div class="col-xs-8 col-xs-offset-2">
+              <a href="{{ url('campaigns') }}" class="btn btn-primary btn-block" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
+              <hr class="divider inv visible-xs">
+              <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow btn-block" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
+            </div>
           </div>
-        </div>
-        <hr class="divider inv xlg">
-        <hr class="divider inv xlg">
-        <hr class="divider inv xlg">
-        <hr class="divider inv xlg">
-        </div>
+        </div><!-- end vid-bg-caption -->
       </div><!-- end col -->
     </div><!-- end row -->
   </div><!-- end container -->

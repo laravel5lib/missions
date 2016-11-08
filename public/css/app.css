@@ -10473,6 +10473,12 @@ button.close {
   .carousel-inner > .active.right {
     left: 100%; }
 
+@media screen and (max-width: 991px) {
+  .carousel-inner > .item > img, .carousel-inner > .item > a > img {
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 1080px; } }
+
 .carousel-control {
   position: absolute;
   top: 0;
@@ -15939,6 +15945,10 @@ li.av-nav > a {
   padding: 0px;
   margin: 4px 0px; }
 
+@media (min-width: 991px) {
+  .aside.left {
+    left: 55px; } }
+
 .content-section {
   padding: 80px 0; }
   .content-section a {
@@ -16185,17 +16195,18 @@ h1.home-college-header {
   position: relative;
   overflow: hidden;
   z-index: 0; }
-
-.vid-bg-video {
-  position: absolute;
-  display: block;
-  top: 50%;
-  left: 50%;
-  width: auto;
-  height: auto;
-  min-width: 100%;
-  min-height: 100%;
-  transform: translate(-50%, -50%); }
+  .vid-bg .vid-bg-video {
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: auto;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%); }
+  .vid-bg .vid-bg-caption {
+    margin: 150px 0; }
 
 @media (max-width: 767px) {
   .vid-bg {

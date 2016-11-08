@@ -539,6 +539,12 @@ li.av-nav > a {
   padding: 0px;
   margin: 4px 0px;
 }
+@media (min-width: 991px) {
+  .aside.left {
+    left: 55px;
+    // left: 55px !important;
+  }
+}
 
 // -- Section Backgrounds -- //
 .content-section {
@@ -827,9 +833,7 @@ h1.home-college-header {
     position: relative;
     overflow: hidden;
     z-index: 0;
-}
-
-.vid-bg-video {
+  .vid-bg-video {
     position: absolute;
     display: block;
     top: 50%;
@@ -842,6 +846,10 @@ h1.home-college-header {
        -moz-transform: translate(-50%, -50%);
         -ms-transform: translate(-50%, -50%);
       transform: translate(-50%, -50%);
+  }
+  .vid-bg-caption {
+    margin: 150px 0;
+  }
 }
 
 @media (max-width: 767px) {

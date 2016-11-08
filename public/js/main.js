@@ -72458,7 +72458,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":206,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],124:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":209,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],124:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -72708,7 +72708,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":206,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],126:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":209,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],126:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73592,6 +73592,829 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],135:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'admin-donors-list',
+    components: { vSelect: _vueSelect2.default, 'aside': _vueStrap2.default.aside, 'modal': _vueStrap2.default.modal },
+    props: {
+        storageName: {
+            type: String,
+            default: 'AdminDonorsListConfig'
+        }
+    },
+    data: function data() {
+        return {
+            donors: [],
+            orderByField: 'name',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {},
+            search: '',
+            activeFields: ['name', 'company', 'email', 'phone', 'zip', 'total_donated'],
+            maxActiveFields: 8,
+
+            // filter vars
+            groupsOptions: [],
+            groupObj: null,
+            groupAccountObj: null,
+            usersOptions: [],
+            userObj: null,
+            reservationsOptions: [],
+            reservationObj: null,
+            campaignsOptions: [],
+            campaignObj: null,
+            causesOptions: [],
+            causeObj: null,
+            tripsOptions: [],
+            tripObj: null,
+            projectsOptions: [],
+            projectObj: null,
+            filters: {
+                tags: [],
+                reservation: '',
+                group: '',
+                campaign: '',
+                cause: '',
+                trip: '',
+                project: '',
+                userAccount: '',
+                groupAccount: '',
+                starts: '',
+                ends: ''
+            },
+            showFilters: false,
+            showExportModal: false,
+            exportSettings: {
+                fields: []
+            }
+
+        };
+    },
+
+    watch: {
+        // watch filters obj
+        'filters': {
+            handler: function handler(val) {
+                console.log(val);
+                this.searchDonors();
+            },
+            deep: true
+        },
+        'campaignObj': function campaignObj(val) {
+            this.filters.campaign = val ? val.id : '';
+            this.searchDonors();
+        },
+        'causeObj': function causeObj(val) {
+            this.filters.cause = val ? val.id : '';
+            this.searchDonors();
+        },
+        'tripObj': function tripObj(val) {
+            this.filters.trip = val ? val.id : '';
+            this.searchDonors();
+        },
+        'projectObj': function projectObj(val) {
+            this.filters.project = val ? val.id : '';
+            this.searchDonors();
+        },
+        'userObj': function userObj(val) {
+            this.filters.userAccount = val ? val.id : '';
+            this.searchDonors();
+        },
+        'groupObj': function groupObj(val) {
+            this.filters.group = val ? val.id : '';
+            this.searchDonors();
+        },
+        'groupAccountObj': function groupAccountObj(val) {
+            this.filters.groupAccount = val ? val.id : '';
+            this.searchDonors();
+        },
+        'reservationObj': function reservationObj(val) {
+            this.filters.reservation = val ? val.id : '';
+            this.searchDonors();
+        },
+        'direction': function direction(val) {
+            this.searchDonors();
+        },
+        'tagsString': function tagsString(val) {
+            var tags = val.split(/[\s,]+/);
+            this.filters.tags = tags[0] !== '' ? tags : '';
+            this.searchDonors();
+        },
+        'activeFields': function activeFields(val, oldVal) {
+            // if the orderBy field is removed from view
+            if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
+                // default to first visible field
+                this.orderByField = val[0];
+            }
+            this.updateConfig();
+        },
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchDonors();
+        },
+        'page': function page(val, oldVal) {
+            this.searchDonors();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchDonors();
+        }
+
+    },
+    methods: {
+        updateConfig: function updateConfig() {
+            localStorage[this.storageName] = (0, _stringify2.default)({
+                activeFields: this.activeFields,
+                maxActiveFields: this.maxActiveFields,
+                per_page: this.per_page,
+                groupObj: this.groupObj,
+                userObj: this.userObj,
+                campaignObj: this.campaignObj,
+                causeObj: this.causeObj,
+                reservationObj: this.reservationObj,
+                tripObj: this.tripObj,
+                projectObj: this.projectObj,
+                filters: {
+                    tags: this.filters.tags,
+                    reservation: this.filters.reservation,
+                    group: this.filters.group,
+                    campaign: this.filters.campaign,
+                    cause: this.filters.cause,
+                    trip: this.filters.trip,
+                    project: this.filters.project,
+                    userAccount: this.filters.userAccount,
+                    groupAccount: this.filters.groupAccount,
+                    starts: this.filters.starts,
+                    ends: this.filters.ends
+                }
+            });
+        },
+        isActive: function isActive(field) {
+            return _.contains(this.activeFields, field);
+        },
+        maxCheck: function maxCheck(field) {
+            return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields;
+        },
+        setOrderByField: function setOrderByField(field) {
+            this.orderByField = field;
+            this.direction = 1;
+            this.searchDonors();
+        },
+        resetFilter: function resetFilter() {
+            $.extend(this, {
+                orderByField: 'name',
+                direction: 1,
+                page: 1,
+                per_page: 10,
+                perPageOptions: [5, 10, 25, 50, 100],
+                pagination: {},
+                search: '',
+                activeFields: ['name', 'company', 'email', 'phone', 'zip', 'total_donated'],
+                maxActiveFields: 8,
+                filters: {
+                    tags: '',
+                    reservation: '',
+                    group: '',
+                    campaign: '',
+                    cause: '',
+                    trip: '',
+                    project: '',
+                    userAccount: '',
+                    groupAccount: '',
+                    starts: '',
+                    ends: ''
+                }
+            });
+        },
+        getListSettings: function getListSettings() {
+            var params = {
+                include: '',
+                search: this.search,
+                per_page: this.per_page,
+                page: this.page,
+                sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
+            };
+
+            $.extend(params, this.filters);
+
+            return params;
+        },
+        getGroups: function getGroups(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('groups', { search: search }).then(function (response) {
+                this.groupsOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        getReservations: function getReservations(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('reservations', { search: search }).then(function (response) {
+                this.reservationsOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        getCampaigns: function getCampaigns(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('campaigns', { search: search }).then(function (response) {
+                this.campaignsOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        getCauses: function getCauses(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('causes', { search: search }).then(function (response) {
+                this.causesOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        getTrips: function getTrips(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('trips', { search: search, include: 'group' }).then(function (response) {
+                this.tripsOptions = response.data.data;
+                _.each(this.tripsOptions, function (trip) {
+                    trip.name = trip.type + ' | ' + trip.country_name + ' | ' + trip.group.data.name;
+                });
+                loading ? loading(false) : void 0;
+            });
+        },
+        getProjects: function getProjects(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('projects', { search: search }).then(function (response) {
+                this.projectsOptions = response.data.data;
+                _.each(this.projectsOptions, function (project) {
+                    project.name = project.plaque.prefix + ' ' + project.plaque.message;
+                });
+                loading ? loading(false) : void 0;
+            });
+        },
+        getUsers: function getUsers(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('users', { search: search }).then(function (response) {
+                this.usersOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        searchDonors: function searchDonors() {
+            var params = this.getListSettings();
+            this.$http.get('donors', params).then(function (response) {
+                var self = this;
+                this.donors = response.data.data;
+                this.pagination = response.data.meta.pagination;
+            }).then(function () {
+                this.updateConfig();
+            });
+        },
+        exportList: function exportList() {
+            var params = this.getListSettings();
+            $.extend(params, this.exportSettings);
+            // Send to api route
+
+            this.$http.post('donors/export', params).then(function (response) {
+                console.log(response);
+            }, function (error) {
+                console.log(error);
+            });
+        }
+    },
+    ready: function ready() {
+        // load view state
+        if (localStorage[this.storageName]) {
+            var config = JSON.parse(localStorage[this.storageName]);
+            this.filters = config.filters;
+        }
+        // populate
+        this.getGroups();
+        this.getCampaigns();
+        this.searchDonors();
+
+        //Manually handle dropdown functionality to keep dropdown open until finished
+        $('.form-toggle-menu .dropdown-menu').on('click', function (event) {
+            var events = $._data(document, 'events') || {};
+            events = events.click || [];
+            for (var i = 0; i < events.length; i++) {
+                if (events[i].selector) {
+
+                    //Check if the clicked element matches the event selector
+                    if ($(event.target).is(events[i].selector)) {
+                        events[i].handler.call(event.target, event);
+                    }
+
+                    // Check if any of the clicked element parents matches the
+                    // delegated event selector (Emulating propagation)
+                    $(event.target).parents(events[i].selector).each(function () {
+                        events[i].handler.call(this, event);
+                    });
+                }
+            }
+            event.stopPropagation(); //Always stop propagation
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n            </div>\n\n            <legend>By Designation</legend>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"groupFilter\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupObj\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter by Group\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"reservationFilter\" :debounce=\"250\" :on-search=\"getReservations\" :value.sync=\"reservationObj\" :options=\"reservationsOptions\" label=\"given_names\" placeholder=\"Filter by Reservation\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignsOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"causesFilter\" :debounce=\"250\" :on-search=\"getCauses\" :value.sync=\"causeObj\" :options=\"causesOptions\" label=\"name\" placeholder=\"Filter by Cause\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"tripsFilter\" :debounce=\"250\" :on-search=\"getTrips\" :value.sync=\"tripObj\" :options=\"tripsOptions\" label=\"name\" placeholder=\"Filter by Trip\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"projectsFilter\" :debounce=\"250\" :on-search=\"getProjects\" :value.sync=\"projectObj\" :options=\"projectsOptions\" label=\"name\" placeholder=\"Filter by Project\"></v-select>\n            </div>\n\n            <legend>By Account Holder</legend>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"groupFilter\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupAccountObj\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"userFilter\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"userObj\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n            </div>\n\n\n            <div class=\"form-group\">\n                <div class=\"row\">\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group input-group-sm\">\n                            <span class=\"input-group-addon\">Start</span>\n                            <input type=\"datetime-local\" class=\"form-control\" v-model=\"filters.starts\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group input-group-sm\">\n                            <span class=\"input-group-addon\">End</span>\n                            <input type=\"datetime-local\" class=\"form-control\" v-model=\"filters.ends\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\"> Name\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"company\" :disabled=\"maxCheck('company')\"> Company\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"phone\" :disabled=\"maxCheck('phone')\"> Phone\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"zip\" :disabled=\"maxCheck('zip')\"> Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"total_donated\" :disabled=\"maxCheck('total_donated')\"> Amount\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n                                <label>Max Visible Fields</label>\n                                <select class=\"form-control\" v-model=\"maxActiveFields\">\n                                    <option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <span class=\"caret\"></span>\n                </button>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showExportModal=true\">\n                    Export\n                    <span class=\"fa fa-download\"></span>\n                </button>\n                <!--<a class=\"btn btn-primary btn-sm\" href=\"donors/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n            </form>\n        </div>\n    </div>\n    <hr class=\"divider sm\">\n    <div>\n        Active Filters:\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.reservation &amp;&amp; filters.reservation.length\" @click=\"filters.reservation = ''\">\n            Reservation\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.group &amp;&amp; filters.group.length\" @click=\"filters.group = ''\">\n            Group\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign &amp;&amp; filters.campaign.length\" @click=\"filters.campaign = ''\">\n            Campaign\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.cause &amp;&amp; filters.cause.length\" @click=\"filters.cause = ''\">\n            Cause\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.trip &amp;&amp; filters.trip.length\" @click=\"filters.trip = ''\">\n            Trip\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.project &amp;&amp; filters.project.length\" @click=\"filters.project = ''\">\n            Project\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.starts &amp;&amp; filters.starts.length\" @click=\"filters.starts = ''\">\n            Starts\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.ends &amp;&amp; filters.ends.length\" @click=\"filters.ends = ''\">\n            Ends\n            <span class=\"badge\">x</span>\n        </button>\n    </div>\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('company')\" :class=\"{'text-primary': orderByField === 'company'}\">\n                Company\n                <i @click=\"setOrderByField('company')\" v-if=\"orderByField !== 'company'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'company'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('email')\" :class=\"{'text-primary': orderByField === 'email'}\">\n                Email\n                <i @click=\"setOrderByField('email')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('phone')\">\n                Phone\n            </th>\n            <th v-if=\"isActive('zip')\">\n                Zip\n            </th>\n            <th v-if=\"isActive('total_donated')\" :class=\"{'text-primary': orderByField === 'total_donated'}\">\n                Amount\n                <i @click=\"setOrderByField('total_donated')\" v-if=\"orderByField !== 'total_donated'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'total_donated'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"donor in donors|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('name')\" v-text=\"donor.name\"></td>\n            <td v-if=\"isActive('company')\" v-text=\"donor.company\"></td>\n            <td v-if=\"isActive('email')\" v-text=\"donor.email\"></td>\n            <td v-if=\"isActive('phone')\" v-text=\"donor.phone|phone\"></td>\n            <td v-if=\"isActive('zip')\" v-text=\"donor.zip\"></td>\n            <td v-if=\"isActive('total_donated')\" v-text=\"donor.total_donated|currency\"></td>\n            <td><a href=\"/admin/donors/{{ donor.id }}\"><i class=\"fa fa-cog\"></i></a></td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n    <modal title=\"Export Donors List\" :show.sync=\"showExportModal\" effect=\"zoom\" width=\"400\" ok-text=\"Export\" :callback=\"exportList\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <ul class=\"list-unstyled\">\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"name\"> Name\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"company\"> Company\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"email\"> Email\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"phone\"> Phone\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"zip\"> Zip\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"amount\"> Amount\n                    </label>\n                </li>\n            </ul>\n        </div>\n    </modal>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-3e2654be", module.exports)
+  } else {
+    hotAPI.update("_v-3e2654be", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"babel-runtime/core-js/json/stringify":2,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],136:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'admin-funds-list',
+    components: { vSelect: _vueSelect2.default, 'aside': _vueStrap2.default.aside, 'modal': _vueStrap2.default.modal },
+    props: {
+        storageName: {
+            type: String,
+            default: 'AdminFundsListConfig'
+        }
+    },
+    data: function data() {
+        return {
+            funds: [],
+            orderByField: 'name',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {},
+            search: '',
+            activeFields: ['name', 'type', 'balance'],
+            maxActiveFields: 3,
+
+            // filter vars
+            filters: {
+                tags: [],
+                minBalance: null,
+                maxBalance: null,
+                type: null
+            },
+            showFilters: false,
+            showExportModal: false,
+            exportSettings: {
+                fields: []
+            }
+
+        };
+    },
+
+    watch: {
+        // watch filters obj
+        'filters': {
+            handler: function handler(val) {
+                console.log(val);
+                this.searchFunds();
+            },
+            deep: true
+        },
+        'direction': function direction(val) {
+            this.searchFunds();
+        },
+        'tagsString': function tagsString(val) {
+            var tags = val.split(/[\s,]+/);
+            this.filters.tags = tags[0] !== '' ? tags : '';
+            this.searchFunds();
+        },
+        'activeFields': function activeFields(val, oldVal) {
+            // if the orderBy field is removed from view
+            if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
+                // default to first visible field
+                this.orderByField = val[0];
+            }
+            this.updateConfig();
+        },
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchFunds();
+        },
+        'page': function page(val, oldVal) {
+            this.searchFunds();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchFunds();
+        }
+
+    },
+    methods: {
+        updateConfig: function updateConfig() {
+            localStorage[this.storageName] = (0, _stringify2.default)({
+                activeFields: this.activeFields,
+                maxActiveFields: this.maxActiveFields,
+                per_page: this.per_page,
+                filters: {
+                    tags: this.filters.tags,
+                    minBalance: this.filters.minBalance,
+                    maxBalance: this.filters.maxBalance,
+                    type: this.filters.type
+                }
+            });
+        },
+        isActive: function isActive(field) {
+            return _.contains(this.activeFields, field);
+        },
+        maxCheck: function maxCheck(field) {
+            return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields;
+        },
+        setOrderByField: function setOrderByField(field) {
+            this.orderByField = field;
+            this.direction = 1;
+            this.searchFunds();
+        },
+        resetFilter: function resetFilter() {
+            $.extend(this, {
+                orderByField: 'name',
+                direction: 1,
+                page: 1,
+                per_page: 10,
+                perPageOptions: [5, 10, 25, 50, 100],
+                pagination: {},
+                search: '',
+                activeFields: ['name', 'type', 'balance'],
+                maxActiveFields: 8,
+                filters: {
+                    tags: [],
+                    minBalance: null,
+                    maxBalance: null,
+                    type: ''
+                }
+            });
+        },
+        getListSettings: function getListSettings() {
+            var params = {
+                include: '',
+                search: this.search,
+                per_page: this.per_page,
+                page: this.page,
+                sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
+            };
+
+            $.extend(params, this.filters);
+
+            return params;
+        },
+        searchFunds: function searchFunds() {
+            var params = this.getListSettings();
+            this.$http.get('funds', params).then(function (response) {
+                var self = this;
+                this.funds = response.data.data;
+                this.pagination = response.data.meta.pagination;
+            }).then(function () {
+                this.updateConfig();
+            });
+        },
+        exportList: function exportList() {
+            var params = this.getListSettings();
+            $.extend(params, this.exportSettings);
+            // Send to api route
+
+            this.$http.post('funds/export', params).then(function (response) {
+                console.log(response);
+            }, function (error) {
+                console.log(error);
+            });
+        }
+    },
+    ready: function ready() {
+        // load view state
+        if (localStorage[this.storageName]) {
+            var config = JSON.parse(localStorage[this.storageName]);
+            this.filters = config.filters;
+        }
+        // populate
+        this.searchFunds();
+
+        //Manually handle dropdown functionality to keep dropdown open until finished
+        $('.form-toggle-menu .dropdown-menu').on('click', function (event) {
+            var events = $._data(document, 'events') || {};
+            events = events.click || [];
+            for (var i = 0; i < events.length; i++) {
+                if (events[i].selector) {
+
+                    //Check if the clicked element matches the event selector
+                    if ($(event.target).is(events[i].selector)) {
+                        events[i].handler.call(event.target, event);
+                    }
+
+                    // Check if any of the clicked element parents matches the
+                    // delegated event selector (Emulating propagation)
+                    $(event.target).parents(events[i].selector).each(function () {
+                        events[i].handler.call(this, event);
+                    });
+                }
+            }
+            event.stopPropagation(); //Always stop propagation
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <label>Type</label>\n                <select class=\"form-control\" v-model=\"filters.type\">\n                    <option value=\"\">All Types</option>\n                    <option value=\"reservation\">Reservation</option>\n                    <option value=\"trip\">Trip</option>\n                </select>\n            </div>\n            <div class=\"form-group\">\n                <div class=\"row\">\n                    <div class=\"col-xs-12\">\n                        <label>Balance</label>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Min</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.minBalance\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Max</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.maxBalance\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\"> Name\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"balance\" :disabled=\"maxCheck('balance')\"> Balance\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n                                <label>Max Visible Fields</label>\n                                <select class=\"form-control\" v-model=\"maxActiveFields\">\n                                    <option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <span class=\"caret\"></span>\n                </button>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showExportModal=true\">\n                    Export\n                    <span class=\"fa fa-download\"></span>\n                </button>\n                <!--<a class=\"btn btn-primary btn-sm\" href=\"funds/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n            </form>\n        </div>\n    </div>\n    <hr class=\"divider sm\">\n    <div>\n        Active Filters:\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.minBalance\" @click=\"filters.minBalance = ''\">\n            Min Balance\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.maxBalance\" @click=\"filters.maxBalance = ''\">\n            Max Balance\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.type &amp;&amp; filters.type.length\" @click=\"filters.type = ''\">\n            Type\n            <span class=\"badge\">x</span>\n        </button>\n    </div>\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n\n            <th v-if=\"isActive('balance')\" :class=\"{'text-primary': orderByField === 'balance'}\">\n                Balance\n                <i @click=\"setOrderByField('balance')\" v-if=\"orderByField !== 'balance'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'balance'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"fund in funds|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('name')\" v-text=\"fund.name\"></td>\n            <td v-if=\"isActive('type')\">\n                <span class=\"label label-default\" v-text=\"fund.type|capitalize\"></span>\n            </td>\n            <td v-if=\"isActive('balance')\">\n                <span v-text=\"fund.balance|currency\" :class=\"{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}\"></span>\n            </td>\n            <td><a href=\"/admin/funds/{{ fund.id }}\"><i class=\"fa fa-cog\"></i></a></td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n    <modal title=\"Export Funds List\" :show.sync=\"showExportModal\" effect=\"zoom\" width=\"400\" ok-text=\"Export\" :callback=\"exportList\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <ul class=\"list-unstyled\">\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"name\"> Name\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"type\"> Type\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"balance\"> Balance\n                    </label>\n                </li>\n            </ul>\n        </div>\n    </modal>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-72f10bfc", module.exports)
+  } else {
+    hotAPI.update("_v-72f10bfc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"babel-runtime/core-js/json/stringify":2,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],137:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'admin-transactions-list',
+    components: { vSelect: _vueSelect2.default, 'aside': _vueStrap2.default.aside, 'modal': _vueStrap2.default.modal },
+    props: {
+        storageName: {
+            type: String,
+            default: 'AdminTransactionsListConfig'
+        }
+    },
+    data: function data() {
+        return {
+            transactions: [],
+            orderByField: 'description',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {},
+            search: '',
+            activeFields: ['description', 'type', 'amount'],
+            maxActiveFields: 3,
+
+            // filter vars
+            donorsOptions: [],
+            donorObj: null,
+            filters: {
+                tags: [],
+                donor: '',
+                minAmount: null,
+                maxAmount: null,
+                type: null
+            },
+            showFilters: false,
+            showExportModal: false,
+            exportSettings: {
+                fields: []
+            }
+
+        };
+    },
+
+    watch: {
+        // watch filters obj
+        'filters': {
+            handler: function handler(val) {
+                console.log(val);
+                this.searchTransactions();
+            },
+            deep: true
+        },
+        'donorObj': function donorObj(val) {
+            this.filters.donor = val ? val.id : '';
+            this.searchTransactions();
+        },
+        'direction': function direction(val) {
+            this.searchTransactions();
+        },
+        'tagsString': function tagsString(val) {
+            var tags = val.split(/[\s,]+/);
+            this.filters.tags = tags[0] !== '' ? tags : '';
+            this.searchTransactions();
+        },
+        'activeFields': function activeFields(val, oldVal) {
+            // if the orderBy field is removed from view
+            if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
+                // default to first visible field
+                this.orderByField = val[0];
+            }
+            this.updateConfig();
+        },
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchTransactions();
+        },
+        'page': function page(val, oldVal) {
+            this.searchTransactions();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchTransactions();
+        }
+
+    },
+    methods: {
+        updateConfig: function updateConfig() {
+            localStorage[this.storageName] = (0, _stringify2.default)({
+                activeFields: this.activeFields,
+                maxActiveFields: this.maxActiveFields,
+                per_page: this.per_page,
+                filters: {
+                    tags: this.filters.tags,
+                    donor: this.filters.donor,
+                    minAmount: this.filters.minAmount,
+                    maxAmount: this.filters.maxAmount,
+                    type: this.filters.type
+                }
+            });
+        },
+        isActive: function isActive(field) {
+            return _.contains(this.activeFields, field);
+        },
+        maxCheck: function maxCheck(field) {
+            return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields;
+        },
+        setOrderByField: function setOrderByField(field) {
+            this.orderByField = field;
+            this.direction = 1;
+            this.searchTransactions();
+        },
+        resetFilter: function resetFilter() {
+            $.extend(this, {
+                orderByField: 'description',
+                direction: 1,
+                page: 1,
+                per_page: 10,
+                perPageOptions: [5, 10, 25, 50, 100],
+                pagination: {},
+                search: '',
+                activeFields: ['description', 'type', 'amount'],
+                maxActiveFields: 8,
+                filters: {
+                    tags: [],
+                    donor: '',
+                    minAmount: null,
+                    maxAmount: null,
+                    type: ''
+                }
+            });
+        },
+        getListSettings: function getListSettings() {
+            var params = {
+                include: '',
+                search: this.search,
+                per_page: this.per_page,
+                page: this.page,
+                sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
+            };
+
+            $.extend(params, this.filters);
+
+            return params;
+        },
+        getDonors: function getDonors(search, loading) {
+            loading ? loading(true) : void 0;
+            this.$http.get('donors', { search: search }).then(function (response) {
+                this.donorsOptions = response.data.data;
+                loading ? loading(false) : void 0;
+            });
+        },
+        searchTransactions: function searchTransactions() {
+            var params = this.getListSettings();
+            this.$http.get('transactions', params).then(function (response) {
+                var self = this;
+                this.transactions = response.data.data;
+                this.pagination = response.data.meta.pagination;
+            }).then(function () {
+                this.updateConfig();
+            });
+        },
+        exportList: function exportList() {
+            var params = this.getListSettings();
+            $.extend(params, this.exportSettings);
+            // Send to api route
+
+            this.$http.post('transactions/export', params).then(function (response) {
+                console.log(response);
+            }, function (error) {
+                console.log(error);
+            });
+        }
+    },
+    ready: function ready() {
+        // load view state
+        if (localStorage[this.storageName]) {
+            var config = JSON.parse(localStorage[this.storageName]);
+            this.filters = config.filters;
+        }
+        // populate
+        this.searchTransactions();
+
+        //Manually handle dropdown functionality to keep dropdown open until finished
+        $('.form-toggle-menu .dropdown-menu').on('click', function (event) {
+            var events = $._data(document, 'events') || {};
+            events = events.click || [];
+            for (var i = 0; i < events.length; i++) {
+                if (events[i].selector) {
+
+                    //Check if the clicked element matches the event selector
+                    if ($(event.target).is(events[i].selector)) {
+                        events[i].handler.call(event.target, event);
+                    }
+
+                    // Check if any of the clicked element parents matches the
+                    // delegated event selector (Emulating propagation)
+                    $(event.target).parents(events[i].selector).each(function () {
+                        events[i].handler.call(this, event);
+                    });
+                }
+            }
+            event.stopPropagation(); //Always stop propagation
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <label>Type</label>\n                <select class=\"form-control\" v-model=\"filters.type\">\n                    <option value=\"\">All Types</option>\n                    <option value=\"donation\">Donation</option>\n                    <option value=\"transfer\">Transfer</option>\n                    <option value=\"payment\">Payment</option>\n                    <option value=\"refund\">Refund</option>\n                    <option value=\"fee\">Fee</option>\n                </select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"donorFilter\" :debounce=\"250\" :on-search=\"getDonors\" :value.sync=\"donorObj\" :options=\"donorsOptions\" label=\"name\" placeholder=\"Filter by Donor\"></v-select>\n            </div>\n\n            <div class=\"form-group\">\n                <div class=\"row\">\n                    <div class=\"col-xs-12\">\n                        <label>Amount</label>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Min</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.minAmount\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Max</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.maxAmount\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"description\" :disabled=\"maxCheck('description')\"> Description\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"amount\" :disabled=\"maxCheck('amount')\"> Amount\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n                                <label>Max Visible Fields</label>\n                                <select class=\"form-control\" v-model=\"maxActiveFields\">\n                                    <option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <span class=\"caret\"></span>\n                </button>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showExportModal=true\">\n                    Export\n                    <span class=\"fa fa-download\"></span>\n                </button>\n                <!--<a class=\"btn btn-primary btn-sm\" href=\"transactions/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n            </form>\n        </div>\n    </div>\n    <hr class=\"divider sm\">\n    <div>\n        Active Filters:\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.donor\" @click=\"filters.donor = ''\">\n            Donor\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.minAmount\" @click=\"filters.minAmount = ''\">\n            Min Amount\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.maxAmount\" @click=\"filters.maxAmount = ''\">\n            Max Amount\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.type &amp;&amp; filters.type.length\" @click=\"filters.type = ''\">\n            Type\n            <span class=\"badge\">x</span>\n        </button>\n    </div>\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('description')\" :class=\"{'text-primary': orderByField === 'description'}\">\n                Description\n                <i @click=\"setOrderByField('description')\" v-if=\"orderByField !== 'description'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'description'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n\n            <th v-if=\"isActive('amount')\" :class=\"{'text-primary': orderByField === 'amount'}\">\n                Amount\n                <i @click=\"setOrderByField('amount')\" v-if=\"orderByField !== 'amount'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'amount'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"transaction in transactions|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('type')\">\n                <span class=\"label label-default\" v-text=\"transaction.type|capitalize\"></span>\n            </td>\n            <td v-if=\"isActive('description')\" v-text=\"transaction.description\"></td>\n            <td v-if=\"isActive('amount')\">\n                <span v-text=\"transaction.amount|currency\" :class=\"{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}\"></span>\n            </td>\n            <td><a href=\"/admin/transactions/{{ transaction.id }}\"><i class=\"fa fa-cog\"></i></a></td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <nav>\n                        <ul class=\"pagination pagination-sm\">\n                            <li :class=\"{ 'disabled': pagination.current_page == 1 }\">\n                                <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">\n                                    <span aria-hidden=\"true\">«</span>\n                                </a>\n                            </li>\n                            <li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>\n                            <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">\n                                <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">\n                                    <span aria-hidden=\"true\">»</span>\n                                </a>\n                            </li>\n                        </ul>\n                    </nav>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n    <modal title=\"Export Transactions List\" :show.sync=\"showExportModal\" effect=\"zoom\" width=\"400\" ok-text=\"Export\" :callback=\"exportList\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <ul class=\"list-unstyled\">\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"description\"> Description\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"type\"> Type\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"amount\"> Amount\n                    </label>\n                </li>\n            </ul>\n        </div>\n    </modal>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-454ad5be", module.exports)
+  } else {
+    hotAPI.update("_v-454ad5be", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"babel-runtime/core-js/json/stringify":2,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],138:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73632,6 +74455,11 @@ exports.default = {
             /*if (val.hasOwnProperty('url') && oldVal !== null && val.url !== oldVal.url) {
              debugger;
              }*/
+        },
+        'fundraiser.url': function fundraiserUrl() {
+            debugger;
+            // checkbox active state has changed
+            //this.block.someotherprop.changeme = 5;
         }
     },
     filters: {
@@ -73654,6 +74482,11 @@ exports.default = {
                 if (response.data.data.length) {
                     this.validUrl = response.data.data[0].id === this.fundraiser.id;
                 } else {
+                    this.validUrl = true;
+                }
+
+                // validat empty url string for private fundraisers
+                if (this.fundraiser.public === false && this.fundraiser.url === '') {
                     this.validUrl = true;
                 }
                 this.checkingUrl = false;
@@ -73698,7 +74531,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-76dd8b48", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],136:[function(require,module,exports){
+},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],139:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73833,7 +74666,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4773c802", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],137:[function(require,module,exports){
+},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],140:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\nvideo {\n    width: 100%;\n    height: auto;\n}\n")
 'use strict';
@@ -74025,7 +74858,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-02bfe2c1", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":206,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],138:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":209,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],141:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74096,7 +74929,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-60464908", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],139:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],142:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -74211,7 +75044,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0f6c0d9e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],140:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],143:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -74373,7 +75206,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7071c3a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],141:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74474,7 +75307,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1244b388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],142:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74556,7 +75389,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6170d6da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],143:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],146:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -74864,7 +75697,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4d4691e4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],144:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],147:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74912,7 +75745,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-15f24781", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],145:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75015,7 +75848,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3253a032", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],146:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],149:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75051,7 +75884,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-24620ef0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],147:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75105,7 +75938,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3568e8fb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],148:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75138,7 +75971,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-38497816", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],149:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75212,7 +76045,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-a95a0ede", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],150:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75392,7 +76225,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-cf6ec6ac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],151:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75537,7 +76370,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7fba023b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],152:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75598,7 +76431,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7f80c956", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],153:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],156:[function(require,module,exports){
 'use strict';
 
 var _vueSelect = require('vue-select');
@@ -75760,7 +76593,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7dce67a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],154:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75913,7 +76746,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1e536124", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./donate.vue":134,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],155:[function(require,module,exports){
+},{"./donate.vue":134,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76088,7 +76921,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4f7b5afc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],156:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76133,7 +76966,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-627dafb9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],157:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76342,7 +77175,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-81b8d51a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":206,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],158:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":209,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76429,7 +77262,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0460b004", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],159:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76614,7 +77447,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e64c6ba2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":206,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],160:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":209,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76701,7 +77534,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-40f458ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],161:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76738,7 +77571,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-558d51ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],162:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76910,7 +77743,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-793ad0cd", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":206,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],163:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":209,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76997,7 +77830,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6c464550", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],164:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77244,7 +78077,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-86b15298", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/defineProperty":15,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],165:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":15,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77449,7 +78282,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-45829fee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],166:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77674,7 +78507,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-30337481", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/defineProperty":15,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],167:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":15,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77864,7 +78697,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1bac2c0c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":206,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],168:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":209,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],171:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -78199,7 +79032,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],169:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78250,7 +79083,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],170:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78322,7 +79155,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-73e4e546", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":206,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],171:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":209,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78555,7 +79388,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-72fce31c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],172:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78639,7 +79472,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-231765fa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],173:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78677,7 +79510,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c6cc02ae", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],174:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78722,7 +79555,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"col-xs-12 col-sm-6 col-md-4\" v-for=\"reservation in reservations\" v-if=\"reservations.length > 0\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading text-center\">\n                <h5>{{ reservation.trip.data.campaign.data.name }} <small>{{ reservation.country }}</small></h5>\n            </div>\n            <div class=\"panel-body text-center\">\n                <img :src=\"reservation.avatar\" class=\"img-circle img-lg\">\n                <hr class=\"divider inv sm\">\n                <h6 class=\"label label-default text-uppercase\">{{ reservation.trip.data.type }} Missionary</h6>\n                <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>\n                <h5 class=\"text-capitalize\">{{ reservation.trip.data.group.data.name }}</h5>\n                <a class=\"btn btn-sm btn-primary\" href=\"/dashboard/reservations/{{ reservation.id }}\">View Reservation</a>\n            </div>\n        </div>\n    </div>\n    <div class=\"alert alert-info\" v-if=\"reservations.length < 1\">No reservations found</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12 col-sm-6 col-md-4\" v-for=\"reservation in reservations\" v-if=\"reservations.length > 0\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading panel-ministry text-center\">\n                <h5 class=\"text-capitalize\">{{ reservation.trip.data.type }} Missionary</h5>\n            </div>\n            <div class=\"panel-body text-center\">\n                <img :src=\"reservation.avatar\" class=\"img-circle img-md\">\n                <hr class=\"divider inv sm\">\n                <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>\n                <h6 class=\"text-capitalize small\">{{ reservation.trip.data.group.data.name }}</h6>\n                <label style=\"margin-bottom:2px;font-size:10px;\">Campaign</label>\n                <h6 class=\"text-capitalize small\" style=\"margin-top:2px;\">{{ reservation.trip.data.campaign.data.name }}</h6>\n                <label style=\"margin-bottom:2px;font-size:10px;\">Country</label>\n                <h6 class=\"text-capitalize small\" style=\"margin-top:2px;\">{{ reservation.country }}</h6>\n                <hr class=\"divider inv sm\">\n                <a class=\"btn btn-sm btn-primary\" href=\"/dashboard/reservations/{{ reservation.id }}\">View Reservation</a>\n                <hr class=\"divider inv sm\">\n            </div>\n        </div>\n    </div>\n    <div class=\"col-xs-12\">\n        <div class=\"alert alert-info\" v-if=\"reservations.length < 1\">No reservations found</div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -78733,7 +79566,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],175:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78838,7 +79671,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-35c3a93b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/medicals/medical-create-update.vue":157,"vue":120,"vue-hot-reload-api":115}],176:[function(require,module,exports){
+},{"../records/medicals/medical-create-update.vue":160,"vue":120,"vue-hot-reload-api":115}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78943,7 +79776,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5d37e43e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/passports/passport-create-update.vue":159,"vue":120,"vue-hot-reload-api":115}],177:[function(require,module,exports){
+},{"../records/passports/passport-create-update.vue":162,"vue":120,"vue-hot-reload-api":115}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79048,7 +79881,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1bd1d2ef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/visas/visa-create-update.vue":162,"vue":120,"vue-hot-reload-api":115}],178:[function(require,module,exports){
+},{"../records/visas/visa-create-update.vue":165,"vue":120,"vue-hot-reload-api":115}],181:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-e87a91b0] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo[_v-e87a91b0] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo[_v-e87a91b0] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo[_v-e87a91b0]:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox[_v-e87a91b0]:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i[_v-e87a91b0] {\n  margin-right: 10px; }\n")
 'use strict';
@@ -79237,7 +80070,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e87a91b0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],179:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79316,7 +80149,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],180:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],183:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -79474,7 +80307,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":187,"./create/details.vue":188,"./create/pricing.vue":189,"./create/requirements.vue":190,"./create/settings.vue":191,"vue":120,"vue-hot-reload-api":115,"vueify/lib/insert-css":121}],181:[function(require,module,exports){
+},{"./create/deadlines.vue":190,"./create/details.vue":191,"./create/pricing.vue":192,"./create/requirements.vue":193,"./create/settings.vue":194,"vue":120,"vue-hot-reload-api":115,"vueify/lib/insert-css":121}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79510,7 +80343,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],182:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79603,7 +80436,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],183:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],186:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -79787,7 +80620,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":192,"./edit/details.vue":193,"./edit/pricing.vue":194,"./edit/requirements.vue":195,"./edit/settings.vue":196,"babel-runtime/helpers/defineProperty":15,"vue":120,"vue-hot-reload-api":115,"vueify/lib/insert-css":121}],184:[function(require,module,exports){
+},{"./edit/deadlines.vue":195,"./edit/details.vue":196,"./edit/pricing.vue":197,"./edit/requirements.vue":198,"./edit/settings.vue":199,"babel-runtime/helpers/defineProperty":15,"vue":120,"vue-hot-reload-api":115,"vueify/lib/insert-css":121}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79890,7 +80723,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],185:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79963,7 +80796,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],186:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],189:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80034,7 +80867,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],187:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80112,7 +80945,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],188:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],191:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 'use strict';
@@ -80225,7 +81058,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],189:[function(require,module,exports){
+},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80454,7 +81287,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],190:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80531,7 +81364,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],191:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],194:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80586,7 +81419,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],192:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],195:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80668,7 +81501,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],193:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80804,7 +81637,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-select":117}],194:[function(require,module,exports){
+},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-select":117}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81037,7 +81870,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],195:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81117,7 +81950,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],196:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81177,7 +82010,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],197:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81223,7 +82056,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],198:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81390,7 +82223,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],199:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81447,7 +82280,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],200:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81745,7 +82578,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],201:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81790,7 +82623,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],202:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81827,7 +82660,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],203:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81864,7 +82697,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],204:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81935,7 +82768,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c5dc1f32", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],205:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],208:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -82246,7 +83079,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":153,"./registration/additional-trip-options.vue":197,"./registration/basic-info.vue":198,"./registration/deadline-agreement.vue":199,"./registration/payment-details.vue":200,"./registration/review.vue":201,"./registration/roca.vue":202,"./registration/tos.vue":203,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],206:[function(require,module,exports){
+},{"../login.vue":156,"./registration/additional-trip-options.vue":200,"./registration/basic-info.vue":201,"./registration/deadline-agreement.vue":202,"./registration/payment-details.vue":203,"./registration/review.vue":204,"./registration/roca.vue":205,"./registration/tos.vue":206,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82627,7 +83460,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],207:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],210:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -82767,7 +83600,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],208:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],211:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -82900,7 +83733,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],209:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82936,7 +83769,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],210:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],213:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -83114,7 +83947,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],211:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],214:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -83336,7 +84169,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],212:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vueify/lib/insert-css":121}],215:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-4d454604] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-ability[_v-4d454604] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.ability-item:hover i.remove-ability[_v-4d454604] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-ability[_v-4d454604]:hover {\n  color: #d8262e; }\n")
 'use strict';
@@ -83388,7 +84221,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\" _v-4d454604=\"\">\n    <div class=\"panel-heading\" _v-4d454604=\"\">\n        <h5 class=\"panel-header\" _v-4d454604=\"\">Permissions</h5>\n    </div>\n    <div class=\"panel-body\" _v-4d454604=\"\">\n        <label _v-4d454604=\"\">User Roles</label>\n        <v-select class=\"form-control\" multiple=\"\" :value.sync=\"selectedRoles\" :options=\"availableRoles\" label=\"roles\" _v-4d454604=\"\">\n        </v-select>\n\n        <button class=\"btn btn-xs btn-link\" @click=\"showAbilities = !showAbilities\" _v-4d454604=\"\">\n            Mange user abilities <i class=\"fa fa-cog\" _v-4d454604=\"\"></i>\n        </button>\n    </div>\n    <div class=\"panel-body\" v-if=\"showAbilities\" _v-4d454604=\"\">\n        <div class=\"list-gorup-item\" _v-4d454604=\"\">\n            <label _v-4d454604=\"\">User Abilities</label>\n            <v-select class=\"form-control\" :value.sync=\"selectedAbility\" :options=\"availableAbilities\" placeholder=\"add an ability\" label=\"abilities\" _v-4d454604=\"\">\n            </v-select>\n        </div>\n        <div class=\"list-group-item ability-item\" v-for=\"ability in abilities\" _v-4d454604=\"\">\n            <div class=\"row\" _v-4d454604=\"\">\n                <div class=\"col-xs-11\" _v-4d454604=\"\">\n                    <small class=\"text-muted\" _v-4d454604=\"\">can</small> {{ ability.display_name }}\n                </div>\n                <div class=\"col-xs-1 col-sm-1 text-right\" _v-4d454604=\"\">\n                    <i class=\"fa fa-times fa-lg text-muted remove-ability\" _v-4d454604=\"\">\n                    </i>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\" _v-4d454604=\"\">\n    <div class=\"panel-heading\" _v-4d454604=\"\">\n        <h5 class=\"panel-header\" _v-4d454604=\"\">Permissions <button class=\"btn btn-xs btn-default-hollow pull-right\" style=\"margin-top:-3px\" @click=\"showAbilities = !showAbilities\" _v-4d454604=\"\">\n            Mange <i class=\"fa fa-cog\" _v-4d454604=\"\"></i>\n        </button></h5>\n\n    </div>\n    <div class=\"panel-body\" _v-4d454604=\"\">\n        <label _v-4d454604=\"\">User Roles</label>\n        <v-select class=\"form-control\" multiple=\"\" :value.sync=\"selectedRoles\" :options=\"availableRoles\" label=\"roles\" _v-4d454604=\"\">\n        </v-select>\n    </div>\n    <div class=\"panel-body\" v-if=\"showAbilities\" _v-4d454604=\"\">\n        <div class=\"list-gorup-item\" _v-4d454604=\"\">\n            <label _v-4d454604=\"\">User Abilities</label>\n            <v-select class=\"form-control\" :value.sync=\"selectedAbility\" :options=\"availableAbilities\" placeholder=\"add an ability\" label=\"abilities\" _v-4d454604=\"\">\n            </v-select>\n        </div>\n        <div class=\"list-group-item ability-item\" v-for=\"ability in abilities\" _v-4d454604=\"\">\n            <div class=\"row\" _v-4d454604=\"\">\n                <div class=\"col-xs-11\" _v-4d454604=\"\">\n                    <small class=\"text-muted\" _v-4d454604=\"\">can</small> {{ ability.display_name }}\n                </div>\n                <div class=\"col-xs-1 col-sm-1 text-right\" _v-4d454604=\"\">\n                    <i class=\"fa fa-times fa-lg text-muted remove-ability\" _v-4d454604=\"\">\n                    </i>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -83403,7 +84236,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4d454604", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],213:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83518,7 +84351,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0a7ed88a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],214:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83593,7 +84426,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-69badce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":120,"vue-hot-reload-api":115}],215:[function(require,module,exports){
+},{"marked":107,"vue":120,"vue-hot-reload-api":115}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83631,7 +84464,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ea6dd1a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],216:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83676,7 +84509,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-718e65c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":120,"vue-hot-reload-api":115}],217:[function(require,module,exports){
+},{"vue":120,"vue-hot-reload-api":115}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83802,7 +84635,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-63c1ee29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],218:[function(require,module,exports){
+},{"marked":107,"vue":120,"vue-hot-reload-api":115,"vue-strap/dist/vue-strap.min":118}],221:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.alert.top, .alert.top-right {\n    top: 80px;\n}\n")
 'use strict';
@@ -84046,7 +84879,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2d9ee899", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":206,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],219:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":209,"vue":120,"vue-hot-reload-api":115,"vue-select":117,"vue-strap/dist/vue-strap.min":118,"vueify/lib/insert-css":121}],222:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -84357,6 +85190,18 @@ var _reconcileFund = require('./components/reconcile-fund.vue');
 
 var _reconcileFund2 = _interopRequireDefault(_reconcileFund);
 
+var _adminDonorsList = require('./components/financials/donors/admin-donors-list.vue');
+
+var _adminDonorsList2 = _interopRequireDefault(_adminDonorsList);
+
+var _adminFundsList = require('./components/financials/funds/admin-funds-list.vue');
+
+var _adminFundsList2 = _interopRequireDefault(_adminFundsList);
+
+var _adminTransactionsList = require('./components/financials/transactions/admin-transactions-list.vue');
+
+var _adminTransactionsList2 = _interopRequireDefault(_adminTransactionsList);
+
 var _vueStrap = require('vue-strap/dist/vue-strap.min');
 
 var _vueStrap2 = _interopRequireDefault(_vueStrap);
@@ -84364,10 +85209,10 @@ var _vueStrap2 = _interopRequireDefault(_vueStrap);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // jQuery
-window.$ = window.jQuery = require('jquery');
+
 
 // admin components
-
+window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
 window._ = require('underscore');
 window.marked = require('marked');
@@ -84530,7 +85375,7 @@ new _vue2.default({
     _recordsList2.default, _passportsList2.default, _passportCreateUpdate2.default, _visasList2.default, _visaCreateUpdate2.default, _medicalsList2.default, _medicalCreateUpdate2.default, _groupsList2.default, _reservationAvatar2.default, _reservationCosts2.default, _reservationDues2.default, _reservationFunding2.default, _reservationsPassportsManager2.default, _reservationsMedicalReleasesManager2.default, _reservationsVisasManager2.default, _userSettings2.default, _userProfileCountries2.default, _userProfileStories2.default, _userProfileFundraisers2.default, _userProfileFundraisersDonors2.default, _userProfileFundraisersProgress2.default, _dashboardGroupTrips2.default, _dashboardGroupReservations2.default, _dashboardInterestsList2.default,
 
     // admin components
-    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminInterestsList2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminReservationEdit2.default, _adminReservationCosts2.default, _adminReservationDues2.default, _adminReservationDeadlines2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default, _reconcileFund2.default],
+    _adminCampaignCreate2.default, _adminCampaignEdit2.default, _adminCampaignDetails2.default, _adminTripCreate2.default, _adminTripEdit2.default, _adminTripsList2.default, _adminTripReservationsList2.default, _adminTripFacilitators2.default, _adminTripDuplicate2.default, _adminTripDelete2.default, _adminInterestsList2.default, _adminGroupsList2.default, _adminGroupCreate2.default, _adminGroupEdit2.default, _adminGroupManagers2.default, _adminReservationsList2.default, _adminReservationEdit2.default, _adminReservationCosts2.default, _adminReservationDues2.default, _adminReservationDeadlines2.default, _adminUsersList2.default, _adminUserCreate2.default, _adminUserEdit2.default, _adminUserDelete2.default, _adminUploadsList2.default, _adminUploadCreateUpdate2.default, _reconcileFund2.default, _adminDonorsList2.default, _adminFundsList2.default, _adminTransactionsList2.default],
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -84556,6 +85401,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/action-trigger.vue":122,"./components/campaigns/admin-campaign-create.vue":123,"./components/campaigns/admin-campaign-details.vue":124,"./components/campaigns/admin-campaign-edit.vue":125,"./components/campaigns/campaign-groups.vue":126,"./components/campaigns/campaigns.vue":127,"./components/campaigns/group-trips.vue":132,"./components/campaigns/groups-trips-selection-wrapper.vue":133,"./components/donate.vue":134,"./components/fundraisers/fundraisers-manager.vue":135,"./components/fundraisers/fundraisers-stories.vue":136,"./components/fundraisers/fundraisers-uploads.vue":137,"./components/fundraisers/fundraisers.vue":138,"./components/groups/admin-group-create.vue":139,"./components/groups/admin-group-edit.vue":140,"./components/groups/admin-group-managers.vue":141,"./components/groups/admin-groups-list.vue":142,"./components/groups/dashboard-group-reservations.vue":143,"./components/groups/dashboard-group-trips.vue":144,"./components/groups/group-interest-signup.vue":145,"./components/groups/group-profile-fundraisers.vue":146,"./components/groups/group-profile-stories.vue":147,"./components/groups/group-profile-trips.vue":148,"./components/groups/groups-list.vue":149,"./components/groups/groups.vue":150,"./components/interests/admin-interests-list.vue":151,"./components/interests/dashboard-interests-list.vue":152,"./components/login.vue":153,"./components/modal-donate.vue":154,"./components/notes.vue":155,"./components/reconcile-fund.vue":156,"./components/records/medicals/medical-create-update.vue":157,"./components/records/medicals/medicals-list.vue":158,"./components/records/passports/passport-create-update.vue":159,"./components/records/passports/passports-list.vue":160,"./components/records/records-list.vue":161,"./components/records/visas/visa-create-update.vue":162,"./components/records/visas/visas-list.vue":163,"./components/reservations/admin-reservation-costs.vue":164,"./components/reservations/admin-reservation-deadlines.vue":165,"./components/reservations/admin-reservation-dues.vue":166,"./components/reservations/admin-reservation-edit.vue":167,"./components/reservations/admin-reservations-list.vue":168,"./components/reservations/donations-list.vue":169,"./components/reservations/reservation-avatar.vue":170,"./components/reservations/reservation-costs.vue":171,"./components/reservations/reservation-dues.vue":172,"./components/reservations/reservation-funding.vue":173,"./components/reservations/reservations-list.vue":174,"./components/reservations/reservations-medical-releases-manager.vue":175,"./components/reservations/reservations-passports-manager.vue":176,"./components/reservations/reservations-visas-manager.vue":177,"./components/todos.vue":178,"./components/top-nav.vue":179,"./components/trips/admin-trip-create.vue":180,"./components/trips/admin-trip-delete.vue":181,"./components/trips/admin-trip-duplicate.vue":182,"./components/trips/admin-trip-edit.vue":183,"./components/trips/admin-trip-facilitators.vue":184,"./components/trips/admin-trip-reservations-list.vue":185,"./components/trips/admin-trips-list.vue":186,"./components/trips/trip-details-missionaries.vue":204,"./components/trips/trip-registration-wizard.vue":205,"./components/uploads/admin-upload-create-update.vue":206,"./components/uploads/admin-uploads-list.vue":207,"./components/users/admin-user-create.vue":208,"./components/users/admin-user-delete.vue":209,"./components/users/admin-user-edit.vue":210,"./components/users/admin-users-list.vue":211,"./components/users/user-permissions.vue":212,"./components/users/user-profile-countries.vue":213,"./components/users/user-profile-fundraisers-donors.vue":214,"./components/users/user-profile-fundraisers-progress.vue":215,"./components/users/user-profile-fundraisers.vue":216,"./components/users/user-profile-stories.vue":217,"./components/users/user-settings.vue":218,"aos":1,"bootstrap-sass":17,"gsap":104,"jquery":106,"jquery.cookie":105,"marked":107,"moment":108,"scrollmagic":110,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":111,"underscore":112,"video.js":113,"videojs-youtube":114,"vue":120,"vue-resource":116,"vue-strap/dist/vue-strap.min":118,"vue-validator":119}]},{},[219]);
+},{"./components/action-trigger.vue":122,"./components/campaigns/admin-campaign-create.vue":123,"./components/campaigns/admin-campaign-details.vue":124,"./components/campaigns/admin-campaign-edit.vue":125,"./components/campaigns/campaign-groups.vue":126,"./components/campaigns/campaigns.vue":127,"./components/campaigns/group-trips.vue":132,"./components/campaigns/groups-trips-selection-wrapper.vue":133,"./components/donate.vue":134,"./components/financials/donors/admin-donors-list.vue":135,"./components/financials/funds/admin-funds-list.vue":136,"./components/financials/transactions/admin-transactions-list.vue":137,"./components/fundraisers/fundraisers-manager.vue":138,"./components/fundraisers/fundraisers-stories.vue":139,"./components/fundraisers/fundraisers-uploads.vue":140,"./components/fundraisers/fundraisers.vue":141,"./components/groups/admin-group-create.vue":142,"./components/groups/admin-group-edit.vue":143,"./components/groups/admin-group-managers.vue":144,"./components/groups/admin-groups-list.vue":145,"./components/groups/dashboard-group-reservations.vue":146,"./components/groups/dashboard-group-trips.vue":147,"./components/groups/group-interest-signup.vue":148,"./components/groups/group-profile-fundraisers.vue":149,"./components/groups/group-profile-stories.vue":150,"./components/groups/group-profile-trips.vue":151,"./components/groups/groups-list.vue":152,"./components/groups/groups.vue":153,"./components/interests/admin-interests-list.vue":154,"./components/interests/dashboard-interests-list.vue":155,"./components/login.vue":156,"./components/modal-donate.vue":157,"./components/notes.vue":158,"./components/reconcile-fund.vue":159,"./components/records/medicals/medical-create-update.vue":160,"./components/records/medicals/medicals-list.vue":161,"./components/records/passports/passport-create-update.vue":162,"./components/records/passports/passports-list.vue":163,"./components/records/records-list.vue":164,"./components/records/visas/visa-create-update.vue":165,"./components/records/visas/visas-list.vue":166,"./components/reservations/admin-reservation-costs.vue":167,"./components/reservations/admin-reservation-deadlines.vue":168,"./components/reservations/admin-reservation-dues.vue":169,"./components/reservations/admin-reservation-edit.vue":170,"./components/reservations/admin-reservations-list.vue":171,"./components/reservations/donations-list.vue":172,"./components/reservations/reservation-avatar.vue":173,"./components/reservations/reservation-costs.vue":174,"./components/reservations/reservation-dues.vue":175,"./components/reservations/reservation-funding.vue":176,"./components/reservations/reservations-list.vue":177,"./components/reservations/reservations-medical-releases-manager.vue":178,"./components/reservations/reservations-passports-manager.vue":179,"./components/reservations/reservations-visas-manager.vue":180,"./components/todos.vue":181,"./components/top-nav.vue":182,"./components/trips/admin-trip-create.vue":183,"./components/trips/admin-trip-delete.vue":184,"./components/trips/admin-trip-duplicate.vue":185,"./components/trips/admin-trip-edit.vue":186,"./components/trips/admin-trip-facilitators.vue":187,"./components/trips/admin-trip-reservations-list.vue":188,"./components/trips/admin-trips-list.vue":189,"./components/trips/trip-details-missionaries.vue":207,"./components/trips/trip-registration-wizard.vue":208,"./components/uploads/admin-upload-create-update.vue":209,"./components/uploads/admin-uploads-list.vue":210,"./components/users/admin-user-create.vue":211,"./components/users/admin-user-delete.vue":212,"./components/users/admin-user-edit.vue":213,"./components/users/admin-users-list.vue":214,"./components/users/user-permissions.vue":215,"./components/users/user-profile-countries.vue":216,"./components/users/user-profile-fundraisers-donors.vue":217,"./components/users/user-profile-fundraisers-progress.vue":218,"./components/users/user-profile-fundraisers.vue":219,"./components/users/user-profile-stories.vue":220,"./components/users/user-settings.vue":221,"aos":1,"bootstrap-sass":17,"gsap":104,"jquery":106,"jquery.cookie":105,"marked":107,"moment":108,"scrollmagic":110,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":111,"underscore":112,"video.js":113,"videojs-youtube":114,"vue":120,"vue-resource":116,"vue-strap/dist/vue-strap.min":118,"vue-validator":119}]},{},[222]);
 
 //# sourceMappingURL=main.js.map

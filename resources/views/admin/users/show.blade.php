@@ -31,59 +31,81 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-6">
-                <dl class="dl-horizontal">
-                    <dt>ID</dt>
-                    <dd>{{ $user->id }}</dd>
+            <div class="col-sm-8">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                    <div class="col-sm-8">
+                        <label>ID</label>
+                        <p>{{ $user->id }}</p>
 
-                    <dt>Name</dt>
-                    <dd>{{ $user->name }}</dd>
+                        <label>Name</label>
+                        <p>{{ $user->name }}</p>
+                        <hr class="divider">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Email</label>
+                                <p>{{ $user->email }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Alt. Email</label>
+                                <p>{{ $user->alt_email }}</p>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Gender</label>
+                                <p>{{ $user->gender }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Status</label>
+                                <p>{{ $user->status }}</p>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Birthday</label>
+                                <p>{{ carbon($user->birthday)->toFormattedDateString() }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Public</label>
+                                <p>{{ $user->public ? 'Yes' : 'No'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 panel panel-default text-center">
+                        <div class="panel-body">
+                            <label>Phone 1</label>
+                            <p>{{ $user->phone_one }}</p>
 
-                    <dt>Email</dt>
-                    <dd>{{ $user->email }}</dd>
+                            <label>Phone 2</label>
+                            <p>{{ $user->phone_two }}</p>
 
-                    <dt>Alt. Email</dt>
-                    <dd>{{ $user->alt_email }}</dd>
+                            <label>Street</label>
+                            <p>{{ $user->street }}</p>
 
-                    <dt>Gender</dt>
-                    <dd>{{ $user->gender }}</dd>
+                            <label>City</label>
+                            <p>{{ $user->city }}</p>
 
-                    <dt>Status</dt>
-                    <dd>{{ $user->status }}</dd>
+                            <label>State</label>
+                            <p>{{ $user->state }}</p>
 
-                    <dt>Birthday</dt>
-                    <dd>{{ carbon($user->birthday)->toFormattedDateString() }}</dd>
+                            <label>Zip</label>
+                            <p>{{ $user->zip }}</p>
 
-                    <dt>Phone 1</dt>
-                    <dd>{{ $user->phone_one }}</dd>
+                            <label>Country</label>
+                            <p>{{ country($user->country_code) }}</p>
 
-                    <dt>Phone 2</dt>
-                    <dd>{{ $user->phone_two }}</dd>
-
-                    <dt>Street</dt>
-                    <dd>{{ $user->street }}</dd>
-
-                    <dt>City</dt>
-                    <dd>{{ $user->city }}</dd>
-
-                    <dt>State</dt>
-                    <dd>{{ $user->state }}</dd>
-
-                    <dt>Zip</dt>
-                    <dd>{{ $user->zip }}</dd>
-
-                    <dt>Country</dt>
-                    <dd>{{ country($user->country_code) }}</dd>
-
-                    <dt>Timezone</dt>
-                    <dd>{{ $user->timezone }}</dd>
-
-                    <dt>Public</dt>
-                    <dd>{{ $user->public ? 'Yes' : 'No'}}</dd>
-                </dl>
+                            <label>Timezone</label>
+                            <p>{{ $user->timezone }}</p>
+                        </div>
+                    </div><!-- end col -->
+                    </div><!-- end panel body -->
+                </div><!-- end panel -->
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <user-permissions user_id="{{ $user->id }}"></user-permissions>
             </div>
 

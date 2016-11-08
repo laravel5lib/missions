@@ -10,13 +10,13 @@
                 <div class="col-sm-4">
                     <hr class="divider inv sm">
                     <div class="btn-group pull-right">
-                        <a href="#" class="btn btn-primary">New <i class="fa fa-plus"></i></a>
+                        <a href="{{ url('admin/donors/create') }}" class="btn btn-primary">New <i class="fa fa-plus"></i></a>
                         <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Edit</a></li>
+                            <li><a href="{{ 'admin/donors/' . $donor->id . '/edit' }}">Edit</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#">Delete</a></li>
                         </ul>
@@ -58,14 +58,10 @@
                 </div>
             </div>
             <div class="col-md-8">
-                {{--<div class="panel panel-default">--}}
-                    {{--<div class="panel-heading">--}}
-                        <h5>Transactions</h5>
-                    {{--</div>--}}
-                    {{--<div class="panel-body">--}}
-                        <admin-transactions-list donor="{{ $donor->id }}" storage-name="AdminDonorTransactionsConfig"></admin-transactions-list>
-                    {{--</div>--}}
-                {{--</div>--}}
+                <h5>Transactions</h5>
+                <admin-transactions-list donor="{{ $donor->id }}"
+                                         storage-name="AdminDonorTransactionsConfig">
+                </admin-transactions-list>
             </div>
         </div>
     </div>

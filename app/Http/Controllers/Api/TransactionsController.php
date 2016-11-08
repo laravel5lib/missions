@@ -14,6 +14,40 @@ use Dingo\Api\Contract\Http\Request;
 
 class TransactionsController extends Controller
 {
+    // General Donations:
+        // CLASS: General
+        // ITEM: General Donation
+
+    // Campaign Donations:
+        // CLASS: {{ campaign_name }} - General
+        // ITEM: General Donation
+
+    // Trip/Reservation Donations:
+        // CLASS: {{ campaign_name }} - Team
+        // ITEM: Missionary Donation
+
+    // Cause Donations:
+        // CLASS: Angel Houses -OR- Wells -OR- Freedom Houses -OR- {{ campaign_name }} - Stadium Outreach &amp; Humanitarian
+        // ITEM: General Donation
+
+    // Project Donations:
+        // CLASS: Angel Houses -OR- Wells -OR- Freedom Houses -OR- {{ campaign_name }} - Stadium Outreach &amp; Humanitarian
+        // ITEM: {{ project_name }} Donation
+
+    // Student Tuition Payments:
+        // CLASS: MMC
+        // ITEM: Tuition & Fees
+
+
+    // EXCEL:
+        // Donor Name
+        // Address
+        // City, State, Zip
+        // Country
+        // Class
+        // Item
+        // Amount
+        // Date
 
     /**
      * @var Transaction

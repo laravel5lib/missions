@@ -32,7 +32,7 @@ class TransactionsController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.financials.transactions.create');
     }
 
     /**

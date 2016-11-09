@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\v1\Campaign;
 use App\Models\v1\Reservation;
 use App\Models\v1\Trip;
 use Carbon\Carbon;
@@ -37,6 +38,10 @@ function generateFundName($data)
 
     if ($data instanceof Trip) {
         return generateFundNameFromTrip($data);
+    }
+
+    if ($data instanceof Campaign) {
+        return $data->name . ' Campaign';
     }
 }
 
@@ -83,4 +88,25 @@ function generateFundraiserNameFromTrip($trip)
 function set_active($path, $active = 'active')
 {
     return Request::is($path) ? $active : '';
+}
+
+/**
+ * Generate a Class Name for QuickBooks
+ *
+ * @param $data
+ * @return string
+ */
+function generateQbClassName($data)
+{
+    if ($data instanceof Reservation) {
+        return $data->trip->campaign->name . ' - Team';
+    }
+
+    if ($data instanceof Trip) {
+       return $data->campaign->name . ' - Team';
+    }
+
+    if ($data instanceof Campaign) {
+        return $data->name . ' - General';
+    }
 }

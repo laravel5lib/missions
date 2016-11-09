@@ -18,6 +18,9 @@ class CreateFinancialsTables extends Migration
             $table->string('company', 60)->nullable();
             $table->string('email', 60)->nullable();
             $table->string('phone', 60)->nullable();
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
             $table->string('zip', 10)->nullable();
             $table->string('country_code')->nullable();
             $table->uuid('account_id')->nullable();
@@ -33,6 +36,8 @@ class CreateFinancialsTables extends Migration
             $table->integer('balance');
             $table->uuid('fundable_id');
             $table->uuid('fundable_type');
+            $table->string('class');
+            $table->string('item');
             $table->timestamps();
             $table->softDeletes();
         });

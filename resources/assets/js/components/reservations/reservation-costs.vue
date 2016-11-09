@@ -1,17 +1,17 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
         <div class="row">
-            <div class="col-sm-4">
-                <button class="btn btn-primary btn-xs" @click="add">
-                    <span class="fa fa-plus"></span> Add Optional Costs
+            <div class="col-xs-4">
+                <button class="btn btn-primary btn-sm" @click="add">
+                    <span class="fa fa-plus"></span> Add <span class="hidden-xs">Optional</span> Costs
                 </button>
             </div>
-            <div class="col-sm-8 text-right" v-if="reservation && listedCosts !== reservation.costs.data">
-                <button class="btn btn-default btn-xs" @click="revert">
-                    <span class="fa fa-refresh"></span> Revert Changes
+            <div class="col-xs-8 text-right" v-if="reservation && listedCosts !== reservation.costs.data">
+                <button class="btn btn-default btn-sm" @click="revert">
+                    <i class="fa fa-refresh"></i> <span class="hidden-xs">Revert Changes</span>
                 </button>
-                <button class="btn btn-primary btn-xs" @click="doUpdate">
-                    <span class="fa fa-save"></span> Save Changes
+                <button class="btn btn-primary btn-sm" @click="doUpdate">
+                    <i class="fa fa-save"></i> <span class="hidden-xs">Save Changes</span>
                 </button>
             </div>
         </div>
@@ -23,16 +23,11 @@
             </div><!-- end panel-heading -->
 
             <div class="list-group">
-            <div class="list-group-item" v-for="cost in listedCosts" :class="{'list-group-item-info': cost.unsaved}">
+            <div class="list-group-item" v-for="cost in listedCosts" :class="{'list-group-item-default': cost.unsaved}">
                 <div class="row" v-if="cost.type === 'optional'">
-                    <div class="col-md-6">
-                        <button class="btn btn-xs btn-danger" @click="confirmRemove(cost)">
-                            <span><i class="fa fa-trash"></i> Remove</span>
-                        </button>
-
-                    </div>
-                    <div class="col-xs-6 text-right" v-if="cost.unsaved">
-                        <span class="label label-info">Unsaved</span>
+                    <div class="col-xs-12">
+                        <a class="btn btn-xs btn-default-hollow pull-right" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> <span class="hidden-xs">Remove</span></a>
+                        <span v-if="cost.unsaved" class="label label-danger">Unsaved</span>
                     </div>
                 </div>
                 <div class="row">

@@ -15,8 +15,9 @@ class ReservationEventListener {
      */
     public function register($event)
     {
-        $this->process($event);
         $fund = $this->setupFunding($event);
+
+        $this->process($event);
 
         $params = $event->request->only(
             'donor', 'payment', 'token', 'amount', 'donor_id',

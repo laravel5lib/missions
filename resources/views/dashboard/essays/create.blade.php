@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
-                <essay-create-update user-id="{{ auth()->id() }}"></essay-create-update>
+                <essay-create-update user-id="{{ auth()->user()->id }}"></essay-create-update>
             </div>
         </div>
     </div>

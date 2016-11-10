@@ -4,7 +4,7 @@
             <div class="panel panel-default" v-if="essay">
                 <div style="min-height:220px;" class="panel-body">
                     <h6 class="text-uppercase"><i class="fa fa-file"></i> {{essay.subject}}</h6>
-                    <a role="button" :href="'/dashboard/records/' + essay.links[0].uri">
+                    <a role="button" :href="'/dashboard/records/essays/' + essay.id">
                         <h4 style="text-transform:capitalize;" class="text-primary">
                             {{essay.author_name}}
                         </h4>
@@ -41,7 +41,7 @@
                     <div class="panel panel-default">
                         <div style="min-height:220px;" class="panel-body">
                             <h6 class="text-uppercase"><i class="fa fa-file"></i> {{essay.subject}}</h6>
-                            <a role="button" :href="'/dashboard/records/' + essay.links[0].uri">
+                            <a role="button" :href="'/dashboard/records/essays/' + essay.id">
                                 <h4 style="text-transform:capitalize;" class="text-primary">
                                     {{essay.author_name}}
                                 </h4>

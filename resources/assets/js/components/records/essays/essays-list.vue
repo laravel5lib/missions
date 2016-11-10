@@ -8,7 +8,7 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h6 class="text-uppercase"><i class="fa fa-file"></i> {{essay.subject}}</h6>
-                    <a role="button" :href="'/dashboard/records/' + essay.links[0].uri">
+                    <a role="button" :href="'/dashboard/records/essays/' + essay.id">
                         <h4 style="text-transform:capitalize;" class="text-primary">
                             {{essay.author_name}}
                         </h4>

@@ -70,6 +70,16 @@ class Fund extends Model
     }
 
     /**
+     * Get all of the reservation's notes
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
+
+    /**
      * Reconcile the fund's balance.
      */
     public function reconcile()

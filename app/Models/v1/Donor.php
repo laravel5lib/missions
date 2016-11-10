@@ -26,6 +26,16 @@ class Donor extends Model
     }
 
     /**
+     * Get all of the reservation's notes
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
+
+    /**
      * Get all the donor's donations.
      *
      * @param array $designation

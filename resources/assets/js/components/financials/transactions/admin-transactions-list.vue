@@ -9,9 +9,8 @@
                         <option value="">All Types</option>
                         <option value="donation">Donation</option>
                         <option value="transfer">Transfer</option>
-                        <option value="payment">Payment</option>
                         <option value="refund">Refund</option>
-                        <option value="fee">Fee</option>
+                        <option value="credit">Credit</option>
                     </select>
                 </div>
                 <div class="form-group" v-if="!donor">

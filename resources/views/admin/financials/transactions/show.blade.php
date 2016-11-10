@@ -1,4 +1,5 @@
 @extends('admin.layouts.default')
+@inject('fund', 'App\Models\v1\Fund')
 
 @section('content')
     <div class="white-header-bg">
@@ -23,14 +24,20 @@
                         <h5 class="panel-header">Details</h5>
                     </div>
                     <div class="panel-body">
+                        <label>Amount</label>
+                        @if($transaction->amount > 0)<h4 class="text-success">@else <h4 class="text-danger">@endif
+                            $ {{ $transaction->amount }}
+                        </h4>
                         <label>Description</label>
                         <p>{{ $transaction->description }}</p>
                         <label>Type</label>
                         <p>{{ str_singular(ucwords($transaction->type)) }}</p>
-                        <label>Amount</label>
-                        <p>$ {{ $transaction->amount }}</p>
                         <label>Designation</label>
                         <p><a href="{{ url('/admin/funds/'. $transaction->fund->id) }}">{{ $transaction->fund->name }}</a></p>
+                        <label>QuickBooks Class</label>
+                        <p>{{ $transaction->fund->class }}</p>
+                        <label>QuickBooks Item</label>
+                        <p>{{ $transaction->fund->item }}</p>
                         <label>Created</label>
                         <p>{{ $transaction->created_at->format('F j, Y h:i a') }}</p>
                         <label>Last Updated</label>
@@ -39,7 +46,23 @@
                 </div>
             </div>
             <div class="col-md-6">
-                @if($transaction->payment)
+                @if($transaction->payment && $transaction->type == 'transfer')
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5 class="panel-header">Related Fund</h5>
+                        </div>
+                        <div class="panel-body">
+                            <label>{{ $transaction->payment['label'] }}</label>
+                            <p>
+                                <a href="/admin/funds/{{ $transaction->payment['fund_id'] }}">
+                                    {{ $fund->findOrFail($transaction->payment['fund_id'])->name }}
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                @endif
+
+                @if($transaction->payment && $transaction->type == 'donation')
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5 class="panel-header">Payment</h5>
@@ -103,6 +126,14 @@
                             </div>
                         </div>
                     @endif
+            </div>
+            <div class="col-sm-6">
+                <notes type="transactions"
+                       id="{{ $transaction->id }}"
+                       user_id="{{ auth()->user()->id }}"
+                       :per_page="3"
+                       :can-modify="{{ auth()->user()->can('modify-notes') }}">
+                </notes>
             </div>
         </div>
     </div>

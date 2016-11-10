@@ -102,7 +102,7 @@
                 if(essay) {
                     this.essay = essay;
                     this.reservationResource.update({id: this.reservationId}, {
-                        essay_id: essay.id
+                        testimony_id: essay.id
                     }).then(function (response) {
                         this.toggleChangeState();
                     });

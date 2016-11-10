@@ -82,7 +82,7 @@
                             <option value="groups">Group</option>
                         </select>
                     </div>
-                    <div class="col-md-6" v-if="donor.account_type">
+                    <div class="col-md-6" v-if="donor.account_type" :class="{'has-error' : accountError}">
                         <label>Account Holder</label>
                         <v-select class="form-control" id="accountHolder" :debounce="250" :on-search="getUsers"
                                   :value.sync="userObj" :options="users" label="name"
@@ -90,6 +90,7 @@
                         <v-select class="form-control" id="accountHolder" :debounce="250" :on-search="getGroups"
                                   :value.sync="groupObj" :options="groups" label="name"
                                   placeholder="Select a group" v-if="donor.account_type == 'groups'"></v-select>
+                        <span v-if="accountError" class="text-danger">Account already in use.</span>
                     </div>
                     <div class="col-md-6">
                         <label>Stripe Customer ID</label>
@@ -167,7 +168,8 @@
                 showError: false,
                 countryCodeObj: null,
                 userObj: null,
-                groupObj: null
+                groupObj: null,
+                accountError: ''
             }
         },
         watch: {
@@ -201,6 +203,13 @@
                     this.donor.account_type = response.data.data.account_type;
                     this.donor.account_id = response.data.data.account_id;
                     this.donor.customer_id = response.data.data.customer_id;
+
+                    if(this.donor.account_type == 'users') {
+                        this.userObj = {'id': response.data.data.account_id, 'name': response.data.data.account_name}
+                    } else {
+                        this.groupObj = {'id': response.data.data.account_id, 'name': response.data.data.account_name}
+                    }
+
                 });
             },
             create() {
@@ -213,16 +222,21 @@
                 this.$http.post('donors', this.donor).then(function (response) {
                     this.message = 'Donor created successfully.';
                     this.showSuccess = true;
-                }).error(function () {
+                }).error(function (response) {
+                    console.log(response);
                     this.message = 'There are errors on the form.';
                     this.showError = true;
                 });
             },
             update() {
+                this.accountError = false;
                 this.$http.put('donors/' + this.donorId, this.donor).then(function (response) {
                     this.message = 'Donor updated successfully.';
                     this.showSuccess = true;
-                }).error(function () {
+                }).error(function (response) {
+                    if(_.contains(_.keys(response.errors), 'account_id')) {
+                        this.accountError = true;
+                    }
                     this.message = 'There are errors on the form.';
                     this.showError = true;
                 });

@@ -30,6 +30,7 @@ import passportCreateUpdate from './components/records/passports/passport-create
 import essaysList from './components/records/essays/essays-list.vue';
 import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
 import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
+import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
 import reservationAvatar from './components/reservations/reservation-avatar.vue';
 import reservationCosts from './components/reservations/reservation-costs.vue';
 import reservationDues from './components/reservations/reservation-dues.vue';
@@ -303,6 +304,7 @@ new Vue({
         recordsList,
         passportsList,
         essaysList,
+        essayCreateUpdate,
         passportCreateUpdate,
         visasList,
         visaCreateUpdate,

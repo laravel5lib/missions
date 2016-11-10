@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <a href="{{ url('records/essays/create') }}" class="btn btn-primary"><i class="fa fa-plus icon-left"></i> Add Essay</a>
+                    <a href="{{ url('dashboard/records/essays/create') }}" class="btn btn-primary"><i class="fa fa-plus icon-left"></i> Add Essay</a>
                 </div>
             </div>
         </div>

@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-xs-12 text-right">
         <form class="form-inline">
-            <div class="checkbox">
+            <div class="checkbox" v-if="isFacilitator">
                 <label>
                     <input type="checkbox" v-model="includeManaging"> Include my group's reservations
                 </label>
@@ -44,26 +44,20 @@
         name: 'reservations-list',
         props: ['userId', 'type'],
         data(){
-            return{
+            return {
                 reservations: [],
                 trips: [],
                 includeManaging: false,
-                search: ''
+                search: '',
+                isFacilitator: false,
             }
         },
         watch: {
+            'search': function (val, oldVal) {
+                this.getReservations();
+            },
             'includeManaging': function (val, oldVal) {
-                if(val && !oldVal) {
-                    this.$http.get('users/'+ this.userId + '?include=facilitating,managing.trip').then(function (response) {
-                        var user = response.data.data;
-                        var facilitating = _.pluck(user.facilitating.data, 'id');
-                        var managing = user.managing.data
-                        this.trips = _.union(facilitating, managing);
-                        this.getReservations();
-                    });
-                } else {
-                    this.getReservations();
-                }
+                this.getReservations();
             }
         },
         methods: {
@@ -79,8 +73,8 @@
                     params.trip = this.trips;
                 } else {
                     params.user = new Array(this.userId);
-
                 }
+
                 this.$http.get('reservations', params).then(function (response) {
 
                     switch (this.type) {
@@ -95,10 +89,28 @@
                             });
                             break;
                     }
-                })
+                });
             },
         },
         ready(){
+            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
+                var user = response.data.data;
+                var managing = [];
+
+                if (user.facilitating.data.length) {
+                    this.isFacilitator = true;
+                    var facilitating = _.pluck(user.facilitating.data, 'id');
+                    this.trips = _.union(this.trips, facilitating);
+                }
+
+                if (user.managing.data.length) {
+                    _.each(user.managing.data, function (group) {
+                        managing = _.union(managing, _.pluck(group.trips.data, 'id'));
+                    });
+                    this.trips = _.union(this.trips, managing);
+                }
+            });
+
             this.getReservations();
         }
     }

@@ -57,7 +57,7 @@
                     <div role="tabpanel" class="tab-pane active" id="current-trips">
                         <group-profile-trips id="{{ $group->id }}"></group-profile-trips>
                     </div><!-- end tab-pane -->
-                    <div role="tabpanel" class="tab-pane active" id="fundraisers">
+                    <div role="tabpanel" class="tab-pane" id="fundraisers">
                         <group-profile-fundraisers id="{{ $group->id }}" group-url="{{ $group->url }}"></group-profile-fundraisers>
                     </div><!-- end tab-pane -->
                     <div role="tabpanel" class="tab-pane" id="stories">

@@ -813,7 +813,9 @@ $factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
         'name' => $faker->sentence(4),
         'balance' => $faker->randomNumber,
         'fundable_id' => $faker->randomElement(App\Models\v1\Reservation::pluck('id')->toArray()),
-        'fundable_type' => 'reservations'
+        'fundable_type' => 'reservations',
+        'class' => $faker->randomElement(App\Models\v1\Campaign::pluck('Name')->toArray()) . ' - Team',
+        'item' => 'Missionary Donation'
     ];
 });
 

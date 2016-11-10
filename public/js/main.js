@@ -72498,7 +72498,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":216,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],128:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":220,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],128:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -72744,7 +72744,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":216,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],130:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":220,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],130:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73973,6 +73973,153 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],140:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'donor-form',
+    components: { vSelect: _vueSelect2.default },
+    props: {
+        'isUpdate': {
+            required: false,
+            default: false
+        },
+        'donorId': {
+            type: String,
+            required: false
+        }
+    },
+    data: function data() {
+        return {
+            donor: {
+                name: '',
+                company: '',
+                email: '',
+                phone: '',
+                address: '',
+                city: '',
+                state: '',
+                zip: '',
+                country_code: '',
+                account_type: '',
+                account_id: '',
+                customer_id: ''
+            },
+            countries: [],
+            users: [],
+            groups: [],
+            message: '',
+            showSuccess: false,
+            showError: false,
+            countryCodeObj: null,
+            userObj: null,
+            groupObj: null
+        };
+    },
+
+    watch: {
+        'countryCodeObj': function countryCodeObj(val) {
+            _.isObject(val) ? this.donor.country_code = val.code : this.donor.country_code = null;
+        },
+        'userObj': function userObj(val) {
+            _.isObject(val) ? this.donor.account_id = val.id : this.donor.account_id = null;
+        },
+        'groupObj': function groupObj(val) {
+            _.isObject(val) ? this.donor.account_id = val.id : this.donor.account_id = null;
+        }
+    },
+    methods: {
+        checkForError: function checkForError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+
+            return this.$Donor[field].invalid;
+        },
+        fetch: function fetch() {
+            this.$http.get('donors/' + this.donorId).then(function (response) {
+                this.donor.name = response.data.data.name;
+                this.donor.company = response.data.data.company;
+                this.donor.email = response.data.data.email;
+                this.donor.phone = response.data.data.phone;
+                this.donor.address = response.data.data.address;
+                this.donor.city = response.data.data.city;
+                this.donor.state = response.data.data.state;
+                this.donor.zip = response.data.data.zip;
+                this.donor.country_code = response.data.data.country.code;
+                this.countryCodeObj = response.data.data.country;
+                this.donor.account_type = response.data.data.account_type;
+                this.donor.account_id = response.data.data.account_id;
+                this.donor.customer_id = response.data.data.customer_id;
+            });
+        },
+        create: function create() {
+            // validate manually
+            var self = this;
+            this.$validate(true, function () {
+                if (self.$validation.invalid) {}
+            });
+            this.$http.post('donors', this.donor).then(function (response) {
+                this.message = 'Donor created successfully.';
+                this.showSuccess = true;
+            }).error(function () {
+                this.message = 'There are errors on the form.';
+                this.showError = true;
+            });
+        },
+        update: function update() {
+            this.$http.put('donors/' + this.donorId, this.donor).then(function (response) {
+                this.message = 'Donor updated successfully.';
+                this.showSuccess = true;
+            }).error(function () {
+                this.message = 'There are errors on the form.';
+                this.showError = true;
+            });
+        },
+        getCountries: function getCountries() {
+            this.$http.get('utilities/countries').then(function (response) {
+                this.countries = response.data.countries;
+            });
+        },
+        getUsers: function getUsers(search) {
+            this.$http.get('users?per_page=10', { search: search }).then(function (response) {
+                this.users = response.data.data;
+            });
+        },
+        getGroups: function getGroups(search) {
+            this.$http.get('groups?per_page=10', { search: search }).then(function (response) {
+                this.groups = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        if (this.isUpdate) {
+            this.fetch();
+        }
+
+        this.getCountries();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <validator name=\"validation\" :classes=\"{ invalid: 'has-error' }\">\n        <div class=\"panel-heading\">\n            <h5>Personal Details</h5>\n        </div>\n        <div class=\"panel-body\">\n            <div class=\"row\">\n                <div class=\"col-md-6\" v-validate-class=\"\">\n                    <label>Name</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"donor.name\" initial=\"off\" v-validate:name=\"{required: true}\">\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Company</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"donor.company\">\n                </div>\n            </div>\n        </div>\n        <div class=\"panel-heading\">\n            <h5>Contact Details</h5>\n        </div>\n        <div class=\"panel-body\">\n            <div class=\"row\">\n                <div class=\"col-md-6\" v-validate-class=\"\">\n                    <label>Email</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"donor.email\" initial=\"off\" v-validate:email=\"{required: true, email: true}\">\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Phone</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"donor.phone\">\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-md-12\">\n                    <label>Address</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"donor.address\">\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-md-6\">\n                    <label>City</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"donor.city\">\n                </div>\n                <div class=\"col-md-6\">\n                    <label>State/Providence</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"donor.state\">\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-md-6\" v-validate-class=\"\">\n                    <label>Zip/Postal Code</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"donor.zip\" initial=\"off\" v-validate:zip=\"{required: true}\">\n                </div>\n                <div class=\"col-md-6\" v-validate-class=\"\">\n                    <label>Country</label>\n                    <v-select class=\"form-control\" id=\"country\" :debounce=\"250\" :value.sync=\"countryCodeObj\" :options=\"countries\" label=\"name\" placeholder=\"Select a country\" initial=\"off\" v-validate:country_code=\"{required: true}\"></v-select>\n                </div>\n            </div>\n        </div>\n        <div class=\"panel-heading\">\n            <h5>Account Details</h5>\n        </div>\n        <div class=\"panel-body\">\n            <div class=\"row\">\n                <div class=\"col-md-6\">\n                    <label>Account Type</label>\n                    <select class=\"form-control\" v-model=\"donor.account_type\" @change=\"donor.account_id = ''\" initial=\"off\">\n                        <option value=\"\">Guest</option>\n                        <option value=\"users\">Member</option>\n                        <option value=\"groups\">Group</option>\n                    </select>\n                </div>\n                <div class=\"col-md-6\" v-if=\"donor.account_type\">\n                    <label>Account Holder</label>\n                    <v-select class=\"form-control\" id=\"accountHolder\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"userObj\" :options=\"users\" label=\"name\" placeholder=\"Select a user\" v-if=\"donor.account_type == 'users'\"></v-select>\n                    <v-select class=\"form-control\" id=\"accountHolder\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupObj\" :options=\"groups\" label=\"name\" placeholder=\"Select a group\" v-if=\"donor.account_type == 'groups'\"></v-select>\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Stripe Customer ID</label>\n                    <input type=\"text\" class=\"form-control\" v-model=\"donor.customer_id\">\n                    <span class=\"help-block\">Optional. Generated automatically.</span>\n                </div>\n            </div>\n        </div>\n        <div class=\"panel-footer text-center\">\n            <button class=\"btn btn-default\">Cancel</button>\n            <button class=\"btn btn-primary\" v-if=\"!isUpdate\" @click=\"create\">Create</button>\n            <button class=\"btn btn-primary\" v-if=\"isUpdate\" @click=\"update\">Save</button>\n        </div>\n    </validator>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>{{ message }}</p>\n    </alert>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-fdcee0c6", module.exports)
+  } else {
+    hotAPI.update("_v-fdcee0c6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],141:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -74193,7 +74340,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-72f10bfc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],141:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],142:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -74450,7 +74597,73 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-454ad5be", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],142:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],143:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'transaction-form',
+    components: { vSelect: _vueSelect2.default },
+    data: function data() {
+        var _ref;
+
+        return _ref = {
+            type: 'donation',
+            transaction: {
+                payment: {
+                    type: "card"
+                }
+            },
+            funds: null,
+            toFund: null,
+            fromFund: null,
+            selectedFund: null
+        }, (0, _defineProperty3.default)(_ref, 'transaction', null), (0, _defineProperty3.default)(_ref, 'donors', null), (0, _defineProperty3.default)(_ref, 'selectedDonor', null), _ref;
+    },
+
+    methods: {
+        getFunds: function getFunds(search) {
+            this.$http.get('funds?per_page=10', { search: search }).then(function (response) {
+                this.funds = response.data.data;
+            });
+        },
+        getDonors: function getDonors(search) {
+            this.$http.get('donors?per_page=10', { search: search }).then(function (response) {
+                this.donors = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.getFunds();
+        this.getDonors();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"panel panel-default\">\n        <div class=\"panel-body\">\n            <label>Transaction Type</label>\n            <select v-model=\"type\" class=\"form-control\">\n                <option value=\"donation\">Donation</option>\n                <option value=\"transfer\">Transfer</option>\n                <option value=\"refund\">Refund</option>\n                <option value=\"credit\">Credit</option>\n            </select>\n        </div>\n    </div>\n\n    <div class=\"row\" v-if=\"type == 'donation'\">\n        <div class=\"col-sm-12\">\n            <div class=\"panel panel-default\">\n                <div class=\"panel-heading\">\n                    <h5>Donation</h5>\n                </div>\n                <div class=\"panel-body\">\n                    <label>Designated Fund</label>\n                    <v-select class=\"form-control\" id=\"selectedFund\" :debounce=\"250\" :on-search=\"getFunds\" :value.sync=\"selectedFund\" :options=\"funds\" label=\"name\" placeholder=\"Select a fund to transfer from\"></v-select>\n                    <span class=\"help-block\">Fund Balance: {{ selectedFund.balance | currency }}</span>\n                    <label>Amount</label>\n                    <div class=\"input-group\">\n                        <span class=\"input-group-addon\">$</span>\n                        <input type=\"text\" class=\"form-control\" placeholder=\"0.00\" v-model=\"transaction.amount\">\n                    </div>\n                </div>\n            </div>\n            <div class=\"panel panel-default\">\n                <div class=\"panel-heading\">\n                    <h5>Donor</h5>\n                </div>\n                <div class=\"panel-body\">\n                    <label>Donor</label>\n                    <v-select class=\"form-control\" id=\"selectedFund\" :debounce=\"250\" :on-search=\"getDonors\" :value.sync=\"selectedDonor\" :options=\"donors\" label=\"name\" placeholder=\"Select a donor\"></v-select>\n                    <hr class=\"divider inv\">\n                    <div class=\"row\" v-if=\"selectedDonor\">\n                        <div class=\"col-xs-6\" v-if=\"selectedDonor.company\">\n                            <label>Company</label>\n                            <p>{{ selectedDonor.company }}</p>\n                        </div>\n                        <div class=\"col-xs-6\">\n                            <label>Email</label>\n                            <p>{{ selectedDonor.email }}</p>\n                        </div>\n                        <div class=\"col-xs-6\">\n                            <label>Phone</label>\n                            <p>{{ selectedDonor.phone }}</p>\n                        </div>\n                        <div class=\"col-xs-6\">\n                            <label>Postal/Zip Code</label>\n                            <p>{{ selectedDonor.zip }}</p>\n                        </div>\n                        <div class=\"col-xs-6\">\n                            <label>Country</label>\n                            <p>{{ selectedDonor.country.name }}</p>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"panel panel-default\">\n                <div class=\"panel-heading\">\n                    <h5>Payment Method</h5>\n                </div>\n                <div class=\"panel-body\">\n                    <label>Payment Type</label>\n                    <select class=\"form-control\" v-model=\"transaction.payment.type\">\n                        <option value=\"card\">Credit Card</option>\n                        <option value=\"check\">Check</option>\n                        <option value=\"cash\">Cash</option>\n                    </select>\n\n                    <div class=\"row\" v-if=\"transaction.payment.type == 'card'\">\n                        <div class=\"col-xs-12\">\n                            <label>Card Holder's Name</label>\n                            <input class=\"form-control\" type=\"text\">\n                            <label>Card Number</label>\n                            <input class=\"form-control\" type=\"text\">\n                        </div>\n                    </div>\n\n                    <div class=\"row\" v-if=\"transaction.payment.type == 'check'\">\n                        <div class=\"col-xs-12\">\n                            <label>Check Number</label>\n                            <input class=\"form-control\" type=\"text\">\n                        </div>\n                    </div>\n\n                    <label>Billing Email</label>\n                    <input class=\"form-control\" type=\"text\">\n                    <label>Billing Zip</label>\n                    <input class=\"form-control\" type=\"text\">\n\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <div class=\"panel panel-default\" v-if=\"type == 'transfer'\">\n        <div class=\"panel-heading\">\n            <h5>Transfer</h5>\n        </div>\n        <div class=\"panel-body\">\n            <div class=\"row\">\n                <div class=\"col-sm-6\">\n                    <label>Transfer from</label>\n                    <v-select class=\"form-control\" id=\"fromFund\" :debounce=\"250\" :on-search=\"getFunds\" :value.sync=\"fromFund\" :options=\"funds\" label=\"name\" placeholder=\"Select a fund to transfer from\"></v-select>\n                    <span class=\"help-block\">Fund Balance: {{ fromFund.balance | currency }}</span>\n                </div>\n                <div class=\"col-sm-6\">\n                    <label>Transfer to</label>\n                    <v-select class=\"form-control\" id=\"toFund\" :debounce=\"250\" :on-search=\"getDonors\" :value.sync=\"toFund\" :options=\"funds\" label=\"name\" placeholder=\"Select a fund to transfer to\"></v-select>\n                    <span class=\"help-block\">Fund Balance: {{ toFund.balance | currency }}</span>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col-sm-12\">\n                    <label>Amount</label>\n                    <div class=\"input-group\">\n                        <span class=\"input-group-addon\">$</span>\n                        <input type=\"text\" class=\"form-control\" placeholder=\"0.00\" v-model=\"transaction.amount\">\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <div class=\"panel panel-default\" v-if=\"type == 'refund'\">\n        <div class=\"panel-heading\">\n            <h5>Refund</h5>\n        </div>\n        <div class=\"panel-body\">\n            <label>Designated Fund</label>\n            <v-select class=\"form-control\" id=\"selectedFund\" :debounce=\"250\" :on-search=\"getFunds\" :value.sync=\"selectedFund\" :options=\"funds\" label=\"name\" placeholder=\"Select a fund to transfer from\"></v-select>\n            <span class=\"help-block\">Fund Balance: {{ selectedFund.balance | currency }}</span>\n            <label>Amount</label>\n            <div class=\"input-group\">\n                <span class=\"input-group-addon\">$</span>\n                <input type=\"text\" class=\"form-control\" placeholder=\"0.00\" v-model=\"transaction.amount\">\n            </div>\n        </div>\n    </div>\n\n    <div class=\"panel panel-default\" v-if=\"type == 'credit'\">\n        <div class=\"panel-heading\">\n            <h5>Credit</h5>\n        </div>\n        <div class=\"panel-body\">\n            <label>Designated Fund</label>\n            <v-select class=\"form-control\" id=\"selectedFund\" :debounce=\"250\" :on-search=\"getFunds\" :value.sync=\"selectedFund\" :options=\"funds\" label=\"name\" placeholder=\"Select a fund to transfer from\"></v-select>\n            <span class=\"help-block\">Fund Balance: {{ selectedFund.balance | currency }}</span>\n            <label>Amount</label>\n            <div class=\"input-group\">\n                <span class=\"input-group-addon\">$</span>\n                <input type=\"text\" class=\"form-control\" placeholder=\"0.00\" v-model=\"transaction.amount\">\n            </div>\n        </div>\n    </div>\n\n    <div class=\"panel panel-default\">\n        <div class=\"panel-body\">\n            <button class=\"btn btn-default\">Cancel</button>\n            <button class=\"btn btn-primary\">Create</button>\n        </div>\n    </div>\n\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-65b2af1d", module.exports)
+  } else {
+    hotAPI.update("_v-65b2af1d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74561,7 +74774,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-76dd8b48", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],143:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74685,7 +74898,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4773c802", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],144:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],146:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\nvideo {\n    width: 100%;\n    height: auto;\n}\n")
 'use strict';
@@ -74873,7 +75086,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-02bfe2c1", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":216,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],145:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":220,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],147:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74941,7 +75154,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-60464908", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],146:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75052,7 +75265,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0f6c0d9e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],147:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],149:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75210,7 +75423,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7071c3a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],148:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75311,7 +75524,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1244b388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],149:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75375,6 +75588,7 @@ exports.default = {
     },
     ready: function ready() {
         this.searchGroups();
+        $('[data-toggle="tooltip"]').tooltip();
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -75389,7 +75603,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6170d6da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],150:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],152:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -75692,7 +75906,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4d4691e4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],151:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75715,7 +75929,9 @@ exports.default = {
             this.resource.query().then(function (response) {
                 this.trips = response.data.data;
                 this.pagination = response.data.meta.pagination;
-            }).then(function () {});
+            }).then(function () {
+                $('[data-toggle="tooltip"]').tooltip();
+            });
         }
     },
     ready: function ready() {
@@ -75723,7 +75939,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <p v-if=\"trips.length < 1\" class=\"text-center text-muted lead\">\n        This group does not have any trips yet. Please check back soon!\n    </p>\n    <div class=\"col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12\" v-for=\"trip in trips\">\n        <div class=\"panel panel-default\">\n            <img :src=\"trip.campaign.data.avatar\" alt=\"{{ trip.campaign.data.name }}\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h6><span class=\"label label-default\">{{ trip.campaign.data.name }}</span></h6>\n                <h4>{{ trip.country_name }} {{ trip.started_at|moment 'YYYY' }}</h4>\n                <h6>{{ trip.type|capitalize }} Trip</h6>\n                <h6>{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</h6>\n                <ul class=\"list-inline\">\n                    <li data-toggle=\"tooltip\" title=\"Reservations\"><i class=\"fa fa-user\"></i> {{ trip.reservations }}</li>\n                    <li data-toggle=\"tooltip\" title=\"Registration Open\" class=\"pull-right\"><i class=\"fa fa-sign-in\"></i></li>\n                </ul>\n                <p><a class=\"btn btn-primary btn-lg btn-block\" :href=\"id + trip.links[0].uri\">Details</a></p>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div v-if=\"trips.length\" class=\"col-sm-12 text-center\">\n        <pagination :pagination.sync=\"pagination\" :callback=\"searchTrips\"></pagination>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <p v-if=\"trips.length < 1\" class=\"text-center text-muted lead\">\n        This group does not have any trips yet. Please check back soon!\n    </p>\n    <div class=\"col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12\" v-for=\"trip in trips\">\n        <div class=\"panel panel-default\">\n            <img :src=\"trip.campaign.data.avatar\" alt=\"{{ trip.campaign.data.name }}\" class=\"img-responsive\">\n            <div class=\"panel-body\">\n                <h6><span class=\"label label-default\">{{ trip.campaign.data.name }}</span></h6>\n                <h4>{{ trip.country_name }} {{ trip.started_at|moment 'YYYY' }}</h4>\n                <h6>{{ trip.type|capitalize }} Trip</h6>\n                <h6>{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</h6>\n                <ul class=\"list-inline\">\n                    <li data-toggle=\"tooltip\" data-placement=\"top\" title=\"Reservations\"><i class=\"fa fa-user\"></i> {{ trip.reservations }}</li>\n                    <li data-toggle=\"tooltip\" data-placement=\"top\" title=\"Registration Open\" class=\"pull-right\"><i class=\"fa fa-sign-in\"></i></li>\n                </ul>\n                <p><a class=\"btn btn-primary btn-lg btn-block\" :href=\"id + trip.links[0].uri\">Details</a></p>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n    </div><!-- end col -->\n    <div v-if=\"trips.length\" class=\"col-sm-12 text-center\">\n        <pagination :pagination.sync=\"pagination\" :callback=\"searchTrips\"></pagination>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -75734,7 +75950,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-15f24781", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],152:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75829,7 +76045,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3253a032", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],153:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75849,7 +76065,7 @@ exports.default = {
         this.$http.get('fundraisers', {
             sponsor: this.groupUrl
         }).then(function (response) {
-            this.fundraisers = response.data.data.fundraisers.data;
+            this.fundraisers = response.data.data;
         });
     }
 };
@@ -75865,7 +76081,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-24620ef0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],154:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75919,7 +76135,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3568e8fb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],155:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75937,7 +76153,9 @@ exports.default = {
     ready: function ready() {
         this.resource.query().then(function (trips) {
             this.trips = trips.data.data;
-        }).then(function () {});
+        }).then(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -75952,7 +76170,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-38497816", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],156:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76026,7 +76244,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-a95a0ede", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],157:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76197,7 +76415,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-cf6ec6ac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],158:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76338,7 +76556,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7fba023b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],159:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76395,7 +76613,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7f80c956", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],160:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],162:[function(require,module,exports){
 'use strict';
 
 var _vueSelect = require('vue-select');
@@ -76530,6 +76748,10 @@ module.exports = {
 		done();
 	},
 	ready: function ready() {
+		if (_.contains(location.search.substr(1).split('='), 'signup')) {
+			this.currentState = 'create';
+		}
+
 		this.$http.get('utilities/countries').then(function (response) {
 			this.countries = response.data.countries;
 		});
@@ -76557,7 +76779,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7dce67a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],161:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76706,7 +76928,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1e536124", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./donate.vue":138,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],162:[function(require,module,exports){
+},{"./donate.vue":138,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76870,7 +77092,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4f7b5afc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],163:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76987,7 +77209,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-bee86e22", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/object/assign":3,"vue":124,"vue-hot-reload-api":119}],164:[function(require,module,exports){
+},{"babel-runtime/core-js/object/assign":3,"vue":124,"vue-hot-reload-api":119}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77022,7 +77244,126 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-627dafb9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],165:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],167:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'essay-create-update',
+    props: {
+        isUpdate: {
+            type: Boolean,
+            default: false
+        },
+        id: {
+            type: String,
+            default: null
+        },
+        userId: {
+            type: String,
+            required: true
+        }
+    },
+    data: function data() {
+        return {
+            author_name: '',
+            subject: 'Testimony',
+            content: [{ q: 'Describe how you decided to follow Christ', a: '' }, { q: 'Describe your church involvement', a: '' }, { q: 'Describe your current walk with God', a: '' }, { q: 'Have you been on a missions trip before? If so, please tell us about your experience', a: '' }],
+            user_id: this.userId,
+
+            // logic vars
+            resource: this.$resource('essays{/id}'),
+            showSuccess: false,
+            showError: false,
+            hasChanged: false,
+            attemptSubmit: false
+        };
+    },
+
+    methods: {
+        checkForError: function checkForError(field) {
+            // if user clicked submit button while the field is invalid trigger error styles
+
+            return this.$CreateUpdateEssay[field].invalid && this.attemptSubmit;
+        },
+        onTouched: function onTouched() {
+            this.hasChanged = true;
+        },
+        back: function back(force) {
+            if (this.hasChanged && !force) {
+                this.showSaveAlert = true;
+                return false;
+            }
+            window.location.href = '/dashboard/records/essays/';
+        },
+        forceBack: function forceBack() {
+            return this.back(true);
+        },
+        submit: function submit() {
+            this.attemptSubmit = true;
+            if (this.$CreateUpdateEssay.valid) {
+                this.resource.save({
+                    author_name: this.author_name,
+                    subject: this.subject,
+                    content: this.content,
+                    user_id: this.user_id
+                }).then(function (resp) {
+                    this.showSuccess = true;
+                    //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
+                    window.location.href = '/dashboard/records/essays';
+                }, function (error) {
+                    this.showError = true;
+                    console.log(error);
+                });
+            } else {
+                this.showError = true;
+            }
+        },
+        update: function update() {
+            this.attemptSubmit = true;
+            if (this.$CreateUpdateEssay.valid) {
+                this.resource.update({ id: this.id }, {
+                    author_name: this.author_name,
+                    subject: this.subject,
+                    content: this.content,
+                    user_id: this.user_id
+                }).then(function (resp) {
+                    this.showSuccess = true;
+                }, function (error) {
+                    debugger;
+                });
+            }
+        }
+    },
+    ready: function ready() {
+        if (this.isUpdate) {
+            this.$http('essays/' + this.id).then(function (response) {
+                // this.user = response.data.data;
+
+                var essay = response.data.data;
+                this.author_name = essay.author_name;
+                this.subject = essay.subject;
+                this.content = essay.content;
+                // this.user_id = essay.user_id;
+            });
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdateEssay\" @touched=\"onTouched\">\n    <form id=\"CreateUpdateEssay\" class=\"form-horizontal\" novalidate=\"\">\n        <div class=\"form-group\" :class=\"{ 'has-error': checkForError('author') }\">\n            <label for=\"author\" class=\"control-label\">Author Name</label>\n            <input type=\"text\" class=\"form-control\" name=\"author\" id=\"author\" v-model=\"author_name\" placeholder=\"Author Name\" v-validate:author=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n        </div>\n\n        <!--<div class=\"form-group\" :class=\"{ 'has-error': checkForError('subject') }\">\n            <label for=\"subject\" class=\"control-label\">Subject</label>\n            <input type=\"text\" class=\"form-control\" name=\"subject\" id=\"subject\" v-model=\"subject\"\n                   placeholder=\"Subject\" v-validate:subject=\"{ required: true, minlength:1, maxlength:100 }\"\n                   maxlength=\"150\" minlength=\"1\" required>\n        </div>-->\n\n        <div class=\"form-group\" v-for=\"QA in content\">\n            <label class=\"control-label\" v-text=\"QA.q\"></label>\n            <textarea class=\"form-control\" v-model=\"QA.a\"></textarea>\n        </div>\n\n        <div class=\"form-group\">\n            <div class=\"col-sm-12 text-center\">\n                <a v-if=\"!isUpdate\" href=\"/dashboard/records/essays\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n                <a v-if=\"isUpdate\" @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n    </form>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>Essay updated!</p>\n    </alert>\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>There are errors on the form.</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n\n</validator>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-9bbb6c9a", module.exports)
+  } else {
+    hotAPI.update("_v-9bbb6c9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77039,6 +77380,7 @@ exports.default = {
     data: function data() {
         return {
             essays: [],
+            selectedEssay: '',
             //logic vars
             page: 1,
             per_page: 3,
@@ -77057,20 +77399,24 @@ exports.default = {
                     this.essays = _.reject(this.essays, function (item) {
                         return item.id === essay.id;
                     });
+                    this.selectedEssay = '';
                 });
             }
+        },
+        searchEssays: function searchEssays() {
+            this.$http('essays?user=' + this.userId).then(function (response) {
+                this.essays = response.data.data;
+                this.pagination = response.data.meta.pagination;
+                this.loaded = true;
+            });
         }
     },
     ready: function ready() {
-        this.$http('essays?user=' + this.userId).then(function (response) {
-            this.essays = response.data.data;
-            this.pagination = response.data.meta.pagination;
-            this.loaded = true;
-        });
+        this.searchEssays();
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !essays.length\">\n        <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n    </div>\n\n    <div class=\"col-md-4 col-sm-6\" v-for=\"essay in essays\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-body\">\n                <h6 class=\"text-uppercase\"><i class=\"fa fa-file\"></i> {{essay.subject}}</h6>\n                <a role=\"button\" :href=\"'/dashboard' + passport.links[0].uri\">\n                    <h4 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                        {{essay.author_name}}\n                    </h4>\n                </a>\n                <hr class=\"divider lg\">\n                <!--<p class=\"small\">-->\n                    <!--<b>ID:</b> {{passport.number}}-->\n                    <!--<br>-->\n                    <!--<b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}-->\n                    <!--<br>-->\n                    <!--<b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}-->\n                    <!--<br>-->\n                    <!--<b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}-->\n                <!--</p>-->\n            </div><!-- end panel-body -->\n            <div class=\"panel-footer\" style=\"padding: 0;\">\n                <div class=\"btn-group btn-group-justified btn-group-sm\" role=\"group\" aria-label=\"...\">\n                    <a class=\"btn btn-info\" :href=\"'/dashboard/records/' + essay.links[0].uri + '/edit'\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger\" @click=\"selectedEssay = essay,deleteModal = true\"><i class=\"fa fa-times\"></i></a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <!--<div class=\"col-sm-12 text-center\">-->\n        <!--<nav>-->\n            <!--<ul class=\"pagination pagination-sm\">-->\n                <!--<li :class=\"{ 'disabled': pagination.current_page == 1 }\">-->\n                    <!--<a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\">-->\n                        <!--<span aria-hidden=\"true\">&laquo;</span>-->\n                    <!--</a>-->\n                <!--</li>-->\n                <!--<li :class=\"{ 'active': (n+1) == pagination.current_page}\" v-for=\"n in pagination.total_pages\"><a @click=\"page=(n+1)\">{{(n+1)}}</a></li>-->\n                <!--<li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\">-->\n                    <!--<a aria-label=\"Next\" @click=\"page=pagination.current_page+1\">-->\n                        <!--<span aria-hidden=\"true\">&raquo;</span>-->\n                    <!--</a>-->\n                <!--</li>-->\n            <!--</ul>-->\n        <!--</nav>-->\n    <!--</div>-->\n    <modal :show.sync=\"deleteModal\" title=\"Remove Essay\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Essay?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removeEssay(selectedPassport)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !essays.length\">\n        <div class=\"alert alert-info\" role=\"alert\">No records found</div>\n    </div>\n\n    <div class=\"col-md-4 col-sm-6\" v-for=\"essay in essays\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-body\">\n                <h6 class=\"text-uppercase\"><i class=\"fa fa-file\"></i> {{essay.subject}}</h6>\n                <a role=\"button\" :href=\"'/dashboard/records/essays/' + essay.id\">\n                    <h4 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                        {{essay.author_name}}\n                    </h4>\n                </a>\n                <hr class=\"divider lg\">\n                <!--<p class=\"small\">-->\n                    <!--<b>ID:</b> {{passport.number}}-->\n                    <!--<br>-->\n                    <!--<b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}-->\n                    <!--<br>-->\n                    <!--<b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}-->\n                    <!--<br>-->\n                    <!--<b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}-->\n                <!--</p>-->\n            </div><!-- end panel-body -->\n            <div class=\"panel-footer\" style=\"padding: 0;\">\n                <div class=\"btn-group btn-group-justified btn-group-sm\" role=\"group\" aria-label=\"...\">\n                    <a class=\"btn btn-info\" :href=\"'/dashboard/records/essays/' + essay.id + '/edit'\"><i class=\"fa fa-pencil\"></i></a>\n                    <a class=\"btn btn-danger\" @click=\"selectedEssay = essay, deleteModal = true\"><i class=\"fa fa-times\"></i></a>\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <pagination :pagination.sync=\"pagination\" :callback=\"searchEssays\"></pagination>\n    </div>\n    <modal :show.sync=\"deleteModal\" title=\"Remove Essay\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Essay?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removeEssay(selectedEssay)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -77081,7 +77427,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1be69c3e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],166:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77286,7 +77632,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-81b8d51a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":216,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],167:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":220,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77365,7 +77711,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0460b004", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],168:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77546,7 +77892,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e64c6ba2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":216,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],169:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":220,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77625,7 +77971,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-40f458ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],170:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77662,7 +78008,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-558d51ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],171:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77830,7 +78176,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-793ad0cd", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":216,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],172:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":220,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77909,7 +78255,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6c464550", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],173:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78152,7 +78498,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-86b15298", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],174:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78353,7 +78699,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-45829fee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],175:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78574,7 +78920,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-30337481", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],176:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78760,7 +79106,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1bac2c0c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":216,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],177:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":220,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],180:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -79106,7 +79452,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],178:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79157,7 +79503,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],179:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79225,7 +79571,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-73e4e546", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":216,"vue":124,"vue-hot-reload-api":119}],180:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":220,"vue":124,"vue-hot-reload-api":119}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79454,7 +79800,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-72fce31c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],181:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79537,7 +79883,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-231765fa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],182:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79575,7 +79921,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c6cc02ae", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],183:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79644,7 +79990,86 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-efe544c0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],184:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],187:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+
+// import essayCreateUpdate from '../records/essays/essay-create-update.vue';
+exports.default = {
+    name: 'reservations-essays-manager',
+    // components:{essayCreateUpdate},
+    props: ['reservationId', 'essayId', 'userId'],
+    data: function data() {
+        return {
+            essay: null,
+            essays: [],
+
+            //logic vars
+            essayResource: this.$resource('essays{/id}'),
+            reservationResource: this.$resource('reservations{/id}'),
+            loaded: false,
+            newState: false,
+            changeState: false,
+
+            // pagination vars
+            selectedEssay: null,
+            per_page: 3,
+            pagination: {
+                current_page: 1
+            }
+
+        };
+    },
+
+    methods: {
+        setEssay: function setEssay(essay) {
+            if (essay) {
+                this.essay = essay;
+                this.reservationResource.update({ id: this.reservationId }, {
+                    essay_id: essay.id
+                }).then(function (response) {
+                    this.toggleChangeState();
+                });
+            }
+        },
+        toggleChangeState: function toggleChangeState() {
+            this.changeState = !this.changeState;
+            this.newState = false;
+        },
+        toggleNewState: function toggleNewState() {
+            this.newState = !this.newState;
+            this.changeState = false;
+        },
+        searchEssays: function searchEssays() {
+            this.$http.get('essays/?user=' + this.userId, { page: this.pagination.current_page }).then(function (response) {
+                this.essays = response.data.data;
+                this.pagination = response.data.meta.pagination;
+                this.essay = _.findWhere(response.data.data, { id: this.essayId });
+                this.loaded = true;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchEssays();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" v-if=\"loaded\">\n    <div class=\"col-sm-6\">\n        <div class=\"panel panel-default\" v-if=\"essay\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <h6 class=\"text-uppercase\"><i class=\"fa fa-file\"></i> {{essay.subject}}</h6>\n                <a role=\"button\" :href=\"'/dashboard/records/essays/' + essay.id\">\n                    <h4 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                        {{essay.author_name}}\n                    </h4>\n                </a>\n                <hr class=\"divider lg\">\n            </div>\n        </div>\n        <div v-if=\"!essay\" class=\"alert alert-info\" role=\"alert\">This reservation has no essay(s) assigned to it. Please select one or add one.</div>\n    </div>\n\n    <div class=\"col-sm-6\">\n        <div class=\"panel panel-default\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <form novalidate=\"\">\n                    <label>Actions</label>\n                    <a class=\"btn btn-block btn-info btn-sm\" @click=\"toggleChangeState()\">\n                        <i class=\"fa fa-pencil\"></i> Change Essay\n                    </a>\n                    <a class=\"btn btn-block btn-primary btn-sm\" href=\"/dashboard/records/essays/create\">\n                        <i class=\"fa fa-plus\"></i> Add New Essay\n                    </a>\n                </form>\n\n            </div><!-- end panel-body -->\n        </div>\n    </div>\n\n    <div class=\"col-sm-12\" v-if=\"changeState\">\n        <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !essays.length\">\n            <div class=\"alert alert-info\" role=\"alert\">No essays found. Please create add one.</div>\n        </div>\n        <div class=\"row\" v-if=\"loaded &amp;&amp; essays.length\">\n            <div class=\"col-sm-4\" v-for=\"essay in essays\">\n                <div class=\"panel panel-default\">\n                    <div style=\"min-height:220px;\" class=\"panel-body\">\n                        <h6 class=\"text-uppercase\"><i class=\"fa fa-file\"></i> {{essay.subject}}</h6>\n                        <a role=\"button\" :href=\"'/dashboard/records/essays/' + essay.id\">\n                            <h4 style=\"text-transform:capitalize;\" class=\"text-primary\">\n                                {{essay.author_name}}\n                            </h4>\n                        </a>\n                        <hr class=\"divider lg\">\n                    </div><!-- end panel-body -->\n                    <div class=\"panel-footer\" style=\"padding: 0;\">\n                        <div class=\"btn-group btn-group-justified btn-group-sm\" role=\"group\" aria-label=\"...\">\n                            <a class=\"btn btn-danger\" @click=\"setEssay(essay)\">\n                                Select Essay\n                            </a>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-sm-12 text-center\">\n                <pagination :pagination.sync=\"pagination\" :callback=\"searchEssays\"></pagination>\n            </div>\n        </div>\n    </div>\n\n    <!--<div class=\"col-sm-12\" v-if=\"newState\">\n        <essay-create-update></essay-create-update>\n    </div>-->\n\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-10639489", module.exports)
+  } else {
+    hotAPI.update("_v-10639489", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79655,19 +80080,38 @@ exports.default = {
     props: ['userId', 'type'],
     data: function data() {
         return {
-            reservations: []
+            reservations: [],
+            trips: [],
+            includeManaging: false,
+            search: '',
+            isFacilitator: false
         };
     },
 
+    watch: {
+        'search': function search(val, oldVal) {
+            this.getReservations();
+        },
+        'includeManaging': function includeManaging(val, oldVal) {
+            this.getReservations();
+        }
+    },
     methods: {
         country: function country(code) {
             return code;
         },
         getReservations: function getReservations() {
-            this.$http.get('reservations', {
+            var params = {
                 include: 'trip.campaign,trip.group',
-                user: new Array(this.userId)
-            }).then(function (response) {
+                search: this.search
+            };
+            if (this.includeManaging) {
+                params.trip = this.trips;
+            } else {
+                params.user = new Array(this.userId);
+            }
+
+            this.$http.get('reservations', params).then(function (response) {
 
                 switch (this.type) {
                     case 'active':
@@ -79685,11 +80129,29 @@ exports.default = {
         }
     },
     ready: function ready() {
+        this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
+            var user = response.data.data;
+            var managing = [];
+
+            if (user.facilitating.data.length) {
+                this.isFacilitator = true;
+                var facilitating = _.pluck(user.facilitating.data, 'id');
+                this.trips = _.union(this.trips, facilitating);
+            }
+
+            if (user.managing.data.length) {
+                _.each(user.managing.data, function (group) {
+                    managing = _.union(managing, _.pluck(group.trips.data, 'id'));
+                });
+                this.trips = _.union(this.trips, managing);
+            }
+        });
+
         this.getReservations();
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12 col-sm-6 col-md-4\" v-for=\"reservation in reservations\" v-if=\"reservations.length > 0\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading panel-ministry text-center\">\n                <h5 class=\"text-capitalize\">{{ reservation.trip.data.type }} Missionary</h5>\n            </div>\n            <div class=\"panel-body text-center\">\n                <img :src=\"reservation.avatar\" class=\"img-circle img-md\">\n                <hr class=\"divider inv sm\">\n                <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>\n                <h6 class=\"text-capitalize small\">{{ reservation.trip.data.group.data.name }}</h6>\n                <label style=\"margin-bottom:2px;\">Campaign</label>\n                <h6 class=\"text-capitalize small\" style=\"margin-top:2px;\">{{ reservation.trip.data.campaign.data.name }}</h6>\n                <label style=\"margin-bottom:2px;\">Country</label>\n                <h6 class=\"text-capitalize small\" style=\"margin-top:2px;\">{{ reservation.country }}</h6>\n                <hr class=\"divider inv sm\">\n                <a class=\"btn btn-sm btn-primary\" href=\"/dashboard/reservations/{{ reservation.id }}\">View Reservation</a>\n                <hr class=\"divider inv sm\">\n            </div>\n        </div>\n    </div>\n    <div class=\"col-xs-12\">\n        <div class=\"alert alert-info\" v-if=\"reservations.length < 1\">No reservations found</div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <div class=\"col-xs-12 text-right\">\n        <form class=\"form-inline\">\n            <div class=\"checkbox\" v-if=\"isFacilitator\">\n                <label>\n                    <input type=\"checkbox\" v-model=\"includeManaging\"> Include my group's reservations\n                </label>\n            </div>\n            <div class=\"input-group input-group-sm\">\n                <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n            </div>\n        </form>\n        <hr class=\"divider sm inv\">\n    </div>\n    <div class=\"col-xs-12 col-sm-6 col-md-4\" v-for=\"reservation in reservations\" v-if=\"reservations.length > 0\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading text-center\" :class=\"'panel-' + reservation.trip.data.type\">\n                <h5 class=\"text-capitalize\">{{ reservation.trip.data.type }}</h5>\n            </div>\n            <div class=\"panel-body text-center\">\n                <img :src=\"reservation.avatar\" class=\"img-circle img-md\">\n                <hr class=\"divider inv sm\">\n                <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>\n                <h6 class=\"text-capitalize small\">{{ reservation.trip.data.group.data.name }}</h6>\n                <label style=\"margin-bottom:2px;\">Campaign</label>\n                <h6 class=\"text-capitalize small\" style=\"margin-top:2px;\">{{ reservation.trip.data.campaign.data.name }}</h6>\n                <label style=\"margin-bottom:2px;font-size:10px;\">Country</label>\n                <h6 class=\"text-capitalize small\" style=\"margin-top:2px;\">{{ reservation.country_name }}</h6>\n                <hr class=\"divider inv sm\">\n                <a class=\"btn btn-sm btn-primary\" href=\"/dashboard/reservations/{{ reservation.id }}\">View Reservation</a>\n                <hr class=\"divider inv sm\">\n            </div>\n        </div>\n    </div>\n    <div class=\"col-xs-12\">\n        <div class=\"alert alert-info\" v-if=\"reservations.length < 1\">No reservations found</div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -79700,7 +80162,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],185:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],189:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79805,7 +80267,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-35c3a93b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/medicals/medical-create-update.vue":166,"vue":124,"vue-hot-reload-api":119}],186:[function(require,module,exports){
+},{"../records/medicals/medical-create-update.vue":169,"vue":124,"vue-hot-reload-api":119}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79910,7 +80372,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5d37e43e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/passports/passport-create-update.vue":168,"vue":124,"vue-hot-reload-api":119}],187:[function(require,module,exports){
+},{"../records/passports/passport-create-update.vue":171,"vue":124,"vue-hot-reload-api":119}],191:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80015,7 +80477,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1bd1d2ef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/visas/visa-create-update.vue":171,"vue":124,"vue-hot-reload-api":119}],188:[function(require,module,exports){
+},{"../records/visas/visa-create-update.vue":174,"vue":124,"vue-hot-reload-api":119}],192:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-e87a91b0] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo[_v-e87a91b0] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo[_v-e87a91b0] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo[_v-e87a91b0]:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox[_v-e87a91b0]:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i[_v-e87a91b0] {\n  margin-right: 10px; }\n")
 'use strict';
@@ -80193,7 +80655,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e87a91b0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],189:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80264,7 +80726,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],190:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],194:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -80422,7 +80884,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":197,"./create/details.vue":198,"./create/pricing.vue":199,"./create/requirements.vue":200,"./create/settings.vue":201,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],191:[function(require,module,exports){
+},{"./create/deadlines.vue":201,"./create/details.vue":202,"./create/pricing.vue":203,"./create/requirements.vue":204,"./create/settings.vue":205,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],195:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80458,7 +80920,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],192:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80551,7 +81013,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],193:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],197:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -80735,7 +81197,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":202,"./edit/details.vue":203,"./edit/pricing.vue":204,"./edit/requirements.vue":205,"./edit/settings.vue":206,"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],194:[function(require,module,exports){
+},{"./edit/deadlines.vue":206,"./edit/details.vue":207,"./edit/pricing.vue":208,"./edit/requirements.vue":209,"./edit/settings.vue":210,"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80787,8 +81249,8 @@ exports.default = {
 			this.attemptSubmit = true;
 			if (this.$AddFacilitator.valid) {
 				var facilitatorsArr = this.facilitators;
-				facilitatorsArr.push({ trip_id: this.tripId, user_id: this.user_id });
-				this.trip.facilitators = _.pluck(facilitatorsArr, 'user_id');
+				facilitatorsArr.push({ trip_id: this.tripId, id: this.user_id });
+				this.trip.facilitators = _.pluck(facilitatorsArr, 'id');
 				//this.trip.facilitators = this.facilitators;
 				this.updateTrip();
 			}
@@ -80796,11 +81258,13 @@ exports.default = {
 		removeFacilitator: function removeFacilitator(facilitator) {
 			// Remove Facilitator
 			this.facilitators.$remove(facilitator);
-			this.trip.facilitators = this.facilitators;
+			var facilitatorsArr = this.facilitators;
+			this.trip.facilitators = _.pluck(facilitatorsArr, 'id');
 			this.updateTrip();
 		},
 		updateTrip: function updateTrip() {
 			delete this.trip.rep_id;
+			this.trip.difficulty = this.trip.difficulty.split(' ').join('_');
 			// Update Trip
 			this.resource.update({ id: this.tripId }, this.trip).then(function (response) {
 				this.trip = response.data.data;
@@ -80827,7 +81291,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h5>Facilitators\n\t\t\t<button class=\"btn btn-default btn-xs pull-right\" data-toggle=\"modal\" data-target=\"#AddFacilitatorModal\">\n\t\t\t\t\tAdd New <i class=\"fa fa-plus\"></i> \n\t\t\t</button>\n\t\t</h5>\n\t</div>\n\t<div>\n\t\t<div class=\"col-xs-3 col-sm-3 col-md-3 col-lg-3\" v-for=\"facilitator in facilitators\" track-by=\"id\">\n\t\t\t<div class=\"thumbnail\">\n\t\t\t\t<img :src=\"user.avatar\" alt=\"{{ user.name }}\">\n\t\t\t\t<div class=\"caption\">\n\t\t\t\t\t<h5 v-text=\"facilitator.name\"></h5>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<a class=\"btn btn-xs btn-danger\" @click=\"removeFacilitator(facilitator)\">\n\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Remove\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</p>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"modal fade\" id=\"AddFacilitatorModal\">\n\t\t<div class=\"modal-dialog\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n\t\t\t\t\t<h4 class=\"modal-title text-center\">Select A Facilitator</h4></div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t\t<validator name=\"AddFacilitator\">\n\t\t\t\t\t\t\t\t<form class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t<div class=\"form-trip\" :class=\"{ 'has-error': checkForError('user') }\"><label class=\"col-sm-2 control-label\">User</label>\n\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"user\" :value.sync=\"userObj\" :options=\"users\" :on-search=\"getUsers\" label=\"name\"></v-select>\n\t\t\t\t\t\t\t\t\t\t\t<select hidden=\"\" v-model=\"user_id\" v-validate:user=\"{ required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t<option :value=\"user.id\" v-for=\"user in users\">{{user.name}}</option>\n\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<hr class=\"divider inv\">\n\t\t\t\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-default btn-sm\" data-dismiss=\"modal\">Close</button>\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addFacilitator()\">Save</button>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- /.modal-content -->\n\t\t</div><!-- /.modal-dialog -->\n\t</div><!-- /.modal -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n\t<div class=\"panel-heading\">\n\t\t<h5>Facilitators\n\t\t\t<button class=\"btn btn-default btn-xs pull-right\" data-toggle=\"modal\" data-target=\"#AddFacilitatorModal\">\n\t\t\t\t\tAdd New <i class=\"fa fa-plus\"></i> \n\t\t\t</button>\n\t\t</h5>\n\t</div>\n\t<div>\n\t\t<div class=\"col-xs-3 col-sm-3 col-md-3 col-lg-3\" v-for=\"facilitator in facilitators\" track-by=\"id\">\n\t\t\t<div class=\"thumbnail\">\n\t\t\t\t<img :src=\"facilitator.avatar\" alt=\"{{ facilitator.name }}\">\n\t\t\t\t<div class=\"caption\">\n\t\t\t\t\t<h5 v-text=\"facilitator.name\"></h5>\n\t\t\t\t\t<p>\n\t\t\t\t\t\t<a class=\"btn btn-xs btn-danger\" @click=\"removeFacilitator(facilitator)\">\n\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Remove\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</p>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t<div class=\"modal fade\" id=\"AddFacilitatorModal\">\n\t\t<div class=\"modal-dialog\">\n\t\t\t<div class=\"modal-content\">\n\t\t\t\t<div class=\"modal-header\">\n\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n\t\t\t\t\t<h4 class=\"modal-title text-center\">Select A Facilitator</h4></div>\n\t\t\t\t<div class=\"modal-body\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t\t<validator name=\"AddFacilitator\">\n\t\t\t\t\t\t\t\t<form class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t<div class=\"form-trip\" :class=\"{ 'has-error': checkForError('user') }\"><label class=\"col-sm-2 control-label\">User</label>\n\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"user\" :value.sync=\"userObj\" :options=\"users\" :on-search=\"getUsers\" label=\"name\"></v-select>\n\t\t\t\t\t\t\t\t\t\t\t<select hidden=\"\" v-model=\"user_id\" v-validate:user=\"{ required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t<option :value=\"user.id\" v-for=\"user in users\">{{user.name}}</option>\n\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t<hr class=\"divider inv\">\n\t\t\t\t\t\t<div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-default btn-sm\" data-dismiss=\"modal\">Close</button>\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addFacilitator()\">Save</button>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div><!-- /.modal-content -->\n\t\t</div><!-- /.modal-dialog -->\n\t</div><!-- /.modal -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -80838,7 +81302,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],195:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80911,7 +81375,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],196:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80982,7 +81446,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],197:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81060,7 +81524,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],198:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],202:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 'use strict';
@@ -81173,7 +81637,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],199:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81402,7 +81866,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],200:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81479,7 +81943,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],201:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81534,7 +81998,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],202:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81616,7 +82080,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],203:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81752,7 +82216,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],204:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],208:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81985,7 +82449,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],205:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82065,7 +82529,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],206:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82125,7 +82589,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],207:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82171,7 +82635,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],208:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82338,7 +82802,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],209:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82395,7 +82859,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],210:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82693,7 +83157,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],211:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82738,7 +83202,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],212:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82775,7 +83239,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],213:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82812,7 +83276,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],214:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82883,7 +83347,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c5dc1f32", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],215:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],219:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -83063,7 +83527,7 @@ exports.default = {
 				//					this.stripeDeferred.resolve(true);
 				this.$refs.reservationspinner.hide();
 
-				window.location.href = '/dashboard' + response.data.data.links[0].uri;
+				window.location.href = '/dashboard/reservations/' + response.data.data.id;
 				this.$refs.reservationspinner.hide();
 			}, function (response) {
 				console.log(response);
@@ -83189,7 +83653,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":160,"./registration/additional-trip-options.vue":207,"./registration/basic-info.vue":208,"./registration/deadline-agreement.vue":209,"./registration/payment-details.vue":210,"./registration/review.vue":211,"./registration/roca.vue":212,"./registration/tos.vue":213,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],216:[function(require,module,exports){
+},{"../login.vue":162,"./registration/additional-trip-options.vue":211,"./registration/basic-info.vue":212,"./registration/deadline-agreement.vue":213,"./registration/payment-details.vue":214,"./registration/review.vue":215,"./registration/roca.vue":216,"./registration/tos.vue":217,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83566,7 +84030,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],217:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],221:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -83706,7 +84170,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],218:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83835,7 +84299,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],219:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83871,7 +84335,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],220:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84045,7 +84509,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],221:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],225:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -84267,7 +84731,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],222:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],226:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-4d454604] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-ability[_v-4d454604] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.ability-item:hover i.remove-ability[_v-4d454604] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-ability[_v-4d454604]:hover {\n  color: #d8262e; }\n")
 'use strict';
@@ -84328,7 +84792,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4d454604", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],223:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],227:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84439,7 +84903,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0a7ed88a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],224:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84514,7 +84978,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-69badce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],225:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84544,7 +85008,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ea6dd1a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],226:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84589,7 +85053,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-718e65c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],227:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],231:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84709,7 +85173,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-63c1ee29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],228:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],232:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.alert.top, .alert.top-right {\n    top: 80px;\n}\n")
 'use strict';
@@ -84949,7 +85413,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2d9ee899", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":216,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],229:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":220,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],233:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -85080,6 +85544,10 @@ var _medicalCreateUpdate = require('./components/records/medicals/medical-create
 
 var _medicalCreateUpdate2 = _interopRequireDefault(_medicalCreateUpdate);
 
+var _essayCreateUpdate = require('./components/records/essays/essay-create-update.vue');
+
+var _essayCreateUpdate2 = _interopRequireDefault(_essayCreateUpdate);
+
 var _reservationAvatar = require('./components/reservations/reservation-avatar.vue');
 
 var _reservationAvatar2 = _interopRequireDefault(_reservationAvatar);
@@ -85103,6 +85571,10 @@ var _reservationsPassportsManager2 = _interopRequireDefault(_reservationsPasspor
 var _reservationsMedicalReleasesManager = require('./components/reservations/reservations-medical-releases-manager.vue');
 
 var _reservationsMedicalReleasesManager2 = _interopRequireDefault(_reservationsMedicalReleasesManager);
+
+var _reservationsEssaysManager = require('./components/reservations/reservations-essays-manager.vue');
+
+var _reservationsEssaysManager2 = _interopRequireDefault(_reservationsEssaysManager);
 
 var _reservationsVisasManager = require('./components/reservations/reservations-visas-manager.vue');
 
@@ -85284,6 +85756,14 @@ var _adminTransactionsList = require('./components/financials/transactions/admin
 
 var _adminTransactionsList2 = _interopRequireDefault(_adminTransactionsList);
 
+var _transactionForm = require('./components/financials/transactions/transaction-form.vue');
+
+var _transactionForm2 = _interopRequireDefault(_transactionForm);
+
+var _donorForm = require('./components/financials/donors/donor-form.vue');
+
+var _donorForm2 = _interopRequireDefault(_donorForm);
+
 var _vueStrap = require('vue-strap/dist/vue-strap.min');
 
 var _vueStrap2 = _interopRequireDefault(_vueStrap);
@@ -85301,7 +85781,6 @@ window.marked = require('marked');
 require('gsap');
 window.ScrollMagic = require('scrollmagic');
 require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
-
 window.videojs = require('video.js');
 require('videojs-youtube');
 // require('videojs-vimeo');
@@ -85314,13 +85793,12 @@ $(document).ready(function () {
     $('[data-toggle="offcanvas"]').click(function () {
         $('.row-offcanvas').toggleClass('active');
     });
+
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
-// Vue Resource
-_vue2.default.use(require('vue-resource'));
-// Vue Validator
-_vue2.default.use(require('vue-validator'));
 // Global Components
+
 _vue2.default.component('pagination', _pagination2.default);
 _vue2.default.component('modal', _vueStrap2.default.modal);
 _vue2.default.component('accordion', _vueStrap2.default.accordion);
@@ -85336,6 +85814,10 @@ _vue2.default.component('tab', _vueStrap2.default.tab);
 _vue2.default.component('tooltip', _vueStrap2.default.tooltip);
 // Vue.component('vSelect', require('vue-select'));
 
+// Vue Resource
+_vue2.default.use(require('vue-resource'));
+// Vue Validator
+_vue2.default.use(require('vue-validator'));
 
 _vue2.default.http.options.root = '/api';
 _vue2.default.http.interceptors.push({
@@ -85478,7 +85960,7 @@ new _vue2.default({
         groupTripWrapper: _groupsTripsSelectionWrapper2.default,
         groupInterestSignup: _groupInterestSignup2.default,
         tripDetailsMissionaries: _tripDetailsMissionaries2.default,
-        tripRegWizard: _tripRegistrationWizard2.default,
+        tripRegistrationWizard: _tripRegistrationWizard2.default,
         reservationsList: _reservationsList2.default,
         donationsList: _donationsList2.default,
         fundraisersManager: _fundraisersManager2.default,
@@ -85497,6 +85979,7 @@ new _vue2.default({
         recordsList: _recordsList2.default,
         passportsList: _passportsList2.default,
         essaysList: _essaysList2.default,
+        essayCreateUpdate: _essayCreateUpdate2.default,
         passportCreateUpdate: _passportCreateUpdate2.default,
         visasList: _visasList2.default,
         visaCreateUpdate: _visaCreateUpdate2.default,
@@ -85510,6 +85993,7 @@ new _vue2.default({
         reservationsPassportsManager: _reservationsPassportsManager2.default,
         reservationsMedicalReleasesManager: _reservationsMedicalReleasesManager2.default,
         reservationsVisasManager: _reservationsVisasManager2.default,
+        reservationsEssaysManager: _reservationsEssaysManager2.default,
         reservationsArrivalDesignation: _reservationsArrivalDesignation2.default,
         userSettings: _userSettings2.default,
         userProfileCountries: _userProfileCountries2.default,
@@ -85528,10 +86012,10 @@ new _vue2.default({
         adminCampaignTripCreate: _adminTripCreate2.default,
         adminCampaignTripEdit: _adminTripEdit2.default,
         adminTrips: _adminTripsList2.default,
-        adminTripsReservations: _adminTripReservationsList2.default,
-        adminTripsFacilitators: _adminTripFacilitators2.default,
-        adminTripsDuplicate: _adminTripDuplicate2.default,
-        adminTripsDelete: _adminTripDelete2.default,
+        adminTripReservations: _adminTripReservationsList2.default,
+        adminTripFacilitators: _adminTripFacilitators2.default,
+        adminTripDuplicate: _adminTripDuplicate2.default,
+        adminTripDelete: _adminTripDelete2.default,
         adminInterestsList: _adminInterestsList2.default,
         adminGroups: _adminGroupsList2.default,
         adminGroupCreate: _adminGroupCreate2.default,
@@ -85551,7 +86035,9 @@ new _vue2.default({
         reconcileFund: _reconcileFund2.default,
         adminDonorsList: _adminDonorsList2.default,
         adminFundsList: _adminFundsList2.default,
-        adminTransactionsList: _adminTransactionsList2.default
+        adminTransactionsList: _adminTransactionsList2.default,
+        transactionForm: _transactionForm2.default,
+        donorForm: _donorForm2.default
     },
     http: {
         headers: {
@@ -85578,6 +86064,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/action-trigger.vue":126,"./components/campaigns/admin-campaign-create.vue":127,"./components/campaigns/admin-campaign-details.vue":128,"./components/campaigns/admin-campaign-edit.vue":129,"./components/campaigns/campaign-groups.vue":130,"./components/campaigns/campaigns.vue":131,"./components/campaigns/group-trips.vue":136,"./components/campaigns/groups-trips-selection-wrapper.vue":137,"./components/donate.vue":138,"./components/financials/donors/admin-donors-list.vue":139,"./components/financials/funds/admin-funds-list.vue":140,"./components/financials/transactions/admin-transactions-list.vue":141,"./components/fundraisers/fundraisers-manager.vue":142,"./components/fundraisers/fundraisers-stories.vue":143,"./components/fundraisers/fundraisers-uploads.vue":144,"./components/fundraisers/fundraisers.vue":145,"./components/groups/admin-group-create.vue":146,"./components/groups/admin-group-edit.vue":147,"./components/groups/admin-group-managers.vue":148,"./components/groups/admin-groups-list.vue":149,"./components/groups/dashboard-group-reservations.vue":150,"./components/groups/dashboard-group-trips.vue":151,"./components/groups/group-interest-signup.vue":152,"./components/groups/group-profile-fundraisers.vue":153,"./components/groups/group-profile-stories.vue":154,"./components/groups/group-profile-trips.vue":155,"./components/groups/groups-list.vue":156,"./components/groups/groups.vue":157,"./components/interests/admin-interests-list.vue":158,"./components/interests/dashboard-interests-list.vue":159,"./components/login.vue":160,"./components/modal-donate.vue":161,"./components/notes.vue":162,"./components/pagination.vue":163,"./components/reconcile-fund.vue":164,"./components/records/essays/essays-list.vue":165,"./components/records/medicals/medical-create-update.vue":166,"./components/records/medicals/medicals-list.vue":167,"./components/records/passports/passport-create-update.vue":168,"./components/records/passports/passports-list.vue":169,"./components/records/records-list.vue":170,"./components/records/visas/visa-create-update.vue":171,"./components/records/visas/visas-list.vue":172,"./components/reservations/admin-reservation-costs.vue":173,"./components/reservations/admin-reservation-deadlines.vue":174,"./components/reservations/admin-reservation-dues.vue":175,"./components/reservations/admin-reservation-edit.vue":176,"./components/reservations/admin-reservations-list.vue":177,"./components/reservations/donations-list.vue":178,"./components/reservations/reservation-avatar.vue":179,"./components/reservations/reservation-costs.vue":180,"./components/reservations/reservation-dues.vue":181,"./components/reservations/reservation-funding.vue":182,"./components/reservations/reservations-arrival-designation.vue":183,"./components/reservations/reservations-list.vue":184,"./components/reservations/reservations-medical-releases-manager.vue":185,"./components/reservations/reservations-passports-manager.vue":186,"./components/reservations/reservations-visas-manager.vue":187,"./components/todos.vue":188,"./components/top-nav.vue":189,"./components/trips/admin-trip-create.vue":190,"./components/trips/admin-trip-delete.vue":191,"./components/trips/admin-trip-duplicate.vue":192,"./components/trips/admin-trip-edit.vue":193,"./components/trips/admin-trip-facilitators.vue":194,"./components/trips/admin-trip-reservations-list.vue":195,"./components/trips/admin-trips-list.vue":196,"./components/trips/trip-details-missionaries.vue":214,"./components/trips/trip-registration-wizard.vue":215,"./components/uploads/admin-upload-create-update.vue":216,"./components/uploads/admin-uploads-list.vue":217,"./components/users/admin-user-create.vue":218,"./components/users/admin-user-delete.vue":219,"./components/users/admin-user-edit.vue":220,"./components/users/admin-users-list.vue":221,"./components/users/user-permissions.vue":222,"./components/users/user-profile-countries.vue":223,"./components/users/user-profile-fundraisers-donors.vue":224,"./components/users/user-profile-fundraisers-progress.vue":225,"./components/users/user-profile-fundraisers.vue":226,"./components/users/user-profile-stories.vue":227,"./components/users/user-settings.vue":228,"aos":1,"bootstrap-sass":18,"gsap":108,"jquery":110,"jquery.cookie":109,"marked":111,"moment":112,"scrollmagic":114,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":115,"underscore":116,"video.js":117,"videojs-youtube":118,"vue":124,"vue-resource":120,"vue-strap/dist/vue-strap.min":122,"vue-validator":123}]},{},[229]);
+},{"./components/action-trigger.vue":126,"./components/campaigns/admin-campaign-create.vue":127,"./components/campaigns/admin-campaign-details.vue":128,"./components/campaigns/admin-campaign-edit.vue":129,"./components/campaigns/campaign-groups.vue":130,"./components/campaigns/campaigns.vue":131,"./components/campaigns/group-trips.vue":136,"./components/campaigns/groups-trips-selection-wrapper.vue":137,"./components/donate.vue":138,"./components/financials/donors/admin-donors-list.vue":139,"./components/financials/donors/donor-form.vue":140,"./components/financials/funds/admin-funds-list.vue":141,"./components/financials/transactions/admin-transactions-list.vue":142,"./components/financials/transactions/transaction-form.vue":143,"./components/fundraisers/fundraisers-manager.vue":144,"./components/fundraisers/fundraisers-stories.vue":145,"./components/fundraisers/fundraisers-uploads.vue":146,"./components/fundraisers/fundraisers.vue":147,"./components/groups/admin-group-create.vue":148,"./components/groups/admin-group-edit.vue":149,"./components/groups/admin-group-managers.vue":150,"./components/groups/admin-groups-list.vue":151,"./components/groups/dashboard-group-reservations.vue":152,"./components/groups/dashboard-group-trips.vue":153,"./components/groups/group-interest-signup.vue":154,"./components/groups/group-profile-fundraisers.vue":155,"./components/groups/group-profile-stories.vue":156,"./components/groups/group-profile-trips.vue":157,"./components/groups/groups-list.vue":158,"./components/groups/groups.vue":159,"./components/interests/admin-interests-list.vue":160,"./components/interests/dashboard-interests-list.vue":161,"./components/login.vue":162,"./components/modal-donate.vue":163,"./components/notes.vue":164,"./components/pagination.vue":165,"./components/reconcile-fund.vue":166,"./components/records/essays/essay-create-update.vue":167,"./components/records/essays/essays-list.vue":168,"./components/records/medicals/medical-create-update.vue":169,"./components/records/medicals/medicals-list.vue":170,"./components/records/passports/passport-create-update.vue":171,"./components/records/passports/passports-list.vue":172,"./components/records/records-list.vue":173,"./components/records/visas/visa-create-update.vue":174,"./components/records/visas/visas-list.vue":175,"./components/reservations/admin-reservation-costs.vue":176,"./components/reservations/admin-reservation-deadlines.vue":177,"./components/reservations/admin-reservation-dues.vue":178,"./components/reservations/admin-reservation-edit.vue":179,"./components/reservations/admin-reservations-list.vue":180,"./components/reservations/donations-list.vue":181,"./components/reservations/reservation-avatar.vue":182,"./components/reservations/reservation-costs.vue":183,"./components/reservations/reservation-dues.vue":184,"./components/reservations/reservation-funding.vue":185,"./components/reservations/reservations-arrival-designation.vue":186,"./components/reservations/reservations-essays-manager.vue":187,"./components/reservations/reservations-list.vue":188,"./components/reservations/reservations-medical-releases-manager.vue":189,"./components/reservations/reservations-passports-manager.vue":190,"./components/reservations/reservations-visas-manager.vue":191,"./components/todos.vue":192,"./components/top-nav.vue":193,"./components/trips/admin-trip-create.vue":194,"./components/trips/admin-trip-delete.vue":195,"./components/trips/admin-trip-duplicate.vue":196,"./components/trips/admin-trip-edit.vue":197,"./components/trips/admin-trip-facilitators.vue":198,"./components/trips/admin-trip-reservations-list.vue":199,"./components/trips/admin-trips-list.vue":200,"./components/trips/trip-details-missionaries.vue":218,"./components/trips/trip-registration-wizard.vue":219,"./components/uploads/admin-upload-create-update.vue":220,"./components/uploads/admin-uploads-list.vue":221,"./components/users/admin-user-create.vue":222,"./components/users/admin-user-delete.vue":223,"./components/users/admin-user-edit.vue":224,"./components/users/admin-users-list.vue":225,"./components/users/user-permissions.vue":226,"./components/users/user-profile-countries.vue":227,"./components/users/user-profile-fundraisers-donors.vue":228,"./components/users/user-profile-fundraisers-progress.vue":229,"./components/users/user-profile-fundraisers.vue":230,"./components/users/user-profile-stories.vue":231,"./components/users/user-settings.vue":232,"aos":1,"bootstrap-sass":18,"gsap":108,"jquery":110,"jquery.cookie":109,"marked":111,"moment":112,"scrollmagic":114,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":115,"underscore":116,"video.js":117,"videojs-youtube":118,"vue":124,"vue-resource":120,"vue-strap/dist/vue-strap.min":122,"vue-validator":123}]},{},[233]);
 
 //# sourceMappingURL=main.js.map

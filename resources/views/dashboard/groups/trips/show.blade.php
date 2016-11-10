@@ -131,6 +131,9 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <admin-trip-facilitators trip-id="{{ $trip->id }}"></admin-trip-facilitators>
+
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="registration">
                                 <div class="panel panel-default">

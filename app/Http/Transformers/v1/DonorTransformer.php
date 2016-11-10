@@ -39,6 +39,9 @@ class DonorTransformer extends TransformerAbstract
             'company'       => $donor->company,
             'email'         => $donor->email,
             'phone'         => $donor->phone,
+            'address'       => $donor->address,
+            'city'          => $donor->city,
+            'state'         => $donor->state,
             'zip'           => $donor->zip,
             'country'       => [
                 'code' => $donor->country_code,
@@ -48,6 +51,7 @@ class DonorTransformer extends TransformerAbstract
             'account_id'    => $donor->account_id,
             'account_type'  => $donor->account_type,
             'account_url'   => $donor->account ? $donor->account->url : null,
+            'customer_id'   => $donor->customer_id,
             'created_at'    => $donor->created_at->toDateTimeString(),
             'updated_at'    => $donor->updated_at->toDateTimeString(),
             'deleted_at'    => $donor->deleted_at ? $donor->deleted_at->toDateTimeString() : null,

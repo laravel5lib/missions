@@ -54,7 +54,9 @@ class ReservationTableSeeder extends Seeder
 
         $fund = $res->fund()->create([
             'name' => generateFundName($res),
-            'balance' => 0
+            'balance' => 0,
+            'class' => generateQbClassName($res),
+            'item' => 'Missionary Donation'
         ]);
 
         $res->syncCosts($costs);

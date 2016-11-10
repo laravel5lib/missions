@@ -1,5 +1,19 @@
 <template>
 <div class="row">
+    <div class="col-xs-12 text-right">
+        <form class="form-inline">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" v-model="includeManaging"> Include my group's reservations
+                </label>
+            </div>
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+            </div>
+        </form>
+        <hr class="divider sm inv">
+    </div>
     <div class="col-xs-12 col-sm-6 col-md-4" v-for="reservation in reservations" v-if="reservations.length > 0">
         <div class="panel panel-default">
             <div class="panel-heading text-center" :class="'panel-' + reservation.trip.data.type">
@@ -25,13 +39,31 @@
     </div>
 </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'reservations-list',
         props: ['userId', 'type'],
         data(){
             return{
-                reservations: []
+                reservations: [],
+                trips: [],
+                includeManaging: false,
+                search: ''
+            }
+        },
+        watch: {
+            'includeManaging': function (val, oldVal) {
+                if(val && !oldVal) {
+                    this.$http.get('users/'+ this.userId + '?include=facilitating,managing.trip').then(function (response) {
+                        var user = response.data.data;
+                        var facilitating = _.pluck(user.facilitating.data, 'id');
+                        var managing = user.managing.data
+                        this.trips = _.union(facilitating, managing);
+                        this.getReservations();
+                    });
+                } else {
+                    this.getReservations();
+                }
             }
         },
         methods: {
@@ -39,10 +71,17 @@
                 return code;
             },
             getReservations(){
-                this.$http.get('reservations', {
+                var params = {
                     include: 'trip.campaign,trip.group',
-                    user: new Array(this.userId),
-                }).then(function (response) {
+                    search: this.search
+                }
+                if (this.includeManaging) {
+                    params.trip = this.trips;
+                } else {
+                    params.user = new Array(this.userId);
+
+                }
+                this.$http.get('reservations', params).then(function (response) {
 
                     switch (this.type) {
                         case 'active':

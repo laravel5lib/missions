@@ -27,6 +27,12 @@
             <!--<span class="sr-only">Next</span>-->
         <!--</a>-->
     <!--</div>&lt;!&ndash; end carousel &ndash;&gt;-->
+    <div class="content-page-header">
+        <img class="img-responsive" src="images/fundraising/fundraisers-header.jpg" alt="Fundraisers">
+        <div class="c-page-header-text">
+            <h1 class="text-uppercase dash-trailing">Fundraisers</h1>
+        </div><!-- end c-page-header-content -->
+    </div><!-- end c-page-header -->
     <hr class="divider inv xlg">
     <div class="container">
         <div class="col-xs-12">
@@ -60,25 +66,11 @@
             <p class="lead text-muted">Hmmmm. We couldn't find any fundraisers matching your search.</p>
         </div>
         <div class="col-xs-12 text-center" v-if="fundraisers.length">
-            <nav>
-                <ul class="pagination pagination-md">
-                    <li :class="{ 'disabled': pagination.current_page == 1 }">
-                        <a aria-label="Previous" @click="page=pagination.current_page-1">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                        <a aria-label="Next" @click="page=pagination.current_page+1">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <pagination :pagination.sync="pagination" :callback="searchFundraisers"></pagination>
         </div>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'fundraisers',
         props: ['id', 'type', 'authId'],
@@ -91,15 +83,17 @@
                 // pagination vars
                 search: '',
                 page: 1,
-                per_page: 6,
-                pagination: {},
+                //per_page: 6,
+                pagination: { current_page: 1 },
                 pathName: window.location.pathname
             }
         },
+        computed: {
+        	per_page: function () {
+				return this.fundraisersLimit;
+			}
+        },
         watch: {
-            'page': function (val, oldVal) {
-                this.searchFundraisers();
-            },
             'search': function (val, oldVal) {
                 this.searchFundraisers();
             },
@@ -109,9 +103,10 @@
                 this.$http.get('fundraisers?active=true', {
                     // include: '',
                     search: this.search,
-                    page: this.page,
-                    per_page: this.per_page
-                }).then(function (response) {
+                    page: this.pagination.current_page,
+                    per_page: this.per_page,
+					isPublic: true,
+				}).then(function (response) {
                     this.fundraisers = response.data.data;
                     this.featuredFundraisers = _.first(this.fundraisers, 5);
                     this.pagination = response.data.meta.pagination;

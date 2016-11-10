@@ -120,6 +120,10 @@ class ReservationsController extends Controller
             $reservation->medicalRelease()->dissociate();
             $reservation->save();
 
+        if ( ! $request->has('testimony_id'))
+            $reservation->testimony()->dissociate();
+            $reservation->save();
+
         return $this->response->item($reservation, new ReservationTransformer);
     }
 

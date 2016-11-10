@@ -1,0 +1,396 @@
+<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+    <validator name="CreateUpdateMedicalRelease" @touched="onTouched">
+        <form id="CreateUpdateMedicalRelease" class="form-horizontal" novalidate>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h5 class="panel-header">Basic Information</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div :class="{ 'has-error': checkForError('name') }">
+                                <label for="name" class="control-label">Name</label>
+                                <input type="text" class="form-control" name="name" id="name" v-model="name"
+                                       placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
+                                       minlength="1" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div :class="{ 'has-error': checkForError('provider') }">
+                                <label for="ins_provider" class="control-label">Insurance Provider</label>
+                                <input type="text" class="form-control" name="ins_provider" id="ins_provider" v-model="ins_provider"
+                                       placeholder="Insurance Provider" v-validate:provider="{ required: true, minlength:1, maxlength:100 }"
+                                       maxlength="100" minlength="1" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div :class="{ 'has-error': checkForError('policy') }">
+                                <label for="ins_policy_no" class=control-label">Insurance Policy Number</label>
+                                <input type="text" class="form-control" name="ins_policy_no" id="ins_policy_no" v-model="ins_policy_no"
+                                       placeholder="Insurance Policy Number" v-validate:policy="{ required: true, minlength:1 }"
+                                       maxlength="100" minlength="1" required>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- end panel-body -->
+            </div><!-- end panel -->
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h5 class="panel-header">Conditions</h5>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <button class="btn btn-xs btn-default-hollow" type="button" data-toggle="collapse" 
+                                    data-target="#newCondition" aria-expanded="false" aria-controls="newCondition">
+                                <i class="icon-left fa fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item" v-for="condition in conditions">
+                        {{ condition | json }}
+                    </div>
+                    <div class="collapse" id="newCondition">
+                        <div class="list-group-item">
+                            <validator name="NewCondition">
+                                <form name="NewCondition">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" v-model="newCondition.name">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" v-model="newCondition.medication"> Have Medication?
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" v-model="newCondition.diagnosed"> Medically Diagnosed?
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="divider inv sm">
+                                    <button class="btn btn-sm btn-success" type="button" @click="addCondition(newCondition)">Add Condition</button>
+                                </form>
+                            </validator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h5 class="panel-header">Allergies</h5>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <button class="btn btn-xs btn-default-hollow" type="button" data-toggle="collapse"
+                                    data-target="#newAllergy" aria-expanded="false" aria-controls="newAllergy">
+                                <i class="icon-left fa fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item" v-for="allergy in allergies">
+                        {{ allergy | json }}
+                    </div>
+                    <div class="collapse" id="newAllergy">
+                        <div class="list-group-item">
+                            <validator name="newAllergy">
+                                <form name="newAllergy">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" v-model="newAllergy.name">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" v-model="newAllergy.medication"> Have Medication?
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="checkbox">
+                                                <label>
+
+                                                    <input type="checkbox" v-model="newAllergy.diagnosed"> Medically Diagnosed?
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="divider inv sm">
+                                    <button class="btn btn-sm btn-success" type="button" @click="addAllergy(newAllergy)">Add Allergy</button>
+                                </form>
+                            </validator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5 class="panel-header">Emergency Contact</h5>
+                </div>
+                <div class="panel-body">
+                    <form name="newContact">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Name</label>
+                                <input type="text" class="form-control" v-model="emergency_contact.name">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Email</label>
+                                <input type="email" class="form-control" v-model="emergency_contact.email">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Phone</label>
+                                <input type="tel" class="form-control" v-model="emergency_contact.phone|phone">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Relationship</label>
+                                <select type="tel" class="form-control" v-model="emergency_contact.relationship">
+                                    <option value="friend">Friend</option>
+                                    <option value="spouse">Spouse</option>
+                                    <option value="family">Family</option>
+                                    <option value="guardian">Guardian</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="form-group text-center">
+                <div class="col-xs-12">
+                    <a v-if="!isUpdate" href="/dashboard/records/medical-releases" class="btn btn-default">Cancel</a>
+                    <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
+                    <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
+                    <a v-if="isUpdate" @click="back()" class="btn btn-success">Done</a>
+                </div>
+            </div>
+        </form>
+
+        <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
+            <div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Are you sure you want to delete {{ selectedItem.name }}?</div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Confirm</button>
+            </div>
+        </modal>
+
+        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <span class="icon-ok-circled alert-icon-float-left"></span>
+            <strong>Well Done!</strong>
+            <p>Profile updated!</p>
+        </alert>
+        <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+            <span class="icon-info-circled alert-icon-float-left"></span>
+            <strong>Oh No!</strong>
+            <p>There are errors on the form.</p>
+        </alert>
+        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+            <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
+        </modal>
+
+    </validator>
+</template>
+<script type="text/javascript">
+    import vSelect from "vue-select";
+    import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
+    export default{
+        name: 'medical-create-update',
+        components: {vSelect, 'upload-create-update': uploadCreateUpdate},
+        props: {
+            isUpdate: {
+                type:Boolean,
+                default: false
+            },
+            id: {
+                type: String,
+                default: null
+            }
+        },
+        data(){
+            return{
+                user_id: null,
+                name:'',
+                ins_provider:'',
+                ins_policy_no:'',
+                is_risk:true,
+                conditions: [],
+                allergies: [],
+                emergency_contact: {
+                    name: '',
+                    email: '',
+                    phone: '',
+                    relationship: '',
+                },
+
+                newCondition: {
+                    name: '',
+                    medication: false,
+                    diagnosed: false,
+                },
+                newAllergy: {
+                    name: '',
+                    medication: false,
+                    diagnosed: false,
+                },
+
+                // logic vars
+                countries: [],
+                countryObj: null,
+                attemptSubmit: false,
+                showSuccess: false,
+                showError: false,
+                selectedAvatar: null,
+                today: moment().format('YYYY-MM-DD'),
+                yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
+                tomorrow:moment().add(1, 'days').format('YYYY-MM-DD'),
+                resource: this.$resource('medical/releases{/id}')
+            }
+        },
+        computed: {
+            country_code(){
+                return _.isObject(this.countryObj) ? this.countryObj.code : null;
+            },
+        },
+        methods: {
+            checkForError(field){
+                // if user clicked submit button while the field is invalid trigger error styles 
+                return this.$CreateUpdateMedicalRelease[field].invalid && this.attemptSubmit;
+            },
+            onTouched(){
+                this.hasChanged = true;
+            },
+            back(force){
+                if (this.hasChanged && !force ) {
+                    this.showSaveAlert = true;
+                    return false;
+                }
+                window.location.href = '/dashboard/records/medical-releases/';
+            },
+            forceBack(){
+                return this.back(true);
+            },
+            addCondition(condition){
+                this.conditions.push(condition);
+                this.reset('condition');
+            },
+            addAllergy(allergy){
+                this.allergies.push(allergy);
+                this.reset('allergy');
+            },
+            reset(type){
+                switch (type) {
+                    case 'condition':
+                        this.newCondition = {
+                            name: '',
+                            medication: false,
+                            diagnosed: false,
+                        };
+                        jQuery('#newCondition').collapse();
+                        break;
+                    case 'allergy':
+                        this.newAllergy = {
+                            name: '',
+                            medication: false,
+                            diagnosed: false,
+                        };
+                        jQuery('#newAllergy').collapse();
+                        break;
+                }
+            },
+            submit(){
+                this.attemptSubmit = true;
+                if (this.$CreateUpdateMedicalRelease.valid) {
+                    this.resource.save(null, {
+                        name: this.name,
+                        ins_provider: this.ins_provider,
+                        ins_policy_no: this.ins_policy_no,
+                        conditions: this.conditions,
+                        allergies: this.allergies,
+                        emergency_contact: this.emergency_contact,
+                        is_risk: this.is_risk,
+                        user_id: this.user_id,
+                    }).then(function (resp) {
+                        this.showSuccess = true;
+                        // window.location.href = '/dashboard/records/medical-releases';
+                    }, function (error) {
+                        this.showError = true;
+                        debugger;
+                    });
+                } else {
+                    this.showError = true;
+                }
+            },
+            update(){
+                this.attemptSubmit = true;
+                if (this.$CreateUpdateMedicalRelease.valid) {
+                    this.resource.update({id:this.id}, {
+                        given_names: this.given_names,
+                        surname: this.surname,
+                        number: this.number,
+                        issued_at: this.issued_at,
+                        expires_at: this.expires_at,
+                        country_code: this.country_code,
+                        upload_id: this.upload_id,
+                        user_id: this.user_id,
+                    }).then(function (resp) {
+//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
+                        // window.location.href = '/dashboard/visas';
+                    }, function (error) {
+                        debugger;
+                    });
+                }
+            },
+
+        },
+        events:{
+            'uploads-complete'(data){
+                switch(data.type){
+                    case 'other':
+                        //save for preview
+                        this.selectedAvatar = data;
+                        // save for upload reference
+                        this.upload_id = data.id;
+                        break;
+                }
+            }
+        },
+        ready(){
+
+            var fetchURL = this.isUpdate ? 'medical/releases/' + this.id : 'users/me';
+            this.$http(fetchURL).then(function (response) {
+                // this.user = response.data.data;
+                this.user_id = response.data.data.id;
+
+                if (this.isUpdate) {
+                    var medical_releases = _.findWhere(response.data.data.medical_releases.data, {id: this.id});
+                    $.extend(this, medical_releases);
+
+                }
+            });
+        }
+
+    }
+</script>

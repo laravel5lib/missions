@@ -137,7 +137,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	var marked = require('marked');
 
 	import vSelect from "vue-select"
@@ -263,7 +263,7 @@
 					group_id: val.group_id,
 					description: val.description,
 					type: val.type,
-					difficulty: val.difficulty,
+					difficulty: val.difficulty.split(' ')[0] + '_' + val.difficulty.split(' ')[1],
 					companion_limit: val.companion_limit,
 					prospects: val.prospects,
 					started_at: val.started_at,

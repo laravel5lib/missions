@@ -35,6 +35,7 @@ $api->version('v1', [
     $api->put('/users/me', 'UsersController@update');
     $api->resource('users', 'UsersController');
     $api->resource('users.contacts', 'ContactsController');
+    $api->resource('users.permissions', 'UserPermissionsController');
     $api->get('{recipient}/{id}/accolades', 'AccoladesController@index');
     $api->post('{recipient}/{id}/accolades', 'AccoladesController@store');
     $api->resource('groups', 'GroupsController');
@@ -75,6 +76,7 @@ $api->version('v1', [
     $api->resource('projects', 'ProjectsController');
     $api->resource('notes', 'NotesController');
     $api->resource('todos', 'TodosController');
+    $api->resource('essays', 'EssaysController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

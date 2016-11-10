@@ -4,7 +4,7 @@
             <div class="panel panel-default" v-if="visa">
                 <div style="min-height:220px;" class="panel-body">
                     <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{visa.citizenship_name}}</h6>
-                    <a role="button" :href="'/dashboard' + visa.links[0].uri">
+                    <a role="button" :href="'/dashboard/records' + visa.links[0].uri">
                         <h5 style="text-transform:capitalize;" class="text-primary">
                             {{visa.given_names}} {{visa.surname}}
                         </h5>
@@ -32,7 +32,7 @@
                         <a class="btn btn-block btn-info btn-sm" @click="toggleChangeState()">
                             <i class="fa fa-pencil"></i> Change Visa
                         </a>
-                        <a class="btn btn-block btn-primary btn-sm" href="/dashboard/visas/create">
+                        <a class="btn btn-block btn-primary btn-sm" href="/dashboard/records/visas/create">
                             <i class="fa fa-plus"></i> Add New Visa
                         </a>
                     </form>
@@ -50,7 +50,7 @@
                     <div class="panel panel-default">
                         <div style="min-height:220px;" class="panel-body">
                             <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{visa.citizenship_name}}</h6>
-                            <a role="button" :href="'/dashboard' + visa.links[0].uri">
+                            <a role="button" :href="'/dashboard/records' + visa.links[0].uri">
                                 <h5 style="text-transform:capitalize;" class="text-primary">
                                     {{visa.given_names}} {{visa.surname}}
                                 </h5>
@@ -102,7 +102,7 @@
     </div>
 </template>
 <script>
-    import visaCreateUpdate from '../visas/visa-create-update.vue';
+    import visaCreateUpdate from '../records/visas/visa-create-update.vue';
     export default{
         name: 'reservations-visas-manager',
         components:{visaCreateUpdate},

@@ -32,7 +32,8 @@ class Reservation extends Model
         'shirt_size', 'birthday', 'phone_one', 'phone_two',
         'address', 'city', 'state', 'zip', 'country_code',
         'trip_id', 'rep_id', 'todos', 'companion_limit', 'costs',
-        'passport_id', 'user_id', 'email'
+        'passport_id', 'user_id', 'email', 'avatar_upload_id',
+        'arrival_designation', 'testimony_id'
     ];
 
     /**
@@ -65,6 +66,14 @@ class Reservation extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rep()
     {
         return $this->belongsTo(User::class);
     }
@@ -193,6 +202,16 @@ class Reservation extends Model
     public function passport()
     {
         return $this->belongsTo(Passport::class);
+    }
+
+    /**
+     * Get the reservation's testimony.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function testimony()
+    {
+        return $this->belongsTo(Essay::class, 'testimony_id');
     }
 
     /**

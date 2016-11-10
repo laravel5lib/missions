@@ -85,7 +85,7 @@ class DonorFilter extends Filter
      */
     protected function byDesignation($type, $id)
     {
-        return $this->whereHas('fund', function($donation) use($id, $type) {
+        return $this->whereHas('funds', function($donation) use($id, $type) {
             $donation->where('fundable_type', $type)
                 ->where('fundable_id', $id);
         });

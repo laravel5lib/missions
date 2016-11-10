@@ -1,24 +1,16 @@
 <template>
     <template v-if="isUser()">
-        <div class="row hidden-xs">
-            <div class="col-sm-8">
-                <h5>Add photos and videos!</h5>
-            </div>
-            <div class="col-sm-4 text-right">
-                <button class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse">Manage Media <i class="fa fa-plus"></i></button>
-            </div>
-        </div>
-        <div class="row visible-xs">
-            <div class="col-sm-12 text-center">
-                <h5>Add photos and videos!</h5>
-            </div>
-            <div class="col-sm-12 text-center">
-                <button class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse">Manage Media <i class="fa fa-plus"></i></button>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="alert alert-info">
+                            <i class="fa fa-info-circle"></i> Add photos and videos!
+                            <button class="btn btn-white-hollow btn-xs pull-right" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse"><i class="fa fa-picture-o"></i> Manage Media</button>
+                </div>
             </div>
         </div>
-        <hr class="divider inv">
+
         <div class="collapse" id="mediaCollapse">
-            <div class="well">
+            <div class="panel panel-default"><div class="panel-body">
                 <!-- TAB NAVIGATION -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="active"><a href="#tab1" role="tab" data-toggle="tab">Media</a></li>
@@ -29,6 +21,9 @@
                 <div class="tab-content">
                     <div class="active tab-pane fade in" id="tab1">
                         <div class="row" v-if="fundraiser.hasOwnProperty('uploads')">
+                            <p class="lead text-center text-muted" v-if="fundraiser.uploads.data.length < 1">
+                                No media found. Add a video or image.
+                            </p>
                             <div class="col-sm-4 col-md-3" v-for="upload in fundraiser.uploads.data">
                                 <div class="thumbnail">
                                     <img :src="upload.type === 'video' ? 'https://placehold.it/150x150?text=Video' : upload.source" :alt="upload.name">
@@ -67,14 +62,14 @@
                         </modal>
                     </div>
                     <div class="tab-pane fade" id="tab2">
-                        <upload-create-update type="other" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']"></upload-create-update>
+                        <upload-create-update type="other" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']" :width="1920" :height="1080"></upload-create-update>
                     </div>
                     <div class="tab-pane fade" id="tab3">
                         <upload-create-update type="video" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']"></upload-create-update>
                     </div>
                 </div>
 
-            </div>
+            </div></div>
         </div>
     </template>
 
@@ -119,12 +114,11 @@
     }
 </style>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'fundraisers-uploads',
         props: ['id', 'sponsorId', 'authId'],
-        components: {'upload-create-update': uploadCreateUpdate, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
+        components: {'upload-create-update': uploadCreateUpdate},
         data(){
             return{
                 fundraiser: {},

@@ -26,35 +26,17 @@
 					<div class="panel panel-default">
 
 							<a @click="selectExisting(upload)" role="button">
-								<tooltip effect="scale" placement="top" :content="upload.name">
-									<img :src="upload.source + '?w=100&q=50'" :alt="upload.name" class="img-responsive">
+								<tooltip effect="scale" placement="top" content="Preview">
+									<img :src="upload.source + '?w=100&h=100&fit=crop-center&q=50'" :alt="upload.name" class="img-responsive">
 								</tooltip>
 							</a>
-
-						<div class="panel-body">
-							<span class="text-uppercase">{{upload.name}}</span>
-						</div> end panel-body
 						<div class="panel-footer">
 							<button type="button" class="btn btn-xs btn-block btn-primary" @click="selectExisting(upload)">Select</button>
 						</div>
 					</div><!-- end panel -->
 				</div><!-- end col -->
 				<div class="col-xs-12 text-center">
-					<nav>
-						<ul class="pagination pagination-sm">
-							<li :class="{ 'disabled': pagination.current_page == 1 }">
-								<a aria-label="Previous" @click="page=pagination.current_page-1">
-									<span aria-hidden="true">&laquo;</span>
-								</a>
-							</li>
-							<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-							<li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-								<a aria-label="Next" @click="page=pagination.current_page+1">
-									<span aria-hidden="true">&raquo;</span>
-								</a>
-							</li>
-						</ul>
-					</nav>
+					<pagination :pagination.sync="pagination" :callback="searchUploads"></pagination>
 				</div>
 			</div>
 		</div>
@@ -85,7 +67,7 @@
 					</select>
 				</div>
 
-				<div class="row" v-if="type && type === 'other'">
+				<div class="row" v-if="type && type === 'other' && !uiLocked">
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" v-model="constrained">
@@ -156,12 +138,11 @@
 
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	import vSelect from 'vue-select'
-	import VueStrap from 'vue-strap/dist/vue-strap.min'
 	export default{
         name: 'upload-create-update',
-		components: {vSelect, 'tooltip': VueStrap.tooltip},
+		components: {vSelect},
 		props:{
 			uploadId: {
 				type: String,
@@ -206,7 +187,15 @@
 			perPage: {
 				type: Number,
 				default: 6
-			}
+			},
+			width: {
+				type: Number,
+				default: 100
+			},
+			height: {
+				type: Number,
+				default: 100
+			},
 
 		},
         data(){
@@ -216,8 +205,6 @@
                 file: null,
                 x_axis: null,
                 y_axis: null,
-                width: 100,
-				height: 100,
 
 				// logic variables
 				attemptSubmit: false,
@@ -238,7 +225,7 @@
 					{type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
 					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
 					{type: 'video'},
-					{type: 'other', path: 'images/other'},
+					{type: 'other', path: 'images/other', width: this.width, height: this.height},
 					{type: 'file', path: 'resources/documents'},
 				],
 				typeObj: null,
@@ -246,7 +233,7 @@
 				uploads: [],
 				page: 1,
 				search: '',
-				pagination: {},
+				pagination: { current_page: 1 },
             }
         },
 		computed:{
@@ -345,7 +332,7 @@
 				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
 			},
 			adjustSelectByType(){
-				if (this.vueCropApi && _.contains(['banner', 'avatar'], this.typeObj.type)) {
+				if (this.vueCropApi && _.contains(['banner', 'avatar', 'other'], this.typeObj.type)) {
 					// update dimensions
 					this.scaledWidth = this.typeObj.width;
 					this.scaledHeight = this.typeObj.height;
@@ -446,7 +433,7 @@
 
 						// adjust container
 						self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
-						if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type) ) {
+						if (self.typeObj && _.contains(['banner', 'avatar', 'other'], self.typeObj.type) ) {
 							self.adjustSelectByType()
 						} else {
 							self.vueCropApi.setSelect([(self.imageWidth / 2) - 50, (self.imageHeight / 2) - 50, self.width * self.imageAspectRatio, self.height * self.imageAspectRatio]);
@@ -469,7 +456,7 @@
 				var params = {
 					include: '',
 					per_page: this.perPage,
-					page: this.page,
+					page: this.pagination.current_page,
 					sort: this.orderByField + '|' + (this.direction?'asc':'desc'),
 					type: this.type,
 					tags: this.tags

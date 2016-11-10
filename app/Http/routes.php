@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 $dispatcher = app('Dingo\Api\Dispatcher');
 
-Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use($dispatcher)
+Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'dashboard'], function () use($dispatcher)
 {
     Route::get('/', function () {
         return view('dashboard.index');
@@ -64,12 +64,36 @@ Route::group(['middleware' => 'auth', 'prefix' => 'dashboard'], function () use(
         return view('dashboard.visas.create');
     });
 
-    Route::get('visas/{id}', function ($id) {
+    Route::get('records/visas/{id}', function ($id) {
         return view('dashboard.visas.index', compact('id'));
     });
 
     Route::get('records/visas/{id}/edit', function ($id) {
         return view('dashboard.visas.edit', compact('id'));
+    });
+
+    Route::get('records/medical-releases/create', function () {
+        return view('dashboard.medical-releases.create');
+    });
+
+    Route::get('records/medical-releases/{id}', function ($id) {
+        return view('dashboard.medical-releases.index', compact('id'));
+    });
+
+    Route::get('records/medical-releases/{id}/edit', function ($id) {
+        return view('dashboard.medical-releases.edit', compact('id'));
+    });
+
+    Route::get('records/medical-releases/create', function () {
+        return view('dashboard.medical-releases.create');
+    });
+
+    Route::get('records/essays/{id}', function ($id) {
+        return view('dashboard.essays.index', compact('id'));
+    });
+
+    Route::get('records/essays/{id}/edit', function ($id) {
+        return view('dashboard.essays.edit', compact('id'));
     });
 
     Route::get('reservations', 'ReservationsController@index');

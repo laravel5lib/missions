@@ -1,0 +1,223 @@
+<template>
+    <div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <label>Transaction Type</label>
+                <select v-model="type" class="form-control">
+                    <option value="donation">Donation</option>
+                    <option value="transfer">Transfer</option>
+                    <option value="refund">Refund</option>
+                    <option value="credit">Credit</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" v-if="type == 'donation'">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Donation</h5>
+                    </div>
+                    <div class="panel-body">
+                        <label>Designated Fund</label>
+                        <v-select class="form-control" id="selectedFund" :debounce="250" :on-search="getFunds"
+                                  :value.sync="selectedFund" :options="funds" label="name"
+                                  placeholder="Select a fund to transfer from"></v-select>
+                        <span class="help-block">Fund Balance: {{ selectedFund.balance | currency }}</span>
+                        <label>Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            <input type="text" class="form-control" placeholder="0.00" v-model="transaction.amount">
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Donor</h5>
+                    </div>
+                    <div class="panel-body">
+                        <label>Donor</label>
+                        <v-select class="form-control" id="selectedFund" :debounce="250" :on-search="getDonors"
+                                  :value.sync="selectedDonor" :options="donors" label="name"
+                                  placeholder="Select a donor"></v-select>
+                        <hr class="divider inv">
+                        <div class="row" v-if="selectedDonor">
+                            <div class="col-xs-6" v-if="selectedDonor.company">
+                                <label>Company</label>
+                                <p>{{ selectedDonor.company }}</p>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Email</label>
+                                <p>{{ selectedDonor.email }}</p>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Phone</label>
+                                <p>{{ selectedDonor.phone }}</p>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Postal/Zip Code</label>
+                                <p>{{ selectedDonor.zip }}</p>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Country</label>
+                                <p>{{ selectedDonor.country.name }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Payment Method</h5>
+                    </div>
+                    <div class="panel-body">
+                        <label>Payment Type</label>
+                        <select class="form-control" v-model="transaction.payment.type">
+                            <option value="card">Credit Card</option>
+                            <option value="check">Check</option>
+                            <option value="cash">Cash</option>
+                        </select>
+
+                        <div class="row" v-if="transaction.payment.type == 'card'">
+                            <div class="col-xs-12">
+                                <label>Card Holder's Name</label>
+                                <input class="form-control" type="text" />
+                                <label>Card Number</label>
+                                <input class="form-control" type="text" />
+                            </div>
+                        </div>
+
+                        <div class="row" v-if="transaction.payment.type == 'check'">
+                            <div class="col-xs-12">
+                                <label>Check Number</label>
+                                <input class="form-control" type="text" />
+                            </div>
+                        </div>
+
+                        <label>Billing Email</label>
+                        <input class="form-control" type="text" />
+                        <label>Billing Zip</label>
+                        <input class="form-control" type="text" />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default" v-if="type == 'transfer'">
+            <div class="panel-heading">
+                <h5>Transfer</h5>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Transfer from</label>
+                        <v-select class="form-control" id="fromFund" :debounce="250" :on-search="getFunds"
+                                  :value.sync="fromFund" :options="funds" label="name"
+                                  placeholder="Select a fund to transfer from"></v-select>
+                        <span class="help-block">Fund Balance: {{ fromFund.balance | currency }}</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Transfer to</label>
+                        <v-select class="form-control" id="toFund" :debounce="250" :on-search="getDonors"
+                                  :value.sync="toFund" :options="funds" label="name"
+                                  placeholder="Select a fund to transfer to"></v-select>
+                        <span class="help-block">Fund Balance: {{ toFund.balance | currency }}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            <input type="text" class="form-control" placeholder="0.00" v-model="transaction.amount">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default" v-if="type == 'refund'">
+            <div class="panel-heading">
+                <h5>Refund</h5>
+            </div>
+            <div class="panel-body">
+                <label>Designated Fund</label>
+                <v-select class="form-control" id="selectedFund" :debounce="250" :on-search="getFunds"
+                          :value.sync="selectedFund" :options="funds" label="name"
+                          placeholder="Select a fund to transfer from"></v-select>
+                <span class="help-block">Fund Balance: {{ selectedFund.balance | currency }}</span>
+                <label>Amount</label>
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    <input type="text" class="form-control" placeholder="0.00" v-model="transaction.amount">
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default" v-if="type == 'credit'">
+            <div class="panel-heading">
+                <h5>Credit</h5>
+            </div>
+            <div class="panel-body">
+                <label>Designated Fund</label>
+                <v-select class="form-control" id="selectedFund" :debounce="250" :on-search="getFunds"
+                          :value.sync="selectedFund" :options="funds" label="name"
+                          placeholder="Select a fund to transfer from"></v-select>
+                <span class="help-block">Fund Balance: {{ selectedFund.balance | currency }}</span>
+                <label>Amount</label>
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    <input type="text" class="form-control" placeholder="0.00" v-model="transaction.amount">
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <button class="btn btn-default">Cancel</button>
+                <button class="btn btn-primary">Create</button>
+            </div>
+        </div>
+
+    </div>
+</template>
+<script>
+    import vSelect from "vue-select";
+    export default{
+        name: 'transaction-form',
+        components: {vSelect},
+        data() {
+            return {
+                type: 'donation',
+                transaction: {
+                    payment: {
+                        type: "card"
+                    }
+                },
+                funds: null,
+                toFund: null,
+                fromFund: null,
+                selectedFund: null,
+                transaction: null,
+                donors: null,
+                selectedDonor: null
+            }
+        },
+        methods: {
+            getFunds(search) {
+                this.$http.get('funds?per_page=10', {search: search}).then(function (response) {
+                    this.funds = response.data.data;
+                });
+            },
+            getDonors(search) {
+                this.$http.get('donors?per_page=10', {search: search}).then(function (response) {
+                    this.donors = response.data.data;
+                });
+            }
+        },
+        ready() {
+            this.getFunds();
+            this.getDonors();
+        }
+    }
+</script>

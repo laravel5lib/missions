@@ -50,16 +50,24 @@
                 <h5>
                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ story.id }}" aria-expanded="true" aria-controls="collapseOne">
                         {{ story.title }}
-                    </a>
+                    <i class="fa fa-chevron-down pull-right"></i></a>
                 </h5>
             </div>
-            <div id="collapse-{{ story.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
+            <div id="collapse-{{ story.id }}" class="panel-collapse collapse {{ $index == 0 ? 'in' : '' }}" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
                 <div class="panel-body" v-if="editMode !== story.id">
                 <div class="row">
                     <div class="col-sm-8">
                         <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 text-right hidden-xs">
+                        <div style="padding: 0;" v-if="isUser()">
+                            <div role="group" aria-label="...">
+                                <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a>
+                                <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,deleteModal = true"><i class="fa fa-trash"></i> Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 text-center visible-xs">
                         <div style="padding: 0;" v-if="isUser()">
                             <div role="group" aria-label="...">
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a>
@@ -68,7 +76,8 @@
                         </div>
                     </div>
                 </div>
-                    {{{ story.content | marked }}}
+                <hr class="divider inv">
+                    <p class="small">{{{ story.content | marked }}}</p>
                 </div>
                 <div class="panel-body" v-if="editMode === story.id">
                     <form>
@@ -98,21 +107,7 @@
             </div>
         </div>
         <div class="col-sm-12 text-center">
-            <nav>
-                <ul class="pagination pagination-sm">
-                    <li :class="{ 'disabled': pagination.current_page == 1 }">
-                        <a aria-label="Previous" @click="page=pagination.current_page-1">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                        <a aria-label="Next" @click="page=pagination.current_page+1">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <pagination :pagination.sync="pagination" :callback="searchStories"></pagination>
         </div>
 
         <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Delete Story" small="true">
@@ -124,12 +119,10 @@
         </modal>
     </div>
 </template>
-<script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
+<script type="text/javascript">
     var marked = require('marked');
     export default{
         name: 'user-profile-stories',
-        components: {'modal': VueStrap.modal},
         props:['id', 'authId'],
         data(){
             return{
@@ -152,7 +145,7 @@
                 // pagination vars
                 page: 1,
                 per_page: 5,
-                pagination: {},
+                pagination: { current_page: 1 },
 
             }
         },
@@ -210,7 +203,7 @@
             searchStories(){
                 this.$http.get('stories', {
                     user: this.id,
-                    page: this.page,
+                    page: this.pagination.current_page,
                     per_page: this.per_page,
                 }).then(function(response) {
                     this.stories = response.data.data;

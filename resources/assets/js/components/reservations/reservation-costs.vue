@@ -1,16 +1,35 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <!--<button class="btn btn-primary btn-xs" @click="add">
-            <span class="fa fa-plus"></span> Add Optional Costs
-        </button>-->
-        <!--<hr class="divider sm">-->
+        <div class="row">
+            <div class="col-xs-4">
+                <button class="btn btn-primary btn-sm" @click="add">
+                    <span class="fa fa-plus"></span> Add <span class="hidden-xs">Optional</span> Costs
+                </button>
+            </div>
+            <div class="col-xs-8 text-right" v-if="reservation && listedCosts !== reservation.costs.data">
+                <button class="btn btn-default btn-sm" @click="revert">
+                    <i class="fa fa-refresh"></i> <span class="hidden-xs">Revert Changes</span>
+                </button>
+                <button class="btn btn-primary btn-sm" @click="doUpdate">
+                    <i class="fa fa-save"></i> <span class="hidden-xs">Save Changes</span>
+                </button>
+            </div>
+        </div>
+
+        <hr class="divider inv sm">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h5>Costs</h5>
             </div><!-- end panel-heading -->
 
             <div class="list-group">
-            <div class="list-group-item" v-for="cost in reservation.costs.data">
+            <div class="list-group-item" v-for="cost in listedCosts" :class="{'list-group-item-default': cost.unsaved}">
+                <div class="row" v-if="cost.type === 'optional'">
+                    <div class="col-xs-12">
+                        <a class="btn btn-xs btn-default-hollow pull-right" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> <span class="hidden-xs">Remove</span></a>
+                        <span v-if="cost.unsaved" class="label label-danger">Unsaved</span>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-3">
                         <label>Name</label>
@@ -50,7 +69,7 @@
         </modal>
 
         <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
-            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete {{ selectedCost.name }}?</div>
+            <div slot="modal-body" class="modal-body text-center" v-if="selectedCost">Are you sure you want to delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Confirm</button>
@@ -65,34 +84,21 @@
     </div>
 </template>
 
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select';
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
     export default{
         name: 'reservation-costs',
         props: ['id'],
-        components:{ vSelect, 'modal': VueStrap.modal, 'alert': VueStrap.alert},
+        components: {vSelect},
         data(){
-            return{
+            return {
                 reservation: null,
-                reservationsCosts:[],
-                costs:[],
+                reservationsCosts: [],
+                costs: [],
                 selectedCosts: [],
                 availableCosts: [],
-                editedCost: {
-                    name: '',
-                    date: null,
-                    grace_period: 0,
-                    enforced: false,
-                },
-                newCost: {
-                    name: '',
-                    date: null,
-                    grace_period: 0,
-                    enforced: false,
-                },
                 selectedCost: null,
-                resource: this.$resource('reservations/' + this.id, { include: 'dues,costs.payments,trip.costs.payments' }),
+                resource: this.$resource('reservations/' + this.id, {include: 'dues,costs.payments,trip.costs.payments'}),
                 showAddModal: false,
                 deleteModal: false,
                 showNewModal: false,
@@ -100,13 +106,21 @@
                 showSuccess: false,
                 successMessage: '',
 
-                preppedReservation : {}
+                listedCosts: [],
+                originalCosts: [],
+                temporaryCosts: [],
+
+                preppedReservation: {}
             }
         },
-        computed:{},
+        watch: {
+            'temporaryCosts': function (val) {
+                //debugger;
+            }
+        },
         methods: {
             dateIsBetween(a, b){
-                    var start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
+                var start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
                 var stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
@@ -114,37 +128,6 @@
             checkForError(field) {
                 // if user clicked submit button while the field is invalid trigger error styles
                 return this.$AddCost[field].invalid && this.attemptSubmit;
-            },
-            checkForEditCostError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$EditCost[field].invalid && this.attemptSubmit;
-            },
-            checkForNewCostError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$NewCost[field].invalid && this.attemptSubmit;
-            },
-            resetCost(){
-                this.newCost = {
-                    item: '',
-                    item_type: '',
-                    due_at: null,
-                    grace_period: 0,
-                    enforced: false,
-
-                };
-            },
-            costLocking(cost, status) {
-                cost.locked = status;
-                   var costs = [];
-                _.each(this.reservation.costs.data, function (c) {
-                    costs.push({id: c.cost_id, locked: c.locked});
-                });
-
-                var reservation = this.preppedReservation;
-                reservation.costs = costs;
-
-                return this.doUpdate(reservation, 'Cost' + (status ? ' locked ' : ' unlocked ') + 'successfully');
-
             },
             isPast(date){
                 return moment().isAfter(date);
@@ -158,113 +141,116 @@
                 this.showNewModal = true;
 
             },
-            edit(cost){
-                cost.due_at = moment().format('YYYY-MM-DDTHH:mm:ss');
-                this.editedCost = cost;
-                this.attemptSubmit = false;
-                this.showEditModal = true;
-            },
-            updateCost(){
-                // prep current costs
-                var costs = [];
-                _.each(this.reservation.costs.data, function (cost) {
-                    if (cost.cost_id === this.editedCost.cost_id) {
-                        costs.push({
-                            id: this.editedCost.cost_id,
-                            locked: this.editedCost.locked,
-                            due_at: moment(this.editedCost.due_at).format('YYYY-MM-DD HH:mm:ss'),
-                            due_date: moment(this.editedCost.due_at).format('YYYY-MM-DD HH:mm:ss'),
-                            grace_period: 10
-                        });
-                    } else {
-                        costs.push({id: cost.cost_id, locked: cost.locked});
-                    }
-                }.bind(this));
-
-                var reservation = this.preppedReservation;
-                reservation.costs = costs;
-
-                return this.doUpdate(reservation);
-            },
             confirmRemove(cost) {
                 this.selectedCost = cost;
                 this.deleteModal = true;
             },
-            remove(cost){
-                var reservation = this.preppedReservation;
-                reservation.costs = [];
-                _.each(this.reservation.costs.data, function (cs) {
-                    if (cs.cost_id !== cost.cost_id) {
-                        reservation.costs.push({ id: cs.cost_id/*, locked: cs.locked*/})
-                    }
-                });
-                console.log(reservation.costs);
+            remove(){
+                var temporaryDues = [];
+                var res = jQuery.extend(true, {}, this.reservation);
 
-                return this.doUpdate(reservation);
+                // remove cost from temporary array
+                if (this.selectedCost.unsaved) {
+                    this.temporaryCosts = _.reject(this.temporaryCosts, function (tempCost) {
+                        if (tempCost === this.selectedCost) {
+                            return true;
+                        } else {
+                            // generate due based on added costs' payments
+                            temporaryDues = _.union(temporaryDues, this.generatePaymentsFromCost(this.selectedCost));
+                        }
+                    }.bind(this));
+
+                    temporaryDues = _.uniq(temporaryDues);
+                    this.temporaryCosts = _.uniq(this.temporaryCosts);
+                } else {
+                    this.reservation.costs.data = _.reject(this.reservation.costs.data, function (tempCost) {
+                        if (tempCost === this.selectedCost) {
+                            res.dues.data = _.reject(res.dues.data, function (due) {
+                                return due.cost === tempCost.name;
+                            })
+                            return true;
+                        }
+                    }.bind(this));
+
+                    temporaryDues = _.uniq(temporaryDues);
+                    this.temporaryCosts = _.uniq(this.temporaryCosts);
+                }
+
+                // Merge lists and display
+                this.listedCosts = _.union(this.temporaryCosts, this.reservation.costs.data);
+                this.listedCosts = _.uniq(this.listedCosts);
+
+                // cleanup Add Costs Modal
+                this.getAvailableCosts();
+
+                //Add temporary dues
+                res.dues.data = _.union(res.dues.data, temporaryDues);
+                this.$root.$emit('Reservation:CostsUpdated', res);
+
             },
             addCosts(){
-                // prep current costs
-                var currentCostIds = [];
-                _.each(this.reservation.costs.data, function (cost) {
-                    currentCostIds.push({ id: cost.id || cost.cost_id, locked: cost.locked })
-                });
+                var temporaryDues = [];
+                var res = jQuery.extend(true, {}, this.reservation);
 
-                // prep added costs
-                var selectedCostIds = [];
+                // Add selected costs to temporary list
                 _.each(this.selectedCosts, function (cost) {
-                    selectedCostIds.push({ id: cost.id })
+                    cost.unsaved = true;
+                    this.temporaryCosts.push(cost);
+                    // generate due based on added costs' payments
+                    temporaryDues = _.union(temporaryDues, this.generatePaymentsFromCost(cost));
+                }.bind(this));
+                temporaryDues = _.uniq(temporaryDues);
+                this.temporaryCosts = _.uniq(this.temporaryCosts);
+
+                // Merge lists and display
+                this.listedCosts = _.union(this.temporaryCosts, this.reservation.costs.data);
+                this.listedCosts = _.uniq(this.listedCosts);
+
+                // cleanup Add Costs Modal
+                this.getAvailableCosts();
+
+                //Add temporary dues
+                res.dues.data = _.union(res.dues.data, temporaryDues);
+                this.$root.$emit('Reservation:CostsUpdated', res);
+            },
+            generatePaymentsFromCost(cost){
+                var temporaryDues = [];
+                // generate due based on added costs' payments
+                _.each(cost.payments.data, function (payment) {
+                    temporaryDues.push({
+                        amount: payment.amount_owed,
+                        balance: payment.balance_due,
+                        cost: cost.name,
+                        due_at: payment.due_at,
+                        grace_period: payment.grace_period,
+                        status: 'pending',
+                        unsaved: true
+                    });
                 });
 
-                // merge arrays
-                var newCosts = _.union(currentCostIds, selectedCostIds);
-                // filter possible duplicates
-                newCosts = _.uniq(newCosts);
-
-                var reservation = this.preppedReservation;
-                reservation.costs = newCosts;
-
-                return this.doUpdate(reservation);
+                return temporaryDues;
             },
-            addNew(){
-                // get trip object
-                var trip = this.reservation.trip.data;
+            doUpdate(){
+                var costIds = [];
 
-                // get only ids of current costs so we don't change anything
-                trip.costs = [];
-                _.each(this.reservation.trip.data.costs.data, function (dl) {
-                    trip.costs.push({id: dl.id});
+                _.each(this.listedCosts, function (cost) {
+                    costIds.push({id: cost.id || cost.cost_id, locked: cost.locked})
                 });
-                trip.costs.push(this.newDeadline);
-                // remove tranformer modified values
-                delete trip.difficulty;
-                delete trip.rep_id;
 
-                this.$http.put('trips/' + trip.id, trip).then(function (response) {
-                    var thisTrip = response.data.data;
-                    this.selectedcosts = new Array(this.newDeadline);
+                var res = jQuery.extend(true, {}, this.reservation);
+                res.costs = costIds
 
-                    return this.addCosts();
-
-                });
-            },
-
-            getCosts(search, loading){
-                loading(true);
-
-            },
-            doUpdate(reservation, success){
-
-
-                return this.resource.update(reservation).then(function (response) {
+                return this.resource.update(res).then(function (response) {
                     this.setReservationData(response.data.data);
                     this.selectedCosts = [];
-                    this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
-                    this.successMessage = success || 'Costs updated Successfully';
+                    this.temporaryCosts = [];
+                    this.successMessage = 'Costs updated Successfully';
                     this.showSuccess = true;
                 });
             },
             setReservationData(reservation){
                 this.reservation = reservation;
+                this.$root.$emit('Reservation:CostsUpdated', reservation);
                 this.preppedReservation = {
                     given_names: this.reservation.given_names,
                     surname: this.reservation.surname,
@@ -276,17 +262,33 @@
                     trip_id: this.reservation.trip_id,
                 };
 
-                // get available costs intersect with current
-                this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
-                    return !_.findWhere(reservation.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
+                this.getAvailableCosts();
+                this.listedCosts = reservation.costs.data;
+                this.originalCosts = jQuery.extend(true, {}, this.listedCosts);
+            },
+            getAvailableCosts(){
+                this.selectedCosts = [];
+
+                // get available optional costs intersect with current
+                this.availableCosts = _.filter(this.reservation.trip.data.costs.data, function (cost) {
+                    if (!_.findWhere(this.reservation.costs.data, {cost_id: cost.id}) && !_.findWhere(this.temporaryCosts, {id: cost.id}) && cost.type === 'optional') {
+                        cost.removal = false;
+                        return true;
+                    }
+                    ;
+                }.bind(this));
+            },
+            revert(){
+                this.temporaryCosts = [];
+                this.resource.get().then(function (response) {
+                    this.setReservationData(response.data.data);
                 });
-            }
+            },
         },
         ready(){
             this.resource.get().then(function (response) {
                 this.setReservationData(response.data.data);
             });
-
         }
     }
 </script>

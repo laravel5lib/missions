@@ -66,12 +66,12 @@
 													</div>
 
 													<br>
-													<div class="checkbox">
+													<!--<div class="checkbox">
 														<label>
 															<input type="checkbox" v-model="newReq.enforced">
 															Enforced?
 														</label>
-													</div>
+													</div>-->
 												</div>
 											</div>
 										</form>
@@ -92,7 +92,7 @@
 									<th>Type</th>
 									<th>Due</th>
 									<th>Grace</th>
-									<th>Enforced</th>
+									<!--<th>Enforced</th>-->
 									<th>Actions</th>
 								</tr>
 								</thead>
@@ -106,7 +106,7 @@
 									<td>
 										{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}
 									</td>
-									<td>{{requirement.enforced}}</td>
+									<!--<td>{{requirement.enforced}}</td>-->
 									<td>
 										<!--<a @click="editPayment(payment, cost)"><i class="fa fa-pencil"></i></a>-->
 										<a @click="requirements.$remove(requirement)"><i class="fa fa-times"></i></a>
@@ -121,7 +121,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	export default{
 		name: 'trip-requirement',
 		data(){
@@ -134,7 +134,8 @@
 					'Credentials',
 					'Minor Release',
 					'Immunization',
-					'Itinerary'
+					'Itinerary',
+					'Arrival Designation'
 				],
 				toggleNewRequirement: false,
 				attemptedAddRequirement: false,
@@ -147,7 +148,7 @@
 					item_type: '',
 					due_at: null,
 					grace_period: 0,
-					enforced: false,
+					// enforced: false,
 				}
 			}
 		},
@@ -175,7 +176,7 @@
 					item_type: '',
 					due_at: null,
 					grace_period: 0,
-					enforced: false,
+					// enforced: false,
 				};
 			},
 			addRequirement(){

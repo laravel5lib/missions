@@ -22,6 +22,10 @@ return [
             [
                 'label' => 'Deadlines',
                 'url' => 'deadlines'
+            ],
+            [
+                'label' => 'Legal',
+                'url' => 'legal'
             ]
         ],
         'records' => [
@@ -36,6 +40,10 @@ return [
             [
                 'label' => 'Medical Releases',
                 'url' => 'medical-releases'
+            ],
+            [
+                'label' => 'Essays',
+                'url' => 'essays'
             ]
         ]
     ]

@@ -1,25 +1,33 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-				<h5>Managers
-				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddManagerModal"><span
-						class="fa fa-plus"></span> New
-				</button></h5>
-		</div>
-		<div>
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="manager in managers" track-by="id">
-				<div class="thumbnail">
-					<img :src="manager.avatar" alt="{{ manager.name }}">
-					<div class="caption">
-						<h5 v-text="manager.name"></h5>
-
-						<p>
-							<a class="btn btn-xs btn-danger" @click="removeManager(manager)">
-								<i class="fa fa-times"></i> Remove
-							</a>
-						</p>
-					</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<h5>Managers</h5>
 				</div>
+				<div class="col-xs-6 text-right">
+					<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddManagerModal"><span
+							class="fa fa-plus"></span> New
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="panel-body">
+			<div class="media" v-for="manager in managers" track-by="id">
+				<div class="media-left media-top">
+					<a href="#">
+						<img :src="manager.avatar + '?w=50&h=50'" class="media-object" alt="{{ manager.name }}">
+					</a>
+				</div>
+				<div class="media-body">
+					<h5 v-text="manager.name" class="media-heading"></h5>
+					<p>
+						<a class="btn btn-xs btn-default-hollow" @click="removeManager(manager)">
+							<i class="fa fa-times"></i> Remove
+						</a>
+					</p>
+				</div>
+				<hr />
 			</div>
 		</div>
 		<div class="modal fade" id="AddManagerModal">
@@ -49,7 +57,8 @@
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal --></div>
+		</div><!-- /.modal -->
+	</div>
 </template>
 <script>
 	import vSelect from "vue-select";

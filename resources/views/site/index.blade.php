@@ -22,27 +22,20 @@ $('.video-modal').on('hide.bs.modal', function(e) {
   </video>
   <div class="container">
     <div class="row">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
-      <hr class="divider inv xlg">
       <div class="col-md-8 col-md-offset-2 text-center">
-        <h1 class="text-white text-hero" data-aos="fade-up">Where <span class="text-primary" data-aos="zoom-in" data-aos-delay="400">you</span> can change the world.</h1>
-        <hr class="divider inv">
-        <a href="{{ url('campaigns') }}" class="btn btn-primary hidden-xs" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
-        <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow hidden-xs" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
-        <div class="row visible-xs">
-          <div class="col-xs-8 col-xs-offset-2">
-            <a href="{{ url('campaigns') }}" class="btn btn-primary btn-block" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
-            <hr class="divider inv visible-xs">
-            <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow btn-block" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
+        <div class="vid-bg-caption">
+          <h1 class="text-white text-hero" data-aos="fade-up">Where <span class="text-primary" data-aos="zoom-in" data-aos-delay="400">you</span> can change the world.</h1>
+          <hr class="divider inv">
+          <a href="{{ url('campaigns') }}" class="btn btn-primary hidden-xs" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
+          <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow hidden-xs" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
+          <div class="row visible-xs">
+            <div class="col-xs-8 col-xs-offset-2">
+              <a href="{{ url('campaigns') }}" class="btn btn-primary btn-block" data-aos="fade-up" data-aos-delay="200">Go On A Trip</a>
+              <hr class="divider inv visible-xs">
+              <a href="{{ url('fundraisers') }}" class="btn btn-white-hollow btn-block" data-aos="fade-up" data-aos-delay="300">Support A Cause</a>
+            </div>
           </div>
-        </div>
-        <hr class="divider inv xlg">
-        <hr class="divider inv xlg">
-        <hr class="divider inv xlg">
-        <hr class="divider inv xlg">
-        </div>
+        </div><!-- end vid-bg-caption -->
       </div><!-- end col -->
     </div><!-- end row -->
   </div><!-- end container -->
@@ -85,7 +78,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
         <hr class="divider inv lg visible-xs visible-sm">
         <div class="col-sm-6 home-half-section">
           <h1 class="dash-trailing" data-aos="fade-left">1Nation1Day</h1>
-          <p class="large-type" data-aos="fade-left">1Nation1Day is the largest global missions outreach in history. But this isn’t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.</p>
+          <p class="large-type" data-aos="fade-left">The mission of 1Nation1Day is to unite the global church for the salvation and transformation of nations.  We believe we are living in a New Missions Era.</p>
           <hr class="divider inv">
           <a href="/orphans" class="btn btn-info" data-aos="fade-left">Learn More</a>
         </div><!-- end col -->
@@ -142,9 +135,9 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     <div class="content-section">
       <div class="row">
         <div class="col-sm-12 text-center">
-          <h1 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="200">Change The World</h1>
-          <a data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="300" href="#" class="btn btn-primary btn-lg">Create Your Account</a>
-          <h5 data-aos="zoom-in" data-aos-duration="2000" data-aos-delay="300" class="text-uppercase"><a href="#">Or Donate</a></h5>
+          <h1 data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200">Change The World</h1>
+          <a data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="300" href="#" class="btn btn-primary btn-lg">Create Your Account</a>
+          <h5 data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="300" class="text-uppercase"><a href="#">Or Donate</a></h5>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->

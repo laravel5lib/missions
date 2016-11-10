@@ -31,7 +31,7 @@ legend {
 
 label {
   color: $gray-dark;
-  font-size: $font-size-small;
+  font-size: $font-size-small * 0.8;
   display: inline-block;
   max-width: 100%; // Force IE8 to wrap long content (see https://github.com/twbs/bootstrap/issues/13141)
   margin-bottom: 5px;
@@ -418,17 +418,6 @@ input[type="checkbox"] {
   width: $input-height-small;
   height: $input-height-small;
   line-height: $input-height-small;
-}
-
-// Feedback states
-.has-success {
-  @include form-control-validation($state-success-text, $state-success-text, $state-success-bg);
-}
-.has-warning {
-  @include form-control-validation($state-warning-text, $state-warning-text, $state-warning-bg);
-}
-.has-error {
-  @include form-control-validation($state-danger-text, $state-danger-text, $state-danger-bg);
 }
 
 // Reposition feedback icon if input has visible label above

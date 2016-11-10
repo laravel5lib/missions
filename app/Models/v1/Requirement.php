@@ -23,7 +23,7 @@ class Requirement extends Model
      * @var array
      */
     protected $fillable = [
-        'item', 'due_at', 'grace_period', 'enforced'
+        'name', 'due_at', 'grace_period', 'enforced'
     ];
 
     /**

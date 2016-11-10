@@ -170,6 +170,16 @@ class Campaign extends Model
     }
 
     /**
+     * Get the campaign's fund.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function fund()
+    {
+        return $this->morphOne(Fund::class, 'fundable');
+    }
+
+    /**
      * Get public campaigns.
      *
      * @param $query

@@ -78,7 +78,12 @@ class TripTableSeeder extends Seeder
 
             $t->deadlines()->saveMany(factory(App\Models\v1\Deadline::class, 2)->make());
 
-            $t->requirements()->saveMany(factory(App\Models\v1\Requirement::class, 4)->make());
+            $t->requirements()->saveMany([
+                factory(App\Models\v1\Requirement::class)->make(['name' => 'Visa', 'document_type' => 'visas']),
+                factory(App\Models\v1\Requirement::class)->make(['name' => 'Passport', 'document_type' => 'passports']),
+                factory(App\Models\v1\Requirement::class)->make(['name' => 'Medical Release', 'document_type' => 'medical_releases']),
+                factory(App\Models\v1\Requirement::class)->make(['name' => 'Arrival Designation', 'document_type' => 'arrival_designation'])
+            ]);
 
             $t->notes()->save(factory(App\Models\v1\Note::class)->make());
 

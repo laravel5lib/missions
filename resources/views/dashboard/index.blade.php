@@ -12,21 +12,29 @@
   </div>
   <hr class="divider inv lg">
   <div class="container">
-
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 style="margin-bottom:5px;">Welcome to your new dashboard</h4>
+      <p class="small">Access the most important information about your account in one place</p>
+    </div>
     <div class="row">
-
-      <div class="col-sm-4">
+      <div class="col-sm-6">
         @include('dashboard._payments')
       </div>
 
-      <div class="col-sm-4">
+      <div class="col-sm-6">
         @include('dashboard._requirements')
       </div>
-
-      <div class="col-sm-4">
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
         @include('dashboard._donations')
       </div>
 
+      <div class="col-sm-6">
+        @include('dashboard._featurednews')
+      </div>
     </div>
   </div>
+  <hr class="divider inv xlg">
 @endsection

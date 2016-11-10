@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\v1\Campaign;
 use App\Models\v1\Trip;
+use App\Models\v1\User;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -51,8 +53,23 @@ class EventServiceProvider extends ServiceProvider
         Trip::created(function ($trip) {
             $trip->fund()->create([
                 'name' => generateFundName($trip),
-                'balance' => 0
+                'balance' => 0,
+                'class' => generateQbClassName($trip),
+                'item' => 'Missionary Donation'
             ]);
+        });
+
+        Campaign::created(function ($trip) {
+            $trip->fund()->create([
+                'name' => generateFundName($trip),
+                'balance' => 0,
+                'class' => generateQbClassName($trip),
+                'item' => 'General Donation'
+            ]);
+        });
+
+        User::created(function ($user) {
+            $user->assign('member');
         });
     }
 }

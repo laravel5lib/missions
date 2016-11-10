@@ -187,9 +187,13 @@
 							</li>
 						</ul>
                     </div>
-					<button class="btn btn-default btn-sm " type="button" @click="showFilters=!showFilters">
+					<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
 						Filters
 						<span class="caret"></span>
+					</button>
+					<button class="btn btn-default btn-sm" type="button" @click="showExportModal=true">
+						Export
+						<span class="fa fa-download"></span>
 					</button>
                     <!--<a class="btn btn-primary btn-sm" href="reservations/create">New <i class="fa fa-plus"></i> </a>-->
                 </form>
@@ -313,26 +317,78 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <nav>
-                            <ul class="pagination pagination-sm">
-                                <li :class="{ 'disabled': pagination.current_page == 1 }">
-                                    <a aria-label="Previous" @click="page=pagination.current_page-1">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                                <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                                    <a aria-label="Next" @click="page=pagination.current_page+1">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+						<pagination :pagination.sync="pagination" :callback="searchReservations"></pagination>
                     </div>
                 </td>
             </tr>
             </tfoot>
         </table>
+		<modal title="Export Reservations List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
+			<div slot="modal-body" class="modal-body">
+				<ul class="list-unstyled">
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="given_names"> Given Names
+						</label>
+					</li>
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="surname"> Surname
+						</label>
+					</li>
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="group"> Group
+						</label>
+					</li>
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="campaign"> Campaign
+						</label>
+					</li>
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="type"> Type
+						</label>
+					</li>
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="total_raised"> Amout Raised
+						</label>
+					</li>
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="percent_raised"> Percent Raised
+						</label>
+					</li>
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="registered"> Registered On
+						</label>
+					</li>
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="gender"> Gender
+						</label>
+					</li>
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="status"> Status
+						</label>
+					</li>
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="age"> Age
+						</label>
+					</li>
+					<li>
+						<label class="small" style="margin-bottom: 0px;">
+							<input type="checkbox" v-model="exportSettings.fields" value="email"> Email
+						</label>
+					</li>
+				</ul>
+			</div>
+		</modal>
     </div>
 </template>
 <style>
@@ -346,12 +402,11 @@
 		}
 	}
 </style>
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
-	import VueStrap from 'vue-strap/dist/vue-strap.min';
 	export default{
         name: 'admin-reservations-list',
-		components: {vSelect, 'aside': VueStrap.aside},
+		components: {vSelect},
 		props:{
 			tripId: {
 				type: String,
@@ -374,7 +429,7 @@
                 page: 1,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
-                pagination: {},
+                pagination: { current_page: 1 },
                 search: '',
 				activeFields: ['given_names', 'surname', 'group', 'campaign', 'type', 'registered'],
 				maxActiveFields: 6,
@@ -411,7 +466,11 @@
 					hasCompanions:null,
 					hasPassport:null,
 				},
-				showFilters: false
+				showFilters: false,
+				showExportModal: false,
+				exportSettings: {
+				    fields: [],
+				}
             }
         },
 		computed: {
@@ -544,13 +603,13 @@
             age(birthday){
                 return moment().diff(birthday, 'years')
             },
-            searchReservations(){
-            	var params = {
+			getListSettings(){
+				var params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
 					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
 					search: this.search,
 					per_page: this.per_page,
-					page: this.page,
+					page: this.pagination.current_page,
 					sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
 				};
 
@@ -571,6 +630,10 @@
 				$.extend(params, {
 					age: [ this.ageMin, this.ageMax]
 				});
+				return params;
+			},
+            searchReservations(){
+            	var params = this.getListSettings();
                 this.$http.get('reservations', params).then(function (response) {
                     var self = this;
                     _.each(response.data.data, function (reservation) {
@@ -603,6 +666,17 @@
 					loading ? loading(false) : void 0;
 				})
 			},
+			exportList(){
+				var params = this.getListSettings();
+				$.extend(params, this.exportSettings);
+				// Send to api route
+
+				this.$http.post('reservations/export', params).then(function (response) {
+					console.log(response);
+				}, function (error) {
+					console.log(error);
+				})
+			}
         },
         ready(){
             // load view state
@@ -615,7 +689,22 @@
 			// populate
             this.getGroups();
             this.getCampaigns();
-            this.searchReservations();
+
+			// assign values from url search
+			if (window.location.search !== '') {
+				_.each(location.search.substr(1).split('&'), function (search) {
+					var arr = search.split('=');
+					switch (arr[0]) {
+						case 'campaign':
+							this.$http.get('campaigns/' + arr[1]).then(function (response) {
+								this.campaignObj = response.data.data;
+							});
+							// this.campaignObj = _.findWhere(this.campaignOptions, {id: arr[1]})
+					}
+				}.bind(this));
+			}
+
+			this.searchReservations();
 
 			//Manually handle dropdown functionality to keep dropdown open until finished
 			$('.form-toggle-menu .dropdown-menu').on('click', function(event){

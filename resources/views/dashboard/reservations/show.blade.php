@@ -31,7 +31,8 @@
         <div class="row">
             <div class="col-sm-4">
                 @include('dashboard.reservations.layouts.menu', [
-                'links' => config('navigation.dashboard.reservation')
+                'links' => config('navigation.dashboard.reservation'),
+                'rep' => $reservation->rep ? $reservation->rep : $reservation->trip->rep
                 ])
             </div>
             <div class="col-sm-8">

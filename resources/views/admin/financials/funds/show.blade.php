@@ -5,23 +5,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3>{{ $fund->name }}</h3>
+                    <h3>{{ $fund->name }} <small>&middot; Fund</small></h3>
                 </div>
                 <div class="col-sm-4">
                     <hr class="divider inv sm">
-                    <div class="btn-group pull-right">
-                        <a href="#" class="btn btn-primary">New <i class="fa fa-plus"></i></a>
-                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Edit</a></li>
-                            <li><a href="#">Transfer Funds</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#">Delete</a></li>
-                        </ul>
-                    </div>
+                    <a class="btn btn-default pull-right" href="{{ url('admin/funds') }}"><i class="fa fa-chevron-left"></i> Funds</a>
                 </div>
             </div>
         </div>
@@ -29,7 +17,7 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5 class="panel-header">Details</h5>
@@ -49,17 +37,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h5 class="panel-header">Transactions</h5>
-                    </div>
-                    <div class="list-group">
-                        <div class="list-group-item">
-                            ...
-                        </div>
-                    </div>
-                </div>
+            <div class="col-md-8">
+                <h5>Transactions</h5>
+                <admin-transactions-list fund="{{ $fund->id }}"
+                                         storage-name="AdminFundTransactionsConfig">
+                </admin-transactions-list>
             </div>
         </div>
     </div>

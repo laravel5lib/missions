@@ -1,33 +1,28 @@
 <template>
     <div class="row">
-        <div class="col-sm-12" v-if="loaded && !passports.length">
+        <div class="col-sm-12" v-if="loaded && !medical_releases.length">
             <div class="alert alert-info" role="alert">No records found</div>
         </div>
 
-        <div class="col-md-4 col-sm-6" v-for="passport in paginatedPassports">
+        <div class="col-sm-4" v-for="medical_release in paginatedMedical_releases">
             <div class="panel panel-default">
-                <div class="panel-body">
-                    <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{passport.citizenship_name}}</h6>
-                    <a role="button" :href="'/dashboard' + passport.links[0].uri">
-                        <h4 style="text-transform:capitalize;" class="text-primary">
-                            {{passport.given_names}} {{passport.surname}}
-                        </h4>
+                <div style="min-height:120px;" class="panel-body">
+                    <a role="button" :href="'/dashboard' + medical_release.links[0].uri">
+                        <h5 style="text-transform:capitalize;" class="text-primary">
+                            {{medical_release.name}}
+                        </h5>
                     </a>
                     <hr class="divider lg">
                     <p class="small">
-                        <b>ID:</b> {{passport.number}}
+                        <b>Medication:</b> {{medical_release.medication ? 'Yes' : 'No'}}
                         <br>
-                        <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}
-                        <br>
-                        <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}
-                        <br>
-                        <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}
+                        <b>Diagnosed:</b> {{medical_release.diagnosed ? 'Yes' : 'No'}}
                     </p>
                 </div><!-- end panel-body -->
                 <div class="panel-footer" style="padding: 0;">
                     <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
-                        <a class="btn btn-info" :href="'/dashboard' + passport.links[0].uri + '/edit'"><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger" @click="selectedPassport = passport,deleteModal = true"><i class="fa fa-times"></i></a>
+                            <a class="btn btn-info" :href="'/dashboard' + medical_release.links[0].uri + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-danger" @click="selectedMedicalRelease = medical_release,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
             </div>
@@ -49,25 +44,23 @@
                 </ul>
             </nav>
         </div>
-        <modal :show.sync="deleteModal" title="Remove Passport" small="true">
-            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete this Passport?</div>
+        <modal :show.sync="deleteModal" title="Remove Medical Release" small="true">
+            <div slot="modal-body" class="modal-body">Are you sure you want to delete this Medical Release?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removePassport(selectedPassport)'>Confirm</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeMedicalRelease(selectedMedicalRelease)'>Confirm</button>
             </div>
         </modal>
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
-        name: 'passports-list',
-        components: {'modal': VueStrap.modal},
+        name: 'medicals-list',
         data(){
             return{
-                passports: [],
-                paginatedPassports: [],
-                selectedPassport: null,
+                medical_releases: [],
+                paginatedMedical_releases: [],
+                selectedMedicalRelease: null,
                 //logic vars
                 page: 1,
                 per_page: 3,
@@ -84,7 +77,7 @@
                 this.pagination.current_page = val;
                 this.paginate();
             },
-            'passports':function (val) {
+            'medical_releases':function (val) {
                 if(val.length) {
                     this.paginate();
                 }
@@ -98,26 +91,26 @@
                 var end   = start + this.per_page;
                 var range = _.range(start, end);
                 _.each(range, function (index) {
-                    if (this.passports[index])
-                        array.push(this.passports[index]);
+                    if (this.medical_releases[index])
+                        array.push(this.medical_releases[index]);
                 }, this);
-                this.paginatedPassports = array;
+                this.paginatedMedical_releases = array;
             },
-            removePassport(passport){
-                if(passport) {
-                    this.$http.delete('passports/' + passport.id).then(function (response) {
-                        this.passports = _.reject(this.passports, function (item) {
-                            return item.id === passport.id;
+            removeMedicalRelease(medical_release){
+                if(medical_release) {
+                    this.$http.delete('medical/releases/' + medical_release.id).then(function (response) {
+                        this.medical_releases = _.reject(this.medical_releases, function (item) {
+                            return item.id === medical_release.id;
                         });
-                        this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
+                        this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
                     });
                 }
             }
         },
         ready(){
-            this.$http('users/me?include=passports').then(function (response) {
-                this.passports = response.data.data.passports.data;
-                this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
+            this.$http('users/me?include=medical_releases').then(function (response) {
+                this.medical_releases = response.data.data.medical_releases.data;
+                this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
                 this.loaded = true;
             });
         }

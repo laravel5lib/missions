@@ -218,10 +218,9 @@
 </template>
 <script>
     import vSelect from 'vue-select';
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'donate',
-        components:{ vSelect, 'spinner': VueStrap.spinner },
+        components:{ vSelect },
         props: {
             type: {
                 type: String,

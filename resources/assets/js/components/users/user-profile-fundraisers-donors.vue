@@ -54,7 +54,7 @@
         </div>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     var marked = require('marked');
     export default{
         name:'user-profile-fundraisers-donors',
@@ -68,7 +68,7 @@
                 // pagination vars
                 page: 1,
                 per_page: 10,
-                pagination: {},
+                pagination: { current_page: 1 },
             }
         },
         filters: {

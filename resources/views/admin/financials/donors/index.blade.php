@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-sm-4">
                     <hr class="divider inv sm">
-                    <a href="#" class="btn btn-primary pull-right">New <i class="fa fa-plus"></i></a>
+                    <a href="{{ url('admin/donors/create') }}" class="btn btn-primary pull-right">New <i class="fa fa-plus"></i></a>
                 </div>
             </div>
         </div>
@@ -21,37 +21,6 @@
                 @include('admin.financials.partials._tabs')
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Company</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Zip</th>
-                            <th>Amount</th>
-                            <th><i class="fa fa-cog"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($donors as $donor)
-                        <tr>
-                            <td>{{ $donor->name }}</td>
-                            <td>{{ $donor->company }}</td>
-                            <td>{{ $donor->email }}</td>
-                            <td>{{ $donor->phone }}</td>
-                            <td>{{ $donor->zip }}</td>
-                            <td>$ {{ $donor->donations()->sum('amount') }}</td>
-                            <td><a href="{{ url('/admin/donors/' . $donor->id) }}"><i class="fa fa-cog"></i></a></td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-
-                {{ $donors->links() }}
-            </div>
-        </div>
+        <admin-donors-list></admin-donors-list>
     </div>
 @stop

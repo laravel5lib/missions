@@ -15,8 +15,9 @@ class ReservationEventListener {
      */
     public function register($event)
     {
-        $this->process($event);
         $fund = $this->setupFunding($event);
+
+        $this->process($event);
 
         $params = $event->request->only(
             'donor', 'payment', 'token', 'amount', 'donor_id',
@@ -49,7 +50,9 @@ class ReservationEventListener {
     {
         $fund = $event->reservation->fund()->create([
             'name' => generateFundName($event->reservation),
-            'balance' => 0
+            'balance' => 0,
+            'class' => generateQbClassName($event->reservation),
+            'item' => 'Missionary Donation'
         ]);
 
         dispatch(new SetupFunding($event->reservation));

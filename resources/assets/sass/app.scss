@@ -27,7 +27,7 @@ $fa-font-path: "~font-awesome/fonts/";*/
   }
   &.form-control .dropdown-toggle .form-control {
     font-size: 14px;
-    min-height: 40px !important;
+    min-height: 33px !important;
     height: 100%;
   }
   .open-indicator {
@@ -140,6 +140,11 @@ p.large-type {
 .panel-leader {
   background-color: $brand-leader !important;
   color: #fff !important;
+}
+
+.list-group-item-default {
+    color: $text-color;
+    background-color: $gray-lighter;
 }
 
 .footer {
@@ -539,6 +544,11 @@ li.av-nav > a {
   padding: 0px;
   margin: 4px 0px;
 }
+@media (min-width: 991px) {
+  .aside.left {
+    left: 55px !important;
+  }
+}
 
 // -- Section Backgrounds -- //
 .content-section {
@@ -690,6 +700,73 @@ $img-base-size: 40px;
   }
 }
 
+/* Dashboard Styles */
+.circle-tile {
+  margin-bottom: 15px;
+  text-align: center;
+  .circle-tile-heading {
+    background-color: $gray;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    color: #FFFFFF;
+    height: 80px;
+    margin: 0 auto -40px;
+    position: relative;
+    transition: all 0.3s ease-in-out 0s;
+    width: 80px;
+  }
+  .circle-tile-heading .fa {
+    line-height: 80px;
+  }
+  .circle-tile-content {
+    background-color: #fff;
+    border: 1px solid $gray-light;
+    padding-top: 50px;
+    @include border-top-radius(($panel-border-radius - 1));
+    @include border-bottom-radius(($panel-border-radius - 1));
+    @include box-shadow(0 1px 1px rgba(0,0,0,.05));
+  }
+  .circle-tile-number {
+    color: $gray-darker;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 5px 0 15px;
+  }
+  .circle-tile-description {
+    color: $gray-dark;
+    font-size: 10px;
+    line-height: 20px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .circle-tile-name {
+    color: $gray-darker;
+    font-size: 16px;
+    padding: 0 20px;
+    line-height: 25px;
+    font-weight: 400;
+  }
+  .circle-tile-footer {
+    font-size: 12px;
+    background-color: #f7f7f7;
+    color: #bcbcbc;
+    display: block;
+    padding: 5px;
+    @include border-bottom-radius(($panel-border-radius - 1));
+    transition: all 0.3s ease-in-out 0s;
+  }
+  .circle-tile-footer:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-decoration: none;
+  }
+  .tile-img {
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.9);
+  }
+}
+
 /* Home Page */
 .home-half-section {
   padding: 3%;
@@ -760,9 +837,7 @@ h1.home-college-header {
     position: relative;
     overflow: hidden;
     z-index: 0;
-}
-
-.vid-bg-video {
+  .vid-bg-video {
     position: absolute;
     display: block;
     top: 50%;
@@ -775,6 +850,10 @@ h1.home-college-header {
        -moz-transform: translate(-50%, -50%);
         -ms-transform: translate(-50%, -50%);
       transform: translate(-50%, -50%);
+  }
+  .vid-bg-caption {
+    margin: 150px 0;
+  }
 }
 
 @media (max-width: 767px) {

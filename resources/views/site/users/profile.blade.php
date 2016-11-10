@@ -16,12 +16,25 @@
     </div><!-- end page-header-outer -->
     <div class="container">
         <div class="row">
-            <div class="col-md-3 col-sm-offset-0 col-sm-4 col-xs-12">
+            <div class="col-md-3 col-sm-4 col-xs-12">
                 <div class="panel panel-default profile-pic-panel">
                     <img src="{{ image($user->avatar->source) }}" alt="{{ $user->name }}" class="img-responsive">
                     <div class="panel-body">
-                        <h4>{{ $user->name }}</h4>
-                        <h6>/{{ $user->url }}</h6>
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h4>{{ $user->name }}</h4>
+                                <h6 class="small">/{{ '@'.$user->url }}</h6>
+                            </div>
+                            <div class="col-xs-2">
+                                @can('edit', auth()->user())
+                                <h4>
+                                    <a class="pull-right text-muted" href="{{ url('dashboard/settings') }}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                </h4>
+                                @endcan
+                            </div>
+                        </div>
                         <p>{{ $user->bio }}</p>
                         <p><i class="fa fa-map-marker"></i> {{ $user->city }}, {{ $user->state }}, {{ country($user->country_code) }}</p>
                         <ul class="list-unstyled list-inline">
@@ -29,6 +42,8 @@
                         </ul>
                     </div><!-- end panel-body -->
                 </div><!-- end panel-default -->
+
+                @unless(! $user->getGroups())
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5>Groups Traveled With</h5>
@@ -37,30 +52,17 @@
                         @each('site.partials._group', $user->getGroups(), 'group')
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
-                @if(count($user->getCountriesVisited()))
-                <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h5>Countries Visited</h5>
-                        </div><!-- end panel-heading -->
-                        <div class="panel-body">
-                            <h4>
-                                @foreach($user->getCountriesVisited() as $country)
-                                    <p><span class="label label-primary">
-                                    <i class="fa fa-map-marker"></i> {{ country($country) }}
-                                </span></p>
-                                @endforeach
-                            </h4>
-                        </div><!-- end panel-body -->
-                    </div><!-- end panel -->
+                @endunless
+
                     <user-profile-countries id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-countries>
-                @endif
+
             </div><!-- end col -->
-            <div class="col-lg-6 col-sm-8 col-sm-offset-0 col-xs-12">
+            <div class="col-md-9 col-sm-8 col-xs-12">
                 <ul id="profTabs" class="nav nav-tabs" role="tablist">
                     <li data-toggle="tooltip" title="Fundraisers" role="presentation" class="active"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i> <span class="hidden-xs">Fundraisers</span></a></li>
                     <li data-toggle="tooltip" title="Stories" role="presentation"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-list-ul"></i> <span class="hidden-xs">Stories</span></a></li>
                     @can('edit', auth()->user())
-                    <li data-toggle="tooltip" title="Dashboard" class="pull-right"><a href="/dashboard"><i class="fa fa-tachometer"></i></a></li>
+                    <li data-toggle="tooltip" title="Dashboard" class="pull-right"><a href="{{ url('dashboard') }}"><i class="fa fa-tachometer"></i> Dashboard</a></li>
                     @endcan
                 </ul>
                 <div class="tab-content">
@@ -166,61 +168,6 @@
                         </div>
                     </div><!-- end row tab -->
                 </div><!-- end tab-content -->
-            </div><!-- end col -->
-            <div class="col-lg-3 col-md-8 col-sm-offset-0 col-sm-8 col-xs-12">
-                <hr class="divider inv">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h5>Activity</h5>
-                    </div><!-- end panel-heading -->
-                    <div class="panel-body">
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-circle img-xs" src="images/headshot-1.jpg" alt="...">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading"><a href="#">Jonny B</a> <small>added you to the <a href="#">Missions.Me</a> group</small></h5>
-                                <small>1 hour ago</small>
-                            </div><!-- end media-body -->
-                        </div><!-- end media -->
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-circle img-xs" src="images/headshot-2.jpg" alt="...">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading"><a href="#">Jonny B</a> <small>added you to the <a href="#">Missions.Me</a> group</small></h5>
-                                <small>1 hour ago</small>
-                            </div><!-- end media-body -->
-                        </div><!-- end media -->
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-circle img-xs" src="images/headshot-3.jpg" alt="...">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading"><a href="#">Jonny B</a> <small>added you to the <a href="#">Missions.Me</a> group</small></h5>
-                                <small>1 hour ago</small>
-                            </div><!-- end media-body -->
-                        </div><!-- end media -->
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-circle img-xs" src="images/headshot-4.jpg" alt="...">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h5 class="media-heading"><a href="#">Jonny B</a> <small>added you to the <a href="#">Missions.Me</a> group</small></h5>
-                                <small>1 hour ago</small>
-                            </div><!-- end media-body -->
-                        </div><!-- end media -->
-
-                    </div><!-- end panel-body -->
-                </div><!-- end panel -->
             </div><!-- end col -->
         </div><!-- end row -->
     <hr class="divider inv xlg">

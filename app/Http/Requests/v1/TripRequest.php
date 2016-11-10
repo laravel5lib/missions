@@ -74,7 +74,7 @@ class TripRequest extends FormRequest
             'published_at'                    => 'date',
             'companion_limit'                 => 'numeric',
             'requirements'                    => 'sometimes|required|array',
-            'requirements.*.item'             => 'required|string',
+            'requirements.*.name'             => 'required|string',
             'requirements.*.due_at'           => 'required|date',
             'requirements.*.grace_period'     => 'numeric',
             'facilitators'                    => 'array',

@@ -87,11 +87,9 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'group-interest-signup',
         props: ['id'],
-        components:{'spinner': VueStrap.spinner, 'alert': VueStrap.alert },
         data(){
             return{
                 group: {},

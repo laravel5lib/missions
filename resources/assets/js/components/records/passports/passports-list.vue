@@ -1,39 +1,33 @@
 <template>
     <div class="row">
-        <div class="col-sm-12" v-if="loaded && !visas.length">
+        <div class="col-sm-12" v-if="loaded && !passports.length">
             <div class="alert alert-info" role="alert">No records found</div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-12 text-right">
-                <a href="visas/create" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i> Add Visa</a>
-                <hr>
-            </div>
-        </div>
-
-
-        <div class="col-sm-4" v-for="visa in paginatedVisas">
+        <div class="col-md-4 col-sm-6" v-for="passport in paginatedPassports">
             <div class="panel panel-default">
-                <div style="min-height:220px;" class="panel-body">
-                    <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{visa.country_name}}</h6>
-                    <a role="button" :href="'/dashboard' + visa.links[0].uri">
-                        <h5 style="text-transform:capitalize;" class="text-primary">
-                            {{visa.given_names}} {{visa.surname}}
-                        </h5>
+                <div class="panel-body">
+                    <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{passport.citizenship_name}}</h6>
+                    <a role="button" :href="'/dashboard' + passport.links[0].uri">
+                        <h4 style="text-transform:capitalize;" class="text-primary">
+                            {{passport.given_names}} {{passport.surname}}
+                        </h4>
                     </a>
                     <hr class="divider lg">
                     <p class="small">
-                        <b>ID:</b> {{visa.number}}
+                        <b>ID:</b> {{passport.number}}
                         <br>
-                        <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}
+                        <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}
                         <br>
-                        <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}
+                        <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}
+                        <br>
+                        <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}
                     </p>
                 </div><!-- end panel-body -->
                 <div class="panel-footer" style="padding: 0;">
                     <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
-                            <a class="btn btn-info" :href="'/dashboard' + visa.links[0].uri + '/edit'"><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger" @click="selectedVisa = visa,deleteModal = true"><i class="fa fa-times"></i></a>
+                        <a class="btn btn-info" :href="'/dashboard' + passport.links[0].uri + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a class="btn btn-danger" @click="selectedPassport = passport,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
             </div>
@@ -55,25 +49,23 @@
                 </ul>
             </nav>
         </div>
-        <modal :show.sync="deleteModal" title="Remove Visa" small="true">
-            <div slot="modal-body" class="modal-body">Are you sure you want to delete this Visa?</div>
+        <modal :show.sync="deleteModal" title="Remove Passport" small="true">
+            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete this Passport?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeVisa(selectedVisa)'>Confirm</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removePassport(selectedPassport)'>Confirm</button>
             </div>
         </modal>
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
-        name: 'visas-list',
-        components: {'modal': VueStrap.modal},
+        name: 'passports-list',
         data(){
             return{
-                visas: [],
-                paginatedVisas: [],
-                selectedVisa: null,
+                passports: [],
+                paginatedPassports: [],
+                selectedPassport: null,
                 //logic vars
                 page: 1,
                 per_page: 3,
@@ -90,7 +82,7 @@
                 this.pagination.current_page = val;
                 this.paginate();
             },
-            'visas':function (val) {
+            'passports':function (val) {
                 if(val.length) {
                     this.paginate();
                 }
@@ -104,26 +96,26 @@
                 var end   = start + this.per_page;
                 var range = _.range(start, end);
                 _.each(range, function (index) {
-                    if (this.visas[index])
-                        array.push(this.visas[index]);
+                    if (this.passports[index])
+                        array.push(this.passports[index]);
                 }, this);
-                this.paginatedVisas = array;
+                this.paginatedPassports = array;
             },
-            removeVisa(visa){
-                if(visa) {
-                    this.$http.delete('visas/' + visa.id).then(function (response) {
-                        this.visas = _.reject(this.visas, function (item) {
-                            return item.id === visa.id;
+            removePassport(passport){
+                if(passport) {
+                    this.$http.delete('passports/' + passport.id).then(function (response) {
+                        this.passports = _.reject(this.passports, function (item) {
+                            return item.id === passport.id;
                         });
-                        this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
+                        this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
                     });
                 }
             }
         },
         ready(){
-            this.$http('users/me?include=visas').then(function (response) {
-                this.visas = response.data.data.visas.data;
-                this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
+            this.$http('users/me?include=passports').then(function (response) {
+                this.passports = response.data.data.passports.data;
+                this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
                 this.loaded = true;
             });
         }

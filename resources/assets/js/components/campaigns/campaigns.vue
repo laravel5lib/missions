@@ -1,11 +1,9 @@
 <template>
-    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-          <!-- Indicators -->
-          <ol class="carousel-indicators">
+    <!-- <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">-->
             <!--<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>-->
-            <li data-target="#carousel-example-generic" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="campaign in campaigns"></li>
+            <!--<li data-target="#carousel-example-generic" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="campaign in campaigns"></li>
           </ol>
-          <!-- Wrapper for slides -->
           <div class="carousel-inner" role="listbox">
             <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="campaign in campaigns">
               <img :src="campaign.banner">
@@ -18,7 +16,6 @@
               </div>
             </div>
           </div>
-          <!-- Controls -->
           <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
             <span class="fa fa-angle-left" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
@@ -27,6 +24,20 @@
             <span class="fa fa-angle-right" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
           </a>
+    </div> -->
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+            <div class="item active">
+              <img src="../images/1n1d17/1n1d17-campaign-banner.jpg" alt="#1N1D17">
+              <div class="carousel-caption">
+                <h6 class="text-uppercase">Nicaragua</h6>
+                <h3>1Nation1Day 2017</h3>
+                <p>1Nation1Day Nicaragua will be the largest global missions outreach in history.</p>
+                <a href="#" class="btn btn-primary btn-sm">More Details</a>
+                <hr class="divider inv" />
+              </div>
+            </div>
+          </div>
     </div><!-- end carousel -->
     <hr class="divider inv xlg">
     <div class="container">
@@ -284,8 +295,7 @@
       </div><!-- end container -->
     </div><!-- end dark-bg-primary -->
 </template>
-
-<script>
+<script type="text/javascript">
     export default{
 		name: 'campaigns',
         data(){

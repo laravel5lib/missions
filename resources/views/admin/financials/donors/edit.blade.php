@@ -5,11 +5,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3>Donors</h3>
+                    <h3>Edit Donor</h3>
                 </div>
                 <div class="col-sm-4">
                     <hr class="divider inv sm">
-                    <a href="{{ url('admin/donors/create') }}" class="btn btn-primary pull-right">New <i class="fa fa-plus"></i></a>
                 </div>
             </div>
         </div>
@@ -17,10 +16,9 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
-                @include('admin.financials.partials._tabs')
+            <div class="col-sm-offset-2 col-sm-8">
+                <donor-form :is-update="true" donor-id="{{ $id }}"></donor-form>
             </div>
         </div>
-        <admin-donors-list></admin-donors-list>
     </div>
 @stop

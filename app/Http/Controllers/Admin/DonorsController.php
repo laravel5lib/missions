@@ -56,6 +56,6 @@ class DonorsController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.financials.donors.create');
+        return view('admin.financials.donors.edit', compact('id'));
     }
 }

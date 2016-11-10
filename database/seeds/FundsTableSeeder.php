@@ -11,6 +11,19 @@ class FundsTableSeeder extends Seeder
      */
     public function run()
     {
+        factory(App\Models\v1\Fund::class)->create([
+            'name' => 'Missions.Me',
+            'balance' => 0,
+            'class' => 'General',
+            'item' => 'General Donation',
+            'fundable_type' => 'groups',
+            'fundable_id' => function () {
+                return factory(App\Models\v1\Group::class)->create([
+                    'name' => 'Missions.Me'
+                ])->id;
+            }
+        ]);
+
         factory(App\Models\v1\Transaction::class, 'donation', 100)->create()
             ->each(function($t) {
                 $balance = $t->fund->balance + $t->amount;

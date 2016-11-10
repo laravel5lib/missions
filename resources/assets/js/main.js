@@ -18,7 +18,7 @@ import groupProfileStories from './components/groups/group-profile-stories.vue';
 import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
 import groupInterestSignup from './components/groups/group-interest-signup.vue';
 import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
-import tripRegWizard from './components/trips/trip-registration-wizard.vue';
+import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
 import recordsList from './components/records/records-list.vue';
@@ -84,6 +84,8 @@ import reconcileFund from './components/reconcile-fund.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
 import adminFundsList from './components/financials/funds/admin-funds-list.vue';
 import adminTransactionsList from './components/financials/transactions/admin-transactions-list.vue';
+import transactionForm from './components/financials/transactions/transaction-form.vue';
+import donorForm from './components/financials/donors/donor-form.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -282,7 +284,7 @@ new Vue({
         groupTripWrapper,
         groupInterestSignup,
         tripDetailsMissionaries,
-        tripRegWizard,
+        tripRegistrationWizard,
         reservationsList,
         donationsList,
         fundraisersManager,
@@ -356,6 +358,8 @@ new Vue({
         adminDonorsList,
         adminFundsList,
         adminTransactionsList,
+        transactionForm,
+        donorForm
     },
     http: {
         headers: {

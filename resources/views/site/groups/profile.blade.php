@@ -25,10 +25,10 @@
                         <h4>{{ $group->name }}</h4>
                         <h6 class="small">/groups/{{ $group->url }}</h6>
                         <p>{{ $group->description }}</p>
-                        <p><i class="fa fa-map-marker"></i>
+                        <p class="small"><i class="fa fa-map-marker"></i>
                             {{ $group->city ? $group->city.', ' : null }}
                             {{ $group->state ? $group->state.', ' : null }}
-                            <small>{{ country($group->country_code) }}</small></p>
+                            {{ country($group->country_code) }}</p>
                         <ul class="list-unstyled list-inline">
                             {{--@each('site.partials._social_link', $group->social, 'link')--}}
                         </ul>
@@ -46,9 +46,9 @@
             </div><!-- end col -->
             <div class="col-md-9 col-sm-8 col-xs-12">
                 <ul id="profTabs" class="nav nav-tabs" role="tablist">
-                    <li data-toggle="tooltip" title="Current Trips" role="presentation" class="active"><a href="#current-trips" aria-controls="current-trips" role="tab" data-toggle="tab"><i class="fa fa-plane"></i></a></li>
-                    <li data-toggle="tooltip" title="Fundraisers" role="presentation"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i></a></li>
-                    <li data-toggle="tooltip" title="Stories" role="presentation"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-comments"></i></a></li>
+                    <li data-toggle="tooltip" title="Current Trips" role="presentation" class="active"><a href="#current-trips" aria-controls="current-trips" role="tab" data-toggle="tab"><i class="fa fa-plane"></i> <span class="hidden-xs">Trips</span></a></li>
+                    <li data-toggle="tooltip" title="Fundraisers" role="presentation"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i> <span class="hidden-xs">Fundraisers</span></a></li>
+                    <li data-toggle="tooltip" title="Stories" role="presentation"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-comments"></i> <span class="hidden-xs">Stories</span></a></li>
                     @can('edit', $group)
                     <li data-toggle="tooltip" title="Dashboard" class="pull-right"><a href="#"><i class="fa fa-tachometer"></i></a></li>
                     @endcan

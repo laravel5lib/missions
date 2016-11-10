@@ -36,7 +36,7 @@
                             </div>
                         </div>
                         <p>{{ $user->bio }}</p>
-                        <p><i class="fa fa-map-marker"></i> {{ $user->city }}, {{ $user->state }}, {{ country($user->country_code) }}</p>
+                        <p class="small"><i class="fa fa-map-marker"></i> {{ $user->city }}, {{ $user->state }}, {{ country($user->country_code) }}</p>
                         <ul class="list-unstyled list-inline">
                             @each('site.partials._social_link', $user->links, 'link')
                         </ul>
@@ -62,7 +62,7 @@
                     <li data-toggle="tooltip" title="Fundraisers" role="presentation" class="active"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i> <span class="hidden-xs">Fundraisers</span></a></li>
                     <li data-toggle="tooltip" title="Stories" role="presentation"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-list-ul"></i> <span class="hidden-xs">Stories</span></a></li>
                     @can('edit', auth()->user())
-                    <li data-toggle="tooltip" title="Dashboard" class="pull-right"><a href="{{ url('dashboard') }}"><i class="fa fa-tachometer"></i> Dashboard</a></li>
+                    <li data-toggle="tooltip" title="Dashboard" class="pull-right"><a href="{{ url('dashboard') }}"><i class="fa fa-tachometer"></i></a></li>
                     @endcan
                 </ul>
                 <div class="tab-content">

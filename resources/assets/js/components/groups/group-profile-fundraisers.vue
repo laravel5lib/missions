@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="row">
         <div class="col-sm-12" v-if="!fundraisers.length">
             <div class="alert alert-info" role="alert">No records found</div>
         </div>
-        <div class="col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers" v-if="fundraisers.length">
+        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers" v-if="fundraisers.length">
             <div class="panel panel-default">
                 <img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">
                 <div class="panel-body">

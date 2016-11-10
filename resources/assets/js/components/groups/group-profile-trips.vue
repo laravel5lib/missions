@@ -1,24 +1,32 @@
 <template>
 <div>
-    <p v-if="trips.length < 1" class="text-center text-muted lead">
-        This group does not have any trips yet. Please check back soon!
-    </p>
-    <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips">
-        <div class="panel panel-default">
-            <img :src="trip.campaign.data.avatar" alt="{{ trip.campaign.data.name }}" class="img-responsive">
-            <div class="panel-body">
-                <h6><span class="label label-default">{{ trip.campaign.data.name }}</span></h6>
-                <h4>{{ trip.country_name }} {{ trip.started_at|moment 'YYYY' }}</h4>
-                <h6>{{ trip.type|capitalize }} Trip</h6>
-                <h6>{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</h6>
-                <ul class="list-inline">
-                    <li data-toggle="tooltip" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</li>
-                    <li data-toggle="tooltip" title="Registration Open" class="pull-right"><i class="fa fa-sign-in"></i></li>
-                </ul>
-                <p><a class="btn btn-primary btn-lg btn-block" :href="'/trips/' + trip.id">Details</a></p>
-            </div><!-- end panel-body -->
-        </div><!-- end panel -->
-    </div><!-- end col -->
+    <div class="row">
+        <p v-if="trips.length < 1" class="text-center text-muted">
+            This group does not have any trips yet. Please check back soon!
+        </p>
+        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips">
+            <div class="panel panel-default">
+                <div class="panel-heading" :class="'panel-' + trip.type">
+                    <h5 class="text-uppercase text-center">{{ trip.type | capitalize }}</h5>
+                </div>
+                <div class="panel-body text-center">
+                    <p class="badge">{{ trip.status | capitalize }}</p><br>
+                    <h4>{{ trip.campaign.data.name }}</h4>
+                    <p class="small">{{ trip.country_name }} {{ trip.started_at|moment 'YYYY' }}</p>
+                    <label>Travel Dates</label>
+                    <p class="small">{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</p>
+                    <label>Perfect For</label>
+                    <p class="small"><span v-for="prospect in trip.prospects">
+                        {{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
+                    </span></p>
+                    <label>Spots Available</label>
+                    <p>{{ trip.spots }}</p>
+                    <p class="text-left" data-toggle="tooltip" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</p>
+                    <p><a class="btn btn-primary btn-block" :href="'/trips/' + trip.id">Details</a></p>
+                </div><!-- end panel-body -->
+            </div><!-- end panel -->
+        </div><!-- end col -->
+    </div>
 </div>
 </template>
 <script>

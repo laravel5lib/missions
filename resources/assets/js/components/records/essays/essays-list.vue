@@ -27,7 +27,7 @@
                 <div class="panel-footer" style="padding: 0;">
                     <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
                         <a class="btn btn-info" :href="'/dashboard/records/essays/' + essay.id + '/edit'"><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger" @click="selectedEssay = essay,deleteModal = true"><i class="fa fa-times"></i></a>
+                        <a class="btn btn-danger" @click="selectedEssay = essay, deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
             <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete this Essay?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeEssay(selectedPassport)'>Confirm</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeEssay(selectedEssay)'>Confirm</button>
             </div>
         </modal>
     </div>
@@ -56,6 +56,7 @@
         data(){
             return{
                 essays: [],
+                selectedEssay: '',
                 //logic vars
                 page: 1,
                 per_page: 3,
@@ -73,6 +74,7 @@
                         this.essays = _.reject(this.essays, function (item) {
                             return item.id === essay.id;
                         });
+                        this.selectedEssay = '';
                     });
                 }
             },

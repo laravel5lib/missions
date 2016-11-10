@@ -21,7 +21,7 @@
     </div><!-- end col -->
 </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'group-profile-trips',
         props: ['id'],
@@ -35,7 +35,7 @@
             this.resource.query().then(function(trips){
                 this.trips = trips.data.data
             }).then(function () {
-
+                $('[data-toggle="tooltip"]').tooltip();
             });
         }
     }

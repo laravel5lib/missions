@@ -93,7 +93,6 @@ window.marked = require('marked');
 require('gsap');
 window.ScrollMagic = require('scrollmagic');
 require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
-import VueStrap from 'vue-strap/dist/vue-strap.min';
 window.videojs = require('video.js');
 require('videojs-youtube');
 // require('videojs-vimeo');
@@ -106,13 +105,12 @@ $( document ).ready(function() {
     $('[data-toggle="offcanvas"]').click(function () {
         $('.row-offcanvas').toggleClass('active')
     });
+
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
-// Vue Resource
-Vue.use(require('vue-resource'));
-// Vue Validator
-Vue.use(require('vue-validator'));
 // Global Components
+import VueStrap from 'vue-strap/dist/vue-strap.min';
 Vue.component('pagination', pagination);
 Vue.component('modal', VueStrap.modal);
 Vue.component('accordion', VueStrap.accordion);
@@ -128,6 +126,11 @@ Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
 // Vue.component('vSelect', require('vue-select'));
 
+// Vue Resource
+Vue.use(require('vue-resource'));
+// Vue Validator
+Vue.use(require('vue-validator'));
+
 
 Vue.http.options.root = '/api';
 Vue.http.interceptors.push({
@@ -137,7 +140,7 @@ Vue.http.interceptors.push({
 
         token = 'Bearer ' + $.cookie('api_token');
 
-        headers = request.headers || (request.headers = {})
+        headers = request.headers || (request.headers = {});
 
         if (token !== null && token !== 'undefined') {
             headers.Authorization = token

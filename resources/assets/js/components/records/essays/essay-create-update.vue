@@ -8,82 +8,16 @@
                        maxlength="150" minlength="1" required>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': checkForError('subject') }">
+            <!--<div class="form-group" :class="{ 'has-error': checkForError('subject') }">
                 <label for="subject" class="control-label">Subject</label>
                 <input type="text" class="form-control" name="subject" id="subject" v-model="subject"
                        placeholder="Subject" v-validate:subject="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
-            </div>
+            </div>-->
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-8">
-                            <h5 class="panel-header">Questions & Answers</h5>
-                        </div>
-                        <div class="col-xs-4 text-right">
-                            <button class="btn btn-xs btn-default-hollow" type="button" @click="showQAForm()">
-                                <i class="icon-left fa fa-plus"></i> Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group">
-                    <div class="list-group-item" v-for="QA in content">
-                        <template v-if="QA !== editQA">
-                            <div class="row">
-                                <!--<div class="col-sm-8">-->
-                                    <h6 v-text="QA.q"></h6>
-                                    <p v-text="QA.a"></p>
-                                <!--</div>-->
-                                <!--<div class="col-sm-4 text-right">-->
-                                    <!--<tooltip content="Edit">-->
-                                        <!--<a href="#" class="btn btn-xs btn-default" @click.prevent="editQAMode(QA)"><i class="fa fa-pencil"></i></a>-->
-                                    <!--</tooltip>-->
-                                    <!--<tooltip content="Delete">-->
-                                        <!--<a href="#" class="btn btn-xs btn-danger" @click.prevent="content.$remove(QA)"><i class="fa fa-trash"></i></a>-->
-                                    <!--</tooltip>-->
-                                <!--</div>-->
-                            </div>
-
-                        </template>
-                        <template v-else>
-                            <validator name="EditContent">
-                                <form id="EditContent" novalidate>
-                                    <div class="form-group">
-                                        <label class="control-label">Question</label>
-                                        <input type="text" class="form-control" v-model="editQA.q"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Answer</label>
-                                        <input type="text" class="form-control" v-model="editQA.a">
-                                    </div>
-                                    <hr class="divider inv sm">
-                                    <button class="btn btn-sm btn-default" type="button" @click="cancelEditQA(editQA)">Cancel</button>
-                                    <button class="btn btn-sm btn-success" type="button" @click="updateEditQA(editQA)">Save</button>
-                                </form>
-                            </validator>
-                        </template>
-                    </div>
-                    <div class="collapse" id="newQACollapse">
-                        <div class="list-group-item">
-                            <validator name="NewContent">
-                                <form id="NewContent" novalidate>
-                                    <div class="form-group">
-                                        <label class="control-label">Question</label>
-                                        <input type="text" class="form-control" v-model="newQA.q"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Answer</label>
-                                        <input type="text" class="form-control" v-model="newQA.a">
-                                    </div>
-                                    <hr class="divider inv sm">
-                                    <button class="btn btn-sm btn-success" type="button" @click="addQA(newQA)">Add Q&A</button>
-                                </form>
-                            </validator>
-                        </div>
-                    </div>
-                </div>
+            <div class="form-group" v-for="QA in content">
+                <label class="control-label" v-text="QA.q"></label>
+                <textarea class="form-control" v-model="QA.a"></textarea>
             </div>
 
             <div class="form-group">
@@ -127,20 +61,14 @@
         data(){
             return {
                 author_name: '',
-                subject: '',
-                content: [],
+                subject: 'Testimony',
+                content: [
+                    { q: 'Describe how you decided to follow Christ', a: ''},
+                    { q: 'Describe your church involvement', a: ''},
+                    { q: 'Describe your current walk with God', a: ''},
+                    { q: 'Have you been on a missions trip before? If so, please tell us about your experience', a: ''},
+                ],
                 user_id: '',
-
-                newQA: {
-                    q: '',
-                    a: '',
-                },
-
-                editQA: {
-                    q: '',
-                    a: '',
-                },
-                backupEditQA: null,
 
                 // logic vars
                 resource: this.$resource('essays{/id}'),
@@ -167,35 +95,6 @@
             },
             forceBack(){
                 return this.back(true);
-            },
-            showQAForm(){
-                jQuery('#newQACollapse').collapse('show');
-                this.editQA = {
-                    q: '',
-                    a: '',
-                };
-            },
-            addQA(QA){
-                this.content.push(QA);
-                jQuery('#newQACollapse').collapse('hide');
-                this.newQA = {
-                    q: '',
-                    a: '',
-                };
-            },
-            editQAMode(QA){
-                this.editQA = QA;
-                this.backupEditQA = jQuery.extend(true, {}, QA);
-                jQuery('#newQACollapse').collapse('hide');
-            },
-            updateEditQA(EditQA){
-                this.editQA = null;
-                this.backupEditQA = null
-            },
-            cancelEditQA(EditQA){
-                debugger;
-                this.editQA = jQuery.extend(true, {}, this.backupEditQA);
-                this.backupEditQA = null;
             },
             submit(){
                 this.attemptSubmit = true;

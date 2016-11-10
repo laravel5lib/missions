@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\v1\Project;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
@@ -52,6 +53,13 @@ class EventServiceProvider extends ServiceProvider
         Trip::created(function ($trip) {
             $trip->fund()->create([
                 'name' => generateFundName($trip),
+                'balance' => 0
+            ]);
+        });
+
+        Project::created(function ($project) {
+            $project->fund()->create([
+                'name' => $project->name . ' Project',
                 'balance' => 0
             ]);
         });

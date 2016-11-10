@@ -38,6 +38,6 @@ class ProjectTypesController extends Controller
                      ->where('project_cause_id', $causeId)
                      ->findOrFail($typeId);
 
-        return view('admin.causes.types.show', compact('type'));
+        return view('admin.causes.types.show', compact('type', 'causeId'));
     }
 }

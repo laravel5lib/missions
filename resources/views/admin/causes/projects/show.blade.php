@@ -30,7 +30,15 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            ...
+            <div class="col-sm-4">
+
+                @include('admin.causes.projects._menu', [
+                'links' => config('navigation.admin.project')
+                ])
+            </div>
+            <div class="col-sm-8">
+                @yield('tab')
+            </div>
         </div>
     </div>
 @endsection

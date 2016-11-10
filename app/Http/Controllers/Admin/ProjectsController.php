@@ -25,12 +25,12 @@ class ProjectsController extends Controller
         $this->project = $project;
     }
 
-    public function show($id)
+    public function show($id, $tab = 'details')
     {
         $this->authorize('manage-projects');
 
         $project = $this->project->findOrFail($id);
 
-        return view('admin.causes.projects.show', compact('project'));
+        return view('admin.causes.projects.' . $tab, compact('project', 'tab'));
     }
 }

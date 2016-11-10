@@ -72,6 +72,16 @@ class Project extends Model
     }
 
     /**
+     * Get the project's fund.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function fund()
+    {
+        return $this->morphOne(Fund::class, 'fundable');
+    }
+
+    /**
      * The costs associated with the project.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

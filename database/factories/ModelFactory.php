@@ -907,7 +907,7 @@ $factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $fa
  */
 $factory->define(App\Models\v1\ProjectCause::class, function(Faker\Generator $faker) {
     return [
-        'name' => $faker->catchPhrase,
+        'name' => $faker->unique()->randomElement(['Angel House', 'Clean Water']),
         'short_desc' => $faker->realText(200),
         'upload_id' => $faker->randomElement(App\Models\v1\Upload::pluck('id')->toArray()),
         'countries' => [$faker->countryCode]

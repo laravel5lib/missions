@@ -50,7 +50,7 @@ class ProjectType extends Model
      */
     public function cause()
     {
-        return $this->belongsTo(ProjectCause::class);
+        return $this->belongsTo(ProjectCause::class, 'project_cause_id');
     }
 
     /**

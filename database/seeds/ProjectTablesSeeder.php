@@ -26,7 +26,6 @@ class ProjectTablesSeeder extends Seeder
 
                 $staticCost->payments()->save(
                     factory(App\Models\v1\Payment::class)->make([
-                        'due_at' => null,
                         'amount_owed' => $staticCost->amount / 2,
                         'percent_owed' => 50,
                         'upfront' => false
@@ -35,7 +34,7 @@ class ProjectTablesSeeder extends Seeder
 
                 $staticCost->payments()->save(
                     factory(App\Models\v1\Payment::class)->make([
-                        'due_at' => null,
+
                         'amount_owed' => $staticCost->amount / 2,
                         'percent_owed' => 50,
                         'upfront' => false

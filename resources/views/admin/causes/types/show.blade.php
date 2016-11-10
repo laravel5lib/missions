@@ -29,7 +29,7 @@
     </div>
     <hr class="divider inv lg">
     <div class="container">
-            <project-type-editor id="{{ $type->id }}"></project-type-editor>
+            <project-type-editor id="{{ $type->id }}" cause-id="{{ $causeId }}"></project-type-editor>
         </div>
     </div>
 @endsection

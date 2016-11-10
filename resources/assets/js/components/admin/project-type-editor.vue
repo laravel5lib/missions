@@ -67,7 +67,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-body" v-for="cost in type.costs.data">
+                <div class="panel-body" v-for="cost in type.costs">
                     <h4>{{ cost.name }}</h4>
                     <div class="row">
                         <div class="col-sm-12">
@@ -100,7 +100,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="payment in cost.payments.data">
+                        <tr v-for="payment in cost.payments">
                             <td>{{ payment.amount_owed | currency }}</td>
                             <td>{{ payment.percent_owed }}%</td>
                             <td v-if='payment.upfront'>Upfront</td>
@@ -159,6 +159,10 @@
             'id': {
                 type: String,
                 required: true
+            },
+            'causeId': {
+                type: String,
+                required: true
             }
         },
         components: {
@@ -168,13 +172,18 @@
         methods: {
             fetch() {
                 this.$http.get('types/' + this.id + '?include=costs.payments').then(function (response) {
-                    this.type = response.data.data;
+                    var type = response.data.data;
+                    _.each(type.costs.data, function (cost) {
+                        cost.payments = cost.payments.data;
+                    });
+                    type.costs = type.costs.data;
+
+                    this.type = type;
                 });
             },
             save() {
                 this.type.country_code = this.type.country.code;
                 this.$http.put('types/' + this.id, this.type).then(function (response) {
-                    this.type = response.data.data;
                     this.editMode = false;
                     this.message = 'Your changes were saved successfully.';
                     this.showSuccess = true;
@@ -191,8 +200,8 @@
         ready() {
             this.fetch();
 
-            this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+            this.$http.get('causes/' + this.causeId).then(function (response) {
+				this.countries = response.data.data.countries;
 			});
         }
     }

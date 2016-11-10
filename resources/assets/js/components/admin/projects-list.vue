@@ -17,6 +17,8 @@
                     <th>Sponsor</th>
                     <th>Type</th>
                     <th>Country</th>
+                    <th>Goal</th>
+                    <th>Funds</th>
                     <th>Manage</th>
                 </tr>
             </thead>
@@ -29,6 +31,8 @@
                     </td>
                     <td>{{ project.type.data.name }}</td>
                     <td>{{ project.type.data.country.name }}</td>
+                    <td>{{ project.to_raise | currency }}</td>
+                    <td>{{ project.raised_amount | currency }}</td>
                     <td><a href="/admin/projects/{{ project.id }}"><i class="fa fa-cog"></i></a></td>
                 </tr>
             </tbody>

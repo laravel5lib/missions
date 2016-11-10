@@ -153,7 +153,7 @@
         </table>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'admin-groups',
         props: {
@@ -211,6 +211,7 @@
         },
         ready(){
             this.searchGroups();
+            $('[data-toggle="tooltip"]').tooltip();
         }
     }
 </script>

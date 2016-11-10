@@ -27,7 +27,7 @@
       <li>
         <div class="btn-group hidden-xs">
           <a class="btn btn-link" href="/login">Login</a>
-          <a class="btn btn-primary" href="/login">Sign Up</a>
+          <a class="btn btn-primary" href="/login?action=signup">Sign Up</a>
         </div>
       </li>
       @endif

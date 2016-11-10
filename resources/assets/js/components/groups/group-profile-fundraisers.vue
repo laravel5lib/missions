@@ -26,7 +26,7 @@
         </div><!-- end col -->
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'group-profile-fundraisers',
         props: ['id', 'groupUrl'],
@@ -41,7 +41,7 @@
             this.$http.get('fundraisers', {
                 sponsor: this.groupUrl,
             }).then(function (response) {
-                this.fundraisers = response.data.data.fundraisers.data;
+                this.fundraisers = response.data.data;
             })
         }
 

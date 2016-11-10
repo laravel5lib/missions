@@ -234,19 +234,20 @@
             },
         },
         ready(){
-            this.$http.get('users/me').then(function (response) {
-                this.user_id = response.data.data.id;
-                if (this.update) {
-                    this.resource.get({user: this.user_id}).then(function (response) {
-                        var essay = _.findWhere(response.data.data, {id: this.id});
-                        this.author_name = essay.author_name;
-                        this.subject = essay.subject;
-                        this.content = essay.content;
-                        // this.user_id = essay.user_id;
-                    });
+            var fetchURL = this.isUpdate ? ('essays/' + this.id) : 'users/me';
+            this.$http(fetchURL).then(function (response) {
+                // this.user = response.data.data;
+
+                if (this.isUpdate) {
+                    var essay = response.data.data;
+                    this.author_name = essay.author_name;
+                    this.subject = essay.subject;
+                    this.content = essay.content;
+                    this.user_id = essay.user_id;
+                } else {
+                    this.user_id = response.data.data.id;
                 }
             });
-
         }
     }
 </script>

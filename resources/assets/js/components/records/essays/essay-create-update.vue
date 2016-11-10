@@ -22,7 +22,7 @@
 
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" href="/dashboard/records/visas" class="btn btn-default">Cancel</a>
+                    <a v-if="!isUpdate" href="/dashboard/records/essays" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
                     <a v-if="isUpdate" @click="back()" class="btn btn-success">Done</a>
@@ -56,6 +56,10 @@
             id: {
                 type: String,
                 default: null
+            },
+            userId: {
+                type: String,
+                required: true
             }
         },
         data(){
@@ -68,7 +72,7 @@
                     { q: 'Describe your current walk with God', a: ''},
                     { q: 'Have you been on a missions trip before? If so, please tell us about your experience', a: ''},
                 ],
-                user_id: '',
+                user_id: this.userId,
 
                 // logic vars
                 resource: this.$resource('essays{/id}'),
@@ -133,20 +137,17 @@
             },
         },
         ready(){
-            var fetchURL = this.isUpdate ? ('essays/' + this.id) : 'users/me';
-            this.$http(fetchURL).then(function (response) {
+            if (this.isUpdate) {
+                this.$http('essays/' + this.id).then(function (response) {
                 // this.user = response.data.data;
 
-                if (this.isUpdate) {
                     var essay = response.data.data;
                     this.author_name = essay.author_name;
                     this.subject = essay.subject;
                     this.content = essay.content;
-                    this.user_id = essay.user_id;
-                } else {
-                    this.user_id = response.data.data.id;
-                }
-            });
+                    // this.user_id = essay.user_id;
+                });
+            }
         }
     }
 </script>

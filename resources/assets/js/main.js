@@ -60,10 +60,10 @@ import adminCampaignDetails from './components/campaigns/admin-campaign-details.
 import adminCampaignTripCreate from './components/trips/admin-trip-create.vue';
 import adminCampaignTripEdit from './components/trips/admin-trip-edit.vue';
 import adminTrips from './components/trips/admin-trips-list.vue';
-import adminTripsReservations from './components/trips/admin-trip-reservations-list.vue';
-import adminTripsFacilitators from './components/trips/admin-trip-facilitators.vue';
-import adminTripsDuplicate from './components/trips/admin-trip-duplicate.vue';
-import adminTripsDelete from './components/trips/admin-trip-delete.vue';
+import adminTripReservations from './components/trips/admin-trip-reservations-list.vue';
+import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
+import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
+import adminTripDelete from './components/trips/admin-trip-delete.vue';
 import adminInterestsList from './components/interests/admin-interests-list.vue';
 import adminGroups from './components/groups/admin-groups-list.vue';
 import adminGroupCreate from './components/groups/admin-group-create.vue';
@@ -329,10 +329,10 @@ new Vue({
         adminCampaignTripCreate,
         adminCampaignTripEdit,
         adminTrips,
-        adminTripsReservations,
-        adminTripsFacilitators,
-        adminTripsDuplicate,
-        adminTripsDelete,
+        adminTripReservations,
+        adminTripFacilitators,
+        adminTripDuplicate,
+        adminTripDelete,
         adminInterestsList,
         adminGroups,
         adminGroupCreate,

@@ -65,7 +65,7 @@
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" v-model="fundraiser.show_donors"> Show Donor/Donation List
+                                    <input type="checkbox" v-model="fundraiser.show_donors" @change="toggleDisplayDonors(fundraiser.show_donors)"> Show Donor/Donation List
                                 </label>
                             </div>
                         </form>
@@ -115,9 +115,14 @@
             'fundraiser': function (val, oldVal) {
                 this.description = val.hasOwnProperty('description') ? val.description : '';
                 // watch url value for checking
-                /*if (val.hasOwnProperty('url') && oldVal !== null && val.url !== oldVal.url) {
-                 debugger;
-                 }*/
+                if (val.hasOwnProperty('url') && oldVal.hasOwnProperty('url') && val.url !== oldVal.url) {
+                 	debugger;
+				}
+
+                // watch url value for checking
+                if (val.hasOwnProperty('show_donors') && oldVal.hasOwnProperty('show_donors') && val.show_donors !== oldVal.show_donors) {
+                 	debugger;
+				}
             }
         },
         filters: {
@@ -134,6 +139,9 @@
                 this.fundraiser.description = this.description;
                 this.doUpdate('description');
             },
+			toggleDisplayDonors(val) {
+				this.$root.$emit('Fundraiser:DisplayDonors', val);
+			},
             validateUrl(){
                 this.checkingUrl = true;
                 this.$http.get('fundraisers', { url: this.fundraiser.url }).then(function (response) {
@@ -168,8 +176,6 @@
                         this.showSettingsSuccess = true;
                         // page refresh might be necessary for updated url
                     }
-
-						this.$root.$emit('Fundraiser:DisplayDonors', this.fundraiser.show_donors)
 				});
             }
         },

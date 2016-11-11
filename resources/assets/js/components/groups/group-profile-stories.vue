@@ -132,7 +132,7 @@
                     title: '',
                     content:'',
                     publications: [
-                        { type: 'users', id: this.id },
+                        { type: 'groups', id: this.id },
                     ]
                 },
                 editMode: false,

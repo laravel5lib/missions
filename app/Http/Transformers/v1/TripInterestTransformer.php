@@ -28,6 +28,7 @@ class TripInterestTransformer extends TransformerAbstract
         return [
             'id'                        => $interest->id,
             'trip_id'                   => $interest->trip_id,
+            'status'                    => $interest->status,
             'name'                      => $interest->name,
             'email'                     => $interest->email,
             'phone'                     => $interest->phone,

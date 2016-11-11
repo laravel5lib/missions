@@ -88,6 +88,7 @@ import adminFundsList from './components/financials/funds/admin-funds-list.vue';
 import adminTransactionsList from './components/financials/transactions/admin-transactions-list.vue';
 import transactionForm from './components/financials/transactions/transaction-form.vue';
 import donorForm from './components/financials/donors/donor-form.vue';
+import tripInterestEditor from './components/interests/trip-interests-editor.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -363,7 +364,8 @@ new Vue({
         adminFundsList,
         adminTransactionsList,
         transactionForm,
-        donorForm
+        donorForm,
+        tripInterestEditor
     },
     http: {
         headers: {

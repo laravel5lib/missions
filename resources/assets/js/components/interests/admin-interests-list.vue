@@ -97,8 +97,7 @@
                 <td>{{interest.trip.data.type}}</td>
                 <td>{{interest.trip.data.group.data.name}}</td>
                 <td>
-                    <a href="/admin{{interest.links[0].uri}}"><i class="fa fa-eye"></i></a>
-                    <a href="/admin{{campaignId + interest.links[0].uri}}/edit"><i class="fa fa-pencil"></i></a>
+                    <a href="/admin/interests/{{ interest.id }}"><i class="fa fa-cog"></i></a>
                 </td>
             </tr>
             </tbody>

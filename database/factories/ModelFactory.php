@@ -897,6 +897,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Fak
 $factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $faker) {
     return [
         'trip_id' => $faker->randomElement(App\Models\v1\Trip::pluck('id')->toArray()),
+        'status' => 'undecided',
         'name' => $faker->firstName. ' ' .$faker->lastName,
         'email' => $faker->safeEmail,
         'phone' => $faker->optional(0.5)->phoneNumber,

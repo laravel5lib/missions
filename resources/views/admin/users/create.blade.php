@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <user-create></user-create>
+                <admin-user-create></admin-user-create>
             </div>
         </div>
     </div>

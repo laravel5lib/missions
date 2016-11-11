@@ -36,6 +36,19 @@ class TripInterestFilter extends Filter
     }
 
     /**
+     * Filter by trip type.
+     *
+     * @param $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function tripType($type)
+    {
+        return $this->whereHas('trip', function($trip) use($type) {
+            $trip->where('type', $type);
+        });
+    }
+
+    /**
      * Find by group id.
      *
      * @param $id

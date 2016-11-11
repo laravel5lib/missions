@@ -65,6 +65,7 @@ class CreateTripsTables extends Migration
         Schema::create('trip_interests', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('trip_id')->index();
+            $table->string('status')->nullable();
             $table->string('name');
             $table->string('email');
             $table->string('phone')->nullable();

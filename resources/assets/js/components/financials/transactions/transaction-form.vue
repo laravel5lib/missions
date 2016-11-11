@@ -164,16 +164,19 @@
                 <h5>Refund</h5>
             </div>
             <div class="panel-body">
-                <label>Designated Fund</label>
-                <v-select class="form-control" id="selectedFund" :debounce="250" :on-search="getFunds"
-                          :value.sync="selectedFund" :options="funds" label="name"
-                          placeholder="Select a fund to transfer from"></v-select>
-                <span class="help-block">Fund Balance: {{ selectedFund ? selectedFund.balance : 0 | currency }}</span>
-                <label>Amount</label>
+                <label>Transaction to Refund</label>
+                <v-select class="form-control" id="selectedTransaction" :debounce="250" :on-search="getTransactions"
+                          :value.sync="selectedTransaction" :options="transactions" label="description"
+                          placeholder="Select a transaction to refund"></v-select>
+                <span class="help-block">Transaction Amount: {{ selectedTransaction ? selectedTransaction.amount : 0 | currency }}</span>
+                <span class="help-block">Payment Method: {{ selectedTransaction ? selectedTransaction.payment.type : '--' | capitalize }}</span>
+                <label>Refund Amount</label>
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
                     <input type="text" class="form-control" placeholder="0.00" v-model="transaction.amount">
                 </div>
+                <label>Reason for Refund</label>
+                <textarea class="form-control" v-model="transaction.payment.reason"></textarea>
             </div>
         </div>
 
@@ -192,6 +195,8 @@
                     <span class="input-group-addon">$</span>
                     <input type="text" class="form-control" placeholder="0.00" v-model="transaction.amount">
                 </div>
+                <label>Reason for Credit</label>
+                <textarea class="form-control" v-model="transaction.payment.reason"></textarea>
             </div>
         </div>
 
@@ -214,13 +219,16 @@
                 transaction: {
                     type: 'donation',
                     payment: {
-                        type: "card"
+                        type: "card",
+                        reason: null
                     }
                 },
+                transactions: null,
                 funds: null,
                 toFund: null,
                 fromFund: null,
                 selectedFund: null,
+                selectedTransaction: null,
                 donors: null,
                 selectedDonor: null,
                 message: '',
@@ -239,17 +247,25 @@
                     this.donors = response.data.data;
                 });
             },
+            getTransactions(search) {
+                this.$http.get('transactions?type=donation&per_page=10', {search: search}).then(function (response) {
+                    this.transactions = response.data.data;
+                });
+            },
             reset() {
                 this.transaction = {
                     type: 'donation',
                     payment: {
-                        type: "card"
+                        type: "card",
+                        reason: null
                     }
                 };
+                this.transactions = null;
                 this.funds = null;
                 this.toFund = null;
                 this.fromFund = null;
                 this.selectedFund = null;
+                this.selectedTransaction = null;
                 this.donors = null;
                 this.selectedDonor = null;
             },
@@ -259,8 +275,22 @@
                 if (this.transaction.type == 'transfer') {
                     data.type = this.transaction.type;
                     data.amount = this.transaction.amount;
-                    data.from_fund_id = this.fromFund.id;
-                    data.to_fund_id = this.toFund.id;
+                    data.from_fund_id = this.fromFund ? this.fromFund.id : null;
+                    data.to_fund_id = this.toFund ? this.toFund.id : null;
+                }
+
+                if (this.transaction.type == 'credit') {
+                    data.type = this.transaction.type;
+                    data.amount = this.transaction.amount;
+                    data.fund_id = this.selectedFund ? this.selectedFund.id : null;
+                    data.reason = this.transaction.payment.reason;
+                }
+
+                if (this.transaction.type == 'refund') {
+                    data.type = this.transaction.type;
+                    data.amount = this.transaction.amount;
+                    data.transaction_id = this.selectedTransaction ? this.selectedTransaction.id : null;
+                    data.reason = this.transaction.payment.reason;
                 }
 
                 this.$http.post('transactions', data).then(function (response) {

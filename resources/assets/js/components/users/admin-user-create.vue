@@ -353,7 +353,7 @@
 <script type="text/javascript">
     import vSelect from "vue-select";
     export default{
-        name: 'user-create',
+        name: 'admin-user-create',
         components: {vSelect},
         data(){
             return {

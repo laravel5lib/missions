@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\CreditTransaction;
 use App\DonationTransaction;
 use App\FeeTransaction;
 use App\PaymentTransaction;
@@ -11,6 +12,7 @@ use App\Models\v1\Transaction;
 use App\Http\Controllers\Controller;
 use App\Http\Transformers\v1\TransactionTransformer;
 use Dingo\Api\Contract\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 
 class TransactionsController extends Controller
 {
@@ -106,9 +108,11 @@ class TransactionsController extends Controller
     {
         $transaction = $this->getTransactionHandler()->create($this->request);
 
-//        return $transaction;
+        if ($transaction instanceof Collection) {
+            return $this->response->collection($transaction, new TransactionTransformer);
+        }
 
-        return $this->response->collection($transaction, new TransactionTransformer);
+        return $this->response->item($transaction, new TransactionTransformer);
     }
 
     /**
@@ -139,6 +143,9 @@ class TransactionsController extends Controller
                 break;
             case 'refund':
                 return app()->make(RefundTransaction::class);
+                break;
+            case 'credit':
+                return app()->make(CreditTransaction::class);
                 break;
             default:
                 return app()->make(DonationTransaction::class);

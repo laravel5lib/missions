@@ -4,7 +4,7 @@ namespace App\Http\Requests\v1\Transactions;
 
 use Dingo\Api\Http\FormRequest;
 
-class RefundRequest extends FormRequest
+class CreditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,9 @@ class RefundRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount' => 'required|integer',
-            'transaction_id' => 'required|exists:transactions,id',
-            'reason' => 'required|string'
+            'amount'  => 'required|integer',
+            'fund_id' => 'required|exists:funds,id',
+            'reason'  => 'required|string'
         ];
     }
 }

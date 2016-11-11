@@ -15,7 +15,7 @@ class TripInterestFilter extends Filter
      *
      * @var array
      */
-    public $sortable = ['name', 'email', 'phone', 'created_at', 'updated_at'];
+    public $sortable = ['name', 'email', 'phone', 'created_at', 'updated_at', 'status'];
 
     /**
      * Fields that can be searched.
@@ -33,6 +33,30 @@ class TripInterestFilter extends Filter
     public function trip($id)
     {
         return $this->where('trip_id', $id);
+    }
+
+    /**
+     * Filter by status.
+     *
+     * @param $status
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function status($status)
+    {
+        return $this->where('status', $status);
+    }
+
+    /**
+     * Filter by trip type.
+     *
+     * @param $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function tripType($type)
+    {
+        return $this->whereHas('trip', function($trip) use($type) {
+            $trip->where('type', $type);
+        });
     }
 
     /**

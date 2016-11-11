@@ -62,7 +62,7 @@
                     </div><!-- end tab-pane -->
                     <div role="tabpanel" class="tab-pane" id="stories">
                         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                            <group-profile-stories id="{{ $group->id }}"></group-profile-stories>
+                            <group-profile-stories id="{{ $group->id }}" :manager-ids="{{ $group->managers->pluck('id') }}" auth-id="{{ auth()->check() ? auth()->user()->id : '' }}"></group-profile-stories>
                         </div>
                     </div><!-- end row tab -->
                 </div><!-- end tab-content -->

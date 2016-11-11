@@ -36,6 +36,17 @@ class TripInterestFilter extends Filter
     }
 
     /**
+     * Filter by status.
+     *
+     * @param $status
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function status($status)
+    {
+        return $this->where('status', $status);
+    }
+
+    /**
      * Filter by trip type.
      *
      * @param $type

@@ -45,29 +45,34 @@
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-        <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex" v-if="fundraisers.length">
-            <div class="panel panel-default">
-                <!--<img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">-->
-                <div class="panel-body">
-                    <h5>{{ fundraiser.name }}</h5>
-                    <h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;">Expires: {{ fundraiser.ended_at | moment 'll'  }}</h6>
-                    <h3><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>
-                    <p><span>{{ fundraiser.raised_percent|number }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: fundraiser.raised_percent + '%'}">
-                            <span class="sr-only">{{ fundraiser.raised_percent|number }}% Complete (success)</span>
+        <template v-if="fundraisers.length">
+            <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex">
+                <div class="panel panel-default">
+                    <!--<img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">-->
+                    <div class="panel-body">
+                        <h5>{{ fundraiser.name }}</h5>
+                        <h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;">Expires: {{ fundraiser.ended_at | moment 'll'  }}</h6>
+                        <h3><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>
+                        <p><span>{{ fundraiser.raised_percent|number }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: fundraiser.raised_percent + '%'}">
+                                <span class="sr-only">{{ fundraiser.raised_percent|number }}% Complete (success)</span>
+                            </div>
                         </div>
-                    </div>
-                    <p><a class="btn btn-primary btn-block" :href="pathName + '/' + fundraiser.url">Details</a></p>
-                </div><!-- end panel-body -->
-            </div><!-- end panel -->
-        </div><!-- end col -->
-        <div class="col-xs-12 text-center" v-if=" ! fundraisers.length">
-            <p class="lead text-muted">Hmmmm. We couldn't find any fundraisers matching your search.</p>
-        </div>
-        <div class="col-xs-12 text-center" v-if="fundraisers.length">
-            <pagination :pagination.sync="pagination" :callback="searchFundraisers"></pagination>
-        </div>
+                        <p><a class="btn btn-primary btn-block" :href="pathName + '/' + fundraiser.url">Details</a></p>
+                    </div><!-- end panel-body -->
+                </div><!-- end panel -->
+            </div><!-- end col -->
+            <div class="col-xs-12 text-center">
+                <pagination :pagination.sync="pagination" :callback="searchFundraisers"></pagination>
+            </div>
+        </template>
+        <template v-else>
+            <div class="col-xs-12 text-center">
+                <p class="lead text-muted">Hmmmm. We couldn't find any fundraisers matching your search.</p>
+            </div>
+        </template>
+
     </div>
 </template>
 <script type="text/javascript">

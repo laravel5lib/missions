@@ -3,8 +3,10 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="alert alert-info">
-                            <i class="fa fa-info-circle"></i> Add photos and videos!
-                            <button class="btn btn-white-hollow btn-xs pull-right" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse"><i class="fa fa-picture-o"></i> Manage Media</button>
+                    <i class="fa fa-info-circle"></i> Add photos and videos!
+                    <button class="btn btn-white-hollow btn-xs pull-right" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse">
+                        <i class="fa fa-picture-o"></i> Manage Media
+                    </button>
                 </div>
             </div>
         </div>
@@ -73,7 +75,7 @@
         </div>
     </template>
 
-    <div id="uploads-carousel" class="carousel slide" data-ride="carousel" v-if="fundraiser.hasOwnProperty('uploads')">
+    <div id="uploads-carousel" class="carousel slide" data-ride="carousel" data-interval="false" v-if="fundraiser.hasOwnProperty('uploads')">
         <!-- Indicators -->
         <ol class="carousel-indicators">
             <!--<li data-target="#uploads-carousel" data-slide-to="0" class="active"></li>-->
@@ -112,8 +114,32 @@
         width: 100%;
         height: auto;
     }
+        /* CSS used here will be applied after bootstrap.css */
+    .carousel-indicators li { visibility: hidden; }
+
+    .carousel-inner .item {
+        font-size:10px;
+        color:#0404B4
+    }
+
+    .carousel-control {
+        z-index: 10;
+        width: 30px;
+        height: 50px;
+        top: 40%;
+    }
+    .carousel-control.left,
+    .carousel-control.right { background: none }
+
+    .carousel-control.left > span.fa {  }
+    .carousel-control.right > span.fa {  }
+
+    .carousel-control > span.fa {
+        background-color: #EB0A18;
+        border-radius: 3px;
+    }
 </style>
-<script>
+<script type="text/javascript">
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'fundraisers-uploads',

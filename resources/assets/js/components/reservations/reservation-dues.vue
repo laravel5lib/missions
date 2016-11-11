@@ -4,7 +4,7 @@
             <h5>Payments</h5>
         </div><!-- end panel-heading -->
         <div class="list-group" v-if="reservation">
-            <div class="list-group-item" v-for="due in reservation.dues.data" :class="{'list-group-item-info': due.unsaved}">
+            <div class="list-group-item" v-for="due in reservation.dues.data" :class="{'list-group-item-default': due.unsaved}">
                 <div class="row">
                     <div class="col-md-3">
                         <label>Balance Due</label>
@@ -31,11 +31,10 @@
 
 <script type="text/javascript">
     // inmport vSelect from 'vue-select';
-    // import VueStrap from 'vue-strap/dist/vue-strap.min'
     export default{
         name: 'reservation-dues',
         props: ['id'],
-        // components:{ vSelect, 'modal': VueStrap.modal},
+        // components:{ vSelect },
         data(){
             return{
                 reservation: null,

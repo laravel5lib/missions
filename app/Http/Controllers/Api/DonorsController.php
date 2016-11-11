@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\v1\DonorRequest;
 use App\Http\Transformers\v1\DonorTransformer;
 use App\Models\v1\Donor;
+use App\Services\PaymentGateway;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -15,14 +16,20 @@ class DonorsController extends Controller
      * @var Donor
      */
     private $donor;
+    /**
+     * @var PaymentGateway
+     */
+    private $merchant;
 
     /**
      * DonorsController constructor.
      * @param Donor $donor
+     * @param PaymentGateway $merchant
      */
-    public function __construct(Donor $donor)
+    public function __construct(Donor $donor, PaymentGateway $merchant)
     {
         $this->donor = $donor;
+        $this->merchant = $merchant;
     }
 
     /**
@@ -61,6 +68,14 @@ class DonorsController extends Controller
      */
     public function store(DonorRequest $request)
     {
+        if ( ! $request->get('customer_id')) {
+            // create customer with donor details
+            $customer = $this->merchant->createCustomer($request->all());
+
+            // set the new customer id
+            $request['customer_id'] = $customer['id'];
+        }
+
         $donor = $this->donor->create($request->all());
 
         if ($request->has('tags'))

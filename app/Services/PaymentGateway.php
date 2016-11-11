@@ -81,7 +81,7 @@ class PaymentGateway {
      * @param $card_token
      * @return mixed
      */
-    public function createCustomer(array $params, $card_token)
+    public function createCustomer(array $params, $card_token = null)
     {
         $customer = $this->stripe->customers()->create([
             'email' => $params['email'],

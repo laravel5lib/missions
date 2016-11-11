@@ -192,12 +192,11 @@
 </template>
 <script>
     import vSelect from 'vue-select';
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
     import uploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
     export default{
         name: 'admin-reservation-edit',
         props: ['id'],
-        components: { vSelect, 'datepicker': VueStrap.datepicker, 'alert': VueStrap.alert, 'modal': VueStrap.modal, 'upload-create-update': uploadCreateUpdate },
+        components: { vSelect, 'upload-create-update': uploadCreateUpdate },
         data(){
             return{
                 given_names: '',

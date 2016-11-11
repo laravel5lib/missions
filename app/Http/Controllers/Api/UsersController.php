@@ -31,8 +31,6 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        // if ( ! $this->auth->user()->isAdmin()) abort(403);
-
         $users = $this->user
                       ->filter($request->all())
                       ->paginate($request->get('per_page', 25));
@@ -69,8 +67,6 @@ class UsersController extends Controller
      */
     public function store(UserRequest $request)
     {
-        if ( ! $this->auth->user()->isAdmin()) abort(403);
-
         $user = new User($request->all());
         $user->url = $request->get('url', str_random(10));
         $user->save();
@@ -111,8 +107,6 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        if ( ! $this->auth->user()->isAdmin()) abort(403);
-
         $user = $this->user->findOrFail($id);
 
         $user->delete();

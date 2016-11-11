@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\v1;
 
-use App\Http\Requests\Request;
 use App\Utilities\v1\Country;
+use Dingo\Api\Http\FormRequest;
 
-class DonorRequest extends Request
+class DonorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,16 +24,25 @@ class DonorRequest extends Request
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name'         => 'required|string',
             'company'      => 'string',
             'email'        => 'email',
             'phone'        => 'string',
+            'address'      => 'string',
+            'city'         => 'city',
+            'state'        => 'state',
             'zip'          => 'required|string',
             'country_code' => 'required|in:' . Country::codes(),
-            'account_id'   => 'string',
+            'account_id'   => 'string|unique:donors',
             'account_type' => 'in:users,groups',
             'tags'         => 'array'
         ];
+
+        if ($this->isMethod('put')) {
+            $rules['account_id'] = 'string|unique:donors,account_id,' . $this->donors;
+        }
+
+        return $rules;
     }
 }

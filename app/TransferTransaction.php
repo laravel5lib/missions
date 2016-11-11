@@ -34,10 +34,9 @@ class TransferTransaction extends TransactionHandler
             'amount' => -$request->get('amount'),
             'fund_id' => $from_fund->id,
             'payment' => [
-                'to' => [
-                    'fund_id' => $to_fund->id,
-                    'fund_name' => $to_fund->name
-                ]
+                'label' => 'Transferred to',
+                'fund_id' => $to_fund->id,
+                'fund_name' => $to_fund->name
             ]
         ]);
 
@@ -50,10 +49,9 @@ class TransferTransaction extends TransactionHandler
             'amount' => $request->get('amount'),
             'fund_id' => $to_fund->id,
             'payment' => [
-                'from' => [
-                    'fund_id' => $from_fund->id,
-                    'fund_name' => $from_fund->name
-                ]
+                'label' => 'Transferred from',
+                'fund_id' => $from_fund->id,
+                'fund_name' => $from_fund->name
             ]
         ]);
 

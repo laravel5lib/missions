@@ -1,13 +1,13 @@
 <template>
     <div>
         <template v-if="isUser()">
-        <div class="alert alert-info">
+        <div class="panel panel-default panel-body">
             <div class="row">
                 <div class="col-xs-8">
                     <i class="fa fa-info-circle"></i> Share your amazing stories with the world!
                 </div>
                 <div class="col-xs-4 text-right">
-                    <button class="btn btn-white-hollow btn-xs" @click="newMode=!newMode"><i class="fa fa-plus"></i> Post Story</button>
+                    <button class="btn btn-primary btn-xs" @click="newMode=!newMode"><i class="fa fa-plus"></i> Post Story</button>
                 </div>
             </div>
         </div>
@@ -109,21 +109,7 @@
             </div>
         </div>
         <div class="col-sm-12 text-center">
-            <nav>
-                <ul class="pagination pagination-sm">
-                    <li :class="{ 'disabled': pagination.current_page == 1 }">
-                        <a aria-label="Previous" @click="page=pagination.current_page-1">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                        <a aria-label="Next" @click="page=pagination.current_page+1">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <pagination :pagination.sync="pagination" :callback="searchStories"></pagination>
         </div>
 
         <modal v-if="isUser()" :show.sync="deleteModal" title="Remove Passport" small="true">
@@ -136,11 +122,9 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
     var marked = require('marked');
     export default{
         name: 'fundraisers-stories',
-        components: {'modal': VueStrap.modal},
         props:['id', 'sponsorId', 'authId'],
         data(){
             return{
@@ -161,18 +145,13 @@
                 includeProfile: false,
 
                 // pagination vars
-                page: 1,
                 per_page: 5,
-                pagination: {},
+                pagination: { current_page: 1 },
 
 
             }
         },
-        watch: {
-            'page': function (val, oldVal) {
-                this.searchStories();
-            },
-        },
+        watch: {},
         filters: {
             marked: marked,
         },
@@ -229,7 +208,7 @@
             searchStories(){
                 this.$http.get('stories', {
                     fundraiser: this.id,
-                    page: this.page,
+                    page: this.pagination.current_page,
                     per_page: this.per_page,
                 }).then(function(response) {
                     this.stories = response.data.data;

@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-sm-4">
                     <hr class="divider inv sm">
-                    <a href="#" class="btn btn-primary pull-right">New <i class="fa fa-plus"></i></a>
+                    <a href="{{ url('admin/donors/create') }}" class="btn btn-primary pull-right">New <i class="fa fa-plus"></i></a>
                 </div>
             </div>
         </div>

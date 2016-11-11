@@ -1,11 +1,9 @@
 <template>
     <progressbar :now="now" label type="success" striped animated style="max-width: 100%;border-radius: 4px;"></progressbar>
 </template>
-<script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
+<script type="text/javascript">
     export default{
         name: 'user-profile-fundraisers-progress',
-        components:{ 'progressbar': VueStrap.progressbar },
         props: {
             now: {
                 type: Number,

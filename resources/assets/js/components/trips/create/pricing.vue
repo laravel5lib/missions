@@ -208,7 +208,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	export default{
 		name: 'trip-pricing',
 		data(){

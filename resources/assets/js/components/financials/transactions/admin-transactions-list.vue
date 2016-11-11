@@ -9,12 +9,11 @@
                         <option value="">All Types</option>
                         <option value="donation">Donation</option>
                         <option value="transfer">Transfer</option>
-                        <option value="payment">Payment</option>
                         <option value="refund">Refund</option>
-                        <option value="fee">Fee</option>
+                        <option value="credit">Credit</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group" v-if="!donor">
                     <v-select class="form-control" id="donorFilter" :debounce="250" :on-search="getDonors"
                               :value.sync="donorObj" :options="donorsOptions" label="name"
                               placeholder="Filter by Donor"></v-select>
@@ -164,21 +163,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <nav>
-                            <ul class="pagination pagination-sm">
-                                <li :class="{ 'disabled': pagination.current_page == 1 }">
-                                    <a aria-label="Previous" @click="page=pagination.current_page-1">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                                <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                                    <a aria-label="Next" @click="page=pagination.current_page+1">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                        <pagination :pagination.sync="pagination" :callback="searchTransactions"></pagination>
                     </div>
                 </td>
             </tr>
@@ -220,11 +205,18 @@
 </style>
 <script type="text/javascript">
     import vSelect from "vue-select";
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'admin-transactions-list',
-        components: {vSelect, 'aside': VueStrap.aside, 'modal': VueStrap.modal},
+        components: {vSelect},
         props:{
+            fund: {
+                type: String,
+                default: null
+            },
+            donor: {
+                type: String,
+                default: null
+            },
             storageName: {
                 type: String,
                 default: 'AdminTransactionsListConfig'
@@ -235,10 +227,11 @@
                 transactions: [],
                 orderByField: 'description',
                 direction: 1,
-                page: 1,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
-                pagination: {},
+                pagination: {
+                    current_page: 1
+                },
                 search: '',
                 activeFields: ['description', 'type', 'amount'],
                 maxActiveFields: 3,
@@ -248,6 +241,7 @@
                 donorObj: null,
                 filters: {
                     tags: [],
+                    fund:'',
                     donor: '',
                     minAmount: null,
                     maxAmount: null,
@@ -310,6 +304,7 @@
                     per_page: this.per_page,
                     filters: {
                         tags: this.filters.tags,
+                        fund: this.filters.fund,
                         donor: this.filters.donor,
                         minAmount: this.filters.minAmount,
                         maxAmount: this.filters.maxAmount,
@@ -333,15 +328,17 @@
                 $.extend(this, {
                     orderByField: 'description',
                     direction: 1,
-                    page: 1,
                     per_page: 10,
                     perPageOptions: [5, 10, 25, 50, 100],
-                    pagination: {},
+                    pagination: {
+                        current_page: 1
+                    },
                     search: '',
                     activeFields: ['description', 'type', 'amount'],
                     maxActiveFields: 8,
                     filters: {
                         tags: [],
+                        fund:'',
                         donor: '',
                         minAmount: null,
                         maxAmount: null,
@@ -354,7 +351,7 @@
                     include: '',
                     search: this.search,
                     per_page: this.per_page,
-                    page: this.page,
+                    page: this.pagination.current_page,
                     sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
                 };
 
@@ -398,8 +395,16 @@
                 var config = JSON.parse(localStorage[this.storageName]);
                 this.filters = config.filters;
             }
+
             // populate
-            this.searchTransactions();
+            this.getDonors();
+            if(this.fund || this.donor) {
+                this.filters.fund = this.fund;
+                this.filters.donor = this.donor
+
+            } else {
+                this.searchTransactions();
+            }
 
             //Manually handle dropdown functionality to keep dropdown open until finished
             $('.form-toggle-menu .dropdown-menu').on('click', function(event){

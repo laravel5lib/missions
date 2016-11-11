@@ -360,13 +360,12 @@
         </modal>
     </validator>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from "vue-select";
-    import VueStrap from "vue-strap/dist/vue-strap.min";
     export default{
-        name: 'user-edit',
+        name: 'admin-user-edit',
         props: ['userId'],
-        components: {vSelect, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
+        components: {vSelect},
         data(){
             return {
                 name: '',

@@ -288,7 +288,7 @@
 	</div><!-- end panel-body -->
 </template>
 
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
 	module.exports = {
 		name: 'login',
@@ -427,6 +427,10 @@
 			done();
 		},
 		ready: function () {
+			if (_.contains(location.search.substr(1).split('='), 'signup')) {
+				this.currentState = 'create';
+			}
+
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.data.countries;
 			});

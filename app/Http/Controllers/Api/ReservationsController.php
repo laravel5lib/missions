@@ -116,10 +116,6 @@ class ReservationsController extends Controller
         if ($request->has('tags'))
             $reservation->retag($request->get('tags'));
 
-        if ( ! $request->has('medical_release_id'))
-            $reservation->medicalRelease()->dissociate();
-            $reservation->save();
-
         return $this->response->item($reservation, new ReservationTransformer);
     }
 

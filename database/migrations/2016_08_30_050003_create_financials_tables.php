@@ -18,6 +18,9 @@ class CreateFinancialsTables extends Migration
             $table->string('company', 60)->nullable();
             $table->string('email', 60)->nullable();
             $table->string('phone', 60)->nullable();
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
             $table->string('zip', 10)->nullable();
             $table->string('country_code')->nullable();
             $table->uuid('account_id')->nullable();
@@ -33,6 +36,8 @@ class CreateFinancialsTables extends Migration
             $table->integer('balance');
             $table->uuid('fundable_id');
             $table->uuid('fundable_type');
+            $table->string('class');
+            $table->string('item');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -67,7 +72,8 @@ class CreateFinancialsTables extends Migration
             $table->string('type')->default('general');
             $table->integer('goal_amount')->default(0);
             $table->text('description')->nullable();
-            $table->boolean('public')->default(false);
+            $table->boolean('public')->default(true);
+            $table->boolean('show_donors')->default(true);
             $table->uuid('fund_id')->index();
             $table->uuid('sponsor_id')->index();
             $table->string('sponsor_type');

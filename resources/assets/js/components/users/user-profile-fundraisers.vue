@@ -1,8 +1,7 @@
 <template>
     <div>
-        <div class="row">
             <p class="text-muted text-center" v-if="fundrasiers.length < 1">No fundraisers found.</p>
-            <div class="col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
+            <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h4>{{ fundraiser.name }}</h4>
@@ -21,15 +20,14 @@
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
             </div><!-- end col -->
-        </div>
-        <div class="row" v-if="oldFundraisers.length > 0">
+        <div v-if="oldFundraisers.length > 0">
             <div class="col-xs-12">
                 <hr />
                 <h5 class="text-muted text-center">Previous Fundraisers</h5>
                 <hr />
             </div>
         </div>
-        <div class="row" v-if="oldFundraisers.length > 0">
+        <div v-if="oldFundraisers.length > 0">
             <div class="col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in oldFundraisers">
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -46,7 +44,7 @@
         </div>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'user-profile-fundraisers',
         props: ['id', 'userUrl', 'authId'],

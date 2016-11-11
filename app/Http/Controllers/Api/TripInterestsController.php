@@ -70,6 +70,21 @@ class TripInterestsController extends Controller
     }
 
     /**
+     * Update a new trip interest.
+     *
+     * @param TripInterestRequest $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function update(TripInterestRequest $request, $id)
+    {
+        $interest = $this->interest->findOrFail($id);
+
+        $interest->update($request->all());
+
+        return $this->response->item($interest, new TripInterestTransformer);
+    }
+
+    /**
      * Delete a trip interest by id.
      *
      * @param $id

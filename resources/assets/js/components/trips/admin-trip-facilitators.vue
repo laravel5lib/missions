@@ -10,7 +10,7 @@
 		<div>
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">
 				<div class="thumbnail">
-					<img :src="user.avatar" alt="{{ user.name }}">
+					<img :src="facilitator.avatar" alt="{{ facilitator.name }}">
 					<div class="caption">
 						<h5 v-text="facilitator.name"></h5>
 						<p>
@@ -60,7 +60,7 @@
 		</div><!-- /.modal -->
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
 	export default {
 		name: 'admin-trip-facilitators',
@@ -101,8 +101,8 @@
 				this.attemptSubmit = true;
 				if (this.$AddFacilitator.valid) {
 					var facilitatorsArr = this.facilitators;
-					facilitatorsArr.push({trip_id: this.tripId, user_id: this.user_id});
-					this.trip.facilitators = _.pluck(facilitatorsArr, 'user_id');
+					facilitatorsArr.push({trip_id: this.tripId, id: this.user_id});
+					this.trip.facilitators = _.pluck(facilitatorsArr, 'id');
 					//this.trip.facilitators = this.facilitators;
 					this.updateTrip();
 				}
@@ -110,11 +110,13 @@
 			removeFacilitator: function removeFacilitator(facilitator) {
 				// Remove Facilitator
 				this.facilitators.$remove(facilitator);
-				this.trip.facilitators = this.facilitators;
+				var facilitatorsArr = this.facilitators;
+				this.trip.facilitators = _.pluck(facilitatorsArr, 'id');
 				this.updateTrip();
 			},
 			updateTrip: function updateTrip() {
 				delete this.trip.rep_id;
+				this.trip.difficulty = this.trip.difficulty.split(' ').join('_');
 				// Update Trip
 				this.resource.update({id: this.tripId}, this.trip).then(function (response) {
 					this.trip = response.data.data;

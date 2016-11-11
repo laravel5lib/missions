@@ -200,7 +200,7 @@
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Well Done!</strong>
-            <p>Profile updated!</p>
+            <p>Medical Release updated!</p>
         </alert>
         <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
             <span class="icon-info-circled alert-icon-float-left"></span>
@@ -215,11 +215,10 @@
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     export default{
         name: 'medical-create-update',
-        components: {vSelect, 'upload-create-update': uploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel, 'alert': VueStrap.alert, 'modal': VueStrap.modal},
+        components: {vSelect, 'upload-create-update': uploadCreateUpdate},
         props: {
             isUpdate: {
                 type:Boolean,
@@ -334,11 +333,9 @@
                         is_risk: this.is_risk,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.showSuccess = true;
-                        // window.location.href = '/dashboard/records/medical-releases';
+                        window.location.href = '/dashboard/records/medical-releases';
                     }, function (error) {
                         this.showError = true;
-                        debugger;
                     });
                 } else {
                     this.showError = true;
@@ -357,10 +354,9 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        // window.location.href = '/dashboard/visas';
+                        this.showSuccess = true;
                     }, function (error) {
-                        debugger;
+                        console.log(error);
                     });
                 }
             },

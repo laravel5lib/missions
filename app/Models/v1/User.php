@@ -518,6 +518,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get all the user's essays.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function essays()
+    {
+        return $this->hasMany(Essay::class);
+    }
+
+    /**
      * Synchronize User Profile Links.
      *
      * @param $links

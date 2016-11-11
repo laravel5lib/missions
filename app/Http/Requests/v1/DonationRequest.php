@@ -26,7 +26,6 @@ class DonationRequest extends FormRequest
     {
         return [
             'amount'             => 'required|numeric',
-            'currency'           => 'required|string|min:3|max:3',
             'description'        => 'required|string|max:120',
             'comment'            => 'string|max:120',
             'fund_id'            => 'required|string|exists:funds,id',

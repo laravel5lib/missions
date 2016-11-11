@@ -12,7 +12,7 @@ class Fund extends Model
 {
     use UuidForKey, Filterable, Taggable, SoftDeletes;
 
-    protected $fillable = ['name', 'balance', 'fundable_id', 'fundable_type'];
+    protected $fillable = ['name', 'balance', 'fundable_id', 'fundable_type', 'class', 'item'];
 
     /**
      * Get all the fund's fundraisers.
@@ -67,6 +67,16 @@ class Fund extends Model
                     ->withPivot('created_at')
                     ->groupBy('name')
                     ->orderBy('name');
+    }
+
+    /**
+     * Get all of the reservation's notes
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
     }
 
     /**

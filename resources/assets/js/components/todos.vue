@@ -118,14 +118,9 @@
     </modal>
 </div>
 </template>
-<script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
+<script type="text/javascript">
     export default{
         name: 'todos',
-        components: {
-            'alert': VueStrap.alert,
-            'modal': VueStrap.modal
-        },
         props: {
             'type': {
                 type: String
@@ -155,7 +150,7 @@
                     'todoable_id': this.id
                 },
                 page: 1,
-                pagination: {},
+                pagination: { current_page: 1 },
                 search: null,
                 newMode: false,
                 editMode: false,

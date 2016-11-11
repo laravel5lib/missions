@@ -12,33 +12,19 @@
                     <h6>{{ trip.type|capitalize }} Trip</h6>
                     <h6>{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</h6>
                     <ul class="list-inline">
-                        <li data-toggle="tooltip" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</li>
-                        <li data-toggle="tooltip" title="Registration Open" class="pull-right"><i class="fa fa-sign-in"></i></li>
+                        <li data-toggle="tooltip" data-placement="top" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</li>
+                        <li data-toggle="tooltip" data-placement="top" title="Registration Open" class="pull-right"><i class="fa fa-sign-in"></i></li>
                     </ul>
                     <p><a class="btn btn-primary btn-lg btn-block" :href="id + trip.links[0].uri">Details</a></p>
                 </div><!-- end panel-body -->
             </div><!-- end panel -->
         </div><!-- end col -->
         <div v-if="trips.length" class="col-sm-12 text-center">
-            <nav>
-                <ul class="pagination pagination-sm">
-                    <li :class="{ 'disabled': pagination.current_page == 1 }">
-                        <a aria-label="Previous" @click="page=pagination.current_page-1">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                        <a aria-label="Next" @click="page=pagination.current_page+1">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <pagination :pagination.sync="pagination" :callback="searchTrips"></pagination>
         </div>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'dashboard-group-trips',
         props: ['id'],
@@ -46,15 +32,9 @@
             return {
                 trips:[],
                 resource: this.$resource('trips?include=campaign&onlyPublished=true&groups[]=' + this.id),
-                pagination: {},
-                page: 1,
+                pagination: { current_page: 1 },
                 per_page: 3,
             }
-        },
-        watch: {
-            'page': function (val, oldVal) {
-                this.searchTrips();
-            },
         },
         methods:{
             searchTrips(){
@@ -62,7 +42,7 @@
                     this.trips = response.data.data;
                     this.pagination = response.data.meta.pagination;
                 }).then(function () {
-
+                    $('[data-toggle="tooltip"]').tooltip();
                 });
             }
         },

@@ -15,7 +15,7 @@ class Donor extends Model
     protected $fillable = [
         'name', 'email', 'phone', 'company', 'zip',
         'country_code', 'account_id', 'account_type',
-        'customer_id'
+        'customer_id', 'address', 'city', 'state'
     ];
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
@@ -23,6 +23,16 @@ class Donor extends Model
     public function account()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Get all of the reservation's notes
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
     }
 
     /**

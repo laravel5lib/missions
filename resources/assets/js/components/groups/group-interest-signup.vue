@@ -87,16 +87,15 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
     export default{
         name: 'group-interest-signup',
         props: ['id'],
-        components:{'spinner': VueStrap.spinner, 'alert': VueStrap.alert },
         data(){
             return{
                 group: {},
                 interest: {
-                    communication_preferences: []
+                    communication_preferences: [],
+                    status: 'undecided'
                 },
                 campaign_id: null,
                 campaigns: {},
@@ -148,7 +147,8 @@
                         this.showSuccess = true;
                         this.attemptSubmit = false;
                         this.interest = {
-                            communication_preferences: []
+                            communication_preferences: [],
+                            status: 'undecided'
                         };
                         this.campaign_id = '';
                         console.log(response);

@@ -36,21 +36,7 @@
 					</div><!-- end panel -->
 				</div><!-- end col -->
 				<div class="col-xs-12 text-center">
-					<nav>
-						<ul class="pagination pagination-sm">
-							<li :class="{ 'disabled': pagination.current_page == 1 }">
-								<a aria-label="Previous" @click="page=pagination.current_page-1">
-									<span aria-hidden="true">&laquo; Previous</span>
-								</a>
-							</li>
-							<!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-							<li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-								<a aria-label="Next" @click="page=pagination.current_page+1">
-									<span aria-hidden="true">Next &raquo;</span>
-								</a>
-							</li>
-						</ul>
-					</nav>
+					<pagination :pagination.sync="pagination" :callback="searchUploads"></pagination>
 				</div>
 			</div>
 		</div>
@@ -110,9 +96,12 @@
 				</div>
 
 				<div class="row" v-if="type && type === 'video'">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-play-circle"></i></span>
-						<input type="url" class="form-control" v-model="url" placeholder="Video Link (YouTube/Vimeo/etc)">
+					<div class="col-xs-12">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="fa fa-play-circle"></i></span>
+							<input type="url" class="form-control" v-model="url" placeholder="https://vimeo.com/168118606">
+						</div>
+						<span class="help-block">Copy &amp; Paste a YouTube or Vimeo URL.</span>
 					</div>
 				</div>
 
@@ -143,8 +132,8 @@
 
 				<div class="form-group">
 						<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
-						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Create</a>
-						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Update</a>
+						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Save</a>
+						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Save</a>
 				</div>
 
 			</form>
@@ -154,10 +143,9 @@
 </template>
 <script type="text/javascript">
 	import vSelect from 'vue-select'
-	import VueStrap from 'vue-strap/dist/vue-strap.min'
 	export default{
         name: 'upload-create-update',
-		components: {vSelect, 'tooltip': VueStrap.tooltip},
+		components: {vSelect},
 		props:{
 			uploadId: {
 				type: String,
@@ -248,7 +236,7 @@
 				uploads: [],
 				page: 1,
 				search: '',
-				pagination: {},
+				pagination: { current_page: 1 },
             }
         },
 		computed:{
@@ -471,7 +459,7 @@
 				var params = {
 					include: '',
 					per_page: this.perPage,
-					page: this.page,
+					page: this.pagination.current_page,
 					sort: this.orderByField + '|' + (this.direction?'asc':'desc'),
 					type: this.type,
 					tags: this.tags

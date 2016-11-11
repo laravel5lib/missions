@@ -15,7 +15,7 @@ class TripInterestFilter extends Filter
      *
      * @var array
      */
-    public $sortable = ['name', 'email', 'phone', 'created_at', 'updated_at'];
+    public $sortable = ['name', 'email', 'phone', 'created_at', 'updated_at', 'status'];
 
     /**
      * Fields that can be searched.

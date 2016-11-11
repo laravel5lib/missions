@@ -4,7 +4,7 @@
  */
 $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
 {
-    $name = $faker->firstName;
+    $name = $faker->name;
 
     return [
         'name'             => $name,
@@ -23,7 +23,7 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'country_code'     => strtolower($faker->countryCode),
         'timezone'         => $faker->timezone,
         'bio'              => $faker->optional(0.5)->realText(120),
-        'url'              => str_slug($name),
+        'url'              => str_slug($name).'-'.time(),
         'public'           => $faker->boolean(50),
         'remember_token'   => str_random(10),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),

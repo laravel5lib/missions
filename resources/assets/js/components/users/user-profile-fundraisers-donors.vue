@@ -1,5 +1,5 @@
 <template>
-    <div v-if="donors.length > 0">
+    <div v-if="display && donors.length > 0">
         <div class="btn-group btn-group-sm" role="group" aria-label="...">
             <div class="btn-group btn-group-sm" role="group">
                 <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donors'}" @click="toggleView('donors')">Donors</button>
@@ -62,10 +62,11 @@
 <script type="text/javascript">
     var marked = require('marked');
     export default{
-        name:'user-profile-fundraisers-donors',
+        name: 'user-profile-fundraisers-donors',
         props: ['id'],
         data(){
-            return{
+            return {
+                display: true,
                 donors: [],
                 donations: [],
                 activeView: 'donors',
@@ -73,7 +74,7 @@
                 // pagination vars
                 page: 1,
                 per_page: 10,
-                pagination: { current_page: 1 },
+                pagination: {current_page: 1},
             }
         },
         filters: {
@@ -84,7 +85,7 @@
                 this.searchDonors();
             },
         },
-        methods:{
+        methods: {
             toggleView(view){
                 switch (view) {
                     case 'donors':
@@ -111,7 +112,17 @@
             }
         },
         ready(){
-            this.searchDonors();
+            this.$root.$on('Fundraiser:DisplayDonors', function (display) {
+                this.display = display;
+
+                if (this.display) {
+                    this.searchDonors();
+                }
+            }.bind(this));
+
+            if (this.display) {
+                this.searchDonors();
+            }
         }
     }
 </script>

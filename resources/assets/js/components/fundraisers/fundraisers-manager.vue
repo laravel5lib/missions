@@ -169,12 +169,14 @@
                         // page refresh might be necessary for updated url
                     }
 
-                });
+						this.$root.$emit('Fundraiser:DisplayDonors', this.fundraiser.show_donors)
+				});
             }
         },
         ready(){
             this.resource.get({id: this.id}).then(function (response) {
                 this.fundraiser = response.data.data;
+				this.$root.$emit('Fundraiser:DisplayDonors', this.fundraiser.show_donors)
             });
         }
     }

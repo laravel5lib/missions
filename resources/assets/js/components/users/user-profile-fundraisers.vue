@@ -3,19 +3,29 @@
             <p class="text-muted text-center" v-if="fundrasiers.length < 1">No fundraisers found.</p>
             <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6 class="text-center">{{ fundraiser.name }}</h6>
+                    </div>
                     <div class="panel-body">
-                        <h4>{{ fundraiser.name }}</h4>
-                        <h6>
-                            Expires: {{ fundraiser.ended_at | moment 'll'  }}
-                            <span class="label label-default" v-if="!fundraiser.public">Private</span>
-                        </h6>
-                        <h3><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>
-                        <p><span>{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100)|number 1 }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-12 col-md-6">
+                                <label>Raised</label>
+                                <h4 class="text-success" style="margin-top:0;">{{ fundraiser.raised_amount | currency }}</h4>
+                            </div>
+                            <div class="col-xs-6 col-sm-12 col-md-6">
+                                <label>Expires</label>
+                                <p class="small">
+                                    {{ fundraiser.ended_at | moment 'll'  }}
+                                </p>
+                            </div>
+                        </div><!-- end row -->
+                        <label><span>{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100)|number 1 }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></label>
                         <div class="progress">
                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: (fundraiser.raised_amount/fundraiser.goal_amount * 100) + '%'}">
                                 <span class="sr-only">{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100) }}% Complete (success)</span>
                             </div>
                         </div>
+                        <p class="small text-center text-info" v-if="!fundraiser.public">Private <i data-toggle="tooltip" title="Only you can see this" class="fa fa-question-circle-o text-muted"></i></p>
                         <p><a class="btn btn-primary btn-block" :href="pathName + '/' + fundraiser.url">Details</a></p>
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
@@ -30,13 +40,14 @@
         <div v-if="oldFundraisers.length > 0">
             <div class="col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in oldFundraisers">
                 <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h6>{{ fundraiser.name }}</h6>
+                    </div>
                     <div class="panel-body">
-                        <h4>{{ fundraiser.name }}</h4>
-                        <h6>
-                            Closed: {{ fundraiser.ended_at | moment 'll'  }}
-                            <span class="label label-default" v-if="!fundraiser.public">Private</span>
-                        </h6>
-                        <h3><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised / {{ fundraiser.donors_count }} Donors</small></h3>
+                        <label>Closed</label>
+                        <p class="small">{{ fundraiser.ended_at | moment 'll'  }}</p>
+                        <label><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised / {{ fundraiser.donors_count }} Donors</small></label>
+                        <p class="small text-center text-info" v-if="!fundraiser.public">Private</p>
                         <p><a class="btn btn-default btn-block" :href="pathName + '/' + fundraiser.url">Details</a></p>
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->

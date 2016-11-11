@@ -2,13 +2,13 @@
 <div class="row">
     <div class="col-xs-12 text-right">
         <form class="form-inline">
-            <div class="checkbox" v-if="isFacilitator">
+            <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
                 <label>
                     <input type="checkbox" v-model="includeManaging"> Include my group's reservations
                 </label>
             </div>
             <div class="input-group input-group-sm">
-                <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
             </div>
         </form>
@@ -18,7 +18,7 @@
         <div class="col-xs-12 col-sm-6 col-md-4" v-for="reservation in reservations">
             <div class="panel panel-default">
                 <div class="panel-heading text-center" :class="'panel-' + reservation.trip.data.type">
-                    <h5 class="text-capitalize">{{ reservation.trip.data.type }}</h5>
+                    <h5 class="text-uppercase">{{ reservation.trip.data.type }}</h5>
                 </div>
                 <div class="panel-body text-center">
                     <img :src="reservation.avatar" class="img-circle img-md">

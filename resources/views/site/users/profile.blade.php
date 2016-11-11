@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-xs-10">
                                 <h4>{{ $user->name }}</h4>
-                                <h6 class="small">/{{ '@'.$user->url }}</h6>
+                                <h6 class="small text-muted">/{{ '@'.$user->url }}</h6>
                             </div>
                             <div class="col-xs-2">
                                 @can('edit', auth()->user())
@@ -35,8 +35,8 @@
                                 @endcan
                             </div>
                         </div>
-                        <p>{{ $user->bio }}</p>
-                        <p class="small"><i class="fa fa-map-marker"></i> {{ $user->city }}, {{ $user->state }}, {{ country($user->country_code) }}</p>
+                        <p class="small">{{ $user->bio }}</p>
+                        <p class="small"><i class="fa fa-map-marker text-muted" style="margin-right:3px;"></i> {{ $user->city }}, {{ $user->state }}, {{ country($user->country_code) }}</p>
                         <ul class="list-unstyled list-inline">
                             @each('site.partials._social_link', $user->links, 'link')
                         </ul>

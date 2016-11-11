@@ -10,25 +10,30 @@
         </div>
 
         <hr class="divider inv sm">
+        <template v-if="activeView==='donors'">
+            <div class="panel panel-default" v-for="donor in donors">
+                <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
+                    <h5>
+                        <a role="button">
+                            {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
+                        </a>
+                    </h5>
+                </div>
+            </div>
+        </template>
 
-        <div class="panel panel-default" v-for="donor in donors" v-if="activeView==='donors'">
-            <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
-                <h5>
-                    <a role="button">
-                        {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
-                    </a>
-                </h5>
+        <template v-if="activeView === 'donations'">
+            <div class="panel panel-default" v-for="donation in donations">
+                <div class="panel-heading" role="tab" id="heading-{{ donation.id }}">
+                    <h5>
+                        <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
+                        <small class="small">by <a :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>
+                        <br /><small>{{ donation.comment }}</small>
+                    </h5>
+                </div>
             </div>
-        </div>
-        <div class="panel panel-default" v-for="donation in donations" v-if="activeView==='donations'">
-            <div class="panel-heading" role="tab" id="heading-{{ donation.id }}">
-                <h5>
-                    <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
-                    <small class="small">by <a :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>
-                    <br /><small>{{ donation.comment }}</small>
-                </h5>
-            </div>
-        </div>
+        </template>
+
 
         <div class="row">
             <div class="col-sm-12 text-center">

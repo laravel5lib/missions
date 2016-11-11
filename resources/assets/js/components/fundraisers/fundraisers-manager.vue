@@ -96,7 +96,7 @@
                 showDescriptionSuccess: false,
                 showSettingsSuccess: false,
                 newMarkedContentToggle: true,
-                fundraiser: null,
+                fundraiser: {},
                 resource: this.$resource('fundraisers{/id}'),
 
                 // settings vars
@@ -112,11 +112,6 @@
                 /*if (val.hasOwnProperty('url') && oldVal !== null && val.url !== oldVal.url) {
                  debugger;
                  }*/
-            },
-            'fundraiser.url': function() {
-                // debugger;
-                // checkbox active state has changed
-                //this.block.someotherprop.changeme = 5;
             }
         },
         filters: {

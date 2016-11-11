@@ -2,9 +2,9 @@
     <template v-if="isUser()">
         <div class="row">
             <div class="col-xs-12">
-                <div class="alert alert-info">
+                <div class="panel panel-default panel-body">
                     <i class="fa fa-info-circle"></i> Add photos and videos!
-                    <button class="btn btn-white-hollow btn-xs pull-right" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse">
+                    <button class="btn btn-primary btn-xs pull-right" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse">
                         <i class="fa fa-picture-o"></i> Manage Media
                     </button>
                 </div>
@@ -15,8 +15,8 @@
             <div class="panel panel-default"><div class="panel-body">
                 <!-- TAB NAVIGATION -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a href="#tab1" role="tab" data-toggle="tab">Media</a></li>
-                    <li><a href="#tab2" role="tab" data-toggle="tab">Add Image</a></li>
+                    <li class="active"><a href="#tab1" role="tab" data-toggle="tab">All Media</a></li>
+                    <li><a href="#tab2" role="tab" data-toggle="tab">Add Picture</a></li>
                     <li><a href="#tab3" role="tab" data-toggle="tab">Add Video</a></li>
                 </ul>
                 <!-- TAB CONTENT -->
@@ -24,18 +24,18 @@
                     <div class="active tab-pane fade in" id="tab1">
                         <div class="row" v-if="fundraiser.hasOwnProperty('uploads')">
                             <p class="lead text-center text-muted" v-if="fundraiser.uploads.data.length < 1">
-                                No media found. Add a video or image.
+                                No media found. Add a video or picture.
                             </p>
                             <div class="col-sm-4 col-md-3" v-for="upload in fundraiser.uploads.data">
-                                <div class="thumbnail">
-                                    <img :src="upload.type === 'video' ? 'https://placehold.it/155x87?text=Video' : upload.source" :alt="upload.name">
-                                    <div class="caption">
-                                        <h6>{{ upload.name }}</h6>
+                                <div class="panel panel-defaut panel-body">
+                                    <img :src="upload.type === 'video' ? 'https://placehold.it/155x87?text=Video' : upload.source" :alt="upload.name" class="img-responsive">
+                                    <!--<div class="caption">-->
+                                        <p><small class="text-center text-muted">{{ upload.name }}</small></p>
                                         <div class="btn-group btn-group-xs btn-group-justified" role="group" aria-label="...">
-                                            <a @click="viewUpload(upload)" class="btn btn-xs btn-info" role="button"><i class="fa fa-eye"></i></a>
-                                            <a @click="deleteUpload(upload)" class="btn btn-xs btn-danger" role="button"><i class="fa fa-times"></i></a>
+                                            <a @click="viewUpload(upload)" class="btn btn-xs btn-primary-hollow" role="button"><i class="fa fa-eye"></i></a>
+                                            <a @click="deleteUpload(upload)" class="btn btn-xs btn-default-hollow" role="button"><i class="fa fa-times"></i></a>
                                         </div>
-                                    </div>
+                                    <!--</div>-->
                                 </div>
                             </div>
                         </div>

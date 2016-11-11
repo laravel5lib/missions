@@ -12,7 +12,7 @@ class Fund extends Model
 {
     use UuidForKey, Filterable, Taggable, SoftDeletes;
 
-    protected $fillable = ['name', 'balance', 'fundable_id', 'fundable_type'];
+    protected $fillable = ['name', 'balance', 'fundable_id', 'fundable_type', 'class', 'item'];
 
     /**
      * Get all the fund's fundraisers.

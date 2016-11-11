@@ -54,9 +54,11 @@
                         @endunless
                     </div>
                 </div>
+                @unless(! $fundraiser->show_donors)
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                     <user-profile-fundraisers-donors id="{{ $fundraiser->id }}"></user-profile-fundraisers-donors>
                 </div><!-- end panel-group -->
+                @endunless
             </div>
             <div class="col-sm-8 col-sm-pull-4">
                 <fundraisers-uploads id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-uploads>

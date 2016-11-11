@@ -5,7 +5,7 @@
                 <!--<div class="panel-body">-->
                     <form>
                         <div class="form-group">
-                            <div class="alert alert-info">
+                            <div class="panel panel-default panel-body">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <i class="fa fa-info-circle"></i> Update Fundraiser
@@ -13,16 +13,16 @@
                                     </div>
                                     <div class="col-sm-8 text-right">
                                         <div role="group" aria-label="...">
-                                            <a class="btn btn-xs btn-white-hollow small" @click="newMarkedContentToggle = !newMarkedContentToggle">
+                                            <a class="btn btn-xs btn-primary small" @click="newMarkedContentToggle = !newMarkedContentToggle">
                                                 <span v-show="!newMarkedContentToggle">Preview</span>
-                                                <span v-show="newMarkedContentToggle"><i class="fa fa-pencil"></i> Edit Description</span>
+                                                <span v-show="newMarkedContentToggle"><i class="fa fa-pencil"></i> Edit</span>
 
                                             </a>
                                             <span class="form-group" v-if="fundraiser" v-show="description !== fundraiser.description">
-                                                <button class="btn btn-xs btn-white-hollow small" type="button" @click="reset">Cancel</button>
-                                                <button class="btn btn-xs btn-white-hollow small" type="button" @click="saveDescription">Publish</button>
+                                                <button class="btn btn-xs btn-default-hollow small" type="button" @click="reset">Cancel</button>
+                                                <button class="btn btn-xs btn-primary small" type="button" @click="saveDescription">Publish</button>
                                             </span>
-                                            <a class="btn btn-xs btn-white-hollow small" @click="settingsModal = true"><i class="fa fa-cog"></i> Settings</a>
+                                            <a class="btn btn-xs btn-default-hollow small" @click="settingsModal = true"><i class="fa fa-cog"></i> Settings</a>
                                         </div>
                                     </div>
                                 </div>
@@ -60,6 +60,12 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" v-model="fundraiser.public"> Make Public
+                                </label>
+                                <span class="help-block">Private fundraisers can only be accessed by you.</span>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" v-model="fundraiser.show_donors"> Show Donor/Donation List
                                 </label>
                             </div>
                         </form>

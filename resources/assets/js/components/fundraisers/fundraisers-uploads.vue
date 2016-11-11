@@ -114,7 +114,8 @@
         width: 100%;
         height: auto;
     }
-        /* CSS used here will be applied after bootstrap.css */
+
+    .carousel { overflow: hidden; }
     .carousel-indicators li { visibility: hidden; }
 
     .carousel-inner .item {

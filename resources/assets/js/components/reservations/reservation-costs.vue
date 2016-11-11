@@ -51,7 +51,7 @@
         </div>
         </div><!-- end panel -->
 
-        <modal title="Add Costs" :show.sync="showAddModal" effect="fade" width="800" :callback="addCosts">
+        <modal title="Add Costs" :show.sync="showAddModal" effect="fade" width="800" :callback="addCosts" ok-text="Add">
             <div slot="modal-body" class="modal-body">
                 <validator name="AddCost">
                     <form class="for" novalidate>

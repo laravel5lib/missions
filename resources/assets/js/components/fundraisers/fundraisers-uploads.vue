@@ -28,7 +28,7 @@
                             </p>
                             <div class="col-sm-4 col-md-3" v-for="upload in fundraiser.uploads.data">
                                 <div class="thumbnail">
-                                    <img :src="upload.type === 'video' ? 'https://placehold.it/150x150?text=Video' : upload.source" :alt="upload.name">
+                                    <img :src="upload.type === 'video' ? 'https://placehold.it/155x87?text=Video' : upload.source" :alt="upload.name">
                                     <div class="caption">
                                         <h6>{{ upload.name }}</h6>
                                         <div class="btn-group btn-group-xs btn-group-justified" role="group" aria-label="...">

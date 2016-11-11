@@ -114,7 +114,7 @@
                  }*/
             },
             'fundraiser.url': function() {
-                debugger;
+                // debugger;
                 // checkbox active state has changed
                 //this.block.someotherprop.changeme = 5;
             }

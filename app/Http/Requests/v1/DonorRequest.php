@@ -24,7 +24,7 @@ class DonorRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name'         => 'required|string',
             'company'      => 'string',
             'email'        => 'email',
@@ -38,5 +38,11 @@ class DonorRequest extends FormRequest
             'account_type' => 'in:users,groups',
             'tags'         => 'array'
         ];
+
+        if ($this->isMethod('put')) {
+            $rules['account_id'] = 'string|unique:donors,account_id,' . $this->donors;
+        }
+
+        return $rules;
     }
 }

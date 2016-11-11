@@ -1,4 +1,6 @@
 @extends('admin.layouts.default')
+@inject('fund', 'App\Models\v1\Fund')
+@inject('refund', 'App\Models\v1\Transaction')
 
 @section('content')
     <div class="white-header-bg">
@@ -7,9 +9,24 @@
                 <div class="col-sm-8">
                     <h3>{{ ucwords($transaction->type) }} Details</h3>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <a href="#" class="btn btn-primary pull-right">New <i class="fa fa-plus"></i></a>
+                    <!-- Split button -->
+                    <div class="btn-group">
+                        <a type="button" href="{{ url('admin/transactions/' . $transaction->id . '/edit') }}" class="btn btn-primary"><i class="fa fa-pencil"></i> Edit</a>
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            @if($transaction->type == 'donation')
+                                <li><a href="#">Refund Transaction</a></li>
+                            @endif
+                            <li><a href="#">Delete Transaction</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ url('admin/transactions') }}">Back to all Transactions</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -23,23 +40,65 @@
                         <h5 class="panel-header">Details</h5>
                     </div>
                     <div class="panel-body">
+                        <label>Amount</label>
+                        @if($transaction->amount > 0)<h4 class="text-success">@else <h4 class="text-danger">@endif
+                            $ {{ $transaction->amount }}
+                        </h4>
                         <label>Description</label>
                         <p>{{ $transaction->description }}</p>
                         <label>Type</label>
                         <p>{{ str_singular(ucwords($transaction->type)) }}</p>
-                        <label>Amount</label>
-                        <p>$ {{ $transaction->amount }}</p>
                         <label>Designation</label>
                         <p><a href="{{ url('/admin/funds/'. $transaction->fund->id) }}">{{ $transaction->fund->name }}</a></p>
+                        <label>QuickBooks Class</label>
+                        <p>{{ $transaction->fund->class }}</p>
+                        <label>QuickBooks Item</label>
+                        <p>{{ $transaction->fund->item }}</p>
                         <label>Created</label>
-                        <p>{{ $transaction->created_at->format('F j, Y h:i a') }}</p>
+                        <p>{{ $transaction->created_at->format('M j, Y h:i a') }}</p>
                         <label>Last Updated</label>
-                        <p>{{ $transaction->updated_at->format('F j, Y h:i a') }}</p>
+                        <p>{{ $transaction->updated_at->format('M j, Y h:i a') }}</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-                @if($transaction->payment)
+                @if($transaction->payment && $transaction->type == 'refund')
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5 class="panel-header">Related Transaction</h5>
+                        </div>
+                        <div class="panel-body">
+                            <label>Transaction</label>
+                            <p>
+                                <a href="/admin/transactions/{{ $transaction->payment['transaction_id'] }}">
+                                    {{ $refund->findOrFail($transaction->payment['transaction_id'])->description }}
+                                </a>
+                            </p>
+                            <label>Reason</label>
+                            <p>{{ ucfirst($transaction->payment['reason']) }}</p>
+                            <label>Stripe Refund ID</label>
+                            <p>{{ $transaction->payment['refund_id'] or 'n/a' }}</p>
+                        </div>
+                    </div>
+                @endif
+
+                @if($transaction->payment && $transaction->type == 'transfer')
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5 class="panel-header">Related Fund</h5>
+                        </div>
+                        <div class="panel-body">
+                            <label>{{ $transaction->payment['label'] }}</label>
+                            <p>
+                                <a href="/admin/funds/{{ $transaction->payment['fund_id'] }}">
+                                    {{ $fund->findOrFail($transaction->payment['fund_id'])->name }}
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                @endif
+
+                @if($transaction->payment && $transaction->type == 'donation')
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5 class="panel-header">Payment</h5>
@@ -103,6 +162,14 @@
                             </div>
                         </div>
                     @endif
+            </div>
+            <div class="col-sm-6">
+                <notes type="transactions"
+                       id="{{ $transaction->id }}"
+                       user_id="{{ auth()->user()->id }}"
+                       :per_page="3"
+                       :can-modify="{{ auth()->user()->can('modify-notes') }}">
+                </notes>
             </div>
         </div>
     </div>

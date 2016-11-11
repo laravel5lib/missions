@@ -47,6 +47,16 @@ class Transaction extends Model
     }
 
     /**
+     * Get all of the reservation's notes
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
+
+    /**
      * Only get transactions of the given type.
      *
      * @param $query

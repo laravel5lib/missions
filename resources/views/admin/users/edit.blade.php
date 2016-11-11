@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <user-edit user-id="{{ $id }}"></user-edit>
+                <admin-user-edit user-id="{{ $id }}"></admin-user-edit>
             </div>
         </div>
     </div>

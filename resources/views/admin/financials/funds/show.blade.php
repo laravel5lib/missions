@@ -18,26 +18,19 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h5 class="panel-header">Details</h5>
-                    </div>
-                    <div class="panel-body">
-                        <label>Fund Name</label>
-                        <p>{{ $fund->name }}</p>
-                        <label>Type</label>
-                        <p>{{ str_singular(ucwords($fund->fundable_type)) }}</p>
-                        <label>Balance</label>
-                        <h5>$ {{ $fund->balance }}</h5>
-                        <label>Last Update</label>
-                        <p>{{ $fund->updated_at->format('F j, Y h:i a') }}</p>
-                    </div>
-                    <div class="panel-footer text-right">
-                        <reconcile-fund id="{{ $fund->id }}"></reconcile-fund>
-                    </div>
-                </div>
+                <fund-editor id="{{ $fund->id }}"></fund-editor>
             </div>
-            <div class="col-md-8">
+            <div class="col-sm-8">
+                <notes type="funds"
+                       id="{{ $fund->id }}"
+                       user_id="{{ auth()->user()->id }}"
+                       :per_page="3"
+                       :can-modify="{{ auth()->user()->can('modify-notes') }}">
+                </notes>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <h5>Transactions</h5>
                 <admin-transactions-list fund="{{ $fund->id }}"
                                          storage-name="AdminFundTransactionsConfig">

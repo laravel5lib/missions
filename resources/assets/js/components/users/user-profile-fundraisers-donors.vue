@@ -1,5 +1,5 @@
 <template>
-    <div v-if="donors.length > 0">
+    <div v-if="display && donors.length > 0">
         <div class="btn-group btn-group-sm" role="group" aria-label="...">
             <div class="btn-group btn-group-sm" role="group">
                 <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donors'}" @click="toggleView('donors')">Donors</button>
@@ -10,25 +10,30 @@
         </div>
 
         <hr class="divider inv sm">
+        <template v-if="activeView==='donors'">
+            <div class="panel panel-default" v-for="donor in donors">
+                <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
+                    <h5>
+                        <a role="button">
+                            {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
+                        </a>
+                    </h5>
+                </div>
+            </div>
+        </template>
 
-        <div class="panel panel-default" v-for="donor in donors" v-if="activeView==='donors'">
-            <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
-                <h5>
-                    <a role="button">
-                        {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
-                    </a>
-                </h5>
+        <template v-if="activeView === 'donations'">
+            <div class="panel panel-default" v-for="donation in donations">
+                <div class="panel-heading" role="tab" id="heading-{{ donation.id }}">
+                    <h5>
+                        <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
+                        <small class="small">by <a :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>
+                        <br /><small>{{ donation.comment }}</small>
+                    </h5>
+                </div>
             </div>
-        </div>
-        <div class="panel panel-default" v-for="donation in donations" v-if="activeView==='donations'">
-            <div class="panel-heading" role="tab" id="heading-{{ donation.id }}">
-                <h5>
-                    <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
-                    <small class="small">by <a :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>
-                    <br /><small>{{ donation.comment }}</small>
-                </h5>
-            </div>
-        </div>
+        </template>
+
 
         <div class="row">
             <div class="col-sm-12 text-center">
@@ -57,10 +62,11 @@
 <script type="text/javascript">
     var marked = require('marked');
     export default{
-        name:'user-profile-fundraisers-donors',
+        name: 'user-profile-fundraisers-donors',
         props: ['id'],
         data(){
-            return{
+            return {
+                display: true,
                 donors: [],
                 donations: [],
                 activeView: 'donors',
@@ -68,7 +74,7 @@
                 // pagination vars
                 page: 1,
                 per_page: 10,
-                pagination: { current_page: 1 },
+                pagination: {current_page: 1},
             }
         },
         filters: {
@@ -79,7 +85,7 @@
                 this.searchDonors();
             },
         },
-        methods:{
+        methods: {
             toggleView(view){
                 switch (view) {
                     case 'donors':
@@ -106,7 +112,17 @@
             }
         },
         ready(){
-            this.searchDonors();
+            this.$root.$on('Fundraiser:DisplayDonors', function (display) {
+                this.display = display;
+
+                if (this.display) {
+                    this.searchDonors();
+                }
+            }.bind(this));
+
+            if (this.display) {
+                this.searchDonors();
+            }
         }
     }
 </script>

@@ -88,6 +88,10 @@ Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
         return view('dashboard.medical-releases.create');
     });
 
+    Route::get('records/essays/create', function () {
+        return view('dashboard.essays.create');
+    });
+
     Route::get('records/essays/{id}', function ($id) {
         return view('dashboard.essays.index', compact('id'));
     });

@@ -45,6 +45,14 @@
                             </reservations-visas-manager>
                         @endif
 
+                        @if($requirement->document_type === 'essays')
+                            <reservations-essays-manager
+                                    reservation-id="{{ $reservation->id }}"
+                                    essay-id="{{ $reservation->testimony_id }}"
+                                    user-id="{{ $reservation->user_id }}">
+                            </reservations-essays-manager>
+                        @endif
+
                         @if($requirement->document_type === 'arrival_designation')
                             <reservations-arrival-designation
                                     reservation-id="{{ $reservation->id }}">

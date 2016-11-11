@@ -427,6 +427,10 @@
 			done();
 		},
 		ready: function () {
+			if (_.contains(location.search.substr(1).split('='), 'signup')) {
+				this.currentState = 'create';
+			}
+
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.data.countries;
 			});

@@ -35,6 +35,7 @@ class FundraiserTransformer extends TransformerAbstract
             'donors_count'   => (int) count($fundraiser->donors),
             'url'            => $fundraiser->url,
             'public'         => (bool) $fundraiser->public,
+            'show_donors'    => (bool) $fundraiser->show_donors,
             'description'    => $fundraiser->description,
             'started_at'     => $fundraiser->started_at->toDateTimeString(),
             'ended_at'       => $fundraiser->ended_at->toDateTimeString(),

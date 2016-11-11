@@ -96,9 +96,12 @@
 				</div>
 
 				<div class="row" v-if="type && type === 'video'">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-play-circle"></i></span>
-						<input type="url" class="form-control" v-model="url" placeholder="Video Link (YouTube/Vimeo/etc)">
+					<div class="col-xs-12">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="fa fa-play-circle"></i></span>
+							<input type="url" class="form-control" v-model="url" placeholder="https://vimeo.com/168118606">
+						</div>
+						<span class="help-block">Copy &amp; Paste a YouTube or Vimeo URL.</span>
 					</div>
 				</div>
 
@@ -129,8 +132,8 @@
 
 				<div class="form-group">
 						<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
-						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Create</a>
-						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Update</a>
+						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Save</a>
+						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Save</a>
 				</div>
 
 			</form>

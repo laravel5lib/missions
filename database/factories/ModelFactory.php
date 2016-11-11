@@ -4,7 +4,7 @@
  */
 $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
 {
-    $name = $faker->firstName;
+    $name = $faker->name;
 
     return [
         'name'             => $name,
@@ -23,7 +23,7 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'country_code'     => strtolower($faker->countryCode),
         'timezone'         => $faker->timezone,
         'bio'              => $faker->optional(0.5)->realText(120),
-        'url'              => str_slug($name),
+        'url'              => str_slug($name).'-'.time(),
         'public'           => $faker->boolean(50),
         'remember_token'   => str_random(10),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
@@ -396,8 +396,8 @@ $factory->define(App\Models\v1\Payment::class, function (Faker\Generator $faker)
 $factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $faker)
 {
     return [
-        'name'            => $faker->randomElement(['Passport', 'Medical Release', 'Visa', 'Referral']),
-        'document_type'   => $faker->randomElement(['passports', 'medical_releases', 'visas', 'referrals']),
+        'name'            => $faker->randomElement(['Passport', 'Medical Release', 'Visa', 'Referral', 'Testimony']),
+        'document_type'   => $faker->randomElement(['passports', 'medical_releases', 'visas', 'referrals', 'essays']),
         'short_desc'      => $faker->realText(120),
         'due_at'          => $faker->dateTimeThisYear('+ 6 months'),
         'grace_period'    => random_int(0, 10),
@@ -897,6 +897,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Fak
 $factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $faker) {
     return [
         'trip_id' => $faker->randomElement(App\Models\v1\Trip::pluck('id')->toArray()),
+        'status' => 'undecided',
         'name' => $faker->firstName. ' ' .$faker->lastName,
         'email' => $faker->safeEmail,
         'phone' => $faker->optional(0.5)->phoneNumber,

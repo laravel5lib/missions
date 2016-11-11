@@ -30,12 +30,14 @@ import passportCreateUpdate from './components/records/passports/passport-create
 import essaysList from './components/records/essays/essays-list.vue';
 import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
 import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
+import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
 import reservationAvatar from './components/reservations/reservation-avatar.vue';
 import reservationCosts from './components/reservations/reservation-costs.vue';
 import reservationDues from './components/reservations/reservation-dues.vue';
 import reservationFunding from './components/reservations/reservation-funding.vue';
 import reservationsPassportsManager from './components/reservations/reservations-passports-manager.vue';
 import reservationsMedicalReleasesManager from './components/reservations/reservations-medical-releases-manager.vue';
+import reservationsEssaysManager from './components/reservations/reservations-essays-manager.vue';
 import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
 import reservationsArrivalDesignation from './components/reservations/reservations-arrival-designation.vue';
 import userSettings from './components/users/user-settings.vue';
@@ -60,10 +62,10 @@ import adminCampaignDetails from './components/campaigns/admin-campaign-details.
 import adminCampaignTripCreate from './components/trips/admin-trip-create.vue';
 import adminCampaignTripEdit from './components/trips/admin-trip-edit.vue';
 import adminTrips from './components/trips/admin-trips-list.vue';
-import adminTripsReservations from './components/trips/admin-trip-reservations-list.vue';
-import adminTripsFacilitators from './components/trips/admin-trip-facilitators.vue';
-import adminTripsDuplicate from './components/trips/admin-trip-duplicate.vue';
-import adminTripsDelete from './components/trips/admin-trip-delete.vue';
+import adminTripReservations from './components/trips/admin-trip-reservations-list.vue';
+import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
+import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
+import adminTripDelete from './components/trips/admin-trip-delete.vue';
 import adminInterestsList from './components/interests/admin-interests-list.vue';
 import adminGroups from './components/groups/admin-groups-list.vue';
 import adminGroupCreate from './components/groups/admin-group-create.vue';
@@ -80,12 +82,13 @@ import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
 import adminUploadsList from './components/uploads/admin-uploads-list.vue';
 import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
-import reconcileFund from './components/reconcile-fund.vue';
+import fundEditor from './components/financials/funds/fund-editor.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
 import adminFundsList from './components/financials/funds/admin-funds-list.vue';
 import adminTransactionsList from './components/financials/transactions/admin-transactions-list.vue';
 import transactionForm from './components/financials/transactions/transaction-form.vue';
 import donorForm from './components/financials/donors/donor-form.vue';
+import tripInterestEditor from './components/interests/trip-interests-editor.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -95,7 +98,6 @@ window.marked = require('marked');
 require('gsap');
 window.ScrollMagic = require('scrollmagic');
 require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
-import VueStrap from 'vue-strap/dist/vue-strap.min';
 window.videojs = require('video.js');
 require('videojs-youtube');
 // require('videojs-vimeo');
@@ -108,13 +110,12 @@ $( document ).ready(function() {
     $('[data-toggle="offcanvas"]').click(function () {
         $('.row-offcanvas').toggleClass('active')
     });
+
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
-// Vue Resource
-Vue.use(require('vue-resource'));
-// Vue Validator
-Vue.use(require('vue-validator'));
 // Global Components
+import VueStrap from 'vue-strap/dist/vue-strap.min';
 Vue.component('pagination', pagination);
 Vue.component('modal', VueStrap.modal);
 Vue.component('accordion', VueStrap.accordion);
@@ -130,6 +131,11 @@ Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
 // Vue.component('vSelect', require('vue-select'));
 
+// Vue Resource
+Vue.use(require('vue-resource'));
+// Vue Validator
+Vue.use(require('vue-validator'));
+
 
 Vue.http.options.root = '/api';
 Vue.http.interceptors.push({
@@ -139,7 +145,7 @@ Vue.http.interceptors.push({
 
         token = 'Bearer ' + $.cookie('api_token');
 
-        headers = request.headers || (request.headers = {})
+        headers = request.headers || (request.headers = {});
 
         if (token !== null && token !== 'undefined') {
             headers.Authorization = token
@@ -205,7 +211,7 @@ Vue.filter('percentage', {
 });
 
 Vue.filter('moment', function (val, format) {
-    return moment(val).format(format||'LL');
+    return moment.utc(val).local().format(format||'LL');
 });
 
 var VueCropOptions = {
@@ -300,6 +306,7 @@ new Vue({
         recordsList,
         passportsList,
         essaysList,
+        essayCreateUpdate,
         passportCreateUpdate,
         visasList,
         visaCreateUpdate,
@@ -313,6 +320,7 @@ new Vue({
         reservationsPassportsManager,
         reservationsMedicalReleasesManager,
         reservationsVisasManager,
+        reservationsEssaysManager,
         reservationsArrivalDesignation,
         userSettings,
         userProfileCountries,
@@ -331,10 +339,10 @@ new Vue({
         adminCampaignTripCreate,
         adminCampaignTripEdit,
         adminTrips,
-        adminTripsReservations,
-        adminTripsFacilitators,
-        adminTripsDuplicate,
-        adminTripsDelete,
+        adminTripReservations,
+        adminTripFacilitators,
+        adminTripDuplicate,
+        adminTripDelete,
         adminInterestsList,
         adminGroups,
         adminGroupCreate,
@@ -351,12 +359,13 @@ new Vue({
         adminUserDelete,
         adminUploadsList,
         adminUploadCreateUpdate,
-        reconcileFund,
+        fundEditor,
         adminDonorsList,
         adminFundsList,
         adminTransactionsList,
         transactionForm,
-        donorForm
+        donorForm,
+        tripInterestEditor
     },
     http: {
         headers: {

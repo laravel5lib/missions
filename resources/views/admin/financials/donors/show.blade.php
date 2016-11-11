@@ -19,41 +19,83 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5 class="panel-header">Details</h5>
                     </div>
                     <div class="panel-body">
-                        <label>Donor Name</label>
-                        <p>{{ $donor->name }}</p>
-                        @unless(! $donor->company)
-                        <label>Company/Organization</label>
-                        <p>{{ $donor->company }}</p>
-                        @endunless
-                        <label>Account Type</label>
-                        <p>{{ $donor->account_type ? str_singular(ucwords($donor->account_type)) : 'Guest' }}</p>
-                        <label>Stripe Customer ID</label>
-                        <p>{{ $donor->customer_id or 'n/a' }}</p>
-                        <label>Email</label>
-                        <p>{{ $donor->email or 'n/a' }}</p>
-                        <label>Phone</label>
-                        <p>{{ $donor->phone or 'n/a' }}</p>
-                        <label>Address</label>
-                        <p>
-                            {{ $donor->address ?  $donor->address . '<br />' : '' }}
-                            {{ $donor->city ? $donor->city . ', ' : '' }}
-                            {{ $donor->state }}
-                            {{ $donor->zip }}
-                        </p>
-                        <label>Country</label>
-                        <p>{{ country($donor->country_code) }}</p>
-                        <label>Last Update</label>
-                        <p>{{ $donor->updated_at->format('F j, Y h:i a') }}</p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Donor Name</label>
+                                <p>{{ $donor->name }}</p>
+                            </div>
+                            @unless(! $donor->company)
+                            <div class="col-sm-6">
+                                <label>Company/Organization</label>
+                                <p>{{ $donor->company }}</p>
+                            </div>
+                            @endunless
+                        </div>
+                        <hr class="divider">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Account Type</label>
+                                <p>{{ $donor->account_type ? str_singular(ucwords($donor->account_type)) : 'Guest' }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Stripe Customer ID</label>
+                                <p>{{ $donor->customer_id or 'n/a' }}</p>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Email</label>
+                                <p>{{ $donor->email or 'n/a' }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Phone</label>
+                                <p>{{ $donor->phone or 'n/a' }}</p>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Address</label>
+                                <p>
+                                    {{ $donor->address ?  $donor->address . '<br />' : '' }}
+                                    {{ $donor->city ? $donor->city . ', ' : '' }}
+                                    {{ $donor->state }}
+                                    {{ $donor->zip }}
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Country</label>
+                                <p>{{ country($donor->country_code) }}</p>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Last Update</label>
+                                <p>{{ $donor->updated_at->format('F j, Y h:i a') }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-6">
+                <notes type="donors"
+                       id="{{ $donor->id }}"
+                       user_id="{{ auth()->user()->id }}"
+                       :per_page="3"
+                       :can-modify="{{ auth()->user()->can('modify-notes') }}">
+                </notes>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <h5>Transactions</h5>
                 <admin-transactions-list donor="{{ $donor->id }}"
                                          storage-name="AdminDonorTransactionsConfig">

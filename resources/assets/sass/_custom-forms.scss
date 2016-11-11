@@ -55,7 +55,8 @@ input[type="search"] {
 // Position radios and checkboxes better
 input[type="radio"],
 input[type="checkbox"] {
-  margin: 4px 0 0;
+  font-size: 12px;
+  margin: -1px 0 0;
   margin-top: 1px \9; // IE8-9
   line-height: normal;
 }
@@ -238,6 +239,7 @@ input[type="search"] {
 .radio-inline input[type="radio"],
 .checkbox input[type="checkbox"],
 .checkbox-inline input[type="checkbox"] {
+  font-size: 12px;
   position: absolute;
   margin-left: -20px;
   margin-top: 4px \9;

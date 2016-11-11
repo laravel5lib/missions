@@ -363,7 +363,7 @@
 <script type="text/javascript">
     import vSelect from "vue-select";
     export default{
-        name: 'user-edit',
+        name: 'admin-user-edit',
         props: ['userId'],
         components: {vSelect},
         data(){

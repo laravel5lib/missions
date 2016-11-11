@@ -82,7 +82,7 @@ import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
 import adminUploadsList from './components/uploads/admin-uploads-list.vue';
 import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
-import reconcileFund from './components/reconcile-fund.vue';
+import fundEditor from './components/financials/funds/fund-editor.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
 import adminFundsList from './components/financials/funds/admin-funds-list.vue';
 import adminTransactionsList from './components/financials/transactions/admin-transactions-list.vue';
@@ -210,7 +210,7 @@ Vue.filter('percentage', {
 });
 
 Vue.filter('moment', function (val, format) {
-    return moment(val).format(format||'LL');
+    return moment.utc(val).local().format(format||'LL');
 });
 
 var VueCropOptions = {
@@ -358,7 +358,7 @@ new Vue({
         adminUserDelete,
         adminUploadsList,
         adminUploadCreateUpdate,
-        reconcileFund,
+        fundEditor,
         adminDonorsList,
         adminFundsList,
         adminTransactionsList,

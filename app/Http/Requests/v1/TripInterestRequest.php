@@ -29,7 +29,8 @@ class TripInterestRequest extends FormRequest
             'email' => 'required|email',
             'phone' => 'string',
             'communication_preferences' => 'array',
-            'communication_preferences.*' => 'in:email,phone,text'
+            'communication_preferences.*' => 'in:email,phone,text',
+            'status' => 'string'
         ];
     }
 }

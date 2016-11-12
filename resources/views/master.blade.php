@@ -11,7 +11,8 @@
       @endif
     </title>
 
-    <link href="/css/app.css" rel="stylesheet">
+     <link href="{{ elixir('css/app.css') }}" rel="stylesheet">
+    {{--<link href="/css/app.css" rel="stylesheet">--}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -21,9 +22,9 @@
     
     @yield('layout')
 
-    <script src="/js/main.js"></script>
+     <script src="{{ elixir('js/main.js') }}"></script>
+    {{--<script src="/js/main.js"></script>--}}
     <script src="/js/vendor.js"></script>
-    {{--<script type="text/javascript" src="https://js.stripe.com/v2/"></script>--}}
     @yield('scripts')
 </body>
 </html>

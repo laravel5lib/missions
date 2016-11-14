@@ -20,12 +20,17 @@ class DonationTransaction extends TransactionHandler
             $token = $request->get('token');
         }
 
-        // create customer with the token and donor details
-        $customer = $this->merchant
-                         ->createCustomer($request->get('donor'), $token);
+        $donor = $this->donor->firstOrCreate($request->get('donor'));
+
+        if( ! $donor->customer_id) {
+            $customer = $this->merchant
+                ->createCustomer($donor->toArray(), $token);
+        } else {
+            $customer = ['id' => $donor->customer_id];
+        }
 
         // merge the customer id with donor details
-        $request['donor'] = $request->get('donor') + ['customer_id' => $customer['id']];
+        $request['donor'] = $donor->toArray() + ['customer_id' => $customer['id']];
 
         // create the charge with customer id, token, and donation details
         $charge = $this->merchant->createCharge(
@@ -56,7 +61,8 @@ class DonationTransaction extends TransactionHandler
         }
 
         // Create the donation for the donor.
-        $request->merge(['type' => 'donation']);
+        $fund = $this->fund->findOrFail($request->get('fund_id'));
+        $request->merge(['type' => 'donation', 'description' => 'Donation to ' . $fund->name]);
         $donation = $donor->donations()->create($request->all());
 
         event(new TransactionWasCreated($donation));

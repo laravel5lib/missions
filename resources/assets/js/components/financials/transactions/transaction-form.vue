@@ -54,7 +54,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default">
+                <div class="panel panel-default" v-if="! newDonorMode">
                     <div class="panel-heading">
                         <h5>Donor</h5>
                     </div>
@@ -88,6 +88,10 @@
                         </div>
                     </div>
                 </div>
+                <div v-else>
+                    <donor-form></donor-form>
+                </div>
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5>Payment Method</h5>
@@ -103,9 +107,23 @@
                         <div class="row" v-if="transaction.payment.type == 'card'">
                             <div class="col-xs-12">
                                 <label>Card Holder's Name</label>
-                                <input class="form-control" type="text" />
+                                <input class="form-control" type="text" v-model="card.cardholder" />
+                            </div>
+                            <div class="col-xs-8">
                                 <label>Card Number</label>
-                                <input class="form-control" type="text" />
+                                <input class="form-control" type="text" v-model="card.number" />
+                            </div>
+                            <div class="col-xs-4">
+                                <label>CVC Code</label>
+                                <input class="form-control" type="text" v-model="card.cvc" maxlength="4" />
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Exp. Month</label>
+                                <select class="form-control" v-model="card.exp_month"></select>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Exp. Year</label>
+                                <select class="form-control" v-model="card.exp_year"></select>
                             </div>
                         </div>
 
@@ -115,11 +133,6 @@
                                 <input class="form-control" type="text" />
                             </div>
                         </div>
-
-                        <label>Billing Email</label>
-                        <input class="form-control" type="text" />
-                        <label>Billing Zip</label>
-                        <input class="form-control" type="text" />
 
                     </div>
                 </div>
@@ -211,9 +224,13 @@
 </template>
 <script>
     import vSelect from "vue-select";
+    import donorForm from '../donors/donor-form.vue';
     export default{
         name: 'transaction-form',
-        components: {vSelect},
+        components: {
+            vSelect,
+            'donor-form': donorForm
+        },
         data() {
             return {
                 transaction: {
@@ -231,9 +248,11 @@
                 selectedTransaction: null,
                 donors: null,
                 selectedDonor: null,
+                card: null,
                 message: '',
                 showSuccess: false,
-                showError: false
+                showError: false,
+                newDonorMode: false
             }
         },
         methods: {
@@ -268,9 +287,18 @@
                 this.selectedTransaction = null;
                 this.donors = null;
                 this.selectedDonor = null;
+                this.card = {
+                    cardholder: null,
+                    number: null,
+                    cvc: null,
+                    exp_month: null,
+                    exp_year: null
+                };
             },
             create() {
-                var data = {};
+                var data = {
+                    payment: {}
+                };
 
                 if (this.transaction.type == 'transfer') {
                     data.type = this.transaction.type;
@@ -291,6 +319,19 @@
                     data.amount = this.transaction.amount;
                     data.transaction_id = this.selectedTransaction ? this.selectedTransaction.id : null;
                     data.reason = this.transaction.payment.reason;
+                }
+
+                if (this.transaction.type == 'donation') {
+                    data.type = this.transaction.type;
+                    data.amount = this.transaction.amount;
+                    data.fund_id = this.selectedFund ? this.selectedFund.id : null;
+                    if (this.selectedDonor && this.selectedDonor.id) {
+                        data.donor_id = this.selectedDonor.id;
+                    } else {
+                        data.donor = this.selectedDonor;
+                    }
+                    data.payment.type = this.transaction.payment.type;
+                    data.card = this.card;
                 }
 
                 this.$http.post('transactions', data).then(function (response) {

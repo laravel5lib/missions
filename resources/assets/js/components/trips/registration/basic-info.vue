@@ -127,13 +127,13 @@
 						<div class="row">
 							<div class="col-sm-6">
 								<label>Gender</label>
-								<div class="radio" :class="{ 'has-error': checkForError('gender') }">
+								<div :class="{ 'has-error': checkForError('gender') }">
 									<label>
 										<input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }"
 											   value="male"> Male
 									</label>
 								</div>
-								<div class="radio" :class="{ 'has-error': checkForError('gender') }">
+								<div :class="{ 'has-error': checkForError('gender') }">
 									<label>
 										<input type="radio" v-model="gender" v-validate:gender value="female"> Female
 									</label>

@@ -58,7 +58,7 @@ class ReservationTableSeeder extends Seeder
 
         $transaction = factory(App\Models\v1\Transaction::class, 'donation')->create([
             'amount' => 100,
-            'description' => 'Reservation Payment',
+            'description' => 'Deposit toward ' . $fund->name,
             'fund_id' => $fund->id,
             'donor_id' => $donor->id
         ]);

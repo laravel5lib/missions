@@ -12,7 +12,8 @@
                     <select id="type" class="form-control input-sm" v-model="filters.status" >
                         <option value="">Any Status</option>
                         <option value="undecided">Undecided</option>
-                        <option value="decided">Decided</option>
+                        <option value="converted">Converted</option>
+                        <option value="declined">Declined</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -64,6 +65,11 @@
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
                                     <input type="checkbox" v-model="activeFields" value="email" :disabled="maxCheck('email')"> Email
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="status" :disabled="maxCheck('status')"> Status
                                 </label>
                             </li>
                             <li>

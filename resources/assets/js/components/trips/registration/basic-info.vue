@@ -18,23 +18,23 @@
 								<div class="form-group" :class="{ 'has-error': checkForError('firstName') }">
 									<!--<label for="infoFirstName">First</label>-->
 									<input type="text" class="form-control input-sm" v-model="firstName"
-										   v-validate:firstName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="First"
+										   v-validate:firstName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="First & Middle Names"
 										   id="infoFirstName">
 								</div>
 							</div>
-							<div class="col-sm-12">
+							<!--<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('middleName') }">
-									<!--<label for="infoMiddleName">Middle</label>-->
+									&lt;!&ndash;<label for="infoMiddleName">Middle</label>&ndash;&gt;
 									<input type="text" class="form-control input-sm" v-model="middleName"
 										   v-validate:middleName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="Middle"
 										   id="infoMiddleName">
 								</div>
-							</div>
+							</div>-->
 							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('lastName') }">
 									<!--<label for="infoLastName">Last</label>-->
 									<input type="text" class="form-control input-sm" v-model="lastName"
-										   v-validate:lastName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="Last"
+										   v-validate:lastName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="Last Name"
 										   id="infoLastName">
 								</div>
 							</div>
@@ -127,13 +127,13 @@
 						<div class="row">
 							<div class="col-sm-6">
 								<label>Gender</label>
-								<div class="radio" :class="{ 'has-error': checkForError('gender') }">
+								<div :class="{ 'has-error': checkForError('gender') }">
 									<label>
 										<input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }"
 											   value="male"> Male
 									</label>
 								</div>
-								<div class="radio" :class="{ 'has-error': checkForError('gender') }">
+								<div :class="{ 'has-error': checkForError('gender') }">
 									<label>
 										<input type="radio" v-model="gender" v-validate:gender value="female"> Female
 									</label>

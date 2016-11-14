@@ -28,34 +28,34 @@
 					   :class="{'active': currentView === 'details'}">Details</a>
 					<a @click="toView('trips')" class="list-group-item"
 					   :class="{'active': currentView === 'trips'}">Trips</a>
-					<a @click="toView('regions')" class="list-group-item"
-					   :class="{'active': currentView === 'regions'}">Regions</a>
-					<a @click="toView('transports')" class="list-group-item"
-					   :class="{'active': currentView === 'transports'}">Transports</a>
+					<!--<a @click="toView('regions')" class="list-group-item"-->
+					   <!--:class="{'active': currentView === 'regions'}">Regions</a>-->
+					<!--<a @click="toView('transports')" class="list-group-item"-->
+					   <!--:class="{'active': currentView === 'transports'}">Transports</a>-->
 				</div>
 			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5><i class="fa fa-line-chart"></i> Statistics</h5>
-				</div>
-				<div class="list-group">
-					<a @click="toView('overview')" class="list-group-item"
-					   :class="{'active': currentView === 'overview'}">Overview</a>
-				</div>
-			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5><i class="fa fa-file"></i> Interactions</h5>
-				</div>
-				<div class="list-group">
-					<a @click="toView('sites')" class="list-group-item"
-					   :class="{'active': currentView === 'sites'}">Sites</a>
-					<a @click="toView('decisions')" class="list-group-item"
-					   :class="{'active': currentView === 'decisions'}">Decisions</a>
-					<a @click="toView('exams')" class="list-group-item"
-					   :class="{'active': currentView === 'exams'}">Exams</a>
-				</div>
-			</div>
+			<!--<div class="panel panel-default">-->
+				<!--<div class="panel-heading">-->
+					<!--<h5><i class="fa fa-line-chart"></i> Statistics</h5>-->
+				<!--</div>-->
+				<!--<div class="list-group">-->
+					<!--<a @click="toView('overview')" class="list-group-item"-->
+					   <!--:class="{'active': currentView === 'overview'}">Overview</a>-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--<div class="panel panel-default">-->
+				<!--<div class="panel-heading">-->
+					<!--<h5><i class="fa fa-file"></i> Interactions</h5>-->
+				<!--</div>-->
+				<!--<div class="list-group">-->
+					<!--<a @click="toView('sites')" class="list-group-item"-->
+					   <!--:class="{'active': currentView === 'sites'}">Sites</a>-->
+					<!--<a @click="toView('decisions')" class="list-group-item"-->
+					   <!--:class="{'active': currentView === 'decisions'}">Decisions</a>-->
+					<!--<a @click="toView('exams')" class="list-group-item"-->
+					   <!--:class="{'active': currentView === 'exams'}">Exams</a>-->
+				<!--</div>-->
+			<!--</div>-->
 		</div>
 		<div class="col-sm-9">
 			<div class="row">

@@ -21,6 +21,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                        <li><a data-toggle="modal" data-target="#addReservationModal" data-backdrop="static">Create Reservation</a></li>
                         <li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
@@ -305,6 +306,19 @@
 
         <admin-trip-duplicate trip-id="{{ $trip->id }}"></admin-trip-duplicate>
         <admin-trip-delete trip-id="{{ $trip->id }}"></admin-trip-delete>
+        <div class="modal fade" id="addReservationModal" tabindex="-1" role="dialog" aria-labelledby="addReservationModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Create Reservation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <admin-reservation-create trip-id="{{ $trip->id }}"></admin-reservation-create>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
     <style>

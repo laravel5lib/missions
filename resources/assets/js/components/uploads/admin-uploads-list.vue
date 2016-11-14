@@ -69,17 +69,12 @@
             </thead>
             <tbody>
             <tr v-for="upload in uploads">
-                <td>
-					<img v-if="upload.type !== 'file'" :src="checkSource(upload.source)" width="100px"/>
-				</td>
+                <td><img v-if="upload.type !== 'file'" :src="checkSource(upload.source)" width="100px"/></td>
                 <td v-text="upload.name|capitalize"></td>
                 <td v-text="upload.type|capitalize"></td>
                 <td v-text="upload.created_at|moment 'll'"></td>
                 <td v-text="upload.updated_at|moment 'll'"></td>
-                <td class="text-center">
-                    <a href="/admin{{upload.links[0].uri}}/edit"><i class="fa fa-gear"></i></a>
-                </td>
-
+                <td class="text-center"><a href="/admin{{upload.links[0].uri}}/edit"><i class="fa fa-gear"></i></a></td>
             </tr>
             </tbody>
             <tfoot>

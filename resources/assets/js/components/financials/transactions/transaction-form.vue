@@ -54,42 +54,78 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default" v-if="! newDonorMode">
+                <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h5>Donor</h5>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <h5>Donor</h5>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button class="btn btn-xs btn-primary"
+                                        @click="newDonorMode = true"
+                                        v-show="!newDonorMode">New</button>
+                                <button class="btn btn-xs btn-primary"
+                                        @click="newDonorMode = false"
+                                        v-show="newDonorMode">Select</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" v-if="!newDonorMode">
                         <label>Donor</label>
                         <v-select class="form-control" id="selectedFund" :debounce="250" :on-search="getDonors"
                                   :value.sync="selectedDonor" :options="donors" label="name"
                                   placeholder="Select a donor"></v-select>
                         <hr class="divider inv">
-                        <div class="row" v-if="selectedDonor">
-                            <div class="col-xs-6" v-if="selectedDonor.company">
+                        <div class="row">
+                            <div class="col-xs-6" v-if="selectedDonor && selectedDonor.company">
                                 <label>Company</label>
-                                <p>{{ selectedDonor.company }}</p>
+                                <p>{{ selectedDonor && selectedDonor.company ? selectedDonor.company : 'n/a' }}</p>
                             </div>
                             <div class="col-xs-6">
                                 <label>Email</label>
-                                <p>{{ selectedDonor.email }}</p>
+                                <p>{{ selectedDonor && selectedDonor.email ? selectedDonor.email : 'n/a' }}</p>
                             </div>
                             <div class="col-xs-6">
                                 <label>Phone</label>
-                                <p>{{ selectedDonor.phone }}</p>
+                                <p>{{ selectedDonor && selectedDonor.phone ? selectedDonor.phone : 'n/a' }}</p>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Address</label>
+                                <p>{{ selectedDonor && selectedDonor.address ? selectedDonor.address : 'n/a' }}</p>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>City</label>
+                                <p>{{ selectedDonor && selectedDonor.city ? selectedDonor.city : 'n/a' }}</p>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>State/Providence</label>
+                                <p>{{ selectedDonor && selectedDonor.state ? selectedDonor.state : 'n/a' }}</p>
                             </div>
                             <div class="col-xs-6">
                                 <label>Postal/Zip Code</label>
-                                <p>{{ selectedDonor.zip }}</p>
+                                <p>{{ selectedDonor && selectedDonor.zip ? selectedDonor.zip : 'n/a' }}</p>
                             </div>
                             <div class="col-xs-6">
                                 <label>Country</label>
-                                <p>{{ selectedDonor.country.name }}</p>
+                                <p>{{ selectedDonor && selectedDonor.country ? selectedDonor.country.name : 'n/a' }}</p>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Account Type</label>
+                                <p>{{ selectedDonor && selectedDonor.account_type ? selectedDonor.account_type : 'n/a' }}</p>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Account Name</label>
+                                <p>{{ selectedDonor && selectedDonor.account_name ? selectedDonor.account_name : 'n/a' }}</p>
+                            </div>
+                            <div class="col-xs-6">
+                                <label>Stripe Customer ID</label>
+                                <p>{{ selectedDonor && selectedDonor.customer_id ? selectedDonor.customer_id : 'n/a' }}</p>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div v-else>
-                    <donor-form></donor-form>
+                    <div class="panel-body" v-else>
+                        <donor-form @donor-created="donorCreated" @cancel="newDonorMode = !newDonorMode"></donor-form>
+                    </div>
                 </div>
 
                 <div class="panel panel-default">
@@ -119,11 +155,11 @@
                             </div>
                             <div class="col-xs-6">
                                 <label>Exp. Month</label>
-                                <select class="form-control" v-model="card.exp_month"></select>
+                                <select class="form-control" v-model="card.exp_month" :options="monthList"></select>
                             </div>
                             <div class="col-xs-6">
                                 <label>Exp. Year</label>
-                                <select class="form-control" v-model="card.exp_year"></select>
+                                <select class="form-control" v-model="card.exp_year" :options="yearList"></select>
                             </div>
                         </div>
 
@@ -248,11 +284,33 @@
                 selectedTransaction: null,
                 donors: null,
                 selectedDonor: null,
-                card: null,
+                card: {
+                    cardholder: null,
+                    number: null,
+                    exp_year: null,
+                    exp_month: null
+                },
                 message: '',
                 showSuccess: false,
                 showError: false,
-                newDonorMode: false
+                newDonorMode: false,
+                monthList: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+            }
+        },
+        computed: {
+            yearList() {
+                var num, today, years, yyyy;
+                today = new Date;
+                yyyy = today.getFullYear();
+                years = (function () {
+                    var i, ref, ref1, results;
+                    results = [];
+                    for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
+                        results.push(num);
+                    }
+                    return results;
+                })();
+                return years;
             }
         },
         methods: {
@@ -269,6 +327,12 @@
             getTransactions(search) {
                 this.$http.get('transactions?type=donation&per_page=10', {search: search}).then(function (response) {
                     this.transactions = response.data.data;
+                });
+            },
+            donorCreated(donor) {
+                this.newDonorMode = false;
+                this.$http.get('donors/' + donor).then(function (response) {
+                    this.selectedDonor = response.data.data;
                 });
             },
             reset() {

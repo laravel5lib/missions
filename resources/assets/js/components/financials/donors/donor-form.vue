@@ -1,6 +1,7 @@
 <template>
     <div class="panel panel-default">
         <validator name="validation" :classes="{ invalid: 'has-error' }">
+            <spinner v-ref:donorspinner size="xl" :fixed="false" text="Saving..."></spinner>
             <div class="panel-heading">
                 <h5>Personal Details</h5>
             </div>
@@ -76,8 +77,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Account Type</label>
-                        <select class="form-control" v-model="donor.account_type" @change="donor.account_id = ''" initial="off">
-                            <option value="">Guest</option>
+                        <select class="form-control" v-model="donor.account_type" @change="donor.account_id = null" initial="off">
+                            <option :value="null">Guest</option>
                             <option value="users">Member</option>
                             <option value="groups">Group</option>
                         </select>
@@ -100,7 +101,7 @@
                 </div>
             </div>
             <div class="panel-footer text-center">
-                <button class="btn btn-default">Cancel</button>
+                <button class="btn btn-default" @click="cancel">Cancel</button>
                 <button class="btn btn-primary" v-if="!isUpdate" @click="create">Create</button>
                 <button class="btn btn-primary" v-if="isUpdate" @click="update">Save</button>
             </div>
@@ -147,18 +148,18 @@
         data() {
             return {
                 donor: {
-                    name: '',
-                    company: '',
-                    email: '',
-                    phone: '',
-                    address: '',
-                    city: '',
-                    state: '',
-                    zip: '',
-                    country_code: '',
-                    account_type: '',
-                    account_id: '',
-                    customer_id: ''
+                    name: null,
+                    company: null,
+                    email: null,
+                    phone: null,
+                    address: null,
+                    city: null,
+                    state: null,
+                    zip: null,
+                    country_code: null,
+                    account_type: null,
+                    account_id: null,
+                    customer_id: null
                 },
                 countries: [],
                 users: [],
@@ -213,16 +214,20 @@
                 });
             },
             create() {
-                    // validate manually
-                  var self = this
-                  this.$validate(true, function () {
+                this.$refs.donorspinner.show();
+                // validate manually
+                var self = this
+                this.$validate(true, function () {
                     if (self.$validation.invalid) {
                     }
-                  })
+                })
                 this.$http.post('donors', this.donor).then(function (response) {
+                    this.$refs.donorspinner.hide();
                     this.message = 'Donor created successfully.';
                     this.showSuccess = true;
+                    this.$dispatch('donor-created', response.data.data.id);
                 }).error(function (response) {
+                    this.$refs.donorspinner.hide();
                     console.log(response);
                     this.message = 'There are errors on the form.';
                     this.showError = true;
@@ -240,6 +245,14 @@
                     this.message = 'There are errors on the form.';
                     this.showError = true;
                 });
+            },
+            cancel() {
+                if (this.$parent != this.$root) {
+                    console.log('cancelled');
+				    this.$dispatch('cancel');
+			    } else {
+			        return window.location.href = '/admin/donors'
+			    }
             },
             getCountries() {
                 this.$http.get('utilities/countries').then(function (response) {

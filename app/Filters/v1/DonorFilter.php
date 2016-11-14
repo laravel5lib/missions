@@ -11,6 +11,20 @@ class DonorFilter extends Filter
     public $relations = [];
 
     /**
+     * Default sortable fields.
+     *
+     * @var array
+     */
+    public $sortable = ['name'];
+
+    /**
+     * Default searchable fields.
+     *
+     * @var array
+     */
+    public $searchable = ['name'];
+
+    /**
      * Filter by designated reservation.
      *
      * @param $id

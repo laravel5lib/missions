@@ -10132,7 +10132,9 @@ button.close {
 
 .modal-title {
   margin: 0;
-  line-height: 1.428571429; }
+  line-height: 1.428571429;
+  text-align: center;
+  font-size: 14px; }
 
 .modal-body {
   position: relative;
@@ -16239,6 +16241,13 @@ h1.home-college-header {
     background: url("../images/college/home-placeholder.jpg") center center/cover no-repeat; }
   .college-vid-bg-video {
     display: none; } }
+
+/* Fundraiser Carousel */
+.carousel-control > span.fa {
+  background-color: #454545 !important; }
+
+.carousel-control .fa-angle-left, .carousel-control .fa-angle-right, .carousel-control .icon-prev, .carousel-control .icon-next {
+  height: 32px; }
 
 /* Partner Panels */
 .partner-equals-panel {

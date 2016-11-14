@@ -7,8 +7,8 @@
             <tbody>
             @foreach(auth()->user()->upcomingPayments() as $payment)
                 <tr>
-                    <td style="padding:20px;"><h4 style="margin:0px;">${{ $payment->outstanding_balance }}</h4></td>
-                    <td class="text-right" style="padding:20px;">
+                    <td style="padding:10px 15px;"><h4 style="margin:0px;">${{ $payment->outstanding_balance }}</h4></td>
+                    <td class="text-right" style="padding:10px 15px;">
                         @if ($payment->getStatus() == 'late' or $payment->getStatus() == 'overdue')
                             <span class="text-danger">Late</span>
                         @elseif($payment->getStatus() == 'paid')

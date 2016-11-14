@@ -1,27 +1,32 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h5>Facilitators
+			<div class="row">
+			<div class="col-sm-8">
+				<h5>Facilitators</h5>
+			</div>
+			<div class="col-sm-4">
 				<button class="btn btn-default btn-xs pull-right" data-toggle="modal" data-target="#AddFacilitatorModal">
-						Add New <i class="fa fa-plus"></i> 
+					<i class="fa fa-plus icon-left"></i> Add
 				</button>
-			</h5>
-		</div>
-		<div>
+			</div>
+			</div>
+		</div><!-- end panel-heading -->
+		<div class="panel-body">
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">
-				<div class="thumbnail">
-					<img :src="facilitator.avatar" alt="{{ facilitator.name }}">
-					<div class="caption">
-						<h5 v-text="facilitator.name"></h5>
-						<p>
-							<a class="btn btn-xs btn-danger" @click="removeFacilitator(facilitator)">
+				<div class="panel panel-default">
+					<img class="img-responsive" :src="facilitator.avatar" alt="{{ facilitator.name }}">
+					<div class="panel-body">
+						<h5 class="text-center" v-text="facilitator.name"></h5>
+						<p class="text-center">
+							<a class="btn btn-xs btn-default-hollow" @click="removeFacilitator(facilitator)">
 								<i class="fa fa-times"></i> Remove
 							</a>
 						</p>
-					</div>
-				</div>
+					</div><!-- end panel-body -->
+				</div><!-- end panel -->
 			</div>
-		</div>
+		</div><!-- end panel-body -->
 		<div class="modal fade" id="AddFacilitatorModal">
 			<div class="modal-dialog">
 				<div class="modal-content">

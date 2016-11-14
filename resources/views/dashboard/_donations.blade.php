@@ -7,8 +7,8 @@
             <tbody>
             @foreach(auth()->user()->recentDonations() as $donation)
                 <tr>
-                    <td style="padding:20px;"><h3 class="text-success" style="margin:0px;">${{ $donation->amount }}</h3><span class="small">{{ $donation->donor->name }}</span></td>
-                    <td class="text-right text-muted" style="padding:20px;vertical-align:middle;">{{ $donation->created_at->diffForHumans() }}</td>
+                    <td style="padding:5px 15px;vertical-align:middle;"><h4 class="text-success" style="margin:0px;">${{ $donation->amount }}</h4><span class="small">{{ $donation->donor->name }}</span></td>
+                    <td class="text-right text-muted" style="vertical-align:middle;font-size:10px;">{{ $donation->created_at->diffForHumans() }}</td>
                 </tr>
             @endforeach
             </tbody>

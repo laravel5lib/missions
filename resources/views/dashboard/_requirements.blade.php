@@ -7,8 +7,8 @@
             <tbody>
             @foreach(auth()->user()->outstandingRequirements() as $requirement)
                 <tr>
-                    <td style="padding:20px;">{{ $requirement->name }}</td>
-                    <td style="padding:20px;" class="text-right text-muted">{{ $requirement->due_at->format('M j') }}</td>
+                    <td style="padding:10px 15px;">{{ $requirement->name }}</td>
+                    <td style="padding:10px 15px;font-size:10px;vertical-align:middle;" class="text-right text-muted">{{ $requirement->due_at->format('M j') }}</td>
                 </tr>
             @endforeach
             </tbody>

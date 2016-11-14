@@ -2,16 +2,19 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-xs-6">
+                <div class="col-xs-4">
                     <h5 class="panel-header">Details</h5>
                 </div>
-                <div class="col-xs-6 text-right">
-                    <button class="btn btn-xs btn-default-hollow"
+                <div class="col-xs-8 text-right">
+                    <button class="btn btn-xs btn-default-hollow" @click="reconcile" v-if="!editMode">
+                        <i class="fa fa-calculator"></i> Reconcile
+                    </button>
+                    <button class="btn btn-xs btn-default"
                             @click="editMode = !editMode"
                             v-if="!editMode">
                         Edit
                     </button>
-                    <button class="btn btn-xs btn-default-hollow"
+                    <button class="btn btn-xs btn-default"
                             @click="editMode = !editMode"
                             v-if="editMode">
                         Cancel
@@ -42,9 +45,6 @@
             <p>{{ fund.type | capitalize }}</p>
             <label>Last Updated</label>
             <p>{{ fund.updated_at | moment 'lll' }}</p>
-        </div>
-        <div class="panel-footer text-right">
-            <btn class="btn btn-sm btn-default" @click="reconcile"><i class="fa fa-calculator"></i> Reconcile</btn>
         </div>
 
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>

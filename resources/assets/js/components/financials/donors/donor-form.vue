@@ -100,7 +100,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-footer text-center">
+            <div class="panel-body text-center">
                 <button class="btn btn-default" @click="cancel">Cancel</button>
                 <button class="btn btn-primary" v-if="!isUpdate" @click="create">Create</button>
                 <button class="btn btn-primary" v-if="isUpdate" @click="update">Save</button>

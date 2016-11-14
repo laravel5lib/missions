@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use App\Events\TransactionWasCreated;
 use App\Http\Requests\v1\Transactions\CreditRequest;
 use Dingo\Api\Contract\Http\Request;
 
@@ -14,11 +15,13 @@ class CreditTransaction extends TransactionHandler
 
         $transaction = $this->transaction->create([
             'type' => 'credit',
-            'amount' => -$request->get('amount'),
+            'amount' => $request->get('amount'),
             'fund_id' => $fund->id,
             'payments' => ['reason' => $request->get('reason')],
             'description' => 'Credit to ' . $fund->name
         ]);
+
+        event(new TransactionWasCreated($transaction));
 
         return $transaction;
     }

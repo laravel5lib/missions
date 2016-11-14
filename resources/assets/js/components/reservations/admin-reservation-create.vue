@@ -181,6 +181,29 @@
                 this.$http.post('reservations', data).then(function (response) {
                     this.$root.$emit('AdminTrip:RefreshReservations');
                     this.$refs.reservationspinner.hide();
+                    $('#addReservationModal').modal('hide');
+                    $.extend(this, {
+                        stepList:[
+                            {name: 'Basic Info', view: 'step1', complete:false},
+                            {name: 'Trip Options', view: 'step2', complete:false},
+                            {name: 'Review', view: 'step3', complete:false}
+                        ],
+                        currentStep: this.stepList[0],
+                        canContinue: false,
+                        trip: {},
+                        tripCosts: {},
+                        deadlines:[],
+                        requirements:[],
+                        wizardComplete: false,
+
+                        // user generated data
+                        userData: null,
+                        selectedOptions: [],
+                        userInfo: {},
+                        paymentInfo: {},
+                        upfrontTotal: 0,
+                        fundraisingGoal: 0
+                    })
                 }, function (response) {
                     console.log(response);
                     this.$refs.reservationspinner.hide();

@@ -1,27 +1,30 @@
 <template>
     <div>
-        <p v-if="trips.length < 1" class="text-center text-muted lead">
-            This group does not have any trips yet. Please check back soon!
-        </p>
-        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips">
-            <div class="panel panel-default">
-                <img :src="trip.campaign.data.avatar" alt="{{ trip.campaign.data.name }}" class="img-responsive">
-                <div class="panel-body">
-                    <h6><span class="label label-default">{{ trip.campaign.data.name }}</span></h6>
-                    <h4>{{ trip.country_name }} {{ trip.started_at|moment 'YYYY' }}</h4>
-                    <h6>{{ trip.type|capitalize }} Trip</h6>
-                    <h6>{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</h6>
-                    <ul class="list-inline">
-                        <li data-toggle="tooltip" data-placement="top" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</li>
-                        <li data-toggle="tooltip" data-placement="top" title="Registration Open" class="pull-right"><i class="fa fa-sign-in"></i></li>
-                    </ul>
-                    <p><a class="btn btn-primary btn-lg btn-block" :href="id + trip.links[0].uri">Details</a></p>
-                </div><!-- end panel-body -->
-            </div><!-- end panel -->
-        </div><!-- end col -->
-        <div v-if="trips.length" class="col-sm-12 text-center">
-            <pagination :pagination.sync="pagination" :callback="searchTrips"></pagination>
-        </div>
+        <div class="row">
+            <p v-if="trips.length < 1" class="text-center text-muted lead">
+                This group does not have any trips yet. Please check back soon!
+            </p>
+            <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips">
+                <div class="panel panel-default">
+                    <div class="panel-heading" :class="'panel-' + trip.type">
+                        <h5 class="text-uppercase text-center">{{ trip.type|capitalize }} Trip</h5>
+                    </div><!-- end panel-heading -->
+                    <div class="panel-body text-center">
+                        <p class="badge">{{ trip.status | capitalize }}</p><br>
+                        <img :src="trip.campaign.data.avatar" alt="{{ trip.campaign.data.name }}" class="img-circle img-sm">
+                        <h4>{{ trip.campaign.data.name }}</h4>
+                        <p class="small">{{ trip.country_name }} {{ trip.started_at|moment 'YYYY' }}</p>
+                        <label>Travel Date</label>
+                        <p>{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</p>
+                        <p class="text-left" data-toggle="tooltip" data-placement="top" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</p>
+                        <p><a class="btn btn-primary btn-block" :href="id + trip.links[0].uri">Details</a></p>
+                    </div><!-- end panel-body -->
+                </div><!-- end panel -->
+            </div><!-- end col -->
+            <div v-if="trips.length" class="col-sm-12 text-center">
+                <pagination :pagination.sync="pagination" :callback="searchTrips"></pagination>
+            </div>
+        </div><!-- end row -->
     </div>
 </template>
 <script type="text/javascript">

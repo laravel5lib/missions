@@ -56,11 +56,11 @@ import userPermissions from './components/users/user-permissions.vue';
 import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
 
 // admin components
-import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
-import adminCampaignEdit from './components/campaigns/admin-campaign-edit.vue';
+import campaignCreate from './components/campaigns/admin-campaign-create.vue';
+import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
 import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
-import adminCampaignTripCreate from './components/trips/admin-trip-create.vue';
-import adminCampaignTripEdit from './components/trips/admin-trip-edit.vue';
+import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
+import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
 import adminTrips from './components/trips/admin-trips-list.vue';
 import adminTripReservationsList from './components/trips/admin-trip-reservations-list.vue';
 import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
@@ -334,11 +334,11 @@ new Vue({
         dashboardInterestsList,
 
         // admin components
-        adminCampaignCreate,
-        adminCampaignEdit,
+        campaignCreate,
+        campaignEdit,
         adminCampaignDetails,
-        adminCampaignTripCreate,
-        adminCampaignTripEdit,
+        campaignTripCreateWizard,
+        campaignTripEditWizard,
         adminTrips,
         adminTripReservationsList,
         adminTripFacilitators,

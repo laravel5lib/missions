@@ -56,13 +56,13 @@ import userPermissions from './components/users/user-permissions.vue';
 import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
 
 // admin components
-import adminCampaignCreate from './components/campaigns/admin-campaign-create.vue';
-import adminCampaignEdit from './components/campaigns/admin-campaign-edit.vue';
+import campaignCreate from './components/campaigns/admin-campaign-create.vue';
+import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
 import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
-import adminCampaignTripCreate from './components/trips/admin-trip-create.vue';
-import adminCampaignTripEdit from './components/trips/admin-trip-edit.vue';
+import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
+import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
 import adminTrips from './components/trips/admin-trips-list.vue';
-import adminTripReservations from './components/trips/admin-trip-reservations-list.vue';
+import adminTripReservationsList from './components/trips/admin-trip-reservations-list.vue';
 import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
 import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripDelete from './components/trips/admin-trip-delete.vue';
@@ -72,6 +72,7 @@ import adminGroupCreate from './components/groups/admin-group-create.vue';
 import adminGroupEdit from './components/groups/admin-group-edit.vue';
 import adminGroupManagers from './components/groups/admin-group-managers.vue';
 import adminReservationsList from './components/reservations/admin-reservations-list.vue';
+import adminReservationCreate from './components/reservations/admin-reservation-create.vue';
 import adminReservationEdit from './components/reservations/admin-reservation-edit.vue';
 import adminReservationCosts from './components/reservations/admin-reservation-costs.vue';
 import adminReservationDues from './components/reservations/admin-reservation-dues.vue';
@@ -333,13 +334,13 @@ new Vue({
         dashboardInterestsList,
 
         // admin components
-        adminCampaignCreate,
-        adminCampaignEdit,
+        campaignCreate,
+        campaignEdit,
         adminCampaignDetails,
-        adminCampaignTripCreate,
-        adminCampaignTripEdit,
+        campaignTripCreateWizard,
+        campaignTripEditWizard,
         adminTrips,
-        adminTripReservations,
+        adminTripReservationsList,
         adminTripFacilitators,
         adminTripDuplicate,
         adminTripDelete,
@@ -349,6 +350,7 @@ new Vue({
         adminGroupEdit,
         adminGroupManagers,
         adminReservationsList,
+        adminReservationCreate,
         adminReservationEdit,
         adminReservationCosts,
         adminReservationDues,

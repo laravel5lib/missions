@@ -16,7 +16,7 @@
 			<div class="media" v-for="manager in managers" track-by="id">
 				<div class="media-left media-top">
 					<a href="#">
-						<img :src="manager.avatar + '?w=50&h=50'" class="media-object" alt="{{ manager.name }}">
+						<img :src="manager.avatar + '?w=50&h=50'" class="media-object img-rounded" alt="{{ manager.name }}">
 					</a>
 				</div>
 				<div class="media-body">

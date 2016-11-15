@@ -23,13 +23,13 @@
                     <img src="{{ image($group->avatar->source) }}" alt="{{ $group->name }}" class="img-responsive">
                     <div class="panel-body">
                         <h4>{{ $group->name }}</h4>
-                        <h6 class="small">/groups/{{ $group->url }}</h6>
-                        <p>{{ $group->description }}</p>
-                        <p class="small"><i class="fa fa-map-marker"></i>
+                        <h6 class="small text-muted">/groups/{{ $group->url }}</h6>
+                        <p class="small">{{ $group->description }}</p>
+                        <p class="small"><i class="fa fa-map-marker text-muted" style="margin-right:3px;"></i>
                             {{ $group->city ? $group->city.', ' : null }}
                             {{ $group->state ? $group->state.', ' : null }}
                             {{ country($group->country_code) }}</p>
-                        <ul class="list-unstyled list-inline">
+                        <ul class="list-unstyled list-inline text-muted">
                             {{--@each('site.partials._social_link', $group->social, 'link')--}}
                         </ul>
                     </div><!-- end panel-body -->

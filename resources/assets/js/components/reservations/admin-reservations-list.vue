@@ -310,7 +310,7 @@
                 <td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
                 <td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
                 <td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
-                <td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-pencil"></i></a></td>
+                <td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
             </tr>
             </tbody>
             <tfoot>

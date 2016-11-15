@@ -895,6 +895,14 @@ h1.home-college-header {
     }
 }
 
+/* Fundraiser Carousel */
+.carousel-control > span.fa {
+  background-color: #454545 !important;
+}
+.carousel-control .fa-angle-left, .carousel-control .fa-angle-right, .carousel-control .icon-prev, .carousel-control .icon-next {
+  height: 32px;
+}
+
 /* Partner Panels */
 .partner-equals-panel {
   height: 250px;

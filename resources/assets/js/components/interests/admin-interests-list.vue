@@ -9,6 +9,14 @@
                               placeholder="Filter Group"></v-select>
                 </div>
                 <div class="form-group">
+                    <select id="type" class="form-control input-sm" v-model="filters.status" >
+                        <option value="">Any Status</option>
+                        <option value="undecided">Undecided</option>
+                        <option value="converted">Converted</option>
+                        <option value="declined">Declined</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <select id="type" class="form-control input-sm" v-model="filters.trip_type" >
                         <option value="">Any Trip Type</option>
                         <option value="full">Full</option>
@@ -43,7 +51,58 @@
                         <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
-                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters <i class="fa fa-times"></i></button>
+                    <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Fields
+                            <span class="caret"></span>
+                        </button>
+                        <ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="name" :disabled="maxCheck('name')"> Name
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="email" :disabled="maxCheck('email')"> Email
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="status" :disabled="maxCheck('status')"> Status
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="phone" :disabled="maxCheck('phone')"> Phone
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="campaign" :disabled="maxCheck('campaign')"> Campaign
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="type" :disabled="maxCheck('type')"> Trip Type
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="group" :disabled="maxCheck('group')"> Group
+                                </label>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <div style="margin-bottom: 0px;" class="input-group input-group-sm">
+                                    <label>Max Visible Fields</label>
+                                    <select class="form-control" v-model="maxActiveFields">
+                                        <option v-for="option in maxActiveFieldsOptions" :value="option">{{option}}</option>
+                                    </select>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                     <button class="btn btn-default btn-sm " type="button" @click="showFilters=!showFilters">
                         Filters
                         <span class="caret"></span>
@@ -51,36 +110,61 @@
                 </form>
             </div>
         </div>
-        <hr>
+        <hr class="divider sm">
+        <div>
+            Active Filters:
+            <button type="button"class="btn btn-xs btn-default" v-show="filters.group" @click="filters.group = ''" >
+                Group
+                <span class="badge">x</span>
+            </button>
+            <button type="button"class="btn btn-xs btn-default" v-show="filters.status.length" @click="filters.status = ''" >
+                Status
+                <span class="badge">x</span>
+            </button>
+            <button type="button"class="btn btn-xs btn-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
+                Campaign
+                <span class="badge">x</span>
+            </button>
+            <button type="button"class="btn btn-xs btn-default" v-show="filters.trip_type.length" @click="filters.campaign = ''" >
+                Trip Type
+                <span class="badge">x</span>
+            </button>
+        </div>
+        <hr class="divider sm">
         <table class="table table-striped">
             <thead>
             <tr>
-                <th :class="{'text-primary': orderByField === 'name'}">
+                <th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">
                     Name
                     <i @click="setOrderByField('name')" v-if="orderByField !== 'name'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th :class="{'text-primary': orderByField === 'email'}">
+                <th v-if="isActive('email')" :class="{'text-primary': orderByField === 'email'}">
                     Email
                     <i @click="setOrderByField('type')" v-if="orderByField !== 'email'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th :class="{'text-primary': orderByField === 'phone'}">
+                <th v-if="isActive('phone')" :class="{'text-primary': orderByField === 'phone'}">
                     Phone
                     <i @click="setOrderByField('phone')" v-if="orderByField !== 'phone'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'phone'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th :class="{'text-primary': orderByField === 'trip.data.campaign.data.name'}">
+                <th v-if="isActive('status')" :class="{'text-primary': orderByField === 'status'}">
+                    Status
+                    <i @click="setOrderByField('status')" v-if="orderByField !== 'status'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'status'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('campaign')" :class="{'text-primary': orderByField === 'trip.data.campaign.data.name'}">
                     Campaign
                     <i @click="setOrderByField('trip.data.campaign.data.name')" v-if="orderByField !== 'trip.data.campaign.data.name'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th :class="{'text-primary': orderByField === 'trip.data.type'}">
+                <th v-if="isActive('type')" :class="{'text-primary': orderByField === 'trip.data.type'}">
                     Trip Type
                     <i @click="setOrderByField('trip.data.type')" v-if="orderByField !== 'trip.data.type'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th :class="{'text-primary': orderByField === 'trip.data.group.data.name'}">
+                <th v-if="isActive('group')" :class="{'text-primary': orderByField === 'trip.data.group.data.name'}">
                     Group
                     <i @click="setOrderByField('trip.data.group.data.name')" v-if="orderByField !== 'status'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.group.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
@@ -90,12 +174,13 @@
             </thead>
             <tbody>
             <tr v-for="interest in interests|filterBy search|orderBy orderByField direction">
-                <td>{{interest.name|capitalize}}</td>
-                <td>{{interest.email}}</td>
-                <td>{{interest.phone}}</td>
-                <td>{{interest.trip.data.campaign.data.name}}</td>
-                <td>{{interest.trip.data.type}}</td>
-                <td>{{interest.trip.data.group.data.name}}</td>
+                <td v-if="isActive('name')">{{interest.name|capitalize}}</td>
+                <td v-if="isActive('email')">{{interest.email}}</td>
+                <td v-if="isActive('phone')">{{interest.phone}}</td>
+                <td v-if="isActive('status')">{{interest.status}}</td>
+                <td v-if="isActive('campaign')">{{interest.trip.data.campaign.data.name}}</td>
+                <td v-if="isActive('type')">{{interest.trip.data.type}}</td>
+                <td v-if="isActive('group')">{{interest.trip.data.group.data.name}}</td>
                 <td>
                     <a href="/admin/interests/{{ interest.id }}"><i class="fa fa-cog"></i></a>
                 </td>
@@ -113,7 +198,7 @@
         </table>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from "vue-select";
     export default{
         name: 'admin-interests-list',
@@ -123,12 +208,14 @@
                 interests: [],
                 orderByField: 'name',
                 direction: 1,
-                page: 1,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: { current_page: 1 },
+                activeFields: ['name', 'email', 'phone', 'status', 'campaign', 'group', 'type'],
+                maxActiveFields: 7,
+                maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
                 search: '',
-                groupObj: [],
+                groupObj: null,
                 groupsOptions: [],
                 campaignObj: null,
                 campaignOptions: [],
@@ -140,6 +227,7 @@
                     campaign: '',
                     trip: '',
                     trip_type: '',
+                    status: ''
                 },
                 showFilters: false
             }
@@ -178,6 +266,12 @@
         },
 
         methods:{
+            isActive(field){
+                return _.contains(this.activeFields, field);
+            },
+            maxCheck(field){
+                return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields
+            },
             setOrderByField(field){
                 return this.orderByField = field, this.direction = 1;
             },
@@ -228,6 +322,28 @@
             this.getCampaigns();
             this.getTrips();
             this.searchInterests();
+
+            //Manually handle dropdown functionality to keep dropdown open until finished
+            $('.form-toggle-menu .dropdown-menu').on('click', function(event){
+                var events = $._data(document, 'events') || {};
+                events = events.click || [];
+                for(var i = 0; i < events.length; i++) {
+                    if(events[i].selector) {
+
+                        //Check if the clicked element matches the event selector
+                        if($(event.target).is(events[i].selector)) {
+                            events[i].handler.call(event.target, event);
+                        }
+
+                        // Check if any of the clicked element parents matches the
+                        // delegated event selector (Emulating propagation)
+                        $(event.target).parents(events[i].selector).each(function(){
+                            events[i].handler.call(this, event);
+                        });
+                    }
+                }
+                event.stopPropagation(); //Always stop propagation
+            });
         }
     }
 </script>

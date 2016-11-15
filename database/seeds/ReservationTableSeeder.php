@@ -1,8 +1,6 @@
 <?php
 
-use App\Events\ReservationWasCreated;
 use Illuminate\Database\Seeder;
-use Illuminate\Http\Request;
 
 class ReservationTableSeeder extends Seeder
 {
@@ -13,7 +11,8 @@ class ReservationTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\v1\Reservation::class, config('seeders.reservations'))->create()->each(function($r) {
+        factory(App\Models\v1\Reservation::class, config('seeders.reservations'))->create()->each(function($r)
+        {
 
             $r->companions()->save(factory(App\Models\v1\Companion::class)->make());
 
@@ -26,22 +25,9 @@ class ReservationTableSeeder extends Seeder
 
             $this->addDependencies($r);
         });
-
-        // Give the admin user at least one reservation.
-        $user = App\Models\v1\User::where('name', 'Admin')->firstOrFail();
-
-        factory(App\Models\v1\Reservation::class)->create(['user_id' => $user->id])->each(function($ar)
-        {
-
-            $ar->companions()->save(factory(App\Models\v1\Companion::class)->make());
-
-            $ar->notes()->save(factory(App\Models\v1\Note::class)->make());
-
-            $this->addDependencies($ar);
-        });
     }
 
-    protected function addDependencies($res)
+    private function addDependencies($res)
     {
         $active = $res->trip->activeCosts()->get();
 
@@ -72,7 +58,7 @@ class ReservationTableSeeder extends Seeder
 
         $transaction = factory(App\Models\v1\Transaction::class, 'donation')->create([
             'amount' => 100,
-            'description' => 'Reservation Payment',
+            'description' => 'Deposit toward ' . $fund->name,
             'fund_id' => $fund->id,
             'donor_id' => $donor->id
         ]);
@@ -102,4 +88,5 @@ class ReservationTableSeeder extends Seeder
             'ended_at' => $res->trip->started_at
         ]);
     }
+
 }

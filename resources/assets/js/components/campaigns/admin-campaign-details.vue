@@ -7,9 +7,9 @@
             </div>
             <div class="col-sm-4">
                 <div class="pull-right">
-                	<hr class="divider inv">
-					<a href="/admin/campaigns" class="btn btn-default btn-sm"><i class="fa fa-chevron-left icon-left"></i> Back</a>
-					<a class="btn btn-primary btn-sm" href="/admin/campaigns/{{campaignId}}/edit">Edit <i class="fa fa-pencil-square-o"></i></a>
+                	<hr class="divider inv sm">
+					<a href="/admin/campaigns" class="btn btn-default"><i class="fa fa-chevron-left icon-left"></i> Back</a>
+					<a class="btn btn-primary" href="/admin/campaigns/{{campaignId}}/edit"><i class="fa fa-pencil-square-o icon-left"></i> Edit</a>
 				</div>
             </div>
         </div>
@@ -20,41 +20,14 @@
 	<div class="row">
 		<div class="col-sm-3">
 			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5><i class="fa fa-cog"></i> Manage</h5>
-				</div>
-				<div class="list-group">
-					<a @click="toView('details')" class="list-group-item"
-					   :class="{'active': currentView === 'details'}">Details</a>
-					<a @click="toView('trips')" class="list-group-item"
-					   :class="{'active': currentView === 'trips'}">Trips</a>
-					<a @click="toView('regions')" class="list-group-item"
-					   :class="{'active': currentView === 'regions'}">Regions</a>
-					<a @click="toView('transports')" class="list-group-item"
-					   :class="{'active': currentView === 'transports'}">Transports</a>
-				</div>
-			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5><i class="fa fa-line-chart"></i> Statistics</h5>
-				</div>
-				<div class="list-group">
-					<a @click="toView('overview')" class="list-group-item"
-					   :class="{'active': currentView === 'overview'}">Overview</a>
-				</div>
-			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5><i class="fa fa-file"></i> Interactions</h5>
-				</div>
-				<div class="list-group">
-					<a @click="toView('sites')" class="list-group-item"
-					   :class="{'active': currentView === 'sites'}">Sites</a>
-					<a @click="toView('decisions')" class="list-group-item"
-					   :class="{'active': currentView === 'decisions'}">Decisions</a>
-					<a @click="toView('exams')" class="list-group-item"
-					   :class="{'active': currentView === 'exams'}">Exams</a>
-				</div>
+				<ul class="nav nav-pills nav-stacked">
+					<li :class="{'active': currentView === 'details'}">
+						<a @click="toView('details')">Details</a>
+					</li>
+					<li :class="{'active': currentView === 'trips'}">
+						<a @click="toView('trips')">Trips</a>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<div class="col-sm-9">

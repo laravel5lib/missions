@@ -1,27 +1,49 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h5>Facilitators
-				<button class="btn btn-default btn-xs pull-right" data-toggle="modal" data-target="#AddFacilitatorModal">
-						Add New <i class="fa fa-plus"></i> 
-				</button>
-			</h5>
-		</div>
-		<div>
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">
-				<div class="thumbnail">
-					<img :src="facilitator.avatar" alt="{{ facilitator.name }}">
-					<div class="caption">
-						<h5 v-text="facilitator.name"></h5>
-						<p>
-							<a class="btn btn-xs btn-danger" @click="removeFacilitator(facilitator)">
-								<i class="fa fa-times"></i> Remove
-							</a>
-						</p>
-					</div>
-				</div>
+			<div class="row">
+			<div class="col-xs-6">
+				<h5>Facilitators</h5>
 			</div>
-		</div>
+			<div class="col-xs-6 text-right">
+				<button class="btn btn-default btn-xs" data-toggle="modal" data-target="#AddFacilitatorModal">
+					<i class="fa fa-plus icon-left"></i> Add
+				</button>
+			</div>
+			</div>
+		</div><!-- end panel-heading -->
+		<div class="panel-body">
+			<div class="col-sm-6 col-xs-12" v-for="facilitator in facilitators" track-by="id">
+				<div class="media-left media-top">
+					<a href="#">
+						<img :src="facilitator.avatar + '?w=50&h=50'" class="media-object" alt="{{ facilitator.name }}">
+					</a>
+				</div>
+				<div class="media-body">
+					<h5 v-text="facilitator.name" class="media-heading"></h5>
+					<p>
+						<a class="btn btn-xs btn-default-hollow" @click="removeFacilitator(facilitator)">
+							<i class="fa fa-times"></i> Remove
+						</a>
+					</p>
+				</div>
+				<hr class="divider inv" />
+			</div>
+
+			<!--<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">-->
+				<!--<div class="panel panel-default">-->
+					<!--<img class="img-responsive" :src="facilitator.avatar" alt="{{ facilitator.name }}">-->
+					<!--<div class="panel-body">-->
+						<!--<h5 class="text-center" v-text="facilitator.name"></h5>-->
+						<!--<p class="text-center">-->
+							<!--<a class="btn btn-xs btn-default-hollow" @click="removeFacilitator(facilitator)">-->
+								<!--<i class="fa fa-times"></i> Remove-->
+							<!--</a>-->
+						<!--</p>-->
+					<!--</div>&lt;!&ndash; end panel-body &ndash;&gt;-->
+				<!--</div>&lt;!&ndash; end panel &ndash;&gt;-->
+			<!--</div>-->
+		</div><!-- end panel-body -->
 		<div class="modal fade" id="AddFacilitatorModal">
 			<div class="modal-dialog">
 				<div class="modal-content">

@@ -1,7 +1,7 @@
 <div id="myNavmenu" class="navmenu navmenu-inverse navmenu-fixed-left offcanvas-sm">
   <ul class="nav navmenu-nav">
-    <li @if(request()->segment(2) == '')class="active"@endif>
-      <a href="/admin"><i class="fa fa-tachometer"></i></a>
+    <li @if(request()->segment(2) == '')class="active"@endif> 
+        <a href="/admin"><i class="fa fa-tachometer"></i></a>
     </li>
     <li @if(request()->segment(2) == 'campaigns')class="active"@endif>
       <a href="/admin/campaigns"><i class="fa fa-globe"></i></a>

@@ -12,7 +12,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3>My Visas <small>Create</small></h3>
+                    <h3>My Visas <small>&middot; Create</small></h3>
                 </div>
             </div>
         </div>

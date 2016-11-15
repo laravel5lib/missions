@@ -11,7 +11,7 @@
                     </div><!-- end panel-heading -->
                     <div class="panel-body text-center">
                         <p class="badge">{{ trip.status | capitalize }}</p><br>
-                        <img :src="trip.campaign.data.avatar" alt="{{ trip.campaign.data.name }}" class="img-circle img-sm">
+                        <img :src="trip.campaign.data.avatar" alt="{{ trip.campaign.data.name }}" class="img-circle img-lg">
                         <h4>{{ trip.campaign.data.name }}</h4>
                         <p class="small">{{ trip.country_name }} {{ trip.started_at|moment 'YYYY' }}</p>
                         <label>Travel Date</label>

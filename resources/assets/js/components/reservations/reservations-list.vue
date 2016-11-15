@@ -24,14 +24,13 @@
                     <img :src="reservation.avatar" class="img-circle img-md">
                     <hr class="divider inv sm">
                     <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>
-                    <h6 class="text-capitalize small">{{ reservation.trip.data.group.data.name }}</h6>
+                    <p class="text-capitalize small">{{ reservation.trip.data.group.data.name }}</p>
                     <label style="margin-bottom:2px;">Campaign</label>
-                    <h6 class="text-capitalize small" style="margin-top:2px;">{{ reservation.trip.data.campaign.data.name }}</h6>
+                    <p class="text-capitalize small" style="margin-top:2px;">{{ reservation.trip.data.campaign.data.name }}</p>
                     <label style="margin-bottom:2px;font-size:10px;">Country</label>
-                    <h6 class="text-capitalize small" style="margin-top:2px;">{{ reservation.country_name }}</h6>
+                    <p class="text-capitalize small" style="margin-top:2px;">{{ reservation.country_name }}</p>
                     <hr class="divider inv sm">
                     <a class="btn btn-sm btn-primary" href="/dashboard/reservations/{{ reservation.id }}">View Reservation</a>
-                    <hr class="divider inv sm">
                 </div>
             </div>
         </div>

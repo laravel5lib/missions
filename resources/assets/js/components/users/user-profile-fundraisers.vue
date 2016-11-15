@@ -1,6 +1,6 @@
 <template>
     <div>
-            <p class="text-muted text-center" v-if="fundrasiers.length < 1">No fundraisers found.</p>
+            <p class="text-muted text-center" v-if="fundraisers.length < 1">No fundraisers found.</p>
             <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -25,7 +25,13 @@
                                 <span class="sr-only">{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100) }}% Complete (success)</span>
                             </div>
                         </div>
-                        <p class="small text-center text-info" v-if="!fundraiser.public">Private <i data-toggle="tooltip" title="Only you can see this" class="fa fa-question-circle-o text-muted"></i></p>
+                        <p class="small text-center text-info" v-if="!fundraiser.public">Private
+                            <tooltip effect="scale"
+                                     placement="top"
+                                     content="Only you can see this">
+                                <i class="fa fa-question-circle-o text-muted"></i>
+                            </tooltip>
+                        </p>
                         <p><a class="btn btn-primary btn-block" :href="pathName + '/' + fundraiser.url">Details</a></p>
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->

@@ -69,6 +69,7 @@ $api->version('v1', [
     $api->resource('funds', 'FundsController');
     $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
     $api->resource('transactions', 'TransactionsController');
+    $api->post('transactions/export', 'TransactionsController@export');
     $api->resource('causes', 'CausesController');
     $api->resource('causes/{cause}/initiatives', 'ProjectInitiativesController');
     $api->resource('initiatives/{initiative}/packages', 'ProjectPackagesController');

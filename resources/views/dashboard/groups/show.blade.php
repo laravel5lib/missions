@@ -21,7 +21,7 @@
 <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-8">
                 <div class="panel panel-default">
                 	  <div class="panel-heading">
                 			<h5>{{ $group->name }} <small>&middot; Details</small></h5>
@@ -77,7 +77,13 @@
                             </div>
                 	  </div>
                 </div>
+            </div>
+            <div class="col-sm-4">
                 <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
                 <dashboard-group-trips id="{{ $group->id }}"></dashboard-group-trips>
             </div>
         </div>

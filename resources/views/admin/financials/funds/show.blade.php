@@ -19,8 +19,6 @@
         <div class="row">
             <div class="col-md-4">
                 <fund-editor id="{{ $fund->id }}"></fund-editor>
-            </div>
-            <div class="col-sm-8">
                 <notes type="funds"
                        id="{{ $fund->id }}"
                        user_id="{{ auth()->user()->id }}"
@@ -28,13 +26,18 @@
                        :can-modify="{{ auth()->user()->can('modify-notes') }}">
                 </notes>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h5>Transactions</h5>
+            <div class="col-md-8">
+                <transaction-form fund-id="{{ $fund->id }}"></transaction-form>
+                <hr class="divider">
+                <h4 class="text-center text-muted">Transactions</h4>
+                <hr class="divider">
                 <admin-transactions-list fund="{{ $fund->id }}"
                                          storage-name="AdminFundTransactionsConfig">
                 </admin-transactions-list>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
             </div>
         </div>
     </div>

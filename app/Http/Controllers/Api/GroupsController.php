@@ -26,8 +26,6 @@ class GroupsController extends Controller
      */
     public function __construct(Group $group)
     {
-         $this->middleware('api.auth', ['only' => ['store','update','destroy']]);
-        // $this->middleware('jwt.refresh', ['except' => ['index','show']]);
         $this->group = $group;
     }
 

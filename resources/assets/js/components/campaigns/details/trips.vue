@@ -1,5 +1,7 @@
 <template>
     <div>
+        <h4 class="text-center text-muted">Trips</h4>
+        <hr class="divider">
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline text-right" novalidate>

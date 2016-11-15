@@ -43,7 +43,7 @@
                     </div><!-- end panel-body -->
                 </div><!-- end panel-default -->
 
-                @unless(! $user->getGroups())
+                @if(count($user->getGroups()))
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5>Groups Traveled With</h5>
@@ -52,7 +52,7 @@
                         @each('site.partials._group', $user->getGroups(), 'group')
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
-                @endunless
+                @endif
 
                     <user-profile-countries id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-countries>
 

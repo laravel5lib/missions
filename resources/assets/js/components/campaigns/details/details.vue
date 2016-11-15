@@ -41,7 +41,12 @@
                     <div class="col-sm-12 text-center">
                         <div class="well">
                             <label>Page Url</label>
-                            <h5><span class="text-muted">https://missions.me/</span>{{campaign.page_url}}</h5>
+                            <h5>
+                                <a :href="'/campaigns/' + campaign.page_url">
+                                    <span class="text-muted">https://missions.me/</span>
+                                    {{campaign.page_url}}
+                                </a>
+                            </h5>
                         </div>
                     </div>
                 </div>

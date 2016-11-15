@@ -59,7 +59,7 @@
                                 <span class="sr-only">{{ fundraiser.raised_percent|number }}% Complete (success)</span>
                             </div>
                         </div>
-                        <p><a class="btn btn-primary btn-block" :href="pathName + '/' + fundraiser.url">Details</a></p>
+                        <p><a class="btn btn-primary btn-block" :href="calcPath(fundraiser)">Details</a></p>
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
             </div><!-- end col -->
@@ -90,7 +90,7 @@
                 page: 1,
                 //per_page: 6,
                 pagination: { current_page: 1 },
-                pathName: window.location.pathname
+                // pathName: window.location.pathname
             }
         },
         computed: {
@@ -104,9 +104,20 @@
             },
         },
         methods:{
+            calcPath(fundraiser){
+                switch (fundraiser.sponsor_type) {
+                    case 'users':
+                        return'@' + fundraiser.sponsor.data.url + '/' + fundraiser.url
+                        break
+                    case 'groups':
+                        return 'groups' + fundraiser.sponsor.data.url + '/' + fundraiser.url
+                        break;
+                }
+            },
             searchFundraisers(){
-                this.$http.get('fundraisers?active=true', {
-                    // include: '',
+                this.$http.get('fundraisers', {
+                    active: true,
+                    include: 'sponsor',
                     search: this.search,
                     page: this.pagination.current_page,
                     per_page: this.per_page,

@@ -18,7 +18,7 @@
                         <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade.name }}
                     </span>
                 </p>
-				<p class="text-muted text-center small" v-if="accolades.items.length < 1"><em>Add countries you've visited or sign up for a trip to get started!</em></p>
+				<p class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1"><em>Add countries you've visited or sign up for a trip to get started!</em></p>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 
@@ -81,7 +81,7 @@
                 availableCountries: [],
                 selectedCountries: null,
                 selectedCodes: null,
-                selectedCountryRemove: null,
+                selectedCountryRemove: { name: null},
                 manageModal: false,
                 deleteModal: false,
                 showSuccess: false,

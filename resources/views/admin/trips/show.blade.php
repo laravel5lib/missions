@@ -36,7 +36,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
+                    <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Overview</a></li>
                     <li role="presentation"><a href="#reservations" aria-controls="reservations" role="tab" data-toggle="tab">Reservations</a></li>
                 </ul>
             </div>
@@ -47,15 +47,15 @@
                 <div role="tabpanel" class="tab-pane active" id="details">
                     <div class="col-xs-12 col-sm-4 col-md-3">
                         <div class="panel panel-default">
-                            <div class="list-group">
-                                <a href="#details" class="list-group-item">Details</a>
-                                <a href="#registration" class="list-group-item">Registration</a>
-                                <a href="#pricing" class="list-group-item">Pricing</a>
-                                <a href="#requirements" class="list-group-item">Requirements</a>
-                                <a href="#deadlines" class="list-group-item">Deadlines</a>
-                                <a href="#todos" class="list-group-item">Todos</a>
-                                <a href="#notes" class="list-group-item">Notes</a>
-                            </div>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="#details">Details</a></li>
+                                <li><a href="#registration">Registration</a></li>
+                                <li><a href="#pricing">Pricing</a></li>
+                                <li><a href="#requirements">Requirements</a></li>
+                                <li><a href="#deadlines">Deadlines</a></li>
+                                <li><a href="#todos">Todos</a></li>
+                                <li><a href="#notes">Notes</a></li>
+                            </ul>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-8 col-md-9">
@@ -141,30 +141,36 @@
                                 </dl>
                             </div>
                         </div>
-                        <div id="registration"></div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5>Registration</h5>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-xs-6 col-sm-6 col-md-4 text-center">
-                                        <label>Spots Available</label>
-                                        <h4>{{ $trip->spots }}</h4>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h5>Registration</h5>
                                     </div>
-                                    <div class="col-xs-6 col-sm-6 col-md-4 text-center">
-                                        <label>Registration Closes</label>
-                                        <h4>{{ date('F d, Y', strtotime($trip->ended_at)) }}</h4>
-                                    </div>
-                                    <div class="col-xs-6 col-sm-6 col-md-4 text-center">
-                                        <label>Starting Cost</label>
-                                        <h4>${{ number_format($trip->starting_cost, 2, '.', ',') }}</h4>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-6 col-md-4 text-center">
+                                                <label>Spots Available</label>
+                                                <h4>{{ $trip->spots }}</h4>
+                                            </div>
+                                            <div class="col-xs-6 col-sm-6 col-md-4 text-center">
+                                                <label>Registration Closes</label>
+                                                <h4>{{ date('F d, Y', strtotime($trip->ended_at)) }}</h4>
+                                            </div>
+                                            <div class="col-xs-6 col-sm-6 col-md-4 text-center">
+                                                <label>Starting Cost</label>
+                                                <h4>${{ number_format($trip->starting_cost, 2, '.', ',') }}</h4>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-xs-12">
+                                <admin-trip-facilitators trip-id="{{ $trip->id }}"></admin-trip-facilitators>
+                            </div>
                         </div>
 
-                        <admin-trip-facilitators trip-id="{{ $trip->id }}"></admin-trip-facilitators>
                         <div id="pricing"></div>
                         <div class="panel panel-default">
                             <div class="panel-heading">

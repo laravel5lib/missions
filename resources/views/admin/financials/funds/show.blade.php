@@ -7,9 +7,12 @@
                 <div class="col-sm-8">
                     <h3>{{ $fund->name }} <small>&middot; Fund</small></h3>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <a class="btn btn-default pull-right" href="{{ url('admin/funds') }}"><i class="fa fa-chevron-left"></i> Funds</a>
+                    <div class="btn-group">
+                        <a href="{{ url('admin/funds') }}" class="btn btn-default"><i class="fa fa-chevron-left"></i></a>
+                        <a type="button" class="btn btn-primary" data-toggle="collapse" data-target="#createTransaction"><i class="fa fa-plus"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -27,8 +30,9 @@
                 </notes>
             </div>
             <div class="col-md-8">
-                <transaction-form fund-id="{{ $fund->id }}"></transaction-form>
-                <hr class="divider">
+                <div class="collapse" id="createTransaction">
+                    <transaction-form fund-id="{{ $fund->id }}"></transaction-form>
+                </div>
                 <h4 class="text-center text-muted">Transactions</h4>
                 <hr class="divider">
                 <admin-transactions-list fund="{{ $fund->id }}"

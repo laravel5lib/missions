@@ -117,7 +117,7 @@
                 <div class="row" v-if="transaction.payment.type == 'check'">
                     <div class="col-xs-12">
                         <label>Check Number</label>
-                        <input class="form-control" type="text" />
+                        <input class="form-control" type="text" v-model="transaction.payment.number" />
                     </div>
                 </div>
             </div>
@@ -381,7 +381,11 @@
                         data.donor = this.selectedDonor;
                     }
                     data.payment.type = this.transaction.payment.type;
-                    data.card = this.card;
+                    if (this.transaction.payment.type == 'check') {
+                        data.payment.number = this.transaction.payment.number;
+                    }
+                    if (this.transaction.payment.type == 'card') {
+                    }
                 }
 
                 this.$http.post('transactions', data).then(function (response) {

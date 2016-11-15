@@ -42,14 +42,14 @@ class DonationRequest extends FormRequest
             'payment'            => 'required|array',
             'payment.type'       => 'required|in:cash,check,card',
             'payment.number'     => 'required_if:payment.type,check|string',
-            'token' => 'required_without:card|string',
-            'card' => 'required_without:token|array',
-            'card.card_id'   => 'string',
-            'card.cardholder' => 'required_with:card|string',
-            'card.number'    => 'required_with:card|string',
-            'card.exp_month' => 'required_with:card|string',
-            'card.exp_year'  => 'required_with:card|digits:4',
-            'card.cvc'       => 'required_with:card|digits_between:3,4',
+            'token'              => 'string',
+            'card'               => 'array',
+            'card.card_id'       => 'string',
+            'card.cardholder'    => 'required_with:card|string',
+            'card.number'        => 'required_with:card|string',
+            'card.exp_month'     => 'required_with:card|string',
+            'card.exp_year'      => 'required_with:card|digits:4',
+            'card.cvc'           => 'required_with:card|digits_between:3,4',
         ];
     }
 }

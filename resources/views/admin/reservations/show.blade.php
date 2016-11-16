@@ -15,7 +15,10 @@
             </div>
             <div class="col-xs-4 text-right">
                 <hr class="divider inv">
-                <a class="btn btn-primary" href="{{ $reservation->id }}/edit"><i class="fa fa-pencil"></i> Edit</a>
+                <div class="btn-group" role="group">
+                    <a href="{{ url('admin/reservations') }}" class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span></a>
+                    <a class="btn btn-primary" href="{{ $reservation->id }}/edit">Edit</a>
+                </div>
             </div>
         </div>
     </div>
@@ -23,16 +26,23 @@
 <hr class="divider inv lg">
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-xs-12 col-sm-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <a href="{{ url('admin/reservations') }}" class="btn btn-block btn-default"><span class="fa fa-chevron-left icon-left"></span> Reservations</a>
-                </div>
+                    <div style="display:inline-block;">
+                        <img class="img-circle img-sm" src="{{ image($rep->avatar->source.'?w=50&h=50') }}">
+                    </div>
+                    <div style="display:inline-block;vertical-align:middle;margin:0 0 0 10px;">
+                        <label style="margin-bottom:0px;font-size:10px;">Your Trip Rep</label>
+                        <h5 style="margin:3px 0 6px;">{{ $rep->name }}</h5>
+                        <p style="font-size:10px;margin-top:3px;"><i class="fa fa-phone"></i> <a href="tel:{{ $rep->phone_one }}">{{ $rep->phone_one }}</a> / <i class="fa fa-envelope"></i> <a href="mailto:{{ $rep->email }}">{{ $rep->email }}</a></p>
+                    </div>
+                </div><!-- end panel-heading -->
                 <!-- Nav tabs -->
                 <ul class="nav nav-pills nav-stacked" role="tablist">
                     <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
                     <li role="presentation"><a href="#costs" aria-controls="costs" role="tab" data-toggle="tab">Costs</a></li>
-                    <li role="presentation"><a href="#deadlines" aria-controls="deadlines" role="tab" data-toggle="tab">Due Dates / Deadlines</a></li>
+                    <li role="presentation"><a href="#deadlines" aria-controls="deadlines" role="tab" data-toggle="tab">Other Deadlines</a></li>
                     <li role="presentation"><a href="#requirements" aria-controls="requirements" role="tab" data-toggle="tab">Requirements</a></li>
                     <li role="presentation"><a href="#funding" aria-controls="funding" role="tab" data-toggle="tab">Funding</a></li>
                     <li role="presentation"><a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">Notes</a></li>
@@ -40,7 +50,7 @@
                 </ul>
             </div><!-- end panel -->
         </div>
-        <div class="col-sm-8">
+        <div class="col-xs-12 col-sm-8">
             <!-- Tab panes -->
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="details">
@@ -141,9 +151,19 @@
                     </div><!-- end panel -->
                 </div><!-- end tab -->
                 <div role="tabpanel" class="tab-pane" id="costs">
+
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h5>Costs Breakdown</h5>
+                            <h5>Payments Due</h5>
+                        </div><!-- end panel-heading -->
+                        <div class="panel-body">
+                            <admin-reservation-dues id="{{ $reservation->id }}"></admin-reservation-dues>
+                        </div><!-- end panel-body -->
+                    </div><!-- end panel -->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Applied Costs</h5>
                         </div>
                         <div class="panel-body">
                             <admin-reservation-costs id="{{ $reservation->id }}"></admin-reservation-costs>
@@ -151,20 +171,11 @@
                         {{-- {{ $reservation->costs }} --}}
                     </div><!-- end panel -->
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h5>Dues</h5>
-                        </div><!-- end panel-heading -->
-                        <div class="panel-body">
-                            <admin-reservation-dues id="{{ $reservation->id }}"></admin-reservation-dues>
-                        </div><!-- end panel-body -->
-                    </div><!-- end panel -->
-
                 </div><!-- end tab -->
                     <div role="tabpanel" class="tab-pane" id="deadlines">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h5>Deadlines</h5>
+                                <h5>Other Deadlines</h5>
                             </div>
                             <div class="panel-body">
                                 <admin-reservation-deadlines id="{{ $reservation->id }}"></admin-reservation-deadlines>
@@ -174,7 +185,7 @@
                     <div role="tabpanel" class="tab-pane" id="requirements">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h5>Requirements</h5>
+                                <h5>Travel Requirements</h5>
                             </div>
                             <div class="panel-body">
                                 <ul class="list-group">

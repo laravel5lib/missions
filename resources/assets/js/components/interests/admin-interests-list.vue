@@ -105,7 +105,7 @@
                     </div>
                     <button class="btn btn-default btn-sm " type="button" @click="showFilters=!showFilters">
                         Filters
-                        <span class="caret"></span>
+                        <i class="fa fa-filter"></i>
                     </button>
                 </form>
             </div>
@@ -172,12 +172,19 @@
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody v-if="interests.length > 0">
             <tr v-for="interest in interests|filterBy search|orderBy orderByField direction">
                 <td v-if="isActive('name')">{{interest.name|capitalize}}</td>
                 <td v-if="isActive('email')">{{interest.email}}</td>
                 <td v-if="isActive('phone')">{{interest.phone}}</td>
-                <td v-if="isActive('status')">{{interest.status}}</td>
+                <td v-if="isActive('status')">
+                    <span class="label"
+                          :class="{ 'label-success' : interest.status == 'converted',
+                                    'label-default' : interest.status == 'declined',
+                                    'label-danger' : interest.status == 'undecided'}">
+                        {{interest.status}}
+                    </span>
+                </td>
                 <td v-if="isActive('campaign')">{{interest.trip.data.campaign.data.name}}</td>
                 <td v-if="isActive('type')">{{interest.trip.data.type}}</td>
                 <td v-if="isActive('group')">{{interest.trip.data.group.data.name}}</td>
@@ -186,11 +193,21 @@
                 </td>
             </tr>
             </tbody>
+            <tbody v-else>
+            <tr>
+                <td colspan="8" class="text-center text-muted">
+                    No interests found.
+                </td>
+            </tr>
+            </tbody>
             <tfoot>
             <tr>
-                <td colspan="7">
+                <td colspan="8">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" :callback="searchInterests"></pagination>
+                        <pagination :pagination.sync="pagination"
+                                    :callback="searchInterests"
+                                    size="small">
+                        </pagination>
                     </div>
                 </td>
             </tr>
@@ -211,7 +228,7 @@
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: { current_page: 1 },
-                activeFields: ['name', 'email', 'phone', 'status', 'campaign', 'group', 'type'],
+                activeFields: ['name', 'status', 'campaign', 'group', 'type'],
                 maxActiveFields: 7,
                 maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
                 search: '',

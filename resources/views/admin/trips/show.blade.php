@@ -45,13 +45,20 @@
             <!-- Tab panes -->
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="details">
-                    @include('admin.trips.tabs.nav')
-                    @include('admin.trips.tabs.'.$tab)
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-3">
+                            @include('admin.trips.tabs.nav')
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-9">
+                            @include('admin.trips.tabs.'.$tab)
+                        </div>
+                    </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="reservations">
-                    <div class="col-xs-12">
-                        <admin-reservations-list trip-id="{{ $trip->id }}"></admin-reservations-list>
-                        {{--<admin-trip-reservations trip-id="{{ $trip->id }}"></admin-trip-reservations>--}}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <admin-reservations-list trip-id="{{ $trip->id }}"></admin-reservations-list>
+                        </div>
                     </div>
                 </div>
             </div>

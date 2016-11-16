@@ -189,7 +189,7 @@
                     </div>
 					<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
 						Filters
-						<span class="caret"></span>
+						<i class="fa fa-filter"></i>
 					</button>
 					<button class="btn btn-default btn-sm" type="button" @click="showExportModal=true">
 						Export
@@ -240,7 +240,7 @@
 			</button>
 		</div>
         <hr class="divider sm">
-        <table class="table table-hover">
+        <table class="table table-striped">
             <thead>
             <tr>
                 <th v-if="isActive('given_names')" :class="{'text-primary': orderByField === 'given_names'}">
@@ -315,10 +315,11 @@
             </tbody>
             <tfoot>
             <tr>
-                <td colspan="7">
-                    <div class="col-sm-12 text-center">
-						<pagination :pagination.sync="pagination" :callback="searchReservations"></pagination>
-                    </div>
+                <td colspan="7" class="text-center">
+					<pagination :pagination.sync="pagination"
+								:callback="searchReservations"
+								size="small">
+					</pagination>
                 </td>
             </tr>
             </tfoot>

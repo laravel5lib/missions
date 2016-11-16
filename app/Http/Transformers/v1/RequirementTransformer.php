@@ -3,7 +3,6 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Requirement;
-use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 
 class RequirementTransformer extends TransformerAbstract
@@ -48,11 +47,7 @@ class RequirementTransformer extends TransformerAbstract
         $array['links'] = [
             [
                 'rel' => 'self',
-                'uri' => '/api/'
-                    . $requirement->requester_type
-                    . '/' . $requirement->requester_id
-                    . '/requirements/'
-                    . $requirement->id,
+                'uri' => '/api/requirements/' . $requirement->id,
             ]
         ];
 

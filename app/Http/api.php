@@ -43,7 +43,6 @@ $api->version('v1', [
     $api->post('groups/submit', 'GroupsController@submit');
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
-    $api->resource('trips.requirements', 'TripRequirementsController');
     $api->post('trips/{id}/register', 'TripsController@register');
     $api->resource('interests', 'TripInterestsController');
     $api->resource('reservations', 'ReservationsController');
@@ -80,6 +79,7 @@ $api->version('v1', [
     $api->resource('essays', 'EssaysController');
     $api->resource('costs', 'CostsController');
     $api->resource('costs.payments', 'CostPaymentsController');
+    $api->resource('requirements', 'RequirementsController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

@@ -19,14 +19,11 @@ class Cost extends Model
     protected $table = 'costs';
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are not mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'description', 'type',
-        'active_at', 'amount'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.

@@ -50,7 +50,7 @@ class CostTransformer extends TransformerAbstract
         $array['links'] = [
             [
                 'rel' => 'self',
-                'uri' => '/costs/' . $cost->id,
+                'uri' => '/api/costs/' . $cost->id,
             ]
         ];
 

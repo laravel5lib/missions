@@ -48,7 +48,7 @@ class DeadlineTransformer extends TransformerAbstract
         $array['links'] = [
             [
                 'rel' => 'self',
-                'uri' => '/deadlines/' . $deadline->id,
+                'uri' => '/api/deadlines/' . $deadline->id,
             ]
         ];
 

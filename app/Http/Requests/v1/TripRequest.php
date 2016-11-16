@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests\v1;
 
-use App\Models\v1\Campaign;
-use App\Utilities\v1\Country;
 use Dingo\Api\Http\FormRequest;
 
 class TripRequest extends FormRequest
@@ -51,32 +49,11 @@ class TripRequest extends FormRequest
             'rep_id'                          => 'exists:reps,id',
             'spots'                           => 'numeric',
             'thumb_src'                       => 'image',
-            'costs'                           => 'sometimes|required|array',
-            'costs.*.name'                    => 'required|string',
-            'costs.*.description'             => 'string',
-            'costs.*.active_at'               => 'required|date',
-            'costs.*.amount'                  => 'required|numeric',
-            'costs.*.type'                    => 'required|string',
-            'costs.*.payments'                => 'sometimes|required|array',
-            'costs.*.payments.*.amount_owed'  => 'required|numeric',
-            'costs.*.payments.*.percent_owed' => 'required|numeric',
-            'costs.*.payments.*.due_at'       => 'date',
-            'costs.*.payments.*.upfront'      => 'boolean',
-            'costs.*.payments.*.grace_period' => 'required|numeric',
             'todos'                           => 'array',
             'prospects'                       => 'array',
             'description'                     => 'string',
-            'deadlines'                       => 'array',
-            'deadlines.*.name'                => 'required|string',
-            'deadlines.*.date'                => 'required|date',
-            'deadlines.*.grace_period'        => 'numeric',
-            'deadlines.*.enforced'            => 'boolean',
             'published_at'                    => 'date',
             'companion_limit'                 => 'numeric',
-            'requirements'                    => 'sometimes|required|array',
-            'requirements.*.name'             => 'required|string',
-            'requirements.*.due_at'           => 'required|date',
-            'requirements.*.grace_period'     => 'numeric',
             'facilitators'                    => 'array',
             'tags'                            => 'array'
         ];

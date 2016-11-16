@@ -43,6 +43,8 @@ $api->version('v1', [
     $api->post('groups/submit', 'GroupsController@submit');
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
+    $api->get('trips/{id}/todos', 'TripTodosController@index');
+    $api->post('trips/{id}/todos', 'TripTodosController@store');
     $api->post('trips/{id}/register', 'TripsController@register');
     $api->resource('interests', 'TripInterestsController');
     $api->resource('reservations', 'ReservationsController');

@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests\v1;
 
-use App\Models\v1\Campaign;
-use App\Utilities\v1\Country;
 use Dingo\Api\Http\FormRequest;
 
 class TripRequest extends FormRequest

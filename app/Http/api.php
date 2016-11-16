@@ -82,6 +82,7 @@ $api->version('v1', [
     $api->resource('costs', 'CostsController');
     $api->resource('costs.payments', 'CostPaymentsController');
     $api->resource('requirements', 'RequirementsController');
+    $api->resource('deadlines', 'DeadlinesController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

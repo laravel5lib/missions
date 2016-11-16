@@ -61,25 +61,15 @@ class CostsController extends Controller
      */
     public function store(CostRequest $request)
     {
-        $cost = DB::transaction(function () use($request) {
-            $cost = $this->cost->create([
-                'cost_assignable_type' => $request->get('cost_assignable_type'),
-                'cost_assignable_id' => $request->get('cost_assignable_id'),
-                'name' => $request->get('name'),
-                'amount' => $request->get('amount'),
-                'description' => $request->get('description'),
-                'type' => $request->get('type'),
-                'active_at' => $request->get('active_at')
-            ]);
-
-            $payments = collect($request->get('payments'))->map(function($payment) {
-                return new \App\Models\v1\Payment($payment);
-            });
-
-            $cost->payments()->saveMany($payments);
-
-            return $cost;
-        });
+        $cost = $this->cost->create([
+            'cost_assignable_type' => $request->get('cost_assignable_type'),
+            'cost_assignable_id' => $request->get('cost_assignable_id'),
+            'name' => $request->get('name'),
+            'amount' => $request->get('amount'),
+            'description' => $request->get('description'),
+            'type' => $request->get('type'),
+            'active_at' => $request->get('active_at')
+        ]);
 
         return $this->response->item($cost, new CostTransformer);
     }

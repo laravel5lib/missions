@@ -78,6 +78,8 @@ $api->version('v1', [
     $api->resource('notes', 'NotesController');
     $api->resource('todos', 'TodosController');
     $api->resource('essays', 'EssaysController');
+    $api->resource('costs', 'CostsController');
+    $api->resource('costs.payments', 'CostPaymentsController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

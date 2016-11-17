@@ -6,6 +6,7 @@ use App\Http\Requests\v1\PaymentRequest;
 use App\Http\Transformers\v1\PaymentTransformer;
 use App\Models\v1\Cost;
 use App\Http\Controllers\Controller;
+use Dingo\Api\Contract\Http\Request;
 
 class CostPaymentsController extends Controller
 {
@@ -27,12 +28,17 @@ class CostPaymentsController extends Controller
     /**
      * Get all of the cost's payments.
      *
+     * @param Request $request
      * @param $costId
      * @return \Dingo\Api\Http\Response
      */
-    public function index($costId)
+    public function index(Request $request, $costId)
     {
-        $payments = $this->cost->findOrFail($costId)->payments;
+        $payments = $this->cost
+            ->findOrFail($costId)
+            ->payments()
+            ->filter($request->all())
+            ->get();
 
         return $this->response->collection($payments, new PaymentTransformer);
     }

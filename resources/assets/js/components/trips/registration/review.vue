@@ -28,7 +28,7 @@
 				</div>
 			</div>
 
-			<div class="panel panel-primary">
+			<div class="panel panel-primary" v-if="paymentInfo.card">
 				<div class="panel-heading">
 					<div class="panel-title">
 						<h5>Payment Details</h5>

@@ -34,9 +34,9 @@
                 <div class="col-sm-6">
                     <label>Status</label>
                     <select class="form-control" v-model="interest.status" v-if="editMode">
-                        <option>undecided</option>
-                        <option>converted</option>
-                        <option>declined</option>
+                        <option value="undecided">Undecided</option>
+                        <option value="converted">Converted</option>
+                        <option value="declined">Declined</option>
                     </select>
                     <p v-else>
                         <span class="label"
@@ -67,7 +67,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Trip of Interest</label>
-                    <p>
+                    <p v-if="interest.trip">
                         {{ interest.trip.campaign.name }} <br />
                         <small class="text-muted">
                             {{ interest.trip.group.name }} <br />

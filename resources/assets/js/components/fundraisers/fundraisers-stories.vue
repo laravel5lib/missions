@@ -4,10 +4,10 @@
         <div class="panel panel-default panel-body">
             <div class="row">
                 <div class="col-xs-8">
-                    <i class="fa fa-info-circle"></i> Share your amazing stories with the world!
+                    Share your amazing stories with the world!
                 </div>
                 <div class="col-xs-4 text-right">
-                    <button class="btn btn-primary btn-xs" @click="newMode=!newMode"><i class="fa fa-plus"></i> Post Story</button>
+                    <button class="btn btn-primary btn-xs" @click="newMode=!newMode"><i class="fa fa-plus icon-left"></i> Post Story</button>
                 </div>
             </div>
         </div>

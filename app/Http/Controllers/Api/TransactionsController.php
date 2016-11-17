@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\CreditTransaction;
 use App\DonationTransaction;
-use App\FeeTransaction;
-use App\PaymentTransaction;
 use App\RefundTransaction;
 use App\TransferTransaction;
 use App\Models\v1\Transaction;
@@ -13,34 +11,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Transformers\v1\TransactionTransformer;
 use Dingo\Api\Contract\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionsController extends Controller
 {
-    // General Donations:
-        // CLASS: General
-        // ITEM: General Donation
-
-    // Campaign Donations:
-        // CLASS: {{ campaign_name }} - General
-        // ITEM: General Donation
-
-    // Trip/Reservation Donations:
-        // CLASS: {{ campaign_name }} - Team
-        // ITEM: Missionary Donation
-
-    // Cause Donations:
-        // CLASS: Angel Houses -OR- Wells -OR- Freedom Houses -OR- {{ campaign_name }} - Stadium Outreach &amp; Humanitarian
-        // ITEM: General Donation
-
-    // Project Donations:
-        // CLASS: Angel Houses -OR- Wells -OR- Freedom Houses -OR- {{ campaign_name }} - Stadium Outreach &amp; Humanitarian
-        // ITEM: {{ project_name }} Donation
-
-    // Student Tuition Payments:
-        // CLASS: MMC
-        // ITEM: Tuition & Fees
-
-
     // EXCEL:
         // Donor Name
         // Address
@@ -64,26 +38,59 @@ class TransactionsController extends Controller
     /**
      * TransactionsController constructor.
      * @param Transaction $transaction
-     * @param Request $request
      */
-    public function __construct(Transaction $transaction, Request $request)
+    public function __construct(Transaction $transaction)
     {
         $this->transaction = $transaction;
-        $this->request = $request;
     }
 
     /**
      * Get all transactions.
      *
+     * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $transactions = $this->transaction
-                             ->filter($this->request->all())
-                             ->paginate($this->request->get('per_page', 10));
+                             ->filter($request->all())
+                             ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($transactions, new TransactionTransformer);
+    }
+
+    /**
+     * Export transactions.
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function export(Request $request)
+    {
+        $transactions = $this->transaction
+                             ->filter($request->all())
+                             ->with('fund')
+                             ->get();
+
+        $data = $transactions->map(function($transaction) {
+            return [
+                'description' => $transaction->description,
+                'amount' => $transaction->amount,
+                'class' => $transaction->fund->class,
+                'item' => $transaction->fund->item
+            ];
+        });
+
+        return Excel::create('transactions', function($excel) use($data) {
+
+            $excel->sheet('Transactions', function($sheet) use($data) {
+
+                $sheet->fromArray($data);
+                $sheet->freezeFirstRow();
+
+            });
+
+        })->export('csv');
     }
 
     /**

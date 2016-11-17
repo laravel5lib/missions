@@ -189,7 +189,7 @@
                     </div>
 					<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
 						Filters
-						<span class="caret"></span>
+						<i class="fa fa-filter"></i>
 					</button>
 					<button class="btn btn-default btn-sm" type="button" @click="showExportModal=true">
 						Export
@@ -240,7 +240,7 @@
 			</button>
 		</div>
         <hr class="divider sm">
-        <table class="table table-hover">
+        <table class="table table-striped">
             <thead>
             <tr>
                 <th v-if="isActive('given_names')" :class="{'text-primary': orderByField === 'given_names'}">
@@ -296,7 +296,7 @@
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody v-if="reservations.length > 0">
             <tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
                 <td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
                 <td v-if="isActive('surname')" v-text="reservation.surname"></td>
@@ -310,15 +310,23 @@
                 <td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
                 <td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
                 <td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
-                <td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-pencil"></i></a></td>
+                <td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
             </tr>
             </tbody>
+			<tbody v-else>
+				<tr>
+					<td colspan="10" class="text-center text-muted">
+						No reservations found.
+					</td>
+				</tr>
+			</tbody>
             <tfoot>
             <tr>
-                <td colspan="7">
-                    <div class="col-sm-12 text-center">
-						<pagination :pagination.sync="pagination" :callback="searchReservations"></pagination>
-                    </div>
+                <td colspan="10" class="text-center">
+					<pagination :pagination.sync="pagination"
+								:callback="searchReservations"
+								size="small">
+					</pagination>
                 </td>
             </tr>
             </tfoot>
@@ -431,7 +439,7 @@
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: { current_page: 1 },
                 search: '',
-				activeFields: ['given_names', 'surname', 'group', 'campaign', 'type', 'registered'],
+				activeFields: ['given_names', 'surname', 'group', 'campaign', 'type', 'percent_raised'],
 				maxActiveFields: 6,
 				maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
 				groupsArr: [],

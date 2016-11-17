@@ -13,14 +13,12 @@
 				</div>
             </div><!-- end panel-heading -->
             <div class="panel-body">
-                <h4>
-                    <p v-for="accolade in accolades.items">
-                        <span class="label label-primary">
-                            <i class="fa fa-map-marker"></i> {{ accolade.name }}
-                        </span>
-                    </p>
-                </h4>
-				<p class="text-muted text-center" v-if="accolades.items.length < 1">No visits yet.</p>
+                <p style="display:inline-block;margin-bottom:3px;" v-for="accolade in accolades.items">
+                    <span class="label label-default">
+                        <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade.name }}
+                    </span>
+                </p>
+				<p class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1"><em>Add countries you've visited or sign up for a trip to get started!</em></p>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 
@@ -46,7 +44,7 @@
 								<i class="fa fa-map-marker"></i> {{ accolade.name }}
 							</div>
 							<div class="col-xs-4 text-right">
-								<button class="btn btn-danger btn-xs" @click="removeAccolade(accolade)"><i class="fa fa-trash"></i></button>
+								<button class="btn btn-default-hollow btn-xs" @click="removeAccolade(accolade)"><i class="fa fa-trash"></i></button>
 							</div>
 						</div>
 					</li>
@@ -83,7 +81,7 @@
                 availableCountries: [],
                 selectedCountries: null,
                 selectedCodes: null,
-                selectedCountryRemove: null,
+                selectedCountryRemove: { name: null},
                 manageModal: false,
                 deleteModal: false,
                 showSuccess: false,

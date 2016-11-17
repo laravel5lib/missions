@@ -18,13 +18,11 @@ class Requirement extends Model
     protected $table = 'requirements';
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are not mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'due_at', 'grace_period', 'enforced'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.

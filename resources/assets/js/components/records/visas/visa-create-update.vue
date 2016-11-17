@@ -76,7 +76,9 @@
                             <h4 class="media-heading">{{selectedAvatar.name}}</h4>
                         </div>
                     </div>
-                    <upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'visa-'+given_names+'-'+surname"></upload-create-update>
+                    <div class="panel-body">
+                        <upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'visa-'+given_names+'-'+surname"></upload-create-update>
+                    </div><!-- end panel-body -->
                 </panel>
             </accordion>
 

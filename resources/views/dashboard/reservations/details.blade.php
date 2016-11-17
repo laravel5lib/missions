@@ -23,8 +23,9 @@
             <h5>Details</h5>
         </div>
         <div class="panel-body">
-            <reservation-avatar id="{{ $reservation->id }}"></reservation-avatar>
             <div class="col-md-7">
+                <reservation-avatar id="{{ $reservation->id }}"></reservation-avatar>
+                <hr class="divider">
                 <div class="row">
                     <div class="col-md-6">
                         <label>Surname</label>
@@ -61,7 +62,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Birthday</label>
-                        <p>{{ $reservation->birthday->format('F j, Y') }}</p>
+                        <p>{{ $reservation->birthday->format('M j, Y') }}</p>
                     </div>
                     <div class="col-md-6">
                         <label>Group</label>
@@ -72,7 +73,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Trip Type</label>
-                        <p>{{ $reservation->trip->type }} Missionary</p>
+                        <p class="text-capitalize">{{ $reservation->trip->type }} Missionary</p>
                     </div>
                     <div class="col-md-6">
                         <label>Start Date</label>

@@ -8,21 +8,21 @@
                             <div class="panel panel-default panel-body">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <i class="fa fa-info-circle"></i> Update Fundraiser
+                                        Update Fundraiser
                                         <hr class="inv divider visible-xs-block" />
                                     </div>
                                     <div class="col-sm-8 text-right">
                                         <div role="group" aria-label="...">
-                                            <a class="btn btn-xs btn-primary small" @click="newMarkedContentToggle = !newMarkedContentToggle">
+                                            <a class="btn btn-xs btn-default-hollow" @click="newMarkedContentToggle = !newMarkedContentToggle">
                                                 <span v-show="!newMarkedContentToggle">Preview</span>
                                                 <span v-show="newMarkedContentToggle"><i class="fa fa-pencil"></i> Edit</span>
 
                                             </a>
                                             <span class="form-group" v-if="fundraiser" v-show="description !== fundraiser.description">
                                                 <button class="btn btn-xs btn-default-hollow small" type="button" @click="reset">Cancel</button>
-                                                <button class="btn btn-xs btn-primary small" type="button" @click="saveDescription">Publish</button>
+                                                <button class="btn btn-xs btn-info" type="button" @click="saveDescription">Publish</button>
                                             </span>
-                                            <a class="btn btn-xs btn-default-hollow small" @click="settingsModal = true"><i class="fa fa-cog"></i> Settings</a>
+                                            <a class="btn btn-xs btn-default-hollow" @click="settingsModal = true"><i class="fa fa-cog"></i> Settings</a>
                                         </div>
                                     </div>
                                 </div>

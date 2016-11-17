@@ -72,7 +72,10 @@ class MakeDeposit extends Job implements ShouldQueue
         }
 
         // Create the donation for the donor.
-        $this->params = array_merge($this->params, ['type' => 'donation']);
+        $this->params = array_merge($this->params, [
+            'type' => 'donation',
+            'description' => 'Deposit toward ' . $this->params['fund_name']
+        ]);
         $donation = $donor->donations()->create($this->params);
 
         event(new TransactionWasCreated($donation));

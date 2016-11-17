@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <h5 class="panel-header">Permissions <button class="btn btn-xs btn-default-hollow pull-right" style="margin-top:-3px"
                     @click="showAbilities = !showAbilities">
-                Mange <i class="fa fa-cog"></i>
+               <i class="fa fa-cog icon-left"></i> Manage 
             </button></h5>
 
         </div>

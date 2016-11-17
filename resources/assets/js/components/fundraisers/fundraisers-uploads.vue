@@ -3,9 +3,9 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default panel-body">
-                    <i class="fa fa-info-circle"></i> Add photos and videos!
-                    <button class="btn btn-primary btn-xs pull-right" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse">
-                        <i class="fa fa-picture-o"></i> Manage Media
+                    Add photos and videos!
+                    <button class="btn btn-default-hollow btn-xs pull-right" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse">
+                        <i class="fa fa-picture-o icon-left"></i> Manage Media
                     </button>
                 </div>
             </div>
@@ -23,20 +23,20 @@
                 <div class="tab-content">
                     <div class="active tab-pane fade in" id="tab1">
                         <div class="row" v-if="fundraiser.hasOwnProperty('uploads')">
-                            <p class="lead text-center text-muted" v-if="fundraiser.uploads.data.length < 1">
-                                No media found. Add a video or picture.
+                            <p class="text-center text-muted" v-if="fundraiser.uploads.data.length < 1"><em>
+                                No media found. Add a video or picture.</em>
                             </p>
                             <div class="col-sm-4 col-md-3" v-for="upload in fundraiser.uploads.data">
-                                <div class="panel panel-defaut panel-body">
+                                <div class="panel panel-default">
                                     <img :src="upload.type === 'video' ? 'https://placehold.it/155x87?text=Video' : upload.source" :alt="upload.name" class="img-responsive">
-                                    <!--<div class="caption">-->
-                                        <p><small class="text-center text-muted">{{ upload.name }}</small></p>
+                                    <div class="panel-body">
+                                        <p style="font-size:8px;" class="text-center text-muted">{{ upload.name }}</p>
                                         <div class="btn-group btn-group-xs btn-group-justified" role="group" aria-label="...">
                                             <a @click="viewUpload(upload)" class="btn btn-xs btn-primary-hollow" role="button"><i class="fa fa-eye"></i></a>
-                                            <a @click="deleteUpload(upload)" class="btn btn-xs btn-default-hollow" role="button"><i class="fa fa-times"></i></a>
+                                            <a @click="deleteUpload(upload)" class="btn btn-xs btn-default-hollow" role="button"><i class="fa fa-trash"></i></a>
                                         </div>
-                                    <!--</div>-->
-                                </div>
+                                    </div><!-- end panel-body -->
+                                </div><!-- end panel -->
                             </div>
                         </div>
 

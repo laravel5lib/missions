@@ -3,14 +3,28 @@
 		<div class="col-sm-12">
 			<validator name="BasicInfo" @valid="onValid">
 				<form novalidate name="BasicInfoForm" id="BasicInfoForm">
-					<div class="col-sm-12">
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" v-model="onBehalf" @change="toggleUserData">
-								This reservation is for someone else.
-							</label>
+					<template v-if="forAdmin">
+						<div class="col-sm-12">
+							<div class="form-group" :class="{ 'has-error': checkForError('manager') }">
+								<label for="infoManager">Reservation Manager</label>
+								<v-select class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+								<select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+									<option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
+								</select>
+							</div>
 						</div>
-					</div>
+					</template>
+					<!--<template>-->
+						<div class="col-sm-12">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" v-model="onBehalf" @change="toggleUserData">
+									This reservation is for someone else.
+								</label>
+							</div>
+						</div>
+					<!--</template>-->
+
 					<div class="col-md-6">
 						<label>Full Legal Name</label>
 						<div class="row">
@@ -18,23 +32,23 @@
 								<div class="form-group" :class="{ 'has-error': checkForError('firstName') }">
 									<!--<label for="infoFirstName">First</label>-->
 									<input type="text" class="form-control input-sm" v-model="firstName"
-										   v-validate:firstName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="First"
+										   v-validate:firstName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="First & Middle Names"
 										   id="infoFirstName">
 								</div>
 							</div>
-							<div class="col-sm-12">
+							<!--<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('middleName') }">
-									<!--<label for="infoMiddleName">Middle</label>-->
+									&lt;!&ndash;<label for="infoMiddleName">Middle</label>&ndash;&gt;
 									<input type="text" class="form-control input-sm" v-model="middleName"
 										   v-validate:middleName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="Middle"
 										   id="infoMiddleName">
 								</div>
-							</div>
+							</div>-->
 							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('lastName') }">
 									<!--<label for="infoLastName">Last</label>-->
 									<input type="text" class="form-control input-sm" v-model="lastName"
-										   v-validate:lastName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="Last"
+										   v-validate:lastName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="Last Name"
 										   id="infoLastName">
 								</div>
 							</div>
@@ -127,13 +141,13 @@
 						<div class="row">
 							<div class="col-sm-6">
 								<label>Gender</label>
-								<div class="radio" :class="{ 'has-error': checkForError('gender') }">
+								<div :class="{ 'has-error': checkForError('gender') }">
 									<label>
 										<input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }"
 											   value="male"> Male
 									</label>
 								</div>
-								<div class="radio" :class="{ 'has-error': checkForError('gender') }">
+								<div :class="{ 'has-error': checkForError('gender') }">
 									<label>
 										<input type="radio" v-model="gender" v-validate:gender value="female"> Female
 									</label>
@@ -272,6 +286,12 @@
 	import vSelect from "vue-select";
 	export default{
 		name: 'basic-info',
+		props: {
+			forAdmin: {
+				type: Boolean,
+				default: false
+			}
+		},
 		components: {vSelect},
 		data(){
 			return {
@@ -280,7 +300,10 @@
 				dobYearCalc: '',
 				attemptedContinue: false,
 				countries: [],
+				usersArr: [],
 				countryCodeObj: null,
+				userObj: null,
+				user_id: null,
 				onBehalf: false,
 
 				// basic info data
@@ -311,6 +334,12 @@
 		computed: {
 			country(){
 				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+			},
+			user_id(){
+				if (this.$parent.hasOwnProperty('userData') && _.isObject(this.userObj)) {
+					this.$parent.userData = this.userObj;
+				}
+				return  _.isObject(this.userObj) ? this.userObj.id : null;
 			},
 			dobYear(){
 				return (this.currentYear - 100 + parseInt(this.dobYearCalc));
@@ -353,6 +382,13 @@
 				// if user clicked continue button while the field is invalid trigger error styles
 				return this.$BasicInfo[field.toLowerCase()].invalid && this.attemptedContinue
 			},
+			getUsers(search, loading){
+				loading ? loading(true) : void 0;
+				this.$http.get('users', { search: search}).then(function (response) {
+					this.usersArr = response.data.data;
+					loading ? loading(false) : void 0;
+				})
+			},
 			toggleUserData(){
 				switch (this.onBehalf) {
 					case true:
@@ -375,7 +411,7 @@
 						this.country = 'us';
 						break;
 					case false:
-						var user = this.$parent.userData;
+						var user = this.forAdmin ? this.userObj : this.$parent.userData;
 						var names = user.name.split(' ');
 						this.firstName = _.first(names);
 						this.middleName = _.without(names, _.first(names), _.last(names));
@@ -402,6 +438,10 @@
 			}
 		},
 		activate(done){
+			if (this.forAdmin) {
+				this.onBehalf = true;
+			}
+
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.data.countries;
 				this.toggleUserData();

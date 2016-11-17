@@ -20,12 +20,8 @@
 <div class="white-header-bg">
     <div class="container">
         <div class="row hidden-xs">
-            <div class="col-sm-8">
+            <div class="col-xs-12">
                 <h3>Reservations</h3>
-            </div>
-            <div class="col-sm-4 text-right">
-                <hr class="divider inv sm">
-                <a href="/admin/trips/create" class="btn btn-primary">New <i class="fa fa-plus"></i></a>
             </div>
         </div>
         <div class="row visible-xs">
@@ -53,16 +49,38 @@
                 <!-- TAB CONTENT -->
                 <div class="tab-content">
                     <div class="active tab-pane fade in" id="current">
-                        <admin-reservations-list type="current" storage-name="AdminReservationsCurrentStorage"></admin-reservations-list>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <admin-reservations-list type="current"
+                                                         storage-name="AdminReservationsCurrentStorage">
+                                </admin-reservations-list>
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="archived">
-                        <admin-reservations-list type="archived" storage-name="AdminReservationsArchivedStorage"></admin-reservations-list>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <admin-reservations-list type="archived"
+                                                         storage-name="AdminReservationsArchivedStorage">
+                                </admin-reservations-list>
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="dropped">
-                        <admin-reservations-list type="dropped" storage-name="AdminReservationsDroppedStorage"></admin-reservations-list>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <admin-reservations-list type="dropped"
+                                                         storage-name="AdminReservationsDroppedStorage">
+                                </admin-reservations-list>
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="prospects">
-                        <admin-interests-list></admin-interests-list>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <admin-interests-list></admin-interests-list>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

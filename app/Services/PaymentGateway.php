@@ -91,6 +91,10 @@ class PaymentGateway {
         return $customer;
     }
 
+    public function findCustomer($customer_id) {
+        return $this->stripe->customers()->find($customer_id);
+    }
+
     /**
      * Create a new card and add it to customer.
      *

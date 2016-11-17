@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-xs-10">
                                 <h4>{{ $user->name }}</h4>
-                                <h6 class="small">/{{ '@'.$user->url }}</h6>
+                                <h6 class="small text-muted">/{{ '@'.$user->url }}</h6>
                             </div>
                             <div class="col-xs-2">
                                 @can('edit', auth()->user())
@@ -35,15 +35,15 @@
                                 @endcan
                             </div>
                         </div>
-                        <p>{{ $user->bio }}</p>
-                        <p class="small"><i class="fa fa-map-marker"></i> {{ $user->city }}, {{ $user->state }}, {{ country($user->country_code) }}</p>
+                        <p class="small">{{ $user->bio }}</p>
+                        <p class="small"><i class="fa fa-map-marker text-muted" style="margin-right:3px;"></i> {{ $user->city }}, {{ $user->state }}, {{ country($user->country_code) }}</p>
                         <ul class="list-unstyled list-inline">
                             @each('site.partials._social_link', $user->links, 'link')
                         </ul>
                     </div><!-- end panel-body -->
                 </div><!-- end panel-default -->
 
-                @unless(! $user->getGroups())
+                @if(count($user->getGroups()))
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5>Groups Traveled With</h5>
@@ -52,7 +52,7 @@
                         @each('site.partials._group', $user->getGroups(), 'group')
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
-                @endunless
+                @endif
 
                     <user-profile-countries id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-countries>
 

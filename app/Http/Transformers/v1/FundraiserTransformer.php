@@ -33,6 +33,7 @@ class FundraiserTransformer extends TransformerAbstract
             'raised_amount'  => (int) $fundraiser->raised(),
             'raised_percent' => (int) $fundraiser->getPercentRaised(),
             'donors_count'   => (int) count($fundraiser->donors),
+            'sponsor_type'   => $fundraiser->sponsor_type,
             'url'            => $fundraiser->url,
             'public'         => (bool) $fundraiser->public,
             'show_donors'    => (bool) $fundraiser->show_donors,

@@ -24,6 +24,8 @@ class DeadlineRequest extends FormRequest
     public function rules()
     {
         return [
+            'deadline_assignable_type' => 'required|in:trips,reservations,projects',
+            'deadline_assignable_id' => 'required|string',
             'name' => 'required|string',
             'date' => 'required|date',
             'grace_period' => 'numeric',

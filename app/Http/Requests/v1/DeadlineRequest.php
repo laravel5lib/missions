@@ -23,7 +23,7 @@ class DeadlineRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'deadline_assignable_type' => 'required|in:trips,reservations,projects',
             'deadline_assignable_id' => 'required|string',
             'name' => 'required|string',
@@ -31,5 +31,13 @@ class DeadlineRequest extends FormRequest
             'grace_period' => 'numeric',
             'enforced' => 'boolean'
         ];
+
+        if ($this->isMethod('put'))
+        {
+            $rules['deadline_assignable_type'] = 'sometimes|required|in:trips,reservations,projects';
+            $rules['deadline_assignable_id'] = 'sometimes|required|string';
+        }
+
+        return $rules;
     }
 }

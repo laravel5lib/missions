@@ -17,8 +17,7 @@ class TripTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'campaign', 'group', 'costs', 'deadlines', 'notes',
-        'reservations', 'requirements', 'facilitators'
+        'campaign', 'group', 'costs', 'deadlines', 'requirements', 'facilitators', 'rep'
     ];
 
     /**
@@ -146,32 +145,6 @@ class TripTransformer extends TransformerAbstract
     }
 
     /**
-     * Include Notes
-     *
-     * @param Trip $trip
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeNotes(Trip $trip)
-    {
-        $notes = $trip->notes;
-
-        return $this->collection($notes, new NoteTransformer);
-    }
-
-    /**
-     * Include Reservations
-     *
-     * @param Trip $trip
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeReservations(Trip $trip)
-    {
-        $reservations = $trip->reservations;
-
-        return $this->collection($reservations, new ReservationTransformer);
-    }
-
-    /**
      * Include Requirements
      *
      * @param Trip $trip
@@ -195,6 +168,19 @@ class TripTransformer extends TransformerAbstract
         $facilitators = $trip->facilitators;
 
         return $this->collection($facilitators, new UserTransformer);
+    }
+
+    /**
+     * Include Rep
+     *
+     * @param Trip $trip
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeRep(Trip $trip)
+    {
+        $rep = $trip->rep;
+
+        return $this->item($rep, new UserTransformer);
     }
 
     private function validateParams($params)

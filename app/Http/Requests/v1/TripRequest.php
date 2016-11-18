@@ -24,38 +24,40 @@ class TripRequest extends FormRequest
     public function rules()
     {
         $required = [
+            'campaign_id'  => 'required|exists:campaigns,id',
             'group_id'     => 'required|exists:groups,id',
             'country_code' => 'required',
             'type'         => 'required|in:ministry,family,international,leader,medical,media',
             'difficulty'   => 'required|in:level_1,level_2,level_3',
             'started_at'   => 'required|date',
             'ended_at'     => 'required|date',
+            'closed_at'    => 'required|date',
         ];
 
         if ($this->isMethod('put'))
         {
             $required = [
+                'campaign_id'  => 'sometimes|required|exists:campaigns,id',
                 'group_id'     => 'sometimes|required|exists:groups,id',
                 'country_code' => 'sometimes|required',
                 'type'         => 'sometimes|required|in:ministry,family,international,leader,medical,media',
                 'difficulty'   => 'sometimes|required|in:level_1,level_2,level_3',
                 'started_at'   => 'sometimes|required|date',
                 'ended_at'     => 'sometimes|required|date',
+                'closed_at'    => 'sometimes|required|date',
             ];
         }
 
         $optional = [
-            'campaign_id'                     => 'exists:campaigns,id',
-            'rep_id'                          => 'exists:reps,id',
-            'spots'                           => 'numeric',
-            'thumb_src'                       => 'image',
-            'todos'                           => 'array',
-            'prospects'                       => 'array',
-            'description'                     => 'string',
-            'published_at'                    => 'date',
-            'companion_limit'                 => 'numeric',
-            'facilitators'                    => 'array',
-            'tags'                            => 'array'
+            'rep_id'          => 'exists:users,id',
+            'spots'           => 'numeric',
+            'todos'           => 'array',
+            'prospects'       => 'array',
+            'description'     => 'string',
+            'published_at'    => 'date',
+            'companion_limit' => 'numeric',
+            'facilitators'    => 'array',
+            'tags'            => 'array'
         ];
 
         $rules = $required + $optional;

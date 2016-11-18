@@ -2,6 +2,8 @@
     <div class="panel-heading">
         <h5>Requirements</h5>
     </div>
+    <admin-trip-requirements id="{{ $trip->id }}" requester="trips"></admin-trip-requirements>
+
     <div class="panel-body">
         @foreach($trip->requirements as $requirement)
             <div class="row">

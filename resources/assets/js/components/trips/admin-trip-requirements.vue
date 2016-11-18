@@ -1,0 +1,240 @@
+<template>
+    <spinner v-ref:spinner size="md" text="Loading"></spinner>
+    <div class="panel-body" v-for="requirement in requirements|orderBy '-date'">
+        <div class="row">
+            <div class="col-xs-12 text-right hidden-xs">
+                <a class="btn btn-xs btn-default-hollow small" @click="editRequirement(requirement)"><i class="fa fa-pencil"></i> Edit</a>
+                <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(requirement)"><i class="fa fa-trash"></i> Delete</a>
+            </div>
+            <div class="col-xs-12 text-center visible-xs">
+                <a class="btn btn-xs btn-default-hollow small" @click="editRequirement(requirement)"><i class="fa fa-pencil"></i> Edit</a>
+                <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(requirement)"><i class="fa fa-trash"></i> Delete</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-8">
+                <h5><a href="#">{{ requirement.name|capitalize }}</a></h5>
+                <h6><small>Enforced: {{ requirement.enforced ? 'Yes' : 'No' }}</small></h6>
+            </div>
+            <div class="col-xs-4 text-right">
+                <h5><i class="fa fa-calendar"></i> {{ requirement.grace_period }} {{ requirement.grace_period > 1 ? 'days' : 'day' }}</h5>
+                <h6><small>Grace Period: {{ requirement.grace_period }} {{ requirement.grace_period > 1 ? 'days' : 'day' }}</small></h6>
+            </div>
+        </div><!-- end row -->
+        <hr class="divider">
+    </div>
+    <modal class="text-center" :show.sync="showAddModal" title="Add Requirement">
+        <div slot="modal-body" class="modal-body">
+            <validator name="TripRequirementsCreate">
+                <form class="form" novalidate>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" :class="{'has-error': checkForAddError('name')}">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" v-model="newRequirement.name" class="form-control input-sm"
+                                       v-validate:name="{required: true}">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group" :class="{'has-error': checkForAddError('grace') }">
+                                        <label for="grace_period">Grace Period</label>
+                                        <div class="input-group input-group-sm" :class="{'has-error': checkForAddError('grace') }">
+                                            <input id="grace_period" type="number" class="form-control" number v-model="newRequirement.grace_period"
+                                                   v-validate:grace="{required: true, min:0}">
+                                            <span class="input-group-addon">Days</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group" :class="{'has-error': checkForAddError('due')}">
+                                        <label for="date">Due</label>
+                                        <input type="date" id="date" class="form-control input-sm"
+                                               v-model="newRequirement.date" v-validate:due="{required: true}">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" v-model="newRequirement.enforced">
+                                    Enforced?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </validator>
+        </div>
+        <div slot="modal-footer" class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetRequirement()'>Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" @click='addRequirement'>Add</button>
+        </div>
+    </modal>
+    <modal class="text-center" :show.sync="showEditModal" title="Edit Requirement">
+        <div slot="modal-body" class="modal-body">
+            <validator name="TripRequirementsEdit">
+                <form class="form" novalidate v-if="selectedRequirement">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" :class="{'has-error': checkForEditError('name')}">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" v-model="selectedRequirement.name" class="form-control input-sm"
+                                       v-validate:name="{required: true}">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group" :class="{'has-error': checkForEditError('grace') }">
+                                        <label for="grace_period">Grace Period</label>
+                                        <div class="input-group input-group-sm" :class="{'has-error': checkForEditError('grace') }">
+                                            <input id="grace_period" type="number" class="form-control" number v-model="selectedRequirement.grace_period"
+                                                   v-validate:grace="{required: true, min:0}">
+                                            <span class="input-group-addon">Days</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group" :class="{'has-error': checkForEditError('due')}">
+                                        <label for="date">Due</label>
+                                        <input type="date" id="date" class="form-control input-sm"
+                                               v-model="selectedRequirement.date" v-validate:due="{required: true}">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" v-model="selectedRequirement.enforced">
+                                    Enforced?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </validator>
+        </div>
+        <div slot="modal-footer" class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" @click='showEditModal = false, resetRequirement()'>Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" @click='updateRequirement'>Update</button>
+        </div>
+    </modal>
+    <modal class="text-center" :show.sync="showDeleteModal" title="Delete Requirement" small="true">
+        <div slot="modal-body" class="modal-body text-center" v-if="selectedRequirement">Are you sure you want to delete {{ selectedRequirement.name }}?</div>
+        <div slot="modal-footer" class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false'>Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" @click='showDeleteModal = false,remove(selectedRequirement)'>Confirm</button>
+        </div>
+    </modal>
+
+</template>
+<script type="text/javascript">
+    export default{
+        name: 'admin-trip-requirements',
+        props: ['id', 'requester'],
+        data(){
+            return{
+                requirements:[],
+                selectedRequirement: null,
+                showAddModal: false,
+                showEditModal: false,
+                showDeleteModal: false,
+                attemptedAddRequirement: false,
+                attemptedEditRequirement: false,
+                newRequirement: {
+                    requirement_assignable_id: this.id,
+                    requirement_assignable_type: 'trips',
+                    name: '',
+                    item_type: '',
+                    date: null,
+                    grace_period: 0,
+                    enforced: false,
+                },
+                resource: this.$resource('requirements{/id}')
+            }
+        },
+        methods:{
+            checkForAddError(field){
+                return this.$TripRequirementsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
+            },
+            checkForEditError(field){
+                return this.$TripRequirementsEdit[field.toLowerCase()].invalid && this.attemptedEditRequirement;
+            },
+            resetRequirement(){
+                this.newRequirement = {
+                    requirement_assignable_id: this.id,
+                    requirement_assignable_type: 'trips',
+                    item: '',
+                    item_type: '',
+                    date: null,
+                    grace_period: 0,
+                    enforced: false,
+                };
+            },
+            addRequirement(){
+                this.attemptedAddRequirement = true;
+                if(this.$TripRequirementsCreate.valid) {
+                    this.$refs.spinner.show();
+                    this.resource.save({}, this.newRequirement).then(function (response) {
+                        this.requirements.push(response.data.data);
+                        this.resetRequirement();
+                        this.attemptedAddRequirement = false;
+                        this.showAddModal = false;
+                        this.$refs.spinner.hide()
+                    })
+                }
+            },
+            updateRequirement(){
+                this.attemptedEditRequirement = true;
+                if(this.$TripRequirementsEdit.valid) {
+                    this.$refs.spinner.show();
+                    this.resource.update({ id: this.selectedRequirement.id}, this.selectedRequirement).then(function (response) {
+                        this.attemptedEditRequirement = false;
+                        this.showEditModal = false;
+                        this.$refs.spinner.hide()
+                    })
+                }
+            },
+            editRequirement(requirement){
+                this.selectedRequirement = requirement;
+                this.selectedRequirement.date = moment(requirement.date).format('YYYY-MM-DD');
+                this.showEditModal = true;
+            },
+            confirmRemove(requirement) {
+                this.selectedRequirement = requirement;
+                this.showDeleteModal = true;
+            },
+            remove(requirement){
+                this.$refs.spinner.show();
+                this.resource.delete({ id: requirement.id }).then(function (response) {
+                    this.requirements.$remove(requirement);
+                    this.selectedRequirement = null;
+                    this.$refs.spinner.hide()
+                });
+            },
+            searchRequirements(){
+                this.$refs.spinner.show();
+                this.resource.get({
+                    requester: this.requester + '|' + this.id,
+                    search: this.search,
+                    sort: this.sort,
+                }).then(function (response) {
+                    this.requirements = response.data.data;
+                    this.$refs.spinner.hide()
+                });
+            },
+
+        },
+        ready(){
+            this.searchRequirements();
+            var self = this;
+            this.$root.$on('NewRequirement', function () {
+                self.showAddModal = true;
+            })
+        }
+    }
+</script>

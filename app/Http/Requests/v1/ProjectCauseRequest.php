@@ -4,7 +4,7 @@ namespace App\Http\Requests\v1;
 
 use App\Http\Requests\Request;
 
-class ProjectPackageRequest extends Request
+class ProjectCauseRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,10 @@ class ProjectPackageRequest extends Request
     public function rules()
     {
         return [
-            'amount' => 'required|numeric',
-            'currency_code' => 'alpha|min:3|max:3',
-            'generate_dates' => 'boolean',
-            'project_type_id' => 'required|exists:project_types,id'
+            'name' => 'required|max:50',
+            'short_desc' => 'max:255',
+            'countries' => 'required|array',
+            'upload_id' => 'exists:uploads,id'
         ];
     }
 }

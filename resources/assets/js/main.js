@@ -87,8 +87,7 @@ import reconcileFund from './components/reconcile-fund.vue';
 import projectCauses from './components/admin/project-causes.vue';
 import causeEditor from './components/admin/cause-editor.vue';
 import projectsList from './components/admin/projects-list.vue';
-import projectTypes from './components/admin/project-types.vue';
-import projectTypeEditor from './components/admin/project-type-editor.vue';
+import initiativesList from './components/admin/initiatives-list.vue';
 import fundEditor from './components/financials/funds/fund-editor.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
 import adminFundsList from './components/financials/funds/admin-funds-list.vue';
@@ -371,8 +370,7 @@ new Vue({
         projectCauses,
         causeEditor,
         projectsList,
-        projectTypes,
-        projectTypeEditor,
+        initiativesList,
         fundEditor,
         adminDonorsList,
         adminFundsList,

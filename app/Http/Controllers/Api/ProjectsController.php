@@ -43,6 +43,7 @@ class ProjectsController extends Controller
         $projects = $this->cause
                          ->findOrFail($causeId)
                          ->projects()
+                         ->filter($request->all())
                          ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($projects, new ProjectTransformer);

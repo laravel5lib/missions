@@ -15,9 +15,9 @@
 								{{ country.name }}<span v-show="$index + 1 != cause.countries.length">, </span>
 						</span></p>
                         <label>Projects Funded</label>
-                        <p>0</p>
+                        <p>{{ cause.projects_funded }}</p>
                         <!--<h3 class="text-success">{{ trip.starting_cost | currency }}</h3>-->
-                        <a href="/admin/causes/{{ cause.id }}" class="btn btn-primary-hollow btn-sm"><i class="fa fa-cog"></i> Manage</a>
+                        <a href="/admin/causes/{{ cause.id }}/current-projects" class="btn btn-primary-hollow btn-sm"><i class="fa fa-cog"></i> Manage</a>
                     </div>
                 </div>
             </div>

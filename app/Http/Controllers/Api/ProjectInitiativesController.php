@@ -2,39 +2,40 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\v1\ProjectTypeRequest;
-use App\Http\Transformers\v1\ProjectTypeTransformer;
+use App\Http\Requests\v1\ProjectInitiativeRequest;
+use App\Http\Transformers\v1\ProjectInitiativeTransformer;
 use App\Models\v1\ProjectCause;
-use App\Models\v1\ProjectType;
+use App\Models\v1\ProjectInitiative;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ProjectTypesController extends Controller
+class ProjectInitiativesController extends Controller
 {
 
     /**
-     * @var ProjectType
+     * @var ProjectInitiative
      */
-    private $type;
+    private $initiative;
     /**
      * @var ProjectCause
      */
     private $cause;
 
     /**
-     * ProjectTypesController constructor.
-     * @param ProjectType $type
+     * ProjectInitiativesController constructor.
+     * @param ProjectInitiative $initiative
      * @param ProjectCause $cause
      */
-    public function __construct(ProjectType $type, ProjectCause $cause)
+    public function __construct(ProjectInitiative $initiative, ProjectCause $cause)
     {
-        $this->type = $type;
+        $this->initiative = $initiative;
         $this->cause = $cause;
     }
 
     /**
      * Get a list of project types.
      *
+     * @param $id
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
@@ -42,11 +43,12 @@ class ProjectTypesController extends Controller
     {
         $types = $this->cause
                       ->findOrFail($id)
-                      ->types()
+                      ->initiatives()
+                      ->filter($request->all())
                       ->withCount('projects')
                       ->paginate($request->get('per_page'));
 
-        return $this->response->paginator($types, new ProjectTypeTransformer);
+        return $this->response->paginator($types, new ProjectInitiativeTransformer);
     }
 
     /**
@@ -57,38 +59,38 @@ class ProjectTypesController extends Controller
      */
     public function show($id)
     {
-        $type = $this->type->findOrFail($id);
+        $type = $this->initiative->findOrFail($id);
 
-        return $this->response->item($type, new ProjectTypeTransformer);
+        return $this->response->item($type, new ProjectInitiativeTransformer);
     }
 
     /**
      * Create a new project type.
      *
-     * @param ProjectTypeRequest $request
+     * @param ProjectInitiativeRequest $request
      * @return \Dingo\Api\Http\Response
      */
-    public function store(ProjectTypeRequest $request)
+    public function store(ProjectInitiativeRequest $request)
     {
-        $type = $this->type->create($request->all());
+        $type = $this->initiative->create($request->all());
 
-        return $this->response->item($type, new ProjectTypeTransformer);
+        return $this->response->item($type, new ProjectInitiativeTransformer);
     }
 
     /**
      * Update an existing project type by it's id.
      *
      * @param $id
-     * @param ProjectTypeRequest $request
+     * @param ProjectInitiativeRequest $request
      * @return \Dingo\Api\Http\Response
      */
-    public function update($id, ProjectTypeRequest $request)
+    public function update($id, ProjectInitiativeRequest $request)
     {
-        $type = $this->type->findOrFail($id);
+        $type = $this->initiative->findOrFail($id);
 
         $type->update($request->all());
 
-        return $this->response->item($type, new ProjectTypeTransformer);
+        return $this->response->item($type, new ProjectInitiativeTransformer);
     }
 
     /**
@@ -99,7 +101,7 @@ class ProjectTypesController extends Controller
      */
     public function destroy($id)
     {
-        $type = $this->type->findOrFail($id);
+        $type = $this->initiative->findOrFail($id);
 
         $type->delete();
 

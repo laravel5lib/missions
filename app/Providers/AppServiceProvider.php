@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
             'App\Models\v1\Assignment',
             'App\Models\v1\Campaign',
             'App\Models\v1\Upload',
-            'App\Models\v1\ProjectType',
+            'App\Models\v1\ProjectInitiative',
             'App\Models\v1\Project',
             'App\Models\v1\Transaction',
             'App\Models\v1\Fund',

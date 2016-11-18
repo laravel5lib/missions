@@ -9,11 +9,11 @@ use App\Http\Controllers\Controller;
 
 class ProjectCausesController extends Controller
 {
-    public function index()
+    public function index($tab = null)
     {
         $this->authorize('manage-projects');
 
-        return view('admin.causes.index');
+        return view('admin.causes.index', compact('tab'));
     }
 
     public function show($id)

@@ -23,17 +23,17 @@
                         <ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="name" :disabled="maxCheck('name')">Project Name
+                                    <input type="checkbox" v-model="activeFields" value="type" :disabled="maxCheck('type')">Type
                                 </label>
                             </li>
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="sponsor" :disabled="maxCheck('sponsor')"> Sponsor
+                                    <input type="checkbox" v-model="activeFields" value="started_at" :disabled="maxCheck('started_at')"> Started on
                                 </label>
                             </li>
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="type" :disabled="maxCheck('type')"> Type
+                                    <input type="checkbox" v-model="activeFields" value="ended_at" :disabled="maxCheck('ended_at')"> Ended on
                                 </label>
                             </li>
                             <li>
@@ -43,22 +43,7 @@
                             </li>
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="goal" :disabled="maxCheck('goal')"> Goal
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="amount_raised" :disabled="maxCheck('amount_raised')"> Funds Raised
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="percent_raised" :disabled="maxCheck('percent_failed')"> Percent Raised
-                                </label>
-                            </li>
-                            <li>
-                                <label class="small" style="margin-bottom: 0px;">
-                                    <input type="checkbox" v-model="activeFields" value="funded_at" :disabled="maxCheck('funded_at')"> Funded
+                                    <input type="checkbox" v-model="activeFields" value="projects" :disabled="maxCheck('projects')"> Projects
                                 </label>
                             </li>
                             <li>
@@ -69,7 +54,7 @@
                         </ul>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters <i class="fa fa-times"></i></button>
-                    <a class="btn btn-primary btn-sm" href="projects/create">New <i class="fa fa-plus"></i></a>
+                    <a class="btn btn-primary btn-sm" href="/admin/initiatives/create">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
         </div>
@@ -77,31 +62,26 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">
-                    Name
-                    <i @click="setOrderByField('name')" v-if="orderByField !== 'name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('type')">
+                <th v-if="isActive('type')" :class="{'text-primary': orderByField === 'type'}">
                     Type
+                    <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
                 <th v-if="isActive('country')">
                     Country
                 </th>
-                <th v-if="isActive('sponsor')">
-                    Sponsor
+                <th v-if="isActive('started_at')">
+                    Started On
+                    <i @click="setOrderByField('started_at')" v-if="orderByField !== 'started_at'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'started_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th v-if="isActive('goal')">
-                    Goal
+                <th v-if="isActive('ended_at')">
+                    Ended On
+                    <i @click="setOrderByField('ended_at')" v-if="orderByField !== 'ended_at'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'ended_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th v-if="isActive('funds_raised')">
-                    Funds Raised
-                </th>
-                <th v-if="isActive('percent_raised')">
-                    Percent Raised
-                </th>
-                <th v-if="isActive('funded_at')">
-                    Funded
+                <th v-if="isActive('projects')">
+                    Projects
                 </th>
                 <th v-if="isActive('created_at')">
                     Created on
@@ -111,36 +91,30 @@
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
-            <tbody v-if="projects.length > 0">
-            <tr v-for="project in projects|filterBy search|orderBy orderByField direction">
-                <td v-if="isActive('name')">{{project.name|capitalize}}</td>
-                <td v-if="isActive('type')">{{project.initiative.data.type|capitalize}}</td>
-                <td v-if="isActive('country')">{{project.initiative.data.country.name|capitalize}}</td>
-                <td v-if="isActive('sponsor')">{{project.sponsor.data.name|capitalize}}</td>
-                <td v-if="isActive('goal')">{{project.goal|currency}}</td>
-                <td v-if="isActive('funds_raised')">{{project.amount_raised|currency}}</td>
-                <td v-if="isActive('percent_raised')">{{project.percent_raised}}%</td>
-                <td v-if="isActive('funded_at')">
-                    <span v-if="project.funded">{{project.funded_at|moment 'll'}}</span>
-                    <span v-else>In progress</span>
-                </td>
-                <td v-if="isActive('created_at')">{{project.created_at|moment 'll'}}</td>
+            <tbody v-if="initiatives.length > 0">
+            <tr v-for="initiative in initiatives|filterBy search|orderBy orderByField direction">
+                <td v-if="isActive('type')">{{initiative.type|capitalize}}</td>
+                <td v-if="isActive('country')">{{initiative.country.name|capitalize}}</td>
+                <td v-if="isActive('started_at')">{{initiative.started_at|moment 'll'}}</td>
+                <td v-if="isActive('ended_at')">{{initiative.ended_at|moment 'll'}}</td>
+                <td v-if="isActive('projects')">{{initiative.projects_count}}</td>
+                <td v-if="isActive('created_at')">{{initiative.created_at|moment 'll'}}</td>
                 <td>
-                    <a href="/admin/projects/{{project.id}}"><i class="fa fa-cog"></i></a>
+                    <a href="/admin/initiatives/{{initiative.id}}"><i class="fa fa-cog"></i></a>
                 </td>
             </tr>
             </tbody>
             <tbody v-else>
-                <tr>
-                    <td colspan="10" class="text-center text-muted">No projects found.</td>
-                </tr>
+            <tr>
+                <td colspan="7" class="text-center text-muted">No initiatives found.</td>
+            </tr>
             </tbody>
             <tfoot>
             <tr>
-                <td colspan="10">
+                <td colspan="7">
                     <div class="col-sm-12 text-center">
                         <pagination :pagination.sync="pagination"
-                                    :callback="searchProjects"
+                                    :callback="searchInitiatives"
                                     size="small">
                         </pagination>
                     </div>
@@ -152,41 +126,41 @@
 </template>
 <script type="text/javascript">
     export default{
-        name: 'projects-list',
+        name: 'initiatives-list',
         props: {
-          'causeId': {
-              type: String,
-              required: true
-          },
-          'list': {
-              type: String,
-              default: 'current'
-          }
+            'causeId': {
+                type: String,
+                required: true
+            },
+            'list': {
+                type: String,
+                default: 'current'
+            }
         },
         data(){
             return{
-                projects: [],
-                orderByField: 'name',
+                initiatives: [],
+                orderByField: 'started_at',
                 direction: 1,
                 page: 1,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: { current_page: 1 },
                 search: '',
-                activeFields: ['name', 'sponsor', 'type', 'percent_raised'],
+                activeFields: ['type', 'country', 'started_at', 'ended_at'],
                 maxActiveFields: 6,
             }
         },
         watch: {
             'search': function (val, oldVal) {
                 this.page = 1;
-                this.searchProjects();
+                this.searchInitiatives();
             },
             'page': function (val, oldVal) {
-                this.searchProjects();
+                this.searchInitiatives();
             },
             'per_page': function (val, oldVal) {
-                this.searchProjects();
+                this.searchInitiatives();
             }
         },
 
@@ -200,17 +174,17 @@
             setOrderByField(field){
                 this.orderByField = field;
                 this.direction = 1;
-                this.searchProjects();
+                this.searchInitiatives();
             },
             resetFilter(){
-                this.orderByField = 'name';
+                this.orderByField = 'started_at';
                 this.direction = 1;
                 this.search = null;
             },
             getParameters()
             {
                 var params = {
-                    include:'sponsor,initiative',
+                    // include:'',
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
@@ -228,16 +202,16 @@
 
                 return params;
             },
-            searchProjects(){
+            searchInitiatives(){
                 var params = this.getParameters();
-                this.$http.get('causes/' + this.causeId + '/projects', params).then(function (response) {
+                this.$http.get('causes/' + this.causeId + '/initiatives', params).then(function (response) {
                     this.pagination = response.data.meta.pagination;
-                    this.projects = response.data.data;
+                    this.initiatives = response.data.data;
                 })
             }
         },
         ready(){
-            this.searchProjects();
+            this.searchInitiatives();
         }
     }
 </script>

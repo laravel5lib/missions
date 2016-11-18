@@ -17,7 +17,7 @@ class ProjectTransformer extends Fractal\TransformerAbstract
         'costs',
         'sponsor',
         'rep',
-        'type'
+        'initiative'
     ];
 
     /**
@@ -29,25 +29,22 @@ class ProjectTransformer extends Fractal\TransformerAbstract
     public function transform(Project $project)
     {
         return [
-            'id'                => $project->id,
-            'name'              => $project->name,
-            'project_type_id'   => $project->project_type_id,
-            'rep_id'            => $project->rep_id ? $project->rep_id : $project->package->initiative->rep_id,
-            'sponsor_id'        => $project->sponsor_id,
-            'sponsor_type'      => $project->sponsor_type,
-            'plaque'            => [
+            'id'                    => $project->id,
+            'name'                  => $project->name,
+            'project_initiative_id' => $project->project_initiative_id,
+            'sponsor_id'            => $project->sponsor_id,
+            'sponsor_type'          => $project->sponsor_type,
+            'plaque'                => [
                 'prefix'  => $project->plaque_prefix,
                 'message' => $project->plaque_message
             ],
-            'to_raise'          => $project->costs ? (int) $project->costs()->sum('amount') : 0,
-            'raised_amount'     => (int) $project->fund->balance,
-//            'raised_percentage' => 0,
-            'funded_at'         => $project->funded_at ? $project->funded_at->toDateTimeString() : null,
-            'launched_at'       => $project->launched_at ? $project->launched_at->toDateTimeString() : null,
-            'completed_at'      => $project->completed_at ? $project->completed_at->toDateTimeString() : null,
-            'created_at'        => $project->created_at->toDateTimeString(),
-            'updated_at'        => $project->updated_at->toDateTimeString(),
-            'links'             => [
+            'goal'                  => (int) $project->goal,
+            'amount_raised'         => (int) $project->amount_raised,
+            'percent_raised'        => (int) $project->precent_raised,
+            'funded_at'             => $project->funded_at ? $project->funded_at->toDateTimeString() : null,
+            'created_at'            => $project->created_at->toDateTimeString(),
+            'updated_at'            => $project->updated_at->toDateTimeString(),
+            'links'                 => [
                 [
                     'rel' => 'self',
                     'uri' => url('/api/projects/' . $project->id),
@@ -68,16 +65,16 @@ class ProjectTransformer extends Fractal\TransformerAbstract
     }
 
     /**
-     * Include types.
+     * Include initiative.
      *
      * @param Project $project
      * @return Fractal\Resource\Item
      */
-    public function includeType(Project $project)
+    public function includeInitiative(Project $project)
     {
-        $type = $project->type;
+        $initiative = $project->initiative;
 
-        return $this->item($type, new ProjectTypeTransformer);
+        return $this->item($initiative, new ProjectInitiativeTransformer);
     }
 
     /**

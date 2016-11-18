@@ -3,12 +3,14 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use EloquentFilter\Filterable;
 
-class ProjectType extends Model
+class ProjectInitiative extends Model
 {
-    use SoftDeletes, UuidForKey;
+    use Filterable, SoftDeletes, UuidForKey;
 
     /**
      * The attributes that should be mutated to dates.
@@ -18,7 +20,9 @@ class ProjectType extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'started_at',
+        'ended_at'
     ];
 
     /**
@@ -27,14 +31,16 @@ class ProjectType extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
+        'type',
         'short_desc',
         'country_code',
-        'upload_id'
+        'upload_id',
+        'started_at',
+        'ended_at'
     ];
 
     /**
-     * Get the project type's image.
+     * Get the project initiative's image.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -44,7 +50,7 @@ class ProjectType extends Model
     }
 
     /**
-     * Get the project type's cause.
+     * Get the project initiative's cause.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -54,7 +60,7 @@ class ProjectType extends Model
     }
 
     /**
-     * Get all the type's projects.
+     * Get all the initiative's projects.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -64,7 +70,7 @@ class ProjectType extends Model
     }
 
     /**
-     * Get the project type's costs.
+     * Get the project initiative's costs.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
@@ -74,12 +80,44 @@ class ProjectType extends Model
     }
 
     /**
-     * Get all the project type's active costs.
+     * Get the project initiative's deadlines.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function deadlines()
+    {
+        return $this->morphMany(Deadline::class, 'deadline_assignable');
+    }
+
+    /**
+     * Get all the project initiative's active costs.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function activeCosts()
     {
         return $this->costs()->active();
+    }
+
+    /**
+     * Get current initiatives.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeCurrent($query)
+    {
+        return $query->where('ended_at', '>=', Carbon::now());
+    }
+
+    /**
+     * Get past initiatives.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePast($query)
+    {
+        return $query->where('ended_at', '<', Carbon::now());
     }
 }

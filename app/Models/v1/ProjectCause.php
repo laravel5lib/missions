@@ -57,9 +57,9 @@ class ProjectCause extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function types()
+    public function initiatives()
     {
-        return $this->hasMany(ProjectType::class);
+        return $this->hasMany(ProjectInitiative::class);
     }
 
     /**
@@ -69,7 +69,7 @@ class ProjectCause extends Model
      */
     public function projects()
     {
-        return $this->hasManyThrough(Project::class, ProjectType::class);
+        return $this->hasManyThrough(Project::class, ProjectInitiative::class);
     }
 
     /**

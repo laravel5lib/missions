@@ -1,8 +1,8 @@
 <template>
     <div>
 
-        <div class="row">
-            <div v-for="cause in causes" class="col-sm-6 col-md-4">
+        <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+            <div v-for="cause in causes" class="col-sm-6 col-md-4" style="display:flex">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5 class="text-center">{{ cause.name }}</h5>

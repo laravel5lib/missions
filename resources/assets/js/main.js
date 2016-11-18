@@ -88,6 +88,7 @@ import projectCauses from './components/admin/project-causes.vue';
 import causeEditor from './components/admin/cause-editor.vue';
 import projectsList from './components/admin/projects-list.vue';
 import initiativesList from './components/admin/initiatives-list.vue';
+import initiativeEditor from './components/admin/initiative-editor.vue';
 import fundEditor from './components/financials/funds/fund-editor.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
 import adminFundsList from './components/financials/funds/admin-funds-list.vue';
@@ -371,6 +372,7 @@ new Vue({
         causeEditor,
         projectsList,
         initiativesList,
+        initiativeEditor,
         fundEditor,
         adminDonorsList,
         adminFundsList,

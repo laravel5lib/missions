@@ -4,11 +4,11 @@
             <div class="row">
                 <div class="col-xs-6">
                     <h5 v-if="edit">Details</h5>
-                    <h5 v-else>Create a Cause</h5>
+                    <h5 v-else>Create an Initiative</h5>
                 </div>
                 <div class="col-xs-6 text-right" v-if="!editMode">
                     <button class="btn btn-xs btn-default-hollow" @click="editMode = true">
-                            <i class="fa fa-pencil"></i> Edit
+                        <i class="fa fa-pencil"></i> Edit
                     </button>
                 </div>
                 <div class="col-xs-6 text-right" v-else>
@@ -25,26 +25,23 @@
             </div>
         </div>
         <div class="panel-body">
-            <label>Name</label>
-            <input class="form-control" v-model="cause.name" v-if="editMode" />
-            <p v-else>{{ cause.name }}</p>
+            <label>Type</label>
+            <input class="form-control" v-model="initiative.type" v-if="editMode" />
+            <p v-else>{{ initiative.type }}</p>
             <label>Countries</label>
             <v-select class="form-control"
-                      multiple
                       id="country"
-                      :value.sync="cause.countries"
+                      :value.sync="initiative.country.code"
                       :options="countries"
                       label="name"
                       v-if="editMode">
             </v-select>
             <p v-else>
-                <span class="label label-default" style="margin-right: 1em" v-for="country in cause.countries">
-                    {{ country.name }}
-                </span>
+                {{ initiative.country.name }}
             </p>
             <label>Description</label>
-            <textarea class="form-control" v-model="cause.short_desc" v-if="editMode" rows="10"></textarea>
-            <p v-else>{{ cause.short_desc }}</p>
+            <textarea class="form-control" v-model="initiative.short_desc" v-if="editMode" rows="10"></textarea>
+            <p v-else>{{ initiative.short_desc }}</p>
         </div>
 
         <alert :show.sync="showSuccess"
@@ -75,14 +72,14 @@
     import VueStrap from 'vue-strap/dist/vue-strap.min';
     import vSelect from 'vue-select';
     export default {
-        name: 'cause-editor',
+        name: 'initiative-editor',
         components: {
             'alert': VueStrap.alert,
             'v-select': vSelect
         },
         data() {
             return{
-                cause: {},
+                initiative: {},
                 countries: [],
                 editMode: true,
                 showSuccess: false,
@@ -104,13 +101,13 @@
         },
         methods: {
             fetch () {
-                this.$http.get('causes/' + this.id).then(function (response) {
-                    this.cause = response.data.data;
+                this.$http.get('initiatives/' + this.id).then(function (response) {
+                    this.initiative = response.data.data;
                 });
             },
             save() {
-                this.$http.put('causes/' + this.id, this.cause).then(function (response) {
-                    this.cause = response.data.data;
+                this.$http.put('initiatives/' + this.id, this.initiative).then(function (response) {
+                    this.initiative = response.data.data;
                     this.editMode = false;
                     this.message = 'Your changes were saved successfully.';
                     this.showSuccess = true;
@@ -120,11 +117,11 @@
                 });
             },
             create() {
-                this.$http.post('causes', this.cause).then(function (response) {
-                    this.cause = {};
+                this.$http.post('initiatives', this.initiative).then(function (response) {
+                    this.initiative = {};
                     window.location.reload();
                 }).error(function () {
-                    this.message = 'The cause could not be created.';
+                    this.message = 'The initiative could not be created.';
                     this.showError = true;
                 });
             },
@@ -133,7 +130,7 @@
                     this.fetch();
                     this.editMode = false;
                 } else {
-                    $('#causeEditor').modal('hide');
+                    $('#initiativeEditor').modal('hide');
                 }
             }
         },

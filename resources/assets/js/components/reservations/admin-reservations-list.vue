@@ -97,7 +97,7 @@
 
 		<div class="row">
             <div class="col-sm-12">
-                <form class="form-inline text-right" novalidate>
+                <form class="form-inline" novalidate>
                 	<div class="form-inline" style="display: inline-block;">
                     	<div class="form-group">
 	                        <label>Show</label>
@@ -201,43 +201,43 @@
         </div>
         <hr class="divider sm">
 		<div>
-			Active Filters:
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.tags.length" @click="filters.tags = []" >
+			<label>Active Filters</label>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.tags.length" @click="filters.tags = []" >
 				Tags
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.user.length" @click="filters.user = []" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.user.length" @click="filters.user = []" >
 				Users
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.groups.length" @click="filters.groups = []" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.groups.length" @click="filters.groups = []" >
 				Groups
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
 				Campaign
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.gender.length" @click="filters.gender = ''" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.gender.length" @click="filters.gender = ''" >
 				Gender
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.status.length" @click="filters.status = ''" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.status.length" @click="filters.status = ''" >
 				Status
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.shirtSize.length" @click="filters.shirtSize = ''" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.shirtSize.length" @click="filters.shirtSize = ''" >
 				Shirt Size
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.hasCompanions !== null" @click="filters.hasCompanions = null" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.hasCompanions !== null" @click="filters.hasCompanions = null" >
 				Companions
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.hasPassport !== null" @click="filters.hasPassport = null" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.hasPassport !== null" @click="filters.hasPassport = null" >
 				Passport
-				<span class="badge">x</span>
-			</button>
+				<i class="fa fa-close"></i>
+			</span>
 		</div>
         <hr class="divider sm">
         <table class="table table-striped">

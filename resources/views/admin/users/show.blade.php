@@ -11,17 +11,19 @@
                 <div class="col-sm-4">
                     <hr class="divider inv sm">
                     <div class="btn-group pull-right">
-                        <a href="/admin/users" class="btn btn-primary"><i class="fa fa-chevron-left"></i></a>
-                        <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Action <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="create">New</a></li>
-                            <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                            {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
-                            <li role="separator" class="divider"></li>
-                            <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
-                        </ul>
+                        <a href="/admin/users" class="btn btn-primary-darker"><i class="fa fa-chevron-left"></i></a>
+                        <div class="btn-group">
+                            <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="create">New</a></li>
+                                <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                                {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
+                                <li role="separator" class="divider"></li>
+                                <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

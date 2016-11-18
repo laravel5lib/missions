@@ -168,7 +168,7 @@ $btn-primary-bg:                 $brand-primary;
 $btn-primary-border:             $btn-primary-bg;
 
 $btn-primary-darker-color:              #fff !important;
-$btn-primary-darker-bg:                 $text-primary-darker;
+$btn-primary-darker-bg:                 lighten($text-primary-darker, 20%);
 $btn-primary-darker-border:             $btn-primary-darker-bg;
 
 $btn-success-color:              #fff !important;

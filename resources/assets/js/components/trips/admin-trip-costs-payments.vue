@@ -1,4 +1,5 @@
 <template>
+    <spinner v-ref:spinner size="md" text="Loading"></spinner>
     <table class="table">
         <thead>
         <tr>
@@ -150,9 +151,9 @@
 <script type="text/javascript">
     export default{
         props: ['id', 'payments', 'cost'],
-    	name: 'admin-trip-costs-payments',
+        name: 'admin-trip-costs-payments',
         data(){
-            return{
+            return {
                 attemptedAddPayment: false,
                 toggleNewPayment: false,
                 showAddModal: false,
@@ -169,30 +170,72 @@
                 resource: this.$resource('costs/' + this.id + '/payments{/payment_id}')
             }
         },
-        watch:{
-            'newPayment.amount_owed': function (val, oldVal) {
-                var thePayment = !!this.showEditModal ? this.selectedPayment : this.newPayment;
-                var max = this.calculateMaxAmount(thePayment);
-                if (val > max)
-                    thePayment.amount_owed = this.cost.amount;
-                thePayment.percent_owed = (val / this.cost.amount) * 100;
-                if ( _.isFunction(this.$validate) )
-                    this.$validate('percent', true);
+        watch: {
+            'selectedPayment': {
+                handler: function (val, oldVal) {
+                    console.log(val);
+                    if(val && val.amount_owed) {
+                        var max = this.calculateMaxAmount(val);
+                        if (val.amount_owed > max)
+                            val.amount_owed = this.cost.amount;
+                        val.percent_owed = (val.amount_owed / this.cost.amount) * 100;
+                        if (_.isFunction(this.$validate))
+                            this.$validate('percent', true);
+                    }
+
+                    if(val && val.percent_owed) {
+                        var max = this.calculateMaxPercent(val);
+                        if (val.percent_owed > max)
+                            val.percent_owed = max;
+                        val.amount_owed = (val.percent_owed / 100) * this.cost.amount;
+                        if (_.isFunction(this.$validate))
+                            this.$validate('amount', true);
+                    }
+                },
+                deep: true
             },
-            'newPayment.percent_owed': function (val, oldVal) {
-                var thePayment = !!this.showEditModal ? this.selectedPayment : this.newPayment;
-                var max = this.calculateMaxPercent(thePayment);
-                if (val > max)
-                    thePayment.percent_owed = max;
-                thePayment.amount_owed = (val / 100) * this.cost.amount;
-                if ( _.isFunction(this.$validate) )
-                    this.$validate('amount', true);
+            'newPayment': {
+                handler: function (val, oldVal) {
+                    console.log(val);
+                    if(val && val.amount_owed) {
+                        var max = this.calculateMaxAmount(val);
+                        if (val.amount_owed > max)
+                            val.amount_owed = this.cost.amount;
+                        val.percent_owed = (val.amount_owed / this.cost.amount) * 100;
+                        if (_.isFunction(this.$validate))
+                            this.$validate('percent', true);
+                    }
+
+                    if(val && val.percent_owed) {
+                        var max = this.calculateMaxPercent(val);
+                        if (val.percent_owed > max)
+                            val.percent_owed = max;
+                        val.amount_owed = (val.percent_owed / 100) * this.cost.amount;
+                        if (_.isFunction(this.$validate))
+                            this.$validate('amount', true);
+                    }
+                },
+                deep: true
             },
-            /*'costs': function (val, oldVal) {
-                this.checkCostsErrors();
-            }*/
+            'showEditModal': function (val, oldVal) {
+                this.$nextTick(function () {
+                    // if edit modal closes, reset data
+                    if (val !== oldVal && val === false) {
+                        this.resetPayment();
+                    }
+                })
+            },
+            'showAddModal': function (val, oldVal) {
+                this.$nextTick(function () {
+                    // if add modal closes, reset data
+                    if (val !== oldVal && val === false) {
+                        this.resetPayment();
+                    }
+                })
+            }
+
         },
-        methods:{
+        methods: {
             checkForErrorPaymentAdd(field){
                 return this.$TripPricingCostPaymentAdd && this.$TripPricingCostPaymentAdd[field.toLowerCase()].invalid && this.attemptedAddPayment;
             },
@@ -206,14 +249,15 @@
                     due_at: null,
                     upfront: false,
                     grace_period: 0,
-                }
+                };
+                this.selectedPayment = null;
             },
             calculateMaxAmount(thePayment){
                 var max = this.cost.amount;
                 if (this.payments.length) {
                     this.payments.forEach(function (payment) {
                         // must ignore current payment in editMode
-                        if(thePayment !== payment) {
+                        if (thePayment !== payment) {
                             max -= payment.amount_owed;
                         }
                     }, this);
@@ -225,7 +269,7 @@
                 if (this.payments.length) {
                     this.payments.forEach(function (payment) {
                         // must ignore current payment in editMode
-                        if(thePayment !== payment) {
+                        if (thePayment !== payment) {
                             max -= payment.percent_owed;
                         }
                     }, this);
@@ -244,7 +288,7 @@
                         amount += payment.amount_owed;
                     }, this);
                     // evaluate difference
-                    if (amount != cost.amount) {
+                    if (amount != this.cost.amount) {
                         errors.push('incomplete');
                     }
                 }
@@ -260,24 +304,28 @@
             },
             addPayment(){
                 this.attemptedAddPayment = true;
-                if(this.$TripPricingCostPaymentAdd.valid) {
+                if (this.$TripPricingCostPaymentAdd.valid) {
+                    this.$refs.spinner.show();
                     this.resource.save({}, this.newPayment).then(function (response) {
                         this.payments.push(this.newPayment);
                         this.resetPayment();
                         this.showAddModal = false;
                         this.attemptedAddPayment = false;
+                        this.$refs.spinner.hide();
                     });
 
                 }
-                // this.checkCostsErrors();
+                this.checkCostsErrors();
             },
             updatePayment(){
                 this.attemptedAddPayment = true;
-                if(this.$TripPricingCostPaymentEdit.valid) {
+                if (this.$TripPricingCostPaymentEdit.valid) {
+                    this.$refs.spinner.show();
                     this.resource.update({payment_id: this.selectedPayment.id}, this.selectedPayment).then(function (response) {
                         this.resetPayment();
                         this.showEditModal = false;
                         this.attemptedAddPayment = false;
+                        this.$refs.spinner.hide();
                     });
 
                 } else {
@@ -290,7 +338,7 @@
                 this.deletePaymentModal = true;
             },
             remove(payment){
-                this.resource.delete({ payment_id: payment.id }).then(function (response) {
+                this.resource.delete({payment_id: payment.id}).then(function (response) {
                     this.payments.$remove(payment);
                     this.selectedPayment = null;
                 });

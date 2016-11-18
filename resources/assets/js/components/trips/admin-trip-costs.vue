@@ -16,7 +16,7 @@
             <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
         </form>
     </aside>
-    <form class="form-inline text-right" novalidate>
+    <form class="panel-body form-inline text-right" novalidate>
         <div class="input-group input-group-sm">
             <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
             <span class="input-group-addon"><i class="fa fa-search"></i></span>

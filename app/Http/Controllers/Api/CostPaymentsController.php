@@ -92,7 +92,7 @@ class CostPaymentsController extends Controller
      */
     public function update(PaymentRequest $request, $costId, $id)
     {
-        $payment = $this->payments->findOrFail($id);
+        $payment = $this->cost->findOrFail($costId)->payments()->findOrFail($id);
 
         $payment->update([
             'cost_id' => $request->get('cost_id', $costId),

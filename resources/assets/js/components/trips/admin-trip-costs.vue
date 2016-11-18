@@ -369,8 +369,6 @@
         },
         ready(){
             this.searchCosts();
-
-
         }
     }
 </script>

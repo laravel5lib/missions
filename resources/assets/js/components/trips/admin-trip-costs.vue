@@ -28,20 +28,22 @@
     <template v-for="cost in costs">
         <div class="panel-body" :class="{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }">
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-6">
                     <h4>{{ cost.name|capitalize }}</h4>
                 </div>
-                <div class="col-sm-4 text-right hidden-xs">
+                <div class="col-sm-6 text-right hidden-xs">
                     <div style="padding: 0;">
                         <div role="group" aria-label="...">
+                            <a class="btn btn-xs btn-default-hollow small" @click="addPayment(cost)"><i class="fa fa-plus"></i> New Payment</a>
                             <a class="btn btn-xs btn-default-hollow small" @click="editCost(cost)"><i class="fa fa-pencil"></i> Edit</a>
                             <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> Delete</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 text-center visible-xs">
+                <div class="col-sm-6 text-center visible-xs">
                     <div style="padding: 0;">
                         <div role="group" aria-label="...">
+                            <a class="btn btn-xs btn-default-hollow small" @click="addPayment(cost)"><i class="fa fa-plus"></i> New Payment</a>
                             <a class="btn btn-xs btn-default-hollow small" @click="editCost(cost)"><i class="fa fa-pencil"></i> Edit</a>
                             <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> Delete</a>
                         </div>
@@ -69,7 +71,7 @@
                 </div>
             </div>
             <hr class="divider">
-            <admin-trip-costs-payments :id="cost.id" :payments.sync="cost.payments.data"></admin-trip-costs-payments>
+            <admin-trip-costs-payments :id="cost.id" :cost="cost" :payments.sync="cost.payments.data"></admin-trip-costs-payments>
         </div>
         <hr class="divider">
     </template>
@@ -302,30 +304,6 @@
                     toggleNewPayment: false
                 }
             },
-            calculateMaxAmount(cost){
-                var max = cost.amount;
-                if (cost.payments.length) {
-                    cost.payments.forEach(function (payment) {
-                        // must ignore current payment in editMode
-                        if(this.newPayment !== payment) {
-                            max -= payment.amount_owed;
-                        }
-                    }, this);
-                }
-                return max;
-            },
-            calculateMaxPercent(cost){
-                var max = 100;
-                if (cost.payments.length) {
-                    cost.payments.forEach(function (payment) {
-                        // must ignore current payment in editMode
-                        if(this.newPayment !== payment) {
-                            max -= payment.percent_owed;
-                        }
-                    }, this);
-                }
-                return max;
-            },
             editCost(cost){
                 this.selectedCost = cost;
                 this.selectedCost.active_at = moment(cost.active_at).format('YYYY-MM-DD');
@@ -384,10 +362,15 @@
                     this.costs = response.data.data;
                     this.$refs.spinner.hide()
                 });
+            },
+            addPayment(cost){
+                this.$root.$emit('Cost:' + cost.id + ':NewPayment')
             }
         },
         ready(){
             this.searchCosts();
+
+
         }
     }
 </script>

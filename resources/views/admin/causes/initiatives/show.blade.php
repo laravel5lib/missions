@@ -29,7 +29,21 @@
     </div>
     <hr class="divider inv lg">
     <div class="container">
-            <initiative-editor id="{{ $initiative->id }}" :edit="true"></initiative-editor>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    <initiative-editor id="{{ $initiative->id }}" :edit="true"></initiative-editor>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    Costs
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    Deadlines
+                </div>
+            </div>
         </div>
     </div>
 @endsection

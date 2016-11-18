@@ -25,23 +25,37 @@
             </div>
         </div>
         <div class="panel-body">
-            <label>Type</label>
-            <input class="form-control" v-model="initiative.type" v-if="editMode" />
-            <p v-else>{{ initiative.type }}</p>
-            <label>Countries</label>
-            <v-select class="form-control"
-                      id="country"
-                      :value.sync="initiative.country.code"
-                      :options="countries"
-                      label="name"
-                      v-if="editMode">
-            </v-select>
-            <p v-else>
-                {{ initiative.country.name }}
-            </p>
-            <label>Description</label>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>Type</label>
+                    <input class="form-control" v-model="initiative.type" v-if="editMode" />
+                    <p v-else>{{ initiative.type }}</p>
+                    <label>Country</label>
+                    <v-select class="form-control"
+                              id="country"
+                              :value.sync="initiative.country.code"
+                              :options="countries"
+                              label="name"
+                              v-if="editMode">
+                    </v-select>
+                    <p v-else>
+                        {{ initiative.country.name }}
+                    </p>
+                </div>
+                <div class="col-sm-6">
+                    <label>Start Date</label>
+                    <input type="date" class="form-control" v-model="initiative.started_at" v-if="editMode">
+                    <p v-else>{{ initiative.started_at | moment 'll' }}</p>
+                    <label>End Date</label>
+                    <input type="date" class="form-control" v-model="initiative.ended_at" v-if="editMode">
+                    <p v-else>{{ initiative.ended_at | moment 'll' }}</p>
+                </div>
+            </div>
+
+            <label>Short Description</label>
             <textarea class="form-control" v-model="initiative.short_desc" v-if="editMode" rows="10"></textarea>
             <p v-else>{{ initiative.short_desc }}</p>
+
         </div>
 
         <alert :show.sync="showSuccess"
@@ -139,6 +153,8 @@
                 this.fetch();
                 this.editMode = false;
             }
+
+            <!--this.selectedCost.active_at = moment(cost.active_at).format('YYYY-MM-DD')-->
 
             this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.data.countries;

@@ -1,5 +1,5 @@
 <template>
-    <a class="btn btn-primary" @click="execute">{{text}} <i v-if="icon" :class="icon"></i></a>
+    <a class="btn btn-primary" :class="size" @click="execute">{{text}} <i v-if="icon" :class="icon"></i></a>
 </template>
 <script type="text/javascript">
     export default{
@@ -14,6 +14,10 @@
                 default: null
             },
             icon: {
+                type: String,
+                default: null
+            },
+            size: {
                 type: String,
                 default: null
             }

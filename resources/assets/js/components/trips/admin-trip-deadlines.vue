@@ -1,9 +1,19 @@
 <template>
     <spinner v-ref:spinner size="md" text="Loading"></spinner>
-    <div class="panel-body" v-for="deadline in deadlines">
+    <div class="panel-body" v-for="deadline in deadlines|orderBy '-date'">
+        <div class="row">
+            <div class="col-xs-12 text-right hidden-xs">
+                <a class="btn btn-xs btn-default-hollow small" @click="editDeadline(deadline)"><i class="fa fa-pencil"></i> Edit</a>
+                <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(deadline)"><i class="fa fa-trash"></i> Delete</a>
+            </div>
+            <div class="col-xs-12 text-center visible-xs">
+                <a class="btn btn-xs btn-default-hollow small" @click="editDeadline(deadline)"><i class="fa fa-pencil"></i> Edit</a>
+                <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(deadline)"><i class="fa fa-trash"></i> Delete</a>
+            </div>
+        </div>
         <div class="row">
             <div class="col-xs-8">
-                <h5><a href="#">{{ deadline.name }}</a></h5>
+                <h5><a href="#">{{ deadline.name|capitalize }}</a></h5>
                 <h6><small>Enforced: {{ deadline.enforced ? 'Yes' : 'No' }}</small></h6>
             </div>
             <div class="col-xs-4 text-right">
@@ -13,11 +23,111 @@
         </div><!-- end row -->
         <hr class="divider">
     </div>
-    <modal class="text-center" :show.sync="showDeletetModal" title="Delete Deadlone" small="true">
-        <div slot="modal-body" class="modal-body text-center" v-if="selectedCost">Are you sure you want to delete {{ selectedCost.name }}?</div>
+    <modal class="text-center" :show.sync="showAddModal" title="Add Deadline">
+        <div slot="modal-body" class="modal-body">
+            <validator name="TripDeadlinesCreate">
+                <form class="form" novalidate>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" :class="{'has-error': checkForAddError('name')}">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" v-model="newDeadline.name" class="form-control input-sm"
+                                       v-validate:name="{required: true}">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group" :class="{'has-error': checkForAddError('grace') }">
+                                        <label for="grace_period">Grace Period</label>
+                                        <div class="input-group input-group-sm" :class="{'has-error': checkForAddError('grace') }">
+                                            <input id="grace_period" type="number" class="form-control" number v-model="newDeadline.grace_period"
+                                                   v-validate:grace="{required: true, min:0}">
+                                            <span class="input-group-addon">Days</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group" :class="{'has-error': checkForAddError('due')}">
+                                        <label for="date">Due</label>
+                                        <input type="date" id="date" class="form-control input-sm"
+                                               v-model="newDeadline.date" v-validate:due="{required: true}">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" v-model="newDeadline.enforced">
+                                    Enforced?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </validator>
+        </div>
         <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default btn-sm" @click='deleteCostModal = false'>Cancel</button>
-            <button type="button" class="btn btn-primary btn-sm" @click='deleteCostModal = false,remove(selectedCost)'>Confirm</button>
+            <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetDeadline()'>Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" @click='addDeadline'>Add</button>
+        </div>
+    </modal>
+    <modal class="text-center" :show.sync="showEditModal" title="Edit Deadline">
+        <div slot="modal-body" class="modal-body">
+            <validator name="TripDeadlinesEdit">
+                <form class="form" novalidate v-if="selectedDeadline">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group" :class="{'has-error': checkForEditError('name')}">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" v-model="selectedDeadline.name" class="form-control input-sm"
+                                       v-validate:name="{required: true}">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group" :class="{'has-error': checkForEditError('grace') }">
+                                        <label for="grace_period">Grace Period</label>
+                                        <div class="input-group input-group-sm" :class="{'has-error': checkForEditError('grace') }">
+                                            <input id="grace_period" type="number" class="form-control" number v-model="selectedDeadline.grace_period"
+                                                   v-validate:grace="{required: true, min:0}">
+                                            <span class="input-group-addon">Days</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group" :class="{'has-error': checkForEditError('due')}">
+                                        <label for="date">Due</label>
+                                        <input type="date" id="date" class="form-control input-sm"
+                                               v-model="selectedDeadline.date" v-validate:due="{required: true}">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" v-model="selectedDeadline.enforced">
+                                    Enforced?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </validator>
+        </div>
+        <div slot="modal-footer" class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" @click='showEditModal = false, resetDeadline()'>Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" @click='updateDeadline'>Update</button>
+        </div>
+    </modal>
+    <modal class="text-center" :show.sync="showDeleteModal" title="Delete Deadline" small="true">
+        <div slot="modal-body" class="modal-body text-center" v-if="selectedDeadline">Are you sure you want to delete {{ selectedDeadline.name }}?</div>
+        <div slot="modal-footer" class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false'>Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" @click='showDeleteModal = false,remove(selectedDeadline)'>Confirm</button>
         </div>
     </modal>
 
@@ -29,21 +139,38 @@
         data(){
             return{
                 deadlines:[],
+                selectedDeadline: null,
                 showAddModal: false,
                 showEditModal: false,
-                showDeletetModal: false,
+                showDeleteModal: false,
+                attemptedAddDeadline: false,
+                attemptedEditDeadline: false,
+                newDeadline: {
+                    deadline_assignable_id: this.id,
+                    deadline_assignable_type: 'trips',
+                    name: '',
+                    item_type: '',
+                    date: null,
+                    grace_period: 0,
+                    enforced: false,
+                },
                 resource: this.$resource('deadlines{/id}')
             }
         },
         methods:{
-            checkForError(field){
+            checkForAddError(field){
                 return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
+            },
+            checkForEditError(field){
+                return this.$TripDeadlinesEdit[field.toLowerCase()].invalid && this.attemptedEditDeadline;
             },
             resetDeadline(){
                 this.newDeadline = {
+                    deadline_assignable_id: this.id,
+                    deadline_assignable_type: 'trips',
                     item: '',
                     item_type: '',
-                    due_at: null,
+                    date: null,
                     grace_period: 0,
                     enforced: false,
                 };
@@ -51,20 +178,42 @@
             addDeadline(){
                 this.attemptedAddDeadline = true;
                 if(this.$TripDeadlinesCreate.valid) {
-                    this.deadlines.push(this.newDeadline);
-                    this.resetDeadline();
-                    this.toggleNewDeadline = false;
-                    this.attemptedAddDeadline = false;
+                    this.$refs.spinner.show();
+                    this.resource.save({}, this.newDeadline).then(function (response) {
+                        this.deadlines.push(response.data.data);
+                        this.resetDeadline();
+                        this.attemptedAddDeadline = false;
+                        this.showAddModal = false;
+                        this.$refs.spinner.hide()
+                    })
                 }
+            },
+            updateDeadline(){
+                this.attemptedEditDeadline = true;
+                if(this.$TripDeadlinesEdit.valid) {
+                    this.$refs.spinner.show();
+                    this.resource.update({ id: this.selectedDeadline.id}, this.selectedDeadline).then(function (response) {
+                        this.attemptedEditDeadline = false;
+                        this.showEditModal = false;
+                        this.$refs.spinner.hide()
+                    })
+                }
+            },
+            editDeadline(deadline){
+                this.selectedDeadline = deadline;
+                this.selectedDeadline.date = moment(deadline.date).format('YYYY-MM-DD');
+                this.showEditModal = true;
             },
             confirmRemove(deadline) {
                 this.selectedDeadline = deadline;
                 this.showDeleteModal = true;
             },
             remove(deadline){
+                this.$refs.spinner.show();
                 this.resource.delete({ id: deadline.id }).then(function (response) {
                     this.deadlines.$remove(deadline);
                     this.selectedDeadline = null;
+                    this.$refs.spinner.hide()
                 });
             },
             searchDeadlines(){
@@ -82,6 +231,10 @@
         },
         ready(){
             this.searchDeadlines();
+            var self = this;
+            this.$root.$on('NewDeadline', function () {
+                self.showAddModal = true;
+            })
         }
     }
 </script>

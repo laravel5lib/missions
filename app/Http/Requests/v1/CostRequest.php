@@ -38,16 +38,6 @@ class CostRequest extends FormRequest
             $rules['cost_assignable_type'] = 'sometimes|required|string|in:trips,reservations,projects';
         }
 
-        if ($this->isMethod('post'))
-        {
-            $rules['payments'] = 'required|array';
-            $rules['payments.*.amount_owed'] = 'required|numeric';
-            $rules['payments.*.percent_owed'] = 'required|numeric';
-            $rules['payments.*.due_at'] = 'date';
-            $rules['payments.*.upfront'] = 'boolean';
-            $rules['payments.*.grace_period'] = 'required|numeric';
-        }
-
         return $rules;
     }
 }

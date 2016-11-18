@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\RegisteredForTrip;
-use App\Events\ReservationWasCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\TripRegistrationRequest;
 use App\Http\Transformers\v1\ReservationTransformer;
@@ -26,9 +25,6 @@ class TripsController extends Controller
      */
     public function __construct(Trip $trip)
     {
-        $this->middleware('internal', ['only' => ['store', 'update', 'destroy']]);
-        $this->middleware('api.auth', ['only' => ['store', 'update', 'destroy']]);
-//        $this->middleware('jwt.refresh', ['only' => ['store', 'update', 'destroy']]);
         $this->trip = $trip;
     }
 

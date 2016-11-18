@@ -41,9 +41,9 @@
 <script type="text/javascript">
 	import details from './create/details.vue';
 	import settings from './create/settings.vue';
-	import pricing from './create/pricing.vue';
-	import reqs from './create/requirements.vue';
-	import deadlines from './create/deadlines.vue';
+	// import pricing from './create/pricing.vue';
+	// import reqs from './create/requirements.vue';
+	// import deadlines from './create/deadlines.vue';
 
 	export default{
 		name: 'campaign-trip-create-wizard',
@@ -53,9 +53,9 @@
 				stepList:[
 					{name: 'Details', view: 'step1', form:'$TripDetails', valid: null, complete:false},
 					{name: 'Registration Settings', view: 'step2', form:'$TripSettings', valid: null, complete:false},
-					{name: 'Pricing', view: 'step3', form:'$TripPricing', valid: null, complete:false},
-					{name: 'Requirements', view: 'step4', form:'$TripReqs', valid: null, complete:false},
-					{name: 'Other Deadlines', view: 'step5', form:'$TripDeadlines', valid: null, complete:false},
+					// {name: 'Pricing', view: 'step3', form:'$TripPricing', valid: null, complete:false},
+					// {name: 'Requirements', view: 'step4', form:'$TripReqs', valid: null, complete:false},
+					// {name: 'Other Deadlines', view: 'step5', form:'$TripDeadlines', valid: null, complete:false},
 				],
 				currentStep: null,
 				canContinue: false,
@@ -77,9 +77,9 @@
 		components:{
 			'step1': details,
 			'step2': settings,
-			'step3': pricing,
-			'step4': reqs,
-			'step5': deadlines
+			// 'step3': pricing,
+			// 'step4': reqs,
+			// 'step5': deadlines
 		},
 		methods: {
 			back(){
@@ -129,7 +129,7 @@
 
 				var resource = this.$resource('trips');
 				resource.save(null, this.wizardData).then(function (resp) {
-					window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
+					window.location.href = '/admin' + resp.data.data.links[0].uri;
 				}, function (error) {
 					console.log(error);
 				});
@@ -147,9 +147,9 @@
 				this.currentStep.complete = val;
 			},
 			'settings'(val){
-				this.currentStep.complete = val;
+				this.currentStep.complete = this.wizardComplete = val;
 			},
-			'pricing'(val){
+			/*'pricing'(val){
 				this.currentStep.complete = val;
 			},
 			'reqs'(val){
@@ -157,7 +157,7 @@
 			},
 			'deadlines'(val){
 				this.currentStep.complete = this.wizardComplete = val
-			}
+			}*/
 		}
 	}
 </script> 

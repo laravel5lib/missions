@@ -2,9 +2,5 @@
     <div class="panel-heading">
         <h5>Todos</h5>
     </div>
-    <div class="list-group">
-        @foreach($trip->todos as $todo)
-            <li class="list-group-item">{{$todo}}</li>
-        @endforeach
-    </div>
+    <admin-trip-todos id="{{ $trip->id }}"></admin-trip-todos>
 </div>

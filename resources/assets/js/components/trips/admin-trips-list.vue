@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <form class="form-inline text-right" novalidate>
+                <form class="form-inline" novalidate>
                     <div class="form-inline" style="display: inline-block;">
                         <div class="form-group">
                             <label>Show</label>
@@ -16,7 +16,7 @@
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters <i class="fa fa-times"></i></button>
-                    <a class="btn btn-primary btn-sm" href="trips/create">New <i class="fa fa-plus"></i></a>
+                    <a class="btn btn-primary btn-sm" href="trips/create"><i class="fa fa-plus icon-left"></i> New</a>
                 </form>
             </div>
         </div>

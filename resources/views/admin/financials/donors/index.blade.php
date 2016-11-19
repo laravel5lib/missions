@@ -21,6 +21,10 @@
                 @include('admin.financials.partials._tabs')
             </div>
         </div>
-        <admin-donors-list></admin-donors-list>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <admin-donors-list></admin-donors-list>
+            </div><!-- end panel-body -->
+        </div><!-- end panel -->
     </div>
 @stop

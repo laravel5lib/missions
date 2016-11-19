@@ -2,12 +2,19 @@
     <div>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h5>Trips</h5>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h5>Trips</h5>
+                    </div>
+                    <div class="col-sm-4 text-right">
+                        <a class="btn btn-primary btn-sm" href="{{campaignId}}/trips/create"><i class="fa fa-plus icon-left"></i> New</a>
+                    </div>
+                </div>
             </div><!-- end panel-heading -->
             <div class="panel-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <form class="form-inline text-right" novalidate>
+                        <form class="form-inline" novalidate>
                             <div class="form-inline" style="display: inline-block;">
                                 <div class="form-group">
                                     <label>Show</label>
@@ -21,7 +28,6 @@
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
                             </div>
                             <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters</button>
-                            <a class="btn btn-primary btn-sm" href="{{campaignId}}/trips/create">New <i class="fa fa-plus"></i></a>
                         </form>
                     </div>
                 </div>

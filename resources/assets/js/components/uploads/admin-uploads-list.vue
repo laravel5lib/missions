@@ -36,7 +36,6 @@
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()">Reset Filters</button>
 						</ul>
                     </div>
-                    <a class="btn btn-primary btn-sm" href="uploads/create">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
         </div>

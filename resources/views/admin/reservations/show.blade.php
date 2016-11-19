@@ -16,7 +16,7 @@
             <div class="col-xs-4 text-right">
                 <hr class="divider inv">
                 <div class="btn-group" role="group">
-                    <a href="{{ url('admin/reservations') }}" class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span></a>
+                    <a href="{{ url('admin/reservations') }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
                     <a class="btn btn-primary" href="{{ $reservation->id }}/edit">Edit</a>
                 </div>
             </div>

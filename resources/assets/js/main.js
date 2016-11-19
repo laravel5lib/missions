@@ -349,6 +349,7 @@ new Vue({
         adminTripDelete,
         adminTripCosts,
         adminTripDeadlines,
+        adminTripRequirements,
         adminInterestsList,
         adminGroups,
         adminGroupCreate,

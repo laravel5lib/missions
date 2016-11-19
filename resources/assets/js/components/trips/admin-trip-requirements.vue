@@ -13,11 +13,11 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <h5><a href="#">{{ requirement.name|capitalize }}</a></h5>
+                <h5><a href="#">{{ requirement.name|capitalize }} {{ requirement.document_type|capitalize }}</a></h5>
                 <h6><small>Enforced: {{ requirement.enforced ? 'Yes' : 'No' }}</small></h6>
             </div>
             <div class="col-xs-4 text-right">
-                <h5><i class="fa fa-calendar"></i> {{ requirement.grace_period }} {{ requirement.grace_period > 1 ? 'days' : 'day' }}</h5>
+                <h5><i class="fa fa-calendar"></i> {{ requirement.due_at|moment 'll' }} </h5>
                 <h6><small>Grace Period: {{ requirement.grace_period }} {{ requirement.grace_period > 1 ? 'days' : 'day' }}</small></h6>
             </div>
         </div><!-- end row -->
@@ -29,10 +29,25 @@
                 <form class="form" novalidate>
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-group" :class="{'has-error': checkForAddError('name')}">
-                                <label for="name">Name</label>
-                                <input type="text" id="name" v-model="newRequirement.name" class="form-control input-sm"
-                                       v-validate:name="{required: true}">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group" :class="{'has-error': checkForAddError('name')}">
+                                        <label for="name">Name</label>
+                                        <select id="name" class="form-control input-sm" v-model="newRequirement.name" v-validate:name="{ required: true }">
+                                            <option value="">-- select --</option>
+                                            <option :value="option" v-for="option in documentNames">{{option}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="type">Document Type</label>
+                                        <select id="type" class="form-control input-sm" v-model="newRequirement.document_type">
+                                            <option value="">-- select --</option>
+                                            <option :value="option" v-for="option in documentTypes">{{option}}</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="row">
@@ -48,21 +63,21 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group" :class="{'has-error': checkForAddError('due')}">
-                                        <label for="date">Due</label>
-                                        <input type="date" id="date" class="form-control input-sm"
-                                               v-model="newRequirement.date" v-validate:due="{required: true}">
+                                        <label for="due_at">Due</label>
+                                        <input type="date" id="due_at" class="form-control input-sm"
+                                               v-model="newRequirement.due_at" v-validate:due="{required: true}">
                                     </div>
 
                                 </div>
                             </div>
 
                             <br>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" v-model="newRequirement.enforced">
-                                    Enforced?
-                                </label>
-                            </div>
+                            <!--<div class="checkbox">
+								<label>
+									<input type="checkbox" v-model="newRequirement.enforced">
+									Enforced?
+								</label>
+							</div>-->
                         </div>
                     </div>
                 </form>
@@ -79,10 +94,25 @@
                 <form class="form" novalidate v-if="selectedRequirement">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-group" :class="{'has-error': checkForEditError('name')}">
-                                <label for="name">Name</label>
-                                <input type="text" id="name" v-model="selectedRequirement.name" class="form-control input-sm"
-                                       v-validate:name="{required: true}">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group" :class="{'has-error': checkForEditError('name')}">
+                                        <label for="name">Name</label>
+                                        <select id="name" class="form-control input-sm" v-model="selectedRequirement.name" v-validate:name="{ required: true }">
+                                            <option value="">-- select --</option>
+                                            <option :value="option" v-for="option in documentNames">{{option}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="type">Document Type</label>
+                                        <select id="type" class="form-control input-sm" v-model="selectedRequirement.document_type">
+                                            <option value="">-- select --</option>
+                                            <option :value="option" v-for="option in documentTypes">{{option}}</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="row">
@@ -98,24 +128,25 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group" :class="{'has-error': checkForEditError('due')}">
-                                        <label for="date">Due</label>
-                                        <input type="date" id="date" class="form-control input-sm"
-                                               v-model="selectedRequirement.date" v-validate:due="{required: true}">
+                                        <label for="due_at">Due</label>
+                                        <input type="date" id="due_at" class="form-control input-sm"
+                                               v-model="selectedRequirement.due_at" v-validate:due="{required: true}">
                                     </div>
 
                                 </div>
                             </div>
 
                             <br>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" v-model="selectedRequirement.enforced">
-                                    Enforced?
-                                </label>
-                            </div>
+                            <!--<div class="checkbox">
+								<label>
+									<input type="checkbox" v-model="newRequirement.enforced">
+									Enforced?
+								</label>
+							</div>-->
                         </div>
                     </div>
                 </form>
+
             </validator>
         </div>
         <div slot="modal-footer" class="modal-footer">
@@ -146,15 +177,36 @@
                 attemptedAddRequirement: false,
                 attemptedEditRequirement: false,
                 newRequirement: {
-                    requirement_assignable_id: this.id,
-                    requirement_assignable_type: 'trips',
+                    requester_id: this.id,
+                    requester_type: 'trip',
                     name: '',
-                    item_type: '',
-                    date: null,
+                    document_type: '',
+                    due_at: null,
                     grace_period: 0,
-                    enforced: false,
+                    // enforced: false,
                 },
-                resource: this.$resource('requirements{/id}')
+                resource: this.$resource('requirements{/id}'),
+                documentNames: [
+                    'Medical Release',
+                    'Passport',
+                    'Visa',
+                    'Referral',
+                    'Credentials',
+                    'Minor Release',
+                    'Immunization',
+                    'Testimony',
+                    'Arrival Designation',
+                    'Itinerary'
+                ],
+                documentTypes: [
+                    'medical_releases',
+                    'passports',
+                    'visas',
+                    'referrals',
+                    'credentials',
+                    'arrival_designation',
+                    'essays',
+                ],
             }
         },
         methods:{
@@ -166,13 +218,13 @@
             },
             resetRequirement(){
                 this.newRequirement = {
-                    requirement_assignable_id: this.id,
-                    requirement_assignable_type: 'trips',
-                    item: '',
-                    item_type: '',
-                    date: null,
+                    requester_id: this.id,
+                    requester_type: 'trip',
+                    name: '',
+                    document_type: '',
+                    due_at: null,
                     grace_period: 0,
-                    enforced: false,
+                    // enforced: false,
                 };
             },
             addRequirement(){
@@ -201,7 +253,7 @@
             },
             editRequirement(requirement){
                 this.selectedRequirement = requirement;
-                this.selectedRequirement.date = moment(requirement.date).format('YYYY-MM-DD');
+                this.selectedRequirement.due_at = moment(requirement.due_at).format('YYYY-MM-DD');
                 this.showEditModal = true;
             },
             confirmRemove(requirement) {

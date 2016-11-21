@@ -62,10 +62,12 @@ class DeadlinesController extends Controller
     public function store(DeadlineRequest $request)
     {
         $deadline = $this->deadline->create([
-            'name'         => $request->get('name'),
-            'date'         => $request->get('date'),
-            'grace_period' => $request->get('grace_period', 0),
-            'enforced'     => $request->get('enforced', false)
+            'deadline_assignable_id'   => $request->get('deadline_assignable_id'),
+            'deadline_assignable_type' => $request->get('deadline_assignable_type'),
+            'name'                     => $request->get('name'),
+            'date'                     => $request->get('date'),
+            'grace_period'             => $request->get('grace_period', 0),
+            'enforced'                 => $request->get('enforced', false)
         ]);
 
         return $this->response->item($deadline, new DeadlineTransformer);
@@ -83,10 +85,12 @@ class DeadlinesController extends Controller
         $deadline = $this->deadline->findOrFail($id);
 
         $deadline->update([
-            'name'         => $request->get('name'),
-            'date'         => $request->get('date'),
-            'grace_period' => $request->get('grace_period', $deadline->grace_period),
-            'enforced'     => $request->get('enforced', $deadline->enforced)
+            'deadline_assignable_id'   => $request->get('deadline_assignable_id', $deadline->deadline_assignable_id),
+            'deadline_assignable_type' => $request->get('deadline_assignable_type', $deadline->deadline_assignable_type),
+            'name'                     => $request->get('name'),
+            'date'                     => $request->get('date'),
+            'grace_period'             => $request->get('grace_period', $deadline->grace_period),
+            'enforced'                 => $request->get('enforced', $deadline->enforced)
         ]);
 
         return $this->response->item($deadline, new DeadlineTransformer);

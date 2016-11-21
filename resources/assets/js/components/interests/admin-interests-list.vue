@@ -38,7 +38,7 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <form class="form-inline text-right" novalidate>
+                <form class="form-inline" novalidate>
                     <div class="form-inline" style="display: inline-block;">
                         <div class="form-group">
                             <label>Show</label>
@@ -112,23 +112,23 @@
         </div>
         <hr class="divider sm">
         <div>
-            Active Filters:
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.group" @click="filters.group = ''" >
+            <label>Active Filters</label>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.group" @click="filters.group = ''" >
                 Group
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.status.length" @click="filters.status = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.status.length" @click="filters.status = ''" >
                 Status
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
                 Campaign
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.trip_type.length" @click="filters.campaign = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.trip_type.length" @click="filters.campaign = ''" >
                 Trip Type
-                <span class="badge">x</span>
-            </button>
+                <i class="fa fa-close"></i>
+            </span>
         </div>
         <hr class="divider sm">
         <table class="table table-striped">

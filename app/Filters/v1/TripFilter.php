@@ -196,7 +196,7 @@ class TripFilter extends Filter
     {
         $this->whereHas('requirements', function ($r) use ($requirements)
         {
-            return $r->whereIn('item', $requirements);
+            return $r->whereIn('name', $requirements);
         });
     }
 
@@ -209,7 +209,7 @@ class TripFilter extends Filter
     {
         $this->whereHas('costs', function ($c) use ($costs)
         {
-            return $c->whereIn('type', $costs);
+            return $c->whereIn('name', $costs);
         });
     }
 

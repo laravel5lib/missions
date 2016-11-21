@@ -45,6 +45,10 @@ class TripTodosController extends Controller
      */
     public function store(Request $request, $tripId)
     {
+        $this->validate($request, [
+            'todos' => 'required|array'
+        ]);
+
         $trip = $this->trip->findOrFail($tripId);
 
         $trip->todos = $request->get('todos');

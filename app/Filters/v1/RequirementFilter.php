@@ -22,7 +22,7 @@ class RequirementFilter extends Filter
      *
      * @var array
      */
-    public $searchable = ['name', 'short_description'];
+    public $searchable = ['name', 'short_desc'];
 
     /**
      * Filter by document type.

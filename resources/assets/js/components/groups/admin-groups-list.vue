@@ -70,7 +70,6 @@
                         </ul>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters</button>
-                    <a class="btn btn-primary btn-sm" href="groups/create">New <i class="fa fa-plus icon-left"></i></a>
                 </form>
             </div>
         </div>

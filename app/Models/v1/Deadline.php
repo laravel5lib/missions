@@ -18,13 +18,11 @@ class Deadline extends Model
     protected $table = 'deadlines';
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are not mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'date', 'grace_period', 'enforced'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.

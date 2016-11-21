@@ -66,9 +66,9 @@ class RequirementsController extends Controller
             'requester_id' => $request->get('requester_id'),
             'name' => $request->get('name'),
             'document_type' => $request->get('document_type'),
-            'short_desc' => $request->get('short_desc'),
+            'short_desc' => $request->get('short_desc', null),
             'due_at' => $request->get('due_at'),
-            'grace_period' => $request->get('grace_period')
+            'grace_period' => $request->get('grace_period', 0)
         ]);
 
         return $this->response->item($requirement, new RequirementTransformer);
@@ -90,9 +90,9 @@ class RequirementsController extends Controller
             'requester_id' => $request->get('requester_id', $requirement->requester_id),
             'name' => $request->get('name'),
             'document_type' => $request->get('document_type'),
-            'short_desc' => $request->get('short_desc'),
+            'short_desc' => $request->get('short_desc', $requirement->short_desc),
             'due_at' => $request->get('due_at'),
-            'grace_period' => $request->get('grace_period')
+            'grace_period' => $request->get('grace_period', $requirement->grace_period)
         ]);
 
         return $this->response->item($requirement, new RequirementTransformer);
@@ -104,7 +104,7 @@ class RequirementsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function delete($id)
+    public function destroy($id)
     {
         $requirement = $this->requirement->findOrFail($id);
 

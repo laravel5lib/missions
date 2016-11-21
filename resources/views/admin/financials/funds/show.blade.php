@@ -10,8 +10,8 @@
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
                     <div class="btn-group">
-                        <a href="{{ url('admin/funds') }}" class="btn btn-default"><i class="fa fa-chevron-left"></i></a>
-                        <a type="button" class="btn btn-primary" data-toggle="collapse" data-target="#createTransaction"><i class="fa fa-plus"></i></a>
+                        <a href="{{ url('admin/funds') }}" class="btn btn-primary-darker"><i class="fa fa-chevron-left"></i></a>
+                        <a type="button" class="btn btn-primary" data-toggle="collapse" data-target="#createTransaction"><i class="fa fa-plus icon-left"></i> New</a>
                     </div>
                 </div>
             </div>
@@ -33,11 +33,16 @@
                 <div class="collapse" id="createTransaction">
                     <transaction-form fund-id="{{ $fund->id }}"></transaction-form>
                 </div>
-                <h4 class="text-center text-muted">Transactions</h4>
-                <hr class="divider">
-                <admin-transactions-list fund="{{ $fund->id }}"
-                                         storage-name="AdminFundTransactionsConfig">
-                </admin-transactions-list>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Transactions</h5>
+                    </div><!-- end panel-heading -->
+                    <div class="panel-body">
+                        <admin-transactions-list fund="{{ $fund->id }}"
+                                                 storage-name="AdminFundTransactionsConfig">
+                        </admin-transactions-list>
+                    </div><!-- end panel-body -->
+                </div>
             </div>
         </div>
         <div class="row">

@@ -37,78 +37,86 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="active">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Country</th>
-                                <th>Dates</th>
-                                <th>Name</th>
-                                <th>Groups</th>
-                                <th>Status</th>
-                                <th>Manage</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($campaigns as $campaign)
-                                @if($campaign->ended_at->isFuture())
-                                <tr>
-                                    <td>{{ country($campaign->country_code) }}</td>
-                                    <td>{{ $campaign->started_at->format('M j, Y').' - '.$campaign->ended_at->format('M j, Y') }}</td>
-                                    <td>{{ $campaign->name }}</td>
-                                    <td>{{ $campaign->groups()->count() }} <i class="fa fa-group"></i></td>
-                                    <td>
-                                        @if($campaign->status == 'Scheduled')
-                                            <i class="fa fa-calendar"></i> Scheduled
-                                        @elseif($campaign->status == 'Published')
-                                            <i class="fa fa-check"></i> Published
-                                        @else
-                                            <i class="fa fa-pencil"></i> Draft
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Country</th>
+                                        <th>Dates</th>
+                                        <th>Name</th>
+                                        <th>Groups</th>
+                                        <th>Status</th>
+                                        <th>Manage</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($campaigns as $campaign)
+                                        @if($campaign->ended_at->isFuture())
+                                        <tr>
+                                            <td>{{ country($campaign->country_code) }}</td>
+                                            <td>{{ $campaign->started_at->format('M j, Y').' - '.$campaign->ended_at->format('M j, Y') }}</td>
+                                            <td>{{ $campaign->name }}</td>
+                                            <td>{{ $campaign->groups()->count() }} <i class="fa fa-group"></i></td>
+                                            <td>
+                                                @if($campaign->status == 'Scheduled')
+                                                    <i class="fa fa-calendar"></i> Scheduled
+                                                @elseif($campaign->status == 'Published')
+                                                    <i class="fa fa-check"></i> Published
+                                                @else
+                                                    <i class="fa fa-pencil"></i> Draft
+                                                @endif
+                                            </td>
+                                            <td class="text-center"><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-gear"></i></a>
+                                            </td>
+                                        </tr>
                                         @endif
-                                    </td>
-                                    <td class="text-center"><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-gear"></i></a>
-                                    </td>
-                                </tr>
-                                @endif
-                            @endforeach
-                            </tbody>
-                        </table>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div><!-- end panel-body -->
+                        </div><!-- end panel -->
                     </div>
                     <div role="tabpanel" class="tab-pane" id="archive">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Country</th>
-                                <th>Dates</th>
-                                <th>Name</th>
-                                <th>Groups</th>
-                                <th>Status</th>
-                                <th>Manage</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($campaigns as $campaign)
-                                @if($campaign->ended_at->isPast())
-                                <tr>
-                                    <td>{{ country($campaign->country_code) }}</td>
-                                    <td>{{ $campaign->started_at->format('M j, Y').' - '.$campaign->ended_at->format('M j, Y') }}</td>
-                                    <td>{{ $campaign->name }}</td>
-                                    <td>{{ $campaign->groups()->count() }} <i class="fa fa-group"></i></td>
-                                    <td>
-                                        @if($campaign->status == 'Scheduled')
-                                            <i class="fa fa-calendar"></i> Scheduled
-                                        @elseif($campaign->status == 'Published')
-                                            <i class="fa fa-check"></i> Published
-                                        @else
-                                            <i class="fa fa-pencil"></i> Draft
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Country</th>
+                                        <th>Dates</th>
+                                        <th>Name</th>
+                                        <th>Groups</th>
+                                        <th>Status</th>
+                                        <th>Manage</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($campaigns as $campaign)
+                                        @if($campaign->ended_at->isPast())
+                                        <tr>
+                                            <td>{{ country($campaign->country_code) }}</td>
+                                            <td>{{ $campaign->started_at->format('M j, Y').' - '.$campaign->ended_at->format('M j, Y') }}</td>
+                                            <td>{{ $campaign->name }}</td>
+                                            <td>{{ $campaign->groups()->count() }} <i class="fa fa-group"></i></td>
+                                            <td>
+                                                @if($campaign->status == 'Scheduled')
+                                                    <i class="fa fa-calendar"></i> Scheduled
+                                                @elseif($campaign->status == 'Published')
+                                                    <i class="fa fa-check"></i> Published
+                                                @else
+                                                    <i class="fa fa-pencil"></i> Draft
+                                                @endif
+                                            </td>
+                                            <td class="text-center"><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-gear"></i></a>
+                                            </td>
+                                        </tr>
                                         @endif
-                                    </td>
-                                    <td class="text-center"><a href="/admin/campaigns/{{ $campaign->id }}"><i class="fa fa-gear"></i></a>
-                                    </td>
-                                </tr>
-                                @endif
-                            @endforeach
-                            </tbody>
-                        </table>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div><!-- end panel-body -->
+                        </div><!-- end panel -->
                     </div>
                 </div>
             </div>

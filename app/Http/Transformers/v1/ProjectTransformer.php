@@ -34,10 +34,8 @@ class ProjectTransformer extends Fractal\TransformerAbstract
             'project_initiative_id' => $project->project_initiative_id,
             'sponsor_id'            => $project->sponsor_id,
             'sponsor_type'          => $project->sponsor_type,
-            'plaque'                => [
-                'prefix'  => $project->plaque_prefix,
-                'message' => $project->plaque_message
-            ],
+            'plaque_prefix'         => $project->plaque_prefix,
+            'plaque_message'        => $project->plaque_message,
             'goal'                  => (int) $project->goal,
             'amount_raised'         => (int) $project->amount_raised,
             'percent_raised'        => (int) $project->precent_raised,

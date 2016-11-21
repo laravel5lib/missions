@@ -25,13 +25,24 @@ class ProjectInitiativeFilter extends Filter
     public $searchable = ['type'];
 
     /**
+     * Filter by country code.
+     *
+     * @param $code
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function country($code)
+    {
+        return $this->where('country_code', $code);
+    }
+
+    /**
      * Is currently active.
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function current()
     {
-        return $this->current();
+        return $this->new();
     }
 
     /**

@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <a href="/admin/causes/{{ $project->type->project_cause_id }}" class="btn btn-default">
+                    <a href="/admin/causes/{{ $project->initiative->project_cause_id }}" class="btn btn-default">
                         <i class="fa fa-chevron-left icon-left"></i> Projects
                     </a>
                 </div>
@@ -19,7 +19,7 @@
                     <h3>{{ $project->name }}</h3>
                 </div>
                 <div class="col-sm-4 text-center">
-                    <a href="/admin/causes/{{ $project->type->project_cause_id }}" class="btn btn-default">
+                    <a href="/admin/causes/{{ $project->initiative->project_cause_id }}" class="btn btn-default">
                         <i class="fa fa-chevron-left icon-left"></i> Projects
                     </a>
                     <hr class="divider inv sm">

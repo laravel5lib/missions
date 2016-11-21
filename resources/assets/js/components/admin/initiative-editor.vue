@@ -154,7 +154,7 @@
                 this.editMode = false;
             }
 
-            <!--this.selectedCost.active_at = moment(cost.active_at).format('YYYY-MM-DD')-->
+            //this.selectedCost.active_at = moment(cost.active_at).format('YYYY-MM-DD')
 
             this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.data.countries;

@@ -17,7 +17,7 @@ class ProjectInitiativeTransformer extends Fractal\TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'costs'
+        'costs', 'cause'
     ];
 
     /**
@@ -48,6 +48,19 @@ class ProjectInitiativeTransformer extends Fractal\TransformerAbstract
                 ]
             ]
         ];
+    }
+
+    /**
+     * Include Cause.
+     *
+     * @param ProjectInitiative $initiative
+     * @return Fractal\Resource\Item
+     */
+    public function includeCause(ProjectInitiative $initiative)
+    {
+        $cause = $initiative->cause;
+
+        return $this->item($cause, new ProjectCauseTransformer);
     }
 
     /**

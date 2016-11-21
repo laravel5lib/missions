@@ -100,12 +100,12 @@ class ProjectInitiative extends Model
     }
 
     /**
-     * Get current initiatives.
+     * Get new initiatives.
      *
      * @param $query
      * @return mixed
      */
-    public function scopeCurrent($query)
+    public function scopeNew($query)
     {
         return $query->where('ended_at', '>=', Carbon::now());
     }

@@ -87,6 +87,7 @@ import reconcileFund from './components/reconcile-fund.vue';
 import projectCauses from './components/admin/project-causes.vue';
 import causeEditor from './components/admin/cause-editor.vue';
 import projectsList from './components/admin/projects-list.vue';
+import projectEditor from './components/admin/project-editor.vue';
 import initiativesList from './components/admin/initiatives-list.vue';
 import initiativeEditor from './components/admin/initiative-editor.vue';
 import fundEditor from './components/financials/funds/fund-editor.vue';
@@ -217,8 +218,14 @@ Vue.filter('percentage', {
     }
 });
 
-Vue.filter('moment', function (val, format) {
-    return moment.utc(val).local().format(format||'LL');
+Vue.filter('moment', function (val, format, diff = false) {
+    var date = moment.utc(val).local().format(format||'LL');
+
+    if(diff) {
+        date = moment.utc(val).local().fromNow();
+    }
+
+    return date;
 });
 
 var VueCropOptions = {
@@ -371,6 +378,7 @@ new Vue({
         projectCauses,
         causeEditor,
         projectsList,
+        projectEditor,
         initiativesList,
         initiativeEditor,
         fundEditor,

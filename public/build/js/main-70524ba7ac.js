@@ -78,8 +78,8 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 },{"../core-js/symbol":14,"../core-js/symbol/iterator":15}],18:[function(require,module,exports){
 /*!
- * Bootstrap v3.3.7 (http://getbootstrap.com)
- * Copyright 2011-2016 Twitter, Inc.
+ * Bootstrap v3.3.6 (http://getbootstrap.com)
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under the MIT license
  */
 
@@ -90,16 +90,16 @@ if (typeof jQuery === 'undefined') {
 +function ($) {
   'use strict';
   var version = $.fn.jquery.split(' ')[0].split('.')
-  if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1) || (version[0] > 3)) {
-    throw new Error('Bootstrap\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 4')
+  if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1) || (version[0] > 2)) {
+    throw new Error('Bootstrap\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 3')
   }
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: transition.js v3.3.7
+ * Bootstrap: transition.js v3.3.6
  * http://getbootstrap.com/javascript/#transitions
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -156,10 +156,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: alert.js v3.3.7
+ * Bootstrap: alert.js v3.3.6
  * http://getbootstrap.com/javascript/#alerts
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -175,7 +175,7 @@ if (typeof jQuery === 'undefined') {
     $(el).on('click', dismiss, this.close)
   }
 
-  Alert.VERSION = '3.3.7'
+  Alert.VERSION = '3.3.6'
 
   Alert.TRANSITION_DURATION = 150
 
@@ -188,7 +188,7 @@ if (typeof jQuery === 'undefined') {
       selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
     }
 
-    var $parent = $(selector === '#' ? [] : selector)
+    var $parent = $(selector)
 
     if (e) e.preventDefault()
 
@@ -251,10 +251,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: button.js v3.3.7
+ * Bootstrap: button.js v3.3.6
  * http://getbootstrap.com/javascript/#buttons
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -271,7 +271,7 @@ if (typeof jQuery === 'undefined') {
     this.isLoading = false
   }
 
-  Button.VERSION  = '3.3.7'
+  Button.VERSION  = '3.3.6'
 
   Button.DEFAULTS = {
     loadingText: 'loading...'
@@ -293,10 +293,10 @@ if (typeof jQuery === 'undefined') {
 
       if (state == 'loadingText') {
         this.isLoading = true
-        $el.addClass(d).attr(d, d).prop(d, true)
+        $el.addClass(d).attr(d, d)
       } else if (this.isLoading) {
         this.isLoading = false
-        $el.removeClass(d).removeAttr(d).prop(d, false)
+        $el.removeClass(d).removeAttr(d)
       }
     }, this), 0)
   }
@@ -360,15 +360,10 @@ if (typeof jQuery === 'undefined') {
 
   $(document)
     .on('click.bs.button.data-api', '[data-toggle^="button"]', function (e) {
-      var $btn = $(e.target).closest('.btn')
+      var $btn = $(e.target)
+      if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn')
       Plugin.call($btn, 'toggle')
-      if (!($(e.target).is('input[type="radio"], input[type="checkbox"]'))) {
-        // Prevent double click on radios, and the double selections (so cancellation) on checkboxes
-        e.preventDefault()
-        // The target component still receive the focus
-        if ($btn.is('input,button')) $btn.trigger('focus')
-        else $btn.find('input:visible,button:visible').first().trigger('focus')
-      }
+      if (!($(e.target).is('input[type="radio"]') || $(e.target).is('input[type="checkbox"]'))) e.preventDefault()
     })
     .on('focus.bs.button.data-api blur.bs.button.data-api', '[data-toggle^="button"]', function (e) {
       $(e.target).closest('.btn').toggleClass('focus', /^focus(in)?$/.test(e.type))
@@ -377,10 +372,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: carousel.js v3.3.7
+ * Bootstrap: carousel.js v3.3.6
  * http://getbootstrap.com/javascript/#carousel
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -408,7 +403,7 @@ if (typeof jQuery === 'undefined') {
       .on('mouseleave.bs.carousel', $.proxy(this.cycle, this))
   }
 
-  Carousel.VERSION  = '3.3.7'
+  Carousel.VERSION  = '3.3.6'
 
   Carousel.TRANSITION_DURATION = 600
 
@@ -615,14 +610,13 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: collapse.js v3.3.7
+ * Bootstrap: collapse.js v3.3.6
  * http://getbootstrap.com/javascript/#collapse
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
-/* jshint latedef: false */
 
 +function ($) {
   'use strict';
@@ -646,7 +640,7 @@ if (typeof jQuery === 'undefined') {
     if (this.options.toggle) this.toggle()
   }
 
-  Collapse.VERSION  = '3.3.7'
+  Collapse.VERSION  = '3.3.6'
 
   Collapse.TRANSITION_DURATION = 350
 
@@ -828,10 +822,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: dropdown.js v3.3.7
+ * Bootstrap: dropdown.js v3.3.6
  * http://getbootstrap.com/javascript/#dropdowns
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -848,7 +842,7 @@ if (typeof jQuery === 'undefined') {
     $(element).on('click.bs.dropdown', this.toggle)
   }
 
-  Dropdown.VERSION = '3.3.7'
+  Dropdown.VERSION = '3.3.6'
 
   function getParent($this) {
     var selector = $this.attr('data-target')
@@ -994,10 +988,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: modal.js v3.3.7
+ * Bootstrap: modal.js v3.3.6
  * http://getbootstrap.com/javascript/#modals
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -1028,7 +1022,7 @@ if (typeof jQuery === 'undefined') {
     }
   }
 
-  Modal.VERSION  = '3.3.7'
+  Modal.VERSION  = '3.3.6'
 
   Modal.TRANSITION_DURATION = 300
   Modal.BACKDROP_TRANSITION_DURATION = 150
@@ -1135,9 +1129,7 @@ if (typeof jQuery === 'undefined') {
     $(document)
       .off('focusin.bs.modal') // guard against infinite focus loop
       .on('focusin.bs.modal', $.proxy(function (e) {
-        if (document !== e.target &&
-            this.$element[0] !== e.target &&
-            !this.$element.has(e.target).length) {
+        if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
           this.$element.trigger('focus')
         }
       }, this))
@@ -1334,11 +1326,11 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tooltip.js v3.3.7
+ * Bootstrap: tooltip.js v3.3.6
  * http://getbootstrap.com/javascript/#tooltip
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -1361,7 +1353,7 @@ if (typeof jQuery === 'undefined') {
     this.init('tooltip', element, options)
   }
 
-  Tooltip.VERSION  = '3.3.7'
+  Tooltip.VERSION  = '3.3.6'
 
   Tooltip.TRANSITION_DURATION = 150
 
@@ -1652,11 +1644,9 @@ if (typeof jQuery === 'undefined') {
 
     function complete() {
       if (that.hoverState != 'in') $tip.detach()
-      if (that.$element) { // TODO: Check whether guarding this code with this `if` is really necessary.
-        that.$element
-          .removeAttr('aria-describedby')
-          .trigger('hidden.bs.' + that.type)
-      }
+      that.$element
+        .removeAttr('aria-describedby')
+        .trigger('hidden.bs.' + that.type)
       callback && callback()
     }
 
@@ -1699,10 +1689,7 @@ if (typeof jQuery === 'undefined') {
       // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
       elRect = $.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top })
     }
-    var isSvg = window.SVGElement && el instanceof window.SVGElement
-    // Avoid using $.offset() on SVGs since it gives incorrect results in jQuery 3.
-    // See https://github.com/twbs/bootstrap/issues/20280
-    var elOffset  = isBody ? { top: 0, left: 0 } : (isSvg ? null : $element.offset())
+    var elOffset  = isBody ? { top: 0, left: 0 } : $element.offset()
     var scroll    = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() }
     var outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null
 
@@ -1818,7 +1805,6 @@ if (typeof jQuery === 'undefined') {
       that.$tip = null
       that.$arrow = null
       that.$viewport = null
-      that.$element = null
     })
   }
 
@@ -1855,10 +1841,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: popover.js v3.3.7
+ * Bootstrap: popover.js v3.3.6
  * http://getbootstrap.com/javascript/#popovers
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -1875,7 +1861,7 @@ if (typeof jQuery === 'undefined') {
 
   if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
 
-  Popover.VERSION  = '3.3.7'
+  Popover.VERSION  = '3.3.6'
 
   Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
     placement: 'right',
@@ -1964,10 +1950,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: scrollspy.js v3.3.7
+ * Bootstrap: scrollspy.js v3.3.6
  * http://getbootstrap.com/javascript/#scrollspy
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -1993,7 +1979,7 @@ if (typeof jQuery === 'undefined') {
     this.process()
   }
 
-  ScrollSpy.VERSION  = '3.3.7'
+  ScrollSpy.VERSION  = '3.3.6'
 
   ScrollSpy.DEFAULTS = {
     offset: 10
@@ -2137,10 +2123,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tab.js v3.3.7
+ * Bootstrap: tab.js v3.3.6
  * http://getbootstrap.com/javascript/#tabs
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -2157,7 +2143,7 @@ if (typeof jQuery === 'undefined') {
     // jscs:enable requireDollarBeforejQueryAssignment
   }
 
-  Tab.VERSION = '3.3.7'
+  Tab.VERSION = '3.3.6'
 
   Tab.TRANSITION_DURATION = 150
 
@@ -2293,10 +2279,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: affix.js v3.3.7
+ * Bootstrap: affix.js v3.3.6
  * http://getbootstrap.com/javascript/#affix
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -2322,7 +2308,7 @@ if (typeof jQuery === 'undefined') {
     this.checkPosition()
   }
 
-  Affix.VERSION  = '3.3.7'
+  Affix.VERSION  = '3.3.6'
 
   Affix.RESET    = 'affix affix-top affix-bottom'
 
@@ -26878,30 +26864,10 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
 
 var process = module.exports = {};
 
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
+// cached from whatever global is present so that test runners that stub it don't break things.
+var cachedSetTimeout = setTimeout;
+var cachedClearTimeout = clearTimeout;
 
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-(function () {
-  try {
-    cachedSetTimeout = setTimeout;
-  } catch (e) {
-    cachedSetTimeout = function () {
-      throw new Error('setTimeout is not defined');
-    }
-  }
-  try {
-    cachedClearTimeout = clearTimeout;
-  } catch (e) {
-    cachedClearTimeout = function () {
-      throw new Error('clearTimeout is not defined');
-    }
-  }
-} ())
 var queue = [];
 var draining = false;
 var currentQueue;
@@ -31640,7 +31606,7 @@ process.umask = function() { return 0; };
 (function (global){
 /**
  * @license
- * Video.js 5.11.7 <http://videojs.com/>
+ * Video.js 5.11.8 <http://videojs.com/>
  * Copyright Brightcove, Inc. <https://www.brightcove.com/>
  * Available under Apache License Version 2.0
  * <https://github.com/videojs/video.js/blob/master/LICENSE>
@@ -39397,6 +39363,12 @@ var DurationDisplay = (function (_Component) {
     _Component.call(this, player, options);
 
     this.on(player, 'durationchange', this.updateContent);
+
+    // Also listen for timeupdate and loadedmetadata because removing those
+    // listeners could have broken dependent applications/libraries. These
+    // can likely be removed for 6.0.
+    this.on(player, 'timeupdate', this.updateContent);
+    this.on(player, 'loadedmetadata', this.updateContent);
   }
 
   /**
@@ -53542,7 +53514,7 @@ setup.autoSetupTimeout(1, videojs);
  *
  * @type {String}
  */
-videojs.VERSION = '5.11.7';
+videojs.VERSION = '5.11.8';
 
 /**
  * The global options object. These are the settings that take effect
@@ -59453,7 +59425,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 });
 
 },{"babel-runtime/core-js/json/stringify":2,"babel-runtime/core-js/object/create":4,"babel-runtime/core-js/object/define-properties":5,"babel-runtime/core-js/object/define-property":6,"babel-runtime/core-js/object/get-own-property-descriptor":7,"babel-runtime/core-js/object/get-own-property-names":8,"babel-runtime/core-js/object/get-own-property-symbols":9,"babel-runtime/core-js/object/get-prototype-of":10,"babel-runtime/core-js/object/is-extensible":11,"babel-runtime/core-js/object/keys":12,"babel-runtime/core-js/object/prevent-extensions":13,"babel-runtime/helpers/typeof":17}],122:[function(require,module,exports){
-"use strict";var _typeof=typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"?function(obj){return typeof obj;}:function(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol?"symbol":typeof obj;};!function(t,e){"object"==(typeof exports==="undefined"?"undefined":_typeof(exports))&&"object"==(typeof module==="undefined"?"undefined":_typeof(module))?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==(typeof exports==="undefined"?"undefined":_typeof(exports))?exports.VueStrap=e():t.VueStrap=e();}(undefined,function(){return function(t){function e(o){if(n[o])return n[o].exports;var i=n[o]={exports:{},id:o,loaded:!1};return t[o].call(i.exports,i,i.exports,e),i.loaded=!0,i.exports;}var n={};return e.m=t,e.c=n,e.p="",e(0);}([function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}var i=n(27),r=o(i),a=n(95),s=o(a),l=n(99),c=o(l),u=n(102),d=o(u),p=n(109),f=o(p),h=n(114),v=o(h),y=n(117),b=o(y),m=n(122),g=o(m),x=n(127),w=o(x),_=n(132),k=o(_),S=n(137),M=o(S),O=n(140),$=o(O),D=n(145),j=o(D),C=n(154),N=o(C),B=n(157),L=o(B),A=n(160),T=o(A),P=n(165),E=o(P),R=n(171),V=o(R),z=n(174),I=o(z),W=n(179),F=o(W),Y=n(199),X=o(Y),H=n(202),G=o(H),q=n(207),U=o(q),J=n(210),Z=o(J),K=n(215),Q=o(K),tt=n(220),et=o(tt),nt=n(225),ot=o(nt),it={$:r["default"],accordion:s["default"],affix:c["default"],alert:d["default"],aside:f["default"],buttonGroup:v["default"],carousel:b["default"],checkbox:g["default"],datepicker:w["default"],dropdown:k["default"],formGroup:M["default"],input:$["default"],modal:j["default"],navbar:N["default"],option:L["default"],panel:T["default"],popover:E["default"],progressbar:V["default"],radio:I["default"],select:F["default"],slider:X["default"],spinner:G["default"],tab:U["default"],tabGroup:Z["default"],tabset:Q["default"],tooltip:et["default"],typeahead:ot["default"]};t.exports=it;},,,,,,,,,,,,,,,,,,,,,,,,,,,function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}function i(t,e){var n=[],o=!0,i=!1,r=void 0;try{for(var a,s=(0,h["default"])(t);!(o=(a=s.next()).done);o=!0){var l=a.value;if(l instanceof Node||null===l)~n.indexOf(l)||n.push(l);else{if(!(l instanceof window.NodeList||l instanceof S||l instanceof HTMLCollection||l instanceof Array))return t.get=M.get,t.set=M.set,t.call=M.call,t.owner=e,t;var c=!0,u=!1,d=void 0;try{for(var p,f=(0,h["default"])(l);!(c=(p=f.next()).done);c=!0){var v=p.value;n.push(v);}}catch(y){u=!0,d=y;}finally{try{!c&&f["return"]&&f["return"]();}finally{if(u)throw d;}}}}}catch(y){i=!0,r=y;}finally{try{!o&&s["return"]&&s["return"]();}finally{if(i)throw r;}}return new S([n,e]);}function r(t){var e=this,n=arguments;O[t]instanceof Function?M[t]=function(){var o=[],r=!0,a=!0,s=!1,l=void 0;try{for(var c,u=(0,h["default"])(M);!(a=(c=u.next()).done);a=!0){var d=c.value;d&&d[t]instanceof Function?(d=d[t].apply(d,n),o.push(d),r&&void 0!==d&&(r=!1)):o.push(void 0);}}catch(p){s=!0,l=p;}finally{try{!a&&u["return"]&&u["return"]();}finally{if(s)throw l;}}return r?e:i(o,e);}:(0,l["default"])(M,t,{get:function get(){var e=[],n=!0,o=!1,r=void 0;try{for(var a,s=(0,h["default"])(this);!(n=(a=s.next()).done);n=!0){var l=a.value;null!==l&&(l=l[t]),e.push(l);}}catch(c){o=!0,r=c;}finally{try{!n&&s["return"]&&s["return"]();}finally{if(o)throw r;}}return i(e,this);},set:function set(e){var n=!0,o=!1,i=void 0;try{for(var r,a=(0,h["default"])(this);!(n=(r=a.next()).done);n=!0){var s=r.value;s&&t in s&&(s[t]=e);}}catch(l){o=!0,i=l;}finally{try{!n&&a["return"]&&a["return"]();}finally{if(o)throw i;}}}});}function a(){return new S(arguments);}Object.defineProperty(e,"__esModule",{value:!0});var s=n(28),l=o(s),c=n(46),u=o(c),d=n(82),p=o(d),f=n(88),h=o(f),v=n(93),y=o(v),b=n(94),m=o(b),g=Array.prototype,x=new Error("Passed arguments must be of Node"),w=void 0,_=[],k=[],S=function(){function t(e){(0,y["default"])(this,t);var n=e;if(e[0]===window?n=[window]:"string"==typeof e[0]?(n=(e[1]||document).querySelectorAll(e[0]),e[1]&&(this.owner=e[1])):0 in e&&!(e[0]instanceof Node)&&e[0]&&"length"in e[0]&&(n=e[0],e[1]&&(this.owner=e[1])),n){for(var o in n){this[o]=n[o];}this.length=n.length;}else this.length=0;}return(0,m["default"])(t,[{key:"concat",value:function value(){function e(t){var o=!0,i=!1,r=void 0;try{for(var a,s=(0,h["default"])(t);!(o=(a=s.next()).done);o=!0){var l=a.value;l instanceof Node?~n.indexOf(l)||n.push(l):l&&e(l);}}catch(c){i=!0,r=c;}finally{try{!o&&s["return"]&&s["return"]();}finally{if(i)throw r;}}}var n=g.slice.call(this),o=!0,i=!1,r=void 0;try{for(var a,s=(0,h["default"])(arguments);!(o=(a=s.next()).done);o=!0){var l=a.value;if(l instanceof Node)~n.indexOf(l)||n.push(l);else{if(!(l instanceof window.NodeList||l instanceof t||l instanceof HTMLCollection||l instanceof Array))throw Error("Concat arguments must be of a Node, NodeList, HTMLCollection, or Array of (Node, NodeList, HTMLCollection, Array)");e(l);}}}catch(c){i=!0,r=c;}finally{try{!o&&s["return"]&&s["return"]();}finally{if(i)throw r;}}return new t([n,this]);}},{key:"each",value:function value(){return g.forEach.apply(this,arguments),this;}},{key:"parent",value:function value(){return this.map(function(t){return t.parentNode;});}},{key:"filter",value:function value(){return new t([g.filter.apply(this,arguments),this]);}},{key:"find",value:function value(t){var e=[],n=!0,o=!1,r=void 0;try{for(var a,s=(0,h["default"])(i(this));!(n=(a=s.next()).done);n=!0){var l=a.value,c=l.querySelectorAll(t);c&&c.length&&e.push(c);}}catch(u){o=!0,r=u;}finally{try{!n&&s["return"]&&s["return"]();}finally{if(o)throw r;}}return i(e,this.owner);}},{key:"findChildren",value:function value(t){var e=this;return this.find(t).filter(function(t){return e.includes(t.parentElement);});}},{key:"forEach",value:function value(){return g.forEach.apply(this,arguments),this;}},{key:"includes",value:function value(t,e){return~this.indexOf(t,e);}},{key:"map",value:function value(){for(var t=arguments.length,e=Array(t),n=0;n<t;n++){e[n]=arguments[n];}return i(g.map.apply(this,e),this);}},{key:"pop",value:function e(n){"number"!=typeof n&&(n=1);for(var o=[],e=g.pop.bind(this);n--;){o.push(e());}return new t([o,this]);}},{key:"push",value:function value(){var t=!0,e=!1,n=void 0;try{for(var o,i=(0,h["default"])(arguments);!(t=(o=i.next()).done);t=!0){var r=o.value;if(!(r instanceof Node))throw x;~this.indexOf(r)||g.push.call(this,r);}}catch(a){e=!0,n=a;}finally{try{!t&&i["return"]&&i["return"]();}finally{if(e)throw n;}}return this;}},{key:"delete",value:function value(){for(var e=(new t([[],this.owner]),this.length-1),n=this[e];n;n=this[--e]){n.remove?(n.remove(),g.splice.call(this,e,1)):n.parentNode&&(n.parentNode.removeChild(n),g.splice.call(this,e,1));}return this;}},{key:"shift",value:function n(e){"number"!=typeof e&&(e=1);for(var o=[],n=g.shift.bind(this);e--;){o.push(n());}return new t([o,this]);}},{key:"slice",value:function value(){return new t([g.slice.apply(this,arguments),this]);}},{key:"splice",value:function value(){for(var e=2,n=arguments.length;e<n;e++){if(!(arguments[e]instanceof Node))throw x;}return new t([g.splice.apply(this,arguments),this]);}},{key:"unshift",value:function o(){var o=g.unshift.bind(this),t=!0,e=!1,n=void 0;try{for(var i,r=(0,h["default"])(arguments);!(t=(i=r.next()).done);t=!0){var a=i.value;if(!(a instanceof Node))throw x;~this.indexOf(a)||o(a);}}catch(s){e=!0,n=s;}finally{try{!t&&r["return"]&&r["return"]();}finally{if(e)throw n;}}return this;}},{key:"addClass",value:function value(t){return this.toggleClass(t,!0);}},{key:"removeClass",value:function value(t){return this.toggleClass(t,!1);}},{key:"toggleClass",value:function value(t,e){var n=this,o=void 0===e||null===e?"toggle":e?"add":"remove";return"string"==typeof t&&(t=t.trim().replace(/\s+/," ").split(" ")),t.forEach(function(t){return n.each(function(e){return e.classList[o](t);});}),this;}},{key:"get",value:function value(t){var e=[],n=!0,o=!1,r=void 0;try{for(var a,s=(0,h["default"])(this);!(n=(a=s.next()).done);n=!0){var l=a.value;null!==l&&(l=l[t]),e.push(l);}}catch(c){o=!0,r=c;}finally{try{!n&&s["return"]&&s["return"]();}finally{if(o)throw r;}}return i(e,this);}},{key:"set",value:function value(t,e){if(t.constructor===Object){var n=!0,o=!1,i=void 0;try{for(var r,a=(0,h["default"])(this);!(n=(r=a.next()).done);n=!0){var s=r.value;if(s)for(key in t){key in s&&(s[key]=t[key]);}}}catch(l){o=!0,i=l;}finally{try{!n&&a["return"]&&a["return"]();}finally{if(o)throw i;}}}else{var c=!0,u=!1,d=void 0;try{for(var p,f=(0,h["default"])(this);!(c=(p=f.next()).done);c=!0){var v=p.value;t in v&&(v[t]=e);}}catch(l){u=!0,d=l;}finally{try{!c&&f["return"]&&f["return"]();}finally{if(u)throw d;}}}return this;}},{key:"call",value:function value(){for(var t=arguments.length,e=Array(t),n=0;n<t;n++){e[n]=arguments[n];}var o=g.shift.call(e),r=[],a=!0,s=!0,l=!1,c=void 0;try{for(var u,d=(0,h["default"])(this);!(s=(u=d.next()).done);s=!0){var p=u.value;p&&p[o]instanceof Function?(p=p[o].apply(p,e),r.push(p),a&&void 0!==p&&(a=!1)):r.push(void 0);}}catch(f){l=!0,c=f;}finally{try{!s&&d["return"]&&d["return"]();}finally{if(l)throw c;}}return a?this:i(r,this);}},{key:"item",value:function value(e){return new t([[this[e]],this]);}},{key:"on",value:function value(e,n,o){if("string"==typeof e&&(e=e.trim().replace(/\s+/," ").split(" ")),!this||!this.length)return this;if(void 0===o&&(o=n,n=null),!o)return this;var i=o;o=n?function(e){var o=new t([n,this]);o.length&&o.some(function(t){var n=t.contains(e.target);return n&&i.call(t,e,t),n;});}:function(t){i.apply(this,[t,this]);};var r=!0,a=!1,s=void 0;try{for(var l,c=(0,h["default"])(e);!(r=(l=c.next()).done);r=!0){var u=l.value,d=!0,p=!1,f=void 0;try{for(var v,y=(0,h["default"])(this);!(d=(v=y.next()).done);d=!0){var b=v.value;b&&(b.addEventListener(u,o,!1),k.push({el:b,event:u,callback:o}));}}catch(m){p=!0,f=m;}finally{try{!d&&y["return"]&&y["return"]();}finally{if(p)throw f;}}}}catch(m){a=!0,s=m;}finally{try{!r&&c["return"]&&c["return"]();}finally{if(a)throw s;}}return this;}},{key:"off",value:function value(t,e){if(t instanceof Function&&(e=t,t=null),"string"==typeof t&&e instanceof Function){var n=!0,o=!1,i=void 0;try{for(var r,a=(0,h["default"])(this);!(n=(r=a.next()).done);n=!0){var s=r.value;for(var l in k){var c=!0,u=!1,d=void 0;try{for(var p,f=(0,h["default"])(t.split(" "));!(c=(p=f.next()).done);c=!0){var v=p.value;k[l]&&k[l].el===s&&k[l].event===v&&k[l].callback===e&&(k[l].el.removeEventListener(k[l].event,k[l].callback),delete k[l]);}}catch(y){u=!0,d=y;}finally{try{!c&&f["return"]&&f["return"]();}finally{if(u)throw d;}}}}}catch(y){o=!0,i=y;}finally{try{!n&&a["return"]&&a["return"]();}finally{if(o)throw i;}}}else if("string"==typeof t){var b=!0,m=!1,g=void 0;try{for(var x,w=(0,h["default"])(this);!(b=(x=w.next()).done);b=!0){var _=x.value;for(var S in k){var M=!0,O=!1,$=void 0;try{for(var D,j=(0,h["default"])(t.split(" "));!(M=(D=j.next()).done);M=!0){var C=D.value;k[S]&&k[S].el===_&&k[S].event===C&&(k[S].el.removeEventListener(k[S].event,k[S].callback),delete k[S]);}}catch(y){O=!0,$=y;}finally{try{!M&&j["return"]&&j["return"]();}finally{if(O)throw $;}}}}}catch(y){m=!0,g=y;}finally{try{!b&&w["return"]&&w["return"]();}finally{if(m)throw g;}}}else if(e instanceof Function){var N=!0,B=!1,L=void 0;try{for(var A,T=(0,h["default"])(this);!(N=(A=T.next()).done);N=!0){var P=A.value;for(var E in k){k[E]&&k[E].el===P&&k[E].callback===e&&(k[E].el.removeEventListener(k[E].event,k[E].callback),delete k[E]);}}}catch(y){B=!0,L=y;}finally{try{!N&&T["return"]&&T["return"]();}finally{if(B)throw L;}}}else{var R=!0,V=!1,z=void 0;try{for(var I,W=(0,h["default"])(this);!(R=(I=W.next()).done);R=!0){var F=I.value;for(var Y in k){k[Y]&&k[Y].el===F&&(k[Y].el.removeEventListener(k[Y].event,k[Y].callback),delete k[Y]);}}}catch(y){V=!0,z=y;}finally{try{!R&&W["return"]&&W["return"]();}finally{if(V)throw z;}}}return k=k.filter(function(t){return void 0!==t;}),this;}},{key:"onBlur",value:function value(t){return this&&this.length&&t?(this.each(function(e){_.push({el:e,callback:t});}),w||(w=function w(t){var e=!0,n=!1,o=void 0;try{for(var i,r=(0,h["default"])(_);!(e=(i=r.next()).done);e=!0){var a=i.value,s=a.el.contains(t.target)||a.el===t.target;s||a.callback.call(a.el,t,a.el);}}catch(l){n=!0,o=l;}finally{try{!e&&r["return"]&&r["return"]();}finally{if(n)throw o;}}},document.addEventListener("click",w,!1),document.addEventListener("touchstart",w,!1)),this):this;}},{key:"offBlur",value:function value(t){return this.each(function(e){for(var n in _){!_[n]||_[n].el!==e||t&&_[n].callback!==t||delete _[n];}}),_=_.filter(function(t){return void 0!==t;}),this;}},{key:"asArray",get:function get(){return g.slice.call(this);}}]),t;}(),M=S.prototype;(0,p["default"])(g).forEach(function(t){"join"!==t&&"copyWithin"!==t&&"fill"!==t&&void 0===M[t]&&(M[t]=g[t]);}),window.Symbol&&u["default"]&&(M[u["default"]]=M.values=g[u["default"]]);var O=document.createElement("div");for(var $ in O){r($);}window.NL=a,e["default"]=a;},function(t,e,n){t.exports={"default":n(29),__esModule:!0};},function(t,e,n){n(30);var o=n(33).Object;t.exports=function(t,e,n){return o.defineProperty(t,e,n);};},function(t,e,n){var o=n(31);o(o.S+o.F*!n(41),"Object",{defineProperty:n(37).f});},function(t,e,n){var o=n(32),i=n(33),r=n(34),a=n(36),s="prototype",l=function l(t,e,n){var c,u,d,p=t&l.F,f=t&l.G,h=t&l.S,v=t&l.P,y=t&l.B,b=t&l.W,m=f?i:i[e]||(i[e]={}),g=m[s],x=f?o:h?o[e]:(o[e]||{})[s];f&&(n=e);for(c in n){u=!p&&x&&void 0!==x[c],u&&c in m||(d=u?x[c]:n[c],m[c]=f&&"function"!=typeof x[c]?n[c]:y&&u?r(d,o):b&&x[c]==d?function(t){var e=function e(_e,n,o){if(this instanceof t){switch(arguments.length){case 0:return new t();case 1:return new t(_e);case 2:return new t(_e,n);}return new t(_e,n,o);}return t.apply(this,arguments);};return e[s]=t[s],e;}(d):v&&"function"==typeof d?r(Function.call,d):d,v&&((m.virtual||(m.virtual={}))[c]=d,t&l.R&&g&&!g[c]&&a(g,c,d)));}};l.F=1,l.G=2,l.S=4,l.P=8,l.B=16,l.W=32,l.U=64,l.R=128,t.exports=l;},function(t,e){var n=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=n);},function(t,e){var n=t.exports={version:"2.4.0"};"number"==typeof __e&&(__e=n);},function(t,e,n){var o=n(35);t.exports=function(t,e,n){if(o(t),void 0===e)return t;switch(n){case 1:return function(n){return t.call(e,n);};case 2:return function(n,o){return t.call(e,n,o);};case 3:return function(n,o,i){return t.call(e,n,o,i);};}return function(){return t.apply(e,arguments);};};},function(t,e){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t;};},function(t,e,n){var o=n(37),i=n(45);t.exports=n(41)?function(t,e,n){return o.f(t,e,i(1,n));}:function(t,e,n){return t[e]=n,t;};},function(t,e,n){var o=n(38),i=n(40),r=n(44),a=Object.defineProperty;e.f=n(41)?Object.defineProperty:function(t,e,n){if(o(t),e=r(e,!0),o(n),i)try{return a(t,e,n);}catch(s){}if("get"in n||"set"in n)throw TypeError("Accessors not supported!");return"value"in n&&(t[e]=n.value),t;};},function(t,e,n){var o=n(39);t.exports=function(t){if(!o(t))throw TypeError(t+" is not an object!");return t;};},function(t,e){t.exports=function(t){return"object"==(typeof t==="undefined"?"undefined":_typeof(t))?null!==t:"function"==typeof t;};},function(t,e,n){t.exports=!n(41)&&!n(42)(function(){return 7!=Object.defineProperty(n(43)("div"),"a",{get:function get(){return 7;}}).a;});},function(t,e,n){t.exports=!n(42)(function(){return 7!=Object.defineProperty({},"a",{get:function get(){return 7;}}).a;});},function(t,e){t.exports=function(t){try{return!!t();}catch(e){return!0;}};},function(t,e,n){var o=n(39),i=n(32).document,r=o(i)&&o(i.createElement);t.exports=function(t){return r?i.createElement(t):{};};},function(t,e,n){var o=n(39);t.exports=function(t,e){if(!o(t))return t;var n,i;if(e&&"function"==typeof(n=t.toString)&&!o(i=n.call(t)))return i;if("function"==typeof(n=t.valueOf)&&!o(i=n.call(t)))return i;if(!e&&"function"==typeof(n=t.toString)&&!o(i=n.call(t)))return i;throw TypeError("Can't convert object to primitive value");};},function(t,e){t.exports=function(t,e){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:e};};},function(t,e,n){t.exports={"default":n(47),__esModule:!0};},function(t,e,n){n(48),n(77),t.exports=n(81).f("iterator");},function(t,e,n){"use strict";var o=n(49)(!0);n(52)(String,"String",function(t){this._t=String(t),this._i=0;},function(){var t,e=this._t,n=this._i;return n>=e.length?{value:void 0,done:!0}:(t=o(e,n),this._i+=t.length,{value:t,done:!1});});},function(t,e,n){var o=n(50),i=n(51);t.exports=function(t){return function(e,n){var r,a,s=String(i(e)),l=o(n),c=s.length;return l<0||l>=c?t?"":void 0:(r=s.charCodeAt(l),r<55296||r>56319||l+1===c||(a=s.charCodeAt(l+1))<56320||a>57343?t?s.charAt(l):r:t?s.slice(l,l+2):(r-55296<<10)+(a-56320)+65536);};};},function(t,e){var n=Math.ceil,o=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?o:n)(t);};},function(t,e){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t;};},function(t,e,n){"use strict";var o=n(53),i=n(31),r=n(54),a=n(36),s=n(55),l=n(56),c=n(57),u=n(73),d=n(75),p=n(74)("iterator"),f=!([].keys&&"next"in[].keys()),h="@@iterator",v="keys",y="values",b=function b(){return this;};t.exports=function(t,e,n,m,g,x,w){c(n,e,m);var _,k,S,M=function M(t){if(!f&&t in j)return j[t];switch(t){case v:return function(){return new n(this,t);};case y:return function(){return new n(this,t);};}return function(){return new n(this,t);};},O=e+" Iterator",$=g==y,D=!1,j=t.prototype,C=j[p]||j[h]||g&&j[g],N=C||M(g),B=g?$?M("entries"):N:void 0,L="Array"==e?j.entries||C:C;if(L&&(S=d(L.call(new t())),S!==Object.prototype&&(u(S,O,!0),o||s(S,p)||a(S,p,b))),$&&C&&C.name!==y&&(D=!0,N=function N(){return C.call(this);}),o&&!w||!f&&!D&&j[p]||a(j,p,N),l[e]=N,l[O]=b,g)if(_={values:$?N:M(y),keys:x?N:M(v),entries:B},w)for(k in _){k in j||r(j,k,_[k]);}else i(i.P+i.F*(f||D),e,_);return _;};},function(t,e){t.exports=!0;},function(t,e,n){t.exports=n(36);},function(t,e){var n={}.hasOwnProperty;t.exports=function(t,e){return n.call(t,e);};},function(t,e){t.exports={};},function(t,e,n){"use strict";var o=n(58),i=n(45),r=n(73),a={};n(36)(a,n(74)("iterator"),function(){return this;}),t.exports=function(t,e,n){t.prototype=o(a,{next:i(1,n)}),r(t,e+" Iterator");};},function(t,e,n){var o=n(38),i=n(59),r=n(71),a=n(68)("IE_PROTO"),s=function s(){},l="prototype",_c=function c(){var t,e=n(43)("iframe"),o=r.length,i="<",a=">";for(e.style.display="none",n(72).appendChild(e),e.src="javascript:",t=e.contentWindow.document,t.open(),t.write(i+"script"+a+"document.F=Object"+i+"/script"+a),t.close(),_c=t.F;o--;){delete _c[l][r[o]];}return _c();};t.exports=Object.create||function(t,e){var n;return null!==t?(s[l]=o(t),n=new s(),s[l]=null,n[a]=t):n=_c(),void 0===e?n:i(n,e);};},function(t,e,n){var o=n(37),i=n(38),r=n(60);t.exports=n(41)?Object.defineProperties:function(t,e){i(t);for(var n,a=r(e),s=a.length,l=0;s>l;){o.f(t,n=a[l++],e[n]);}return t;};},function(t,e,n){var o=n(61),i=n(71);t.exports=Object.keys||function(t){return o(t,i);};},function(t,e,n){var o=n(55),i=n(62),r=n(65)(!1),a=n(68)("IE_PROTO");t.exports=function(t,e){var n,s=i(t),l=0,c=[];for(n in s){n!=a&&o(s,n)&&c.push(n);}for(;e.length>l;){o(s,n=e[l++])&&(~r(c,n)||c.push(n));}return c;};},function(t,e,n){var o=n(63),i=n(51);t.exports=function(t){return o(i(t));};},function(t,e,n){var o=n(64);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==o(t)?t.split(""):Object(t);};},function(t,e){var n={}.toString;t.exports=function(t){return n.call(t).slice(8,-1);};},function(t,e,n){var o=n(62),i=n(66),r=n(67);t.exports=function(t){return function(e,n,a){var s,l=o(e),c=i(l.length),u=r(a,c);if(t&&n!=n){for(;c>u;){if(s=l[u++],s!=s)return!0;}}else for(;c>u;u++){if((t||u in l)&&l[u]===n)return t||u||0;}return!t&&-1;};};},function(t,e,n){var o=n(50),i=Math.min;t.exports=function(t){return t>0?i(o(t),9007199254740991):0;};},function(t,e,n){var o=n(50),i=Math.max,r=Math.min;t.exports=function(t,e){return t=o(t),t<0?i(t+e,0):r(t,e);};},function(t,e,n){var o=n(69)("keys"),i=n(70);t.exports=function(t){return o[t]||(o[t]=i(t));};},function(t,e,n){var o=n(32),i="__core-js_shared__",r=o[i]||(o[i]={});t.exports=function(t){return r[t]||(r[t]={});};},function(t,e){var n=0,o=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++n+o).toString(36));};},function(t,e){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");},function(t,e,n){t.exports=n(32).document&&document.documentElement;},function(t,e,n){var o=n(37).f,i=n(55),r=n(74)("toStringTag");t.exports=function(t,e,n){t&&!i(t=n?t:t.prototype,r)&&o(t,r,{configurable:!0,value:e});};},function(t,e,n){var o=n(69)("wks"),i=n(70),r=n(32).Symbol,a="function"==typeof r,s=t.exports=function(t){return o[t]||(o[t]=a&&r[t]||(a?r:i)("Symbol."+t));};s.store=o;},function(t,e,n){var o=n(55),i=n(76),r=n(68)("IE_PROTO"),a=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=i(t),o(t,r)?t[r]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?a:null;};},function(t,e,n){var o=n(51);t.exports=function(t){return Object(o(t));};},function(t,e,n){n(78);for(var o=n(32),i=n(36),r=n(56),a=n(74)("toStringTag"),s=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],l=0;l<5;l++){var c=s[l],u=o[c],d=u&&u.prototype;d&&!d[a]&&i(d,a,c),r[c]=r.Array;}},function(t,e,n){"use strict";var o=n(79),i=n(80),r=n(56),a=n(62);t.exports=n(52)(Array,"Array",function(t,e){this._t=a(t),this._i=0,this._k=e;},function(){var t=this._t,e=this._k,n=this._i++;return!t||n>=t.length?(this._t=void 0,i(1)):"keys"==e?i(0,n):"values"==e?i(0,t[n]):i(0,[n,t[n]]);},"values"),r.Arguments=r.Array,o("keys"),o("values"),o("entries");},function(t,e){t.exports=function(){};},function(t,e){t.exports=function(t,e){return{value:e,done:!!t};};},function(t,e,n){e.f=n(74);},function(t,e,n){t.exports={"default":n(83),__esModule:!0};},function(t,e,n){n(84);var o=n(33).Object;t.exports=function(t){return o.getOwnPropertyNames(t);};},function(t,e,n){n(85)("getOwnPropertyNames",function(){return n(86).f;});},function(t,e,n){var o=n(31),i=n(33),r=n(42);t.exports=function(t,e){var n=(i.Object||{})[t]||Object[t],a={};a[t]=e(n),o(o.S+o.F*r(function(){n(1);}),"Object",a);};},function(t,e,n){var o=n(62),i=n(87).f,r={}.toString,a="object"==(typeof window==="undefined"?"undefined":_typeof(window))&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[],s=function s(t){try{return i(t);}catch(e){return a.slice();}};t.exports.f=function(t){return a&&"[object Window]"==r.call(t)?s(t):i(o(t));};},function(t,e,n){var o=n(61),i=n(71).concat("length","prototype");e.f=Object.getOwnPropertyNames||function(t){return o(t,i);};},function(t,e,n){t.exports={"default":n(89),__esModule:!0};},function(t,e,n){n(77),n(48),t.exports=n(90);},function(t,e,n){var o=n(38),i=n(91);t.exports=n(33).getIterator=function(t){var e=i(t);if("function"!=typeof e)throw TypeError(t+" is not iterable!");return o(e.call(t));};},function(t,e,n){var o=n(92),i=n(74)("iterator"),r=n(56);t.exports=n(33).getIteratorMethod=function(t){if(void 0!=t)return t[i]||t["@@iterator"]||r[o(t)];};},function(t,e,n){var o=n(64),i=n(74)("toStringTag"),r="Arguments"==o(function(){return arguments;}()),a=function a(t,e){try{return t[e];}catch(n){}};t.exports=function(t){var e,n,s;return void 0===t?"Undefined":null===t?"Null":"string"==typeof(n=a(e=Object(t),i))?n:r?o(e):"Object"==(s=o(e))&&"function"==typeof e.callee?"Arguments":s;};},function(t,e){"use strict";e.__esModule=!0,e["default"]=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function");};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}e.__esModule=!0;var i=n(28),r=o(i);e["default"]=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),(0,r["default"])(t,o.key,o);}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e;};}();},function(t,e,n){t.exports=n(96),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(98);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{type:{type:String,"default":null},oneAtAtime:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},created:function created(){var t=this;this._isAccordion=!0,this.$on("isOpenEvent",function(e){t.oneAtAtime&&t.$children.forEach(function(t){e!==t&&(t.isOpen=!1);});});}};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}function i(t){for(var e=new window.XMLHttpRequest(),n={},o={then:function then(t,e){return o.done(t).fail(e);},"catch":function _catch(t){return o.fail(t);},always:function always(t){return o.done(t).fail(t);}},i=["done","fail"],r=function r(){var t=i[a];n[t]=[],o[t]=function(e){return e instanceof Function&&n[t].push(e),o;};},a=0;a<i.length;a++){r();}return o.done(JSON.parse),e.onreadystatechange=function(){if(4===e.readyState){var t={status:e.status};if(200===e.status)try{var o=void 0,i=e.responseText,r=!0,a=!1,s=void 0;try{for(var c,u=(0,l["default"])(n.done);!(r=(c=u.next()).done);r=!0){var d=c.value;void 0!==(o=d(i))&&(i=o);}}catch(p){a=!0,s=p;}finally{try{!r&&u["return"]&&u["return"]();}finally{if(a)throw s;}}}catch(t){var f=!0,h=!1,v=void 0;try{for(var y,b=(0,l["default"])(n.fail);!(f=(y=b.next()).done);f=!0){var m=y.value;m(t);}}catch(p){h=!0,v=p;}finally{try{!f&&b["return"]&&b["return"]();}finally{if(h)throw v;}}}else{var g=!0,x=!1,w=void 0;try{for(var _,k=(0,l["default"])(n.fail);!(g=(_=k.next()).done);g=!0){var S=_.value;S(t);}}catch(p){x=!0,w=p;}finally{try{!g&&k["return"]&&k["return"]();}finally{if(x)throw w;}}}}},e.open("GET",t),e.setRequestHeader("Accept","application/json"),e.send(),o;}function r(){if(document.documentElement.scrollHeight<=document.documentElement.clientHeight)return 0;var t=document.createElement("p");t.style.width="100%",t.style.height="200px";var e=document.createElement("div");e.style.position="absolute",e.style.top="0px",e.style.left="0px",e.style.visibility="hidden",e.style.width="200px",e.style.height="150px",e.style.overflow="hidden",e.appendChild(t),document.body.appendChild(e);var n=t.offsetWidth;e.style.overflow="scroll";var o=t.offsetWidth;return n===o&&(o=e.clientWidth),document.body.removeChild(e),n-o;}function a(t){t=t||"en";var e={daysOfWeek:["Su","Mo","Tu","We","Th","Fr","Sa"],limit:"Limit reached ({{limit}} items max).",loading:"Loading...",minLength:"Min. Length",months:["January","February","March","April","May","June","July","August","September","October","November","December"],notSelected:"Nothing Selected",required:"Required",search:"Search"};return window.VueStrapLang?window.VueStrapLang(t):e;}Object.defineProperty(e,"__esModule",{value:!0}),e.coerce=void 0;var s=n(88),l=o(s);e.getJSON=i,e.getScrollBarWidth=r,e.translations=a;e.coerce={"boolean":function boolean(t){return"string"==typeof t?"false"!==t&&"null"!==t&&"undefined"!==t&&("true"===t||t):t;},number:function number(t){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:null;return"number"==typeof t?t:void 0===t||null===t||isNaN(Number(t))?e:Number(t);},string:function string(t){return void 0===t||null===t?"":t+"";},pattern:function pattern(t){return t instanceof Function||t instanceof RegExp?t:"string"==typeof t?new RegExp(t):null;}};},function(t,e){t.exports="<div class=panel-group> <slot></slot> </div>";},function(t,e,n){t.exports=n(100),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(101);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{offset:{type:Number,coerce:i.coerce.number,"default":0}},data:function data(){return{affixed:!1};},computed:{top:function top(){return this.offset>0?this.offset+"px":null;}},methods:{checkScroll:function checkScroll(){if(this.$el.offsetWidth||this.$el.offsetHeight||this.$el.getClientRects().length){for(var t={},e={},n=this.$el.getBoundingClientRect(),o=document.body,i=["Top","Left"],r=0;r<i.length;r++){var a=i[r],s=a.toLowerCase(),l=window["page"+("Top"===a?"Y":"X")+"Offset"],c="scroll"+a;"number"!=typeof l&&(l=document.documentElement[c],"number"!=typeof l&&(l=document.body[c])),t[s]=l,e[s]=t[s]+n[s]-(this.$el["client"+a]||o["client"+a]||0);}var u=t.top>e.top-this.offset;this.affixed!==u&&(this.affixed=u);}}},ready:function ready(){var t=this;(0,a["default"])(window).on("scroll resize",function(){return t.checkScroll();}),setTimeout(function(){return t.checkScroll();},0);},beforeDestroy:function beforeDestroy(){var t=this;(0,a["default"])(window).off("scroll resize",function(){return t.checkScroll();});}};},function(t,e){t.exports='<div class="hidden-print hidden-xs hidden-sm"> <nav class=bs-docs-sidebar :class={affix:affixed} :style={marginTop:top}> <slot></slot> </nav> </div>';},function(t,e,n){n(103),t.exports=n(107),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(108);},function(t,e,n){var o=n(104);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".fade-transition{-webkit-transition:opacity .3s ease;transition:opacity .3s ease}.fade-enter,.fade-leave{height:0;opacity:0}.alert.top{margin:0 auto;left:0;right:0}.alert.top,.alert.top-right{position:fixed;top:30px;z-index:1050}.alert.top-right{right:50px}",""]);},function(t,e){t.exports=function(){var t=[];return t.toString=function(){for(var t=[],e=0;e<this.length;e++){var n=this[e];n[2]?t.push("@media "+n[2]+"{"+n[1]+"}"):t.push(n[1]);}return t.join("");},t.i=function(e,n){"string"==typeof e&&(e=[[null,e,""]]);for(var o={},i=0;i<this.length;i++){var r=this[i][0];"number"==typeof r&&(o[r]=!0);}for(i=0;i<e.length;i++){var a=e[i];"number"==typeof a[0]&&o[a[0]]||(n&&!a[2]?a[2]=n:n&&(a[2]="("+a[2]+") and ("+n+")"),t.push(a));}},t;};},function(t,e,n){function o(t,e){for(var n=0;n<t.length;n++){var o=t[n],i=f[o.id];if(i){i.refs++;for(var r=0;r<i.parts.length;r++){i.parts[r](o.parts[r]);}for(;r<o.parts.length;r++){i.parts.push(c(o.parts[r],e));}}else{for(var a=[],r=0;r<o.parts.length;r++){a.push(c(o.parts[r],e));}f[o.id]={id:o.id,refs:1,parts:a};}}}function i(t){for(var e=[],n={},o=0;o<t.length;o++){var i=t[o],r=i[0],a=i[1],s=i[2],l=i[3],c={css:a,media:s,sourceMap:l};n[r]?n[r].parts.push(c):e.push(n[r]={id:r,parts:[c]});}return e;}function r(t,e){var n=y(),o=g[g.length-1];if("top"===t.insertAt)o?o.nextSibling?n.insertBefore(e,o.nextSibling):n.appendChild(e):n.insertBefore(e,n.firstChild),g.push(e);else{if("bottom"!==t.insertAt)throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");n.appendChild(e);}}function a(t){t.parentNode.removeChild(t);var e=g.indexOf(t);e>=0&&g.splice(e,1);}function s(t){var e=document.createElement("style");return e.type="text/css",r(t,e),e;}function l(t){var e=document.createElement("link");return e.rel="stylesheet",r(t,e),e;}function c(t,e){var n,o,i;if(e.singleton){var r=m++;n=b||(b=s(e)),o=u.bind(null,n,r,!1),i=u.bind(null,n,r,!0);}else t.sourceMap&&"function"==typeof URL&&"function"==typeof URL.createObjectURL&&"function"==typeof URL.revokeObjectURL&&"function"==typeof Blob&&"function"==typeof btoa?(n=l(e),o=p.bind(null,n),i=function i(){a(n),n.href&&URL.revokeObjectURL(n.href);}):(n=s(e),o=d.bind(null,n),i=function i(){a(n);});return o(t),function(e){if(e){if(e.css===t.css&&e.media===t.media&&e.sourceMap===t.sourceMap)return;o(t=e);}else i();};}function u(t,e,n,o){var i=n?"":o.css;if(t.styleSheet)t.styleSheet.cssText=x(e,i);else{var r=document.createTextNode(i),a=t.childNodes;a[e]&&t.removeChild(a[e]),a.length?t.insertBefore(r,a[e]):t.appendChild(r);}}function d(t,e){var n=e.css,o=e.media;if(o&&t.setAttribute("media",o),t.styleSheet)t.styleSheet.cssText=n;else{for(;t.firstChild;){t.removeChild(t.firstChild);}t.appendChild(document.createTextNode(n));}}function p(t,e){var n=e.css,o=e.sourceMap;o&&(n+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(o))))+" */");var i=new Blob([n],{type:"text/css"}),r=t.href;t.href=URL.createObjectURL(i),r&&URL.revokeObjectURL(r);}var f={},h=function h(t){var e;return function(){return"undefined"==typeof e&&(e=t.apply(this,arguments)),e;};},v=h(function(){return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());}),y=h(function(){return document.head||document.getElementsByTagName("head")[0];}),b=null,m=0,g=[];t.exports=function(t,e){e=e||{},"undefined"==typeof e.singleton&&(e.singleton=v()),"undefined"==typeof e.insertAt&&(e.insertAt="bottom");var n=i(t);return o(n,e),function(t){for(var r=[],a=0;a<n.length;a++){var s=n[a],l=f[s.id];l.refs--,r.push(l);}if(t){var c=i(t);o(c,e);}for(var a=0;a<r.length;a++){var l=r[a];if(0===l.refs){for(var u=0;u<l.parts.length;u++){l.parts[u]();}delete f[l.id];}}};};var x=function(){var t=[];return function(e,n){return t[e]=n,t.filter(Boolean).join("\n");};}();},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{type:{type:String},dismissable:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},show:{type:Boolean,coerce:o.coerce["boolean"],"default":!0,twoWay:!0},duration:{type:Number,coerce:o.coerce.number,"default":0},width:{type:String},placement:{type:String}},watch:{show:function show(t){var e=this;this._timeout&&clearTimeout(this._timeout),t&&Boolean(this.duration)&&(this._timeout=setTimeout(function(){e.show=!1;},this.duration));}}};},function(t,e){t.exports="<div v-show=show v-bind:class=\"{\r\n      'alert':\t\ttrue,\r\n      'alert-success':(type == 'success'),\r\n      'alert-warning':(type == 'warning'),\r\n      'alert-info':\t(type == 'info'),\r\n      'alert-danger':\t(type == 'danger'),\r\n      'top': \t\t\t(placement === 'top'),\r\n      'top-right': \t(placement === 'top-right')\r\n    }\" transition=fade v-bind:style={width:width} role=alert> <button v-show=dismissable type=button class=close @click=\"show = false\"> <span>&times;</span> </button> <slot></slot> </div>";},function(t,e,n){n(110),t.exports=n(112),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(113);},function(t,e,n){var o=n(111);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".aside-open{-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s}.aside-open.has-push-right{-webkit-transform:translateX(-300px);transform:translateX(-300px)}.aside{position:fixed;top:0;bottom:0;z-index:1049;overflow:auto;background:#fff}.aside.left{left:0;right:auto}.aside.right{left:auto;right:0}.slideleft-enter{-webkit-animation:slideleft-in .3s;animation:slideleft-in .3s}.slideleft-leave{-webkit-animation:slideleft-out .3s;animation:slideleft-out .3s}@-webkit-keyframes slideleft-in{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@keyframes slideleft-in{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@-webkit-keyframes slideleft-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}}@keyframes slideleft-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}}.slideright-enter{-webkit-animation:slideright-in .3s;animation:slideright-in .3s}.slideright-leave{-webkit-animation:slideright-out .3s;animation:slideright-out .3s}@-webkit-keyframes slideright-in{0%{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@keyframes slideright-in{0%{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@-webkit-keyframes slideright-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}}@keyframes slideright-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}}.aside:focus{outline:0}@media (max-width:991px){.aside{min-width:240px}}.aside.left{right:auto;left:0}.aside.right{right:0;left:auto}.aside .aside-dialog .aside-header{border-bottom:1px solid #e5e5e5;min-height:16.43px;padding:6px 15px;background:#337ab7;color:#fff}.aside .aside-dialog .aside-header .close{margin-right:-8px;padding:4px 8px;color:#fff;font-size:25px;opacity:.8}.aside .aside-dialog .aside-body{position:relative;padding:15px}.aside .aside-dialog .aside-footer{padding:15px;text-align:right;border-top:1px solid #e5e5e5}.aside .aside-dialog .aside-footer .btn+.btn{margin-left:5px;margin-bottom:0}.aside .aside-dialog .aside-footer .btn-group .btn+.btn{margin-left:-1px}.aside .aside-dialog .aside-footer .btn-block+.btn-block{margin-left:0}.aside-backdrop{position:fixed;top:0;right:0;bottom:0;left:0;z-index:1040;opacity:0;-webkit-transition:opacity .3s ease;transition:opacity .3s ease;background-color:#000}.aside-backdrop.in{opacity:.5;filter:alpha(opacity=50)}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{show:{type:Boolean,coerce:i.coerce["boolean"],required:!0,twoWay:!0},placement:{type:String,"default":"right"},header:{type:String},width:{type:Number,coerce:i.coerce.number,"default":320}},watch:{show:function show(t){var e=this,n=document.body,o=(0,i.getScrollBarWidth)();if(t){this._backdrop||(this._backdrop=document.createElement("div")),this._backdrop.className="aside-backdrop",n.appendChild(this._backdrop),n.classList.add("modal-open"),0!==o&&(n.style.paddingRight=o+"px");this._backdrop.clientHeight;this._backdrop.classList.add("in"),(0,a["default"])(this._backdrop).on("click",function(){return e.close();});}else(0,a["default"])(this._backdrop).on("transitionend",function(){(0,a["default"])(e._backdrop).off();try{n.classList.remove("modal-open"),n.style.paddingRight="0",n.removeChild(e._backdrop),e._backdrop=null;}catch(t){}}),this._backdrop.className="aside-backdrop";}},methods:{close:function close(){this.show=!1;}}};},function(t,e){t.exports="<div class=aside v-bind:style=\"{width:width + 'px'}\" v-bind:class=\"{\r\n    left:placement === 'left',\r\n    right:placement === 'right'\r\n    }\" v-show=show :transition=\"(this.placement === 'left') ? 'slideleft' : 'slideright'\"> <div class=aside-dialog> <div class=aside-content> <div class=aside-header> <button type=button class=close @click=close><span>&times;</span></button> <h4 class=aside-title> <slot name=header> {{ header }} </slot> </h4> </div> <div class=aside-body> <slot></slot> </div> </div> </div> </div>";},function(t,e,n){t.exports=n(115),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(116);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{value:null,buttons:{type:Boolean,coerce:o.coerce["boolean"],"default":!0},justified:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String,"default":"default"},vertical:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},watch:{value:{deep:!0,handler:function handler(t){this.$children.forEach(function(t){t.group&&t.eval&&t.eval();});}}},created:function created(){this._btnGroup=!0;}};},function(t,e){t.exports="<div :class=\"{'btn-group':buttons,'btn-group-justified':justified,'btn-group-vertical':vertical}\" :data-toggle=\"buttons&&'buttons'\"> <slot></slot> </div>";},function(t,e,n){n(118),t.exports=n(120),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(121);},function(t,e,n){var o=n(119);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".carousel-control[_v-322dee41]{cursor:pointer}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{indicators:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},controls:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},interval:{type:Number,coerce:i.coerce.number,"default":5e3}},data:function data(){return{indicator:[],index:0,isAnimating:!1};},watch:{index:function index(t,e){this.slide(t>e?"left":"right",t,e);}},methods:{indicatorClick:function indicatorClick(t){return!this.isAnimating&&this.index!==t&&(this.isAnimating=!0,void(this.index=t));},slide:function slide(t,e,n){var o=this;if(this.$el){var i=(0,a["default"])(".item",this.$el);if(i.length){var r=i[e]||i[0];(0,a["default"])(r).addClass("left"===t?"next":"prev");r.clientHeight;(0,a["default"])([i[n],r]).addClass(t).on("transitionend",function(){i.off("transitionend").className="item",(0,a["default"])(r).addClass("active"),o.isAnimating=!1;});}}},next:function next(){return!(!this.$el||this.isAnimating)&&(this.isAnimating=!0,void(this.index+1<(0,a["default"])(".item",this.$el).length?this.index+=1:this.index=0));},prev:function prev(){return!(!this.$el||this.isAnimating)&&(this.isAnimating=!0,void(0===this.index?this.index=(0,a["default"])(".item",this.$el).length-1:this.index-=1));},toggleInterval:function toggleInterval(t){void 0===t&&(t=this._intervalID),this._intervalID&&(clearInterval(this._intervalID),delete this._intervalID),t&&this.interval>0&&(this._intervalID=setInterval(this.next,this.interval));}},ready:function ready(){var t=this;this.toggleInterval(!0),(0,a["default"])(this.$el).on("mouseenter",function(){return t.toggleInterval(!1);}).on("mouseleave",function(){return t.toggleInterval(!0);});},beforeDestroy:function beforeDestroy(){this.toggleInterval(!1),(0,a["default"])(this.$el).off("mouseenter mouseleave");}};},function(t,e){t.exports='<div class="carousel slide" data-ride=carousel _v-322dee41=""> <ol class=carousel-indicators v-show=indicators _v-322dee41=""> <li v-for="i in indicator" @click=indicatorClick($index) v-bind:class="{active:$index === index}" _v-322dee41=""><span _v-322dee41=""></span></li> </ol> <div class=carousel-inner role=listbox _v-322dee41=""> <slot _v-322dee41=""></slot> </div> <div v-show=controls class="carousel-controls hidden-xs" _v-322dee41=""> <a class="left carousel-control" role=button @click=prev _v-322dee41=""> <span class="glyphicon glyphicon-chevron-left" aria-hidden=true _v-322dee41=""></span> </a> <a class="right carousel-control" role=button @click=next _v-322dee41=""> <span class="glyphicon glyphicon-chevron-right" aria-hidden=true _v-322dee41=""></span> </a> </div> </div>';},function(t,e,n){n(123),t.exports=n(125),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(126);},function(t,e,n){var o=n(124);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,"label.checkbox[_v-6922bf24]{position:relative;padding-left:18px}label.checkbox>input[_v-6922bf24]{box-sizing:border-box;position:absolute;z-index:-1;padding:0;opacity:0;margin:0}label.checkbox>.icon[_v-6922bf24]{position:absolute;top:.2rem;left:0;display:block;width:1.4rem;height:1.4rem;line-height:1rem;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;border-radius:.35rem;background-repeat:no-repeat;background-position:50%;background-size:50% 50%}label.checkbox:not(.active)>.icon[_v-6922bf24]{background-color:#ddd;border:1px solid #bbb}label.checkbox>input:focus~.icon[_v-6922bf24]{outline:0;border:1px solid #66afe9;box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)}label.checkbox.active>.icon[_v-6922bf24]{background-size:1rem 1rem;background-image:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNyIgaGVpZ2h0PSI3Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJtNS43MywwLjUybC0zLjEyNDIyLDMuMzQxNjFsLTEuMzM4OTUsLTEuNDMyMTJsLTEuMjQ5NjksMS4zMzY2NWwyLjU4ODYzLDIuNzY4NzZsNC4zNzM5LC00LjY3ODI2bC0xLjI0OTY5LC0xLjMzNjY1bDAsMGwwLjAwMDAyLDAuMDAwMDF6Ii8+PC9zdmc+)}label.checkbox.active .btn-default[_v-6922bf24]{-webkit-filter:brightness(75%);filter:brightness(75%)}.btn.readonly[_v-6922bf24],label.checkbox.disabled[_v-6922bf24],label.checkbox.readonly[_v-6922bf24]{filter:alpha(opacity=65);box-shadow:none;opacity:.65}label.btn>input[type=checkbox][_v-6922bf24]{position:absolute;clip:rect(0,0,0,0);pointer-events:none}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{value:{"default":!0},checked:{twoWay:!0},button:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},name:{type:String,"default":null},readonly:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String,"default":null}},computed:{active:function active(){return"boolean"!=typeof this.value&&this.group?~this.$parent.value.indexOf(this.value):this.checked===this.value;},isButton:function isButton(){return this.button||this.group&&this.$parent.buttons;},group:function group(){return this.$parent&&this.$parent._checkboxGroup;},typeColor:function typeColor(){return this.type||this.$parent&&this.$parent.type||"default";}},watch:{checked:function checked(t){"boolean"!=typeof this.value&&this.group&&(this.checked&&!~this.$parent.value.indexOf(this.value)&&this.$parent.value.push(this.value),!this.checked&&~this.$parent.value.indexOf(this.value)&&this.$parent.value.$remove(this.value));}},created:function created(){if("boolean"!=typeof this.value){var t=this.$parent;t&&t._btnGroup&&!t._radioGroup&&(t._checkboxGroup=!0,t.value instanceof Array||(t.value=[]));}},ready:function ready(){this.$parent._checkboxGroup&&"boolean"!=typeof this.value&&(this.$parent.value.length?this.checked=~this.$parent.value.indexOf(this.value):this.checked&&this.$parent.value.push(this.value));},methods:{eval:function _eval(){"boolean"!=typeof this.value&&this.group&&(this.checked=~this.$parent.value.indexOf(this.value));},focus:function focus(){this.$els.input.focus();},toggle:function toggle(){if(!this.disabled&&(this.focus(),!this.readonly&&(this.checked=this.checked?null:this.value,this.group&&"boolean"!=typeof this.value))){var t=this.$parent.value.indexOf(this.value);this.$parent.value[~t?"$remove":"push"](this.value);}return!1;}}};},function(t,e){t.exports='<label :class="[isButton?\'btn btn-\'+typeColor:\'open checkbox \'+typeColor,{active:checked,disabled:disabled,readonly:readonly}]" @click.prevent=toggle _v-6922bf24=""> <input type=checkbox autocomplete=off v-el:input="" :checked=active :value=value :name=name :readonly=readonly :disabled=disabled _v-6922bf24=""> <span v-if=!isButton class="icon dropdown-toggle" :class="[active?\'btn-\'+typeColor:\'\',{bg:typeColor===\'default\'}]" _v-6922bf24=""></span> <span v-if="!isButton&amp;active&amp;&amp;typeColor===\'default\'" class=icon _v-6922bf24=""></span> <slot _v-6922bf24=""></slot> </label>';},function(t,e,n){n(128),t.exports=n(130),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(131);},function(t,e,n){var o=n(129);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".datepicker{position:relative;display:inline-block}input.datepicker-input.with-reset-button{padding-right:25px}.datepicker>button.close{position:absolute;top:0;right:0;outline:none;z-index:2;display:block;width:34px;height:34px;line-height:34px;text-align:center}.datepicker>button.close:focus{opacity:.2}.datepicker-popup{position:absolute;border:1px solid #ccc;border-radius:5px;background:#fff;margin-top:2px;z-index:1000;box-shadow:0 6px 12px rgba(0,0,0,.175)}.datepicker-inner{width:218px}.datepicker-body{padding:10px}.datepicker-body span,.datepicker-ctrl p,.datepicker-ctrl span{display:inline-block;width:28px;line-height:28px;height:28px;border-radius:4px}.datepicker-ctrl p{width:65%}.datepicker-ctrl span{position:absolute}.datepicker-body span{text-align:center}.datepicker-monthRange span{width:48px;height:50px;line-height:45px}.datepicker-item-disable{background-color:#fff!important;cursor:not-allowed!important}.datepicker-item-disable,.datepicker-item-gray,.decadeRange span:first-child,.decadeRange span:last-child{color:#999}.datepicker-dateRange-item-active,.datepicker-dateRange-item-active:hover{background:#3276b1!important;color:#fff!important}.datepicker-monthRange{margin-top:10px}.datepicker-ctrl p,.datepicker-ctrl span,.datepicker-dateRange span,.datepicker-monthRange span{cursor:pointer}.datepicker-ctrl i:hover,.datepicker-ctrl p:hover,.datepicker-dateRange-item-hover,.datepicker-dateRange span:hover,.datepicker-monthRange span:hover{background-color:#eee}.datepicker-weekRange span{font-weight:700}.datepicker-label{background-color:#f8f8f8;font-weight:700;padding:7px 0;text-align:center}.datepicker-ctrl{position:relative;height:30px;line-height:30px;font-weight:700;text-align:center}.month-btn{font-weight:700;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.datepicker-preBtn{left:2px}.datepicker-nextBtn{right:2px}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{value:{type:String,twoWay:!0},format:{"default":"MM/dd/yyyy"},disabledDaysOfWeek:{type:Array,"default":function _default(){return[];}},width:{type:String,"default":"200px"},clearButton:{type:Boolean,"default":!1},lang:{type:String,"default":navigator.language},placeholder:{type:String}},ready:function ready(){var t=this;this._blur=function(e){t.$el.contains(e.target)||t.close();},this.$dispatch("child-created",this),this.currDate=this.parse(this.value)||this.parse(new Date()),(0,a["default"])(window).on("click",this._blur);},beforeDestroy:function beforeDestroy(){(0,a["default"])(window).off("click",this._blur);},data:function data(){return{currDate:new Date(),dateRange:[],decadeRange:[],displayDayView:!1,displayMonthView:!1,displayYearView:!1};},watch:{currDate:function currDate(){this.getDateRange();}},computed:{text:function text(){return(0,i.translations)(this.lang);}},methods:{close:function close(){this.displayDayView=this.displayMonthView=this.displayYearView=!1;},inputClick:function inputClick(){this.currDate=this.parse(this.value)||this.parse(new Date()),this.displayMonthView||this.displayYearView?this.displayDayView=!1:this.displayDayView=!this.displayDayView;},preNextDecadeClick:function preNextDecadeClick(t){var e=this.currDate.getFullYear(),n=this.currDate.getMonth(),o=this.currDate.getDate();0===t?this.currDate=new Date(e-10,n,o):this.currDate=new Date(e+10,n,o);},preNextMonthClick:function preNextMonthClick(t){var e=this.currDate.getFullYear(),n=this.currDate.getMonth(),o=this.currDate.getDate();if(0===t){var i=this.getYearMonth(e,n-1);this.currDate=new Date(i.year,i.month,o);}else{var r=this.getYearMonth(e,n+1);this.currDate=new Date(r.year,r.month,o);}},preNextYearClick:function preNextYearClick(t){var e=this.currDate.getFullYear(),n=this.currDate.getMonth(),o=this.currDate.getDate();0===t?this.currDate=new Date(e-1,n,o):this.currDate=new Date(e+1,n,o);},yearSelect:function yearSelect(t){this.displayYearView=!1,this.displayMonthView=!0,this.currDate=new Date(t,this.currDate.getMonth(),this.currDate.getDate());},daySelect:function daySelect(t,e){return"datepicker-item-disable"!==e.$el.classList[0]&&(this.currDate=t,this.value=this.stringify(this.currDate),this.displayDayView=!1,void 0);},switchMonthView:function switchMonthView(){this.displayDayView=!1,this.displayMonthView=!0;},switchDecadeView:function switchDecadeView(){this.displayMonthView=!1,this.displayYearView=!0;},monthSelect:function monthSelect(t){this.displayMonthView=!1,this.displayDayView=!0,this.currDate=new Date(this.currDate.getFullYear(),t,this.currDate.getDate());},getYearMonth:function getYearMonth(t,e){return e>11?(t++,e=0):e<0&&(t--,e=11),{year:t,month:e};},stringifyDecadeHeader:function stringifyDecadeHeader(t){var e=t.getFullYear().toString(),n=e.substring(0,e.length-1)+0,o=parseInt(n,10)+10;return n+"-"+o;},stringifyDayHeader:function stringifyDayHeader(t){return this.text.months[t.getMonth()]+" "+t.getFullYear();},parseMonth:function parseMonth(t){return this.text.months[t.getMonth()];},stringifyYearHeader:function stringifyYearHeader(t){return t.getFullYear();},stringify:function stringify(t){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.format;if(t||(t=this.parse()),!t)return"";var n=t.getFullYear(),o=t.getMonth()+1,i=t.getDate(),r=this.parseMonth(t);return e.replace(/yyyy/g,n).replace(/MMMM/g,r).replace(/MMM/g,r.substring(0,3)).replace(/MM/g,("0"+o).slice(-2)).replace(/dd/g,("0"+i).slice(-2)).replace(/yy/g,n).replace(/M(?!a)/g,o).replace(/d/g,i);},parse:function parse(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:this.value,e=void 0;return e=10!==t.length||"dd-MM-yyyy"!==this.format&&"dd/MM/yyyy"!==this.format?new Date(t):new Date(t.substring(6,10),t.substring(3,5),t.substring(0,2)),isNaN(e.getFullYear())?new Date():e;},getDayCount:function getDayCount(t,e){var n=[31,28,31,30,31,30,31,31,30,31,30,31];return 1===e&&(t%400===0||t%4===0&&t%100!==0)?29:n[e];},getDateRange:function getDateRange(){var t=this;this.dateRange=[],this.decadeRange=[];for(var e={year:this.currDate.getFullYear(),month:this.currDate.getMonth(),day:this.currDate.getDate()},n=e.year.toString(),o=n.substring(0,n.length-1)+0-1,i=0;i<12;i++){this.decadeRange.push({text:o+i});}var r=new Date(e.year,e.month,1),a=r.getDay()+1;0===a&&(a=7);var s=this.getDayCount(e.year,e.month);if(a>1)for(var l=this.getYearMonth(e.year,e.month-1),c=this.getDayCount(l.year,l.month),u=1;u<a;u++){var d=c-a+u+1;this.dateRange.push({text:d,date:new Date(l.year,l.month,d),sclass:"datepicker-item-gray"});}for(var p=function p(n){var o=new Date(e.year,e.month,n),i=o.getDay(),r="";if(t.disabledDaysOfWeek.forEach(function(t){i===parseInt(t,10)&&(r="datepicker-item-disable");}),n===e.day&&t.value){var a=t.parse(t.value);a&&a.getFullYear()===e.year&&a.getMonth()===e.month&&(r="datepicker-dateRange-item-active");}t.dateRange.push({text:n,date:o,sclass:r});},f=1;f<=s;f++){p(f);}if(this.dateRange.length<42)for(var h=42-this.dateRange.length,v=this.getYearMonth(e.year,e.month+1),y=1;y<=h;y++){this.dateRange.push({text:y,date:new Date(v.year,v.month,y),sclass:"datepicker-item-gray"});}}}};},function(t,e){t.exports='<div class=datepicker> <input class="form-control datepicker-input" :class="{\'with-reset-button\': clearButton}" type=text :placeholder=placeholder :style={width:width} @click=inputClick v-model=value /> <button v-if="clearButton && value" type=button class=close @click="value = \'\'"> <span>&times;</span> </button> <div class=datepicker-popup v-show=displayDayView> <div class=datepicker-inner> <div class=datepicker-body> <div class=datepicker-ctrl> <span class="datepicker-preBtn glyphicon glyphicon-chevron-left" aria-hidden=true @click=preNextMonthClick(0)></span> <span class="datepicker-nextBtn glyphicon glyphicon-chevron-right" aria-hidden=true @click=preNextMonthClick(1)></span> <p @click=switchMonthView>{{stringifyDayHeader(currDate)}}</p> </div> <div class=datepicker-weekRange> <span v-for="w in text.daysOfWeek">{{w}}</span> </div> <div class=datepicker-dateRange> <span v-for="d in dateRange" :class=d.sclass @click=daySelect(d.date,this)>{{d.text}}</span> </div> </div> </div> </div> <div class=datepicker-popup v-show=displayMonthView> <div class=datepicker-inner> <div class=datepicker-body> <div class=datepicker-ctrl> <span class="datepicker-preBtn glyphicon glyphicon-chevron-left" aria-hidden=true @click=preNextYearClick(0)></span> <span class="datepicker-nextBtn glyphicon glyphicon-chevron-right" aria-hidden=true @click=preNextYearClick(1)></span> <p @click=switchDecadeView>{{stringifyYearHeader(currDate)}}</p> </div> <div class=datepicker-monthRange> <template v-for="m in text.months"> <span :class="{\'datepicker-dateRange-item-active\':\r\n                  (text.months[parse(value).getMonth()]  === m) &&\r\n                  currDate.getFullYear() === parse(value).getFullYear()}" @click=monthSelect($index)>{{m.substr(0,3)}}</span> </template> </div> </div> </div> </div> <div class=datepicker-popup v-show=displayYearView> <div class=datepicker-inner> <div class=datepicker-body> <div class=datepicker-ctrl> <span class="datepicker-preBtn glyphicon glyphicon-chevron-left" aria-hidden=true @click=preNextDecadeClick(0)></span> <span class="datepicker-nextBtn glyphicon glyphicon-chevron-right" aria-hidden=true @click=preNextDecadeClick(1)></span> <p>{{stringifyDecadeHeader(currDate)}}</p> </div> <div class="datepicker-monthRange decadeRange"> <template v-for="decade in decadeRange"> <span :class="{\'datepicker-dateRange-item-active\':\r\n                  parse(this.value).getFullYear() === decade.text}" @click.stop=yearSelect(decade.text)>{{decade.text}}</span> </template> </div> </div> </div> </div> </div>';},function(t,e,n){n(133),t.exports=n(135),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(136);},function(t,e,n){var o=n(134);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".secret[_v-39be1072]{position:absolute;clip:rect(0 0 0 0);overflow:hidden;margin:-1px;height:1px;width:1px;padding:0;border:0}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{show:{twoWay:!0,type:Boolean,coerce:i.coerce["boolean"],"default":!1},"class":null,disabled:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},text:{type:String,"default":null},type:{type:String,"default":"default"}},computed:{classes:function classes(){return[{open:this.show,disabled:this.disabled},this["class"],this.isLi?"dropdown":this.inInput?"input-group-btn":"btn-group"];},inInput:function inInput(){return this.$parent._input;},isLi:function isLi(){return this.$parent._navbar||this.$parent.menu||this.$parent._tabset;},menu:function menu(){return!this.$parent||this.$parent.navbar;},submenu:function submenu(){return this.$parent&&(this.$parent.menu||this.$parent.submenu);},slots:function slots(){return this._slotContents;}},methods:{blur:function blur(){var t=this;this.unblur(),this._hide=setTimeout(function(){t._hide=null,t.show=!1;},100);},unblur:function unblur(){this._hide&&(clearTimeout(this._hide),this._hide=null);}},ready:function ready(){var t=this,e=(0,a["default"])(this.$els.dropdown);e.onBlur(function(e){t.show=!1;}),e.findChildren("a,button.dropdown-toggle").on("click",function(e){return e.preventDefault(),!t.disabled&&(t.show=!t.show,!1);}),e.findChildren("ul").on("click","li>a",function(e){t.show=!1;});},beforeDestroy:function beforeDestroy(){var t=(0,a["default"])(this.$els.dropdown);t.offBlur(),t.findChildren("a,button").off(),t.findChildren("ul").off();}};},function(t,e){t.exports='<li v-if=isLi v-el:dropdown="" :class=classes _v-39be1072=""> <slot name=button _v-39be1072=""> <a class=dropdown-toggle role=button :class="{disabled: disabled}" @keyup.esc="show = false" _v-39be1072=""> {{ text }} <span class=caret _v-39be1072=""></span> </a> </slot> <slot name=dropdown-menu _v-39be1072=""> <ul v-else="" class=dropdown-menu _v-39be1072=""> <slot _v-39be1072=""></slot> </ul> </slot> </li> <div v-else="" v-el:dropdown="" :class=classes _v-39be1072=""> <slot name=before _v-39be1072=""></slot> <slot name=button _v-39be1072=""> <button type=button class="btn btn-{{type}} dropdown-toggle" @keyup.esc="show = false" :disabled=disabled _v-39be1072=""> {{ text }} <span class=caret _v-39be1072=""></span> </button> </slot> <slot name=dropdown-menu _v-39be1072=""> <ul class=dropdown-menu _v-39be1072=""> <slot _v-39be1072=""></slot> </ul> </slot> </div>';},function(t,e,n){t.exports=n(138),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(139);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27);o(r);e["default"]={props:{valid:{twoWay:!0,"default":null},enterSubmit:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},icon:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},lang:{type:String,"default":navigator.language}},data:function data(){return{children:[],timeout:null};},watch:{valid:function valid(t,e){t!==e&&this._parent&&this._parent.validate();}},methods:{focus:function focus(){this.$els.input.focus();},validate:function validate(){var t=!0;return this.children.some(function(e){var n=e.validate?e.validate():void 0!==e.valid?e.valid:e.required&&!~["",null,void 0].indexOf(e.value);return n||(t=!1),!t;}),this.valid=t,t===!0;}},created:function created(){this._formGroup=!0;for(var t=this.$parent;t&&!t._formGroup;){t=t.$parent;}t&&t._formGroup&&(t.children.push(this),this._parent=t);},ready:function ready(){this.validate();},beforeDestroy:function beforeDestroy(){this._parent&&this._parent.children.$remove(this);}};},function(t,e){t.exports="<slot></slot>";},function(t,e,n){n(141),t.exports=n(143),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(144);},function(t,e,n){var o=n(142);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".form-group[_v-652ad7b9]{position:relative}label~.close[_v-652ad7b9]{top:25px}.input-group>.icon[_v-652ad7b9]{position:relative;display:table-cell;width:0;z-index:3}.close[_v-652ad7b9]{position:absolute;top:0;right:0;z-index:2;display:block;width:34px;height:34px;line-height:34px;text-align:center}.has-feedback .close[_v-652ad7b9]{right:20px}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{value:{twoWay:!0,"default":null},match:{type:String,"default":null},clearButton:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},enterSubmit:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},error:{type:String,"default":null},help:{type:String,"default":null},hideHelp:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},icon:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},label:{type:String,"default":null},lang:{type:String,"default":navigator.language},mask:null,maskDelay:{type:Number,coerce:i.coerce.number,"default":100},max:{type:String,coerce:i.coerce.string,"default":null},maxlength:{type:Number,coerce:i.coerce.number,"default":null},min:{type:String,coerce:i.coerce.string,"default":null},minlength:{type:Number,coerce:i.coerce.number,"default":0},name:{type:String,"default":null},pattern:{coerce:i.coerce.pattern,"default":null},placeholder:{type:String,"default":null},readonly:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},required:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},rows:{type:Number,coerce:i.coerce.number,"default":3},step:{type:Number,coerce:i.coerce.number,"default":null},type:{type:String,"default":"text"},validationDelay:{type:Number,coerce:i.coerce.number,"default":250}},data:function data(){return{valid:null,timeout:null};},computed:{canValidate:function canValidate(){return!this.disabled&&!this.readonly&&(this.required||this.pattern||this.nativeValidate||null!==this.match);},errorText:function errorText(){var t=this.value,e=[this.error];return!t&&this.required&&e.push("("+this.text.required.toLowerCase()+")"),t&&t.length<this.minlength&&e.push("("+this.text.minLength.toLowerCase()+": "+this.minlength+")"),e.join(" ");},input:function input(){return this.$els.input;},nativeValidate:function nativeValidate(){return(this.input||{}).checkValidity&&(~["url","email"].indexOf(this.type.toLowerCase())||this.min||this.max);},showError:function showError(){return this.error&&this.valid===!1;},showHelp:function showHelp(){return this.help&&(!this.showError||!this.hideHelp);},slots:function slots(){return this._slotContents||{};},text:function text(){return(0,i.translations)(this.lang);},title:function title(){return this.errorText||this.help||"";}},watch:{match:function match(t){this.eval();},valid:function valid(t,e){t!==e&&this._parent&&this._parent.validate();},value:function value(t,e){var n=this;t!==e&&(this.mask instanceof Function&&(t=this.mask(t||""),this.value!==t&&(this._timeout.mask&&clearTimeout(this._timeout.mask),this._timeout.mask=setTimeout(function(){n.value=t,n.$els.input.value=t;},this.maskDelay))),this.eval());}},methods:{attr:function attr(t){return~["",null,void 0].indexOf(t)||t instanceof Function?void 0:t;},focus:function focus(){this.input.focus();},eval:function _eval(){var t=this;this._timeout.eval&&clearTimeout(this._timeout.eval),this.canValidate?this._timeout.eval=setTimeout(function(){t.valid=t.validate(),t._timeout.eval=null;},this.validationDelay):this.valid=!0;},onblur:function onblur(t){this.canValidate&&(this.valid=this.validate()),this.$emit("blur",t);},onfocus:function onfocus(t){this.$emit("focus",t);},submit:function submit(){if(this.$parent._formGroup)return this.$parent.validate();if(this.input.form){var t=(0,a["default"])(".form-group.validate:not(.has-success)",this.input.form);t.length?t.find("input,textarea,select")[0].focus():this.input.form.submit();}},validate:function validate(){if(!this.canValidate)return!0;var t=(this.value||"").trim();return t?null!==this.match?this.match===t:!(t.length<this.minlength)&&!(this.nativeValidate&&!this.input.checkValidity())&&(!this.pattern||(this.pattern instanceof Function?this.pattern(this.value):this.pattern.test(this.value))):!this.required;}},created:function created(){this._input=!0,this._timeout={};for(var t=this.$parent;t&&!t._formGroup;){t=t.$parent;}t&&t._formGroup&&(this._parent=t);},ready:function ready(){var t=this;this._parent&&this._parent.children.push(this),(0,a["default"])(this.input).on("focus",function(e){return t.$emit("focus",e);}).on("blur",function(e){t.canValidate&&(t.valid=t.validate()),t.$emit("blur",e);});},beforeDestroy:function beforeDestroy(){this._parent&&this._parent.children.$remove(this),(0,a["default"])(this.input).off();}};},function(t,e){t.exports='<div class=form-group :class="{validate:canValidate,\'has-feedback\':icon,\'has-error\':canValidate&amp;&amp;valid===false,\'has-success\':canValidate&amp;&amp;valid}" _v-652ad7b9=""> <slot name=label _v-652ad7b9=""><label v-if=label class=control-label @click=focus _v-652ad7b9="">{{label}}</label></slot> <div v-if=slots.before||slots.after class=input-group _v-652ad7b9=""> <slot name=before _v-652ad7b9=""></slot> <textarea v-if="type==\'textarea\'" class=form-control v-el:input="" v-model=value :cols=cols :rows=rows :name=name :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @blur=onblur @focus=onfocus _v-652ad7b9=""></textarea> <input v-else="" class=form-control v-el:input="" v-model=value :name=name :max=attr(max) :min=attr(min) :step=step :type=type :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @keyup.enter=enterSubmit&amp;&amp;submit() @blur=onblur @focus=onfocus _v-652ad7b9=""> <div v-if="clearButton &amp;&amp; value" :class={icon:icon} _v-652ad7b9=""> <span class=close @click="value = \'\'" _v-652ad7b9="">×</span> </div> <div v-if=icon class=icon _v-652ad7b9=""> <span v-if="icon&amp;&amp;valid!==null" :class="[\'form-control-feedback glyphicon\',\'glyphicon-\'+(valid?\'ok\':\'remove\')]" aria-hidden=true _v-652ad7b9=""></span> </div> <slot name=after _v-652ad7b9=""></slot> </div> <template v-else="" _v-652ad7b9=""> <textarea v-if="type==\'textarea\'" class=form-control v-el:input="" v-model=value :cols=cols :rows=rows :name=name :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @blur=onblur @focus=onfocus _v-652ad7b9=""></textarea> <input v-else="" class=form-control v-el:input="" v-model=value :name=name :max=attr(max) :min=attr(min) :step=step :type=type :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @keyup.enter=enterSubmit&amp;&amp;submit() @blur=onblur @focus=onfocus _v-652ad7b9=""> <span v-if="clearButton &amp;&amp; value" class=close @click="value = \'\'" _v-652ad7b9="">×</span> <span v-if="icon&amp;&amp;valid!==null" :class="[\'form-control-feedback glyphicon\',\'glyphicon-\'+(valid?\'ok\':\'remove\')]" aria-hidden=true _v-652ad7b9=""></span> </template> <div v-if=showHelp class=help-block @click=focus _v-652ad7b9="">{{help}}</div> <div v-if=showError class="help-block with-errors" @click=focus _v-652ad7b9="">{{errorText}}</div> </div>';},function(t,e,n){n(146),t.exports=n(148),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(153);},function(t,e,n){var o=n(147);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".modal{-webkit-transition:all .3s ease;transition:all .3s ease}.modal.in{background-color:rgba(0,0,0,.5)}.modal.zoom .modal-dialog{-webkit-transform:scale(.1);transform:scale(.1);top:300px;opacity:0;-webkit-transition:all .3s;transition:all .3s}.modal.zoom.in .modal-dialog{-webkit-transform:scale(1);transform:scale(1);-webkit-transform:translate3d(0,-300px,0);transform:translate3d(0,-300px,0);opacity:1}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(149),r=o(i),a=n(97),s=n(27),l=o(s);e["default"]={props:{okText:{type:String,"default":"Save changes"},cancelText:{type:String,"default":"Close"},title:{type:String,"default":""},show:{required:!0,type:Boolean,coerce:a.coerce["boolean"],twoWay:!0},width:{"default":null},callback:{type:Function,"default":function _default(){}},effect:{type:String,"default":null},backdrop:{type:Boolean,coerce:a.coerce["boolean"],"default":!0},large:{type:Boolean,coerce:a.coerce["boolean"],"default":!1},small:{type:Boolean,coerce:a.coerce["boolean"],"default":!1}},computed:{optionalWidth:function optionalWidth(){return null===this.width?null:(0,r["default"])(this.width)?this.width+"px":this.width;}},watch:{show:function show(t){var e=this,n=this.$el,o=document.body,i=(0,a.getScrollBarWidth)();t?((0,l["default"])(n).find(".modal-content").focus(),n.style.display="block",setTimeout(function(){return(0,l["default"])(n).addClass("in");},0),(0,l["default"])(o).addClass("modal-open"),0!==i&&(o.style.paddingRight=i+"px"),this.backdrop&&(0,l["default"])(n).on("click",function(t){t.target===n&&(e.show=!1);})):(o.style.paddingRight=null,(0,l["default"])(o).removeClass("modal-open"),(0,l["default"])(n).removeClass("in").on("transitionend",function(){(0,l["default"])(n).off("click transitionend"),n.style.display="none";}));}},methods:{close:function close(){this.show=!1;}}};},function(t,e,n){t.exports={"default":n(150),__esModule:!0};},function(t,e,n){n(151),t.exports=n(33).Number.isInteger;},function(t,e,n){var o=n(31);o(o.S,"Number",{isInteger:n(152)});},function(t,e,n){var o=n(39),i=Math.floor;t.exports=function(t){return!o(t)&&isFinite(t)&&i(t)===t;};},function(t,e){t.exports="<div role=dialog v-bind:class=\"{\r\n    'modal':true,\r\n    'fade':effect === 'fade',\r\n    'zoom':effect === 'zoom'\r\n    }\"> <div v-bind:class=\"{'modal-dialog':true,'modal-lg':large,'modal-sm':small}\" role=document v-bind:style=\"{width: optionalWidth}\"> <div class=modal-content> <slot name=modal-header> <div class=modal-header> <button type=button class=close @click=close><span>&times;</span></button> <h4 class=modal-title> <slot name=title> {{title}} </slot> </h4> </div> </slot> <slot name=modal-body> <div class=modal-body></div> </slot> <slot name=modal-footer> <div class=modal-footer> <button type=button class=\"btn btn-default\" @click=close>{{ cancelText }}</button> <button type=button class=\"btn btn-primary\" @click=callback>{{ okText }}</button> </div> </slot> </div> </div> </div>";},function(t,e,n){t.exports=n(155),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(156);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(27),r=o(i);e["default"]={props:{type:{type:String,"default":"default"},placement:{type:String,"default":""}},data:function data(){return{id:"bs-example-navbar-collapse-1",collapsed:!0,styles:{}};},computed:{slots:function slots(){return this._slotContents;}},methods:{toggleCollapse:function toggleCollapse(t){t&&t.preventDefault(),this.collapsed=!this.collapsed;}},created:function created(){this._navbar=!0;},ready:function ready(){var t=this,e=(0,r["default"])('.dropdown>[data-toggle="dropdown"]',this.$el).parent();e.on("click",".dropdown-toggle",function(t){t.preventDefault(),e.each(function(e){e.contains(t.target)&&e.classList.toggle("open");});}).on("click",".dropdown-menu>li>a",function(t){e.each(function(e){e.contains(t.target)&&e.classList.remove("open");});}).onBlur(function(t){e.each(function(e){e.contains(t.target)||e.classList.remove("open");});}),(0,r["default"])(this.$el).on("click touchstart","li:not(.dropdown)>a",function(e){setTimeout(function(){t.collapsed=!0;},200);}).onBlur(function(e){t.$el.contains(e.target)||(t.collapsed=!0);});var n=this.$el.offsetHeight;"top"===this.placement&&(document.body.style.paddingTop=n+"px"),"bottom"===this.placement&&(document.body.style.paddingBottom=n+"px"),this.slots.collapse&&(0,r["default"])('[data-toggle="collapse"]',this.$el).on("click",function(e){return t.toggleCollapse(e);});},beforeDestroy:function beforeDestroy(){(0,r["default"])(".dropdown",this.$el).off("click").offBlur(),this.slots.collapse&&(0,r["default"])('[data-toggle="collapse"]',this.$el).off("click");}};},function(t,e){t.exports="<nav v-el:navbar :class=\"['navbar',{\r\n    'navbar-inverse':(type == 'inverse'),\r\n    'navbar-default':(type == 'default'),\r\n    'navbar-fixed-top':(placement === 'top'),\r\n    'navbar-fixed-bottom':(placement === 'bottom'),\r\n    'navbar-static-top':(placement === 'static')\r\n  }]\"> <div class=container-fluid> <div class=navbar-header> <button v-if=!slots.collapse type=button class=\"navbar-toggle collapsed\" aria-expanded=false @click=toggleCollapse> <span class=sr-only>Toggle navigation</span> <span class=icon-bar></span> <span class=icon-bar></span> <span class=icon-bar></span> </button> <slot name=collapse></slot> <slot name=brand></slot> </div> <div :class=\"['navbar-collapse',{collapse:collapsed}]\"> <ul class=\"nav navbar-nav\"> <slot></slot> </ul> <ul v-if=slots.right class=\"nav navbar-nav navbar-right\"> <slot name=right></slot> </ul> </div> </div> </nav>";},function(t,e,n){t.exports=n(158),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(159);},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={props:{value:null},data:function data(){return{loading:!0};},ready:function ready(){if(this.$parent._select){this.$parent.options||(this.$parent.options=[]);var t={};t[this.$parent.optionsLabel]=this.$els.v.innerHTML,t[this.$parent.optionsValue]=this.value,this.$parent.options.push(t),this.loading=!1;}else console.warn("options only work inside a select component");}};},function(t,e){t.exports="<li v-el:v v-if=loading><slot></slot></li>";},function(t,e,n){n(161),t.exports=n(163),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(164);},function(t,e,n){var o=n(162);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".accordion-toggle{cursor:pointer}.collapse-transition{-webkit-transition:max-height .5s ease;transition:max-height .5s ease}.collapse-enter,.collapse-leave{max-height:0!important}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{header:{type:String},isOpen:{type:Boolean,coerce:o.coerce["boolean"],"default":null},type:{type:String,"default":null}},computed:{inAccordion:function inAccordion(){return this.$parent&&this.$parent._isAccordion;},panelType:function panelType(){return"panel-"+(this.type||this.$parent&&this.$parent.type||"default");}},methods:{toggle:function toggle(){this.isOpen=!this.isOpen,this.$dispatch("isOpenEvent",this);}},transitions:{collapse:{afterEnter:function afterEnter(t){t.style.maxHeight="",t.style.overflow="";},beforeLeave:function beforeLeave(t){return t.style.maxHeight=t.offsetHeight+"px",t.style.overflow="hidden",t.offsetHeight;}}},created:function created(){null===this.isOpen&&(this.isOpen=!this.inAccordion);}};},function(t,e){t.exports="<div class=\"panel {{panelType}}\"> <div :class=\"['panel-heading',{'accordion-toggle':inAccordion}]\" @click.prevent=inAccordion&&toggle()> <slot name=header> <h4 class=panel-title>{{ header }}</h4> </slot> </div> <div class=panel-collapse v-el:panel v-show=isOpen transition=collapse> <div class=panel-body> <slot></slot> </div> </div> </div>";},function(t,e,n){n(166),t.exports=n(168),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(170);},function(t,e,n){var o=n(167);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".popover.bottom,.popover.left,.popover.right,.popover.top{display:block}.scale-enter{-webkit-animation:scale-in .15s ease-in;animation:scale-in .15s ease-in}.scale-leave{-webkit-animation:scale-out .15s ease-out;animation:scale-out .15s ease-out}@-webkit-keyframes scale-in{0%{-webkit-transform:scale(0);transform:scale(0);opacity:0}to{-webkit-transform:scale(1);transform:scale(1);opacity:1}}@keyframes scale-in{0%{-webkit-transform:scale(0);transform:scale(0);opacity:0}to{-webkit-transform:scale(1);transform:scale(1);opacity:1}}@-webkit-keyframes scale-out{0%{-webkit-transform:scale(1);transform:scale(1);opacity:1}to{-webkit-transform:scale(0);transform:scale(0);opacity:0}}@keyframes scale-out{0%{-webkit-transform:scale(1);transform:scale(1);opacity:1}to{-webkit-transform:scale(0);transform:scale(0);opacity:0}}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(169),r=o(i);e["default"]={mixins:[r["default"]],props:{trigger:{type:String,"default":"click"}}};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{trigger:{type:String},effect:{type:String,"default":"fade"},title:{type:String},content:{type:String},header:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},placement:{type:String,"default":"top"}},data:function data(){return{position:{top:0,left:0},show:!1};},methods:{toggle:function toggle(t){var e=this;t&&"contextmenu"===this.trigger&&t.preventDefault(),(this.show=!this.show)&&setTimeout(function(){var t=e.$els.popover,n=e.$els.trigger.children[0];switch(e.placement){case"top":e.position.left=n.offsetLeft-t.offsetWidth/2+n.offsetWidth/2,e.position.top=n.offsetTop-t.offsetHeight;break;case"left":e.position.left=n.offsetLeft-t.offsetWidth,e.position.top=n.offsetTop+n.offsetHeight/2-t.offsetHeight/2;break;case"right":e.position.left=n.offsetLeft+n.offsetWidth,e.position.top=n.offsetTop+n.offsetHeight/2-t.offsetHeight/2;break;case"bottom":e.position.left=n.offsetLeft-t.offsetWidth/2+n.offsetWidth/2,e.position.top=n.offsetTop+n.offsetHeight;break;default:console.warn("Wrong placement prop");}t.style.top=e.position.top+"px",t.style.left=e.position.left+"px";},0);}},ready:function ready(){var t=this.$els.trigger;if(!t)return console.error("Could not find trigger v-el in your component that uses popoverMixin.");if("focus"!==this.trigger||~t.tabIndex||(t=(0,a["default"])("a,input,select,textarea,button",t),t.length||(t=null)),t){var e={contextmenu:"contextmenu",hover:"mouseleave mouseenter",focus:"blur focus"};(0,a["default"])(t).on(e[this.trigger]||"click",this.toggle),this._trigger=t;}},beforeDestroy:function beforeDestroy(){this._trigger&&(0,a["default"])(this._trigger).off();}};},function(t,e){t.exports="<span v-el:trigger> <slot></slot> </span> <div v-el:popover v-if=show :class=\"['popover',placement]\" :transition=effect> <div class=arrow></div> <h3 class=popover-title v-if=title> <slot name=title>{{title}}</slot> </h3> <div class=popover-content> <slot name=content>{{{content}}}</slot> </div> </div>";},function(t,e,n){t.exports=n(172),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(173);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{now:{type:Number,coerce:o.coerce.number,required:!0},label:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String},striped:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},animated:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}}};},function(t,e){t.exports="<div role=progressbar :class=\"['progress-bar',{\r\n      'progress-bar-success':type == 'success',\r\n      'progress-bar-warning':type == 'warning',\r\n      'progress-bar-info':type == 'info',\r\n      'progress-bar-danger':type == 'danger',\r\n      'progress-bar-striped':striped,\r\n      'active':animated\r\n    }]\" :style=\"{width: now + '%'}\"> {{label ? now + '%' : ''}} </div>";},function(t,e,n){n(175),t.exports=n(177),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(178);},function(t,e,n){var o=n(176);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".radio{position:relative}.radio>label>input{position:absolute;margin:0;padding:0;opacity:0;z-index:-1;box-sizing:border-box}.radio>label>.icon{position:absolute;top:.15rem;left:0;display:block;width:1.4rem;height:1.4rem;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;border-radius:.7rem;background-repeat:no-repeat;background-position:50%;background-size:50% 50%}.radio:not(.active)>label>.icon{background-color:#ddd;border:1px solid #bbb}.radio>label>input:focus~.icon{outline:0;border:1px solid #66afe9;box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)}.radio.active>label>.icon{background-size:1rem 1rem;background-image:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxjaXJjbGUgY3g9IjUiIGN5PSI1IiByPSI0IiBmaWxsPSIjZmZmIi8+PC9zdmc+)}.radio.active .btn-default{-webkit-filter:brightness(75%);filter:brightness(75%)}.btn.readonly,.radio.disabled>label>.icon,.radio.readonly>label>.icon{filter:alpha(opacity=65);box-shadow:none;opacity:.65}label.btn>input[type=radio]{position:absolute;clip:rect(0,0,0,0);pointer-events:none}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{value:{"default":!0},checked:{twoWay:!0},button:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},name:{type:String,"default":null},readonly:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String,"default":null}},computed:{active:function active(){return this.group?this.$parent.value===this.value:this.value===this.checked;},buttonStyle:function buttonStyle(){return this.button||this.group&&this.$parent.buttons;},group:function group(){return this.$parent&&this.$parent._radioGroup;},typeColor:function typeColor(){return this.type||this.$parent&&this.$parent.type||"default";}},created:function created(){var t=this.$parent;t&&t._btnGroup&&!t._checkboxGroup&&(t._radioGroup=!0);},ready:function ready(){this.$parent._radioGroup&&(this.$parent.value?this.checked=this.$parent.value===this.value:this.checked&&(this.$parent.value=this.value));},methods:{focus:function focus(){this.$els.input.focus();},toggle:function toggle(){this.disabled||(this.focus(),this.readonly||(this.checked=this.value,this.group&&(this.$parent.value=this.value)));}}};},function(t,e){t.exports="<label v-if=buttonStyle :class=\"['btn btn-'+typeColor,{active:active,disabled:disabled,readonly:readonly}]\" @click.prevent=toggle> <input type=radio autocomplete=off v-el:input v-show=!readonly :checked=active :value=value :name=name :readonly=readonly :disabled=disabled /> <slot></slot> </label> <div v-else :class=\"['radio',typeColor,{active:active,disabled:disabled,readonly:readonly}]\" @click.prevent=toggle> <label class=open> <input type=radio autocomplete=off v-el:input :checked=active :value=value :name=name :readonly=readonly :disabled=disabled /> <span class=\"icon dropdown-toggle\" :class=\"[active?'btn-'+typeColor:'',{bg:typeColor==='default'}]\"></span> <span v-if=\"active&&typeColor==='default'\" class=icon></span> <slot></slot> </label> </div>";},function(t,e,n){n(180),t.exports=n(182),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(198);},function(t,e,n){var o=n(181);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,"button.form-control.dropdown-toggle[_v-e514dbc6]{height:auto;padding-right:24px}button.form-control.dropdown-toggle[_v-e514dbc6]:after{content:' ';position:absolute;right:13px;top:50%;margin:-1px 0 0;border-top:4px dashed;border-top:4px solid\\9;border-right:4px solid transparent;border-left:4px solid transparent}.bs-searchbox[_v-e514dbc6]{position:relative;margin:4px 8px}.bs-searchbox .close[_v-e514dbc6]{position:absolute;top:0;right:0;z-index:2;display:block;width:34px;height:34px;line-height:34px;text-align:center}.bs-searchbox input[_v-e514dbc6]:focus,.secret:focus+button[_v-e514dbc6]{outline:0;border-color:#66afe9!important;box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)}.secret[_v-e514dbc6]{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}button>.close[_v-e514dbc6]{margin-left:5px}.notify.out[_v-e514dbc6]{position:relative}.notify.in[_v-e514dbc6],.notify>div[_v-e514dbc6]{position:absolute;width:96%;margin:0 2%;min-height:26px;padding:3px 5px;background:#f5f5f5;border:1px solid #e3e3e3;box-shadow:inset 0 1px 1px rgba(0,0,0,.05);pointer-events:none}.notify>div[_v-e514dbc6]{top:5px;z-index:1}.notify.in[_v-e514dbc6]{opacity:.9;bottom:5px}.btn-group-justified .dropdown-toggle>span[_v-e514dbc6]:not(.close){width:calc(100% - 18px);display:inline-block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-bottom:-4px}.btn-group-justified .dropdown-menu[_v-e514dbc6]{width:100%}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(183),r=o(i),a=n(88),s=o(a),l=n(97),c=n(27),u=o(c),d={};e["default"]={props:{value:{twoWay:!0},options:{type:Array,"default":function _default(){return[];}},multiple:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},clearButton:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},closeOnSelect:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},lang:{type:String,"default":navigator.language},limit:{type:Number,coerce:l.coerce.number,"default":1024},name:{type:String,"default":null},optionsLabel:{type:String,"default":"label"},optionsValue:{type:String,"default":"value"},parent:{"default":!0},placeholder:{type:String,"default":null},readonly:{type:Boolean,coerce:l.coerce["boolean"],"default":null},required:{type:Boolean,coerce:l.coerce["boolean"],"default":null},minSearch:{type:Number,coerce:l.coerce.number,"default":0},search:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},searchText:{type:String,"default":null},url:{type:String,"default":null}},data:function data(){return{loading:null,searchValue:null,show:!1,showNotify:!1,valid:null};},computed:{selected:function selected(){var t=this;if(0===this.options.length)return"";var e=[],n=!0,o=!1,i=void 0;try{for(var a,l=(0,s["default"])(this.values);!(n=(a=l.next()).done);n=!0){var c=a.value;if(~["number","string"].indexOf("undefined"==typeof c?"undefined":(0,r["default"])(c))){var u=null;this.options.some(function(e){if(e instanceof Object?e[t.optionsValue]===c:e===c)return u=e,!0;})&&e.push(u[this.optionsLabel]||u);}}}catch(d){o=!0,i=d;}finally{try{!n&&l["return"]&&l["return"]();}finally{if(o)throw i;}}return e.join(", ");},classes:function classes(){return[{open:this.show,disabled:this.disabled},this["class"],this.isLi?"dropdown":this.inInput?"input-group-btn":"btn-group"];},inInput:function inInput(){return this.$parent._input;},isLi:function isLi(){return this.$parent._navbar||this.$parent.menu||this.$parent._tabset;},canSearch:function canSearch(){return this.minSearch?this.options.length>=this.minSearch:this.search;},limitText:function limitText(){return this.text.limit.replace("{{limit}}",this.limit);},showPlaceholder:function showPlaceholder(){return 0!==this.values.length&&this.hasParent?null:this.placeholder||this.text.notSelected;},text:function text(){return(0,l.translations)(this.lang);},hasParent:function hasParent(){return this.parent instanceof Array?this.parent.length:this.parent;},values:function values(){return this.value instanceof Array?this.value:null!==this.value&&void 0!==this.value?[this.value]:[];}},watch:{options:function options(t){var e=this,n=!1;t instanceof Array&&t.length&&t.map(function(t){if(!(t instanceof Object)){var o={};return o[e.optionsLabel]=t,o[e.optionsValue]=t,n=!0,o;}return t;}),n&&(this.options=t);},show:function show(t){t&&(this.$els.sel.focus(),this.$els.search&&this.$els.search.focus());},url:function url(){this.update();},value:function value(t){var e=this;this.$emit("change",t),this.$emit("selected",this.selected),this.value instanceof Array&&t.length>this.limit&&(this.showNotify=!0,d.limit&&clearTimeout(d.limit),d.limit=setTimeout(function(){d.limit=!1,e.showNotify=!1;},1500)),this.checkValue(),this.valid=this.validate();},valid:function valid(t,e){t!==e&&this._parent&&this._parent.validate();}},methods:{blur:function blur(){this.show=!1;},clear:function clear(){this.disabled||this.readonly||(this.value=this.value instanceof Array?[]:null,this.toggle());},clearSearch:function clearSearch(){this.searchValue="",this.$els.search.focus();},checkValue:function checkValue(){!this.multiple||this.value instanceof Array||(this.value=null===this.value||void 0===this.value?[]:[this.value]),!this.multiple&&this.value instanceof Array&&(this.value=this.value.length?this.value.pop():null),this.limit<1&&(this.limit=1),this.values.length>this.limit&&(this.value=this.value.slice(0,this.limit));},isSelected:function isSelected(t){return this.values.indexOf(t)>-1;},select:function select(t,e){this.value instanceof Array?(~this.value.indexOf(t)?this.value.$remove(t):this.value.push(t),this.closeOnSelect&&this.toggle()):(this.value=~["",null,void 0].indexOf(t)?e:t,this.toggle());},toggle:function toggle(){this.show=!this.show;},update:function update(){var t=this;this.url&&(this.loading=!0,(0,l.getJSON)(this.url).then(function(e){var n=[],o=!0,i=!1,r=void 0;try{for(var a,l=(0,s["default"])(e);!(o=(a=l.next()).done);o=!0){var c=a.value;void 0!==c[t.optionsValue]&&void 0!==c[t.optionsLabel]&&n.push(c);}}catch(u){i=!0,r=u;}finally{try{!o&&l["return"]&&l["return"]();}finally{if(i)throw r;}}t.options=n,n.length||(t.value=t.value instanceof Array?[]:null);}).always(function(){t.loading=!1,t.checkValue();}));},validate:function validate(){return!this.required||(this.value instanceof Array?this.value.length>0:null!==this.value);}},created:function created(){this._select=!0,void 0!==this.value&&this.parent||(this.value=null),!this.multiple&&this.value instanceof Array&&(this.value=this.value.shift()),this.checkValue(),this.url&&this.update();for(var t=this.$parent;t&&!t._formGroup;){t=t.$parent;}t&&t._formGroup&&(t.children.push(this),this._parent=t);},ready:function ready(){var t=this;(0,u["default"])(this.$els.select).onBlur(function(e){t.show=!1;});},beforeDestroy:function beforeDestroy(){this._parent&&this._parent.children.$remove(this),(0,u["default"])(this.$els.select).offBlur();}};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}e.__esModule=!0;var i=n(46),r=o(i),a=n(184),s=o(a),l="function"==typeof s["default"]&&"symbol"==_typeof(r["default"])?function(t){return typeof t==="undefined"?"undefined":_typeof(t);}:function(t){return t&&"function"==typeof s["default"]&&t.constructor===s["default"]?"symbol":typeof t==="undefined"?"undefined":_typeof(t);};e["default"]="function"==typeof s["default"]&&"symbol"===l(r["default"])?function(t){return"undefined"==typeof t?"undefined":l(t);}:function(t){return t&&"function"==typeof s["default"]&&t.constructor===s["default"]?"symbol":"undefined"==typeof t?"undefined":l(t);};},function(t,e,n){t.exports={"default":n(185),__esModule:!0};},function(t,e,n){n(186),n(195),n(196),n(197),t.exports=n(33).Symbol;},function(t,e,n){"use strict";var o=n(32),i=n(55),r=n(41),a=n(31),s=n(54),l=n(187).KEY,c=n(42),u=n(69),d=n(73),p=n(70),f=n(74),h=n(81),v=n(188),y=n(189),b=n(190),m=n(193),g=n(38),x=n(62),w=n(44),_=n(45),k=n(58),S=n(86),M=n(194),O=n(37),$=n(60),D=M.f,j=O.f,C=S.f,_N=o.Symbol,B=o.JSON,L=B&&B.stringify,A="prototype",T=f("_hidden"),P=f("toPrimitive"),E={}.propertyIsEnumerable,R=u("symbol-registry"),V=u("symbols"),z=u("op-symbols"),I=Object[A],W="function"==typeof _N,F=o.QObject,Y=!F||!F[A]||!F[A].findChild,X=r&&c(function(){return 7!=k(j({},"a",{get:function get(){return j(this,"a",{value:7}).a;}})).a;})?function(t,e,n){var o=D(I,e);o&&delete I[e],j(t,e,n),o&&t!==I&&j(I,e,o);}:j,H=function H(t){var e=V[t]=k(_N[A]);return e._k=t,e;},G=W&&"symbol"==_typeof(_N.iterator)?function(t){return"symbol"==(typeof t==="undefined"?"undefined":_typeof(t));}:function(t){return t instanceof _N;},q=function q(t,e,n){return t===I&&q(z,e,n),g(t),e=w(e,!0),g(n),i(V,e)?(n.enumerable?(i(t,T)&&t[T][e]&&(t[T][e]=!1),n=k(n,{enumerable:_(0,!1)})):(i(t,T)||j(t,T,_(1,{})),t[T][e]=!0),X(t,e,n)):j(t,e,n);},U=function U(t,e){g(t);for(var n,o=b(e=x(e)),i=0,r=o.length;r>i;){q(t,n=o[i++],e[n]);}return t;},J=function J(t,e){return void 0===e?k(t):U(k(t),e);},Z=function Z(t){var e=E.call(this,t=w(t,!0));return!(this===I&&i(V,t)&&!i(z,t))&&(!(e||!i(this,t)||!i(V,t)||i(this,T)&&this[T][t])||e);},K=function K(t,e){if(t=x(t),e=w(e,!0),t!==I||!i(V,e)||i(z,e)){var n=D(t,e);return!n||!i(V,e)||i(t,T)&&t[T][e]||(n.enumerable=!0),n;}},Q=function Q(t){for(var e,n=C(x(t)),o=[],r=0;n.length>r;){i(V,e=n[r++])||e==T||e==l||o.push(e);}return o;},tt=function tt(t){for(var e,n=t===I,o=C(n?z:x(t)),r=[],a=0;o.length>a;){!i(V,e=o[a++])||n&&!i(I,e)||r.push(V[e]);}return r;};W||(_N=function N(){if(this instanceof _N)throw TypeError("Symbol is not a constructor!");var t=p(arguments.length>0?arguments[0]:void 0),e=function e(n){this===I&&e.call(z,n),i(this,T)&&i(this[T],t)&&(this[T][t]=!1),X(this,t,_(1,n));};return r&&Y&&X(I,t,{configurable:!0,set:e}),H(t);},s(_N[A],"toString",function(){return this._k;}),M.f=K,O.f=q,n(87).f=S.f=Q,n(192).f=Z,n(191).f=tt,r&&!n(53)&&s(I,"propertyIsEnumerable",Z,!0),h.f=function(t){return H(f(t));}),a(a.G+a.W+a.F*!W,{Symbol:_N});for(var et="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),nt=0;et.length>nt;){f(et[nt++]);}for(var et=$(f.store),nt=0;et.length>nt;){v(et[nt++]);}a(a.S+a.F*!W,"Symbol",{"for":function _for(t){return i(R,t+="")?R[t]:R[t]=_N(t);},keyFor:function keyFor(t){if(G(t))return y(R,t);throw TypeError(t+" is not a symbol!");},useSetter:function useSetter(){Y=!0;},useSimple:function useSimple(){Y=!1;}}),a(a.S+a.F*!W,"Object",{create:J,defineProperty:q,defineProperties:U,getOwnPropertyDescriptor:K,getOwnPropertyNames:Q,getOwnPropertySymbols:tt}),B&&a(a.S+a.F*(!W||c(function(){var t=_N();return"[null]"!=L([t])||"{}"!=L({a:t})||"{}"!=L(Object(t));})),"JSON",{stringify:function stringify(t){if(void 0!==t&&!G(t)){for(var e,n,o=[t],i=1;arguments.length>i;){o.push(arguments[i++]);}return e=o[1],"function"==typeof e&&(n=e),!n&&m(e)||(e=function e(t,_e2){if(n&&(_e2=n.call(this,t,_e2)),!G(_e2))return _e2;}),o[1]=e,L.apply(B,o);}}}),_N[A][P]||n(36)(_N[A],P,_N[A].valueOf),d(_N,"Symbol"),d(Math,"Math",!0),d(o.JSON,"JSON",!0);},function(t,e,n){var o=n(70)("meta"),i=n(39),r=n(55),a=n(37).f,s=0,l=Object.isExtensible||function(){return!0;},c=!n(42)(function(){return l(Object.preventExtensions({}));}),u=function u(t){a(t,o,{value:{i:"O"+ ++s,w:{}}});},d=function d(t,e){if(!i(t))return"symbol"==(typeof t==="undefined"?"undefined":_typeof(t))?t:("string"==typeof t?"S":"P")+t;if(!r(t,o)){if(!l(t))return"F";if(!e)return"E";u(t);}return t[o].i;},p=function p(t,e){if(!r(t,o)){if(!l(t))return!0;if(!e)return!1;u(t);}return t[o].w;},f=function f(t){return c&&h.NEED&&l(t)&&!r(t,o)&&u(t),t;},h=t.exports={KEY:o,NEED:!1,fastKey:d,getWeak:p,onFreeze:f};},function(t,e,n){var o=n(32),i=n(33),r=n(53),a=n(81),s=n(37).f;t.exports=function(t){var e=i.Symbol||(i.Symbol=r?{}:o.Symbol||{});"_"==t.charAt(0)||t in e||s(e,t,{value:a.f(t)});};},function(t,e,n){var o=n(60),i=n(62);t.exports=function(t,e){for(var n,r=i(t),a=o(r),s=a.length,l=0;s>l;){if(r[n=a[l++]]===e)return n;}};},function(t,e,n){var o=n(60),i=n(191),r=n(192);t.exports=function(t){var e=o(t),n=i.f;if(n)for(var a,s=n(t),l=r.f,c=0;s.length>c;){l.call(t,a=s[c++])&&e.push(a);}return e;};},function(t,e){e.f=Object.getOwnPropertySymbols;},function(t,e){e.f={}.propertyIsEnumerable;},function(t,e,n){var o=n(64);t.exports=Array.isArray||function(t){return"Array"==o(t);};},function(t,e,n){var o=n(192),i=n(45),r=n(62),a=n(44),s=n(55),l=n(40),c=Object.getOwnPropertyDescriptor;e.f=n(41)?c:function(t,e){if(t=r(t),e=a(e,!0),l)try{return c(t,e);}catch(n){}if(s(t,e))return i(!o.f.call(t,e),t[e]);};},function(t,e){},function(t,e,n){n(188)("asyncIterator");},function(t,e,n){n(188)("observable");},function(t,e){t.exports='<div v-el:select="" :class=classes _v-e514dbc6=""> <button type=button class="form-control dropdown-toggle" :disabled="disabled || !hasParent" :readonly=readonly @click=toggle() @keyup.esc="show = false" _v-e514dbc6=""> <span class=btn-content _v-e514dbc6="">{{ loading ? text.loading : showPlaceholder || selected }}</span> <span v-if=clearButton&amp;&amp;values.length class=close @click=clear() _v-e514dbc6="">×</span> </button> <select v-el:sel="" v-model=value v-show=show name={{name}} class=secret :multiple=multiple :required=required :readonly=readonly :disabled=disabled _v-e514dbc6=""> <option v-if=required value="" _v-e514dbc6=""></option> <option v-for="option in options" :value=option[optionsValue]||option _v-e514dbc6="">{{ option[optionsLabel]||option }}</option> </select> <ul class=dropdown-menu _v-e514dbc6=""> <template v-if=options.length _v-e514dbc6=""> <li v-if=canSearch class=bs-searchbox _v-e514dbc6=""> <input type=text placeholder={{searchText||text.search}} class=form-control autocomplete=off v-el:search="" v-model=searchValue @keyup.esc="show = false" _v-e514dbc6=""> <span v-show=searchValue class=close @click=clearSearch _v-e514dbc6="">×</span> </li> <li v-if=required&amp;&amp;!clearButton _v-e514dbc6=""><a @mousedown.prevent="clear() &amp;&amp; blur()" _v-e514dbc6="">{{ placeholder || text.notSelected }}</a></li> <li v-for="option in options | filterBy searchValue" :id=option[optionsValue]||option _v-e514dbc6=""> <a @mousedown.prevent=select(option[optionsValue],option) _v-e514dbc6=""> <span v-html=option[optionsLabel]||option _v-e514dbc6=""></span> <span class="glyphicon glyphicon-ok check-mark" v-show=isSelected(option[optionsValue]||option) _v-e514dbc6=""></span> </a> </li> </template> <slot _v-e514dbc6=""></slot> <div v-if="showNotify &amp;&amp; !closeOnSelect" class="notify in" transition=fadein _v-e514dbc6="">{{limitText}}</div> </ul> <div v-if="showNotify &amp;&amp; closeOnSelect" class="notify out" transition=fadein _v-e514dbc6=""><div _v-e514dbc6="">{{limitText}}</div></div> </div>';},function(t,e,n){t.exports=n(200),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(201);},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={data:function data(){return{index:0,show:!1};},computed:{show:function show(){return this.$parent.index===this.index;}},ready:function ready(){for(var t in this.$parent.$children){if(this.$parent.$children[t]===this){this.index=parseInt(t,10);break;}}this.$parent.indicator.push(this.index),0===this.index&&this.$el.classList.add("active");}};},function(t,e){t.exports="<div class=item> <slot></slot> </div>";},function(t,e,n){t.exports=n(203),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(206);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),n(204);var o=n(97),i=500;e["default"]={props:{size:{type:String,"default":"md"},text:{type:String,"default":""},fixed:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},data:function data(){return{active:!1};},computed:{spinnerSize:function spinnerSize(){return this.size?"spinner-"+this.size:"spinner-sm";}},ready:function ready(){this._body=document.querySelector("body"),this._bodyOverflow=this._body.style.overflowY||"";},methods:{getMinWait:function getMinWait(t){return t=t||0,new Date().getTime()-this._started.getTime()<i?i-parseInt(new Date().getTime()-this._started.getTime(),10)+t:0+t;},show:function show(t){t&&t.text&&(this.text=t.text),t&&t.size&&(this.size=t.size),t&&t.fixed&&(this.fixed=t.fixed),this._body.style.overflowY="hidden",this._started=new Date(),this.active=!0,this.$root.$broadcast("shown::spinner");},hide:function hide(){var t=this,e=0;this._spinnerAnimation=setTimeout(function(){t.active=!1,t._body.style.overflowY=t._bodyOverflow,t.$root.$broadcast("hidden::spinner");},this.getMinWait(e));}},events:{"show::spinner":function showSpinner(t){this.show(t);},"hide::spinner":function hideSpinner(){this.hide();},"start::ajax":function startAjax(t){this.show(t);},"end::ajax":function endAjax(){this.hide();}},beforeDestroy:function beforeDestroy(){clearTimeout(this._spinnerAnimation),this._body.style.overflowY=this._bodyOverflow;}};},function(t,e,n){var o=n(205);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,'/*!\r\n *\r\n * Spinner\r\n * With fallback to IE9\r\n *\r\n */@keyframes spin{to{transform:rotate(1turn)}}.spinner-gritcode{top:0;left:0;bottom:0;right:0;z-index:9998;position:absolute;width:100%;text-align:center;background:hsla(0,0%,100%,.9)}.spinner-gritcode.spinner-fixed{position:fixed}.spinner-gritcode .spinner-wrapper{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%)}.spinner-gritcode .spinner-circle{position:relative;border:4px solid #ccc;border-right-color:#337ab7;border-radius:50%;display:inline-block;animation:spin .6s linear;animation-iteration-count:infinite;width:3em;height:3em;z-index:2}.spinner-gritcode .spinner-text{position:relative;text-align:center;margin-top:.5em;z-index:2;width:100%;font-size:95%;color:#337ab7}.spinner-gritcode.spinner-sm .spinner-circle{width:1.5em;height:1.5em}.spinner-gritcode.spinner-md .spinner-circle{width:2em;height:2em}.spinner-gritcode.spinner-lg .spinner-circle{width:2.5em;height:2.5em}.spinner-gritcode.spinner-xl .spinner-circle{width:3.5em;height:3.5em}.ie9 .spinner-gritcode .spinner-circle,.lt-ie10 .spinner-gritcode .spinner-circle,.no-csstransforms3d .spinner-gritcode .spinner-circle,.no-csstransitions .spinner-gritcode .spinner-circle,.oldie .spinner-gritcode .spinner-circle{background:url("http://i2.wp.com/www.thegreatnovelingadventure.com/wp-content/plugins/wp-polls/images/loading.gif") 50% no-repeat;animation:none;margin-left:0;margin-top:5px;border:none;width:32px;height:32px}',""]);},function(t,e){t.exports="<div :class=\"['spinner spinner-gritcode',spinnerSize,{'spinner-fixed':fixed}]\" v-show=active> <div class=spinner-wrapper> <div class=spinner-circle></div> <div class=spinner-text>{{text}}</div> </div> </div>";},function(t,e,n){t.exports=n(208),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(209);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{header:{type:String},disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},computed:{active:function active(){return this._tabset.show===this;},index:function index(){return this._tabset.tabs.indexOf(this);},show:function show(){return this._tabset&&this._tabset.show===this;},transition:function transition(){return this._tabset?this._tabset.effect:null;}},created:function created(){this._ingroup=this.$parent&&this.$parent._tabgroup;for(var t=this;t&&t._tabset!==!0&&t.$parent;){t=t.$parent;}t._tabset?(t.tabs.push(this),this._ingroup?~t.headers.indexOf(this.$parent)||t.headers.push(this.$parent):t.headers.push(this),this._tabset=t):(this._tabset={},console.warn('Warning: "tab" depend on "tabset" to work properly.')),this._ingroup&&this.$parent.tabs.push(this);},beforeDestroy:function beforeDestroy(){this._tabset.active===this.index&&(this._tabset.active=0),this._ingroup&&this.$parent.tabs.$remove(this),this._tabset.tabs.$remove(this);}};},function(t,e){t.exports='<div role=tabpanel class="tab-pane active" v-show=show :class={hide:!show} :transition=transition> <slot></slot> </div>';},function(t,e,n){n(211),t.exports=n(213),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(214);},function(t,e,n){var o=n(212);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".nav-tabs[_v-55faf3cb]{margin-bottom:15px}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},header:{type:String}},data:function data(){return{tabs:[],show:!1};},computed:{active:function active(){return~this.tabs.indexOf(this._tabset.show);}},created:function created(){this._tabgroup=!0;var t=this.$parent&&this.$parent._tabset===!0?this.$parent:{};for(this.$parent&&this.$parent._tabgroup&&console.error("Can't nest tabgroups.");t&&!t._tabset&&t.$parent;){t=t.$parent;}t._tabset?this._tabset=t:(this._tabset={},this.show=!0,console.warn("Warning: tabgroup depend on tabset to work properly."));},methods:{blur:function blur(){this.show=!1;},toggle:function toggle(){this.show=!this.show;}}};},function(t,e){t.exports='<slot _v-55faf3cb=""></slot>';},function(t,e,n){n(216),t.exports=n(218),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(219);},function(t,e,n){var o=n(217);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".nav-tabs[_v-09e2754e]{margin-bottom:15px}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(132),a=o(r);e["default"]={components:{dropdown:a["default"]},props:{navStyle:{type:String,"default":"tabs"},effect:{type:String,"default":"fadein"},active:{twoWay:!0,type:Number,coerce:i.coerce.number,"default":0}},data:function data(){return{show:null,headers:[],tabs:[]};},created:function created(){this._tabset=!0;},watch:{active:function active(t){this.show=this.tabs[t];}},ready:function ready(){this.show=this.tabs[this.active];},methods:{select:function select(t){t.disabled||(this.active=t.index);}}};},function(t,e){t.exports=' <ul class="nav nav-{{navStyle}}" role=tablist _v-09e2754e=""> <template v-for="t in headers" _v-09e2754e=""> <li v-if=!t._tabgroup :class="{active:t.active, disabled:t.disabled}" @click.prevent=select(t) _v-09e2754e=""> <a href=# _v-09e2754e=""><slot name=header _v-09e2754e="">{{{t.header}}}</slot></a> </li> <dropdown v-else="" :text=t.header :class={active:t.active} :disabled=t.disabled _v-09e2754e=""> <li v-for="tab in t.tabs" :class={disabled:tab.disabled} _v-09e2754e=""><a href=# @click.prevent=select(tab) _v-09e2754e="">{{tab.header}}</a></li> </dropdown> </template> </ul> <div class=tab-content v-el:tab-content="" _v-09e2754e=""> <slot _v-09e2754e=""></slot> </div>';},function(t,e,n){n(221),t.exports=n(223),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(224);},function(t,e,n){var o=n(222);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".tooltip.bottom,.tooltip.left,.tooltip.right,.tooltip.top{opacity:.9}.fadein-enter{-webkit-animation:fadein-in .3s ease-in;animation:fadein-in .3s ease-in}.fadein-leave{-webkit-animation:fadein-out .3s ease-out;animation:fadein-out .3s ease-out}@-webkit-keyframes fadein-in{0%{opacity:0}to{opacity:.9}}@keyframes fadein-in{0%{opacity:0}to{opacity:.9}}@-webkit-keyframes fadein-out{0%{opacity:.9}to{opacity:0}}@keyframes fadein-out{0%{opacity:.9}to{opacity:0}}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(169),r=o(i);e["default"]={mixins:[r["default"]],props:{trigger:{type:String,"default":"hover"},effect:{type:String,"default":"scale"}}};},function(t,e){t.exports="<span v-el:trigger> <slot></slot> </span> <div v-el:popover v-if=show style=display:block :class=\"['tooltip',placement]\" :transition=effect> <div class=tooltip-arrow></div> <div class=tooltip-inner> <slot name=content>{{{content}}}</slot> </div> </div>";},function(t,e,n){n(226),t.exports=n(228),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(229);},function(t,e,n){var o=n(227);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".dropdown-menu>li>a{cursor:pointer}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97),i=window.Vue;e["default"]={created:function created(){this.items=this.primitiveData;},partials:{"default":'<span v-html="item | highlight query"></span>'},props:{value:{twoWay:!0,type:String,"default":""},data:{type:Array},limit:{type:Number,"default":8},async:{type:String},template:{type:String},templateName:{type:String,"default":"default"},key:{type:String,"default":null},matchCase:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},matchStart:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},onHit:{type:Function,"default":function _default(t){this.reset(),this.value=t;}},placeholder:{type:String}},data:function data(){return{showDropdown:!1,noResults:!0,current:0,items:[]};},computed:{primitiveData:function primitiveData(){var t=this;if(this.data)return this.data.filter(function(e){e=t.matchCase?e:e.toLowerCase();var n=t.matchCase?t.value:t.value.toLowerCase();return t.matchStart?0===e.indexOf(n):e.indexOf(n)!==-1;}).slice(0,this.limit);}},ready:function ready(){this.templateName&&"default"!==this.templateName&&i.partial(this.templateName,this.template);},methods:{update:function update(){var t=this;return this.value?(this.data&&(this.items=this.primitiveData,this.showDropdown=this.items.length>0),void(this.async&&(0,o.getJSON)(this.async+this.value).then(function(e){t.items=(t.key?e[t.key]:e).slice(0,t.limit),t.showDropdown=t.items.length>0;}))):(this.reset(),!1);},reset:function reset(){this.items=[],this.value="",this.loading=!1,this.showDropdown=!1;},setActive:function setActive(t){this.current=t;},isActive:function isActive(t){return this.current===t;},hit:function hit(t){t.preventDefault(),this.onHit(this.items[this.current],this);},up:function up(){this.current>0&&this.current--;},down:function down(){this.current<this.items.length-1&&this.current++;}},filters:{highlight:function highlight(t,e){return t.replace(new RegExp("("+e+")","gi"),"<strong>$1</strong>");}}};},function(t,e){t.exports='<div style="position: relative" v-bind:class="{\'open\':showDropdown}"> <input type=text class=form-control :placeholder=placeholder autocomplete=off v-model=value @input=update @keydown.up=up @keydown.down=down @keydown.enter=hit @keydown.esc=reset @blur="showDropdown = false"/> <ul class=dropdown-menu v-el:dropdown> <li v-for="item in items" v-bind:class="{\'active\': isActive($index)}"> <a @mousedown.prevent=hit @mousemove=setActive($index)> <partial :name=templateName></partial> </a> </li> </ul> </div>';}]);});
+"use strict";var _typeof=typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"?function(obj){return typeof obj;}:function(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol&&obj!==Symbol.prototype?"symbol":typeof obj;};!function(t,e){"object"==(typeof exports==="undefined"?"undefined":_typeof(exports))&&"object"==(typeof module==="undefined"?"undefined":_typeof(module))?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==(typeof exports==="undefined"?"undefined":_typeof(exports))?exports.VueStrap=e():t.VueStrap=e();}(undefined,function(){return function(t){function e(o){if(n[o])return n[o].exports;var i=n[o]={exports:{},id:o,loaded:!1};return t[o].call(i.exports,i,i.exports,e),i.loaded=!0,i.exports;}var n={};return e.m=t,e.c=n,e.p="",e(0);}([function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}var i=n(27),r=o(i),a=n(95),s=o(a),l=n(99),c=o(l),u=n(102),d=o(u),p=n(109),f=o(p),h=n(114),v=o(h),y=n(117),b=o(y),m=n(122),g=o(m),x=n(127),w=o(x),_=n(132),k=o(_),S=n(137),M=o(S),O=n(140),$=o(O),D=n(145),j=o(D),C=n(154),N=o(C),B=n(157),L=o(B),A=n(160),T=o(A),P=n(165),E=o(P),R=n(171),V=o(R),z=n(174),I=o(z),W=n(179),F=o(W),Y=n(199),X=o(Y),H=n(202),G=o(H),q=n(207),U=o(q),J=n(210),Z=o(J),K=n(215),Q=o(K),tt=n(220),et=o(tt),nt=n(225),ot=o(nt),it={$:r["default"],accordion:s["default"],affix:c["default"],alert:d["default"],aside:f["default"],buttonGroup:v["default"],carousel:b["default"],checkbox:g["default"],datepicker:w["default"],dropdown:k["default"],formGroup:M["default"],input:$["default"],modal:j["default"],navbar:N["default"],option:L["default"],panel:T["default"],popover:E["default"],progressbar:V["default"],radio:I["default"],select:F["default"],slider:X["default"],spinner:G["default"],tab:U["default"],tabGroup:Z["default"],tabset:Q["default"],tooltip:et["default"],typeahead:ot["default"]};t.exports=it;},,,,,,,,,,,,,,,,,,,,,,,,,,,function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}function i(t,e){var n=[],o=!0,i=!1,r=void 0;try{for(var a,s=(0,h["default"])(t);!(o=(a=s.next()).done);o=!0){var l=a.value;if(l instanceof Node||null===l)~n.indexOf(l)||n.push(l);else{if(!(l instanceof window.NodeList||l instanceof S||l instanceof HTMLCollection||l instanceof Array))return t.get=M.get,t.set=M.set,t.call=M.call,t.owner=e,t;var c=!0,u=!1,d=void 0;try{for(var p,f=(0,h["default"])(l);!(c=(p=f.next()).done);c=!0){var v=p.value;n.push(v);}}catch(y){u=!0,d=y;}finally{try{!c&&f["return"]&&f["return"]();}finally{if(u)throw d;}}}}}catch(y){i=!0,r=y;}finally{try{!o&&s["return"]&&s["return"]();}finally{if(i)throw r;}}return new S([n,e]);}function r(t){var e=this,n=arguments;O[t]instanceof Function?M[t]=function(){var o=[],r=!0,a=!0,s=!1,l=void 0;try{for(var c,u=(0,h["default"])(M);!(a=(c=u.next()).done);a=!0){var d=c.value;d&&d[t]instanceof Function?(d=d[t].apply(d,n),o.push(d),r&&void 0!==d&&(r=!1)):o.push(void 0);}}catch(p){s=!0,l=p;}finally{try{!a&&u["return"]&&u["return"]();}finally{if(s)throw l;}}return r?e:i(o,e);}:(0,l["default"])(M,t,{get:function get(){var e=[],n=!0,o=!1,r=void 0;try{for(var a,s=(0,h["default"])(this);!(n=(a=s.next()).done);n=!0){var l=a.value;null!==l&&(l=l[t]),e.push(l);}}catch(c){o=!0,r=c;}finally{try{!n&&s["return"]&&s["return"]();}finally{if(o)throw r;}}return i(e,this);},set:function set(e){var n=!0,o=!1,i=void 0;try{for(var r,a=(0,h["default"])(this);!(n=(r=a.next()).done);n=!0){var s=r.value;s&&t in s&&(s[t]=e);}}catch(l){o=!0,i=l;}finally{try{!n&&a["return"]&&a["return"]();}finally{if(o)throw i;}}}});}function a(){return new S(arguments);}Object.defineProperty(e,"__esModule",{value:!0});var s=n(28),l=o(s),c=n(46),u=o(c),d=n(82),p=o(d),f=n(88),h=o(f),v=n(93),y=o(v),b=n(94),m=o(b),g=Array.prototype,x=new Error("Passed arguments must be of Node"),w=void 0,_=[],k=[],S=function(){function t(e){(0,y["default"])(this,t);var n=e;if(e[0]===window?n=[window]:"string"==typeof e[0]?(n=(e[1]||document).querySelectorAll(e[0]),e[1]&&(this.owner=e[1])):0 in e&&!(e[0]instanceof Node)&&e[0]&&"length"in e[0]&&(n=e[0],e[1]&&(this.owner=e[1])),n){for(var o in n){this[o]=n[o];}this.length=n.length;}else this.length=0;}return(0,m["default"])(t,[{key:"concat",value:function value(){function e(t){var o=!0,i=!1,r=void 0;try{for(var a,s=(0,h["default"])(t);!(o=(a=s.next()).done);o=!0){var l=a.value;l instanceof Node?~n.indexOf(l)||n.push(l):l&&e(l);}}catch(c){i=!0,r=c;}finally{try{!o&&s["return"]&&s["return"]();}finally{if(i)throw r;}}}var n=g.slice.call(this),o=!0,i=!1,r=void 0;try{for(var a,s=(0,h["default"])(arguments);!(o=(a=s.next()).done);o=!0){var l=a.value;if(l instanceof Node)~n.indexOf(l)||n.push(l);else{if(!(l instanceof window.NodeList||l instanceof t||l instanceof HTMLCollection||l instanceof Array))throw Error("Concat arguments must be of a Node, NodeList, HTMLCollection, or Array of (Node, NodeList, HTMLCollection, Array)");e(l);}}}catch(c){i=!0,r=c;}finally{try{!o&&s["return"]&&s["return"]();}finally{if(i)throw r;}}return new t([n,this]);}},{key:"each",value:function value(){return g.forEach.apply(this,arguments),this;}},{key:"parent",value:function value(){return this.map(function(t){return t.parentNode;});}},{key:"filter",value:function value(){return new t([g.filter.apply(this,arguments),this]);}},{key:"find",value:function value(t){var e=[],n=!0,o=!1,r=void 0;try{for(var a,s=(0,h["default"])(i(this));!(n=(a=s.next()).done);n=!0){var l=a.value,c=l.querySelectorAll(t);c&&c.length&&e.push(c);}}catch(u){o=!0,r=u;}finally{try{!n&&s["return"]&&s["return"]();}finally{if(o)throw r;}}return i(e,this.owner);}},{key:"findChildren",value:function value(t){var e=this;return this.find(t).filter(function(t){return e.includes(t.parentElement);});}},{key:"forEach",value:function value(){return g.forEach.apply(this,arguments),this;}},{key:"includes",value:function value(t,e){return~this.indexOf(t,e);}},{key:"map",value:function value(){for(var t=arguments.length,e=Array(t),n=0;n<t;n++){e[n]=arguments[n];}return i(g.map.apply(this,e),this);}},{key:"pop",value:function e(n){"number"!=typeof n&&(n=1);for(var o=[],e=g.pop.bind(this);n--;){o.push(e());}return new t([o,this]);}},{key:"push",value:function value(){var t=!0,e=!1,n=void 0;try{for(var o,i=(0,h["default"])(arguments);!(t=(o=i.next()).done);t=!0){var r=o.value;if(!(r instanceof Node))throw x;~this.indexOf(r)||g.push.call(this,r);}}catch(a){e=!0,n=a;}finally{try{!t&&i["return"]&&i["return"]();}finally{if(e)throw n;}}return this;}},{key:"delete",value:function value(){for(var e=(new t([[],this.owner]),this.length-1),n=this[e];n;n=this[--e]){n.remove?(n.remove(),g.splice.call(this,e,1)):n.parentNode&&(n.parentNode.removeChild(n),g.splice.call(this,e,1));}return this;}},{key:"shift",value:function n(e){"number"!=typeof e&&(e=1);for(var o=[],n=g.shift.bind(this);e--;){o.push(n());}return new t([o,this]);}},{key:"slice",value:function value(){return new t([g.slice.apply(this,arguments),this]);}},{key:"splice",value:function value(){for(var e=2,n=arguments.length;e<n;e++){if(!(arguments[e]instanceof Node))throw x;}return new t([g.splice.apply(this,arguments),this]);}},{key:"unshift",value:function o(){var o=g.unshift.bind(this),t=!0,e=!1,n=void 0;try{for(var i,r=(0,h["default"])(arguments);!(t=(i=r.next()).done);t=!0){var a=i.value;if(!(a instanceof Node))throw x;~this.indexOf(a)||o(a);}}catch(s){e=!0,n=s;}finally{try{!t&&r["return"]&&r["return"]();}finally{if(e)throw n;}}return this;}},{key:"addClass",value:function value(t){return this.toggleClass(t,!0);}},{key:"removeClass",value:function value(t){return this.toggleClass(t,!1);}},{key:"toggleClass",value:function value(t,e){var n=this,o=void 0===e||null===e?"toggle":e?"add":"remove";return"string"==typeof t&&(t=t.trim().replace(/\s+/," ").split(" ")),t.forEach(function(t){return n.each(function(e){return e.classList[o](t);});}),this;}},{key:"get",value:function value(t){var e=[],n=!0,o=!1,r=void 0;try{for(var a,s=(0,h["default"])(this);!(n=(a=s.next()).done);n=!0){var l=a.value;null!==l&&(l=l[t]),e.push(l);}}catch(c){o=!0,r=c;}finally{try{!n&&s["return"]&&s["return"]();}finally{if(o)throw r;}}return i(e,this);}},{key:"set",value:function value(t,e){if(t.constructor===Object){var n=!0,o=!1,i=void 0;try{for(var r,a=(0,h["default"])(this);!(n=(r=a.next()).done);n=!0){var s=r.value;if(s)for(key in t){key in s&&(s[key]=t[key]);}}}catch(l){o=!0,i=l;}finally{try{!n&&a["return"]&&a["return"]();}finally{if(o)throw i;}}}else{var c=!0,u=!1,d=void 0;try{for(var p,f=(0,h["default"])(this);!(c=(p=f.next()).done);c=!0){var v=p.value;t in v&&(v[t]=e);}}catch(l){u=!0,d=l;}finally{try{!c&&f["return"]&&f["return"]();}finally{if(u)throw d;}}}return this;}},{key:"call",value:function value(){for(var t=arguments.length,e=Array(t),n=0;n<t;n++){e[n]=arguments[n];}var o=g.shift.call(e),r=[],a=!0,s=!0,l=!1,c=void 0;try{for(var u,d=(0,h["default"])(this);!(s=(u=d.next()).done);s=!0){var p=u.value;p&&p[o]instanceof Function?(p=p[o].apply(p,e),r.push(p),a&&void 0!==p&&(a=!1)):r.push(void 0);}}catch(f){l=!0,c=f;}finally{try{!s&&d["return"]&&d["return"]();}finally{if(l)throw c;}}return a?this:i(r,this);}},{key:"item",value:function value(e){return new t([[this[e]],this]);}},{key:"on",value:function value(e,n,o){if("string"==typeof e&&(e=e.trim().replace(/\s+/," ").split(" ")),!this||!this.length)return this;if(void 0===o&&(o=n,n=null),!o)return this;var i=o;o=n?function(e){var o=new t([n,this]);o.length&&o.some(function(t){var n=t.contains(e.target);return n&&i.call(t,e,t),n;});}:function(t){i.apply(this,[t,this]);};var r=!0,a=!1,s=void 0;try{for(var l,c=(0,h["default"])(e);!(r=(l=c.next()).done);r=!0){var u=l.value,d=!0,p=!1,f=void 0;try{for(var v,y=(0,h["default"])(this);!(d=(v=y.next()).done);d=!0){var b=v.value;b&&(b.addEventListener(u,o,!1),k.push({el:b,event:u,callback:o}));}}catch(m){p=!0,f=m;}finally{try{!d&&y["return"]&&y["return"]();}finally{if(p)throw f;}}}}catch(m){a=!0,s=m;}finally{try{!r&&c["return"]&&c["return"]();}finally{if(a)throw s;}}return this;}},{key:"off",value:function value(t,e){if(t instanceof Function&&(e=t,t=null),"string"==typeof t&&e instanceof Function){var n=!0,o=!1,i=void 0;try{for(var r,a=(0,h["default"])(this);!(n=(r=a.next()).done);n=!0){var s=r.value;for(var l in k){var c=!0,u=!1,d=void 0;try{for(var p,f=(0,h["default"])(t.split(" "));!(c=(p=f.next()).done);c=!0){var v=p.value;k[l]&&k[l].el===s&&k[l].event===v&&k[l].callback===e&&(k[l].el.removeEventListener(k[l].event,k[l].callback),delete k[l]);}}catch(y){u=!0,d=y;}finally{try{!c&&f["return"]&&f["return"]();}finally{if(u)throw d;}}}}}catch(y){o=!0,i=y;}finally{try{!n&&a["return"]&&a["return"]();}finally{if(o)throw i;}}}else if("string"==typeof t){var b=!0,m=!1,g=void 0;try{for(var x,w=(0,h["default"])(this);!(b=(x=w.next()).done);b=!0){var _=x.value;for(var S in k){var M=!0,O=!1,$=void 0;try{for(var D,j=(0,h["default"])(t.split(" "));!(M=(D=j.next()).done);M=!0){var C=D.value;k[S]&&k[S].el===_&&k[S].event===C&&(k[S].el.removeEventListener(k[S].event,k[S].callback),delete k[S]);}}catch(y){O=!0,$=y;}finally{try{!M&&j["return"]&&j["return"]();}finally{if(O)throw $;}}}}}catch(y){m=!0,g=y;}finally{try{!b&&w["return"]&&w["return"]();}finally{if(m)throw g;}}}else if(e instanceof Function){var N=!0,B=!1,L=void 0;try{for(var A,T=(0,h["default"])(this);!(N=(A=T.next()).done);N=!0){var P=A.value;for(var E in k){k[E]&&k[E].el===P&&k[E].callback===e&&(k[E].el.removeEventListener(k[E].event,k[E].callback),delete k[E]);}}}catch(y){B=!0,L=y;}finally{try{!N&&T["return"]&&T["return"]();}finally{if(B)throw L;}}}else{var R=!0,V=!1,z=void 0;try{for(var I,W=(0,h["default"])(this);!(R=(I=W.next()).done);R=!0){var F=I.value;for(var Y in k){k[Y]&&k[Y].el===F&&(k[Y].el.removeEventListener(k[Y].event,k[Y].callback),delete k[Y]);}}}catch(y){V=!0,z=y;}finally{try{!R&&W["return"]&&W["return"]();}finally{if(V)throw z;}}}return k=k.filter(function(t){return void 0!==t;}),this;}},{key:"onBlur",value:function value(t){return this&&this.length&&t?(this.each(function(e){_.push({el:e,callback:t});}),w||(w=function w(t){var e=!0,n=!1,o=void 0;try{for(var i,r=(0,h["default"])(_);!(e=(i=r.next()).done);e=!0){var a=i.value,s=a.el.contains(t.target)||a.el===t.target;s||a.callback.call(a.el,t,a.el);}}catch(l){n=!0,o=l;}finally{try{!e&&r["return"]&&r["return"]();}finally{if(n)throw o;}}},document.addEventListener("click",w,!1),document.addEventListener("touchstart",w,!1)),this):this;}},{key:"offBlur",value:function value(t){return this.each(function(e){for(var n in _){!_[n]||_[n].el!==e||t&&_[n].callback!==t||delete _[n];}}),_=_.filter(function(t){return void 0!==t;}),this;}},{key:"asArray",get:function get(){return g.slice.call(this);}}]),t;}(),M=S.prototype;(0,p["default"])(g).forEach(function(t){"join"!==t&&"copyWithin"!==t&&"fill"!==t&&void 0===M[t]&&(M[t]=g[t]);}),window.Symbol&&u["default"]&&(M[u["default"]]=M.values=g[u["default"]]);var O=document.createElement("div");for(var $ in O){r($);}window.NL=a,e["default"]=a;},function(t,e,n){t.exports={"default":n(29),__esModule:!0};},function(t,e,n){n(30);var o=n(33).Object;t.exports=function(t,e,n){return o.defineProperty(t,e,n);};},function(t,e,n){var o=n(31);o(o.S+o.F*!n(41),"Object",{defineProperty:n(37).f});},function(t,e,n){var o=n(32),i=n(33),r=n(34),a=n(36),s="prototype",l=function l(t,e,n){var c,u,d,p=t&l.F,f=t&l.G,h=t&l.S,v=t&l.P,y=t&l.B,b=t&l.W,m=f?i:i[e]||(i[e]={}),g=m[s],x=f?o:h?o[e]:(o[e]||{})[s];f&&(n=e);for(c in n){u=!p&&x&&void 0!==x[c],u&&c in m||(d=u?x[c]:n[c],m[c]=f&&"function"!=typeof x[c]?n[c]:y&&u?r(d,o):b&&x[c]==d?function(t){var e=function e(_e,n,o){if(this instanceof t){switch(arguments.length){case 0:return new t();case 1:return new t(_e);case 2:return new t(_e,n);}return new t(_e,n,o);}return t.apply(this,arguments);};return e[s]=t[s],e;}(d):v&&"function"==typeof d?r(Function.call,d):d,v&&((m.virtual||(m.virtual={}))[c]=d,t&l.R&&g&&!g[c]&&a(g,c,d)));}};l.F=1,l.G=2,l.S=4,l.P=8,l.B=16,l.W=32,l.U=64,l.R=128,t.exports=l;},function(t,e){var n=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=n);},function(t,e){var n=t.exports={version:"2.4.0"};"number"==typeof __e&&(__e=n);},function(t,e,n){var o=n(35);t.exports=function(t,e,n){if(o(t),void 0===e)return t;switch(n){case 1:return function(n){return t.call(e,n);};case 2:return function(n,o){return t.call(e,n,o);};case 3:return function(n,o,i){return t.call(e,n,o,i);};}return function(){return t.apply(e,arguments);};};},function(t,e){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t;};},function(t,e,n){var o=n(37),i=n(45);t.exports=n(41)?function(t,e,n){return o.f(t,e,i(1,n));}:function(t,e,n){return t[e]=n,t;};},function(t,e,n){var o=n(38),i=n(40),r=n(44),a=Object.defineProperty;e.f=n(41)?Object.defineProperty:function(t,e,n){if(o(t),e=r(e,!0),o(n),i)try{return a(t,e,n);}catch(s){}if("get"in n||"set"in n)throw TypeError("Accessors not supported!");return"value"in n&&(t[e]=n.value),t;};},function(t,e,n){var o=n(39);t.exports=function(t){if(!o(t))throw TypeError(t+" is not an object!");return t;};},function(t,e){t.exports=function(t){return"object"==(typeof t==="undefined"?"undefined":_typeof(t))?null!==t:"function"==typeof t;};},function(t,e,n){t.exports=!n(41)&&!n(42)(function(){return 7!=Object.defineProperty(n(43)("div"),"a",{get:function get(){return 7;}}).a;});},function(t,e,n){t.exports=!n(42)(function(){return 7!=Object.defineProperty({},"a",{get:function get(){return 7;}}).a;});},function(t,e){t.exports=function(t){try{return!!t();}catch(e){return!0;}};},function(t,e,n){var o=n(39),i=n(32).document,r=o(i)&&o(i.createElement);t.exports=function(t){return r?i.createElement(t):{};};},function(t,e,n){var o=n(39);t.exports=function(t,e){if(!o(t))return t;var n,i;if(e&&"function"==typeof(n=t.toString)&&!o(i=n.call(t)))return i;if("function"==typeof(n=t.valueOf)&&!o(i=n.call(t)))return i;if(!e&&"function"==typeof(n=t.toString)&&!o(i=n.call(t)))return i;throw TypeError("Can't convert object to primitive value");};},function(t,e){t.exports=function(t,e){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:e};};},function(t,e,n){t.exports={"default":n(47),__esModule:!0};},function(t,e,n){n(48),n(77),t.exports=n(81).f("iterator");},function(t,e,n){"use strict";var o=n(49)(!0);n(52)(String,"String",function(t){this._t=String(t),this._i=0;},function(){var t,e=this._t,n=this._i;return n>=e.length?{value:void 0,done:!0}:(t=o(e,n),this._i+=t.length,{value:t,done:!1});});},function(t,e,n){var o=n(50),i=n(51);t.exports=function(t){return function(e,n){var r,a,s=String(i(e)),l=o(n),c=s.length;return l<0||l>=c?t?"":void 0:(r=s.charCodeAt(l),r<55296||r>56319||l+1===c||(a=s.charCodeAt(l+1))<56320||a>57343?t?s.charAt(l):r:t?s.slice(l,l+2):(r-55296<<10)+(a-56320)+65536);};};},function(t,e){var n=Math.ceil,o=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?o:n)(t);};},function(t,e){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t;};},function(t,e,n){"use strict";var o=n(53),i=n(31),r=n(54),a=n(36),s=n(55),l=n(56),c=n(57),u=n(73),d=n(75),p=n(74)("iterator"),f=!([].keys&&"next"in[].keys()),h="@@iterator",v="keys",y="values",b=function b(){return this;};t.exports=function(t,e,n,m,g,x,w){c(n,e,m);var _,k,S,M=function M(t){if(!f&&t in j)return j[t];switch(t){case v:return function(){return new n(this,t);};case y:return function(){return new n(this,t);};}return function(){return new n(this,t);};},O=e+" Iterator",$=g==y,D=!1,j=t.prototype,C=j[p]||j[h]||g&&j[g],N=C||M(g),B=g?$?M("entries"):N:void 0,L="Array"==e?j.entries||C:C;if(L&&(S=d(L.call(new t())),S!==Object.prototype&&(u(S,O,!0),o||s(S,p)||a(S,p,b))),$&&C&&C.name!==y&&(D=!0,N=function N(){return C.call(this);}),o&&!w||!f&&!D&&j[p]||a(j,p,N),l[e]=N,l[O]=b,g)if(_={values:$?N:M(y),keys:x?N:M(v),entries:B},w)for(k in _){k in j||r(j,k,_[k]);}else i(i.P+i.F*(f||D),e,_);return _;};},function(t,e){t.exports=!0;},function(t,e,n){t.exports=n(36);},function(t,e){var n={}.hasOwnProperty;t.exports=function(t,e){return n.call(t,e);};},function(t,e){t.exports={};},function(t,e,n){"use strict";var o=n(58),i=n(45),r=n(73),a={};n(36)(a,n(74)("iterator"),function(){return this;}),t.exports=function(t,e,n){t.prototype=o(a,{next:i(1,n)}),r(t,e+" Iterator");};},function(t,e,n){var o=n(38),i=n(59),r=n(71),a=n(68)("IE_PROTO"),s=function s(){},l="prototype",_c=function c(){var t,e=n(43)("iframe"),o=r.length,i="<",a=">";for(e.style.display="none",n(72).appendChild(e),e.src="javascript:",t=e.contentWindow.document,t.open(),t.write(i+"script"+a+"document.F=Object"+i+"/script"+a),t.close(),_c=t.F;o--;){delete _c[l][r[o]];}return _c();};t.exports=Object.create||function(t,e){var n;return null!==t?(s[l]=o(t),n=new s(),s[l]=null,n[a]=t):n=_c(),void 0===e?n:i(n,e);};},function(t,e,n){var o=n(37),i=n(38),r=n(60);t.exports=n(41)?Object.defineProperties:function(t,e){i(t);for(var n,a=r(e),s=a.length,l=0;s>l;){o.f(t,n=a[l++],e[n]);}return t;};},function(t,e,n){var o=n(61),i=n(71);t.exports=Object.keys||function(t){return o(t,i);};},function(t,e,n){var o=n(55),i=n(62),r=n(65)(!1),a=n(68)("IE_PROTO");t.exports=function(t,e){var n,s=i(t),l=0,c=[];for(n in s){n!=a&&o(s,n)&&c.push(n);}for(;e.length>l;){o(s,n=e[l++])&&(~r(c,n)||c.push(n));}return c;};},function(t,e,n){var o=n(63),i=n(51);t.exports=function(t){return o(i(t));};},function(t,e,n){var o=n(64);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==o(t)?t.split(""):Object(t);};},function(t,e){var n={}.toString;t.exports=function(t){return n.call(t).slice(8,-1);};},function(t,e,n){var o=n(62),i=n(66),r=n(67);t.exports=function(t){return function(e,n,a){var s,l=o(e),c=i(l.length),u=r(a,c);if(t&&n!=n){for(;c>u;){if(s=l[u++],s!=s)return!0;}}else for(;c>u;u++){if((t||u in l)&&l[u]===n)return t||u||0;}return!t&&-1;};};},function(t,e,n){var o=n(50),i=Math.min;t.exports=function(t){return t>0?i(o(t),9007199254740991):0;};},function(t,e,n){var o=n(50),i=Math.max,r=Math.min;t.exports=function(t,e){return t=o(t),t<0?i(t+e,0):r(t,e);};},function(t,e,n){var o=n(69)("keys"),i=n(70);t.exports=function(t){return o[t]||(o[t]=i(t));};},function(t,e,n){var o=n(32),i="__core-js_shared__",r=o[i]||(o[i]={});t.exports=function(t){return r[t]||(r[t]={});};},function(t,e){var n=0,o=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++n+o).toString(36));};},function(t,e){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");},function(t,e,n){t.exports=n(32).document&&document.documentElement;},function(t,e,n){var o=n(37).f,i=n(55),r=n(74)("toStringTag");t.exports=function(t,e,n){t&&!i(t=n?t:t.prototype,r)&&o(t,r,{configurable:!0,value:e});};},function(t,e,n){var o=n(69)("wks"),i=n(70),r=n(32).Symbol,a="function"==typeof r,s=t.exports=function(t){return o[t]||(o[t]=a&&r[t]||(a?r:i)("Symbol."+t));};s.store=o;},function(t,e,n){var o=n(55),i=n(76),r=n(68)("IE_PROTO"),a=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=i(t),o(t,r)?t[r]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?a:null;};},function(t,e,n){var o=n(51);t.exports=function(t){return Object(o(t));};},function(t,e,n){n(78);for(var o=n(32),i=n(36),r=n(56),a=n(74)("toStringTag"),s=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],l=0;l<5;l++){var c=s[l],u=o[c],d=u&&u.prototype;d&&!d[a]&&i(d,a,c),r[c]=r.Array;}},function(t,e,n){"use strict";var o=n(79),i=n(80),r=n(56),a=n(62);t.exports=n(52)(Array,"Array",function(t,e){this._t=a(t),this._i=0,this._k=e;},function(){var t=this._t,e=this._k,n=this._i++;return!t||n>=t.length?(this._t=void 0,i(1)):"keys"==e?i(0,n):"values"==e?i(0,t[n]):i(0,[n,t[n]]);},"values"),r.Arguments=r.Array,o("keys"),o("values"),o("entries");},function(t,e){t.exports=function(){};},function(t,e){t.exports=function(t,e){return{value:e,done:!!t};};},function(t,e,n){e.f=n(74);},function(t,e,n){t.exports={"default":n(83),__esModule:!0};},function(t,e,n){n(84);var o=n(33).Object;t.exports=function(t){return o.getOwnPropertyNames(t);};},function(t,e,n){n(85)("getOwnPropertyNames",function(){return n(86).f;});},function(t,e,n){var o=n(31),i=n(33),r=n(42);t.exports=function(t,e){var n=(i.Object||{})[t]||Object[t],a={};a[t]=e(n),o(o.S+o.F*r(function(){n(1);}),"Object",a);};},function(t,e,n){var o=n(62),i=n(87).f,r={}.toString,a="object"==(typeof window==="undefined"?"undefined":_typeof(window))&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[],s=function s(t){try{return i(t);}catch(e){return a.slice();}};t.exports.f=function(t){return a&&"[object Window]"==r.call(t)?s(t):i(o(t));};},function(t,e,n){var o=n(61),i=n(71).concat("length","prototype");e.f=Object.getOwnPropertyNames||function(t){return o(t,i);};},function(t,e,n){t.exports={"default":n(89),__esModule:!0};},function(t,e,n){n(77),n(48),t.exports=n(90);},function(t,e,n){var o=n(38),i=n(91);t.exports=n(33).getIterator=function(t){var e=i(t);if("function"!=typeof e)throw TypeError(t+" is not iterable!");return o(e.call(t));};},function(t,e,n){var o=n(92),i=n(74)("iterator"),r=n(56);t.exports=n(33).getIteratorMethod=function(t){if(void 0!=t)return t[i]||t["@@iterator"]||r[o(t)];};},function(t,e,n){var o=n(64),i=n(74)("toStringTag"),r="Arguments"==o(function(){return arguments;}()),a=function a(t,e){try{return t[e];}catch(n){}};t.exports=function(t){var e,n,s;return void 0===t?"Undefined":null===t?"Null":"string"==typeof(n=a(e=Object(t),i))?n:r?o(e):"Object"==(s=o(e))&&"function"==typeof e.callee?"Arguments":s;};},function(t,e){"use strict";e.__esModule=!0,e["default"]=function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function");};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}e.__esModule=!0;var i=n(28),r=o(i);e["default"]=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),(0,r["default"])(t,o.key,o);}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e;};}();},function(t,e,n){t.exports=n(96),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(98);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{type:{type:String,"default":null},oneAtAtime:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},created:function created(){var t=this;this._isAccordion=!0,this.$on("isOpenEvent",function(e){t.oneAtAtime&&t.$children.forEach(function(t){e!==t&&(t.isOpen=!1);});});}};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}function i(t){for(var e=new window.XMLHttpRequest(),n={},o={then:function then(t,e){return o.done(t).fail(e);},"catch":function _catch(t){return o.fail(t);},always:function always(t){return o.done(t).fail(t);}},i=["done","fail"],r=function r(){var t=i[a];n[t]=[],o[t]=function(e){return e instanceof Function&&n[t].push(e),o;};},a=0;a<i.length;a++){r();}return o.done(JSON.parse),e.onreadystatechange=function(){if(4===e.readyState){var t={status:e.status};if(200===e.status)try{var o=void 0,i=e.responseText,r=!0,a=!1,s=void 0;try{for(var c,u=(0,l["default"])(n.done);!(r=(c=u.next()).done);r=!0){var d=c.value;void 0!==(o=d(i))&&(i=o);}}catch(p){a=!0,s=p;}finally{try{!r&&u["return"]&&u["return"]();}finally{if(a)throw s;}}}catch(t){var f=!0,h=!1,v=void 0;try{for(var y,b=(0,l["default"])(n.fail);!(f=(y=b.next()).done);f=!0){var m=y.value;m(t);}}catch(p){h=!0,v=p;}finally{try{!f&&b["return"]&&b["return"]();}finally{if(h)throw v;}}}else{var g=!0,x=!1,w=void 0;try{for(var _,k=(0,l["default"])(n.fail);!(g=(_=k.next()).done);g=!0){var S=_.value;S(t);}}catch(p){x=!0,w=p;}finally{try{!g&&k["return"]&&k["return"]();}finally{if(x)throw w;}}}}},e.open("GET",t),e.setRequestHeader("Accept","application/json"),e.send(),o;}function r(){if(document.documentElement.scrollHeight<=document.documentElement.clientHeight)return 0;var t=document.createElement("p");t.style.width="100%",t.style.height="200px";var e=document.createElement("div");e.style.position="absolute",e.style.top="0px",e.style.left="0px",e.style.visibility="hidden",e.style.width="200px",e.style.height="150px",e.style.overflow="hidden",e.appendChild(t),document.body.appendChild(e);var n=t.offsetWidth;e.style.overflow="scroll";var o=t.offsetWidth;return n===o&&(o=e.clientWidth),document.body.removeChild(e),n-o;}function a(t){t=t||"en";var e={daysOfWeek:["Su","Mo","Tu","We","Th","Fr","Sa"],limit:"Limit reached ({{limit}} items max).",loading:"Loading...",minLength:"Min. Length",months:["January","February","March","April","May","June","July","August","September","October","November","December"],notSelected:"Nothing Selected",required:"Required",search:"Search"};return window.VueStrapLang?window.VueStrapLang(t):e;}Object.defineProperty(e,"__esModule",{value:!0}),e.coerce=void 0;var s=n(88),l=o(s);e.getJSON=i,e.getScrollBarWidth=r,e.translations=a;e.coerce={"boolean":function boolean(t){return"string"==typeof t?"false"!==t&&"null"!==t&&"undefined"!==t&&("true"===t||t):t;},number:function number(t){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:null;return"number"==typeof t?t:void 0===t||null===t||isNaN(Number(t))?e:Number(t);},string:function string(t){return void 0===t||null===t?"":t+"";},pattern:function pattern(t){return t instanceof Function||t instanceof RegExp?t:"string"==typeof t?new RegExp(t):null;}};},function(t,e){t.exports="<div class=panel-group> <slot></slot> </div>";},function(t,e,n){t.exports=n(100),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(101);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{offset:{type:Number,coerce:i.coerce.number,"default":0}},data:function data(){return{affixed:!1};},computed:{top:function top(){return this.offset>0?this.offset+"px":null;}},methods:{checkScroll:function checkScroll(){if(this.$el.offsetWidth||this.$el.offsetHeight||this.$el.getClientRects().length){for(var t={},e={},n=this.$el.getBoundingClientRect(),o=document.body,i=["Top","Left"],r=0;r<i.length;r++){var a=i[r],s=a.toLowerCase(),l=window["page"+("Top"===a?"Y":"X")+"Offset"],c="scroll"+a;"number"!=typeof l&&(l=document.documentElement[c],"number"!=typeof l&&(l=document.body[c])),t[s]=l,e[s]=t[s]+n[s]-(this.$el["client"+a]||o["client"+a]||0);}var u=t.top>e.top-this.offset;this.affixed!==u&&(this.affixed=u);}}},ready:function ready(){var t=this;(0,a["default"])(window).on("scroll resize",function(){return t.checkScroll();}),setTimeout(function(){return t.checkScroll();},0);},beforeDestroy:function beforeDestroy(){var t=this;(0,a["default"])(window).off("scroll resize",function(){return t.checkScroll();});}};},function(t,e){t.exports='<div class="hidden-print hidden-xs hidden-sm"> <nav class=bs-docs-sidebar :class={affix:affixed} :style={marginTop:top}> <slot></slot> </nav> </div>';},function(t,e,n){n(103),t.exports=n(107),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(108);},function(t,e,n){var o=n(104);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".fade-transition{-webkit-transition:opacity .3s ease;transition:opacity .3s ease}.fade-enter,.fade-leave{height:0;opacity:0}.alert.top{margin:0 auto;left:0;right:0}.alert.top,.alert.top-right{position:fixed;top:30px;z-index:1050}.alert.top-right{right:50px}",""]);},function(t,e){t.exports=function(){var t=[];return t.toString=function(){for(var t=[],e=0;e<this.length;e++){var n=this[e];n[2]?t.push("@media "+n[2]+"{"+n[1]+"}"):t.push(n[1]);}return t.join("");},t.i=function(e,n){"string"==typeof e&&(e=[[null,e,""]]);for(var o={},i=0;i<this.length;i++){var r=this[i][0];"number"==typeof r&&(o[r]=!0);}for(i=0;i<e.length;i++){var a=e[i];"number"==typeof a[0]&&o[a[0]]||(n&&!a[2]?a[2]=n:n&&(a[2]="("+a[2]+") and ("+n+")"),t.push(a));}},t;};},function(t,e,n){function o(t,e){for(var n=0;n<t.length;n++){var o=t[n],i=f[o.id];if(i){i.refs++;for(var r=0;r<i.parts.length;r++){i.parts[r](o.parts[r]);}for(;r<o.parts.length;r++){i.parts.push(c(o.parts[r],e));}}else{for(var a=[],r=0;r<o.parts.length;r++){a.push(c(o.parts[r],e));}f[o.id]={id:o.id,refs:1,parts:a};}}}function i(t){for(var e=[],n={},o=0;o<t.length;o++){var i=t[o],r=i[0],a=i[1],s=i[2],l=i[3],c={css:a,media:s,sourceMap:l};n[r]?n[r].parts.push(c):e.push(n[r]={id:r,parts:[c]});}return e;}function r(t,e){var n=y(),o=g[g.length-1];if("top"===t.insertAt)o?o.nextSibling?n.insertBefore(e,o.nextSibling):n.appendChild(e):n.insertBefore(e,n.firstChild),g.push(e);else{if("bottom"!==t.insertAt)throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");n.appendChild(e);}}function a(t){t.parentNode.removeChild(t);var e=g.indexOf(t);e>=0&&g.splice(e,1);}function s(t){var e=document.createElement("style");return e.type="text/css",r(t,e),e;}function l(t){var e=document.createElement("link");return e.rel="stylesheet",r(t,e),e;}function c(t,e){var n,o,i;if(e.singleton){var r=m++;n=b||(b=s(e)),o=u.bind(null,n,r,!1),i=u.bind(null,n,r,!0);}else t.sourceMap&&"function"==typeof URL&&"function"==typeof URL.createObjectURL&&"function"==typeof URL.revokeObjectURL&&"function"==typeof Blob&&"function"==typeof btoa?(n=l(e),o=p.bind(null,n),i=function i(){a(n),n.href&&URL.revokeObjectURL(n.href);}):(n=s(e),o=d.bind(null,n),i=function i(){a(n);});return o(t),function(e){if(e){if(e.css===t.css&&e.media===t.media&&e.sourceMap===t.sourceMap)return;o(t=e);}else i();};}function u(t,e,n,o){var i=n?"":o.css;if(t.styleSheet)t.styleSheet.cssText=x(e,i);else{var r=document.createTextNode(i),a=t.childNodes;a[e]&&t.removeChild(a[e]),a.length?t.insertBefore(r,a[e]):t.appendChild(r);}}function d(t,e){var n=e.css,o=e.media;if(o&&t.setAttribute("media",o),t.styleSheet)t.styleSheet.cssText=n;else{for(;t.firstChild;){t.removeChild(t.firstChild);}t.appendChild(document.createTextNode(n));}}function p(t,e){var n=e.css,o=e.sourceMap;o&&(n+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(o))))+" */");var i=new Blob([n],{type:"text/css"}),r=t.href;t.href=URL.createObjectURL(i),r&&URL.revokeObjectURL(r);}var f={},h=function h(t){var e;return function(){return"undefined"==typeof e&&(e=t.apply(this,arguments)),e;};},v=h(function(){return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());}),y=h(function(){return document.head||document.getElementsByTagName("head")[0];}),b=null,m=0,g=[];t.exports=function(t,e){e=e||{},"undefined"==typeof e.singleton&&(e.singleton=v()),"undefined"==typeof e.insertAt&&(e.insertAt="bottom");var n=i(t);return o(n,e),function(t){for(var r=[],a=0;a<n.length;a++){var s=n[a],l=f[s.id];l.refs--,r.push(l);}if(t){var c=i(t);o(c,e);}for(var a=0;a<r.length;a++){var l=r[a];if(0===l.refs){for(var u=0;u<l.parts.length;u++){l.parts[u]();}delete f[l.id];}}};};var x=function(){var t=[];return function(e,n){return t[e]=n,t.filter(Boolean).join("\n");};}();},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{type:{type:String},dismissable:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},show:{type:Boolean,coerce:o.coerce["boolean"],"default":!0,twoWay:!0},duration:{type:Number,coerce:o.coerce.number,"default":0},width:{type:String},placement:{type:String}},watch:{show:function show(t){var e=this;this._timeout&&clearTimeout(this._timeout),t&&Boolean(this.duration)&&(this._timeout=setTimeout(function(){e.show=!1;},this.duration));}}};},function(t,e){t.exports="<div v-show=show v-bind:class=\"{\r\n      'alert':\t\ttrue,\r\n      'alert-success':(type == 'success'),\r\n      'alert-warning':(type == 'warning'),\r\n      'alert-info':\t(type == 'info'),\r\n      'alert-danger':\t(type == 'danger'),\r\n      'top': \t\t\t(placement === 'top'),\r\n      'top-right': \t(placement === 'top-right')\r\n    }\" transition=fade v-bind:style={width:width} role=alert> <button v-show=dismissable type=button class=close @click=\"show = false\"> <span>&times;</span> </button> <slot></slot> </div>";},function(t,e,n){n(110),t.exports=n(112),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(113);},function(t,e,n){var o=n(111);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".aside-open{-webkit-transition:-webkit-transform .3s;transition:-webkit-transform .3s;transition:transform .3s;transition:transform .3s,-webkit-transform .3s}.aside-open.has-push-right{-webkit-transform:translateX(-300px);transform:translateX(-300px)}.aside{position:fixed;top:0;bottom:0;z-index:1049;overflow:auto;background:#fff}.aside.left{left:0;right:auto}.aside.right{left:auto;right:0}.slideleft-enter{-webkit-animation:slideleft-in .3s;animation:slideleft-in .3s}.slideleft-leave{-webkit-animation:slideleft-out .3s;animation:slideleft-out .3s}@-webkit-keyframes slideleft-in{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@keyframes slideleft-in{0%{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@-webkit-keyframes slideleft-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}}@keyframes slideleft-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(-100%);transform:translateX(-100%);opacity:0}}.slideright-enter{-webkit-animation:slideright-in .3s;animation:slideright-in .3s}.slideright-leave{-webkit-animation:slideright-out .3s;animation:slideright-out .3s}@-webkit-keyframes slideright-in{0%{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@keyframes slideright-in{0%{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}to{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}}@-webkit-keyframes slideright-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}}@keyframes slideright-out{0%{-webkit-transform:translateX(0);transform:translateX(0);opacity:1}to{-webkit-transform:translateX(100%);transform:translateX(100%);opacity:0}}.aside:focus{outline:0}@media (max-width:991px){.aside{min-width:240px}}.aside.left{right:auto;left:0}.aside.right{right:0;left:auto}.aside .aside-dialog .aside-header{border-bottom:1px solid #e5e5e5;min-height:16.43px;padding:6px 15px;background:#337ab7;color:#fff}.aside .aside-dialog .aside-header .close{margin-right:-8px;padding:4px 8px;color:#fff;font-size:25px;opacity:.8}.aside .aside-dialog .aside-body{position:relative;padding:15px}.aside .aside-dialog .aside-footer{padding:15px;text-align:right;border-top:1px solid #e5e5e5}.aside .aside-dialog .aside-footer .btn+.btn{margin-left:5px;margin-bottom:0}.aside .aside-dialog .aside-footer .btn-group .btn+.btn{margin-left:-1px}.aside .aside-dialog .aside-footer .btn-block+.btn-block{margin-left:0}.aside-backdrop{position:fixed;top:0;right:0;bottom:0;left:0;z-index:1040;opacity:0;-webkit-transition:opacity .3s ease;transition:opacity .3s ease;background-color:#000}.aside-backdrop.in{opacity:.5;filter:alpha(opacity=50)}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{show:{type:Boolean,coerce:i.coerce["boolean"],required:!0,twoWay:!0},placement:{type:String,"default":"right"},header:{type:String},width:{type:Number,coerce:i.coerce.number,"default":320}},watch:{show:function show(t){var e=this,n=document.body,o=(0,i.getScrollBarWidth)();if(t){this._backdrop||(this._backdrop=document.createElement("div")),this._backdrop.className="aside-backdrop",n.appendChild(this._backdrop),n.classList.add("modal-open"),0!==o&&(n.style.paddingRight=o+"px");this._backdrop.clientHeight;this._backdrop.classList.add("in"),(0,a["default"])(this._backdrop).on("click",function(){return e.close();});}else(0,a["default"])(this._backdrop).on("transitionend",function(){(0,a["default"])(e._backdrop).off();try{n.classList.remove("modal-open"),n.style.paddingRight="0",n.removeChild(e._backdrop),e._backdrop=null;}catch(t){}}),this._backdrop.className="aside-backdrop";}},methods:{close:function close(){this.show=!1;}}};},function(t,e){t.exports="<div class=aside v-bind:style=\"{width:width + 'px'}\" v-bind:class=\"{\r\n    left:placement === 'left',\r\n    right:placement === 'right'\r\n    }\" v-show=show :transition=\"(this.placement === 'left') ? 'slideleft' : 'slideright'\"> <div class=aside-dialog> <div class=aside-content> <div class=aside-header> <button type=button class=close @click=close><span>&times;</span></button> <h4 class=aside-title> <slot name=header> {{ header }} </slot> </h4> </div> <div class=aside-body> <slot></slot> </div> </div> </div> </div>";},function(t,e,n){t.exports=n(115),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(116);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{value:null,buttons:{type:Boolean,coerce:o.coerce["boolean"],"default":!0},justified:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String,"default":"default"},vertical:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},watch:{value:{deep:!0,handler:function handler(t){this.$children.forEach(function(t){t.group&&t.eval&&t.eval();});}}},created:function created(){this._btnGroup=!0;}};},function(t,e){t.exports="<div :class=\"{'btn-group':buttons,'btn-group-justified':justified,'btn-group-vertical':vertical}\" :data-toggle=\"buttons&&'buttons'\"> <slot></slot> </div>";},function(t,e,n){n(118),t.exports=n(120),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(121);},function(t,e,n){var o=n(119);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".carousel-control[_v-322dee41]{cursor:pointer}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{indicators:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},controls:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},interval:{type:Number,coerce:i.coerce.number,"default":5e3}},data:function data(){return{indicator:[],index:0,isAnimating:!1};},watch:{index:function index(t,e){this.slide(t>e?"left":"right",t,e);}},methods:{indicatorClick:function indicatorClick(t){return!this.isAnimating&&this.index!==t&&(this.isAnimating=!0,void(this.index=t));},slide:function slide(t,e,n){var o=this;if(this.$el){var i=(0,a["default"])(".item",this.$el);if(i.length){var r=i[e]||i[0];(0,a["default"])(r).addClass("left"===t?"next":"prev");r.clientHeight;(0,a["default"])([i[n],r]).addClass(t).on("transitionend",function(){i.off("transitionend").className="item",(0,a["default"])(r).addClass("active"),o.isAnimating=!1;});}}},next:function next(){return!(!this.$el||this.isAnimating)&&(this.isAnimating=!0,void(this.index+1<(0,a["default"])(".item",this.$el).length?this.index+=1:this.index=0));},prev:function prev(){return!(!this.$el||this.isAnimating)&&(this.isAnimating=!0,void(0===this.index?this.index=(0,a["default"])(".item",this.$el).length-1:this.index-=1));},toggleInterval:function toggleInterval(t){void 0===t&&(t=this._intervalID),this._intervalID&&(clearInterval(this._intervalID),delete this._intervalID),t&&this.interval>0&&(this._intervalID=setInterval(this.next,this.interval));}},ready:function ready(){var t=this;this.toggleInterval(!0),(0,a["default"])(this.$el).on("mouseenter",function(){return t.toggleInterval(!1);}).on("mouseleave",function(){return t.toggleInterval(!0);});},beforeDestroy:function beforeDestroy(){this.toggleInterval(!1),(0,a["default"])(this.$el).off("mouseenter mouseleave");}};},function(t,e){t.exports='<div class="carousel slide" data-ride=carousel _v-322dee41=""> <ol class=carousel-indicators v-show=indicators _v-322dee41=""> <li v-for="i in indicator" @click=indicatorClick($index) v-bind:class="{active:$index === index}" _v-322dee41=""><span _v-322dee41=""></span></li> </ol> <div class=carousel-inner role=listbox _v-322dee41=""> <slot _v-322dee41=""></slot> </div> <div v-show=controls class="carousel-controls hidden-xs" _v-322dee41=""> <a class="left carousel-control" role=button @click=prev _v-322dee41=""> <span class="glyphicon glyphicon-chevron-left" aria-hidden=true _v-322dee41=""></span> </a> <a class="right carousel-control" role=button @click=next _v-322dee41=""> <span class="glyphicon glyphicon-chevron-right" aria-hidden=true _v-322dee41=""></span> </a> </div> </div>';},function(t,e,n){n(123),t.exports=n(125),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(126);},function(t,e,n){var o=n(124);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,"label.checkbox[_v-6922bf24]{position:relative;padding-left:18px}label.checkbox>input[_v-6922bf24]{box-sizing:border-box;position:absolute;z-index:-1;padding:0;opacity:0;margin:0}label.checkbox>.icon[_v-6922bf24]{position:absolute;top:.2rem;left:0;display:block;width:1.4rem;height:1.4rem;line-height:1rem;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;border-radius:.35rem;background-repeat:no-repeat;background-position:50%;background-size:50% 50%}label.checkbox:not(.active)>.icon[_v-6922bf24]{background-color:#ddd;border:1px solid #bbb}label.checkbox>input:focus~.icon[_v-6922bf24]{outline:0;border:1px solid #66afe9;box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)}label.checkbox.active>.icon[_v-6922bf24]{background-size:1rem 1rem;background-image:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNyIgaGVpZ2h0PSI3Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJtNS43MywwLjUybC0zLjEyNDIyLDMuMzQxNjFsLTEuMzM4OTUsLTEuNDMyMTJsLTEuMjQ5NjksMS4zMzY2NWwyLjU4ODYzLDIuNzY4NzZsNC4zNzM5LC00LjY3ODI2bC0xLjI0OTY5LC0xLjMzNjY1bDAsMGwwLjAwMDAyLDAuMDAwMDF6Ii8+PC9zdmc+)}label.checkbox.active .btn-default[_v-6922bf24]{-webkit-filter:brightness(75%);filter:brightness(75%)}.btn.readonly[_v-6922bf24],label.checkbox.disabled[_v-6922bf24],label.checkbox.readonly[_v-6922bf24]{filter:alpha(opacity=65);box-shadow:none;opacity:.65}label.btn>input[type=checkbox][_v-6922bf24]{position:absolute;clip:rect(0,0,0,0);pointer-events:none}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{value:{"default":!0},checked:{twoWay:!0},button:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},name:{type:String,"default":null},readonly:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String,"default":null}},computed:{active:function active(){return"boolean"!=typeof this.value&&this.group?~this.$parent.value.indexOf(this.value):this.checked===this.value;},isButton:function isButton(){return this.button||this.group&&this.$parent.buttons;},group:function group(){return this.$parent&&this.$parent._checkboxGroup;},typeColor:function typeColor(){return this.type||this.$parent&&this.$parent.type||"default";}},watch:{checked:function checked(t){"boolean"!=typeof this.value&&this.group&&(this.checked&&!~this.$parent.value.indexOf(this.value)&&this.$parent.value.push(this.value),!this.checked&&~this.$parent.value.indexOf(this.value)&&this.$parent.value.$remove(this.value));}},created:function created(){if("boolean"!=typeof this.value){var t=this.$parent;t&&t._btnGroup&&!t._radioGroup&&(t._checkboxGroup=!0,t.value instanceof Array||(t.value=[]));}},ready:function ready(){this.$parent._checkboxGroup&&"boolean"!=typeof this.value&&(this.$parent.value.length?this.checked=~this.$parent.value.indexOf(this.value):this.checked&&this.$parent.value.push(this.value));},methods:{eval:function _eval(){"boolean"!=typeof this.value&&this.group&&(this.checked=~this.$parent.value.indexOf(this.value));},focus:function focus(){this.$els.input.focus();},toggle:function toggle(){if(!this.disabled&&(this.focus(),!this.readonly&&(this.checked=this.checked?null:this.value,this.group&&"boolean"!=typeof this.value))){var t=this.$parent.value.indexOf(this.value);this.$parent.value[~t?"$remove":"push"](this.value);}return!1;}}};},function(t,e){t.exports='<label :class="[isButton?\'btn btn-\'+typeColor:\'open checkbox \'+typeColor,{active:checked,disabled:disabled,readonly:readonly}]" @click.prevent=toggle _v-6922bf24=""> <input type=checkbox autocomplete=off v-el:input="" :checked=active :value=value :name=name :readonly=readonly :disabled=disabled _v-6922bf24=""> <span v-if=!isButton class="icon dropdown-toggle" :class="[active?\'btn-\'+typeColor:\'\',{bg:typeColor===\'default\'}]" _v-6922bf24=""></span> <span v-if="!isButton&amp;active&amp;&amp;typeColor===\'default\'" class=icon _v-6922bf24=""></span> <slot _v-6922bf24=""></slot> </label>';},function(t,e,n){n(128),t.exports=n(130),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(131);},function(t,e,n){var o=n(129);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".datepicker{position:relative;display:inline-block}input.datepicker-input.with-reset-button{padding-right:25px}.datepicker>button.close{position:absolute;top:0;right:0;outline:none;z-index:2;display:block;width:34px;height:34px;line-height:34px;text-align:center}.datepicker>button.close:focus{opacity:.2}.datepicker-popup{position:absolute;border:1px solid #ccc;border-radius:5px;background:#fff;margin-top:2px;z-index:1000;box-shadow:0 6px 12px rgba(0,0,0,.175)}.datepicker-inner{width:218px}.datepicker-body{padding:10px}.datepicker-body span,.datepicker-ctrl p,.datepicker-ctrl span{display:inline-block;width:28px;line-height:28px;height:28px;border-radius:4px}.datepicker-ctrl p{width:65%}.datepicker-ctrl span{position:absolute}.datepicker-body span{text-align:center}.datepicker-monthRange span{width:48px;height:50px;line-height:45px}.datepicker-item-disable{background-color:#fff!important;cursor:not-allowed!important}.datepicker-item-disable,.datepicker-item-gray,.decadeRange span:first-child,.decadeRange span:last-child{color:#999}.datepicker-dateRange-item-active,.datepicker-dateRange-item-active:hover{background:#3276b1!important;color:#fff!important}.datepicker-monthRange{margin-top:10px}.datepicker-ctrl p,.datepicker-ctrl span,.datepicker-dateRange span,.datepicker-monthRange span{cursor:pointer}.datepicker-ctrl i:hover,.datepicker-ctrl p:hover,.datepicker-dateRange-item-hover,.datepicker-dateRange span:hover,.datepicker-monthRange span:hover{background-color:#eee}.datepicker-weekRange span{font-weight:700}.datepicker-label{background-color:#f8f8f8;font-weight:700;padding:7px 0;text-align:center}.datepicker-ctrl{position:relative;height:30px;line-height:30px;font-weight:700;text-align:center}.month-btn{font-weight:700;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.datepicker-preBtn{left:2px}.datepicker-nextBtn{right:2px}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{value:{type:String,twoWay:!0},format:{"default":"MM/dd/yyyy"},disabledDaysOfWeek:{type:Array,"default":function _default(){return[];}},width:{type:String,"default":"200px"},clearButton:{type:Boolean,"default":!1},lang:{type:String,"default":navigator.language},placeholder:{type:String}},ready:function ready(){var t=this;this._blur=function(e){t.$el.contains(e.target)||t.close();},this.$dispatch("child-created",this),this.currDate=this.parse(this.value)||this.parse(new Date()),(0,a["default"])(window).on("click",this._blur);},beforeDestroy:function beforeDestroy(){(0,a["default"])(window).off("click",this._blur);},data:function data(){return{currDate:new Date(),dateRange:[],decadeRange:[],displayDayView:!1,displayMonthView:!1,displayYearView:!1};},watch:{currDate:function currDate(){this.getDateRange();}},computed:{text:function text(){return(0,i.translations)(this.lang);}},methods:{close:function close(){this.displayDayView=this.displayMonthView=this.displayYearView=!1;},inputClick:function inputClick(){this.currDate=this.parse(this.value)||this.parse(new Date()),this.displayMonthView||this.displayYearView?this.displayDayView=!1:this.displayDayView=!this.displayDayView;},preNextDecadeClick:function preNextDecadeClick(t){var e=this.currDate.getFullYear(),n=this.currDate.getMonth(),o=this.currDate.getDate();0===t?this.currDate=new Date(e-10,n,o):this.currDate=new Date(e+10,n,o);},preNextMonthClick:function preNextMonthClick(t){var e=this.currDate.getFullYear(),n=this.currDate.getMonth(),o=this.currDate.getDate();if(0===t){var i=this.getYearMonth(e,n-1);this.currDate=new Date(i.year,i.month,o);}else{var r=this.getYearMonth(e,n+1);this.currDate=new Date(r.year,r.month,o);}},preNextYearClick:function preNextYearClick(t){var e=this.currDate.getFullYear(),n=this.currDate.getMonth(),o=this.currDate.getDate();0===t?this.currDate=new Date(e-1,n,o):this.currDate=new Date(e+1,n,o);},yearSelect:function yearSelect(t){this.displayYearView=!1,this.displayMonthView=!0,this.currDate=new Date(t,this.currDate.getMonth(),this.currDate.getDate());},daySelect:function daySelect(t,e){return"datepicker-item-disable"!==e.$el.classList[0]&&(this.currDate=t,this.value=this.stringify(this.currDate),this.displayDayView=!1,void 0);},switchMonthView:function switchMonthView(){this.displayDayView=!1,this.displayMonthView=!0;},switchDecadeView:function switchDecadeView(){this.displayMonthView=!1,this.displayYearView=!0;},monthSelect:function monthSelect(t){this.displayMonthView=!1,this.displayDayView=!0,this.currDate=new Date(this.currDate.getFullYear(),t,this.currDate.getDate());},getYearMonth:function getYearMonth(t,e){return e>11?(t++,e=0):e<0&&(t--,e=11),{year:t,month:e};},stringifyDecadeHeader:function stringifyDecadeHeader(t){var e=t.getFullYear().toString(),n=e.substring(0,e.length-1)+0,o=parseInt(n,10)+10;return n+"-"+o;},stringifyDayHeader:function stringifyDayHeader(t){return this.text.months[t.getMonth()]+" "+t.getFullYear();},parseMonth:function parseMonth(t){return this.text.months[t.getMonth()];},stringifyYearHeader:function stringifyYearHeader(t){return t.getFullYear();},stringify:function stringify(t){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.format;if(t||(t=this.parse()),!t)return"";var n=t.getFullYear(),o=t.getMonth()+1,i=t.getDate(),r=this.parseMonth(t);return e.replace(/yyyy/g,n).replace(/MMMM/g,r).replace(/MMM/g,r.substring(0,3)).replace(/MM/g,("0"+o).slice(-2)).replace(/dd/g,("0"+i).slice(-2)).replace(/yy/g,n).replace(/M(?!a)/g,o).replace(/d/g,i);},parse:function parse(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:this.value,e=void 0;return e=10!==t.length||"dd-MM-yyyy"!==this.format&&"dd/MM/yyyy"!==this.format?new Date(t):new Date(t.substring(6,10),t.substring(3,5),t.substring(0,2)),isNaN(e.getFullYear())?new Date():e;},getDayCount:function getDayCount(t,e){var n=[31,28,31,30,31,30,31,31,30,31,30,31];return 1===e&&(t%400===0||t%4===0&&t%100!==0)?29:n[e];},getDateRange:function getDateRange(){var t=this;this.dateRange=[],this.decadeRange=[];for(var e={year:this.currDate.getFullYear(),month:this.currDate.getMonth(),day:this.currDate.getDate()},n=e.year.toString(),o=n.substring(0,n.length-1)+0-1,i=0;i<12;i++){this.decadeRange.push({text:o+i});}var r=new Date(e.year,e.month,1),a=r.getDay()+1;0===a&&(a=7);var s=this.getDayCount(e.year,e.month);if(a>1)for(var l=this.getYearMonth(e.year,e.month-1),c=this.getDayCount(l.year,l.month),u=1;u<a;u++){var d=c-a+u+1;this.dateRange.push({text:d,date:new Date(l.year,l.month,d),sclass:"datepicker-item-gray"});}for(var p=function p(n){var o=new Date(e.year,e.month,n),i=o.getDay(),r="";if(t.disabledDaysOfWeek.forEach(function(t){i===parseInt(t,10)&&(r="datepicker-item-disable");}),n===e.day&&t.value){var a=t.parse(t.value);a&&a.getFullYear()===e.year&&a.getMonth()===e.month&&(r="datepicker-dateRange-item-active");}t.dateRange.push({text:n,date:o,sclass:r});},f=1;f<=s;f++){p(f);}if(this.dateRange.length<42)for(var h=42-this.dateRange.length,v=this.getYearMonth(e.year,e.month+1),y=1;y<=h;y++){this.dateRange.push({text:y,date:new Date(v.year,v.month,y),sclass:"datepicker-item-gray"});}}}};},function(t,e){t.exports='<div class=datepicker> <input class="form-control datepicker-input" :class="{\'with-reset-button\': clearButton}" type=text :placeholder=placeholder :style={width:width} @click=inputClick v-model=value /> <button v-if="clearButton && value" type=button class=close @click="value = \'\'"> <span>&times;</span> </button> <div class=datepicker-popup v-show=displayDayView> <div class=datepicker-inner> <div class=datepicker-body> <div class=datepicker-ctrl> <span class="datepicker-preBtn glyphicon glyphicon-chevron-left" aria-hidden=true @click=preNextMonthClick(0)></span> <span class="datepicker-nextBtn glyphicon glyphicon-chevron-right" aria-hidden=true @click=preNextMonthClick(1)></span> <p @click=switchMonthView>{{stringifyDayHeader(currDate)}}</p> </div> <div class=datepicker-weekRange> <span v-for="w in text.daysOfWeek">{{w}}</span> </div> <div class=datepicker-dateRange> <span v-for="d in dateRange" :class=d.sclass @click=daySelect(d.date,this)>{{d.text}}</span> </div> </div> </div> </div> <div class=datepicker-popup v-show=displayMonthView> <div class=datepicker-inner> <div class=datepicker-body> <div class=datepicker-ctrl> <span class="datepicker-preBtn glyphicon glyphicon-chevron-left" aria-hidden=true @click=preNextYearClick(0)></span> <span class="datepicker-nextBtn glyphicon glyphicon-chevron-right" aria-hidden=true @click=preNextYearClick(1)></span> <p @click=switchDecadeView>{{stringifyYearHeader(currDate)}}</p> </div> <div class=datepicker-monthRange> <template v-for="m in text.months"> <span :class="{\'datepicker-dateRange-item-active\':\r\n                  (text.months[parse(value).getMonth()]  === m) &&\r\n                  currDate.getFullYear() === parse(value).getFullYear()}" @click=monthSelect($index)>{{m.substr(0,3)}}</span> </template> </div> </div> </div> </div> <div class=datepicker-popup v-show=displayYearView> <div class=datepicker-inner> <div class=datepicker-body> <div class=datepicker-ctrl> <span class="datepicker-preBtn glyphicon glyphicon-chevron-left" aria-hidden=true @click=preNextDecadeClick(0)></span> <span class="datepicker-nextBtn glyphicon glyphicon-chevron-right" aria-hidden=true @click=preNextDecadeClick(1)></span> <p>{{stringifyDecadeHeader(currDate)}}</p> </div> <div class="datepicker-monthRange decadeRange"> <template v-for="decade in decadeRange"> <span :class="{\'datepicker-dateRange-item-active\':\r\n                  parse(this.value).getFullYear() === decade.text}" @click.stop=yearSelect(decade.text)>{{decade.text}}</span> </template> </div> </div> </div> </div> </div>';},function(t,e,n){n(133),t.exports=n(135),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(136);},function(t,e,n){var o=n(134);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".secret[_v-39be1072]{position:absolute;clip:rect(0 0 0 0);overflow:hidden;margin:-1px;height:1px;width:1px;padding:0;border:0}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{show:{twoWay:!0,type:Boolean,coerce:i.coerce["boolean"],"default":!1},"class":null,disabled:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},text:{type:String,"default":null},type:{type:String,"default":"default"}},computed:{classes:function classes(){return[{open:this.show,disabled:this.disabled},this["class"],this.isLi?"dropdown":this.inInput?"input-group-btn":"btn-group"];},inInput:function inInput(){return this.$parent._input;},isLi:function isLi(){return this.$parent._navbar||this.$parent.menu||this.$parent._tabset;},menu:function menu(){return!this.$parent||this.$parent.navbar;},submenu:function submenu(){return this.$parent&&(this.$parent.menu||this.$parent.submenu);},slots:function slots(){return this._slotContents;}},methods:{blur:function blur(){var t=this;this.unblur(),this._hide=setTimeout(function(){t._hide=null,t.show=!1;},100);},unblur:function unblur(){this._hide&&(clearTimeout(this._hide),this._hide=null);}},ready:function ready(){var t=this,e=(0,a["default"])(this.$els.dropdown);e.onBlur(function(e){t.show=!1;}),e.findChildren("a,button.dropdown-toggle").on("click",function(e){return e.preventDefault(),!t.disabled&&(t.show=!t.show,!1);}),e.findChildren("ul").on("click","li>a",function(e){t.show=!1;});},beforeDestroy:function beforeDestroy(){var t=(0,a["default"])(this.$els.dropdown);t.offBlur(),t.findChildren("a,button").off(),t.findChildren("ul").off();}};},function(t,e){t.exports='<li v-if=isLi v-el:dropdown="" :class=classes _v-39be1072=""> <slot name=button _v-39be1072=""> <a class=dropdown-toggle role=button :class="{disabled: disabled}" @keyup.esc="show = false" _v-39be1072=""> {{ text }} <span class=caret _v-39be1072=""></span> </a> </slot> <slot name=dropdown-menu _v-39be1072=""> <ul v-else="" class=dropdown-menu _v-39be1072=""> <slot _v-39be1072=""></slot> </ul> </slot> </li> <div v-else="" v-el:dropdown="" :class=classes _v-39be1072=""> <slot name=before _v-39be1072=""></slot> <slot name=button _v-39be1072=""> <button type=button class="btn btn-{{type}} dropdown-toggle" @keyup.esc="show = false" :disabled=disabled _v-39be1072=""> {{ text }} <span class=caret _v-39be1072=""></span> </button> </slot> <slot name=dropdown-menu _v-39be1072=""> <ul class=dropdown-menu _v-39be1072=""> <slot _v-39be1072=""></slot> </ul> </slot> </div>';},function(t,e,n){t.exports=n(138),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(139);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27);o(r);e["default"]={props:{valid:{twoWay:!0,"default":null},enterSubmit:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},icon:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},lang:{type:String,"default":navigator.language}},data:function data(){return{children:[],timeout:null};},watch:{valid:function valid(t,e){t!==e&&this._parent&&this._parent.validate();}},methods:{focus:function focus(){this.$els.input.focus();},validate:function validate(){var t=!0;return this.children.some(function(e){var n=e.validate?e.validate():void 0!==e.valid?e.valid:e.required&&!~["",null,void 0].indexOf(e.value);return n||(t=!1),!t;}),this.valid=t,t===!0;}},created:function created(){this._formGroup=!0;for(var t=this.$parent;t&&!t._formGroup;){t=t.$parent;}t&&t._formGroup&&(t.children.push(this),this._parent=t);},ready:function ready(){this.validate();},beforeDestroy:function beforeDestroy(){this._parent&&this._parent.children.$remove(this);}};},function(t,e){t.exports="<slot></slot>";},function(t,e,n){n(141),t.exports=n(143),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(144);},function(t,e,n){var o=n(142);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".form-group[_v-652ad7b9]{position:relative}label~.close[_v-652ad7b9]{top:25px}.input-group>.icon[_v-652ad7b9]{position:relative;display:table-cell;width:0;z-index:3}.close[_v-652ad7b9]{position:absolute;top:0;right:0;z-index:2;display:block;width:34px;height:34px;line-height:34px;text-align:center}.has-feedback .close[_v-652ad7b9]{right:20px}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{value:{twoWay:!0,"default":null},match:{type:String,"default":null},clearButton:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},enterSubmit:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},error:{type:String,"default":null},help:{type:String,"default":null},hideHelp:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},icon:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},label:{type:String,"default":null},lang:{type:String,"default":navigator.language},mask:null,maskDelay:{type:Number,coerce:i.coerce.number,"default":100},max:{type:String,coerce:i.coerce.string,"default":null},maxlength:{type:Number,coerce:i.coerce.number,"default":null},min:{type:String,coerce:i.coerce.string,"default":null},minlength:{type:Number,coerce:i.coerce.number,"default":0},name:{type:String,"default":null},pattern:{coerce:i.coerce.pattern,"default":null},placeholder:{type:String,"default":null},readonly:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},required:{type:Boolean,coerce:i.coerce["boolean"],"default":!1},rows:{type:Number,coerce:i.coerce.number,"default":3},step:{type:Number,coerce:i.coerce.number,"default":null},type:{type:String,"default":"text"},validationDelay:{type:Number,coerce:i.coerce.number,"default":250}},data:function data(){return{valid:null,timeout:null};},computed:{canValidate:function canValidate(){return!this.disabled&&!this.readonly&&(this.required||this.pattern||this.nativeValidate||null!==this.match);},errorText:function errorText(){var t=this.value,e=[this.error];return!t&&this.required&&e.push("("+this.text.required.toLowerCase()+")"),t&&t.length<this.minlength&&e.push("("+this.text.minLength.toLowerCase()+": "+this.minlength+")"),e.join(" ");},input:function input(){return this.$els.input;},nativeValidate:function nativeValidate(){return(this.input||{}).checkValidity&&(~["url","email"].indexOf(this.type.toLowerCase())||this.min||this.max);},showError:function showError(){return this.error&&this.valid===!1;},showHelp:function showHelp(){return this.help&&(!this.showError||!this.hideHelp);},slots:function slots(){return this._slotContents||{};},text:function text(){return(0,i.translations)(this.lang);},title:function title(){return this.errorText||this.help||"";}},watch:{match:function match(t){this.eval();},valid:function valid(t,e){t!==e&&this._parent&&this._parent.validate();},value:function value(t,e){var n=this;t!==e&&(this.mask instanceof Function&&(t=this.mask(t||""),this.value!==t&&(this._timeout.mask&&clearTimeout(this._timeout.mask),this._timeout.mask=setTimeout(function(){n.value=t,n.$els.input.value=t;},this.maskDelay))),this.eval());}},methods:{attr:function attr(t){return~["",null,void 0].indexOf(t)||t instanceof Function?void 0:t;},focus:function focus(){this.input.focus();},eval:function _eval(){var t=this;this._timeout.eval&&clearTimeout(this._timeout.eval),this.canValidate?this._timeout.eval=setTimeout(function(){t.valid=t.validate(),t._timeout.eval=null;},this.validationDelay):this.valid=!0;},onblur:function onblur(t){this.canValidate&&(this.valid=this.validate()),this.$emit("blur",t);},onfocus:function onfocus(t){this.$emit("focus",t);},submit:function submit(){if(this.$parent._formGroup)return this.$parent.validate();if(this.input.form){var t=(0,a["default"])(".form-group.validate:not(.has-success)",this.input.form);t.length?t.find("input,textarea,select")[0].focus():this.input.form.submit();}},validate:function validate(){if(!this.canValidate)return!0;var t=(this.value||"").trim();return t?null!==this.match?this.match===t:!(t.length<this.minlength)&&!(this.nativeValidate&&!this.input.checkValidity())&&(!this.pattern||(this.pattern instanceof Function?this.pattern(this.value):this.pattern.test(this.value))):!this.required;}},created:function created(){this._input=!0,this._timeout={};for(var t=this.$parent;t&&!t._formGroup;){t=t.$parent;}t&&t._formGroup&&(this._parent=t);},ready:function ready(){var t=this;this._parent&&this._parent.children.push(this),(0,a["default"])(this.input).on("focus",function(e){return t.$emit("focus",e);}).on("blur",function(e){t.canValidate&&(t.valid=t.validate()),t.$emit("blur",e);});},beforeDestroy:function beforeDestroy(){this._parent&&this._parent.children.$remove(this),(0,a["default"])(this.input).off();}};},function(t,e){t.exports='<div class=form-group :class="{validate:canValidate,\'has-feedback\':icon,\'has-error\':canValidate&amp;&amp;valid===false,\'has-success\':canValidate&amp;&amp;valid}" _v-652ad7b9=""> <slot name=label _v-652ad7b9=""><label v-if=label class=control-label @click=focus _v-652ad7b9="">{{label}}</label></slot> <div v-if=slots.before||slots.after class=input-group _v-652ad7b9=""> <slot name=before _v-652ad7b9=""></slot> <textarea v-if="type==\'textarea\'" class=form-control v-el:input="" v-model=value :cols=cols :rows=rows :name=name :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @blur=onblur @focus=onfocus _v-652ad7b9=""></textarea> <input v-else="" class=form-control v-el:input="" v-model=value :name=name :max=attr(max) :min=attr(min) :step=step :type=type :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @keyup.enter=enterSubmit&amp;&amp;submit() @blur=onblur @focus=onfocus _v-652ad7b9=""> <div v-if="clearButton &amp;&amp; value" :class={icon:icon} _v-652ad7b9=""> <span class=close @click="value = \'\'" _v-652ad7b9="">×</span> </div> <div v-if=icon class=icon _v-652ad7b9=""> <span v-if="icon&amp;&amp;valid!==null" :class="[\'form-control-feedback glyphicon\',\'glyphicon-\'+(valid?\'ok\':\'remove\')]" aria-hidden=true _v-652ad7b9=""></span> </div> <slot name=after _v-652ad7b9=""></slot> </div> <template v-else="" _v-652ad7b9=""> <textarea v-if="type==\'textarea\'" class=form-control v-el:input="" v-model=value :cols=cols :rows=rows :name=name :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @blur=onblur @focus=onfocus _v-652ad7b9=""></textarea> <input v-else="" class=form-control v-el:input="" v-model=value :name=name :max=attr(max) :min=attr(min) :step=step :type=type :title=attr(title) :readonly=readonly :required=required :disabled=disabled :maxlength=maxlength :placeholder=placeholder @keyup.enter=enterSubmit&amp;&amp;submit() @blur=onblur @focus=onfocus _v-652ad7b9=""> <span v-if="clearButton &amp;&amp; value" class=close @click="value = \'\'" _v-652ad7b9="">×</span> <span v-if="icon&amp;&amp;valid!==null" :class="[\'form-control-feedback glyphicon\',\'glyphicon-\'+(valid?\'ok\':\'remove\')]" aria-hidden=true _v-652ad7b9=""></span> </template> <div v-if=showHelp class=help-block @click=focus _v-652ad7b9="">{{help}}</div> <div v-if=showError class="help-block with-errors" @click=focus _v-652ad7b9="">{{errorText}}</div> </div>';},function(t,e,n){n(146),t.exports=n(148),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(153);},function(t,e,n){var o=n(147);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".modal{-webkit-transition:all .3s ease;transition:all .3s ease}.modal.in{background-color:rgba(0,0,0,.5)}.modal.zoom .modal-dialog{-webkit-transform:scale(.1);transform:scale(.1);top:300px;opacity:0;-webkit-transition:all .3s;transition:all .3s}.modal.zoom.in .modal-dialog{-webkit-transform:scale(1);transform:scale(1);-webkit-transform:translate3d(0,-300px,0);transform:translate3d(0,-300px,0);opacity:1}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(149),r=o(i),a=n(97),s=n(27),l=o(s);e["default"]={props:{okText:{type:String,"default":"Save changes"},cancelText:{type:String,"default":"Close"},title:{type:String,"default":""},show:{required:!0,type:Boolean,coerce:a.coerce["boolean"],twoWay:!0},width:{"default":null},callback:{type:Function,"default":function _default(){}},effect:{type:String,"default":null},backdrop:{type:Boolean,coerce:a.coerce["boolean"],"default":!0},large:{type:Boolean,coerce:a.coerce["boolean"],"default":!1},small:{type:Boolean,coerce:a.coerce["boolean"],"default":!1}},computed:{optionalWidth:function optionalWidth(){return null===this.width?null:(0,r["default"])(this.width)?this.width+"px":this.width;}},watch:{show:function show(t){var e=this,n=this.$el,o=document.body,i=(0,a.getScrollBarWidth)();t?((0,l["default"])(n).find(".modal-content").focus(),n.style.display="block",setTimeout(function(){return(0,l["default"])(n).addClass("in");},0),(0,l["default"])(o).addClass("modal-open"),0!==i&&(o.style.paddingRight=i+"px"),this.backdrop&&(0,l["default"])(n).on("click",function(t){t.target===n&&(e.show=!1);})):(o.style.paddingRight=null,(0,l["default"])(o).removeClass("modal-open"),(0,l["default"])(n).removeClass("in").on("transitionend",function(){(0,l["default"])(n).off("click transitionend"),n.style.display="none";}));}},methods:{close:function close(){this.show=!1;}}};},function(t,e,n){t.exports={"default":n(150),__esModule:!0};},function(t,e,n){n(151),t.exports=n(33).Number.isInteger;},function(t,e,n){var o=n(31);o(o.S,"Number",{isInteger:n(152)});},function(t,e,n){var o=n(39),i=Math.floor;t.exports=function(t){return!o(t)&&isFinite(t)&&i(t)===t;};},function(t,e){t.exports="<div role=dialog v-bind:class=\"{\r\n    'modal':true,\r\n    'fade':effect === 'fade',\r\n    'zoom':effect === 'zoom'\r\n    }\"> <div v-bind:class=\"{'modal-dialog':true,'modal-lg':large,'modal-sm':small}\" role=document v-bind:style=\"{width: optionalWidth}\"> <div class=modal-content> <slot name=modal-header> <div class=modal-header> <button type=button class=close @click=close><span>&times;</span></button> <h4 class=modal-title> <slot name=title> {{title}} </slot> </h4> </div> </slot> <slot name=modal-body> <div class=modal-body></div> </slot> <slot name=modal-footer> <div class=modal-footer> <button type=button class=\"btn btn-default\" @click=close>{{ cancelText }}</button> <button type=button class=\"btn btn-primary\" @click=callback>{{ okText }}</button> </div> </slot> </div> </div> </div>";},function(t,e,n){t.exports=n(155),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(156);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(27),r=o(i);e["default"]={props:{type:{type:String,"default":"default"},placement:{type:String,"default":""}},data:function data(){return{id:"bs-example-navbar-collapse-1",collapsed:!0,styles:{}};},computed:{slots:function slots(){return this._slotContents;}},methods:{toggleCollapse:function toggleCollapse(t){t&&t.preventDefault(),this.collapsed=!this.collapsed;}},created:function created(){this._navbar=!0;},ready:function ready(){var t=this,e=(0,r["default"])('.dropdown>[data-toggle="dropdown"]',this.$el).parent();e.on("click",".dropdown-toggle",function(t){t.preventDefault(),e.each(function(e){e.contains(t.target)&&e.classList.toggle("open");});}).on("click",".dropdown-menu>li>a",function(t){e.each(function(e){e.contains(t.target)&&e.classList.remove("open");});}).onBlur(function(t){e.each(function(e){e.contains(t.target)||e.classList.remove("open");});}),(0,r["default"])(this.$el).on("click touchstart","li:not(.dropdown)>a",function(e){setTimeout(function(){t.collapsed=!0;},200);}).onBlur(function(e){t.$el.contains(e.target)||(t.collapsed=!0);});var n=this.$el.offsetHeight;"top"===this.placement&&(document.body.style.paddingTop=n+"px"),"bottom"===this.placement&&(document.body.style.paddingBottom=n+"px"),this.slots.collapse&&(0,r["default"])('[data-toggle="collapse"]',this.$el).on("click",function(e){return t.toggleCollapse(e);});},beforeDestroy:function beforeDestroy(){(0,r["default"])(".dropdown",this.$el).off("click").offBlur(),this.slots.collapse&&(0,r["default"])('[data-toggle="collapse"]',this.$el).off("click");}};},function(t,e){t.exports="<nav v-el:navbar :class=\"['navbar',{\r\n    'navbar-inverse':(type == 'inverse'),\r\n    'navbar-default':(type == 'default'),\r\n    'navbar-fixed-top':(placement === 'top'),\r\n    'navbar-fixed-bottom':(placement === 'bottom'),\r\n    'navbar-static-top':(placement === 'static')\r\n  }]\"> <div class=container-fluid> <div class=navbar-header> <button v-if=!slots.collapse type=button class=\"navbar-toggle collapsed\" aria-expanded=false @click=toggleCollapse> <span class=sr-only>Toggle navigation</span> <span class=icon-bar></span> <span class=icon-bar></span> <span class=icon-bar></span> </button> <slot name=collapse></slot> <slot name=brand></slot> </div> <div :class=\"['navbar-collapse',{collapse:collapsed}]\"> <ul class=\"nav navbar-nav\"> <slot></slot> </ul> <ul v-if=slots.right class=\"nav navbar-nav navbar-right\"> <slot name=right></slot> </ul> </div> </div> </nav>";},function(t,e,n){t.exports=n(158),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(159);},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={props:{value:null},data:function data(){return{loading:!0};},ready:function ready(){if(this.$parent._select){this.$parent.options||(this.$parent.options=[]);var t={};t[this.$parent.optionsLabel]=this.$els.v.innerHTML,t[this.$parent.optionsValue]=this.value,this.$parent.options.push(t),this.loading=!1;}else console.warn("options only work inside a select component");}};},function(t,e){t.exports="<li v-el:v v-if=loading><slot></slot></li>";},function(t,e,n){n(161),t.exports=n(163),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(164);},function(t,e,n){var o=n(162);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".accordion-toggle{cursor:pointer}.collapse-transition{-webkit-transition:max-height .5s ease;transition:max-height .5s ease}.collapse-enter,.collapse-leave{max-height:0!important}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{header:{type:String},isOpen:{type:Boolean,coerce:o.coerce["boolean"],"default":null},type:{type:String,"default":null}},computed:{inAccordion:function inAccordion(){return this.$parent&&this.$parent._isAccordion;},panelType:function panelType(){return"panel-"+(this.type||this.$parent&&this.$parent.type||"default");}},methods:{toggle:function toggle(){this.isOpen=!this.isOpen,this.$dispatch("isOpenEvent",this);}},transitions:{collapse:{afterEnter:function afterEnter(t){t.style.maxHeight="",t.style.overflow="";},beforeLeave:function beforeLeave(t){return t.style.maxHeight=t.offsetHeight+"px",t.style.overflow="hidden",t.offsetHeight;}}},created:function created(){null===this.isOpen&&(this.isOpen=!this.inAccordion);}};},function(t,e){t.exports="<div class=\"panel {{panelType}}\"> <div :class=\"['panel-heading',{'accordion-toggle':inAccordion}]\" @click.prevent=inAccordion&&toggle()> <slot name=header> <h4 class=panel-title>{{ header }}</h4> </slot> </div> <div class=panel-collapse v-el:panel v-show=isOpen transition=collapse> <div class=panel-body> <slot></slot> </div> </div> </div>";},function(t,e,n){n(166),t.exports=n(168),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(170);},function(t,e,n){var o=n(167);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".popover.bottom,.popover.left,.popover.right,.popover.top{display:block}.scale-enter{-webkit-animation:scale-in .15s ease-in;animation:scale-in .15s ease-in}.scale-leave{-webkit-animation:scale-out .15s ease-out;animation:scale-out .15s ease-out}@-webkit-keyframes scale-in{0%{-webkit-transform:scale(0);transform:scale(0);opacity:0}to{-webkit-transform:scale(1);transform:scale(1);opacity:1}}@keyframes scale-in{0%{-webkit-transform:scale(0);transform:scale(0);opacity:0}to{-webkit-transform:scale(1);transform:scale(1);opacity:1}}@-webkit-keyframes scale-out{0%{-webkit-transform:scale(1);transform:scale(1);opacity:1}to{-webkit-transform:scale(0);transform:scale(0);opacity:0}}@keyframes scale-out{0%{-webkit-transform:scale(1);transform:scale(1);opacity:1}to{-webkit-transform:scale(0);transform:scale(0);opacity:0}}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(169),r=o(i);e["default"]={mixins:[r["default"]],props:{trigger:{type:String,"default":"click"}}};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(27),a=o(r);e["default"]={props:{trigger:{type:String},effect:{type:String,"default":"fade"},title:{type:String},content:{type:String},header:{type:Boolean,coerce:i.coerce["boolean"],"default":!0},placement:{type:String,"default":"top"}},data:function data(){return{position:{top:0,left:0},show:!1};},methods:{toggle:function toggle(t){var e=this;t&&"contextmenu"===this.trigger&&t.preventDefault(),(this.show=!this.show)&&setTimeout(function(){var t=e.$els.popover,n=e.$els.trigger.children[0];switch(e.placement){case"top":e.position.left=n.offsetLeft-t.offsetWidth/2+n.offsetWidth/2,e.position.top=n.offsetTop-t.offsetHeight;break;case"left":e.position.left=n.offsetLeft-t.offsetWidth,e.position.top=n.offsetTop+n.offsetHeight/2-t.offsetHeight/2;break;case"right":e.position.left=n.offsetLeft+n.offsetWidth,e.position.top=n.offsetTop+n.offsetHeight/2-t.offsetHeight/2;break;case"bottom":e.position.left=n.offsetLeft-t.offsetWidth/2+n.offsetWidth/2,e.position.top=n.offsetTop+n.offsetHeight;break;default:console.warn("Wrong placement prop");}t.style.top=e.position.top+"px",t.style.left=e.position.left+"px";},0);}},ready:function ready(){var t=this.$els.trigger;if(!t)return console.error("Could not find trigger v-el in your component that uses popoverMixin.");if("focus"!==this.trigger||~t.tabIndex||(t=(0,a["default"])("a,input,select,textarea,button",t),t.length||(t=null)),t){var e={contextmenu:"contextmenu",hover:"mouseleave mouseenter",focus:"blur focus"};(0,a["default"])(t).on(e[this.trigger]||"click",this.toggle),this._trigger=t;}},beforeDestroy:function beforeDestroy(){this._trigger&&(0,a["default"])(this._trigger).off();}};},function(t,e){t.exports="<span v-el:trigger> <slot></slot> </span> <div v-el:popover v-if=show :class=\"['popover',placement]\" :transition=effect> <div class=arrow></div> <h3 class=popover-title v-if=title> <slot name=title>{{title}}</slot> </h3> <div class=popover-content> <slot name=content>{{{content}}}</slot> </div> </div>";},function(t,e,n){t.exports=n(172),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(173);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{now:{type:Number,coerce:o.coerce.number,required:!0},label:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String},striped:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},animated:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}}};},function(t,e){t.exports="<div role=progressbar :class=\"['progress-bar',{\r\n      'progress-bar-success':type == 'success',\r\n      'progress-bar-warning':type == 'warning',\r\n      'progress-bar-info':type == 'info',\r\n      'progress-bar-danger':type == 'danger',\r\n      'progress-bar-striped':striped,\r\n      'active':animated\r\n    }]\" :style=\"{width: now + '%'}\"> {{label ? now + '%' : ''}} </div>";},function(t,e,n){n(175),t.exports=n(177),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(178);},function(t,e,n){var o=n(176);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".radio{position:relative}.radio>label>input{position:absolute;margin:0;padding:0;opacity:0;z-index:-1;box-sizing:border-box}.radio>label>.icon{position:absolute;top:.15rem;left:0;display:block;width:1.4rem;height:1.4rem;text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;border-radius:.7rem;background-repeat:no-repeat;background-position:50%;background-size:50% 50%}.radio:not(.active)>label>.icon{background-color:#ddd;border:1px solid #bbb}.radio>label>input:focus~.icon{outline:0;border:1px solid #66afe9;box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)}.radio.active>label>.icon{background-size:1rem 1rem;background-image:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxzdmcgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxjaXJjbGUgY3g9IjUiIGN5PSI1IiByPSI0IiBmaWxsPSIjZmZmIi8+PC9zdmc+)}.radio.active .btn-default{-webkit-filter:brightness(75%);filter:brightness(75%)}.btn.readonly,.radio.disabled>label>.icon,.radio.readonly>label>.icon{filter:alpha(opacity=65);box-shadow:none;opacity:.65}label.btn>input[type=radio]{position:absolute;clip:rect(0,0,0,0);pointer-events:none}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{value:{"default":!0},checked:{twoWay:!0},button:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},name:{type:String,"default":null},readonly:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},type:{type:String,"default":null}},computed:{active:function active(){return this.group?this.$parent.value===this.value:this.value===this.checked;},buttonStyle:function buttonStyle(){return this.button||this.group&&this.$parent.buttons;},group:function group(){return this.$parent&&this.$parent._radioGroup;},typeColor:function typeColor(){return this.type||this.$parent&&this.$parent.type||"default";}},created:function created(){var t=this.$parent;t&&t._btnGroup&&!t._checkboxGroup&&(t._radioGroup=!0);},ready:function ready(){this.$parent._radioGroup&&(this.$parent.value?this.checked=this.$parent.value===this.value:this.checked&&(this.$parent.value=this.value));},methods:{focus:function focus(){this.$els.input.focus();},toggle:function toggle(){this.disabled||(this.focus(),this.readonly||(this.checked=this.value,this.group&&(this.$parent.value=this.value)));}}};},function(t,e){t.exports="<label v-if=buttonStyle :class=\"['btn btn-'+typeColor,{active:active,disabled:disabled,readonly:readonly}]\" @click.prevent=toggle> <input type=radio autocomplete=off v-el:input v-show=!readonly :checked=active :value=value :name=name :readonly=readonly :disabled=disabled /> <slot></slot> </label> <div v-else :class=\"['radio',typeColor,{active:active,disabled:disabled,readonly:readonly}]\" @click.prevent=toggle> <label class=open> <input type=radio autocomplete=off v-el:input :checked=active :value=value :name=name :readonly=readonly :disabled=disabled /> <span class=\"icon dropdown-toggle\" :class=\"[active?'btn-'+typeColor:'',{bg:typeColor==='default'}]\"></span> <span v-if=\"active&&typeColor==='default'\" class=icon></span> <slot></slot> </label> </div>";},function(t,e,n){n(180),t.exports=n(182),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(198);},function(t,e,n){var o=n(181);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,"button.form-control.dropdown-toggle[_v-e514dbc6]{height:auto;padding-right:24px}button.form-control.dropdown-toggle[_v-e514dbc6]:after{content:' ';position:absolute;right:13px;top:50%;margin:-1px 0 0;border-top:4px dashed;border-top:4px solid\\9;border-right:4px solid transparent;border-left:4px solid transparent}.bs-searchbox[_v-e514dbc6]{position:relative;margin:4px 8px}.bs-searchbox .close[_v-e514dbc6]{position:absolute;top:0;right:0;z-index:2;display:block;width:34px;height:34px;line-height:34px;text-align:center}.bs-searchbox input[_v-e514dbc6]:focus,.secret:focus+button[_v-e514dbc6]{outline:0;border-color:#66afe9!important;box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)}.secret[_v-e514dbc6]{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}button>.close[_v-e514dbc6]{margin-left:5px}.notify.out[_v-e514dbc6]{position:relative}.notify.in[_v-e514dbc6],.notify>div[_v-e514dbc6]{position:absolute;width:96%;margin:0 2%;min-height:26px;padding:3px 5px;background:#f5f5f5;border:1px solid #e3e3e3;box-shadow:inset 0 1px 1px rgba(0,0,0,.05);pointer-events:none}.notify>div[_v-e514dbc6]{top:5px;z-index:1}.notify.in[_v-e514dbc6]{opacity:.9;bottom:5px}.btn-group-justified .dropdown-toggle>span[_v-e514dbc6]:not(.close){width:calc(100% - 18px);display:inline-block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-bottom:-4px}.btn-group-justified .dropdown-menu[_v-e514dbc6]{width:100%}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(183),r=o(i),a=n(88),s=o(a),l=n(97),c=n(27),u=o(c),d={};e["default"]={props:{value:{twoWay:!0},options:{type:Array,"default":function _default(){return[];}},multiple:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},clearButton:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},closeOnSelect:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},disabled:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},lang:{type:String,"default":navigator.language},limit:{type:Number,coerce:l.coerce.number,"default":1024},name:{type:String,"default":null},optionsLabel:{type:String,"default":"label"},optionsValue:{type:String,"default":"value"},parent:{"default":!0},placeholder:{type:String,"default":null},readonly:{type:Boolean,coerce:l.coerce["boolean"],"default":null},required:{type:Boolean,coerce:l.coerce["boolean"],"default":null},minSearch:{type:Number,coerce:l.coerce.number,"default":0},search:{type:Boolean,coerce:l.coerce["boolean"],"default":!1},searchText:{type:String,"default":null},url:{type:String,"default":null}},data:function data(){return{loading:null,searchValue:null,show:!1,showNotify:!1,valid:null};},computed:{selected:function selected(){var t=this;if(0===this.options.length)return"";var e=[],n=!0,o=!1,i=void 0;try{for(var a,l=(0,s["default"])(this.values);!(n=(a=l.next()).done);n=!0){var c=a.value;if(~["number","string"].indexOf("undefined"==typeof c?"undefined":(0,r["default"])(c))){var u=null;this.options.some(function(e){if(e instanceof Object?e[t.optionsValue]===c:e===c)return u=e,!0;})&&e.push(u[this.optionsLabel]||u);}}}catch(d){o=!0,i=d;}finally{try{!n&&l["return"]&&l["return"]();}finally{if(o)throw i;}}return e.join(", ");},classes:function classes(){return[{open:this.show,disabled:this.disabled},this["class"],this.isLi?"dropdown":this.inInput?"input-group-btn":"btn-group"];},inInput:function inInput(){return this.$parent._input;},isLi:function isLi(){return this.$parent._navbar||this.$parent.menu||this.$parent._tabset;},canSearch:function canSearch(){return this.minSearch?this.options.length>=this.minSearch:this.search;},limitText:function limitText(){return this.text.limit.replace("{{limit}}",this.limit);},showPlaceholder:function showPlaceholder(){return 0!==this.values.length&&this.hasParent?null:this.placeholder||this.text.notSelected;},text:function text(){return(0,l.translations)(this.lang);},hasParent:function hasParent(){return this.parent instanceof Array?this.parent.length:this.parent;},values:function values(){return this.value instanceof Array?this.value:null!==this.value&&void 0!==this.value?[this.value]:[];}},watch:{options:function options(t){var e=this,n=!1;t instanceof Array&&t.length&&t.map(function(t){if(!(t instanceof Object)){var o={};return o[e.optionsLabel]=t,o[e.optionsValue]=t,n=!0,o;}return t;}),n&&(this.options=t);},show:function show(t){t&&(this.$els.sel.focus(),this.$els.search&&this.$els.search.focus());},url:function url(){this.update();},value:function value(t){var e=this;this.$emit("change",t),this.$emit("selected",this.selected),this.value instanceof Array&&t.length>this.limit&&(this.showNotify=!0,d.limit&&clearTimeout(d.limit),d.limit=setTimeout(function(){d.limit=!1,e.showNotify=!1;},1500)),this.checkValue(),this.valid=this.validate();},valid:function valid(t,e){t!==e&&this._parent&&this._parent.validate();}},methods:{blur:function blur(){this.show=!1;},clear:function clear(){this.disabled||this.readonly||(this.value=this.value instanceof Array?[]:null,this.toggle());},clearSearch:function clearSearch(){this.searchValue="",this.$els.search.focus();},checkValue:function checkValue(){!this.multiple||this.value instanceof Array||(this.value=null===this.value||void 0===this.value?[]:[this.value]),!this.multiple&&this.value instanceof Array&&(this.value=this.value.length?this.value.pop():null),this.limit<1&&(this.limit=1),this.values.length>this.limit&&(this.value=this.value.slice(0,this.limit));},isSelected:function isSelected(t){return this.values.indexOf(t)>-1;},select:function select(t,e){this.value instanceof Array?(~this.value.indexOf(t)?this.value.$remove(t):this.value.push(t),this.closeOnSelect&&this.toggle()):(this.value=~["",null,void 0].indexOf(t)?e:t,this.toggle());},toggle:function toggle(){this.show=!this.show;},update:function update(){var t=this;this.url&&(this.loading=!0,(0,l.getJSON)(this.url).then(function(e){var n=[],o=!0,i=!1,r=void 0;try{for(var a,l=(0,s["default"])(e);!(o=(a=l.next()).done);o=!0){var c=a.value;void 0!==c[t.optionsValue]&&void 0!==c[t.optionsLabel]&&n.push(c);}}catch(u){i=!0,r=u;}finally{try{!o&&l["return"]&&l["return"]();}finally{if(i)throw r;}}t.options=n,n.length||(t.value=t.value instanceof Array?[]:null);}).always(function(){t.loading=!1,t.checkValue();}));},validate:function validate(){return!this.required||(this.value instanceof Array?this.value.length>0:null!==this.value);}},created:function created(){this._select=!0,void 0!==this.value&&this.parent||(this.value=null),!this.multiple&&this.value instanceof Array&&(this.value=this.value.shift()),this.checkValue(),this.url&&this.update();for(var t=this.$parent;t&&!t._formGroup;){t=t.$parent;}t&&t._formGroup&&(t.children.push(this),this._parent=t);},ready:function ready(){var t=this;(0,u["default"])(this.$els.select).onBlur(function(e){t.show=!1;});},beforeDestroy:function beforeDestroy(){this._parent&&this._parent.children.$remove(this),(0,u["default"])(this.$els.select).offBlur();}};},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}e.__esModule=!0;var i=n(46),r=o(i),a=n(184),s=o(a),l="function"==typeof s["default"]&&"symbol"==_typeof(r["default"])?function(t){return typeof t==="undefined"?"undefined":_typeof(t);}:function(t){return t&&"function"==typeof s["default"]&&t.constructor===s["default"]?"symbol":typeof t==="undefined"?"undefined":_typeof(t);};e["default"]="function"==typeof s["default"]&&"symbol"===l(r["default"])?function(t){return"undefined"==typeof t?"undefined":l(t);}:function(t){return t&&"function"==typeof s["default"]&&t.constructor===s["default"]?"symbol":"undefined"==typeof t?"undefined":l(t);};},function(t,e,n){t.exports={"default":n(185),__esModule:!0};},function(t,e,n){n(186),n(195),n(196),n(197),t.exports=n(33).Symbol;},function(t,e,n){"use strict";var o=n(32),i=n(55),r=n(41),a=n(31),s=n(54),l=n(187).KEY,c=n(42),u=n(69),d=n(73),p=n(70),f=n(74),h=n(81),v=n(188),y=n(189),b=n(190),m=n(193),g=n(38),x=n(62),w=n(44),_=n(45),k=n(58),S=n(86),M=n(194),O=n(37),$=n(60),D=M.f,j=O.f,C=S.f,_N=o.Symbol,B=o.JSON,L=B&&B.stringify,A="prototype",T=f("_hidden"),P=f("toPrimitive"),E={}.propertyIsEnumerable,R=u("symbol-registry"),V=u("symbols"),z=u("op-symbols"),I=Object[A],W="function"==typeof _N,F=o.QObject,Y=!F||!F[A]||!F[A].findChild,X=r&&c(function(){return 7!=k(j({},"a",{get:function get(){return j(this,"a",{value:7}).a;}})).a;})?function(t,e,n){var o=D(I,e);o&&delete I[e],j(t,e,n),o&&t!==I&&j(I,e,o);}:j,H=function H(t){var e=V[t]=k(_N[A]);return e._k=t,e;},G=W&&"symbol"==_typeof(_N.iterator)?function(t){return"symbol"==(typeof t==="undefined"?"undefined":_typeof(t));}:function(t){return t instanceof _N;},q=function q(t,e,n){return t===I&&q(z,e,n),g(t),e=w(e,!0),g(n),i(V,e)?(n.enumerable?(i(t,T)&&t[T][e]&&(t[T][e]=!1),n=k(n,{enumerable:_(0,!1)})):(i(t,T)||j(t,T,_(1,{})),t[T][e]=!0),X(t,e,n)):j(t,e,n);},U=function U(t,e){g(t);for(var n,o=b(e=x(e)),i=0,r=o.length;r>i;){q(t,n=o[i++],e[n]);}return t;},J=function J(t,e){return void 0===e?k(t):U(k(t),e);},Z=function Z(t){var e=E.call(this,t=w(t,!0));return!(this===I&&i(V,t)&&!i(z,t))&&(!(e||!i(this,t)||!i(V,t)||i(this,T)&&this[T][t])||e);},K=function K(t,e){if(t=x(t),e=w(e,!0),t!==I||!i(V,e)||i(z,e)){var n=D(t,e);return!n||!i(V,e)||i(t,T)&&t[T][e]||(n.enumerable=!0),n;}},Q=function Q(t){for(var e,n=C(x(t)),o=[],r=0;n.length>r;){i(V,e=n[r++])||e==T||e==l||o.push(e);}return o;},tt=function tt(t){for(var e,n=t===I,o=C(n?z:x(t)),r=[],a=0;o.length>a;){!i(V,e=o[a++])||n&&!i(I,e)||r.push(V[e]);}return r;};W||(_N=function N(){if(this instanceof _N)throw TypeError("Symbol is not a constructor!");var t=p(arguments.length>0?arguments[0]:void 0),e=function e(n){this===I&&e.call(z,n),i(this,T)&&i(this[T],t)&&(this[T][t]=!1),X(this,t,_(1,n));};return r&&Y&&X(I,t,{configurable:!0,set:e}),H(t);},s(_N[A],"toString",function(){return this._k;}),M.f=K,O.f=q,n(87).f=S.f=Q,n(192).f=Z,n(191).f=tt,r&&!n(53)&&s(I,"propertyIsEnumerable",Z,!0),h.f=function(t){return H(f(t));}),a(a.G+a.W+a.F*!W,{Symbol:_N});for(var et="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),nt=0;et.length>nt;){f(et[nt++]);}for(var et=$(f.store),nt=0;et.length>nt;){v(et[nt++]);}a(a.S+a.F*!W,"Symbol",{"for":function _for(t){return i(R,t+="")?R[t]:R[t]=_N(t);},keyFor:function keyFor(t){if(G(t))return y(R,t);throw TypeError(t+" is not a symbol!");},useSetter:function useSetter(){Y=!0;},useSimple:function useSimple(){Y=!1;}}),a(a.S+a.F*!W,"Object",{create:J,defineProperty:q,defineProperties:U,getOwnPropertyDescriptor:K,getOwnPropertyNames:Q,getOwnPropertySymbols:tt}),B&&a(a.S+a.F*(!W||c(function(){var t=_N();return"[null]"!=L([t])||"{}"!=L({a:t})||"{}"!=L(Object(t));})),"JSON",{stringify:function stringify(t){if(void 0!==t&&!G(t)){for(var e,n,o=[t],i=1;arguments.length>i;){o.push(arguments[i++]);}return e=o[1],"function"==typeof e&&(n=e),!n&&m(e)||(e=function e(t,_e2){if(n&&(_e2=n.call(this,t,_e2)),!G(_e2))return _e2;}),o[1]=e,L.apply(B,o);}}}),_N[A][P]||n(36)(_N[A],P,_N[A].valueOf),d(_N,"Symbol"),d(Math,"Math",!0),d(o.JSON,"JSON",!0);},function(t,e,n){var o=n(70)("meta"),i=n(39),r=n(55),a=n(37).f,s=0,l=Object.isExtensible||function(){return!0;},c=!n(42)(function(){return l(Object.preventExtensions({}));}),u=function u(t){a(t,o,{value:{i:"O"+ ++s,w:{}}});},d=function d(t,e){if(!i(t))return"symbol"==(typeof t==="undefined"?"undefined":_typeof(t))?t:("string"==typeof t?"S":"P")+t;if(!r(t,o)){if(!l(t))return"F";if(!e)return"E";u(t);}return t[o].i;},p=function p(t,e){if(!r(t,o)){if(!l(t))return!0;if(!e)return!1;u(t);}return t[o].w;},f=function f(t){return c&&h.NEED&&l(t)&&!r(t,o)&&u(t),t;},h=t.exports={KEY:o,NEED:!1,fastKey:d,getWeak:p,onFreeze:f};},function(t,e,n){var o=n(32),i=n(33),r=n(53),a=n(81),s=n(37).f;t.exports=function(t){var e=i.Symbol||(i.Symbol=r?{}:o.Symbol||{});"_"==t.charAt(0)||t in e||s(e,t,{value:a.f(t)});};},function(t,e,n){var o=n(60),i=n(62);t.exports=function(t,e){for(var n,r=i(t),a=o(r),s=a.length,l=0;s>l;){if(r[n=a[l++]]===e)return n;}};},function(t,e,n){var o=n(60),i=n(191),r=n(192);t.exports=function(t){var e=o(t),n=i.f;if(n)for(var a,s=n(t),l=r.f,c=0;s.length>c;){l.call(t,a=s[c++])&&e.push(a);}return e;};},function(t,e){e.f=Object.getOwnPropertySymbols;},function(t,e){e.f={}.propertyIsEnumerable;},function(t,e,n){var o=n(64);t.exports=Array.isArray||function(t){return"Array"==o(t);};},function(t,e,n){var o=n(192),i=n(45),r=n(62),a=n(44),s=n(55),l=n(40),c=Object.getOwnPropertyDescriptor;e.f=n(41)?c:function(t,e){if(t=r(t),e=a(e,!0),l)try{return c(t,e);}catch(n){}if(s(t,e))return i(!o.f.call(t,e),t[e]);};},function(t,e){},function(t,e,n){n(188)("asyncIterator");},function(t,e,n){n(188)("observable");},function(t,e){t.exports='<div v-el:select="" :class=classes _v-e514dbc6=""> <button type=button class="form-control dropdown-toggle" :disabled="disabled || !hasParent" :readonly=readonly @click=toggle() @keyup.esc="show = false" _v-e514dbc6=""> <span class=btn-content _v-e514dbc6="">{{ loading ? text.loading : showPlaceholder || selected }}</span> <span v-if=clearButton&amp;&amp;values.length class=close @click=clear() _v-e514dbc6="">×</span> </button> <select v-el:sel="" v-model=value v-show=show name={{name}} class=secret :multiple=multiple :required=required :readonly=readonly :disabled=disabled _v-e514dbc6=""> <option v-if=required value="" _v-e514dbc6=""></option> <option v-for="option in options" :value=option[optionsValue]||option _v-e514dbc6="">{{ option[optionsLabel]||option }}</option> </select> <ul class=dropdown-menu _v-e514dbc6=""> <template v-if=options.length _v-e514dbc6=""> <li v-if=canSearch class=bs-searchbox _v-e514dbc6=""> <input type=text placeholder={{searchText||text.search}} class=form-control autocomplete=off v-el:search="" v-model=searchValue @keyup.esc="show = false" _v-e514dbc6=""> <span v-show=searchValue class=close @click=clearSearch _v-e514dbc6="">×</span> </li> <li v-if=required&amp;&amp;!clearButton _v-e514dbc6=""><a @mousedown.prevent="clear() &amp;&amp; blur()" _v-e514dbc6="">{{ placeholder || text.notSelected }}</a></li> <li v-for="option in options | filterBy searchValue" :id=option[optionsValue]||option _v-e514dbc6=""> <a @mousedown.prevent=select(option[optionsValue],option) _v-e514dbc6=""> <span v-html=option[optionsLabel]||option _v-e514dbc6=""></span> <span class="glyphicon glyphicon-ok check-mark" v-show=isSelected(option[optionsValue]||option) _v-e514dbc6=""></span> </a> </li> </template> <slot _v-e514dbc6=""></slot> <div v-if="showNotify &amp;&amp; !closeOnSelect" class="notify in" transition=fadein _v-e514dbc6="">{{limitText}}</div> </ul> <div v-if="showNotify &amp;&amp; closeOnSelect" class="notify out" transition=fadein _v-e514dbc6=""><div _v-e514dbc6="">{{limitText}}</div></div> </div>';},function(t,e,n){t.exports=n(200),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(201);},function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e["default"]={data:function data(){return{index:0,show:!1};},computed:{show:function show(){return this.$parent.index===this.index;}},ready:function ready(){for(var t in this.$parent.$children){if(this.$parent.$children[t]===this){this.index=parseInt(t,10);break;}}this.$parent.indicator.push(this.index),0===this.index&&this.$el.classList.add("active");}};},function(t,e){t.exports="<div class=item> <slot></slot> </div>";},function(t,e,n){t.exports=n(203),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(206);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),n(204);var o=n(97),i=500;e["default"]={props:{size:{type:String,"default":"md"},text:{type:String,"default":""},fixed:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},data:function data(){return{active:!1};},computed:{spinnerSize:function spinnerSize(){return this.size?"spinner-"+this.size:"spinner-sm";}},ready:function ready(){this._body=document.querySelector("body"),this._bodyOverflow=this._body.style.overflowY||"";},methods:{getMinWait:function getMinWait(t){return t=t||0,new Date().getTime()-this._started.getTime()<i?i-parseInt(new Date().getTime()-this._started.getTime(),10)+t:0+t;},show:function show(t){t&&t.text&&(this.text=t.text),t&&t.size&&(this.size=t.size),t&&t.fixed&&(this.fixed=t.fixed),this._body.style.overflowY="hidden",this._started=new Date(),this.active=!0,this.$root.$broadcast("shown::spinner");},hide:function hide(){var t=this,e=0;this._spinnerAnimation=setTimeout(function(){t.active=!1,t._body.style.overflowY=t._bodyOverflow,t.$root.$broadcast("hidden::spinner");},this.getMinWait(e));}},events:{"show::spinner":function showSpinner(t){this.show(t);},"hide::spinner":function hideSpinner(){this.hide();},"start::ajax":function startAjax(t){this.show(t);},"end::ajax":function endAjax(){this.hide();}},beforeDestroy:function beforeDestroy(){clearTimeout(this._spinnerAnimation),this._body.style.overflowY=this._bodyOverflow;}};},function(t,e,n){var o=n(205);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,'/*!\r\n *\r\n * Spinner\r\n * With fallback to IE9\r\n *\r\n */@keyframes spin{to{transform:rotate(1turn)}}.spinner-gritcode{top:0;left:0;bottom:0;right:0;z-index:9998;position:absolute;width:100%;text-align:center;background:hsla(0,0%,100%,.9)}.spinner-gritcode.spinner-fixed{position:fixed}.spinner-gritcode .spinner-wrapper{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%)}.spinner-gritcode .spinner-circle{position:relative;border:4px solid #ccc;border-right-color:#337ab7;border-radius:50%;display:inline-block;animation:spin .6s linear;animation-iteration-count:infinite;width:3em;height:3em;z-index:2}.spinner-gritcode .spinner-text{position:relative;text-align:center;margin-top:.5em;z-index:2;width:100%;font-size:95%;color:#337ab7}.spinner-gritcode.spinner-sm .spinner-circle{width:1.5em;height:1.5em}.spinner-gritcode.spinner-md .spinner-circle{width:2em;height:2em}.spinner-gritcode.spinner-lg .spinner-circle{width:2.5em;height:2.5em}.spinner-gritcode.spinner-xl .spinner-circle{width:3.5em;height:3.5em}.ie9 .spinner-gritcode .spinner-circle,.lt-ie10 .spinner-gritcode .spinner-circle,.no-csstransforms3d .spinner-gritcode .spinner-circle,.no-csstransitions .spinner-gritcode .spinner-circle,.oldie .spinner-gritcode .spinner-circle{background:url("http://i2.wp.com/www.thegreatnovelingadventure.com/wp-content/plugins/wp-polls/images/loading.gif") 50% no-repeat;animation:none;margin-left:0;margin-top:5px;border:none;width:32px;height:32px}',""]);},function(t,e){t.exports="<div :class=\"['spinner spinner-gritcode',spinnerSize,{'spinner-fixed':fixed}]\" v-show=active> <div class=spinner-wrapper> <div class=spinner-circle></div> <div class=spinner-text>{{text}}</div> </div> </div>";},function(t,e,n){t.exports=n(208),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(209);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{header:{type:String},disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1}},computed:{active:function active(){return this._tabset.show===this;},index:function index(){return this._tabset.tabs.indexOf(this);},show:function show(){return this._tabset&&this._tabset.show===this;},transition:function transition(){return this._tabset?this._tabset.effect:null;}},created:function created(){this._ingroup=this.$parent&&this.$parent._tabgroup;for(var t=this;t&&t._tabset!==!0&&t.$parent;){t=t.$parent;}t._tabset?(t.tabs.push(this),this._ingroup?~t.headers.indexOf(this.$parent)||t.headers.push(this.$parent):t.headers.push(this),this._tabset=t):(this._tabset={},console.warn('Warning: "tab" depend on "tabset" to work properly.')),this._ingroup&&this.$parent.tabs.push(this);},beforeDestroy:function beforeDestroy(){this._tabset.active===this.index&&(this._tabset.active=0),this._ingroup&&this.$parent.tabs.$remove(this),this._tabset.tabs.$remove(this);}};},function(t,e){t.exports='<div role=tabpanel class="tab-pane active" v-show=show :class={hide:!show} :transition=transition> <slot></slot> </div>';},function(t,e,n){n(211),t.exports=n(213),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(214);},function(t,e,n){var o=n(212);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".nav-tabs[_v-55faf3cb]{margin-bottom:15px}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97);e["default"]={props:{disabled:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},header:{type:String}},data:function data(){return{tabs:[],show:!1};},computed:{active:function active(){return~this.tabs.indexOf(this._tabset.show);}},created:function created(){this._tabgroup=!0;var t=this.$parent&&this.$parent._tabset===!0?this.$parent:{};for(this.$parent&&this.$parent._tabgroup&&console.error("Can't nest tabgroups.");t&&!t._tabset&&t.$parent;){t=t.$parent;}t._tabset?this._tabset=t:(this._tabset={},this.show=!0,console.warn("Warning: tabgroup depend on tabset to work properly."));},methods:{blur:function blur(){this.show=!1;},toggle:function toggle(){this.show=!this.show;}}};},function(t,e){t.exports='<slot _v-55faf3cb=""></slot>';},function(t,e,n){n(216),t.exports=n(218),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(219);},function(t,e,n){var o=n(217);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".nav-tabs[_v-09e2754e]{margin-bottom:15px}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(97),r=n(132),a=o(r);e["default"]={components:{dropdown:a["default"]},props:{navStyle:{type:String,"default":"tabs"},effect:{type:String,"default":"fadein"},active:{twoWay:!0,type:Number,coerce:i.coerce.number,"default":0}},data:function data(){return{show:null,headers:[],tabs:[]};},created:function created(){this._tabset=!0;},watch:{active:function active(t){this.show=this.tabs[t];}},ready:function ready(){this.show=this.tabs[this.active];},methods:{select:function select(t){t.disabled||(this.active=t.index);}}};},function(t,e){t.exports=' <ul class="nav nav-{{navStyle}}" role=tablist _v-09e2754e=""> <template v-for="t in headers" _v-09e2754e=""> <li v-if=!t._tabgroup :class="{active:t.active, disabled:t.disabled}" @click.prevent=select(t) _v-09e2754e=""> <a href=# _v-09e2754e=""><slot name=header _v-09e2754e="">{{{t.header}}}</slot></a> </li> <dropdown v-else="" :text=t.header :class={active:t.active} :disabled=t.disabled _v-09e2754e=""> <li v-for="tab in t.tabs" :class={disabled:tab.disabled} _v-09e2754e=""><a href=# @click.prevent=select(tab) _v-09e2754e="">{{tab.header}}</a></li> </dropdown> </template> </ul> <div class=tab-content v-el:tab-content="" _v-09e2754e=""> <slot _v-09e2754e=""></slot> </div>';},function(t,e,n){n(221),t.exports=n(223),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(224);},function(t,e,n){var o=n(222);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".tooltip.bottom,.tooltip.left,.tooltip.right,.tooltip.top{opacity:.9}.fadein-enter{-webkit-animation:fadein-in .3s ease-in;animation:fadein-in .3s ease-in}.fadein-leave{-webkit-animation:fadein-out .3s ease-out;animation:fadein-out .3s ease-out}@-webkit-keyframes fadein-in{0%{opacity:0}to{opacity:.9}}@keyframes fadein-in{0%{opacity:0}to{opacity:.9}}@-webkit-keyframes fadein-out{0%{opacity:.9}to{opacity:0}}@keyframes fadein-out{0%{opacity:.9}to{opacity:0}}",""]);},function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{"default":t};}Object.defineProperty(e,"__esModule",{value:!0});var i=n(169),r=o(i);e["default"]={mixins:[r["default"]],props:{trigger:{type:String,"default":"hover"},effect:{type:String,"default":"scale"}}};},function(t,e){t.exports="<span v-el:trigger> <slot></slot> </span> <div v-el:popover v-if=show style=display:block :class=\"['tooltip',placement]\" :transition=effect> <div class=tooltip-arrow></div> <div class=tooltip-inner> <slot name=content>{{{content}}}</slot> </div> </div>";},function(t,e,n){n(226),t.exports=n(228),t.exports.__esModule&&(t.exports=t.exports["default"]),("function"==typeof t.exports?t.exports.options:t.exports).template=n(229);},function(t,e,n){var o=n(227);"string"==typeof o&&(o=[[t.id,o,""]]);n(106)(o,{});o.locals&&(t.exports=o.locals);},function(t,e,n){e=t.exports=n(105)(),e.push([t.id,".dropdown-menu>li>a{cursor:pointer}",""]);},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n(97),i=window.Vue;e["default"]={created:function created(){this.items=this.primitiveData;},partials:{"default":'<span v-html="item | highlight query"></span>'},props:{value:{twoWay:!0,type:String,"default":""},data:{type:Array},limit:{type:Number,"default":8},async:{type:String},template:{type:String},templateName:{type:String,"default":"default"},key:{type:String,"default":null},matchCase:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},matchStart:{type:Boolean,coerce:o.coerce["boolean"],"default":!1},onHit:{type:Function,"default":function _default(t){this.reset(),this.value=t;}},placeholder:{type:String}},data:function data(){return{showDropdown:!1,noResults:!0,current:0,items:[]};},computed:{primitiveData:function primitiveData(){var t=this;if(this.data)return this.data.filter(function(e){e=t.matchCase?e:e.toLowerCase();var n=t.matchCase?t.value:t.value.toLowerCase();return t.matchStart?0===e.indexOf(n):e.indexOf(n)!==-1;}).slice(0,this.limit);}},ready:function ready(){this.templateName&&"default"!==this.templateName&&i.partial(this.templateName,this.template);},methods:{update:function update(){var t=this;return this.value?(this.data&&(this.items=this.primitiveData,this.showDropdown=this.items.length>0),void(this.async&&(0,o.getJSON)(this.async+this.value).then(function(e){t.items=(t.key?e[t.key]:e).slice(0,t.limit),t.showDropdown=t.items.length>0;}))):(this.reset(),!1);},reset:function reset(){this.items=[],this.value="",this.loading=!1,this.showDropdown=!1;},setActive:function setActive(t){this.current=t;},isActive:function isActive(t){return this.current===t;},hit:function hit(t){t.preventDefault(),this.onHit(this.items[this.current],this);},up:function up(){this.current>0&&this.current--;},down:function down(){this.current<this.items.length-1&&this.current++;}},filters:{highlight:function highlight(t,e){return t.replace(new RegExp("("+e+")","gi"),"<strong>$1</strong>");}}};},function(t,e){t.exports='<div style="position: relative" v-bind:class="{\'open\':showDropdown}"> <input type=text class=form-control :placeholder=placeholder autocomplete=off v-model=value @input=update @keydown.up=up @keydown.down=down @keydown.enter=hit @keydown.esc=reset @blur="showDropdown = false"/> <ul class=dropdown-menu v-el:dropdown> <li v-for="item in items" v-bind:class="{\'active\': isActive($index)}"> <a @mousedown.prevent=hit @mousemove=setActive($index)> <partial :name=templateName></partial> </a> </li> </ul> </div>';}]);});
 
 },{}],123:[function(require,module,exports){
 (function (process){
@@ -72348,6 +72320,10 @@ exports.default = {
         icon: {
             type: String,
             default: null
+        },
+        size: {
+            type: String,
+            default: null
         }
     },
     data: function data() {
@@ -72361,15 +72337,15 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"btn btn-primary\" @click=\"execute\">{{text}} <i v-if=\"icon\" :class=\"icon\"></i></a>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"btn btn-primary\" :class=\"size\" @click=\"execute\">{{text}} <i v-if=\"icon\" :class=\"icon\"></i></a>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2a7f7076", module.exports)
+    hotAPI.createRecord("_v-0a8b2cde", module.exports)
   } else {
-    hotAPI.update("_v-2a7f7076", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0a8b2cde", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],127:[function(require,module,exports){
@@ -72493,12 +72469,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-402a95aa", module.exports)
+    hotAPI.createRecord("_v-14d23642", module.exports)
   } else {
-    hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-14d23642", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],128:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],128:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -72568,9 +72544,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6c0d9684", module.exports)
+    hotAPI.createRecord("_v-2c5a08ec", module.exports)
   } else {
-    hotAPI.update("_v-6c0d9684", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2c5a08ec", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./details/details.vue":132,"./details/regions.vue":133,"./details/transports.vue":134,"./details/trips.vue":135,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],129:[function(require,module,exports){
@@ -72739,12 +72715,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3a603938", module.exports)
+    hotAPI.createRecord("_v-b5b1c060", module.exports)
   } else {
-    hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-b5b1c060", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],130:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],130:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72813,9 +72789,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-12a47980", module.exports)
+    hotAPI.createRecord("_v-71409450", module.exports)
   } else {
-    hotAPI.update("_v-12a47980", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-71409450", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],131:[function(require,module,exports){
@@ -72852,9 +72828,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-58d98fb2", module.exports)
+    hotAPI.createRecord("_v-483b544a", module.exports)
   } else {
-    hotAPI.update("_v-58d98fb2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-483b544a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],132:[function(require,module,exports){
@@ -72893,9 +72869,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c27860f8", module.exports)
+    hotAPI.createRecord("_v-6f75c21c", module.exports)
   } else {
-    hotAPI.update("_v-c27860f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6f75c21c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],133:[function(require,module,exports){
@@ -72928,9 +72904,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-88b7227e", module.exports)
+    hotAPI.createRecord("_v-e7533d4e", module.exports)
   } else {
-    hotAPI.update("_v-88b7227e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-e7533d4e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],134:[function(require,module,exports){
@@ -72962,9 +72938,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2299a818", module.exports)
+    hotAPI.createRecord("_v-368f8e80", module.exports)
   } else {
-    hotAPI.update("_v-2299a818", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-368f8e80", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],135:[function(require,module,exports){
@@ -73033,9 +73009,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-19c29ab0", module.exports)
+    hotAPI.createRecord("_v-43005348", module.exports)
   } else {
-    hotAPI.update("_v-19c29ab0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-43005348", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],136:[function(require,module,exports){
@@ -73109,9 +73085,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1c3f53a2", module.exports)
+    hotAPI.createRecord("_v-e0395672", module.exports)
   } else {
-    hotAPI.update("_v-1c3f53a2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-e0395672", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],137:[function(require,module,exports){
@@ -73167,9 +73143,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-94fcdc0a", module.exports)
+    hotAPI.createRecord("_v-1f091c63", module.exports)
   } else {
-    hotAPI.update("_v-94fcdc0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1f091c63", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./campaign-groups.vue":130,"./group-trips.vue":136,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],138:[function(require,module,exports){
@@ -73615,9 +73591,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-52666078", module.exports)
+    hotAPI.createRecord("_v-342117a8", module.exports)
   } else {
-    hotAPI.update("_v-52666078", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-342117a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],139:[function(require,module,exports){
@@ -73967,9 +73943,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3e2654be", module.exports)
+    hotAPI.createRecord("_v-3e5be956", module.exports)
   } else {
-    hotAPI.update("_v-3e2654be", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3e5be956", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],140:[function(require,module,exports){
@@ -74138,9 +74114,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-fdcee0c6", module.exports)
+    hotAPI.createRecord("_v-d5e313f6", module.exports)
   } else {
-    hotAPI.update("_v-fdcee0c6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d5e313f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],141:[function(require,module,exports){
@@ -74359,9 +74335,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-72f10bfc", module.exports)
+    hotAPI.createRecord("_v-879a32d8", module.exports)
   } else {
-    hotAPI.update("_v-72f10bfc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-879a32d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],142:[function(require,module,exports){
@@ -74420,9 +74396,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-59741304", module.exports)
+    hotAPI.createRecord("_v-6d69f96c", module.exports)
   } else {
-    hotAPI.update("_v-59741304", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6d69f96c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],143:[function(require,module,exports){
@@ -74677,9 +74653,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-454ad5be", module.exports)
+    hotAPI.createRecord("_v-08e37354", module.exports)
   } else {
-    hotAPI.update("_v-454ad5be", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-08e37354", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],144:[function(require,module,exports){
@@ -74872,9 +74848,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-65b2af1d", module.exports)
+    hotAPI.createRecord("_v-618b8cf6", module.exports)
   } else {
-    hotAPI.update("_v-65b2af1d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-618b8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../donors/donor-form.vue":140,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],145:[function(require,module,exports){
@@ -74987,9 +74963,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-76dd8b48", module.exports)
+    hotAPI.createRecord("_v-cd8e4a18", module.exports)
   } else {
-    hotAPI.update("_v-76dd8b48", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-cd8e4a18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":111,"vue":124,"vue-hot-reload-api":119}],146:[function(require,module,exports){
@@ -75111,9 +75087,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4773c802", module.exports)
+    hotAPI.createRecord("_v-1c1b689a", module.exports)
   } else {
-    hotAPI.update("_v-4773c802", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1c1b689a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":111,"vue":124,"vue-hot-reload-api":119}],147:[function(require,module,exports){
@@ -75299,12 +75275,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-02bfe2c1", module.exports)
+    hotAPI.createRecord("_v-5130f94e", module.exports)
   } else {
-    hotAPI.update("_v-02bfe2c1", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5130f94e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],148:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75375,9 +75351,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-60464908", module.exports)
+    hotAPI.createRecord("_v-0dcad7d8", module.exports)
   } else {
-    hotAPI.update("_v-60464908", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0dcad7d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],149:[function(require,module,exports){
@@ -75486,9 +75462,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0f6c0d9e", module.exports)
+    hotAPI.createRecord("_v-3fc3ff94", module.exports)
   } else {
-    hotAPI.update("_v-0f6c0d9e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3fc3ff94", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],150:[function(require,module,exports){
@@ -75644,9 +75620,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7071c3a8", module.exports)
+    hotAPI.createRecord("_v-1df65278", module.exports)
   } else {
-    hotAPI.update("_v-7071c3a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1df65278", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],151:[function(require,module,exports){
@@ -75745,9 +75721,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1244b388", module.exports)
+    hotAPI.createRecord("_v-7e446020", module.exports)
   } else {
-    hotAPI.update("_v-1244b388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7e446020", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],152:[function(require,module,exports){
@@ -75824,9 +75800,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6170d6da", module.exports)
+    hotAPI.createRecord("_v-647e220a", module.exports)
   } else {
-    hotAPI.update("_v-6170d6da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-647e220a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],153:[function(require,module,exports){
@@ -76127,9 +76103,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4d4691e4", module.exports)
+    hotAPI.createRecord("_v-4d7c267c", module.exports)
   } else {
-    hotAPI.update("_v-4d4691e4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4d7c267c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],154:[function(require,module,exports){
@@ -76171,9 +76147,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-15f24781", module.exports)
+    hotAPI.createRecord("_v-29e82de9", module.exports)
   } else {
-    hotAPI.update("_v-15f24781", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-29e82de9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],155:[function(require,module,exports){
@@ -76268,9 +76244,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3253a032", module.exports)
+    hotAPI.createRecord("_v-0a67d362", module.exports)
   } else {
-    hotAPI.update("_v-3253a032", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0a67d362", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],156:[function(require,module,exports){
@@ -76312,9 +76288,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-24620ef0", module.exports)
+    hotAPI.createRecord("_v-36a2fd50", module.exports)
   } else {
-    hotAPI.update("_v-24620ef0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-36a2fd50", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],157:[function(require,module,exports){
@@ -76426,9 +76402,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3568e8fb", module.exports)
+    hotAPI.createRecord("_v-495ecf63", module.exports)
   } else {
-    hotAPI.update("_v-3568e8fb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-495ecf63", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"marked":111,"vue":124,"vue-hot-reload-api":119}],158:[function(require,module,exports){
@@ -76461,9 +76437,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-38497816", module.exports)
+    hotAPI.createRecord("_v-7dd5d87e", module.exports)
   } else {
-    hotAPI.update("_v-38497816", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7dd5d87e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],159:[function(require,module,exports){
@@ -76535,9 +76511,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-a95a0ede", module.exports)
+    hotAPI.createRecord("_v-264b7e0e", module.exports)
   } else {
-    hotAPI.update("_v-a95a0ede", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-264b7e0e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],160:[function(require,module,exports){
@@ -76706,9 +76682,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-cf6ec6ac", module.exports)
+    hotAPI.createRecord("_v-131fb342", module.exports)
   } else {
-    hotAPI.update("_v-cf6ec6ac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-131fb342", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],161:[function(require,module,exports){
@@ -76878,9 +76854,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7fba023b", module.exports)
+    hotAPI.createRecord("_v-6dcfeea3", module.exports)
   } else {
-    hotAPI.update("_v-7fba023b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6dcfeea3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],162:[function(require,module,exports){
@@ -76935,9 +76911,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7f80c956", module.exports)
+    hotAPI.createRecord("_v-5e7a41be", module.exports)
   } else {
-    hotAPI.update("_v-7f80c956", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5e7a41be", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],163:[function(require,module,exports){
@@ -76994,9 +76970,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-04e65764", module.exports)
+    hotAPI.createRecord("_v-5b971634", module.exports)
   } else {
-    hotAPI.update("_v-04e65764", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5b971634", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],164:[function(require,module,exports){
@@ -77160,9 +77136,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7dce67a4", module.exports)
+    hotAPI.createRecord("_v-d1dcd388", module.exports)
   } else {
-    hotAPI.update("_v-7dce67a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d1dcd388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],165:[function(require,module,exports){
@@ -77309,9 +77285,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1e536124", module.exports)
+    hotAPI.createRecord("_v-7119d0e8", module.exports)
   } else {
-    hotAPI.update("_v-1e536124", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7119d0e8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"./donate.vue":138,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],166:[function(require,module,exports){
@@ -77473,9 +77449,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4f7b5afc", module.exports)
+    hotAPI.createRecord("_v-68be8994", module.exports)
   } else {
-    hotAPI.update("_v-4f7b5afc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-68be8994", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],167:[function(require,module,exports){
@@ -77590,9 +77566,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-bee86e22", module.exports)
+    hotAPI.createRecord("_v-5b75f957", module.exports)
   } else {
-    hotAPI.update("_v-bee86e22", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5b75f957", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/object/assign":3,"vue":124,"vue-hot-reload-api":119}],168:[function(require,module,exports){
@@ -77709,9 +77685,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-9bbb6c9a", module.exports)
+    hotAPI.createRecord("_v-ddc87bca", module.exports)
   } else {
-    hotAPI.update("_v-9bbb6c9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ddc87bca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],169:[function(require,module,exports){
@@ -77773,9 +77749,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1be69c3e", module.exports)
+    hotAPI.createRecord("_v-6172fca6", module.exports)
   } else {
-    hotAPI.update("_v-1be69c3e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6172fca6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],170:[function(require,module,exports){
@@ -77975,12 +77951,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-81b8d51a", module.exports)
+    hotAPI.createRecord("_v-1a5a99db", module.exports)
   } else {
-    hotAPI.update("_v-81b8d51a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1a5a99db", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],171:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78053,9 +78029,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0460b004", module.exports)
+    hotAPI.createRecord("_v-2834d734", module.exports)
   } else {
-    hotAPI.update("_v-0460b004", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2834d734", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],172:[function(require,module,exports){
@@ -78234,12 +78210,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-e64c6ba2", module.exports)
+    hotAPI.createRecord("_v-133d56d2", module.exports)
   } else {
-    hotAPI.update("_v-e64c6ba2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-133d56d2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],173:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78313,9 +78289,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-40f458ba", module.exports)
+    hotAPI.createRecord("_v-0140cb22", module.exports)
   } else {
-    hotAPI.update("_v-40f458ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0140cb22", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],174:[function(require,module,exports){
@@ -78350,9 +78326,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-558d51ea", module.exports)
+    hotAPI.createRecord("_v-5bdfb51a", module.exports)
   } else {
-    hotAPI.update("_v-558d51ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5bdfb51a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],175:[function(require,module,exports){
@@ -78518,12 +78494,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-793ad0cd", module.exports)
+    hotAPI.createRecord("_v-39874335", module.exports)
   } else {
-    hotAPI.update("_v-793ad0cd", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-39874335", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],176:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78597,9 +78573,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6c464550", module.exports)
+    hotAPI.createRecord("_v-6f539080", module.exports)
   } else {
-    hotAPI.update("_v-6c464550", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6f539080", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],177:[function(require,module,exports){
@@ -78840,9 +78816,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-86b15298", module.exports)
+    hotAPI.createRecord("_v-79b755c8", module.exports)
   } else {
-    hotAPI.update("_v-86b15298", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-79b755c8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],178:[function(require,module,exports){
@@ -79070,12 +79046,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0375b904", module.exports)
+    hotAPI.createRecord("_v-71301bd4", module.exports)
   } else {
-    hotAPI.update("_v-0375b904", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-71301bd4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../trips/registration/additional-trip-options.vue":213,"../trips/registration/basic-info.vue":214,"../trips/registration/review.vue":217,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],179:[function(require,module,exports){
+},{"../trips/registration/additional-trip-options.vue":212,"../trips/registration/basic-info.vue":213,"../trips/registration/review.vue":216,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79271,9 +79247,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-45829fee", module.exports)
+    hotAPI.createRecord("_v-46c63a71", module.exports)
   } else {
-    hotAPI.update("_v-45829fee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-46c63a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],180:[function(require,module,exports){
@@ -79492,9 +79468,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-30337481", module.exports)
+    hotAPI.createRecord("_v-30690919", module.exports)
   } else {
-    hotAPI.update("_v-30337481", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-30690919", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],181:[function(require,module,exports){
@@ -79678,12 +79654,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1bac2c0c", module.exports)
+    hotAPI.createRecord("_v-1be1c0a4", module.exports)
   } else {
-    hotAPI.update("_v-1bac2c0c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1be1c0a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],182:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],182:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -80024,9 +80000,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0ff77a9a", module.exports)
+    hotAPI.createRecord("_v-02fd7dca", module.exports)
   } else {
-    hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-02fd7dca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],183:[function(require,module,exports){
@@ -80075,9 +80051,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5e12a7a6", module.exports)
+    hotAPI.createRecord("_v-3cf658c5", module.exports)
   } else {
-    hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3cf658c5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],184:[function(require,module,exports){
@@ -80143,12 +80119,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-73e4e546", module.exports)
+    hotAPI.createRecord("_v-ca95a416", module.exports)
   } else {
-    hotAPI.update("_v-73e4e546", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ca95a416", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119}],185:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80372,9 +80348,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-72fce31c", module.exports)
+    hotAPI.createRecord("_v-96d10a4c", module.exports)
   } else {
-    hotAPI.update("_v-72fce31c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-96d10a4c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],186:[function(require,module,exports){
@@ -80455,9 +80431,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-231765fa", module.exports)
+    hotAPI.createRecord("_v-593b339b", module.exports)
   } else {
-    hotAPI.update("_v-231765fa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-593b339b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],187:[function(require,module,exports){
@@ -80493,9 +80469,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c6cc02ae", module.exports)
+    hotAPI.createRecord("_v-5ce67111", module.exports)
   } else {
-    hotAPI.update("_v-c6cc02ae", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5ce67111", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],188:[function(require,module,exports){
@@ -80562,9 +80538,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-efe544c0", module.exports)
+    hotAPI.createRecord("_v-29241438", module.exports)
   } else {
-    hotAPI.update("_v-efe544c0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-29241438", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],189:[function(require,module,exports){
@@ -80641,9 +80617,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-10639489", module.exports)
+    hotAPI.createRecord("_v-79eb1ef1", module.exports)
   } else {
-    hotAPI.update("_v-10639489", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-79eb1ef1", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],190:[function(require,module,exports){
@@ -80735,9 +80711,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-01de7a71", module.exports)
+    hotAPI.createRecord("_v-2017324e", module.exports)
   } else {
-    hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2017324e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],191:[function(require,module,exports){
@@ -80840,9 +80816,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-35c3a93b", module.exports)
+    hotAPI.createRecord("_v-67cf51a3", module.exports)
   } else {
-    hotAPI.update("_v-35c3a93b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-67cf51a3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../records/medicals/medical-create-update.vue":170,"vue":124,"vue-hot-reload-api":119}],192:[function(require,module,exports){
@@ -80945,9 +80921,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5d37e43e", module.exports)
+    hotAPI.createRecord("_v-1d893e54", module.exports)
   } else {
-    hotAPI.update("_v-5d37e43e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1d893e54", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../records/passports/passport-create-update.vue":172,"vue":124,"vue-hot-reload-api":119}],193:[function(require,module,exports){
@@ -81050,14 +81026,14 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1bd1d2ef", module.exports)
+    hotAPI.createRecord("_v-277b5b87", module.exports)
   } else {
-    hotAPI.update("_v-1bd1d2ef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-277b5b87", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../records/visas/visa-create-update.vue":175,"vue":124,"vue-hot-reload-api":119}],194:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-e87a91b0] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo[_v-e87a91b0] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo[_v-e87a91b0] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo[_v-e87a91b0]:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox[_v-e87a91b0]:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i[_v-e87a91b0] {\n  margin-right: 10px; }\n")
+var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-b5f43480] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo[_v-b5f43480] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo[_v-b5f43480] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo[_v-b5f43480]:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox[_v-b5f43480]:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i[_v-b5f43480] {\n  margin-right: 10px; }\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81218,19 +81194,19 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-e87a91b0=\"\">\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\" _v-e87a91b0=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\" _v-e87a91b0=\"\"></span>\n        <strong _v-e87a91b0=\"\">Well Done!</strong>\n        <p _v-e87a91b0=\"\">{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\" _v-e87a91b0=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\" _v-e87a91b0=\"\"></span>\n        <strong _v-e87a91b0=\"\">Oh No!</strong>\n        <p _v-e87a91b0=\"\">{{ message }}</p>\n    </alert>\n\n    <div class=\"panel panel-default\" _v-e87a91b0=\"\">\n        <div class=\"panel-heading\" _v-e87a91b0=\"\">\n            <h5 _v-e87a91b0=\"\">ToDos</h5>\n        </div>\n        <div class=\"list-group\" _v-e87a91b0=\"\">\n            <div class=\"list-group-item\" v-if=\"canModify\" _v-e87a91b0=\"\">\n                <div class=\"row\" _v-e87a91b0=\"\">\n                    <div class=\"col-xs-2 col-sm-1 text-muted\" _v-e87a91b0=\"\">\n                        <i class=\"fa fa-lg fa-plus-square-o\" style=\"margin-right: 10px\" _v-e87a91b0=\"\"></i>\n                    </div>\n                    <div class=\"col-xs-10 col-sm-11\" _v-e87a91b0=\"\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"newTodo.task\" placeholder=\"What needs to be done?\" @keyup.enter=\"createTodo\" _v-e87a91b0=\"\">\n                    </div>\n                </div>\n            </div>\n            <div class=\"list-group-item\" v-if=\"todos.length < 1\" _v-e87a91b0=\"\">\n                <p class=\"text-center text-muted lead\" _v-e87a91b0=\"\">No tasks found.</p>\n            </div>\n            <div class=\"list-group-item todo-item\" v-for=\"todo in todos\" _v-e87a91b0=\"\">\n                    <div class=\"row\" _v-e87a91b0=\"\">\n                        <div class=\"col-xs-2 col-sm-1 text-muted todo-item-checkbox\" @click=\"completeTodo(todo)\" _v-e87a91b0=\"\">\n                            <i class=\"fa fa-lg\" :class=\"{\n                               'fa-check-square-o' : todo.completed_at,\n                               'fa-square-o' : !todo.completed_at\n                               }\" _v-e87a91b0=\"\">\n                            </i>\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" v-if=\"selectedTodo.id == todo.id &amp;&amp; editMode\" _v-e87a91b0=\"\">\n                            <input type=\"text\" class=\"form-control\" v-model=\"selectedTodo.task\" @blur=\"updateTodo\" @keyup.enter=\"updateTodo\" _v-e87a91b0=\"\">\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" @dblclick=\"editTodo(todo)\" v-else=\"\" _v-e87a91b0=\"\">\n                            <span :class=\"{ 'text-strike' : todo.completed_at }\" _v-e87a91b0=\"\">{{ todo.task }}</span>\n                            <small class=\"text-muted\" v-if=\"todo.completed_at\" _v-e87a91b0=\"\"><br _v-e87a91b0=\"\">\n                                Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}\n                            </small>\n                        </div>\n                        <div class=\"col-xs-1 col-sm-1 text-right\" v-if=\"canModify\" _v-e87a91b0=\"\">\n                            <i class=\"fa fa-times fa-lg text-muted remove-todo\" @click=\"selectedTodo = todo,deleteModal = true\" _v-e87a91b0=\"\">\n                            </i>\n                        </div>\n                    </div>\n            </div>\n        </div>\n        <div class=\"panel-body text-center\" _v-e87a91b0=\"\">\n            <nav _v-e87a91b0=\"\">\n                <ul class=\"pager\" _v-e87a91b0=\"\">\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\" class=\"previous\" _v-e87a91b0=\"\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\" _v-e87a91b0=\"\">\n                            <span aria-hidden=\"true\" _v-e87a91b0=\"\">« <span class=\"hidden-xs\" _v-e87a91b0=\"\">Previous</span></span>\n                        </a>\n                    </li>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'all'}\" @click=\"changeFilter('all')\" _v-e87a91b0=\"\">\n                        All\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'active'}\" @click=\"changeFilter('active')\" _v-e87a91b0=\"\">\n                        Active\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'completed'}\" @click=\"changeFilter('completed')\" _v-e87a91b0=\"\">\n                        Completed\n                    </button>\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\" class=\"next\" _v-e87a91b0=\"\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\" _v-e87a91b0=\"\">\n                            <span aria-hidden=\"true\" _v-e87a91b0=\"\"><span class=\"hidden-xs\" _v-e87a91b0=\"\">Next</span> » </span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n    <p class=\"text-center\" _v-e87a91b0=\"\"><small class=\"text-muted\" _v-e87a91b0=\"\">Double-click to edit a todo.</small></p>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Todo\" small=\"true\" _v-e87a91b0=\"\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\" _v-e87a91b0=\"\">Are you sure you want to delete this Todo?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\" _v-e87a91b0=\"\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\" _v-e87a91b0=\"\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedTodo)\" _v-e87a91b0=\"\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-b5f43480=\"\">\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\" _v-b5f43480=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\" _v-b5f43480=\"\"></span>\n        <strong _v-b5f43480=\"\">Well Done!</strong>\n        <p _v-b5f43480=\"\">{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\" _v-b5f43480=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\" _v-b5f43480=\"\"></span>\n        <strong _v-b5f43480=\"\">Oh No!</strong>\n        <p _v-b5f43480=\"\">{{ message }}</p>\n    </alert>\n\n    <div class=\"panel panel-default\" _v-b5f43480=\"\">\n        <div class=\"panel-heading\" _v-b5f43480=\"\">\n            <h5 _v-b5f43480=\"\">ToDos</h5>\n        </div>\n        <div class=\"list-group\" _v-b5f43480=\"\">\n            <div class=\"list-group-item\" v-if=\"canModify\" _v-b5f43480=\"\">\n                <div class=\"row\" _v-b5f43480=\"\">\n                    <div class=\"col-xs-2 col-sm-1 text-muted\" _v-b5f43480=\"\">\n                        <i class=\"fa fa-lg fa-plus-square-o\" style=\"margin-right: 10px\" _v-b5f43480=\"\"></i>\n                    </div>\n                    <div class=\"col-xs-10 col-sm-11\" _v-b5f43480=\"\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"newTodo.task\" placeholder=\"What needs to be done?\" @keyup.enter=\"createTodo\" _v-b5f43480=\"\">\n                    </div>\n                </div>\n            </div>\n            <div class=\"list-group-item\" v-if=\"todos.length < 1\" _v-b5f43480=\"\">\n                <p class=\"text-center text-muted lead\" _v-b5f43480=\"\">No tasks found.</p>\n            </div>\n            <div class=\"list-group-item todo-item\" v-for=\"todo in todos\" _v-b5f43480=\"\">\n                    <div class=\"row\" _v-b5f43480=\"\">\n                        <div class=\"col-xs-2 col-sm-1 text-muted todo-item-checkbox\" @click=\"completeTodo(todo)\" _v-b5f43480=\"\">\n                            <i class=\"fa fa-lg\" :class=\"{ 'fa-check-square-o' : todo.completed_at, 'fa-square-o' : !todo.completed_at }\" _v-b5f43480=\"\">\n                            </i>\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" v-if=\"selectedTodo.id == todo.id &amp;&amp; editMode\" _v-b5f43480=\"\">\n                            <input type=\"text\" class=\"form-control\" v-model=\"selectedTodo.task\" @blur=\"updateTodo\" @keyup.enter=\"updateTodo\" _v-b5f43480=\"\">\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" @dblclick=\"editTodo(todo)\" v-else=\"\" _v-b5f43480=\"\">\n                            <span :class=\"{ 'text-strike' : todo.completed_at }\" _v-b5f43480=\"\">{{ todo.task }}</span>\n                            <small class=\"text-muted\" v-if=\"todo.completed_at\" _v-b5f43480=\"\"><br _v-b5f43480=\"\">\n                                Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}\n                            </small>\n                        </div>\n                        <div class=\"col-xs-1 col-sm-1 text-right\" v-if=\"canModify\" _v-b5f43480=\"\">\n                            <i class=\"fa fa-times fa-lg text-muted remove-todo\" @click=\"selectedTodo = todo,deleteModal = true\" _v-b5f43480=\"\">\n                            </i>\n                        </div>\n                    </div>\n            </div>\n        </div>\n        <div class=\"panel-body text-center\" _v-b5f43480=\"\">\n            <nav _v-b5f43480=\"\">\n                <ul class=\"pager\" _v-b5f43480=\"\">\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\" class=\"previous\" _v-b5f43480=\"\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\" _v-b5f43480=\"\">\n                            <span aria-hidden=\"true\" _v-b5f43480=\"\">« <span class=\"hidden-xs\" _v-b5f43480=\"\">Previous</span></span>\n                        </a>\n                    </li>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'all'}\" @click=\"changeFilter('all')\" _v-b5f43480=\"\">\n                        All\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'active'}\" @click=\"changeFilter('active')\" _v-b5f43480=\"\">\n                        Active\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'completed'}\" @click=\"changeFilter('completed')\" _v-b5f43480=\"\">\n                        Completed\n                    </button>\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\" class=\"next\" _v-b5f43480=\"\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\" _v-b5f43480=\"\">\n                            <span aria-hidden=\"true\" _v-b5f43480=\"\"><span class=\"hidden-xs\" _v-b5f43480=\"\">Next</span> » </span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n    <p class=\"text-center\" _v-b5f43480=\"\"><small class=\"text-muted\" _v-b5f43480=\"\">Double-click to edit a todo.</small></p>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Todo\" small=\"true\" _v-b5f43480=\"\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\" _v-b5f43480=\"\">Are you sure you want to delete this Todo?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\" _v-b5f43480=\"\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\" _v-b5f43480=\"\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedTodo)\" _v-b5f43480=\"\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["/* line 2, stdin */\ndiv.list-group-item[_v-e87a91b0] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo[_v-e87a91b0] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo[_v-e87a91b0] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo[_v-e87a91b0]:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox[_v-e87a91b0]:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i[_v-e87a91b0] {\n  margin-right: 10px; }\n"] = false
+    __vueify_insert__.cache["/* line 2, stdin */\ndiv.list-group-item[_v-b5f43480] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo[_v-b5f43480] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo[_v-b5f43480] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo[_v-b5f43480]:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox[_v-b5f43480]:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i[_v-b5f43480] {\n  margin-right: 10px; }\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-e87a91b0", module.exports)
+    hotAPI.createRecord("_v-b5f43480", module.exports)
   } else {
-    hotAPI.update("_v-e87a91b0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-b5f43480", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],195:[function(require,module,exports){
@@ -81299,12 +81275,412 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1f813726", module.exports)
+    hotAPI.createRecord("_v-1699c084", module.exports)
   } else {
-    hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1699c084", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],196:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    props: ['id', 'payments', 'cost'],
+    name: 'admin-trip-costs-payments',
+    data: function data() {
+        return {
+            attemptedAddPayment: false,
+            toggleNewPayment: false,
+            showAddModal: false,
+            showEditModal: false,
+            selectedPayment: null,
+            deletePaymentModal: false,
+            newPayment: {
+                amount_owed: 0,
+                percent_owed: 0,
+                due_at: null,
+                upfront: false,
+                grace_period: 0
+            },
+            resource: this.$resource('costs/' + this.id + '/payments{/payment_id}')
+        };
+    },
+
+    watch: {
+        'selectedPayment': {
+            handler: function handler(val, oldVal) {
+                console.log(val);
+                if (val && val.amount_owed) {
+                    var max = this.calculateMaxAmount(val);
+                    if (val.amount_owed > max) val.amount_owed = this.cost.amount;
+                    val.percent_owed = val.amount_owed / this.cost.amount * 100;
+                    if (_.isFunction(this.$validate)) this.$validate('percent', true);
+                }
+
+                if (val && val.percent_owed) {
+                    var max = this.calculateMaxPercent(val);
+                    if (val.percent_owed > max) val.percent_owed = max;
+                    val.amount_owed = val.percent_owed / 100 * this.cost.amount;
+                    if (_.isFunction(this.$validate)) this.$validate('amount', true);
+                }
+            },
+            deep: true
+        },
+        'newPayment': {
+            handler: function handler(val, oldVal) {
+                console.log(val);
+                if (val && val.amount_owed) {
+                    var max = this.calculateMaxAmount(val);
+                    if (val.amount_owed > max) val.amount_owed = this.cost.amount;
+                    val.percent_owed = val.amount_owed / this.cost.amount * 100;
+                    if (_.isFunction(this.$validate)) this.$validate('percent', true);
+                }
+
+                if (val && val.percent_owed) {
+                    var max = this.calculateMaxPercent(val);
+                    if (val.percent_owed > max) val.percent_owed = max;
+                    val.amount_owed = val.percent_owed / 100 * this.cost.amount;
+                    if (_.isFunction(this.$validate)) this.$validate('amount', true);
+                }
+            },
+            deep: true
+        },
+        'showEditModal': function showEditModal(val, oldVal) {
+            this.$nextTick(function () {
+                // if edit modal closes, reset data
+                if (val !== oldVal && val === false) {
+                    this.resetPayment();
+                }
+            });
+        },
+        'showAddModal': function showAddModal(val, oldVal) {
+            this.$nextTick(function () {
+                // if add modal closes, reset data
+                if (val !== oldVal && val === false) {
+                    this.resetPayment();
+                }
+            });
+        }
+
+    },
+    methods: {
+        checkForErrorPaymentAdd: function checkForErrorPaymentAdd(field) {
+            return this.$TripPricingCostPaymentAdd && this.$TripPricingCostPaymentAdd[field.toLowerCase()].invalid && this.attemptedAddPayment;
+        },
+        checkForErrorPaymentEdit: function checkForErrorPaymentEdit(field) {
+            return this.$TripPricingCostPaymentEdit && this.$TripPricingCostPaymentEdit[field.toLowerCase()].invalid && this.attemptedAddPayment;
+        },
+        resetPayment: function resetPayment() {
+            this.newPayment = {
+                amount_owed: 0,
+                percent_owed: 0,
+                due_at: null,
+                upfront: false,
+                grace_period: 0
+            };
+            this.selectedPayment = null;
+        },
+        calculateMaxAmount: function calculateMaxAmount(thePayment) {
+            var max = this.cost.amount;
+            if (this.payments.length) {
+                this.payments.forEach(function (payment) {
+                    // must ignore current payment in editMode
+                    if (thePayment !== payment) {
+                        max -= payment.amount_owed;
+                    }
+                }, this);
+            }
+            return max;
+        },
+        calculateMaxPercent: function calculateMaxPercent(thePayment) {
+            var max = 100;
+            if (this.payments.length) {
+                this.payments.forEach(function (payment) {
+                    // must ignore current payment in editMode
+                    if (thePayment !== payment) {
+                        max -= payment.percent_owed;
+                    }
+                }, this);
+            }
+            return max;
+        },
+        checkCostsErrors: function checkCostsErrors() {
+            var errors = [];
+
+            if (!this.payments.length) {
+                errors.push('empty');
+            } else {
+                // cost payments must total full amount owed and percent owed
+                var amount = 0;
+                this.payments.forEach(function (payment, index) {
+                    amount += payment.amount_owed;
+                }, this);
+                // evaluate difference
+                if (amount != this.cost.amount) {
+                    errors.push('incomplete');
+                }
+            }
+
+            // no errors
+            errors.push(false);
+            this.costsErrors = errors;
+        },
+        editPayment: function editPayment(payment) {
+            this.showEditModal = true;
+            this.selectedPayment = payment;
+            this.selectedPayment.due_at = moment(payment.due_at).format('YYYY-MM-DD');
+        },
+        addPayment: function addPayment() {
+            this.attemptedAddPayment = true;
+            if (this.$TripPricingCostPaymentAdd.valid) {
+                this.$refs.spinner.show();
+                this.resource.save({}, this.newPayment).then(function (response) {
+                    this.payments.push(this.newPayment);
+                    this.resetPayment();
+                    this.showAddModal = false;
+                    this.attemptedAddPayment = false;
+                    this.$refs.spinner.hide();
+                });
+            }
+            this.checkCostsErrors();
+        },
+        updatePayment: function updatePayment() {
+            this.attemptedAddPayment = true;
+            if (this.$TripPricingCostPaymentEdit.valid) {
+                this.$refs.spinner.show();
+                this.resource.update({ payment_id: this.selectedPayment.id }, this.selectedPayment).then(function (response) {
+                    this.resetPayment();
+                    this.showEditModal = false;
+                    this.attemptedAddPayment = false;
+                    this.$refs.spinner.hide();
+                });
+            } else {
+                console.log('Errors');
+            }
+            this.checkCostsErrors();
+        },
+        confirmRemove: function confirmRemove(payment) {
+            this.selectedPayment = payment;
+            this.deletePaymentModal = true;
+        },
+        remove: function remove(payment) {
+            this.resource.delete({ payment_id: payment.id }).then(function (response) {
+                this.payments.$remove(payment);
+                this.selectedPayment = null;
+            });
+        }
+    },
+    ready: function ready() {
+        var self = this;
+        this.$root.$on('Cost:' + this.id + ':NewPayment', function (cost) {
+            self.showAddModal = true;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n<table class=\"table\">\n    <thead>\n    <tr>\n        <th>Amount</th>\n        <th>Percent</th>\n        <th>Due</th>\n        <th>Grace</th>\n        <th><i class=\"fa fa-cog\"></i></th>\n    </tr>\n    </thead>\n    <tbody>\n\n    <tr v-for=\"payment in payments|orderBy 'due_at'\">\n        <td>{{ payment.amount_owed|currency }}</td>\n        <td>{{ payment.percent_owed|number }}%</td>\n        <td>{{ payment.upfront ? 'Upfront' : payment.due_at|moment 'll' }}</td>\n        <td>{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period &gt; 1 ? 'days' : 'day') }}</td>\n        <td>\n            <a class=\"btn btn-default btn-xs\" @click=\"editPayment(payment)\"><i class=\"fa fa-pencil\"></i></a>\n            <a class=\"btn btn-danger btn-xs\" @click=\"confirmRemove(payment)\"><i class=\"fa fa-times\"></i></a>\n        </td>\n    </tr>\n    </tbody>\n</table>\n<modal title=\"New Payment\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCostPaymentAdd\">\n            <form class=\"form-inline\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <label for=\"amountOwed\">Owed</label>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentAdd('amount') }\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                            <input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(newPayment)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentAdd('percent') }\">\n                            <input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n                        </div>\n                    </div>\n                </div>\n                <br>\n                <div class=\"checkbox\">\n                    <label>\n                        <input type=\"checkbox\" v-model=\"newPayment.upfront\">\n                        Due upfront?\n                    </label>\n                </div>\n                <div class=\"row\" v-if=\"!newPayment.upfront\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\">\n                            <label for=\"dueAt\">Due</label>\n                            <input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorPaymentAdd('grace') }\">\n                            <label for=\"grace_period\">Grace Period</label>\n                            <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentAdd('grace') }\">\n                                <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                <span class=\"input-group-addon\">Days</span>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetPayment()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addPayment\">Add</button>\n    </div>\n\n</modal>\n<modal title=\"Edit Payment\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCostPaymentEdit\" v-if=\"selectedPayment\">\n            <form class=\"form-inline\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <label for=\"amountOwed\">Owed</label>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentEdit('amount') }\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                            <input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(selectedPayment)\" number=\"\" v-model=\"selectedPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentEdit('percent') }\">\n                            <input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"selectedPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n                        </div>\n                    </div>\n                </div>\n                <br>\n                <div class=\"checkbox\">\n                    <label>\n                        <input type=\"checkbox\" v-model=\"selectedPayment.upfront\">\n                        Due upfront?\n                    </label>\n                </div>\n                <div class=\"row\" v-if=\"!selectedPayment.upfront\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\">\n                            <label for=\"dueAt\">Due</label>\n                            <input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"selectedPayment.due_at\" required=\"\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorPaymentEdit('grace') }\">\n                            <label for=\"grace_period\">Grace Period</label>\n                            <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentEdit('grace') }\">\n                                <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"selectedPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                <span class=\"input-group-addon\">Days</span>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, selectedPayment = null\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updatePayment\">Update</button>\n    </div>\n\n</modal>\n<modal class=\"text-center\" :show.sync=\"deletePaymentModal\" title=\"Delete Payment\" small=\"true\">\n    <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedPayment\">Are you sure you want to delete {{ selectedPayment.name }}?</div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deletePaymentModal = false\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deletePaymentModal = false,remove(selectedPayment)\">Confirm</button>\n    </div>\n</modal>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-9a5af5a0", module.exports)
+  } else {
+    hotAPI.update("_v-9a5af5a0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],197:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _adminTripCostsPayments = require('./admin-trip-costs-payments.vue');
+
+var _adminTripCostsPayments2 = _interopRequireDefault(_adminTripCostsPayments);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'admin-trip-costs',
+    props: ['id', 'assignment'],
+    components: { adminTripCostsPayments: _adminTripCostsPayments2.default },
+    data: function data() {
+        return {
+            costs: [],
+            selectedCost: null,
+            attemptedAddCost: false,
+            costsErrors: [],
+
+            newCost: {
+                cost_assignable_id: this.id,
+                cost_assignable_type: 'trips',
+                name: '',
+                description: '',
+                active_at: '',
+                amount: 0,
+                type: '',
+                payments: [],
+                toggleNewPayment: false
+            },
+            showFilters: false,
+            showAddModal: false,
+            showEditModal: false,
+            deleteCostModal: false,
+            filters: {
+                type: ''
+            },
+            search: '',
+            sort: 'active_at',
+            resource: this.$resource('costs{/id}')
+        };
+    },
+
+    watch: {
+        // watch filters obj
+        'filters': {
+            handler: function handler(val) {
+                // console.log(val);
+                this.searchCosts();
+            },
+            deep: true
+        },
+
+        'search': function search(val) {
+            this.searchCosts();
+        },
+
+        'showEditModal': function showEditModal(val, oldVal) {
+            this.$nextTick(function () {
+                if (val !== oldVal && val === false) {
+                    this.selectedCost = null;
+                }
+            });
+        }
+    },
+    methods: {
+        checkForErrorCost: function checkForErrorCost(field) {
+            return this.$TripPricingCost && this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
+        },
+        checkCostsErrors: function checkCostsErrors() {
+            var errors = [];
+            this.costs.forEach(function (cost, index) {
+                // cost must have at least 1 payment
+                if (!cost.payments.length) {
+                    errors.push('empty');
+                } else {
+                    // cost payments must total full amount owed and percent owed
+                    var amount = 0;
+                    cost.payments.forEach(function (payment, index) {
+                        amount += payment.amount_owed;
+                    }, this);
+                    // evaluate difference
+                    if (amount != cost.amount) {
+                        errors.push('incomplete');
+                    }
+                }
+
+                // no errors
+                errors.push(false);
+            }, this);
+            this.costsErrors = errors;
+        },
+        resetCost: function resetCost() {
+            this.newCost = {
+                cost_assignable_id: this.id,
+                cost_assignable_type: 'trips',
+                name: '',
+                description: '',
+                active_at: '',
+                amount: 0,
+                type: '',
+                payments: [],
+                toggleNewPayment: false
+            };
+        },
+        editCost: function editCost(cost) {
+            this.selectedCost = cost;
+            this.selectedCost.active_at = moment(cost.active_at).format('YYYY-MM-DD');
+            this.showEditModal = true;
+        },
+        confirmRemove: function confirmRemove(cost) {
+            this.selectedCost = cost;
+            this.deleteCostModal = true;
+        },
+        remove: function remove(cost) {
+            this.resource.delete({ id: cost.id }).then(function (response) {
+                this.costs.$remove(cost);
+                this.selectedCost = null;
+            });
+        },
+        addCost: function addCost() {
+            this.attemptedAddCost = true;
+            if (this.$TripPricingCost.valid) {
+                this.resource.save(this.newCost).then(function (response) {
+                    this.costs.push(response.data.data);
+                    this.resetCost();
+                    this.showAddModal = false;
+                    this.attemptedAddCost = false;
+                });
+            }
+            this.checkCostsErrors();
+        },
+        updateCost: function updateCost() {
+            this.attemptedAddCost = true;
+            if (this.$TripPricingCost.valid) {
+                this.resource.update({ id: this.selectedCost.id }, this.selectedCost).then(function (response) {
+                    $.extend(this.costs, this.selectedCost);
+                    this.selectedCost = null;
+                    this.attemptedAddCost = false;
+                    this.showEditModal = false;
+                });
+            }
+            this.checkCostsErrors();
+        },
+        resetFilter: function resetFilter() {
+            this.search = '';
+            this.sort = 'active_at';
+            this.filters = {
+                type: ''
+            };
+        },
+        searchCosts: function searchCosts() {
+            this.$refs.spinner.show();
+            this.resource.get({
+                include: 'payments',
+                assignment: this.assignment + '|' + this.id,
+                search: this.search,
+                sort: this.sort,
+                type: this.filters.type
+            }).then(function (response) {
+                this.costs = response.data.data;
+                this.$refs.spinner.hide();
+            });
+        },
+        addPayment: function addPayment(cost) {
+            this.$root.$emit('Cost:' + cost.id + ':NewPayment');
+        }
+    },
+    ready: function ready() {
+        this.searchCosts();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n    <hr class=\"divider inv sm\">\n    <form class=\"col-sm-12\">\n        <div class=\"form-group\">\n            <select class=\"form-control input-sm\" v-model=\"filters.type\" style=\"width:100%;\">\n                <option value=\"\">Any Type</option>\n                <option value=\"incremental\">Incremental</option>\n                <option value=\"optional\">Optional</option>\n                <option value=\"static\">Static</option>\n            </select>\n        </div>\n\n        <hr class=\"divider inv sm\">\n        <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n    </form>\n</aside>\n<form class=\"panel-body form-inline text-right\" novalidate=\"\">\n    <div class=\"input-group input-group-sm\">\n        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n    </div>\n    <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=true\">Filters</button>\n    <a class=\"btn btn-primary btn-sm\" @click=\"showAddModal=true\">New <i class=\"fa fa-plus\"></i></a>\n</form>\n<hr class=\"divider sm\">\n<template v-for=\"cost in costs\">\n    <div class=\"panel-body\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <h4>{{ cost.name|capitalize }}</h4>\n            </div>\n            <div class=\"col-sm-6 text-right hidden-xs\">\n                <div style=\"padding: 0;\">\n                    <div role=\"group\" aria-label=\"...\">\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"addPayment(cost)\"><i class=\"fa fa-plus\"></i> New Payment</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editCost(cost)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(cost)\"><i class=\"fa fa-trash\"></i> Delete</a>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-sm-6 text-center visible-xs\">\n                <div style=\"padding: 0;\">\n                    <div role=\"group\" aria-label=\"...\">\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"addPayment(cost)\"><i class=\"fa fa-plus\"></i> New Payment</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editCost(cost)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(cost)\"><i class=\"fa fa-trash\"></i> Delete</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <p class=\"small\">{{ cost.description }}</p>\n            </div>\n        </div>\n        <hr class=\"divider\">\n        <div class=\"row\">\n            <div class=\"col-sm-4 text-center\">\n                <label>Cost Type</label>\n                <p>{{ cost.type|capitalize }}</p>\n            </div>\n            <div class=\"col-sm-4 text-center\">\n                <label>Active Date</label>\n                <p>{{ cost.active_at|moment 'll' }}</p>\n            </div>\n            <div class=\"col-sm-4 text-center\">\n                <label>Cost</label>\n                <p>{{ cost.amount|currency }}</p>\n            </div>\n        </div>\n        <hr class=\"divider\">\n        <admin-trip-costs-payments :id=\"cost.id\" :cost=\"cost\" :payments.sync=\"cost.payments.data\"></admin-trip-costs-payments>\n    </div>\n    <hr class=\"divider\">\n</template>\n\n<modal title=\"New Cost\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCost\" v-if=\"!selectedCost\">\n            <form class=\"form\" novalidate=\"\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n                            <label for=\"cost_name\">Name</label>\n                            <input type=\"text\" class=\"form-control\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n                            <label for=\"cost_description\">Description</label>\n                            <textarea class=\"form-control\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n                            <label for=\"cost_type\">Type</label>\n                            <select id=\"cost_type\" class=\"form-control\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n                                <option value=\"\">-- select --</option>\n                                <option value=\"static\">Static</option>\n                                <option value=\"incremental\">Incremental</option>\n                                <option value=\"optional\">Optional</option>\n                            </select>\n                        </div>\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n                                    <label for=\"newCost_active_at\">Active</label>\n                                    <br>\n                                    <datepicker :value.sync=\"newCost.active_at\" format=\"yyyy-MM-dd\" :clear-button=\"true\">\n                                    </datepicker>\n                                    <input type=\"date\" id=\"newCost_active_at\" class=\"form-control hidden\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n                                </div>\n\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n                                    <label for=\"newCost_amount\">Amount</label>\n                                    <div class=\"input-group\">\n                                        <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                                        <input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetCost()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addCost(newCost)\">Add</button>\n    </div>\n\n</modal>\n<modal title=\"Edit Cost\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCost\" v-if=\"selectedCost\">\n            <form class=\"form\" novalidate=\"\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n                            <label for=\"cost_name\">Name</label>\n                            <input type=\"text\" class=\"form-control\" id=\"cost_name\" v-model=\"selectedCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n                            <label for=\"cost_description\">Description</label>\n                            <textarea class=\"form-control\" id=\"cost_description\" v-model=\"selectedCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n                            <label for=\"cost_type\">Type</label>\n                            <select id=\"cost_type\" class=\"form-control\" v-model=\"selectedCost.type\" v-validate:costtype=\"{ required: true }\">\n                                <option value=\"\">-- select --</option>\n                                <option value=\"static\">Static</option>\n                                <option value=\"incremental\">Incremental</option>\n                                <option value=\"optional\">Optional</option>\n                            </select>\n                        </div>\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n                                    <label for=\"selectedCost_active_at\">Active</label>\n                                    <br>\n                                    <datepicker :value.sync=\"selectedCost.active_at\" format=\"yyyy-MM-dd\" :clear-button=\"true\">\n                                    </datepicker>\n                                    <input type=\"date\" id=\"selectedCost_active_at\" class=\"form-control hidden\" v-model=\"selectedCost.active_at\" v-validate:costactive=\"{required: true}\">\n                                </div>\n\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n                                    <label for=\"selectedCost_amount\">Amount</label>\n                                    <div class=\"input-group\">\n                                        <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                                        <input type=\"number\" number=\"\" id=\"selectedCost_amount\" class=\"form-control\" v-model=\"selectedCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, selectedCost = null\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updateCost(selectedCost)\">Update</button>\n    </div>\n\n</modal>\n\n<modal class=\"text-center\" :show.sync=\"deleteCostModal\" title=\"Delete Cost\" small=\"true\">\n    <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedCost\">Are you sure you want to delete {{ selectedCost.name }}?</div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteCostModal = false\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteCostModal = false,remove(selectedCost)\">Confirm</button>\n    </div>\n</modal>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-2820379a", module.exports)
+  } else {
+    hotAPI.update("_v-2820379a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./admin-trip-costs-payments.vue":196,"vue":124,"vue-hot-reload-api":119}],198:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -81321,26 +81697,18 @@ var _settings = require('./create/settings.vue');
 
 var _settings2 = _interopRequireDefault(_settings);
 
-var _pricing = require('./create/pricing.vue');
-
-var _pricing2 = _interopRequireDefault(_pricing);
-
-var _requirements = require('./create/requirements.vue');
-
-var _requirements2 = _interopRequireDefault(_requirements);
-
-var _deadlines = require('./create/deadlines.vue');
-
-var _deadlines2 = _interopRequireDefault(_deadlines);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import pricing from './create/pricing.vue';
+// import reqs from './create/requirements.vue';
+// import deadlines from './create/deadlines.vue';
 
 exports.default = {
 	name: 'campaign-trip-create-wizard',
 	props: ['campaignId', 'countryCode'],
 	data: function data() {
 		return {
-			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }, { name: 'Pricing', view: 'step3', form: '$TripPricing', valid: null, complete: false }, { name: 'Requirements', view: 'step4', form: '$TripReqs', valid: null, complete: false }, { name: 'Other Deadlines', view: 'step5', form: '$TripDeadlines', valid: null, complete: false }],
+			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }],
 			currentStep: null,
 			canContinue: false,
 			wizardComplete: false,
@@ -81361,10 +81729,7 @@ exports.default = {
 	},
 	components: {
 		'step1': _details2.default,
-		'step2': _settings2.default,
-		'step3': _pricing2.default,
-		'step4': _requirements2.default,
-		'step5': _deadlines2.default
+		'step2': _settings2.default
 	},
 	methods: {
 		back: function back() {
@@ -81414,7 +81779,7 @@ exports.default = {
 
 			var resource = this.$resource('trips');
 			resource.save(null, this.wizardData).then(function (resp) {
-				window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
+				window.location.href = '/admin' + resp.data.data.links[0].uri;
 			}, function (error) {
 				console.log(error);
 			});
@@ -81433,15 +81798,6 @@ exports.default = {
 			this.currentStep.complete = val;
 		},
 		'settings': function settings(val) {
-			this.currentStep.complete = val;
-		},
-		'pricing': function pricing(val) {
-			this.currentStep.complete = val;
-		},
-		'reqs': function reqs(val) {
-			this.currentStep.complete = val;
-		},
-		'deadlines': function deadlines(val) {
 			this.currentStep.complete = this.wizardComplete = val;
 		}
 	}
@@ -81457,12 +81813,134 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4eaab280", module.exports)
+    hotAPI.createRecord("_v-01e85f58", module.exports)
   } else {
-    hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-01e85f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":203,"./create/details.vue":204,"./create/pricing.vue":205,"./create/requirements.vue":206,"./create/settings.vue":207,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],197:[function(require,module,exports){
+},{"./create/details.vue":208,"./create/settings.vue":209,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],199:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-trip-deadlines',
+    props: ['id', 'assignment'],
+    data: function data() {
+        return {
+            deadlines: [],
+            selectedDeadline: null,
+            showAddModal: false,
+            showEditModal: false,
+            showDeleteModal: false,
+            attemptedAddDeadline: false,
+            attemptedEditDeadline: false,
+            newDeadline: {
+                deadline_assignable_id: this.id,
+                deadline_assignable_type: 'trips',
+                name: '',
+                item_type: '',
+                date: null,
+                grace_period: 0,
+                enforced: false
+            },
+            resource: this.$resource('deadlines{/id}')
+        };
+    },
+
+    methods: {
+        checkForAddError: function checkForAddError(field) {
+            return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
+        },
+        checkForEditError: function checkForEditError(field) {
+            return this.$TripDeadlinesEdit[field.toLowerCase()].invalid && this.attemptedEditDeadline;
+        },
+        resetDeadline: function resetDeadline() {
+            this.newDeadline = {
+                deadline_assignable_id: this.id,
+                deadline_assignable_type: 'trips',
+                item: '',
+                item_type: '',
+                date: null,
+                grace_period: 0,
+                enforced: false
+            };
+        },
+        addDeadline: function addDeadline() {
+            this.attemptedAddDeadline = true;
+            if (this.$TripDeadlinesCreate.valid) {
+                this.$refs.spinner.show();
+                this.resource.save({}, this.newDeadline).then(function (response) {
+                    this.deadlines.push(response.data.data);
+                    this.resetDeadline();
+                    this.attemptedAddDeadline = false;
+                    this.showAddModal = false;
+                    this.$refs.spinner.hide();
+                });
+            }
+        },
+        updateDeadline: function updateDeadline() {
+            this.attemptedEditDeadline = true;
+            if (this.$TripDeadlinesEdit.valid) {
+                this.$refs.spinner.show();
+                this.resource.update({ id: this.selectedDeadline.id }, this.selectedDeadline).then(function (response) {
+                    this.attemptedEditDeadline = false;
+                    this.showEditModal = false;
+                    this.$refs.spinner.hide();
+                });
+            }
+        },
+        editDeadline: function editDeadline(deadline) {
+            this.selectedDeadline = deadline;
+            this.selectedDeadline.date = moment(deadline.date).format('YYYY-MM-DD');
+            this.showEditModal = true;
+        },
+        confirmRemove: function confirmRemove(deadline) {
+            this.selectedDeadline = deadline;
+            this.showDeleteModal = true;
+        },
+        remove: function remove(deadline) {
+            this.$refs.spinner.show();
+            this.resource.delete({ id: deadline.id }).then(function (response) {
+                this.deadlines.$remove(deadline);
+                this.selectedDeadline = null;
+                this.$refs.spinner.hide();
+            });
+        },
+        searchDeadlines: function searchDeadlines() {
+            this.$refs.spinner.show();
+            this.resource.get({
+                assignment: this.assignment + '|' + this.id,
+                search: this.search,
+                sort: this.sort
+            }).then(function (response) {
+                this.deadlines = response.data.data;
+                this.$refs.spinner.hide();
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchDeadlines();
+        var self = this;
+        this.$root.$on('NewDeadline', function () {
+            self.showAddModal = true;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n<div class=\"panel-body\" v-for=\"deadline in deadlines|orderBy '-date'\">\n    <div class=\"row\">\n        <div class=\"col-xs-12 text-right hidden-xs\">\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editDeadline(deadline)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(deadline)\"><i class=\"fa fa-trash\"></i> Delete</a>\n        </div>\n        <div class=\"col-xs-12 text-center visible-xs\">\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editDeadline(deadline)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(deadline)\"><i class=\"fa fa-trash\"></i> Delete</a>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-xs-8\">\n            <h5><a href=\"#\">{{ deadline.name|capitalize }}</a></h5>\n            <h6><small>Enforced: {{ deadline.enforced ? 'Yes' : 'No' }}</small></h6>\n        </div>\n        <div class=\"col-xs-4 text-right\">\n            <h5><i class=\"fa fa-calendar\"></i> {{ deadline.date | moment 'll' }}</h5>\n            <h6><small>Grace Period: {{ deadline.grace_period }} {{ deadline.grace_period &gt; 1 ? 'days' : 'day' }}</small></h6>\n        </div>\n    </div><!-- end row -->\n    <hr class=\"divider\">\n</div>\n<modal class=\"text-center\" :show.sync=\"showAddModal\" title=\"Add Deadline\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripDeadlinesCreate\">\n            <form class=\"form\" novalidate=\"\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForAddError('name')}\">\n                            <label for=\"name\">Name</label>\n                            <input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\" v-validate:name=\"{required: true}\">\n                        </div>\n\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                    <label for=\"grace_period\">Grace Period</label>\n                                    <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                        <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                        <span class=\"input-group-addon\">Days</span>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForAddError('due')}\">\n                                    <label for=\"date\">Due</label>\n                                    <input type=\"date\" id=\"date\" class=\"form-control input-sm\" v-model=\"newDeadline.date\" v-validate:due=\"{required: true}\">\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <br>\n                        <div class=\"checkbox\">\n                            <label>\n                                <input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n                                Enforced?\n                            </label>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetDeadline()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addDeadline\">Add</button>\n    </div>\n</modal>\n<modal class=\"text-center\" :show.sync=\"showEditModal\" title=\"Edit Deadline\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripDeadlinesEdit\">\n            <form class=\"form\" novalidate=\"\" v-if=\"selectedDeadline\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForEditError('name')}\">\n                            <label for=\"name\">Name</label>\n                            <input type=\"text\" id=\"name\" v-model=\"selectedDeadline.name\" class=\"form-control input-sm\" v-validate:name=\"{required: true}\">\n                        </div>\n\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                    <label for=\"grace_period\">Grace Period</label>\n                                    <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                        <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"selectedDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                        <span class=\"input-group-addon\">Days</span>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditError('due')}\">\n                                    <label for=\"date\">Due</label>\n                                    <input type=\"date\" id=\"date\" class=\"form-control input-sm\" v-model=\"selectedDeadline.date\" v-validate:due=\"{required: true}\">\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <br>\n                        <div class=\"checkbox\">\n                            <label>\n                                <input type=\"checkbox\" v-model=\"selectedDeadline.enforced\">\n                                Enforced?\n                            </label>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, resetDeadline()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updateDeadline\">Update</button>\n    </div>\n</modal>\n<modal class=\"text-center\" :show.sync=\"showDeleteModal\" title=\"Delete Deadline\" small=\"true\">\n    <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedDeadline\">Are you sure you want to delete {{ selectedDeadline.name }}?</div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showDeleteModal = false\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"showDeleteModal = false,remove(selectedDeadline)\">Confirm</button>\n    </div>\n</modal>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-2df0adef", module.exports)
+  } else {
+    hotAPI.update("_v-2df0adef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81493,12 +81971,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1f88c822", module.exports)
+    hotAPI.createRecord("_v-19795487", module.exports)
   } else {
-    hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-19795487", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],198:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81586,12 +82064,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-07829d12", module.exports)
+    hotAPI.createRecord("_v-41cb11df", module.exports)
   } else {
-    hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-41cb11df", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],199:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],202:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -81612,26 +82090,18 @@ var _settings = require('./edit/settings.vue');
 
 var _settings2 = _interopRequireDefault(_settings);
 
-var _pricing = require('./edit/pricing.vue');
-
-var _pricing2 = _interopRequireDefault(_pricing);
-
-var _requirements = require('./edit/requirements.vue');
-
-var _requirements2 = _interopRequireDefault(_requirements);
-
-var _deadlines = require('./edit/deadlines.vue');
-
-var _deadlines2 = _interopRequireDefault(_deadlines);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import pricing from './edit/pricing.vue';
+// import reqs from './edit/requirements.vue';
+// import deadlines from './edit/deadlines.vue';
 
 exports.default = {
 	name: 'campaign-trip-edit-wizard',
 	props: ['tripId'],
 	data: function data() {
 		return {
-			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }, { name: 'Pricing', view: 'step3', form: '$TripPricing', valid: null, complete: false }, { name: 'Requirements', view: 'step4', form: '$TripReqs', valid: null, complete: false }, { name: 'Other Deadlines', view: 'step5', form: '$TripDeadlines', valid: null, complete: false }],
+			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }],
 			currentStep: null,
 			canContinue: false,
 			wizardComplete: false,
@@ -81649,10 +82119,7 @@ exports.default = {
 	},
 	components: {
 		'step1': _details2.default,
-		'step2': _settings2.default,
-		'step3': _pricing2.default,
-		'step4': _requirements2.default,
-		'step5': _deadlines2.default
+		'step2': _settings2.default
 	},
 	methods: (0, _defineProperty3.default)({
 		back: function back() {
@@ -81711,8 +82178,8 @@ exports.default = {
 	created: function created() {
 		this.currentStep = this.stepList[0];
 
-		this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines' }).then(function (trip) {
-			var trip = trip.data.data;
+		this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines' }).then(function (response) {
+			var trip = response.data.data;
 			$.extend(trip, {
 				type: this.type,
 				group_id: this.group_id
@@ -81746,15 +82213,6 @@ exports.default = {
 			this.currentStep.complete = val;
 		},
 		'settings': function settings(val) {
-			this.currentStep.complete = val;
-		},
-		'pricing': function pricing(val) {
-			this.currentStep.complete = val;
-		},
-		'reqs': function reqs(val) {
-			this.currentStep.complete = val;
-		},
-		'deadlines': function deadlines(val) {
 			this.currentStep.complete = this.wizardComplete = val;
 		}
 	}
@@ -81770,12 +82228,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1684d064", module.exports)
+    hotAPI.createRecord("_v-da7ed334", module.exports)
   } else {
-    hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-da7ed334", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":208,"./edit/details.vue":209,"./edit/pricing.vue":210,"./edit/requirements.vue":211,"./edit/settings.vue":212,"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],200:[function(require,module,exports){
+},{"./edit/details.vue":210,"./edit/settings.vue":211,"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81875,12 +82333,134 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-9f5ddb6a", module.exports)
+    hotAPI.createRecord("_v-1b17f8e3", module.exports)
   } else {
-    hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1b17f8e3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],201:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],204:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-trip-requirements',
+    props: ['id', 'requester'],
+    data: function data() {
+        return {
+            requirements: [],
+            selectedRequirement: null,
+            showAddModal: false,
+            showEditModal: false,
+            showDeleteModal: false,
+            attemptedAddRequirement: false,
+            attemptedEditRequirement: false,
+            newRequirement: {
+                requester_id: this.id,
+                requester_type: 'trip',
+                name: '',
+                document_type: '',
+                due_at: null,
+                grace_period: 0
+            },
+            resource: this.$resource('requirements{/id}'),
+            documentNames: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Testimony', 'Arrival Designation', 'Itinerary'],
+            documentTypes: ['medical_releases', 'passports', 'visas', 'referrals', 'credentials', 'arrival_designation', 'essays']
+        };
+    },
+
+    methods: {
+        checkForAddError: function checkForAddError(field) {
+            return this.$TripRequirementsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
+        },
+        checkForEditError: function checkForEditError(field) {
+            return this.$TripRequirementsEdit[field.toLowerCase()].invalid && this.attemptedEditRequirement;
+        },
+        resetRequirement: function resetRequirement() {
+            this.newRequirement = {
+                requester_id: this.id,
+                requester_type: 'trip',
+                name: '',
+                document_type: '',
+                due_at: null,
+                grace_period: 0
+            };
+        },
+        addRequirement: function addRequirement() {
+            this.attemptedAddRequirement = true;
+            if (this.$TripRequirementsCreate.valid) {
+                this.$refs.spinner.show();
+                this.resource.save({}, this.newRequirement).then(function (response) {
+                    this.requirements.push(response.data.data);
+                    this.resetRequirement();
+                    this.attemptedAddRequirement = false;
+                    this.showAddModal = false;
+                    this.$refs.spinner.hide();
+                });
+            }
+        },
+        updateRequirement: function updateRequirement() {
+            this.attemptedEditRequirement = true;
+            if (this.$TripRequirementsEdit.valid) {
+                this.$refs.spinner.show();
+                this.resource.update({ id: this.selectedRequirement.id }, this.selectedRequirement).then(function (response) {
+                    this.attemptedEditRequirement = false;
+                    this.showEditModal = false;
+                    this.$refs.spinner.hide();
+                });
+            }
+        },
+        editRequirement: function editRequirement(requirement) {
+            this.selectedRequirement = requirement;
+            this.selectedRequirement.due_at = moment(requirement.due_at).format('YYYY-MM-DD');
+            this.showEditModal = true;
+        },
+        confirmRemove: function confirmRemove(requirement) {
+            this.selectedRequirement = requirement;
+            this.showDeleteModal = true;
+        },
+        remove: function remove(requirement) {
+            this.$refs.spinner.show();
+            this.resource.delete({ id: requirement.id }).then(function (response) {
+                this.requirements.$remove(requirement);
+                this.selectedRequirement = null;
+                this.$refs.spinner.hide();
+            });
+        },
+        searchRequirements: function searchRequirements() {
+            this.$refs.spinner.show();
+            this.resource.get({
+                requester: this.requester + '|' + this.id,
+                search: this.search,
+                sort: this.sort
+            }).then(function (response) {
+                this.requirements = response.data.data;
+                this.$refs.spinner.hide();
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchRequirements();
+        var self = this;
+        this.$root.$on('NewRequirement', function () {
+            self.showAddModal = true;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n    <div class=\"panel-body\" v-for=\"requirement in requirements|orderBy '-date'\">\n        <div class=\"row\">\n            <div class=\"col-xs-12 text-right hidden-xs\">\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editRequirement(requirement)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(requirement)\"><i class=\"fa fa-trash\"></i> Delete</a>\n            </div>\n            <div class=\"col-xs-12 text-center visible-xs\">\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editRequirement(requirement)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(requirement)\"><i class=\"fa fa-trash\"></i> Delete</a>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-xs-8\">\n                <h5><a href=\"#\">{{ requirement.name|capitalize }}</a></h5>\n                <h6><small>Type: {{ requirement.document_type }}</small></h6>\n            </div>\n            <div class=\"col-xs-4 text-right\">\n                <h5><i class=\"fa fa-calendar\"></i> {{ requirement.due_at|moment 'll' }} </h5>\n                <h6><small>Grace Period: {{ requirement.grace_period }} {{ requirement.grace_period &gt; 1 ? 'days' : 'day' }}</small></h6>\n            </div>\n        </div><!-- end row -->\n        <hr class=\"divider\">\n    </div>\n    <modal class=\"text-center\" :show.sync=\"showAddModal\" title=\"Add Requirement\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"TripRequirementsCreate\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForAddError('name')}\">\n                                        <label for=\"name\">Name</label>\n                                        <select id=\"name\" class=\"form-control input-sm\" v-model=\"newRequirement.name\" v-validate:name=\"{ required: true }\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentNames\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\">\n                                        <label for=\"type\">Document Type</label>\n                                        <select id=\"type\" class=\"form-control input-sm\" v-model=\"newRequirement.document_type\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentTypes\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newRequirement.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForAddError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newRequirement.due_at\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newRequirement.enforced\">\n\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>-->\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetRequirement()\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addRequirement\">Add</button>\n        </div>\n    </modal>\n    <modal class=\"text-center\" :show.sync=\"showEditModal\" title=\"Edit Requirement\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"TripRequirementsEdit\">\n                <form class=\"form\" novalidate=\"\" v-if=\"selectedRequirement\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForEditError('name')}\">\n                                        <label for=\"name\">Name</label>\n                                        <select id=\"name\" class=\"form-control input-sm\" v-model=\"selectedRequirement.name\" v-validate:name=\"{ required: true }\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentNames\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\">\n                                        <label for=\"type\">Document Type</label>\n                                        <select id=\"type\" class=\"form-control input-sm\" v-model=\"selectedRequirement.document_type\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentTypes\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"selectedRequirement.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForEditError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"selectedRequirement.due_at\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newRequirement.enforced\">\n\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>-->\n                        </div>\n                    </div>\n                </form>\n\n            </validator>\n        </div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, resetRequirement()\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updateRequirement\">Update</button>\n        </div>\n    </modal>\n    <modal class=\"text-center\" :show.sync=\"showDeleteModal\" title=\"Delete Requirement\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedRequirement\">Are you sure you want to delete {{ selectedRequirement.name }}?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showDeleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"showDeleteModal = false,remove(selectedRequirement)\">Confirm</button>\n        </div>\n    </modal>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-1dd01dec", module.exports)
+  } else {
+    hotAPI.update("_v-1dd01dec", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81948,12 +82528,97 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-25146f20", module.exports)
+    hotAPI.createRecord("_v-67217e50", module.exports)
   } else {
-    hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-67217e50", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],202:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],206:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'admin-trip-todos',
+	props: ['id'],
+	data: function data() {
+		return {
+			newTodo: '',
+			todos: [],
+			resource: this.$resource('trips/' + this.id + '/todos'),
+			newMode: false,
+			// editMode: false,
+			showError: false,
+			selectedTodo: null,
+			deleteModal: false,
+			errorMessage: null
+		};
+	},
+
+	methods: {
+		reset: function reset() {
+			this.newMode = false;
+			this.editMode = false;
+			this.newTodo = '';
+		},
+		createTodo: function createTodo() {
+			if (!this.newTodo) return;
+			this.todos.push(this.newTodo);
+			this.$refs.spinner.show();
+			this.resource.save({}, { todos: this.todos }).then(function (response) {
+				this.todos = response.data.data;
+				this.reset();
+				this.$refs.spinner.hide();
+			}).error(function () {
+				this.errorMessage = 'Unable to delete todo.';
+				this.showError = true;
+				this.$refs.spinner.hide();
+			});
+		},
+		remove: function remove() {
+			this.todos.$remove(this.selectedTodo);
+			this.$refs.spinner.show();
+			this.resource.save({}, { todos: this.todos }).then(function (response) {
+				this.todos = response.data.data;
+				this.reset();
+				this.$refs.spinner.hide();
+			}).error(function () {
+				this.errorMessage = 'Unable to delete todo.';
+				this.showError = true;
+				this.$refs.spinner.hide();
+			});
+		},
+		getTodos: function getTodos() {
+			this.$refs.spinner.show();
+			this.resource.get().then(function (response) {
+				this.todos = response.data.data;
+				this.$refs.spinner.hide();
+			});
+		}
+	},
+	ready: function ready() {
+		this.getTodos();
+
+		var self = this;
+		this.$root.$on('NewTodo', function () {
+			self.newMode = true;
+		});
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\t<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n\t<alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n\t\t<span class=\"icon-info-circled alert-icon-float-left\"></span>\n\t\t<strong>Oh No!</strong>\n\t\t<p>{{ errorMessage }}</p>\n\t</alert>\n\t<div class=\"list-group\">\n\t\t<div class=\"list-group-item\" v-if=\"newMode\">\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-2 col-sm-1 text-muted\">\n\t\t\t\t\t<i class=\"fa fa-lg fa-plus-square-o\" style=\"margin-right: 10px\"></i>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-xs-10 col-sm-11\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"newTodo\" placeholder=\"What needs to be done?\" @keyup.enter=\"createTodo\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div v-for=\"todo in todos\" class=\"list-group-item\">\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-10\">\n\t\t\t\t\t{{ todo }}\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-xs-2 text-right\">\n\t\t\t\t\t<!--<tooltip content=\"Edit\">\n\t\t\t\t\t\t<i class=\"fa fa-pencil fa-lg text-muted remove-todo\"\n\t\t\t\t\t\t   @click=\"selectedTodo = todo,editMode = true\">\n\t\t\t\t\t\t</i>\n\t\t\t\t\t</tooltip>-->\n\t\t\t\t\t<tooltip content=\"Delete\">\n\t\t\t\t\t\t<i class=\"fa fa-trash fa-lg text-muted remove-todo\" @click=\"selectedTodo = todo,deleteModal = true\">\n\t\t\t\t\t\t</i>\n\t\t\t\t\t</tooltip>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n    </div>\n\t<modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Todo\" small=\"true\">\n\t\t<div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Todo?</div>\n\t\t<div slot=\"modal-footer\" class=\"modal-footer\">\n\t\t\t<button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n\t\t\t<button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedTodo)\">Confirm</button>\n\t\t</div>\n\t</modal>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-42b43a7e", module.exports)
+  } else {
+    hotAPI.update("_v-42b43a7e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82019,90 +82684,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-41204f31", module.exports)
+    hotAPI.createRecord("_v-637d2399", module.exports)
   } else {
-    hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-637d2399", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],203:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-deadlines',
-	data: function data() {
-		return {
-			toggleNewDeadline: false,
-			attemptedAddDeadline: false,
-			attemptedContinue: false,
-
-			// deadlines data
-			todos: [],
-			deadlines: [],
-			newDeadline: {
-				name: '',
-				date: null,
-				grace_period: 0,
-				enforced: false
-			}
-		};
-	},
-
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				todos: this.todos,
-				deadlines: this.deadlines
-			});
-		},
-		onValid: function onValid() {
-			this.populateWizardData();
-			this.$dispatch('deadlines', true);
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
-		},
-		resetDeadline: function resetDeadline() {
-			this.newDeadline = {
-				item: '',
-				item_type: '',
-				due_at: null,
-				grace_period: 0,
-				enforced: false
-			};
-		},
-		addDeadline: function addDeadline() {
-			this.attemptedAddDeadline = true;
-			if (this.$TripDeadlinesCreate.valid) {
-				this.deadlines.push(this.newDeadline);
-				this.resetDeadline();
-				this.toggleNewDeadline = false;
-				this.attemptedAddDeadline = false;
-			}
-		}
-	},
-	activate: function activate(done) {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		this.$dispatch('deadlines', true);
-		done();
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDeadlines\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDeadlines\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Deadlines</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewDeadline=!toggleNewDeadline\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Deadline\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewDeadline\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Deadline\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripDeadlinesCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewDeadline=false\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addDeadline()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Deadline\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"deadline in deadlines|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{deadline.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.due_at|moment}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"deadlines.$remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-8ed335c4", module.exports)
-  } else {
-    hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],204:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],208:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 'use strict';
@@ -82210,318 +82797,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-087e8cf6", module.exports)
+    hotAPI.createRecord("_v-0ed0f026", module.exports)
   } else {
-    hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0ed0f026", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],205:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-pricing',
-	data: function data() {
-		return {
-			attemptedContinue: false,
-			attemptedAddCost: false,
-			attemptedAddPayment: false,
-			toggleNewCost: false,
-			toggleNewPayment: false,
-			selectedCost: null,
-			editCostMode: false,
-			editPaymentMode: false,
-			costsErrors: [],
-
-			// pricing data
-			costs: [],
-			newCost: {
-				name: '',
-				description: '',
-				active_at: null,
-				amount: 0,
-				type: '',
-				payments: [],
-				toggleNewPayment: false
-			},
-			newPayment: {
-				amount_owed: 0,
-				percent_owed: 0,
-				due_at: null,
-				upfront: false,
-				grace_period: 0
-			}
-		};
-	},
-
-	/*validators:{
- 	costs
- },*/
-	watch: {
-		'newPayment.amount_owed': function newPaymentAmount_owed(val, oldVal) {
-			var max = this.calculateMaxAmount(this.selectedCost);
-			if (val > max) this.newPayment.amount_owed = this.selectedCost.amount;
-			this.newPayment.percent_owed = val / this.selectedCost.amount * 100;
-			if (_.isFunction(this.$validate)) this.$validate('percent', true);
-		},
-		'newPayment.percent_owed': function newPaymentPercent_owed(val, oldVal) {
-			var max = this.calculateMaxPercent(this.selectedCost);
-			if (val > max) this.newPayment.percent_owed = max;
-			this.newPayment.amount_owed = val / 100 * this.selectedCost.amount;
-			if (_.isFunction(this.$validate)) this.$validate('amount', true);
-		},
-		'costs': function costs(val, oldVal) {
-			this.checkCostsErrors();
-		}
-	},
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				costs: this.costs
-			});
-		},
-		onValid: function onValid() {
-
-			this.$dispatch('pricing', true);
-			//this.$parent.details = this.details;
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripPricing[field.toLowerCase()].invalid && this.attemptedContinue;
-		},
-		checkForErrorCost: function checkForErrorCost(field) {
-			return this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
-		},
-		checkForErrorPayment: function checkForErrorPayment(field) {
-			return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
-		},
-		checkCostsErrors: function checkCostsErrors() {
-			var errors = [];
-			this.costs.forEach(function (cost, index) {
-				// cost must have at least 1 payment
-				if (!cost.payments.length) {
-					errors.push('empty');
-				} else {
-					// cost payments must total full amount owed and percent owed
-					var amount = 0;
-					cost.payments.forEach(function (payment, index) {
-						amount += payment.amount_owed;
-					}, this);
-					// evaluate difference
-					if (amount != cost.amount) {
-						errors.push('incomplete');
-					}
-				}
-
-				// no errors
-				errors.push(false);
-			}, this);
-			this.costsErrors = errors;
-		},
-		resetCost: function resetCost() {
-			this.newCost = {
-				name: '',
-				description: '',
-				active_at: null,
-				amount: 0,
-				type: '',
-				payments: [],
-				toggleNewPayment: false
-			};
-		},
-		resetPayment: function resetPayment() {
-			this.newPayment = {
-				amount_owed: 0,
-				percent_owed: 0,
-				due_at: null,
-				upfront: false,
-				grace_period: 0
-			};
-		},
-		calculateMaxAmount: function calculateMaxAmount(cost) {
-			var max = cost.amount;
-			if (cost.payments.length) {
-				cost.payments.forEach(function (payment) {
-					// must ignore current payment in editMode
-					if (this.newPayment !== payment) {
-						max -= payment.amount_owed;
-					}
-				}, this);
-			}
-			return max;
-		},
-		calculateMaxPercent: function calculateMaxPercent(cost) {
-			var max = 100;
-			if (cost.payments.length) {
-				cost.payments.forEach(function (payment) {
-					// must ignore current payment in editMode
-					if (this.newPayment !== payment) {
-						max -= payment.percent_owed;
-					}
-				}, this);
-			}
-			return max;
-		},
-		editCost: function editCost(cost) {
-			this.editCostMode = true;
-			this.toggleNewCost = true;
-			this.newCost = cost;
-		},
-		cancelEditPayment: function cancelEditPayment() {
-			this.editPaymentMode = false;
-			this.resetCost();
-		},
-		editPayment: function editPayment(payment, cost) {
-			this.editPaymentMode = true;
-			this.toggleNewPaymentForm(cost, true);
-			this.newPayment = payment;
-		},
-		toggleNewPaymentForm: function toggleNewPaymentForm(cost, updateMode) {
-			this.selectedCost = cost;
-			this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
-		},
-		addCost: function addCost() {
-			this.attemptedAddCost = true;
-			if (this.$TripPricingCost.valid) {
-				this.costs.push(this.newCost);
-				this.resetCost();
-				this.toggleNewCost = false;
-				this.attemptedAddCost = false;
-			}
-			this.checkCostsErrors();
-		},
-		updateCost: function updateCost() {
-			this.attemptedAddCost = true;
-			if (this.$TripPricingCost.valid) {
-				this.resetCost();
-				this.toggleNewCost = false;
-				this.attemptedAddCost = false;
-				this.editCostMode = false;
-			}
-			this.checkCostsErrors();
-		},
-		addPayment: function addPayment(cost) {
-			this.attemptedAddPayment = true;
-			if (this.$TripPricingCostPayment.valid) {
-				cost.payments.push(this.newPayment);
-				this.resetPayment();
-				this.selectedCost.toggleNewPayment = false;
-				this.attemptedAddPayment = false;
-			}
-			this.checkCostsErrors();
-		},
-		updatePayment: function updatePayment(cost) {
-			this.attemptedAddPayment = true;
-			if (this.$TripPricingCostPayment.valid) {
-				this.resetPayment();
-				this.selectedCost.toggleNewPayment = false;
-				this.attemptedAddPayment = false;
-				this.editPaymentMode = false;
-			}
-			this.checkCostsErrors();
-		},
-		generateUUID: function generateUUID() {
-			return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
-		}
-	},
-	activate: function activate(done) {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		this.$dispatch('pricing', true);
-		done();
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripPricing\" @valid=\"onValid\">\n\t\t\t<form id=\"TripPricing\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewCost=!toggleNewCost\">\n\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Cost\n\t\t\t\t\t</button>\n\n\t\t\t\t</div>\n\t\t\t\t<hr>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Pricing</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewCost\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Cost\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripPricingCost\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_description\">Description</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<textarea class=\"form-control input-sm\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_type\">Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"cost_type\" class=\"form-control input-sm\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"static\">Static</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"incremental\">Incremental</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"optional\">Optional</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_active_at\">Active</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"newCost_active_at\" class=\"form-control input-sm\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_amount\">Amount</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewCost=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addCost()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Cost\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-for=\"cost in costs\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">{{cost.name}}</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t{{cost.description}}\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t<ul class=\"list-unstyled\">\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.type|capitalize}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.active_at|moment}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.amount|currency}}</li>\n\t\t\t\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t\t<th>Amount</th>\n\t\t\t\t\t\t\t\t\t<th>Percent</th>\n\t\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"payment in cost.payments|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t\t<td>{{payment.amount_owed|currency}}</td>\n\t\t\t\t\t\t\t\t\t<td>{{payment.percent_owed|number 2}}%</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">Upfront</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.due_at\">{{payment.due_at|moment}}</span>\n\t\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">None</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">N/A</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"cost.payments.$remove(payment)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t<tr v-if=\"costsErrors[$index] != false\" class=\"danger\">\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-if=\"costsErrors[$index] === 'empty'\">\n\t\t\t\t\t\t\t\t\t\t<b>At least 1 payment is required!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t<b>Payments must total the cost amount!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t\t</table>\n\t\t\t\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t\t\t\t<li class=\"list-group-item\" v-if=\"cost.toggleNewPayment\">\n\t\t\t\t\t\t\t\t\t<validator name=\"TripPricingCostPayment\">\n\t\t\t\t\t\t\t\t\t\t<form class=\"form-inline\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"amountOwed\">Owed</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('amount') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(cost)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('percent') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t\tDue upfront?\n\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\" v-if=\"!newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"dueAt\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"!editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cost.toggleNewPayment=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-success\" @click=\"addPayment(cost)\"><i class=\"fa fa-plus\"></i> Add Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cancelEditPayment(cost)\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-info\" @click=\"updatePayment(cost)\"><i class=\"fa fa-plus\"></i> Update Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\" v-if=\"calculateMaxAmount(cost) > 0\">\n\t\t\t\t\t\t\t\t<a @click=\"toggleNewPaymentForm(cost)\" class=\"btn btn-xs btn-primary\"><i class=\"fa fa-plus\"></i> New Payment</a>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-5c73f5ee", module.exports)
-  } else {
-    hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],206:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-requirement',
-	data: function data() {
-		return {
-			resources: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Itinerary', 'Arrival Designation'],
-			toggleNewRequirement: false,
-			attemptedAddRequirement: false,
-			attemptedContinue: false,
-
-			// requirements data
-			requirements: [],
-			newReq: {
-				item: '',
-				item_type: '',
-				due_at: null,
-				grace_period: 0
-			}
-		};
-	},
-
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				requirements: this.requirements
-			});
-		},
-		onValid: function onValid() {
-			this.populateWizardData();
-			this.$dispatch('reqs', true);
-			//this.$parent.details = this.details;
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripReqsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
-		},
-		resetRequirement: function resetRequirement() {
-			this.newReq = {
-				item: '',
-				item_type: '',
-				due_at: null,
-				grace_period: 0
-			};
-		},
-		addRequirement: function addRequirement() {
-			this.attemptedAddRequirement = true;
-			if (this.$TripReqsCreate.valid) {
-				this.requirements.push(this.newReq);
-				this.resetRequirement();
-				this.toggleNewRequirement = false;
-				this.attemptedAddRequirement = false;
-			}
-		}
-	},
-	activate: function activate(done) {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		this.$dispatch('reqs', true);
-		done();
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripReqs\" @valid=\"onValid\">\n\t\t\t<form id=\"TripReqs\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Requirements</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewRequirement=!toggleNewRequirement\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Requirement\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewRequirement\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Requirement\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripReqsCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"item\">Item</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"item\" class=\"form-control input-sm\" v-model=\"newReq.item\" v-validate:item=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option :value=\"option\" v-for=\"option in resources\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"type\">Item Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"newReq.item_type\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newReq.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newReq.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newReq.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>-->\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewRequirement=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addRequirement()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Requirement\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Item</th>\n\t\t\t\t\t\t\t\t<th>Type</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<!--<th>Enforced</th>-->\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"requirement in requirements|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{requirement.item}}</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.item_type}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.due_at|moment}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<!--<td>{{requirement.enforced}}</td>-->\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"requirements.$remove(requirement)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-af5f3746", module.exports)
-  } else {
-    hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],207:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82571,94 +82852,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-49d154f0", module.exports)
+    hotAPI.createRecord("_v-305758f0", module.exports)
   } else {
-    hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-305758f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],208:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-deadlines',
-	data: function data() {
-		return {
-			toggleNewDeadline: false,
-			attemptedAddDeadline: false,
-			attemptedContinue: false,
-
-			// deadlines data
-			todos: [],
-			deadlines: [],
-			newDeadline: {
-				name: '',
-				date: null,
-				grace_period: 0,
-				enforced: false
-			}
-		};
-	},
-
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				todos: this.todos,
-				deadlines: this.deadlines
-			});
-		},
-		onValid: function onValid() {
-			this.populateWizardData();
-			this.$dispatch('deadlines', true);
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
-		},
-		resetDeadline: function resetDeadline() {
-			this.newDeadline = {
-				item: '',
-				item_type: '',
-				due_at: null,
-				grace_period: 0,
-				enforced: false
-			};
-		},
-		addDeadline: function addDeadline() {
-			this.attemptedAddDeadline = true;
-			if (this.$TripDeadlinesCreate.valid) {
-				this.deadlines.push(this.newDeadline);
-				this.resetDeadline();
-				this.toggleNewDeadline = false;
-				this.attemptedAddDeadline = false;
-			}
-		}
-	},
-	activate: function activate(done) {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		$.extend(this, {
-			todos: this.$parent.trip.todos,
-			deadlines: this.$parent.trip.deadlines
-		});
-		this.$dispatch('deadlines', true);
-		done();
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDeadlines\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDeadlines\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Deadlines</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewDeadline=!toggleNewDeadline\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Deadline\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewDeadline\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Deadline\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripDeadlinesCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewDeadline=false\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addDeadline()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Deadline\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"deadline in deadlines|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{deadline.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.due_at|moment}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"deadlines.$remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-03d4d92c", module.exports)
-  } else {
-    hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],209:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82789,325 +82988,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5888d913", module.exports)
+    hotAPI.createRecord("_v-cbdfbd0a", module.exports)
   } else {
-    hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-cbdfbd0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],210:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-pricing',
-	data: function data() {
-		return {
-			attemptedContinue: false,
-			attemptedAddCost: false,
-			attemptedAddPayment: false,
-			toggleNewCost: false,
-			toggleNewPayment: false,
-			selectedCost: null,
-			editCostMode: false,
-			editPaymentMode: false,
-			costsErrors: [],
-
-			// pricing data
-			costs: [],
-			newCost: {
-				name: '',
-				description: '',
-				active_at: null,
-				amount: 0,
-				type: '',
-				payments: [],
-				toggleNewPayment: false
-			},
-			newPayment: {
-				amount_owed: 0,
-				percent_owed: 0,
-				due_at: null,
-				upfront: false,
-				grace_period: 0
-			}
-		};
-	},
-
-	/*validators:{
-  costs
-  },*/
-	watch: {
-		'newPayment.amount_owed': function newPaymentAmount_owed(val, oldVal) {
-			var max = this.calculateMaxAmount(this.selectedCost);
-			if (val > max) this.newPayment.amount_owed = this.selectedCost.amount;
-			this.newPayment.percent_owed = val / this.selectedCost.amount * 100;
-			if (_.isFunction(this.$validate)) this.$validate('percent', true);
-		},
-		'newPayment.percent_owed': function newPaymentPercent_owed(val, oldVal) {
-			var max = this.calculateMaxPercent(this.selectedCost);
-			if (val > max) this.newPayment.percent_owed = max;
-			this.newPayment.amount_owed = val / 100 * this.selectedCost.amount;
-			if (_.isFunction(this.$validate)) this.$validate('amount', true);
-		},
-		'costs': function costs(val, oldVal) {
-			this.checkCostsErrors();
-		}
-	},
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				costs: this.costs
-			});
-		},
-		onValid: function onValid() {
-
-			this.$dispatch('pricing', true);
-			//this.$parent.details = this.details;
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripPricing[field.toLowerCase()].invalid && this.attemptedContinue;
-		},
-		checkForErrorCost: function checkForErrorCost(field) {
-			return this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
-		},
-		checkForErrorPayment: function checkForErrorPayment(field) {
-			return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
-		},
-		checkCostsErrors: function checkCostsErrors() {
-			var errors = [];
-			this.costs.forEach(function (cost, index) {
-				// cost must have at least 1 payment
-				if (!cost.payments.length) {
-					errors.push('empty');
-				} else {
-					// cost payments must total full amount owed and percent owed
-					var amount = 0;
-					cost.payments.forEach(function (payment, index) {
-						amount += payment.amount_owed;
-					}, this);
-					// evaluate difference
-					if (amount != cost.amount) {
-						errors.push('incomplete');
-					}
-				}
-
-				// no errors
-				errors.push(false);
-			}, this);
-			this.costsErrors = errors;
-		},
-		resetCost: function resetCost() {
-			this.newCost = {
-				name: '',
-				description: '',
-				active_at: null,
-				amount: 0,
-				type: '',
-				payments: [],
-				toggleNewPayment: false
-			};
-		},
-		resetPayment: function resetPayment() {
-			this.newPayment = {
-				amount_owed: 0,
-				percent_owed: 0,
-				due_at: null,
-				upfront: false,
-				grace_period: 0
-			};
-		},
-		calculateMaxAmount: function calculateMaxAmount(cost) {
-			var max = cost.amount;
-			if (cost.payments.length) {
-				cost.payments.forEach(function (payment) {
-					// must ignore current payment in editMode
-					if (this.newPayment !== payment) {
-						max -= payment.amount_owed;
-					}
-				}, this);
-			}
-			return max;
-		},
-		calculateMaxPercent: function calculateMaxPercent(cost) {
-			var max = 100;
-			if (cost.payments.length) {
-				cost.payments.forEach(function (payment) {
-					// must ignore current payment in editMode
-					if (this.newPayment !== payment) {
-						max -= payment.percent_owed;
-					}
-				}, this);
-			}
-			return max;
-		},
-		editCost: function editCost(cost) {
-			this.editCostMode = true;
-			this.toggleNewCost = true;
-			this.newCost = cost;
-		},
-		cancelEditPayment: function cancelEditPayment() {
-			this.editPaymentMode = false;
-			this.resetCost();
-		},
-		editPayment: function editPayment(payment, cost) {
-			this.editPaymentMode = true;
-			this.toggleNewPaymentForm(cost, true);
-			this.newPayment = payment;
-		},
-		toggleNewPaymentForm: function toggleNewPaymentForm(cost, updateMode) {
-			this.selectedCost = cost;
-			this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
-		},
-		addCost: function addCost() {
-			this.attemptedAddCost = true;
-			if (this.$TripPricingCost.valid) {
-				this.costs.push(this.newCost);
-				this.resetCost();
-				this.toggleNewCost = false;
-				this.attemptedAddCost = false;
-			}
-			this.checkCostsErrors();
-		},
-		updateCost: function updateCost() {
-			this.attemptedAddCost = true;
-			if (this.$TripPricingCost.valid) {
-				this.resetCost();
-				this.toggleNewCost = false;
-				this.attemptedAddCost = false;
-				this.editCostMode = false;
-			}
-			this.checkCostsErrors();
-		},
-		addPayment: function addPayment(cost) {
-			this.attemptedAddPayment = true;
-			if (this.$TripPricingCostPayment.valid) {
-				cost.payments.push(this.newPayment);
-				this.resetPayment();
-				this.selectedCost.toggleNewPayment = false;
-				this.attemptedAddPayment = false;
-			}
-			this.checkCostsErrors();
-		},
-		updatePayment: function updatePayment(cost) {
-			this.attemptedAddPayment = true;
-			if (this.$TripPricingCostPayment.valid) {
-				this.resetPayment();
-				this.selectedCost.toggleNewPayment = false;
-				this.attemptedAddPayment = false;
-				this.editPaymentMode = false;
-			}
-			this.checkCostsErrors();
-		},
-		generateUUID: function generateUUID() {
-			return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
-		}
-	},
-	ready: function ready() {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		this.$set('costs', this.$parent.trip.costs);
-		// add toggle data
-		_.each(this.costs, function (cost) {
-			cost.toggleNewPayment = false;
-		});
-		this.$dispatch('pricing', true);
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripPricing\" @valid=\"onValid\">\n\t\t\t<form id=\"TripPricing\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewCost=!toggleNewCost\">\n\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Cost\n\t\t\t\t\t</button>\n\n\t\t\t\t</div>\n\t\t\t\t<hr>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Pricing</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewCost\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Cost\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripPricingCost\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_description\">Description</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<textarea class=\"form-control input-sm\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_type\">Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"cost_type\" class=\"form-control input-sm\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"static\">Static</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"incremental\">Incremental</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"optional\">Optional</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_active_at\">Active</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"newCost_active_at\" class=\"form-control input-sm\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_amount\">Amount</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewCost=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addCost()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Cost\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-for=\"cost in costs\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">{{cost.name}}</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t{{cost.description}}\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t<ul class=\"list-unstyled\">\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.type|capitalize}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.active_at|moment}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.amount|currency}}</li>\n\t\t\t\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t\t<th>Amount</th>\n\t\t\t\t\t\t\t\t\t<th>Percent</th>\n\t\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"payment in cost.payments|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t\t<td>{{payment.amount_owed|currency}}</td>\n\t\t\t\t\t\t\t\t\t<td>{{payment.percent_owed|number 2}}%</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">Upfront</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.due_at\">{{payment.due_at|moment}}</span>\n\t\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">None</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">N/A</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"cost.payments.$remove(payment)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t<tr v-if=\"costsErrors[$index] != false\" class=\"danger\">\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-if=\"costsErrors[$index] === 'empty'\">\n\t\t\t\t\t\t\t\t\t\t<b>At least 1 payment is required!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t<b>Payments must total the cost amount!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t\t</table>\n\t\t\t\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t\t\t\t<li class=\"list-group-item\" v-if=\"cost.toggleNewPayment\">\n\t\t\t\t\t\t\t\t\t<validator name=\"TripPricingCostPayment\">\n\t\t\t\t\t\t\t\t\t\t<form class=\"form-inline\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"amountOwed\">Owed</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('amount') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(cost)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('percent') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t\tDue upfront?\n\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\" v-if=\"!newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"dueAt\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"!editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cost.toggleNewPayment=false\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-success\" @click=\"addPayment(cost)\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Payment\n\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cancelEditPayment(cost)\"><i class=\"fa fa-times\"></i>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tCancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-info\" @click=\"updatePayment(cost)\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Update Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\" v-if=\"calculateMaxAmount(cost) > 0\">\n\t\t\t\t\t\t\t\t<a @click=\"toggleNewPaymentForm(cost)\" class=\"btn btn-xs btn-primary\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Payment</a>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-2e8e2497", module.exports)
-  } else {
-    hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],211:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-requirement',
-	data: function data() {
-		return {
-			resources: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Itinerary'],
-			toggleNewRequirement: false,
-			attemptedAddRequirement: false,
-			attemptedContinue: false,
-
-			// requirements data
-			requirements: [],
-			newReq: {
-				name: '',
-				document_type: '',
-				due_at: null,
-				grace_period: 0
-			}
-		};
-	},
-
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				requirements: this.requirements
-			});
-		},
-		onValid: function onValid() {
-			this.populateWizardData();
-			this.$dispatch('reqs', true);
-			//this.$parent.details = this.details;
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripReqsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
-		},
-		resetRequirement: function resetRequirement() {
-			this.newReq = {
-				name: '',
-				document_type: '',
-				due_at: null,
-				grace_period: 0
-			};
-		},
-		addRequirement: function addRequirement() {
-			this.attemptedAddRequirement = true;
-			if (this.$TripReqsCreate.valid) {
-				this.requirements.push(this.newReq);
-				this.resetRequirement();
-				this.toggleNewRequirement = false;
-				this.attemptedAddRequirement = false;
-			}
-		}
-	},
-	activate: function activate(done) {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		$.extend(this, {
-			requirements: this.$parent.trip.requirements
-		});
-		this.$dispatch('reqs', true);
-		done();
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripReqs\" @valid=\"onValid\">\n\t\t\t<form id=\"TripReqs\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Requirements</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewRequirement=!toggleNewRequirement\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Requirement\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewRequirement\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Requirement\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripReqsCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('name')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"name\" class=\"form-control input-sm\" v-model=\"newReq.name\" v-validate:name=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option :value=\"option\" v-for=\"option in resources\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"type\">Document Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"newReq.document_type\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newReq.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newReq.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newReq.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>-->\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewRequirement=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addRequirement()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Requirement\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Type</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<!--<th>Enforced</th>-->\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"requirement in requirements|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{requirement.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.document_type}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.due_at|moment}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<!--<td>{{requirement.enforced}}</td>-->\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"requirements.$remove(requirement)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-3dd864e2", module.exports)
-  } else {
-    hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],212:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83162,12 +83048,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-f3e5b1bc", module.exports)
+    hotAPI.createRecord("_v-756eebba", module.exports)
   } else {
-    hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-756eebba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],213:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83208,12 +83094,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-424f54dc", module.exports)
+    hotAPI.createRecord("_v-681de544", module.exports)
   } else {
-    hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-681de544", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],214:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83401,12 +83287,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3935869d", module.exports)
+    hotAPI.createRecord("_v-b8072596", module.exports)
   } else {
-    hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-b8072596", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],215:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83458,12 +83344,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ca5dc6f6", module.exports)
+    hotAPI.createRecord("_v-63f3eb1d", module.exports)
   } else {
-    hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-63f3eb1d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],216:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83756,12 +83642,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-40feac0a", module.exports)
+    hotAPI.createRecord("_v-830bbb3a", module.exports)
   } else {
-    hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-830bbb3a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],217:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83801,12 +83687,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-9d0c84f0", module.exports)
+    hotAPI.createRecord("_v-fba89fc0", module.exports)
   } else {
-    hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-fba89fc0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],218:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83838,12 +83724,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5f91920b", module.exports)
+    hotAPI.createRecord("_v-ee616aba", module.exports)
   } else {
-    hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ee616aba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],219:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83875,12 +83761,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-235a6f58", module.exports)
+    hotAPI.createRecord("_v-45b743c0", module.exports)
   } else {
-    hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-45b743c0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],220:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83946,12 +83832,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c5dc1f32", module.exports)
+    hotAPI.createRecord("_v-71b990ff", module.exports)
   } else {
-    hotAPI.update("_v-c5dc1f32", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-71b990ff", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],221:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],220:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -84252,12 +84138,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6fb76f2d", module.exports)
+    hotAPI.createRecord("_v-5dcd5b95", module.exports)
   } else {
-    hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5dcd5b95", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":164,"./registration/additional-trip-options.vue":213,"./registration/basic-info.vue":214,"./registration/deadline-agreement.vue":215,"./registration/payment-details.vue":216,"./registration/review.vue":217,"./registration/roca.vue":218,"./registration/tos.vue":219,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],222:[function(require,module,exports){
+},{"../login.vue":164,"./registration/additional-trip-options.vue":212,"./registration/basic-info.vue":213,"./registration/deadline-agreement.vue":214,"./registration/payment-details.vue":215,"./registration/review.vue":216,"./registration/roca.vue":217,"./registration/tos.vue":218,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84629,12 +84515,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-e6a8f7c4", module.exports)
+    hotAPI.createRecord("_v-6ba4fc86", module.exports)
   } else {
-    hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6ba4fc86", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],223:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],222:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -84769,12 +84655,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-507a71a9", module.exports)
+    hotAPI.createRecord("_v-d3f25bde", module.exports)
   } else {
-    hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d3f25bde", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],224:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84898,12 +84784,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-e7b14e18", module.exports)
+    hotAPI.createRecord("_v-9535dce8", module.exports)
   } else {
-    hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-9535dce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],225:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84934,12 +84820,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-b88f63ba", module.exports)
+    hotAPI.createRecord("_v-6613f28a", module.exports)
   } else {
-    hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6613f28a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],226:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85108,12 +84994,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-372d71fc", module.exports)
+    hotAPI.createRecord("_v-fb2774cc", module.exports)
   } else {
-    hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-fb2774cc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],227:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],226:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -85330,14 +85216,14 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-46ea867d", module.exports)
+    hotAPI.createRecord("_v-69475ae5", module.exports)
   } else {
-    hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-69475ae5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],228:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],227:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-4d454604] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-ability[_v-4d454604] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.ability-item:hover i.remove-ability[_v-4d454604] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-ability[_v-4d454604]:hover {\n  color: #d8262e; }\n")
+var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-088b9d34] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-ability[_v-088b9d34] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.ability-item:hover i.remove-ability[_v-088b9d34] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-ability[_v-088b9d34]:hover {\n  color: #d8262e; }\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85381,22 +85267,22 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\" _v-4d454604=\"\">\n    <div class=\"panel-heading\" _v-4d454604=\"\">\n        <h5 class=\"panel-header\" _v-4d454604=\"\">Permissions <button class=\"btn btn-xs btn-default-hollow pull-right\" style=\"margin-top:-3px\" @click=\"showAbilities = !showAbilities\" _v-4d454604=\"\">\n           <i class=\"fa fa-cog icon-left\" _v-4d454604=\"\"></i> Manage \n        </button></h5>\n\n    </div>\n    <div class=\"panel-body\" _v-4d454604=\"\">\n        <label _v-4d454604=\"\">User Roles</label>\n        <v-select class=\"form-control\" multiple=\"\" :value.sync=\"selectedRoles\" :options=\"availableRoles\" label=\"roles\" _v-4d454604=\"\">\n        </v-select>\n    </div>\n    <div class=\"panel-body\" v-if=\"showAbilities\" _v-4d454604=\"\">\n        <div class=\"list-gorup-item\" _v-4d454604=\"\">\n            <label _v-4d454604=\"\">User Abilities</label>\n            <v-select class=\"form-control\" :value.sync=\"selectedAbility\" :options=\"availableAbilities\" placeholder=\"add an ability\" label=\"abilities\" _v-4d454604=\"\">\n            </v-select>\n        </div>\n        <div class=\"list-group-item ability-item\" v-for=\"ability in abilities\" _v-4d454604=\"\">\n            <div class=\"row\" _v-4d454604=\"\">\n                <div class=\"col-xs-11\" _v-4d454604=\"\">\n                    <small class=\"text-muted\" _v-4d454604=\"\">can</small> {{ ability.display_name }}\n                </div>\n                <div class=\"col-xs-1 col-sm-1 text-right\" _v-4d454604=\"\">\n                    <i class=\"fa fa-times fa-lg text-muted remove-ability\" _v-4d454604=\"\">\n                    </i>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\" _v-088b9d34=\"\">\n    <div class=\"panel-heading\" _v-088b9d34=\"\">\n        <h5 class=\"panel-header\" _v-088b9d34=\"\">Permissions <button class=\"btn btn-xs btn-default-hollow pull-right\" style=\"margin-top:-3px\" @click=\"showAbilities = !showAbilities\" _v-088b9d34=\"\">\n           <i class=\"fa fa-cog icon-left\" _v-088b9d34=\"\"></i> Manage \n        </button></h5>\n\n    </div>\n    <div class=\"panel-body\" _v-088b9d34=\"\">\n        <label _v-088b9d34=\"\">User Roles</label>\n        <v-select class=\"form-control\" multiple=\"\" :value.sync=\"selectedRoles\" :options=\"availableRoles\" label=\"roles\" _v-088b9d34=\"\">\n        </v-select>\n    </div>\n    <div class=\"panel-body\" v-if=\"showAbilities\" _v-088b9d34=\"\">\n        <div class=\"list-gorup-item\" _v-088b9d34=\"\">\n            <label _v-088b9d34=\"\">User Abilities</label>\n            <v-select class=\"form-control\" :value.sync=\"selectedAbility\" :options=\"availableAbilities\" placeholder=\"add an ability\" label=\"abilities\" _v-088b9d34=\"\">\n            </v-select>\n        </div>\n        <div class=\"list-group-item ability-item\" v-for=\"ability in abilities\" _v-088b9d34=\"\">\n            <div class=\"row\" _v-088b9d34=\"\">\n                <div class=\"col-xs-11\" _v-088b9d34=\"\">\n                    <small class=\"text-muted\" _v-088b9d34=\"\">can</small> {{ ability.display_name }}\n                </div>\n                <div class=\"col-xs-1 col-sm-1 text-right\" _v-088b9d34=\"\">\n                    <i class=\"fa fa-times fa-lg text-muted remove-ability\" _v-088b9d34=\"\">\n                    </i>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["/* line 2, stdin */\ndiv.list-group-item[_v-4d454604] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-ability[_v-4d454604] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.ability-item:hover i.remove-ability[_v-4d454604] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-ability[_v-4d454604]:hover {\n  color: #d8262e; }\n"] = false
+    __vueify_insert__.cache["/* line 2, stdin */\ndiv.list-group-item[_v-088b9d34] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-ability[_v-088b9d34] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.ability-item:hover i.remove-ability[_v-088b9d34] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-ability[_v-088b9d34]:hover {\n  color: #d8262e; }\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4d454604", module.exports)
+    hotAPI.createRecord("_v-088b9d34", module.exports)
   } else {
-    hotAPI.update("_v-4d454604", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-088b9d34", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],229:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85502,12 +85388,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0a7ed88a", module.exports)
+    hotAPI.createRecord("_v-1e74bef2", module.exports)
   } else {
-    hotAPI.update("_v-0a7ed88a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1e74bef2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],230:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85588,12 +85474,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-69badce8", module.exports)
+    hotAPI.createRecord("_v-d7753fb8", module.exports)
   } else {
-    hotAPI.update("_v-69badce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d7753fb8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],231:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85618,12 +85504,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ea6dd1a8", module.exports)
+    hotAPI.createRecord("_v-d31ac078", module.exports)
   } else {
-    hotAPI.update("_v-ea6dd1a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d31ac078", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],232:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],231:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85663,12 +85549,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-718e65c4", module.exports)
+    hotAPI.createRecord("_v-95628cf4", module.exports)
   } else {
-    hotAPI.update("_v-718e65c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-95628cf4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],233:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85783,12 +85669,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-63c1ee29", module.exports)
+    hotAPI.createRecord("_v-ad6362de", module.exports)
   } else {
-    hotAPI.update("_v-63c1ee29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ad6362de", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],234:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],233:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.alert.top, .alert.top-right {\n    top: 80px;\n}\n")
 'use strict';
@@ -86023,12 +85909,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2d9ee899", module.exports)
+    hotAPI.createRecord("_v-1d00ad31", module.exports)
   } else {
-    hotAPI.update("_v-2d9ee899", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1d00ad31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],235:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],234:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -86294,6 +86180,22 @@ var _adminTripDuplicate2 = _interopRequireDefault(_adminTripDuplicate);
 var _adminTripDelete = require('./components/trips/admin-trip-delete.vue');
 
 var _adminTripDelete2 = _interopRequireDefault(_adminTripDelete);
+
+var _adminTripCosts = require('./components/trips/admin-trip-costs.vue');
+
+var _adminTripCosts2 = _interopRequireDefault(_adminTripCosts);
+
+var _adminTripDeadlines = require('./components/trips/admin-trip-deadlines.vue');
+
+var _adminTripDeadlines2 = _interopRequireDefault(_adminTripDeadlines);
+
+var _adminTripRequirements = require('./components/trips/admin-trip-requirements.vue');
+
+var _adminTripRequirements2 = _interopRequireDefault(_adminTripRequirements);
+
+var _adminTripTodos = require('./components/trips/admin-trip-todos.vue');
+
+var _adminTripTodos2 = _interopRequireDefault(_adminTripTodos);
 
 var _adminInterestsList = require('./components/interests/admin-interests-list.vue');
 
@@ -86639,6 +86541,10 @@ new _vue2.default({
         adminTripFacilitators: _adminTripFacilitators2.default,
         adminTripDuplicate: _adminTripDuplicate2.default,
         adminTripDelete: _adminTripDelete2.default,
+        adminTripCosts: _adminTripCosts2.default,
+        adminTripDeadlines: _adminTripDeadlines2.default,
+        adminTripRequirements: _adminTripRequirements2.default,
+        adminTripTodos: _adminTripTodos2.default,
         adminInterestsList: _adminInterestsList2.default,
         adminGroups: _adminGroupsList2.default,
         adminGroupCreate: _adminGroupCreate2.default,
@@ -86689,6 +86595,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/action-trigger.vue":126,"./components/campaigns/admin-campaign-create.vue":127,"./components/campaigns/admin-campaign-details.vue":128,"./components/campaigns/admin-campaign-edit.vue":129,"./components/campaigns/campaign-groups.vue":130,"./components/campaigns/campaigns.vue":131,"./components/campaigns/group-trips.vue":136,"./components/campaigns/groups-trips-selection-wrapper.vue":137,"./components/donate.vue":138,"./components/financials/donors/admin-donors-list.vue":139,"./components/financials/donors/donor-form.vue":140,"./components/financials/funds/admin-funds-list.vue":141,"./components/financials/funds/fund-editor.vue":142,"./components/financials/transactions/admin-transactions-list.vue":143,"./components/financials/transactions/transaction-form.vue":144,"./components/fundraisers/fundraisers-manager.vue":145,"./components/fundraisers/fundraisers-stories.vue":146,"./components/fundraisers/fundraisers-uploads.vue":147,"./components/fundraisers/fundraisers.vue":148,"./components/groups/admin-group-create.vue":149,"./components/groups/admin-group-edit.vue":150,"./components/groups/admin-group-managers.vue":151,"./components/groups/admin-groups-list.vue":152,"./components/groups/dashboard-group-reservations.vue":153,"./components/groups/dashboard-group-trips.vue":154,"./components/groups/group-interest-signup.vue":155,"./components/groups/group-profile-fundraisers.vue":156,"./components/groups/group-profile-stories.vue":157,"./components/groups/group-profile-trips.vue":158,"./components/groups/groups-list.vue":159,"./components/groups/groups.vue":160,"./components/interests/admin-interests-list.vue":161,"./components/interests/dashboard-interests-list.vue":162,"./components/interests/trip-interests-editor.vue":163,"./components/login.vue":164,"./components/modal-donate.vue":165,"./components/notes.vue":166,"./components/pagination.vue":167,"./components/records/essays/essay-create-update.vue":168,"./components/records/essays/essays-list.vue":169,"./components/records/medicals/medical-create-update.vue":170,"./components/records/medicals/medicals-list.vue":171,"./components/records/passports/passport-create-update.vue":172,"./components/records/passports/passports-list.vue":173,"./components/records/records-list.vue":174,"./components/records/visas/visa-create-update.vue":175,"./components/records/visas/visas-list.vue":176,"./components/reservations/admin-reservation-costs.vue":177,"./components/reservations/admin-reservation-create.vue":178,"./components/reservations/admin-reservation-deadlines.vue":179,"./components/reservations/admin-reservation-dues.vue":180,"./components/reservations/admin-reservation-edit.vue":181,"./components/reservations/admin-reservations-list.vue":182,"./components/reservations/donations-list.vue":183,"./components/reservations/reservation-avatar.vue":184,"./components/reservations/reservation-costs.vue":185,"./components/reservations/reservation-dues.vue":186,"./components/reservations/reservation-funding.vue":187,"./components/reservations/reservations-arrival-designation.vue":188,"./components/reservations/reservations-essays-manager.vue":189,"./components/reservations/reservations-list.vue":190,"./components/reservations/reservations-medical-releases-manager.vue":191,"./components/reservations/reservations-passports-manager.vue":192,"./components/reservations/reservations-visas-manager.vue":193,"./components/todos.vue":194,"./components/top-nav.vue":195,"./components/trips/admin-trip-create.vue":196,"./components/trips/admin-trip-delete.vue":197,"./components/trips/admin-trip-duplicate.vue":198,"./components/trips/admin-trip-edit.vue":199,"./components/trips/admin-trip-facilitators.vue":200,"./components/trips/admin-trip-reservations-list.vue":201,"./components/trips/admin-trips-list.vue":202,"./components/trips/trip-details-missionaries.vue":220,"./components/trips/trip-registration-wizard.vue":221,"./components/uploads/admin-upload-create-update.vue":222,"./components/uploads/admin-uploads-list.vue":223,"./components/users/admin-user-create.vue":224,"./components/users/admin-user-delete.vue":225,"./components/users/admin-user-edit.vue":226,"./components/users/admin-users-list.vue":227,"./components/users/user-permissions.vue":228,"./components/users/user-profile-countries.vue":229,"./components/users/user-profile-fundraisers-donors.vue":230,"./components/users/user-profile-fundraisers-progress.vue":231,"./components/users/user-profile-fundraisers.vue":232,"./components/users/user-profile-stories.vue":233,"./components/users/user-settings.vue":234,"aos":1,"bootstrap-sass":18,"gsap":108,"jquery":110,"jquery.cookie":109,"marked":111,"moment":112,"scrollmagic":114,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":115,"underscore":116,"video.js":117,"videojs-youtube":118,"vue":124,"vue-resource":120,"vue-strap/dist/vue-strap.min":122,"vue-validator":123}]},{},[235]);
+},{"./components/action-trigger.vue":126,"./components/campaigns/admin-campaign-create.vue":127,"./components/campaigns/admin-campaign-details.vue":128,"./components/campaigns/admin-campaign-edit.vue":129,"./components/campaigns/campaign-groups.vue":130,"./components/campaigns/campaigns.vue":131,"./components/campaigns/group-trips.vue":136,"./components/campaigns/groups-trips-selection-wrapper.vue":137,"./components/donate.vue":138,"./components/financials/donors/admin-donors-list.vue":139,"./components/financials/donors/donor-form.vue":140,"./components/financials/funds/admin-funds-list.vue":141,"./components/financials/funds/fund-editor.vue":142,"./components/financials/transactions/admin-transactions-list.vue":143,"./components/financials/transactions/transaction-form.vue":144,"./components/fundraisers/fundraisers-manager.vue":145,"./components/fundraisers/fundraisers-stories.vue":146,"./components/fundraisers/fundraisers-uploads.vue":147,"./components/fundraisers/fundraisers.vue":148,"./components/groups/admin-group-create.vue":149,"./components/groups/admin-group-edit.vue":150,"./components/groups/admin-group-managers.vue":151,"./components/groups/admin-groups-list.vue":152,"./components/groups/dashboard-group-reservations.vue":153,"./components/groups/dashboard-group-trips.vue":154,"./components/groups/group-interest-signup.vue":155,"./components/groups/group-profile-fundraisers.vue":156,"./components/groups/group-profile-stories.vue":157,"./components/groups/group-profile-trips.vue":158,"./components/groups/groups-list.vue":159,"./components/groups/groups.vue":160,"./components/interests/admin-interests-list.vue":161,"./components/interests/dashboard-interests-list.vue":162,"./components/interests/trip-interests-editor.vue":163,"./components/login.vue":164,"./components/modal-donate.vue":165,"./components/notes.vue":166,"./components/pagination.vue":167,"./components/records/essays/essay-create-update.vue":168,"./components/records/essays/essays-list.vue":169,"./components/records/medicals/medical-create-update.vue":170,"./components/records/medicals/medicals-list.vue":171,"./components/records/passports/passport-create-update.vue":172,"./components/records/passports/passports-list.vue":173,"./components/records/records-list.vue":174,"./components/records/visas/visa-create-update.vue":175,"./components/records/visas/visas-list.vue":176,"./components/reservations/admin-reservation-costs.vue":177,"./components/reservations/admin-reservation-create.vue":178,"./components/reservations/admin-reservation-deadlines.vue":179,"./components/reservations/admin-reservation-dues.vue":180,"./components/reservations/admin-reservation-edit.vue":181,"./components/reservations/admin-reservations-list.vue":182,"./components/reservations/donations-list.vue":183,"./components/reservations/reservation-avatar.vue":184,"./components/reservations/reservation-costs.vue":185,"./components/reservations/reservation-dues.vue":186,"./components/reservations/reservation-funding.vue":187,"./components/reservations/reservations-arrival-designation.vue":188,"./components/reservations/reservations-essays-manager.vue":189,"./components/reservations/reservations-list.vue":190,"./components/reservations/reservations-medical-releases-manager.vue":191,"./components/reservations/reservations-passports-manager.vue":192,"./components/reservations/reservations-visas-manager.vue":193,"./components/todos.vue":194,"./components/top-nav.vue":195,"./components/trips/admin-trip-costs.vue":197,"./components/trips/admin-trip-create.vue":198,"./components/trips/admin-trip-deadlines.vue":199,"./components/trips/admin-trip-delete.vue":200,"./components/trips/admin-trip-duplicate.vue":201,"./components/trips/admin-trip-edit.vue":202,"./components/trips/admin-trip-facilitators.vue":203,"./components/trips/admin-trip-requirements.vue":204,"./components/trips/admin-trip-reservations-list.vue":205,"./components/trips/admin-trip-todos.vue":206,"./components/trips/admin-trips-list.vue":207,"./components/trips/trip-details-missionaries.vue":219,"./components/trips/trip-registration-wizard.vue":220,"./components/uploads/admin-upload-create-update.vue":221,"./components/uploads/admin-uploads-list.vue":222,"./components/users/admin-user-create.vue":223,"./components/users/admin-user-delete.vue":224,"./components/users/admin-user-edit.vue":225,"./components/users/admin-users-list.vue":226,"./components/users/user-permissions.vue":227,"./components/users/user-profile-countries.vue":228,"./components/users/user-profile-fundraisers-donors.vue":229,"./components/users/user-profile-fundraisers-progress.vue":230,"./components/users/user-profile-fundraisers.vue":231,"./components/users/user-profile-stories.vue":232,"./components/users/user-settings.vue":233,"aos":1,"bootstrap-sass":18,"gsap":108,"jquery":110,"jquery.cookie":109,"marked":111,"moment":112,"scrollmagic":114,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":115,"underscore":116,"video.js":117,"videojs-youtube":118,"vue":124,"vue-resource":120,"vue-strap/dist/vue-strap.min":122,"vue-validator":123}]},{},[234]);
 
 //# sourceMappingURL=main.js.map

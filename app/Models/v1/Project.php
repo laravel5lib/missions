@@ -25,19 +25,11 @@ class Project extends Model
     ];
 
     /**
-     * The attributes that can be mass assigned.
+     * The attributes that should not be mass assigned.
      *
      * @var array
      */
-    protected $fillable = [
-        'project_type_id',
-        'rep_id',
-        'sponsor_id',
-        'sponsor_type',
-        'plaque_prefix',
-        'plaque_message',
-        'funded_at'
-    ];
+    protected $guarded = [];
 
     /**
      * The accessors to append to the model's array form.
@@ -152,7 +144,7 @@ class Project extends Model
     public function scopeNew($query)
     {
         return $query->whereHas('initiative', function($initiative) {
-            return $initiative->current();
+            return $initiative->new();
         });
     }
 

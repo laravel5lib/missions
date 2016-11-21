@@ -28,7 +28,7 @@ class ProjectRequest extends FormRequest
             'project_initiative_id' => 'required|exists:project_initiatives,id',
             'sponsor_id' => 'required|string',
             'sponsor_type' => 'required|in:users,groups',
-            'plaque_prefix' => 'required|in:in honor of, in memory of, sponsored by',
+            'plaque_prefix' => 'required|in:in honor of,in memory of,sponsored by,on behalf of',
             'plaque_message' => 'required|string',
             'funded_at' => 'date',
         ];

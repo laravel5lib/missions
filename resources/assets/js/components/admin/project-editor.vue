@@ -4,7 +4,7 @@
         <div class="panel-heading">
             <h5>
                 Details
-                <span class="pull-right text-muted">
+                <span class="pull-right text-muted" v-if="! newOnly">
                     <tooltip effect="scale" placement="bottom" content="Edit">
                         <i class="fa fa-lg fa-cog" @click="editMode = !editMode"></i>
                     </tooltip>
@@ -13,9 +13,13 @@
         </div>
         <div class="panel-body">
             <div :class="{ 'col-md-7': !editMode, 'col-md-12' : editMode}">
-                <label>Project ID</label>
-                <p>{{ project.id }}</p>
-                <hr class="divider">
+                <div class="row" v-if="! newOnly">
+                    <div class="col-md-12">
+                        <label>Project ID</label>
+                        <p>{{ project.id }}</p>
+                    </div>
+                    <hr class="divider">
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <label>Project Name</label>
@@ -42,7 +46,7 @@
                     <div class="col-md-6">
                         <label>Type</label>
                         <select class="form-control" v-model="project.project_initiative_id" v-if="editMode">
-                            <option v-for="initiative in availableInitiatives" :value="project.project_initiative_id">{{ initiative.type }}</option>
+                            <option v-for="initiative in availableInitiatives" :value="initiative.id">{{ initiative.type }}</option>
                         </select>
                         <p v-else>{{ initiative.type }}</p>
                     </div>
@@ -92,8 +96,8 @@
                         <p>{{ plaque }}</p>
                     </div>
                 </div>
-                <hr class="divider">
-                <div class="row">
+                <div class="row" v-if="! newOnly">
+                    <hr class="divider">
                     <div class="col-md-6">
                         <label>Started At</label>
                         <p>{{ project.created_at | moment 'll' }}</p>
@@ -103,8 +107,8 @@
                         <p>{{ funded }}</p>
                     </div>
                 </div>
-                <hr class="divider">
-                <div class="row">
+                <div class="row" v-if="! newOnly">
+                    <hr class="divider">
                     <div class="col-md-6">
                         <label>Last Updated</label>
                         <p>{{ project.updated_at | moment 'll' true }}</p>
@@ -132,8 +136,32 @@
         </div>
         <div class="panel-footer text-right" v-if="editMode">
             <button class="btn btn-default" @click="cancel">Cancel</button>
-            <button class="btn btn-primary" @click="save">Save</button>
+            <button class="btn btn-primary" @click="save" v-if="! newOnly">Save</button>
+            <button class="btn btn-primary" @click="create" v-else>Create</button>
         </div>
+
+        <alert :show.sync="showSuccess"
+               placement="top-right"
+               :duration="3000"
+               type="success"
+               width="400px"
+               dismissable>
+            <span class="icon-ok-circled alert-icon-float-left"></span>
+            <strong>Well Done!</strong>
+            <p>{{ message }}</p>
+        </alert>
+
+        <alert :show.sync="showError"
+               placement="top-right"
+               :duration="6000"
+               type="danger"
+               width="400px"
+               dismissable>
+            <span class="icon-info-circled alert-icon-float-left"></span>
+            <strong>Oh No!</strong>
+            <p>{{ message }}</p>
+        </alert>
+
     </div><!-- end panel -->
 </template>
 <script>
@@ -143,6 +171,10 @@
         components:{ vSelect },
         props: {
             'id': {
+                type: String,
+                default: null
+            },
+            'causeId': {
                 type: String,
                 default: null
             },
@@ -168,14 +200,23 @@
         },
         data(){
             return{
-                project: {},
+                project: {
+                    sponsor_type: 'users'
+                },
                 sponsor: {},
-                initiative: {},
+                initiative: {
+                    country: {
+                        code: null
+                    }
+                },
                 availableInitiatives: [],
                 cause: {},
                 editMode: false,
                 sponsors: [],
-                selectedSponsor: null
+                selectedSponsor: null,
+                showSuccess: false,
+                showError: false,
+                message: null
             }
         },
         computed: {
@@ -189,8 +230,7 @@
         methods: {
             getInitiatives() {
                 this.$http.get('causes/' + this.cause.id + '/initiatives', {
-                    country: this.initiative.country.code,
-                    current: true
+                    country: this.initiative.country.code
                 }).then(function (response) {
                     this.availableInitiatives = response.data.data;
                 });
@@ -200,6 +240,14 @@
                 this.$http.get(this.project.sponsor_type, {search: search}).then(function (response) {
                     this.sponsors = response.data.data;
                     loading(false);
+                });
+            },
+            getCause() {
+                this.$refs.loader.show();
+                this.$http.get('causes/' + this.causeId).then(function (response) {
+                    this.cause  = response.data.data;
+                    this.initiative.country = _.first(this.cause.countries);
+                    this.$refs.loader.hide();
                 });
             },
             fetch() {
@@ -218,15 +266,43 @@
                 this.$http.put('projects/' + this.id, this.project).then(function (response) {
                     this.editMode = false;
                     this.$refs.loader.hide();
+                    this.message = 'Your changes were saved successfully.',
+                    this.showSuccess = true;
+                }).error(function() {
+                    this.$refs.loader.hide();
+                    this.message = 'There are problems with the form.',
+                    this.showError = true;
+                });
+            },
+            create() {
+                this.$refs.loader.show();
+                this.$http.post('projects', this.project).then(function (response) {
+                    this.$refs.loader.hide();
+                    window.location = '/admin/projects/' + response.data.data.id;
+                }).error(function() {
+                    this.$refs.loader.hide();
+                    this.message = 'There are problems with the form.',
+                    this.showError = true;
                 });
             },
             cancel() {
-                this.editMode = false;
-                this.fetch();
+                if ( ! this.newOnly) {
+                    this.editMode = false;
+                    this.fetch();
+                } else {
+                     window.location = '/admin/causes/' + this.causeId + '/current-projects';
+                }
             }
         },
         ready() {
-            this.fetch();
+            if( ! this.newOnly) {
+                this.fetch();
+            }
+
+            if(this.newOnly) {
+                this.getCause();
+                this.editMode = true;
+            }
         }
     }
 </script>

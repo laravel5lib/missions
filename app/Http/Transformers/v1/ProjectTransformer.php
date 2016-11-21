@@ -2,6 +2,7 @@
 
 namespace App\Http\Transformers\v1;
 
+use App\Models\v1\Group;
 use App\Models\v1\Project;
 use League\Fractal;
 
@@ -59,6 +60,10 @@ class ProjectTransformer extends Fractal\TransformerAbstract
      */
     public function includeSponsor(Project $project)
     {
+        if($project->sponsor instanceof Group) {
+            return $this->item($project->sponsor, new GroupTransformer);
+        }
+
         return $this->item($project->sponsor, new UserTransformer);
     }
 

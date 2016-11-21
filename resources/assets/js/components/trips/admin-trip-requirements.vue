@@ -13,8 +13,8 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <h5><a href="#">{{ requirement.name|capitalize }} {{ requirement.document_type|capitalize }}</a></h5>
-                <h6><small>Enforced: {{ requirement.enforced ? 'Yes' : 'No' }}</small></h6>
+                <h5><a href="#">{{ requirement.name|capitalize }}</a></h5>
+                <h6><small>Type: {{ requirement.document_type }}</small></h6>
             </div>
             <div class="col-xs-4 text-right">
                 <h5><i class="fa fa-calendar"></i> {{ requirement.due_at|moment 'll' }} </h5>

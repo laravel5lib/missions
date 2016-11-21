@@ -70,12 +70,12 @@ $api->version('v1', [
     $api->resource('funds', 'FundsController');
     $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
     $api->resource('transactions', 'TransactionsController');
+    $api->resource('causes', 'ProjectCausesController');
+    $api->get('causes/{cause}/initiatives', 'ProjectInitiativesController@index');
+    $api->resource('initiatives', 'ProjectInitiativesController', ['except' => 'index']);
+    $api->get('causes/{cause}/projects', 'ProjectsController@index');
+    $api->resource('projects', 'ProjectsController', ['except' => 'index']);
     $api->post('transactions/export', 'TransactionsController@export');
-    $api->resource('causes', 'CausesController');
-    $api->resource('causes/{cause}/initiatives', 'ProjectInitiativesController');
-    $api->resource('initiatives/{initiative}/packages', 'ProjectPackagesController');
-    $api->resource('projects/types', 'ProjectTypesController');
-    $api->resource('projects', 'ProjectsController');
     $api->resource('notes', 'NotesController');
     $api->resource('todos', 'TodosController');
     $api->resource('essays', 'EssaysController');

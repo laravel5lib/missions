@@ -1,6 +1,6 @@
 <template>
     <spinner v-ref:spinner size="md" text="Loading"></spinner>
-    <div class="panel-body" v-for="deadline in deadlines|orderBy '-date'">
+    <div class="panel-body" v-for="deadline in deadlines">
         <div class="row">
             <div class="col-xs-12 text-right hidden-xs">
                 <a class="btn btn-xs btn-default-hollow small" @click="editDeadline(deadline)"><i class="fa fa-pencil"></i> Edit</a>
@@ -147,14 +147,16 @@
                 attemptedEditDeadline: false,
                 newDeadline: {
                     deadline_assignable_id: this.id,
-                    deadline_assignable_type: 'trips',
+                    deadline_assignable_type: this.assignment,
                     name: '',
                     item_type: '',
                     date: null,
                     grace_period: 0,
                     enforced: false,
                 },
-                resource: this.$resource('deadlines{/id}')
+                resource: this.$resource('deadlines{/id}'),
+                sort: 'date',
+                direction: 'asc'
             }
         },
         methods:{
@@ -167,7 +169,7 @@
             resetDeadline(){
                 this.newDeadline = {
                     deadline_assignable_id: this.id,
-                    deadline_assignable_type: 'trips',
+                    deadline_assignable_type: this.assignment,
                     item: '',
                     item_type: '',
                     date: null,
@@ -184,8 +186,8 @@
                         this.resetDeadline();
                         this.attemptedAddDeadline = false;
                         this.showAddModal = false;
-                        this.$refs.spinner.hide()
-                    })
+                        this.searchDeadlines();
+                    });
                 }
             },
             updateDeadline(){
@@ -195,7 +197,7 @@
                     this.resource.update({ id: this.selectedDeadline.id}, this.selectedDeadline).then(function (response) {
                         this.attemptedEditDeadline = false;
                         this.showEditModal = false;
-                        this.$refs.spinner.hide()
+                        this.searchDeadlines();
                     })
                 }
             },
@@ -213,7 +215,7 @@
                 this.resource.delete({ id: deadline.id }).then(function (response) {
                     this.deadlines.$remove(deadline);
                     this.selectedDeadline = null;
-                    this.$refs.spinner.hide()
+                    this.searchDeadlines();
                 });
             },
             searchDeadlines(){
@@ -221,7 +223,7 @@
                 this.resource.get({
                     assignment: this.assignment + '|' + this.id,
                     search: this.search,
-                    sort: this.sort,
+                    sort: this.sort + '|' + this.direction,
                 }).then(function (response) {
                     this.deadlines = response.data.data;
                     this.$refs.spinner.hide()

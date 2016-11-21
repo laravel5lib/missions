@@ -25,7 +25,7 @@ class CostRequest extends FormRequest
     {
         $rules = [
             'cost_assignable_id'   => 'required|string',
-            'cost_assignable_type' => 'required|string|in:trips,reservations,projects',
+            'cost_assignable_type' => 'required|string|in:trips,reservations,projects,project-initiatives',
             'name'                 => 'required|string',
             'description'          => 'string',
             'active_at'            => 'required|date',
@@ -35,7 +35,7 @@ class CostRequest extends FormRequest
 
         if ($this->isMethod('put')) {
             $rules['cost_assignable_id'] = 'sometimes|required|string';
-            $rules['cost_assignable_type'] = 'sometimes|required|string|in:trips,reservations,projects';
+            $rules['cost_assignable_type'] = 'sometimes|required|string|in:trips,reservations,projects,project-initiatives';
         }
 
         return $rules;

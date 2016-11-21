@@ -67,6 +67,7 @@ import adminTripFacilitators from './components/trips/admin-trip-facilitators.vu
 import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripDelete from './components/trips/admin-trip-delete.vue';
 import adminTripCosts from './components/trips/admin-trip-costs.vue';
+import adminTripDescription from './components/trips/admin-trip-description.vue';
 import adminTripDeadlines from './components/trips/admin-trip-deadlines.vue';
 import adminTripRequirements from './components/trips/admin-trip-requirements.vue';
 import adminTripTodos from './components/trips/admin-trip-todos.vue';
@@ -87,6 +88,13 @@ import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
 import adminUploadsList from './components/uploads/admin-uploads-list.vue';
 import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
+import reconcileFund from './components/reconcile-fund.vue';
+import projectCauses from './components/admin/project-causes.vue';
+import causeEditor from './components/admin/cause-editor.vue';
+import projectsList from './components/admin/projects-list.vue';
+import projectEditor from './components/admin/project-editor.vue';
+import initiativesList from './components/admin/initiatives-list.vue';
+import initiativeEditor from './components/admin/initiative-editor.vue';
 import fundEditor from './components/financials/funds/fund-editor.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
 import adminFundsList from './components/financials/funds/admin-funds-list.vue';
@@ -215,8 +223,14 @@ Vue.filter('percentage', {
     }
 });
 
-Vue.filter('moment', function (val, format) {
-    return moment.utc(val).local().format(format||'LL');
+Vue.filter('moment', function (val, format, diff = false) {
+    var date = moment.utc(val).local().format(format||'LL');
+
+    if(diff) {
+        date = moment.utc(val).local().fromNow();
+    }
+
+    return date;
 });
 
 var VueCropOptions = {
@@ -349,6 +363,7 @@ new Vue({
         adminTripDuplicate,
         adminTripDelete,
         adminTripCosts,
+        adminTripDescription,
         adminTripDeadlines,
         adminTripRequirements,
         adminTripTodos,
@@ -369,6 +384,13 @@ new Vue({
         adminUserDelete,
         adminUploadsList,
         adminUploadCreateUpdate,
+        reconcileFund,
+        projectCauses,
+        causeEditor,
+        projectsList,
+        projectEditor,
+        initiativesList,
+        initiativeEditor,
         fundEditor,
         adminDonorsList,
         adminFundsList,

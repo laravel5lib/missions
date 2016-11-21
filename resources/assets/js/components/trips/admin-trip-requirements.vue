@@ -1,6 +1,6 @@
 <template>
     <spinner v-ref:spinner size="md" text="Loading"></spinner>
-    <div class="panel-body" v-for="requirement in requirements|orderBy '-date'">
+    <div class="panel-body" v-for="requirement in requirements">
         <div class="row">
             <div class="col-xs-12 text-right hidden-xs">
                 <a class="btn btn-xs btn-default-hollow small" @click="editRequirement(requirement)"><i class="fa fa-pencil"></i> Edit</a>
@@ -178,7 +178,7 @@
                 attemptedEditRequirement: false,
                 newRequirement: {
                     requester_id: this.id,
-                    requester_type: 'trip',
+                    requester_type: this.requester,
                     name: '',
                     document_type: '',
                     due_at: null,
@@ -207,6 +207,8 @@
                     'arrival_designation',
                     'essays',
                 ],
+                sort: 'due_at',
+                direction: 'asc'
             }
         },
         methods:{
@@ -236,7 +238,7 @@
                         this.resetRequirement();
                         this.attemptedAddRequirement = false;
                         this.showAddModal = false;
-                        this.$refs.spinner.hide()
+                        this.searchRequirements();
                     })
                 }
             },
@@ -247,7 +249,7 @@
                     this.resource.update({ id: this.selectedRequirement.id}, this.selectedRequirement).then(function (response) {
                         this.attemptedEditRequirement = false;
                         this.showEditModal = false;
-                        this.$refs.spinner.hide()
+                        this.searchRequirements();
                     })
                 }
             },
@@ -265,7 +267,7 @@
                 this.resource.delete({ id: requirement.id }).then(function (response) {
                     this.requirements.$remove(requirement);
                     this.selectedRequirement = null;
-                    this.$refs.spinner.hide()
+                    this.searchRequirements();
                 });
             },
             searchRequirements(){
@@ -273,7 +275,7 @@
                 this.resource.get({
                     requester: this.requester + '|' + this.id,
                     search: this.search,
-                    sort: this.sort,
+                    sort: this.sort + '|' + this.direction,
                 }).then(function (response) {
                     this.requirements = response.data.data;
                     this.$refs.spinner.hide()

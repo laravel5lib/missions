@@ -1,0 +1,175 @@
+<template>
+    <div class="panel panel-default">
+        <spinner v-ref:loader size="xl" :fixed="false" text="Loading..."></spinner>
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h5>Details
+                        <span class="pull-right text-muted" v-if="! newOnly && ! readOnly">
+                            <tooltip effect="scale" placement="bottom" content="Edit">
+                                <i class="fa fa-lg fa-cog" @click="editMode = !editMode"></i>
+                            </tooltip>
+                        </span>
+                    </h5>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>Type</label>
+                    <input class="form-control" v-model="initiative.type" v-if="editMode" />
+                    <p v-else>{{ initiative.type }}</p>
+                    <label>Country</label>
+                    <select class="form-control"
+                            v-model="initiative.country.code"
+                            v-if="editMode">
+                        <option :value="country.code" v-for="country in countries">{{ country.name }}</option>
+                    </select>
+                    <p v-else>
+                        {{ initiative.country.name }}
+                    </p>
+                </div>
+                <div class="col-sm-6">
+                    <label>Start Date</label>
+                    <input type="text" class="form-control" v-model="initiative.started_at" v-if="editMode">
+                    <p v-else>{{ initiative.started_at | moment 'll' }}</p>
+                    <label>End Date</label>
+                    <input type="text" class="form-control" v-model="initiative.ended_at" v-if="editMode">
+                    <p v-else>{{ initiative.ended_at | moment 'll' }}</p>
+                </div>
+            </div>
+
+            <label>Short Description</label>
+            <textarea class="form-control" v-model="initiative.short_desc" v-if="editMode" rows="10"></textarea>
+            <p v-else>{{ initiative.short_desc }}</p>
+
+        </div>
+        <div class="panel-footer text-right" v-if="editMode">
+            <button class="btn btn-default" @click="cancel">Cancel</button>
+            <button class="btn btn-primary" @click="save" v-if="! newOnly">Save</button>
+            <button class="btn btn-primary" @click="create" v-else>Create</button>
+        </div>
+
+        <alert :show.sync="showSuccess"
+               placement="top-right"
+               :duration="3000"
+               type="success"
+               width="400px"
+               dismissable>
+            <span class="icon-ok-circled alert-icon-float-left"></span>
+            <strong>Well Done!</strong>
+            <p>{{ message }}</p>
+        </alert>
+
+        <alert :show.sync="showError"
+               placement="top-right"
+               :duration="6000"
+               type="danger"
+               width="400px"
+               dismissable>
+            <span class="icon-info-circled alert-icon-float-left"></span>
+            <strong>Oh No!</strong>
+            <p>{{ message }}</p>
+        </alert>
+
+    </div>
+</template>
+<script>
+    export default {
+        name: 'initiative-editor',
+        data() {
+            return{
+                initiative: {
+                    country: {
+                        code: null
+                    }
+                },
+                cause: {},
+                countries: [],
+                editMode: true,
+                showSuccess: false,
+                showError: false,
+                message: ''
+            }
+        },
+        props: {
+            'id': {
+                type: String,
+                required: false,
+                default: null
+            },
+            'causeId': {
+                type: String,
+                default: null
+            },
+            'readOnly': {
+                type: Boolean,
+                default: false
+            },
+            'newOnly': {
+                type: Boolean,
+                default: false
+            }
+        },
+        methods: {
+            getCause() {
+                this.$refs.loader.show();
+                this.$http.get('causes/' + this.causeId).then(function (response) {
+                    this.cause  = response.data.data;
+                    this.countries = this.cause.countries;
+                    this.$refs.loader.hide();
+                });
+            },
+            fetch () {
+                this.$refs.loader.show();
+                this.$http.get('initiatives/' + this.id, {include: 'cause'}).then(function (response) {
+                    this.cause = response.data.data.cause.data;
+                    this.countries = response.data.data.cause.data.countries;
+                    this.initiative = _.omit(response.data.data, 'cause');
+                    this.$refs.loader.hide();
+                });
+            },
+            save() {
+                this.initiative.country_code = this.initiative.country.code;
+                this.$http.put('initiatives/' + this.id, this.initiative).then(function (response) {
+                    this.initiative = response.data.data;
+                    this.editMode = false;
+                    this.message = 'Your changes were saved successfully.';
+                    this.showSuccess = true;
+                }).error(function () {
+                    this.message = 'Your changes could not be saved.';
+                    this.showError = true;
+                });
+            },
+            create() {
+                this.initiative.country_code = this.initiative.country.code;
+                this.project_cause_id = this.causeId;
+                this.$http.post('initiatives', this.initiative).then(function (response) {
+                    this.initiative = {};
+                    window.location = '/admin/initiatives/' + response.data.data.id;
+                }).error(function () {
+                    this.message = 'The initiative could not be created.';
+                    this.showError = true;
+                });
+            },
+            cancel() {
+                if ( ! this.newOnly) {
+                    this.fetch();
+                    this.editMode = false;
+                } else {
+                    window.location = '/admin/causes/' + causeId + '/current-initiatives';
+                }
+            }
+        },
+        ready () {
+            if ( ! this.newOnly) {
+                this.fetch();
+                this.editMode = false;
+            } else {
+                this.editMode = true;
+                this.getCause();
+            }
+        }
+    }
+</script>

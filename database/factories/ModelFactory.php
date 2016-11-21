@@ -906,26 +906,14 @@ $factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $fa
 });
 
 /**
- * Cause Factory
+ * Project Cause Factory
  */
-$factory->define(App\Models\v1\Cause::class, function(Faker\Generator $faker) {
+$factory->define(App\Models\v1\ProjectCause::class, function(Faker\Generator $faker) {
     return [
-        'name' => $faker->catchPhrase,
+        'name' => $faker->unique()->randomElement(['Angel House', 'Clean Water']),
         'short_desc' => $faker->realText(200),
         'upload_id' => $faker->randomElement(App\Models\v1\Upload::pluck('id')->toArray()),
-        'active' => $faker->boolean(50)
-    ];
-});
-
-/**
- * Project Type Factory
- */
-$factory->define(App\Models\v1\ProjectType::class, function(Faker\Generator $faker) {
-    return [
-        'name' => $faker->word,
-        'short_desc' => $faker->realText(200),
-        'upload_id' => $faker->randomElement(App\Models\v1\Upload::pluck('id')->toArray()),
-        'active' => $faker->boolean(50)
+        'countries' => [$faker->countryCode]
     ];
 });
 
@@ -934,24 +922,12 @@ $factory->define(App\Models\v1\ProjectType::class, function(Faker\Generator $fak
  */
 $factory->define(App\Models\v1\ProjectInitiative::class, function(Faker\Generator $faker) {
     return [
-        'name' => $faker->catchPhrase,
-        'cause_id' => $faker->randomElement(App\Models\v1\Cause::pluck('id')->toArray()),
-        'country_code' => $faker->countryCode,
-        'started_at' => $faker->dateTimeThisYear(),
-        'ended_at' => $faker->dateTimeThisYear(),
-        'active' => $faker->boolean(50),
-        'rep_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray())
-    ];
-});
-
-/**
- * Project Package Factory
- */
-$factory->define(App\Models\v1\ProjectPackage::class, function(Faker\Generator $faker) {
-    return [
-        'generate_dates' => $faker->boolean(50),
-        'project_type_id' => $faker->randomElement(App\Models\v1\ProjectType::pluck('id')->toArray()),
-        'project_initiative_id' => $faker->randomElement(App\Models\v1\ProjectInitiative::pluck('id')->toArray()),
+        'type' => $faker->word,
+        'short_desc' => $faker->realText(200),
+        'country_code' => strtolower($faker->countryCode),
+        'upload_id' => $faker->randomElement(App\Models\v1\Upload::pluck('id')->toArray()),
+        'started_at' => $faker->dateTime,
+        'ended_at' => $faker->dateTime
     ];
 });
 
@@ -960,13 +936,13 @@ $factory->define(App\Models\v1\ProjectPackage::class, function(Faker\Generator $
  */
 $factory->define(App\Models\v1\Project::class, function(Faker\Generator $faker) {
     return [
-        'project_package_id' => $faker->randomElement(App\Models\v1\ProjectPackage::pluck('id')->toArray()),
+        'name' => $faker->sentence(3),
+        'project_initiative_id' => $faker->randomElement(App\Models\v1\ProjectInitiative::pluck('id')->toArray()),
         'rep_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
         'sponsor_id' => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
         'sponsor_type' => 'users',
         'plaque_prefix' => $faker->randomElement(['in honor of', 'in memory of', 'sponsored by']),
-        'plaque_message' => $faker->name,
-        'launched_at' => $faker->dateTimeThisYear('+ 1 year')
+        'plaque_message' => $faker->name
     ];
 });
 

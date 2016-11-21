@@ -21,5 +21,8 @@
     <li @if(request()->segment(2) == 'funds')class="active"@endif>
       <a href="/admin/funds"><i class="fa fa-usd"></i></a>
     </li>
+    <li @if(request()->segment(2) == 'causes')class="active"@endif>
+        <a href="/admin/causes"><i class="fa fa-tint"></i></a>
+    </li>
   </ul>
 </div>

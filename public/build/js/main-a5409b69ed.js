@@ -72320,10 +72320,6 @@ exports.default = {
         icon: {
             type: String,
             default: null
-        },
-        size: {
-            type: String,
-            default: null
         }
     },
     data: function data() {
@@ -72337,7 +72333,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"btn btn-primary\" :class=\"size\" @click=\"execute\">{{text}} <i v-if=\"icon\" :class=\"icon\"></i></a>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"btn btn-primary\" @click=\"execute\">{{text}} <i v-if=\"icon\" :class=\"icon\"></i></a>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -72349,6 +72345,586 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],127:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'cause-editor',
+    components: {
+        'alert': _vueStrap2.default.alert,
+        'v-select': _vueSelect2.default
+    },
+    data: function data() {
+        return {
+            cause: {},
+            countries: [],
+            editMode: true,
+            showSuccess: false,
+            showError: false,
+            message: ''
+        };
+    },
+
+    props: {
+        'id': {
+            type: String,
+            required: false,
+            default: null
+        },
+        'edit': {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
+    methods: {
+        fetch: function fetch() {
+            this.$http.get('causes/' + this.id).then(function (response) {
+                this.cause = response.data.data;
+            });
+        },
+        save: function save() {
+            this.$http.put('causes/' + this.id, this.cause).then(function (response) {
+                this.cause = response.data.data;
+                this.editMode = false;
+                this.message = 'Your changes were saved successfully.';
+                this.showSuccess = true;
+            }).error(function () {
+                this.message = 'Your changes could not be saved.';
+                this.showError = true;
+            });
+        },
+        create: function create() {
+            this.$http.post('causes', this.cause).then(function (response) {
+                this.cause = {};
+                window.location.reload();
+            }).error(function () {
+                this.message = 'The cause could not be created.';
+                this.showError = true;
+            });
+        },
+        cancel: function cancel() {
+            if (this.edit) {
+                this.fetch();
+                this.editMode = false;
+            } else {
+                $('#causeEditor').modal('hide');
+            }
+        }
+    },
+    ready: function ready() {
+        if (this.edit) {
+            this.fetch();
+            this.editMode = false;
+        }
+
+        this.$http.get('utilities/countries').then(function (response) {
+            this.countries = response.data.countries;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <div class=\"row\">\n            <div class=\"col-xs-6\">\n                <h5 v-if=\"edit\">Details</h5>\n                <h5 v-else=\"\">Create a Cause</h5>\n            </div>\n            <div class=\"col-xs-6 text-right\" v-if=\"!editMode\">\n                <button class=\"btn btn-xs btn-default-hollow\" @click=\"editMode = true\">\n                        <i class=\"fa fa-pencil\"></i> Edit\n                </button>\n            </div>\n            <div class=\"col-xs-6 text-right\" v-else=\"\">\n                <button class=\"btn btn-xs btn-default\" @click=\"cancel\">\n                    Cancel\n                </button>\n                <button class=\"btn btn-xs btn-primary\" @click=\"save\" v-if=\"edit\">\n                    <i class=\"fa fa-save\"></i> Save\n                </button>\n                <button class=\"btn btn-xs btn-primary\" @click=\"create\" v-else=\"\">\n                    <i class=\"fa fa-plus\"></i> Create\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n        <label>Name</label>\n        <input class=\"form-control\" v-model=\"cause.name\" v-if=\"editMode\">\n        <p v-else=\"\">{{ cause.name }}</p>\n        <label>Countries</label>\n        <v-select class=\"form-control\" multiple=\"\" id=\"country\" :value.sync=\"cause.countries\" :options=\"countries\" label=\"name\" v-if=\"editMode\">\n        </v-select>\n        <p v-else=\"\">\n            <span class=\"label label-default\" style=\"margin-right: 1em\" v-for=\"country in cause.countries\">\n                {{ country.name }}\n            </span>\n        </p>\n        <label>Description</label>\n        <textarea class=\"form-control\" v-model=\"cause.short_desc\" v-if=\"editMode\" rows=\"10\"></textarea>\n        <p v-else=\"\">{{ cause.short_desc }}</p>\n    </div>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-55f50164", module.exports)
+  } else {
+    hotAPI.update("_v-55f50164", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vue-strap/dist/vue-strap.min":122}],128:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'initiative-editor',
+    components: {
+        'alert': _vueStrap2.default.alert,
+        'v-select': _vueSelect2.default
+    },
+    data: function data() {
+        return {
+            initiative: {},
+            countries: [],
+            editMode: true,
+            showSuccess: false,
+            showError: false,
+            message: ''
+        };
+    },
+
+    props: {
+        'id': {
+            type: String,
+            required: false,
+            default: null
+        },
+        'edit': {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
+    methods: {
+        fetch: function fetch() {
+            this.$http.get('initiatives/' + this.id).then(function (response) {
+                this.initiative = response.data.data;
+            });
+        },
+        save: function save() {
+            this.$http.put('initiatives/' + this.id, this.initiative).then(function (response) {
+                this.initiative = response.data.data;
+                this.editMode = false;
+                this.message = 'Your changes were saved successfully.';
+                this.showSuccess = true;
+            }).error(function () {
+                this.message = 'Your changes could not be saved.';
+                this.showError = true;
+            });
+        },
+        create: function create() {
+            this.$http.post('initiatives', this.initiative).then(function (response) {
+                this.initiative = {};
+                window.location.reload();
+            }).error(function () {
+                this.message = 'The initiative could not be created.';
+                this.showError = true;
+            });
+        },
+        cancel: function cancel() {
+            if (this.edit) {
+                this.fetch();
+                this.editMode = false;
+            } else {
+                $('#initiativeEditor').modal('hide');
+            }
+        }
+    },
+    ready: function ready() {
+        if (this.edit) {
+            this.fetch();
+            this.editMode = false;
+        }
+
+        //this.selectedCost.active_at = moment(cost.active_at).format('YYYY-MM-DD')
+
+        this.$http.get('utilities/countries').then(function (response) {
+            this.countries = response.data.countries;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <div class=\"row\">\n            <div class=\"col-xs-6\">\n                <h5 v-if=\"edit\">Details</h5>\n                <h5 v-else=\"\">Create an Initiative</h5>\n            </div>\n            <div class=\"col-xs-6 text-right\" v-if=\"!editMode\">\n                <button class=\"btn btn-xs btn-default-hollow\" @click=\"editMode = true\">\n                    <i class=\"fa fa-pencil\"></i> Edit\n                </button>\n            </div>\n            <div class=\"col-xs-6 text-right\" v-else=\"\">\n                <button class=\"btn btn-xs btn-default\" @click=\"cancel\">\n                    Cancel\n                </button>\n                <button class=\"btn btn-xs btn-primary\" @click=\"save\" v-if=\"edit\">\n                    <i class=\"fa fa-save\"></i> Save\n                </button>\n                <button class=\"btn btn-xs btn-primary\" @click=\"create\" v-else=\"\">\n                    <i class=\"fa fa-plus\"></i> Create\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <label>Type</label>\n                <input class=\"form-control\" v-model=\"initiative.type\" v-if=\"editMode\">\n                <p v-else=\"\">{{ initiative.type }}</p>\n                <label>Country</label>\n                <v-select class=\"form-control\" id=\"country\" :value.sync=\"initiative.country.code\" :options=\"countries\" label=\"name\" v-if=\"editMode\">\n                </v-select>\n                <p v-else=\"\">\n                    {{ initiative.country.name }}\n                </p>\n            </div>\n            <div class=\"col-sm-6\">\n                <label>Start Date</label>\n                <input type=\"date\" class=\"form-control\" v-model=\"initiative.started_at\" v-if=\"editMode\">\n                <p v-else=\"\">{{ initiative.started_at | moment 'll' }}</p>\n                <label>End Date</label>\n                <input type=\"date\" class=\"form-control\" v-model=\"initiative.ended_at\" v-if=\"editMode\">\n                <p v-else=\"\">{{ initiative.ended_at | moment 'll' }}</p>\n            </div>\n        </div>\n\n        <label>Short Description</label>\n        <textarea class=\"form-control\" v-model=\"initiative.short_desc\" v-if=\"editMode\" rows=\"10\"></textarea>\n        <p v-else=\"\">{{ initiative.short_desc }}</p>\n\n    </div>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-749cdd21", module.exports)
+  } else {
+    hotAPI.update("_v-749cdd21", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vue-strap/dist/vue-strap.min":122}],129:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'initiatives-list',
+    props: {
+        'causeId': {
+            type: String,
+            required: true
+        },
+        'list': {
+            type: String,
+            default: 'current'
+        }
+    },
+    data: function data() {
+        return {
+            initiatives: [],
+            orderByField: 'started_at',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: { current_page: 1 },
+            search: '',
+            activeFields: ['type', 'country', 'started_at', 'ended_at'],
+            maxActiveFields: 6
+        };
+    },
+
+    watch: {
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchInitiatives();
+        },
+        'page': function page(val, oldVal) {
+            this.searchInitiatives();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchInitiatives();
+        }
+    },
+
+    methods: {
+        isActive: function isActive(field) {
+            return _.contains(this.activeFields, field);
+        },
+        maxCheck: function maxCheck(field) {
+            return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields;
+        },
+        setOrderByField: function setOrderByField(field) {
+            this.orderByField = field;
+            this.direction = 1;
+            this.searchInitiatives();
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'started_at';
+            this.direction = 1;
+            this.search = null;
+        },
+        getParameters: function getParameters() {
+            var params = {
+                // include:'',
+                search: this.search,
+                per_page: this.per_page,
+                page: this.pagination.current_page,
+                sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
+            };
+
+            switch (this.list) {
+                case 'current':
+                    params.current = true;
+                    break;
+                case 'archived':
+                    params.archived = true;
+                    break;
+            }
+
+            return params;
+        },
+        searchInitiatives: function searchInitiatives() {
+            var params = this.getParameters();
+            this.$http.get('causes/' + this.causeId + '/initiatives', params).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.initiatives = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchInitiatives();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\">Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"started_at\" :disabled=\"maxCheck('started_at')\"> Started on\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"ended_at\" :disabled=\"maxCheck('ended_at')\"> Ended on\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"country\" :disabled=\"maxCheck('country')\"> Country\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"projects\" :disabled=\"maxCheck('projects')\"> Projects\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"created_at\" :disabled=\"maxCheck('created_at')\"> Created on\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters <i class=\"fa fa-times\"></i></button>\n                <a class=\"btn btn-primary btn-sm\" href=\"/admin/initiatives/create\">New <i class=\"fa fa-plus\"></i></a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-striped\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('country')\">\n                Country\n            </th>\n            <th v-if=\"isActive('started_at')\">\n                Started On\n                <i @click=\"setOrderByField('started_at')\" v-if=\"orderByField !== 'started_at'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'started_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('ended_at')\">\n                Ended On\n                <i @click=\"setOrderByField('ended_at')\" v-if=\"orderByField !== 'ended_at'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'ended_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('projects')\">\n                Projects\n            </th>\n            <th v-if=\"isActive('created_at')\">\n                Created on\n                <i @click=\"setOrderByField('created_at')\" v-if=\"orderByField !== 'created_at'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'created_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"initiatives.length > 0\">\n        <tr v-for=\"initiative in initiatives|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('type')\">{{initiative.type|capitalize}}</td>\n            <td v-if=\"isActive('country')\">{{initiative.country.name|capitalize}}</td>\n            <td v-if=\"isActive('started_at')\">{{initiative.started_at|moment 'll'}}</td>\n            <td v-if=\"isActive('ended_at')\">{{initiative.ended_at|moment 'll'}}</td>\n            <td v-if=\"isActive('projects')\">{{initiative.projects_count}}</td>\n            <td v-if=\"isActive('created_at')\">{{initiative.created_at|moment 'll'}}</td>\n            <td>\n                <a href=\"/admin/initiatives/{{initiative.id}}\"><i class=\"fa fa-cog\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tbody v-else=\"\">\n        <tr>\n            <td colspan=\"7\" class=\"text-center text-muted\">No initiatives found.</td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchInitiatives\" size=\"small\">\n                    </pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-6cd06ac1", module.exports)
+  } else {
+    hotAPI.update("_v-6cd06ac1", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],130:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'project-causes',
+    data: function data() {
+        return {
+            causes: {},
+            pagination: {}
+        };
+    },
+
+    methods: {
+        fetch: function fetch() {
+            this.$http.get('causes').then(function (response) {
+                this.causes = response.data.data;
+                this.pagination = response.data.meta.pagination;
+            });
+        }
+    },
+    ready: function ready() {
+        this.fetch();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\n        <div class=\"row\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n            <div v-for=\"cause in causes\" class=\"col-sm-6 col-md-4\" style=\"display:flex\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h5 class=\"text-center\">{{ cause.name }}</h5>\n                    </div>\n                    <div class=\"panel-body text-center\">\n                        <!--<p class=\"badge\">{{ cause.status | capitalize }}</p><br>-->\n                        <p class=\"small\">{{ cause.short_desc }}</p>\n                        <label>Countries</label>\n                        <p class=\"small\"><span v-for=\"country in cause.countries\">\n\t\t\t\t\t\t\t\t{{ country.name }}<span v-show=\"$index + 1 != cause.countries.length\">, </span>\n\t\t\t\t\t\t</span></p>\n                        <label>Projects Funded</label>\n                        <p>{{ cause.projects_funded }}</p>\n                        <!--<h3 class=\"text-success\">{{ trip.starting_cost | currency }}</h3>-->\n                        <a href=\"/admin/causes/{{ cause.id }}/current-projects\" class=\"btn btn-primary-hollow btn-sm\"><i class=\"fa fa-cog\"></i> Manage</a>\n                    </div>\n                </div>\n            </div>\n        </div><!-- end row -->\n\n    </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-c9e8f2ca", module.exports)
+  } else {
+    hotAPI.update("_v-c9e8f2ca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],131:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'project-editor',
+    components: { vSelect: _vueSelect2.default },
+    props: {
+        'id': {
+            type: String,
+            default: null
+        },
+        'readOnly': {
+            type: Boolean,
+            default: false
+        },
+        'newOnly': {
+            type: Boolean,
+            default: false
+        }
+    },
+    watch: {
+        'initiative.country.code': function initiativeCountryCode(val, oldVal) {
+            this.getInitiatives();
+        },
+        'sponsor': function sponsor(val, oldVal) {
+            this.selectedSponsor = val;
+        },
+        'selectedSponsor': function selectedSponsor(val, oldVal) {
+            val ? this.project.sponsor_id = val.id : this.project.sponsor_id = oldVal.id;
+        }
+    },
+    data: function data() {
+        return {
+            project: {},
+            sponsor: {},
+            initiative: {},
+            availableInitiatives: [],
+            cause: {},
+            editMode: false,
+            sponsors: [],
+            selectedSponsor: null
+        };
+    },
+
+    computed: {
+        'plaque': function plaque() {
+            return this.project.plaque_prefix + ' ' + this.project.plaque_message;
+        },
+        'funded': function funded() {
+            return this.project.funded_at ? this.project.funded_at.moment('ll') : 'In progress.';
+        }
+    },
+    methods: {
+        getInitiatives: function getInitiatives() {
+            this.$http.get('causes/' + this.cause.id + '/initiatives', {
+                country: this.initiative.country.code,
+                current: true
+            }).then(function (response) {
+                this.availableInitiatives = response.data.data;
+            });
+        },
+        getSponsors: function getSponsors(search, loading) {
+            loading(true);
+            this.$http.get(this.project.sponsor_type, { search: search }).then(function (response) {
+                this.sponsors = response.data.data;
+                loading(false);
+            });
+        },
+        fetch: function fetch() {
+            this.$refs.loader.show();
+            this.$http.get('projects/' + this.id, { include: 'initiative.cause,sponsor' }).then(function (response) {
+                var arr = response.data.data;
+                this.cause = _.omit(arr.initiative.data.cause.data, 'initiatives');
+                this.initiative = arr.initiative.data;
+                this.sponsor = arr.sponsor.data;
+                this.project = _.omit(arr, ['initiative', 'sponsor']);
+                this.$refs.loader.hide();
+            });
+        },
+        save: function save() {
+            this.$refs.loader.show();
+            this.$http.put('projects/' + this.id, this.project).then(function (response) {
+                this.editMode = false;
+                this.$refs.loader.hide();
+            });
+        },
+        cancel: function cancel() {
+            this.editMode = false;
+            this.fetch();
+        }
+    },
+    ready: function ready() {
+        this.fetch();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <spinner v-ref:loader=\"\" size=\"xl\" :fixed=\"false\" text=\"Loading...\"></spinner>\n    <div class=\"panel-heading\">\n        <h5>\n            Details\n            <span class=\"pull-right text-muted\">\n                <tooltip effect=\"scale\" placement=\"bottom\" content=\"Edit\">\n                    <i class=\"fa fa-lg fa-cog\" @click=\"editMode = !editMode\"></i>\n                </tooltip>\n            </span>\n        </h5>\n    </div>\n    <div class=\"panel-body\">\n        <div :class=\"{ 'col-md-7': !editMode, 'col-md-12' : editMode}\">\n            <label>Project ID</label>\n            <p>{{ project.id }}</p>\n            <hr class=\"divider\">\n            <div class=\"row\">\n                <div class=\"col-md-12\">\n                    <label>Project Name</label>\n                    <input type=\"text\" v-model=\"project.name\" class=\"form-control\" v-if=\"editMode\">\n                    <p v-else=\"\">{{ project.name }}</p>\n                </div>\n            </div>\n            <hr class=\"divider\">\n            <div class=\"row\">\n                <div class=\"col-md-12\">\n                    <label>Cause</label>\n                    <p>{{ cause.name }}</p>\n                </div>\n            </div>\n            <hr class=\"divider\">\n            <div class=\"row\">\n                <div class=\"col-md-6\">\n                    <label>Country</label>\n                    <select class=\"form-control\" v-model=\"initiative.country.code\" v-if=\"editMode\">\n                        <option v-for=\"country in cause.countries\" :value=\"country.code\">{{ country.name }}</option>\n                    </select>\n                    <p v-else=\"\">{{ initiative.country.name }}</p>\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Type</label>\n                    <select class=\"form-control\" v-model=\"project.project_initiative_id\" v-if=\"editMode\">\n                        <option v-for=\"initiative in availableInitiatives\" :value=\"project.project_initiative_id\">{{ initiative.type }}</option>\n                    </select>\n                    <p v-else=\"\">{{ initiative.type }}</p>\n                </div>\n            </div>\n            <hr class=\"divider\">\n            <div class=\"row\">\n                <div class=\"col-md-6\">\n                    <label>Sponsor Name</label>\n                    <v-select class=\"form-control\" id=\"sponsor\" :value.sync=\"selectedSponsor\" :options=\"sponsors\" :on-search=\"getSponsors\" label=\"name\" v-if=\"editMode\">\n                    </v-select>\n                    <p v-else=\"\">{{ sponsor.name }}</p>\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Sponsor Type</label>\n                    <select class=\"form-control\" v-model=\"project.sponsor_type\" v-if=\"editMode\" @change=\"selectedSponsor = null\">\n                        <option value=\"users\">Individual</option>\n                        <option value=\"groups\">Group</option>\n                    </select>\n                    <p v-else=\"\">{{ project.sponsor_type == 'users' ? 'Individual' : 'Group' }}</p>\n                </div>\n            </div>\n            <hr class=\"divider\">\n            <div class=\"row\" v-if=\"editMode\">\n                <div class=\"col-md-6\">\n                    <label>Plaque Prefix</label>\n                    <select class=\"form-control\" v-model=\"project.plaque_prefix\">\n                        <option>in honor of</option>\n                        <option>in memory of</option>\n                        <option>sponsored by</option>\n                        <option>on behalf of</option>\n                    </select>\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Plaque Message</label>\n                    <input class=\"form-control\" type=\"text\" v-model=\"project.plaque_message\">\n                </div>\n            </div>\n            <div class=\"row\" v-else=\"\">\n                <div class=\"col-md-12\">\n                    <label>Plaque Message</label>\n                    <p>{{ plaque }}</p>\n                </div>\n            </div>\n            <hr class=\"divider\">\n            <div class=\"row\">\n                <div class=\"col-md-6\">\n                    <label>Started At</label>\n                    <p>{{ project.created_at | moment 'll' }}</p>\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Funded At</label>\n                    <p>{{ funded }}</p>\n                </div>\n            </div>\n            <hr class=\"divider\">\n            <div class=\"row\">\n                <div class=\"col-md-6\">\n                    <label>Last Updated</label>\n                    <p>{{ project.updated_at | moment 'll' true }}</p>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-md-5 panel panel-default panel-body text-center\" v-if=\"!editMode\">\n            <label>Email</label>\n            <p>{{ sponsor.email }}</p>\n            <label>Home Phone</label>\n            <p>{{ sponsor.phone_one }}</p>\n            <label>Mobile Phone</label>\n            <p>{{ sponsor.phone_two }}</p>\n            <label>Address</label>\n            <p>{{ sponsor.address }}</p>\n            <label>City</label>\n            <p>{{ sponsor.city }}</p>\n            <label>State/Providence</label>\n            <p>{{ sponsor.state }}</p>\n            <label>Zip/Postal Code</label>\n            <p>{{ sponsor.zip }}</p>\n            <label>Country</label>\n            <p>{{ sponsor.country_name }}</p>\n        </div>\n    </div>\n    <div class=\"panel-footer text-right\" v-if=\"editMode\">\n        <button class=\"btn btn-default\" @click=\"cancel\">Cancel</button>\n        <button class=\"btn btn-primary\" @click=\"save\">Save</button>\n    </div>\n</div><!-- end panel -->\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-b0739544", module.exports)
+  } else {
+    hotAPI.update("_v-b0739544", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],132:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'projects-list',
+    props: {
+        'causeId': {
+            type: String,
+            required: true
+        },
+        'list': {
+            type: String,
+            default: 'current'
+        }
+    },
+    data: function data() {
+        return {
+            projects: [],
+            orderByField: 'name',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: { current_page: 1 },
+            search: '',
+            activeFields: ['name', 'sponsor', 'type', 'percent_raised'],
+            maxActiveFields: 6
+        };
+    },
+
+    watch: {
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchProjects();
+        },
+        'page': function page(val, oldVal) {
+            this.searchProjects();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchProjects();
+        }
+    },
+
+    methods: {
+        isActive: function isActive(field) {
+            return _.contains(this.activeFields, field);
+        },
+        maxCheck: function maxCheck(field) {
+            return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields;
+        },
+        setOrderByField: function setOrderByField(field) {
+            this.orderByField = field;
+            this.direction = 1;
+            this.searchProjects();
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'name';
+            this.direction = 1;
+            this.search = null;
+        },
+        getParameters: function getParameters() {
+            var params = {
+                include: 'sponsor,initiative',
+                search: this.search,
+                per_page: this.per_page,
+                page: this.pagination.current_page,
+                sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
+            };
+
+            switch (this.list) {
+                case 'current':
+                    params.current = true;
+                    break;
+                case 'archived':
+                    params.archived = true;
+                    break;
+            }
+
+            return params;
+        },
+        searchProjects: function searchProjects() {
+            var params = this.getParameters();
+            this.$http.get('causes/' + this.causeId + '/projects', params).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.projects = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchProjects();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\">Project Name\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"sponsor\" :disabled=\"maxCheck('sponsor')\"> Sponsor\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"country\" :disabled=\"maxCheck('country')\"> Country\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"goal\" :disabled=\"maxCheck('goal')\"> Goal\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"amount_raised\" :disabled=\"maxCheck('amount_raised')\"> Funds Raised\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"funded_at\" :disabled=\"maxCheck('funded_at')\"> Funded\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"created_at\" :disabled=\"maxCheck('created_at')\"> Created on\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters <i class=\"fa fa-times\"></i></button>\n                <a class=\"btn btn-primary btn-sm\" href=\"projects/create\">New <i class=\"fa fa-plus\"></i></a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-striped\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('type')\">\n                Type\n            </th>\n            <th v-if=\"isActive('country')\">\n                Country\n            </th>\n            <th v-if=\"isActive('sponsor')\">\n                Sponsor\n            </th>\n            <th v-if=\"isActive('goal')\">\n                Goal\n            </th>\n            <th v-if=\"isActive('funds_raised')\">\n                Funds Raised\n            </th>\n            <th v-if=\"isActive('percent_raised')\">\n                Percent Raised\n            </th>\n            <th v-if=\"isActive('funded_at')\">\n                Funded\n            </th>\n            <th v-if=\"isActive('created_at')\">\n                Created on\n                <i @click=\"setOrderByField('created_at')\" v-if=\"orderByField !== 'created_at'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'created_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"projects.length > 0\">\n        <tr v-for=\"project in projects|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('name')\">{{project.name|capitalize}}</td>\n            <td v-if=\"isActive('type')\">{{project.initiative.data.type|capitalize}}</td>\n            <td v-if=\"isActive('country')\">{{project.initiative.data.country.name|capitalize}}</td>\n            <td v-if=\"isActive('sponsor')\">{{project.sponsor.data.name|capitalize}}</td>\n            <td v-if=\"isActive('goal')\">{{project.goal|currency}}</td>\n            <td v-if=\"isActive('funds_raised')\">{{project.amount_raised|currency}}</td>\n            <td v-if=\"isActive('percent_raised')\">{{project.percent_raised}}%</td>\n            <td v-if=\"isActive('funded_at')\">\n                <span v-if=\"project.funded\">{{project.funded_at|moment 'll'}}</span>\n                <span v-else=\"\">In progress</span>\n            </td>\n            <td v-if=\"isActive('created_at')\">{{project.created_at|moment 'll'}}</td>\n            <td>\n                <a href=\"/admin/projects/{{project.id}}\"><i class=\"fa fa-cog\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tbody v-else=\"\">\n            <tr>\n                <td colspan=\"10\" class=\"text-center text-muted\">No projects found.</td>\n            </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"10\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchProjects\" size=\"small\">\n                    </pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-452c96e4", module.exports)
+  } else {
+    hotAPI.update("_v-452c96e4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],133:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72474,7 +73050,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-14d23642", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],128:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],134:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -72549,7 +73125,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2c5a08ec", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./details/details.vue":132,"./details/regions.vue":133,"./details/transports.vue":134,"./details/trips.vue":135,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],129:[function(require,module,exports){
+},{"./details/details.vue":138,"./details/regions.vue":139,"./details/transports.vue":140,"./details/trips.vue":141,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],135:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72720,7 +73296,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b5b1c060", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],130:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72794,7 +73370,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-71409450", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],131:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72833,7 +73409,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-483b544a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],132:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],138:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72874,7 +73450,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6f75c21c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],133:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],139:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72909,7 +73485,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e7533d4e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],134:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],140:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72943,7 +73519,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-368f8e80", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],135:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],141:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73003,7 +73579,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n            <div class=\"row\">\n                <div class=\"col-sm-8\">\n                    <h5>Trips</h5>\n                </div>\n                <div class=\"col-sm-4 text-right\">\n                    <a class=\"btn btn-primary btn-sm\" href=\"{{campaignId}}/trips/create\"><i class=\"fa fa-plus icon-left\"></i> New</a>\n                </div>\n            </div>\n        </div><!-- end panel-heading -->\n        <div class=\"panel-body\">\n            <div class=\"row\">\n                <div class=\"col-sm-12\">\n                    <form class=\"form-inline\" novalidate=\"\">\n                        <div class=\"form-inline\" style=\"display: inline-block;\">\n                            <div class=\"form-group\">\n                                <label>Show</label>\n                                <select class=\"form-control input-sm\" v-model=\"per_page\">\n                                    <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </div>\n                        <div class=\"input-group input-group-sm\">\n                            <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                        </div>\n                        <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n                    </form>\n                </div>\n            </div>\n            <hr>\n            <table class=\"table table-striped\">\n                <thead>\n                <tr>\n                    <th :class=\"{'text-primary': orderByField === 'group.data.name'}\">\n                        Group\n                        <i @click=\"setOrderByField('group.data.name')\" v-if=\"orderByField !== 'group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                        <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                    </th>\n                    <th :class=\"{'text-primary': orderByField === 'type'}\">\n                        Type\n                        <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                        <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                    </th>\n                    <th :class=\"{'text-primary': orderByField === 'status'}\">\n                        Status\n                        <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                        <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                    </th>\n                    <th>\n                        Start &amp; End\n                    </th>\n                    <th><i class=\"fa fa-plane\"></i></th>\n                    <th></th>\n                </tr>\n                </thead>\n                <tbody>\n                <tr v-for=\"trip in trips|filterBy search|orderBy orderByField direction\">\n                    <td>{{trip.group.data.name}}</td>\n                    <td>{{trip.type|capitalize}}</td>\n                    <td>{{trip.status|capitalize}}</td>\n                    <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>\n                    <td>{{trip.reservations}}</td>\n                    <td class=\"text-center\">\n                        <a href=\"/admin{{trip.links[0].uri}}\"><i class=\"fa fa-gear\"></i></a>\n                    </td>\n                </tr>\n                </tbody>\n                <tfoot>\n                <tr>\n                    <td colspan=\"7\">\n                        <div class=\"col-sm-12 text-center\">\n    \t\t\t\t\t\t<pagination :pagination.sync=\"pagination\" :callback=\"searchTrips\"></pagination>\n                        </div>\n                    </td>\n                </tr>\n                </tfoot>\n            </table>\n        </div><!-- end panel-body -->\n    </div><!-- end panel -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n            <h5>Trips</h5>\n        </div><!-- end panel-heading -->\n        <div class=\"panel-body\">\n            <div class=\"row\">\n                <div class=\"col-sm-12\">\n                    <form class=\"form-inline text-right\" novalidate=\"\">\n                        <div class=\"form-inline\" style=\"display: inline-block;\">\n                            <div class=\"form-group\">\n                                <label>Show</label>\n                                <select class=\"form-control input-sm\" v-model=\"per_page\">\n                                    <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </div>\n                        <div class=\"input-group input-group-sm\">\n                            <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                        </div>\n                        <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n                        <a class=\"btn btn-primary btn-sm\" href=\"{{campaignId}}/trips/create\">New <i class=\"fa fa-plus\"></i></a>\n                    </form>\n                </div>\n            </div>\n            <hr>\n            <table class=\"table table-striped\">\n                <thead>\n                <tr>\n                    <th :class=\"{'text-primary': orderByField === 'group.data.name'}\">\n                        Group\n                        <i @click=\"setOrderByField('group.data.name')\" v-if=\"orderByField !== 'group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                        <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                    </th>\n                    <th :class=\"{'text-primary': orderByField === 'type'}\">\n                        Type\n                        <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                        <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                    </th>\n                    <th :class=\"{'text-primary': orderByField === 'status'}\">\n                        Status\n                        <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                        <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                    </th>\n                    <th>\n                        Start &amp; End\n                    </th>\n                    <th><i class=\"fa fa-plane\"></i></th>\n                    <th></th>\n                </tr>\n                </thead>\n                <tbody>\n                <tr v-for=\"trip in trips|filterBy search|orderBy orderByField direction\">\n                    <td>{{trip.group.data.name}}</td>\n                    <td>{{trip.type|capitalize}}</td>\n                    <td>{{trip.status|capitalize}}</td>\n                    <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>\n                    <td>{{trip.reservations}}</td>\n                    <td class=\"text-center\">\n                        <a href=\"/admin{{trip.links[0].uri}}\"><i class=\"fa fa-gear\"></i></a>\n                    </td>\n                </tr>\n                </tbody>\n                <tfoot>\n                <tr>\n                    <td colspan=\"7\">\n                        <div class=\"col-sm-12 text-center\">\n    \t\t\t\t\t\t<pagination :pagination.sync=\"pagination\" :callback=\"searchTrips\"></pagination>\n                        </div>\n                    </td>\n                </tr>\n                </tfoot>\n            </table>\n        </div><!-- end panel-body -->\n    </div><!-- end panel -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -73014,7 +73590,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-43005348", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],136:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],142:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73090,7 +73666,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e0395672", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],137:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],143:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -73148,7 +73724,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f091c63", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./campaign-groups.vue":130,"./group-trips.vue":136,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],138:[function(require,module,exports){
+},{"./campaign-groups.vue":136,"./group-trips.vue":142,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73596,7 +74172,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-342117a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],139:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],145:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -73933,7 +74509,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n            </div>\n\n            <legend>By Designation</legend>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"groupFilter\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupObj\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter by Group\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"reservationFilter\" :debounce=\"250\" :on-search=\"getReservations\" :value.sync=\"reservationObj\" :options=\"reservationsOptions\" label=\"given_names\" placeholder=\"Filter by Reservation\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignsOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"causesFilter\" :debounce=\"250\" :on-search=\"getCauses\" :value.sync=\"causeObj\" :options=\"causesOptions\" label=\"name\" placeholder=\"Filter by Cause\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"tripsFilter\" :debounce=\"250\" :on-search=\"getTrips\" :value.sync=\"tripObj\" :options=\"tripsOptions\" label=\"name\" placeholder=\"Filter by Trip\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"projectsFilter\" :debounce=\"250\" :on-search=\"getProjects\" :value.sync=\"projectObj\" :options=\"projectsOptions\" label=\"name\" placeholder=\"Filter by Project\"></v-select>\n            </div>\n\n            <legend>By Account Holder</legend>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"groupFilter\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupAccountObj\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"userFilter\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"userObj\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n            </div>\n\n\n            <div class=\"form-group\">\n                <div class=\"row\">\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group input-group-sm\">\n                            <span class=\"input-group-addon\">Start</span>\n                            <input type=\"datetime-local\" class=\"form-control\" v-model=\"filters.starts\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group input-group-sm\">\n                            <span class=\"input-group-addon\">End</span>\n                            <input type=\"datetime-local\" class=\"form-control\" v-model=\"filters.ends\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\"> Name\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"company\" :disabled=\"maxCheck('company')\"> Company\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"phone\" :disabled=\"maxCheck('phone')\"> Phone\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"zip\" :disabled=\"maxCheck('zip')\"> Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"total_donated\" :disabled=\"maxCheck('total_donated')\"> Amount\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n                                <label>Max Visible Fields</label>\n                                <select class=\"form-control\" v-model=\"maxActiveFields\">\n                                    <option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <span class=\"caret\"></span>\n                </button>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showExportModal=true\">\n                    Export\n                    <span class=\"fa fa-download\"></span>\n                </button>\n                <!--<a class=\"btn btn-primary btn-sm\" href=\"donors/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n            </form>\n        </div>\n    </div>\n    <hr class=\"divider sm\">\n    <div>\n        <label>Active Filters</label>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.reservation &amp;&amp; filters.reservation.length\" @click=\"filters.reservation = ''\">\n            Reservation\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.group &amp;&amp; filters.group.length\" @click=\"filters.group = ''\">\n            Group\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.campaign &amp;&amp; filters.campaign.length\" @click=\"filters.campaign = ''\">\n            Campaign\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.cause &amp;&amp; filters.cause.length\" @click=\"filters.cause = ''\">\n            Cause\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.trip &amp;&amp; filters.trip.length\" @click=\"filters.trip = ''\">\n            Trip\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.project &amp;&amp; filters.project.length\" @click=\"filters.project = ''\">\n            Project\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.starts &amp;&amp; filters.starts.length\" @click=\"filters.starts = ''\">\n            Starts\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.ends &amp;&amp; filters.ends.length\" @click=\"filters.ends = ''\">\n            Ends\n            <i class=\"fa fa-close\"></i>\n        </span>\n    </div>\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('company')\" :class=\"{'text-primary': orderByField === 'company'}\">\n                Company\n                <i @click=\"setOrderByField('company')\" v-if=\"orderByField !== 'company'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'company'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('email')\" :class=\"{'text-primary': orderByField === 'email'}\">\n                Email\n                <i @click=\"setOrderByField('email')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('phone')\">\n                Phone\n            </th>\n            <th v-if=\"isActive('zip')\">\n                Zip\n            </th>\n            <th v-if=\"isActive('total_donated')\" :class=\"{'text-primary': orderByField === 'total_donated'}\">\n                Amount\n                <i @click=\"setOrderByField('total_donated')\" v-if=\"orderByField !== 'total_donated'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'total_donated'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"donor in donors|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('name')\" v-text=\"donor.name\"></td>\n            <td v-if=\"isActive('company')\" v-text=\"donor.company\"></td>\n            <td v-if=\"isActive('email')\" v-text=\"donor.email\"></td>\n            <td v-if=\"isActive('phone')\" v-text=\"donor.phone|phone\"></td>\n            <td v-if=\"isActive('zip')\" v-text=\"donor.zip\"></td>\n            <td v-if=\"isActive('total_donated')\" v-text=\"donor.total_donated|currency\"></td>\n            <td><a href=\"/admin/donors/{{ donor.id }}\"><i class=\"fa fa-cog\"></i></a></td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchDonors\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n    <modal title=\"Export Donors List\" :show.sync=\"showExportModal\" effect=\"zoom\" width=\"400\" ok-text=\"Export\" :callback=\"exportList\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <ul class=\"list-unstyled\">\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"name\"> Name\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"company\"> Company\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"email\"> Email\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"phone\"> Phone\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"zip\"> Zip\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"amount\"> Amount\n                    </label>\n                </li>\n            </ul>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n            </div>\n\n            <legend>By Designation</legend>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"groupFilter\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupObj\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter by Group\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"reservationFilter\" :debounce=\"250\" :on-search=\"getReservations\" :value.sync=\"reservationObj\" :options=\"reservationsOptions\" label=\"given_names\" placeholder=\"Filter by Reservation\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignsOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"causesFilter\" :debounce=\"250\" :on-search=\"getCauses\" :value.sync=\"causeObj\" :options=\"causesOptions\" label=\"name\" placeholder=\"Filter by Cause\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"tripsFilter\" :debounce=\"250\" :on-search=\"getTrips\" :value.sync=\"tripObj\" :options=\"tripsOptions\" label=\"name\" placeholder=\"Filter by Trip\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"projectsFilter\" :debounce=\"250\" :on-search=\"getProjects\" :value.sync=\"projectObj\" :options=\"projectsOptions\" label=\"name\" placeholder=\"Filter by Project\"></v-select>\n            </div>\n\n            <legend>By Account Holder</legend>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"groupFilter\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupAccountObj\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"userFilter\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"userObj\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n            </div>\n\n\n            <div class=\"form-group\">\n                <div class=\"row\">\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group input-group-sm\">\n                            <span class=\"input-group-addon\">Start</span>\n                            <input type=\"datetime-local\" class=\"form-control\" v-model=\"filters.starts\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group input-group-sm\">\n                            <span class=\"input-group-addon\">End</span>\n                            <input type=\"datetime-local\" class=\"form-control\" v-model=\"filters.ends\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\"> Name\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"company\" :disabled=\"maxCheck('company')\"> Company\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"phone\" :disabled=\"maxCheck('phone')\"> Phone\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"zip\" :disabled=\"maxCheck('zip')\"> Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"total_donated\" :disabled=\"maxCheck('total_donated')\"> Amount\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n                                <label>Max Visible Fields</label>\n                                <select class=\"form-control\" v-model=\"maxActiveFields\">\n                                    <option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <span class=\"caret\"></span>\n                </button>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showExportModal=true\">\n                    Export\n                    <span class=\"fa fa-download\"></span>\n                </button>\n                <!--<a class=\"btn btn-primary btn-sm\" href=\"donors/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n            </form>\n        </div>\n    </div>\n    <hr class=\"divider sm\">\n    <div>\n        Active Filters:\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.reservation &amp;&amp; filters.reservation.length\" @click=\"filters.reservation = ''\">\n            Reservation\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.group &amp;&amp; filters.group.length\" @click=\"filters.group = ''\">\n            Group\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign &amp;&amp; filters.campaign.length\" @click=\"filters.campaign = ''\">\n            Campaign\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.cause &amp;&amp; filters.cause.length\" @click=\"filters.cause = ''\">\n            Cause\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.trip &amp;&amp; filters.trip.length\" @click=\"filters.trip = ''\">\n            Trip\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.project &amp;&amp; filters.project.length\" @click=\"filters.project = ''\">\n            Project\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.starts &amp;&amp; filters.starts.length\" @click=\"filters.starts = ''\">\n            Starts\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.ends &amp;&amp; filters.ends.length\" @click=\"filters.ends = ''\">\n            Ends\n            <span class=\"badge\">x</span>\n        </button>\n    </div>\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('company')\" :class=\"{'text-primary': orderByField === 'company'}\">\n                Company\n                <i @click=\"setOrderByField('company')\" v-if=\"orderByField !== 'company'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'company'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('email')\" :class=\"{'text-primary': orderByField === 'email'}\">\n                Email\n                <i @click=\"setOrderByField('email')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('phone')\">\n                Phone\n            </th>\n            <th v-if=\"isActive('zip')\">\n                Zip\n            </th>\n            <th v-if=\"isActive('total_donated')\" :class=\"{'text-primary': orderByField === 'total_donated'}\">\n                Amount\n                <i @click=\"setOrderByField('total_donated')\" v-if=\"orderByField !== 'total_donated'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'total_donated'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"donor in donors|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('name')\" v-text=\"donor.name\"></td>\n            <td v-if=\"isActive('company')\" v-text=\"donor.company\"></td>\n            <td v-if=\"isActive('email')\" v-text=\"donor.email\"></td>\n            <td v-if=\"isActive('phone')\" v-text=\"donor.phone|phone\"></td>\n            <td v-if=\"isActive('zip')\" v-text=\"donor.zip\"></td>\n            <td v-if=\"isActive('total_donated')\" v-text=\"donor.total_donated|currency\"></td>\n            <td><a href=\"/admin/donors/{{ donor.id }}\"><i class=\"fa fa-cog\"></i></a></td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchDonors\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n    <modal title=\"Export Donors List\" :show.sync=\"showExportModal\" effect=\"zoom\" width=\"400\" ok-text=\"Export\" :callback=\"exportList\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <ul class=\"list-unstyled\">\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"name\"> Name\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"company\"> Company\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"email\"> Email\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"phone\"> Phone\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"zip\"> Zip\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"amount\"> Amount\n                    </label>\n                </li>\n            </ul>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -73948,7 +74524,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3e5be956", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],140:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74119,7 +74695,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d5e313f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],141:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],147:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -74325,7 +74901,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <label>Type</label>\n                <select class=\"form-control\" v-model=\"filters.type\">\n                    <option value=\"\">All Types</option>\n                    <option value=\"reservation\">Reservation</option>\n                    <option value=\"trip\">Trip</option>\n                </select>\n            </div>\n            <div class=\"form-group\">\n                <div class=\"row\">\n                    <div class=\"col-xs-12\">\n                        <label>Balance</label>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Min</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.minBalance\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Max</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.maxBalance\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\"> Name\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"balance\" :disabled=\"maxCheck('balance')\"> Balance\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n                                <label>Max Visible Fields</label>\n                                <select class=\"form-control\" v-model=\"maxActiveFields\">\n                                    <option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <span class=\"caret\"></span>\n                </button>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showExportModal=true\">\n                    Export\n                    <span class=\"fa fa-download\"></span>\n                </button>\n                <!--<a class=\"btn btn-primary btn-sm\" href=\"funds/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n            </form>\n        </div>\n    </div>\n    <hr class=\"divider sm\">\n    <div>\n        <label>Active Filters</label>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.minBalance\" @click=\"filters.minBalance = ''\">\n            Min Balance\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.maxBalance\" @click=\"filters.maxBalance = ''\">\n            Max Balance\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.type &amp;&amp; filters.type.length\" @click=\"filters.type = ''\">\n            Type\n            <i class=\"fa fa-close\"></i>\n        </span>\n    </div>\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n\n            <th v-if=\"isActive('balance')\" :class=\"{'text-primary': orderByField === 'balance'}\">\n                Balance\n                <i @click=\"setOrderByField('balance')\" v-if=\"orderByField !== 'balance'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'balance'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"fund in funds|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('name')\" v-text=\"fund.name\"></td>\n            <td v-if=\"isActive('type')\">\n                <span class=\"label label-default\" v-text=\"fund.type|capitalize\"></span>\n            </td>\n            <td v-if=\"isActive('balance')\">\n                <span v-text=\"fund.balance|currency\" :class=\"{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}\"></span>\n            </td>\n            <td><a href=\"/admin/funds/{{ fund.id }}\"><i class=\"fa fa-cog\"></i></a></td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchFunds\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n    <modal title=\"Export Funds List\" :show.sync=\"showExportModal\" effect=\"zoom\" width=\"400\" ok-text=\"Export\" :callback=\"exportList\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <ul class=\"list-unstyled\">\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"name\"> Name\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"type\"> Type\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"balance\"> Balance\n                    </label>\n                </li>\n            </ul>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <label>Type</label>\n                <select class=\"form-control\" v-model=\"filters.type\">\n                    <option value=\"\">All Types</option>\n                    <option value=\"reservation\">Reservation</option>\n                    <option value=\"trip\">Trip</option>\n                </select>\n            </div>\n            <div class=\"form-group\">\n                <div class=\"row\">\n                    <div class=\"col-xs-12\">\n                        <label>Balance</label>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Min</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.minBalance\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Max</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.maxBalance\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\"> Name\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"balance\" :disabled=\"maxCheck('balance')\"> Balance\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n                                <label>Max Visible Fields</label>\n                                <select class=\"form-control\" v-model=\"maxActiveFields\">\n                                    <option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <span class=\"caret\"></span>\n                </button>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showExportModal=true\">\n                    Export\n                    <span class=\"fa fa-download\"></span>\n                </button>\n                <!--<a class=\"btn btn-primary btn-sm\" href=\"funds/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n            </form>\n        </div>\n    </div>\n    <hr class=\"divider sm\">\n    <div>\n        Active Filters:\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.minBalance\" @click=\"filters.minBalance = ''\">\n            Min Balance\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.maxBalance\" @click=\"filters.maxBalance = ''\">\n            Max Balance\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.type &amp;&amp; filters.type.length\" @click=\"filters.type = ''\">\n            Type\n            <span class=\"badge\">x</span>\n        </button>\n    </div>\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n\n            <th v-if=\"isActive('balance')\" :class=\"{'text-primary': orderByField === 'balance'}\">\n                Balance\n                <i @click=\"setOrderByField('balance')\" v-if=\"orderByField !== 'balance'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'balance'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"fund in funds|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('name')\" v-text=\"fund.name\"></td>\n            <td v-if=\"isActive('type')\">\n                <span class=\"label label-default\" v-text=\"fund.type|capitalize\"></span>\n            </td>\n            <td v-if=\"isActive('balance')\">\n                <span v-text=\"fund.balance|currency\" :class=\"{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}\"></span>\n            </td>\n            <td><a href=\"/admin/funds/{{ fund.id }}\"><i class=\"fa fa-cog\"></i></a></td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchFunds\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n    <modal title=\"Export Funds List\" :show.sync=\"showExportModal\" effect=\"zoom\" width=\"400\" ok-text=\"Export\" :callback=\"exportList\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <ul class=\"list-unstyled\">\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"name\"> Name\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"type\"> Type\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"balance\"> Balance\n                    </label>\n                </li>\n            </ul>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -74340,7 +74916,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-879a32d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],142:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74401,7 +74977,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6d69f96c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],143:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],149:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -74643,7 +75219,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <label>Type</label>\n                <select class=\"form-control\" v-model=\"filters.type\">\n                    <option value=\"\">All Types</option>\n                    <option value=\"donation\">Donation</option>\n                    <option value=\"transfer\">Transfer</option>\n                    <option value=\"refund\">Refund</option>\n                    <option value=\"credit\">Credit</option>\n                </select>\n            </div>\n            <div class=\"form-group\" v-if=\"!donor\">\n                <v-select class=\"form-control\" id=\"donorFilter\" :debounce=\"250\" :on-search=\"getDonors\" :value.sync=\"donorObj\" :options=\"donorsOptions\" label=\"name\" placeholder=\"Filter by Donor\"></v-select>\n            </div>\n\n            <div class=\"form-group\">\n                <div class=\"row\">\n                    <div class=\"col-xs-12\">\n                        <label>Amount</label>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Min</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.minAmount\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Max</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.maxAmount\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"description\" :disabled=\"maxCheck('description')\"> Description\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"amount\" :disabled=\"maxCheck('amount')\"> Amount\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n                                <label>Max Visible Fields</label>\n                                <select class=\"form-control\" v-model=\"maxActiveFields\">\n                                    <option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <span class=\"caret\"></span>\n                </button>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showExportModal=true\">\n                    Export\n                    <span class=\"fa fa-download\"></span>\n                </button>\n                <!--<a class=\"btn btn-primary btn-sm\" href=\"transactions/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n            </form>\n        </div>\n    </div>\n    <hr class=\"divider sm\">\n    <div>\n        <label>Active Filters</label>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.donor\" @click=\"filters.donor = ''\">\n            Donor\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.minAmount\" @click=\"filters.minAmount = ''\">\n            Min Amount\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.maxAmount\" @click=\"filters.maxAmount = ''\">\n            Max Amount\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.type &amp;&amp; filters.type.length\" @click=\"filters.type = ''\">\n            Type\n            <i class=\"fa fa-close\"></i>\n        </span>\n    </div>\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('description')\" :class=\"{'text-primary': orderByField === 'description'}\">\n                Description\n                <i @click=\"setOrderByField('description')\" v-if=\"orderByField !== 'description'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'description'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n\n            <th v-if=\"isActive('amount')\" :class=\"{'text-primary': orderByField === 'amount'}\">\n                Amount\n                <i @click=\"setOrderByField('amount')\" v-if=\"orderByField !== 'amount'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'amount'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"transaction in transactions|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('type')\">\n                <span class=\"label label-default\" v-text=\"transaction.type|capitalize\"></span>\n            </td>\n            <td v-if=\"isActive('description')\" v-text=\"transaction.description\"></td>\n            <td v-if=\"isActive('amount')\">\n                <span v-text=\"transaction.amount|currency\" :class=\"{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}\"></span>\n            </td>\n            <td><a href=\"/admin/transactions/{{ transaction.id }}\"><i class=\"fa fa-cog\"></i></a></td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchTransactions\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n    <modal title=\"Export Transactions List\" :show.sync=\"showExportModal\" effect=\"zoom\" width=\"400\" ok-text=\"Export\" :callback=\"exportList\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <ul class=\"list-unstyled\">\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"description\"> Description\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"type\"> Type\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"amount\"> Amount\n                    </label>\n                </li>\n            </ul>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <label>Type</label>\n                <select class=\"form-control\" v-model=\"filters.type\">\n                    <option value=\"\">All Types</option>\n                    <option value=\"donation\">Donation</option>\n                    <option value=\"transfer\">Transfer</option>\n                    <option value=\"refund\">Refund</option>\n                    <option value=\"credit\">Credit</option>\n                </select>\n            </div>\n            <div class=\"form-group\" v-if=\"!donor\">\n                <v-select class=\"form-control\" id=\"donorFilter\" :debounce=\"250\" :on-search=\"getDonors\" :value.sync=\"donorObj\" :options=\"donorsOptions\" label=\"name\" placeholder=\"Filter by Donor\"></v-select>\n            </div>\n\n            <div class=\"form-group\">\n                <div class=\"row\">\n                    <div class=\"col-xs-12\">\n                        <label>Amount</label>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Min</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.minAmount\">\n                        </div>\n                        <br>\n                    </div>\n                    <div class=\"col-xs-12\">\n                        <div class=\"input-group\">\n                            <span class=\"input-group-addon\">Max</span>\n                            <input type=\"number\" class=\"form-control\" v-model=\"filters.maxAmount\">\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"description\" :disabled=\"maxCheck('description')\"> Description\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"amount\" :disabled=\"maxCheck('amount')\"> Amount\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n                                <label>Max Visible Fields</label>\n                                <select class=\"form-control\" v-model=\"maxActiveFields\">\n                                    <option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <span class=\"caret\"></span>\n                </button>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showExportModal=true\">\n                    Export\n                    <span class=\"fa fa-download\"></span>\n                </button>\n                <!--<a class=\"btn btn-primary btn-sm\" href=\"transactions/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n            </form>\n        </div>\n    </div>\n    <hr class=\"divider sm\">\n    <div>\n        Active Filters:\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.donor\" @click=\"filters.donor = ''\">\n            Donor\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.minAmount\" @click=\"filters.minAmount = ''\">\n            Min Amount\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.maxAmount\" @click=\"filters.maxAmount = ''\">\n            Max Amount\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.type &amp;&amp; filters.type.length\" @click=\"filters.type = ''\">\n            Type\n            <span class=\"badge\">x</span>\n        </button>\n    </div>\n    <hr class=\"divider sm\">\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('description')\" :class=\"{'text-primary': orderByField === 'description'}\">\n                Description\n                <i @click=\"setOrderByField('description')\" v-if=\"orderByField !== 'description'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'description'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n\n            <th v-if=\"isActive('amount')\" :class=\"{'text-primary': orderByField === 'amount'}\">\n                Amount\n                <i @click=\"setOrderByField('amount')\" v-if=\"orderByField !== 'amount'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'amount'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"transaction in transactions|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('type')\">\n                <span class=\"label label-default\" v-text=\"transaction.type|capitalize\"></span>\n            </td>\n            <td v-if=\"isActive('description')\" v-text=\"transaction.description\"></td>\n            <td v-if=\"isActive('amount')\">\n                <span v-text=\"transaction.amount|currency\" :class=\"{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}\"></span>\n            </td>\n            <td><a href=\"/admin/transactions/{{ transaction.id }}\"><i class=\"fa fa-cog\"></i></a></td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchTransactions\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n    <modal title=\"Export Transactions List\" :show.sync=\"showExportModal\" effect=\"zoom\" width=\"400\" ok-text=\"Export\" :callback=\"exportList\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <ul class=\"list-unstyled\">\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"description\"> Description\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"type\"> Type\n                    </label>\n                </li>\n                <li>\n                    <label class=\"small\" style=\"margin-bottom: 0px;\">\n                        <input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"amount\"> Amount\n                    </label>\n                </li>\n            </ul>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -74658,7 +75234,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-08e37354", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],144:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74853,7 +75429,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-618b8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../donors/donor-form.vue":140,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],145:[function(require,module,exports){
+},{"../donors/donor-form.vue":146,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74968,7 +75544,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-cd8e4a18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],146:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75092,7 +75668,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1c1b689a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],147:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],153:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\nvideo {\n    width: 100%;\n    height: auto;\n}\n\n.carousel { overflow: hidden; }\n.carousel-indicators li { visibility: hidden; }\n\n.carousel-inner .item {\n    font-size:10px;\n    color:#0404B4\n}\n\n.carousel-control {\n    z-index: 10;\n    width: 30px;\n    height: 50px;\n    top: 40%;\n}\n.carousel-control.left,\n.carousel-control.right { background: none }\n\n.carousel-control.left > span.fa {  }\n.carousel-control.right > span.fa {  }\n\n.carousel-control > span.fa {\n    background-color: #EB0A18;\n    border-radius: 3px;\n}\n")
 'use strict';
@@ -75280,7 +75856,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5130f94e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],148:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75356,7 +75932,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0dcad7d8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],149:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75467,7 +76043,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3fc3ff94", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],150:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75625,7 +76201,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1df65278", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],151:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75726,7 +76302,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7e446020", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],152:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75794,7 +76370,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"\"> Any Status\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"true\"> Public Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"false\"> Private only\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"\"> Any Type\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"church\"> Church Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"business\"> Business only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"nonprofit\"> Non-Profit Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"youth\"> Private only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"other\"> Other only\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'name'}\">\n                Group\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <template v-if=\"pending\">\n                <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                    Location\n                    <!--<i @click=\"setOrderByField('notes.data[0].content')\" v-if=\"orderByField !== 'notes.data[0].content'\" class=\"fa fa-sort pull-right\"></i>-->\n                    <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'notes.data[0].content'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'phone_one'}\">\n                    Phone One\n                    <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'email'}\">\n                    Email\n                    <i @click=\"setOrderByField('email')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n            </template>\n            <template v-else=\"\">\n                <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                    Location\n                    <!--<i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>-->\n                    <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'public'}\">\n                    Status\n                    <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th>Active Trips</th>\n            </template>\n\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"group in groups|filterBy search|orderBy orderByField direction|filterBy status in 'public'|filterBy type in 'type'\">\n            <td>{{group.name}}</td>\n            <td>{{group.type|capitalize}}</td>\n            <template v-if=\"pending\">\n                <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n                <td>{{group.phone_one}}</td>\n                <td>{{group.email}}</td>\n            </template>\n            <template v-else=\"\">\n                <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n                <td>{{group.public ? 'Public' : 'Private'}}</td>\n                <td>{{group.trips.data.length}}</td>\n            </template>\n            <td>\n                <a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Manage\" href=\"/admin{{group.links[0].uri}}\"><i class=\"fa fa-gear\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchGroups\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div class=\"dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"\"> Any Status\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"true\"> Public Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"status\" value=\"false\"> Private only\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"\"> Any Type\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"church\"> Church Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"business\"> Business only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"nonprofit\"> Non-Profit Only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"youth\"> Private only\n                            </label>\n                        </li>\n                        <li>\n                            <label style=\"margin-bottom: 0\" class=\"small\">\n                                <input type=\"radio\" v-model=\"type\" value=\"other\"> Other only\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n                <a class=\"btn btn-primary btn-sm\" href=\"groups/create\">New <i class=\"fa fa-plus icon-left\"></i></a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'name'}\">\n                Group\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <template v-if=\"pending\">\n                <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                    Location\n                    <!--<i @click=\"setOrderByField('notes.data[0].content')\" v-if=\"orderByField !== 'notes.data[0].content'\" class=\"fa fa-sort pull-right\"></i>-->\n                    <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'notes.data[0].content'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'phone_one'}\">\n                    Phone One\n                    <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'email'}\">\n                    Email\n                    <i @click=\"setOrderByField('email')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n            </template>\n            <template v-else=\"\">\n                <th :class=\"{'text-primary': orderByField === 'country_name'}\">\n                    Location\n                    <!--<i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>-->\n                    <!--<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>-->\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'public'}\">\n                    Status\n                    <i @click=\"setOrderByField('public')\" v-if=\"orderByField !== 'public'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'public'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th>Active Trips</th>\n            </template>\n\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"group in groups|filterBy search|orderBy orderByField direction|filterBy status in 'public'|filterBy type in 'type'\">\n            <td>{{group.name}}</td>\n            <td>{{group.type|capitalize}}</td>\n            <template v-if=\"pending\">\n                <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n                <td>{{group.phone_one}}</td>\n                <td>{{group.email}}</td>\n            </template>\n            <template v-else=\"\">\n                <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>\n                <td>{{group.public ? 'Public' : 'Private'}}</td>\n                <td>{{group.trips.data.length}}</td>\n            </template>\n            <td>\n                <a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Manage\" href=\"/admin{{group.links[0].uri}}\"><i class=\"fa fa-gear\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchGroups\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -75805,7 +76381,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-647e220a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],153:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],159:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -76108,7 +76684,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4d7c267c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],154:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76152,7 +76728,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-29e82de9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],155:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76249,7 +76825,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0a67d362", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],156:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76293,7 +76869,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-36a2fd50", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],157:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76407,7 +76983,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-495ecf63", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],158:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76442,7 +77018,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7dd5d87e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],159:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76516,7 +77092,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-264b7e0e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],160:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76687,7 +77263,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-131fb342", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],161:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76848,7 +77424,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"groupFilter\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupObj\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Group\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <select id=\"type\" class=\"form-control input-sm\" v-model=\"filters.status\">\n                    <option value=\"\">Any Status</option>\n                    <option value=\"undecided\">Undecided</option>\n                    <option value=\"converted\">Converted</option>\n                    <option value=\"declined\">Declined</option>\n                </select>\n            </div>\n            <div class=\"form-group\">\n                <select id=\"type\" class=\"form-control input-sm\" v-model=\"filters.trip_type\">\n                    <option value=\"\">Any Trip Type</option>\n                    <option value=\"full\">Full</option>\n                    <option value=\"media\">Media</option>\n                    <option value=\"medical\">Medical</option>\n                    <option value=\"short\">Short</option>\n                </select>\n            </div>\n            <div class=\"form-group\" v-if=\"!tripId\">\n                <v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\"> Name\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"phone\" :disabled=\"maxCheck('phone')\"> Phone\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Trip Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n                                <label>Max Visible Fields</label>\n                                <select class=\"form-control\" v-model=\"maxActiveFields\">\n                                    <option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <i class=\"fa fa-filter\"></i>\n                </button>\n            </form>\n        </div>\n    </div>\n    <hr class=\"divider sm\">\n    <div>\n        <label>Active Filters</label>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.group\" @click=\"filters.group = ''\">\n            Group\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n            Status\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n            Campaign\n            <i class=\"fa fa-close\"></i>\n        </span>\n        <span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.trip_type.length\" @click=\"filters.campaign = ''\">\n            Trip Type\n            <i class=\"fa fa-close\"></i>\n        </span>\n    </div>\n    <hr class=\"divider sm\">\n    <table class=\"table table-striped\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('email')\" :class=\"{'text-primary': orderByField === 'email'}\">\n                Email\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('phone')\" :class=\"{'text-primary': orderByField === 'phone'}\">\n                Phone\n                <i @click=\"setOrderByField('phone')\" v-if=\"orderByField !== 'phone'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'phone'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('status')\" :class=\"{'text-primary': orderByField === 'status'}\">\n                Status\n                <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                Campaign\n                <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                Trip Type\n                <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                Group\n                <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"interests.length > 0\">\n        <tr v-for=\"interest in interests|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('name')\">{{interest.name|capitalize}}</td>\n            <td v-if=\"isActive('email')\">{{interest.email}}</td>\n            <td v-if=\"isActive('phone')\">{{interest.phone}}</td>\n            <td v-if=\"isActive('status')\">\n                <span class=\"label\" :class=\"{ 'label-success' : interest.status == 'converted',\n                                'label-default' : interest.status == 'declined',\n                                'label-danger' : interest.status == 'undecided'}\">\n                    {{interest.status}}\n                </span>\n            </td>\n            <td v-if=\"isActive('campaign')\">{{interest.trip.data.campaign.data.name}}</td>\n            <td v-if=\"isActive('type')\">{{interest.trip.data.type}}</td>\n            <td v-if=\"isActive('group')\">{{interest.trip.data.group.data.name}}</td>\n            <td>\n                <a href=\"/admin/interests/{{ interest.id }}\"><i class=\"fa fa-cog\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tbody v-else=\"\">\n        <tr>\n            <td colspan=\"8\" class=\"text-center text-muted\">\n                No interests found.\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"8\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchInterests\" size=\"small\">\n                    </pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n            <div class=\"form-group\">\n                <v-select class=\"form-control\" id=\"groupFilter\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupObj\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Group\"></v-select>\n            </div>\n            <div class=\"form-group\">\n                <select id=\"type\" class=\"form-control input-sm\" v-model=\"filters.status\">\n                    <option value=\"\">Any Status</option>\n                    <option value=\"undecided\">Undecided</option>\n                    <option value=\"converted\">Converted</option>\n                    <option value=\"declined\">Declined</option>\n                </select>\n            </div>\n            <div class=\"form-group\">\n                <select id=\"type\" class=\"form-control input-sm\" v-model=\"filters.trip_type\">\n                    <option value=\"\">Any Trip Type</option>\n                    <option value=\"full\">Full</option>\n                    <option value=\"media\">Media</option>\n                    <option value=\"medical\">Medical</option>\n                    <option value=\"short\">Short</option>\n                </select>\n            </div>\n            <div class=\"form-group\" v-if=\"!tripId\">\n                <v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\"> Name\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"phone\" :disabled=\"maxCheck('phone')\"> Phone\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Trip Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n                            </label>\n                        </li>\n                        <li role=\"separator\" class=\"divider\"></li>\n                        <li>\n                            <div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n                                <label>Max Visible Fields</label>\n                                <select class=\"form-control\" v-model=\"maxActiveFields\">\n                                    <option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n                                </select>\n                            </div>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm \" type=\"button\" @click=\"showFilters=!showFilters\">\n                    Filters\n                    <i class=\"fa fa-filter\"></i>\n                </button>\n            </form>\n        </div>\n    </div>\n    <hr class=\"divider sm\">\n    <div>\n        Active Filters:\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.group\" @click=\"filters.group = ''\">\n            Group\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n            Status\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n            Campaign\n            <span class=\"badge\">x</span>\n        </button>\n        <button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.trip_type.length\" @click=\"filters.campaign = ''\">\n            Trip Type\n            <span class=\"badge\">x</span>\n        </button>\n    </div>\n    <hr class=\"divider sm\">\n    <table class=\"table table-striped\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('email')\" :class=\"{'text-primary': orderByField === 'email'}\">\n                Email\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('phone')\" :class=\"{'text-primary': orderByField === 'phone'}\">\n                Phone\n                <i @click=\"setOrderByField('phone')\" v-if=\"orderByField !== 'phone'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'phone'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('status')\" :class=\"{'text-primary': orderByField === 'status'}\">\n                Status\n                <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                Campaign\n                <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                Trip Type\n                <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                Group\n                <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"interests.length > 0\">\n        <tr v-for=\"interest in interests|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('name')\">{{interest.name|capitalize}}</td>\n            <td v-if=\"isActive('email')\">{{interest.email}}</td>\n            <td v-if=\"isActive('phone')\">{{interest.phone}}</td>\n            <td v-if=\"isActive('status')\">\n                <span class=\"label\" :class=\"{ 'label-success' : interest.status == 'converted',\n                                'label-default' : interest.status == 'declined',\n                                'label-danger' : interest.status == 'undecided'}\">\n                    {{interest.status}}\n                </span>\n            </td>\n            <td v-if=\"isActive('campaign')\">{{interest.trip.data.campaign.data.name}}</td>\n            <td v-if=\"isActive('type')\">{{interest.trip.data.type}}</td>\n            <td v-if=\"isActive('group')\">{{interest.trip.data.group.data.name}}</td>\n            <td>\n                <a href=\"/admin/interests/{{ interest.id }}\"><i class=\"fa fa-cog\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tbody v-else=\"\">\n        <tr>\n            <td colspan=\"8\" class=\"text-center text-muted\">\n                No interests found.\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"8\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchInterests\" size=\"small\">\n                    </pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -76859,7 +77435,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6dcfeea3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],162:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76916,7 +77492,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5e7a41be", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],163:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76975,7 +77551,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5b971634", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],164:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],170:[function(require,module,exports){
 'use strict';
 
 var _vueSelect = require('vue-select');
@@ -77141,7 +77717,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d1dcd388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],165:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77290,7 +77866,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7119d0e8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./donate.vue":138,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],166:[function(require,module,exports){
+},{"./donate.vue":144,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77454,7 +78030,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-68be8994", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],167:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77571,7 +78147,42 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5b75f957", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/object/assign":3,"vue":124,"vue-hot-reload-api":119}],168:[function(require,module,exports){
+},{"babel-runtime/core-js/object/assign":3,"vue":124,"vue-hot-reload-api":119}],174:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'reconcile-fund',
+    props: ['id'],
+    data: function data() {
+        return {
+            showSuccess: false
+        };
+    },
+
+    methods: {
+        reconcile: function reconcile() {
+            this.$http.put('funds/' + this.id + '/reconcile').then(function (response) {
+                this.showSuccess = true;
+            });
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <btn class=\"btn btn-sm btn-default\" @click=\"reconcile\"><i class=\"fa fa-calculator\"></i> Reconcile</btn>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Awesome!</strong>\n        <p>Fund has been reconciled!</p>\n    </alert>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-42896c21", module.exports)
+  } else {
+    hotAPI.update("_v-42896c21", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77690,7 +78301,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ddc87bca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],169:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77754,7 +78365,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6172fca6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],170:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77956,7 +78567,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1a5a99db", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],171:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78034,7 +78645,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2834d734", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],172:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78215,7 +78826,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-133d56d2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],173:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78294,7 +78905,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0140cb22", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],174:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78331,7 +78942,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5bdfb51a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],175:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78499,7 +79110,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-39874335", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],176:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78578,7 +79189,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6f539080", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],177:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78821,7 +79432,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-79b755c8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],178:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],185:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -79051,7 +79662,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-71301bd4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../trips/registration/additional-trip-options.vue":212,"../trips/registration/basic-info.vue":213,"../trips/registration/review.vue":216,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],179:[function(require,module,exports){
+},{"../trips/registration/additional-trip-options.vue":220,"../trips/registration/basic-info.vue":221,"../trips/registration/review.vue":224,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79252,7 +79863,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-46c63a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],180:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79473,7 +80084,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-30690919", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],181:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79659,7 +80270,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1be1c0a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],182:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],189:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -79990,7 +80601,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"groupFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupsArr\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" v-if=\"!tripId\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"total_raised\" :disabled=\"maxCheck('total_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<i class=\"fa fa-filter\"></i>\n\t\t\t\t\t</button>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showExportModal=true\">\n\t\t\t\t\t\tExport\n\t\t\t\t\t\t<span class=\"fa fa-download\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\t<label>Active Filters</label>\n\t\t\t<span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<i class=\"fa fa-close\"></i>\n\t\t\t</span>\n\t\t\t<span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<i class=\"fa fa-close\"></i>\n\t\t\t</span>\n\t\t\t<span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<i class=\"fa fa-close\"></i>\n\t\t\t</span>\n\t\t\t<span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<i class=\"fa fa-close\"></i>\n\t\t\t</span>\n\t\t\t<span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<i class=\"fa fa-close\"></i>\n\t\t\t</span>\n\t\t\t<span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<i class=\"fa fa-close\"></i>\n\t\t\t</span>\n\t\t\t<span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<i class=\"fa fa-close\"></i>\n\t\t\t</span>\n\t\t\t<span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<i class=\"fa fa-close\"></i>\n\t\t\t</span>\n\t\t\t<span style=\"margin-right:2px;\" class=\"label label-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<i class=\"fa fa-close\"></i>\n\t\t\t</span>\n\t\t</div>\n        <hr class=\"divider sm\">\n        <table class=\"table table-striped\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('total_raised')\" :class=\"{'text-primary': orderByField === 'total_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('total_raised')\" v-if=\"orderByField !== 'total_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'total_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody v-if=\"reservations.length > 0\">\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('total_raised')\" v-text=\"reservation.total_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <td><a href=\"/admin/reservations/{{ reservation.id }}\"><i class=\"fa fa-cog\"></i></a></td>\n            </tr>\n            </tbody>\n\t\t\t<tbody v-else=\"\">\n\t\t\t\t<tr>\n\t\t\t\t\t<td colspan=\"10\" class=\"text-center text-muted\">\n\t\t\t\t\t\tNo reservations found.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"10\" class=\"text-center\">\n\t\t\t\t\t<pagination :pagination.sync=\"pagination\" :callback=\"searchReservations\" size=\"small\">\n\t\t\t\t\t</pagination>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n\t\t<modal title=\"Export Reservations List\" :show.sync=\"showExportModal\" effect=\"zoom\" width=\"400\" ok-text=\"Export\" :callback=\"exportList\">\n\t\t\t<div slot=\"modal-body\" class=\"modal-body\">\n\t\t\t\t<ul class=\"list-unstyled\">\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"given_names\"> Given Names\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"surname\"> Surname\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"group\"> Group\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"campaign\"> Campaign\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"type\"> Type\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"total_raised\"> Amout Raised\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"percent_raised\"> Percent Raised\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"registered\"> Registered On\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"gender\"> Gender\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"status\"> Status\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"age\"> Age\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"email\"> Email\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</modal>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\t\t<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n\t\t\t<hr class=\"divider inv sm\">\n\t\t\t<form class=\"col-sm-12\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" style=\"width:100%\" v-model=\"tagsString\" :debounce=\"250\" placeholder=\"Tag, tag2, tag3...\">\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"groupFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getGroups\" :value.sync=\"groupsArr\" :options=\"groupsOptions\" label=\"name\" placeholder=\"Filter Groups\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"userFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getUsers\" :value.sync=\"usersArr\" :options=\"usersOptions\" label=\"name\" placeholder=\"Filter Users\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" v-if=\"!tripId\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"campaignFilter\" :debounce=\"250\" :on-search=\"getCampaigns\" :value.sync=\"campaignObj\" :options=\"campaignOptions\" label=\"name\" placeholder=\"Filter by Campaign\"></v-select>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<select class=\"form-control input-sm\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t</select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<v-select class=\"form-control\" id=\"ShirtSizeFilter\" :value.sync=\"shirtSizeArr\" multiple=\"\" :options=\"shirtSizeOptions\" label=\"name\" placeholder=\"Shirt Sizes\"></v-select>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Age Min</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMin\" min=\"0\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"col-xs-6\">\n\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Max</span>\n\t\t\t\t\t\t\t\t<input type=\"number\" class=\"form-control\" number=\"\" v-model=\"ageMax\" max=\"120\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Travel Companions</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions1\" v-model=\"filters.hasCompanions\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions2\" v-model=\"filters.hasCompanions\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"companions\" id=\"companions3\" v-model=\"filters.hasCompanions\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" style=\"padding: 3px 20px;\">\n\t\t\t\t\t<label class=\"control-label small\">Passport</label>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.hasPassport\" :value=\"null\"> Any\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.hasPassport\" value=\"yes\"> Yes\n\t\t\t\t\t\t</label>\n\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.hasPassport\" value=\"no\"> No\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<hr class=\"divider inv sm\">\n\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n\t\t\t</form>\n\t\t</aside>\n\n\t\t<div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline text-right\" novalidate=\"\">\n                \t<div class=\"form-inline\" style=\"display: inline-block;\">\n                    \t<div class=\"form-group\">\n\t                        <label>Show</label>\n\t                        <select class=\"form-control  input-sm\" v-model=\"per_page\">\n\t                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n\t                        </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"given_names\" :disabled=\"maxCheck('given_names')\"> Given Names\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"surname\" :disabled=\"maxCheck('surname')\"> Surname\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"group\" :disabled=\"maxCheck('group')\"> Group\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"campaign\" :disabled=\"maxCheck('campaign')\"> Campaign\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"total_raised\" :disabled=\"maxCheck('total_raised')\"> Amout Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"registered\" :disabled=\"maxCheck('registered')\"> Registered On\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"age\" :disabled=\"maxCheck('age')\"> Age\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div style=\"margin-bottom: 0px;\" class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n\t\t\t\t\t\tFilters\n\t\t\t\t\t\t<i class=\"fa fa-filter\"></i>\n\t\t\t\t\t</button>\n\t\t\t\t\t<button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showExportModal=true\">\n\t\t\t\t\t\tExport\n\t\t\t\t\t\t<span class=\"fa fa-download\"></span>\n\t\t\t\t\t</button>\n                    <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i> </a>-->\n                </form>\n            </div>\n        </div>\n        <hr class=\"divider sm\">\n\t\t<div>\n\t\t\tActive Filters:\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.tags.length\" @click=\"filters.tags = []\">\n\t\t\t\tTags\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.user.length\" @click=\"filters.user = []\">\n\t\t\t\tUsers\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.groups.length\" @click=\"filters.groups = []\">\n\t\t\t\tGroups\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.campaign.length\" @click=\"filters.campaign = ''\">\n\t\t\t\tCampaign\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.gender.length\" @click=\"filters.gender = ''\">\n\t\t\t\tGender\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.status.length\" @click=\"filters.status = ''\">\n\t\t\t\tStatus\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.shirtSize.length\" @click=\"filters.shirtSize = ''\">\n\t\t\t\tShirt Size\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasCompanions !== null\" @click=\"filters.hasCompanions = null\">\n\t\t\t\tCompanions\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"btn btn-xs btn-default\" v-show=\"filters.hasPassport !== null\" @click=\"filters.hasPassport = null\">\n\t\t\t\tPassport\n\t\t\t\t<span class=\"badge\">x</span>\n\t\t\t</button>\n\t\t</div>\n        <hr class=\"divider sm\">\n        <table class=\"table table-striped\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('given_names')\" :class=\"{'text-primary': orderByField === 'given_names'}\">\n                    Given Names\n                    <i @click=\"setOrderByField('given_names')\" v-if=\"orderByField !== 'given_names'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'given_names'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('surname')\" :class=\"{'text-primary': orderByField === 'surname'}\">\n                    Surname\n                    <i @click=\"setOrderByField('surname')\" v-if=\"orderByField !== 'surname'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'surname'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('group')\" :class=\"{'text-primary': orderByField === 'trip.data.group.data.name'}\">\n                    Group\n                    <i @click=\"setOrderByField('trip.data.group.data.name')\" v-if=\"orderByField !== 'trip.data.group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('campaign')\" :class=\"{'text-primary': orderByField === 'trip.data.campaign.data.name'}\">\n                    Campaign\n                    <i @click=\"setOrderByField('trip.data.campaign.data.name')\" v-if=\"orderByField !== 'trip.data.campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'trip.data.type'}\">\n                    Type\n                    <i @click=\"setOrderByField('trip.data.type')\" v-if=\"orderByField !== 'trip.data.type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'trip.data.type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('total_raised')\" :class=\"{'text-primary': orderByField === 'total_raised'}\">\n                    $ Raised\n                    <i @click=\"setOrderByField('total_raised')\" v-if=\"orderByField !== 'total_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'total_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('percent_raised')\" :class=\"{'text-primary': orderByField === 'percent_raised'}\">\n                    % Raised\n                    <i @click=\"setOrderByField('percent_raised')\" v-if=\"orderByField !== 'percent_raised'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'percent_raised'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('registered')\">\n                    Registered On\n                </th>\n                <th v-if=\"isActive('gender')\">\n                    Gender\n                </th>\n                <th v-if=\"isActive('status')\">\n                    Status\n                </th>\n                <th v-if=\"isActive('age')\">\n                    Age\n                </th>\n                <th v-if=\"isActive('email')\">\n                    Email\n                </th>\n                <th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody v-if=\"reservations.length > 0\">\n            <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('given_names')\" v-text=\"reservation.given_names\"></td>\n                <td v-if=\"isActive('surname')\" v-text=\"reservation.surname\"></td>\n                <td v-if=\"isActive('group')\" v-text=\"reservation.trip.data.group.data.name|capitalize\"></td>\n                <td v-if=\"isActive('campaign')\" v-text=\"reservation.trip.data.campaign.data.name|capitalize\"></td>\n                <td v-if=\"isActive('type')\" v-text=\"reservation.trip.data.type|capitalize\"></td>\n                <td v-if=\"isActive('total_raised')\" v-text=\"reservation.total_raised|currency\"></td>\n                <td v-if=\"isActive('percent_raised')\">{{reservation.percent_raised|number '2'}}%</td>\n                <td v-if=\"isActive('registered')\" v-text=\"reservation.created_at|moment 'll'\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"reservation.gender|capitalize\"></td>\n                <td v-if=\"isActive('status')\" v-text=\"reservation.status|capitalize\"></td>\n                <td v-if=\"isActive('age')\" v-text=\"age(reservation.birthday)\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"reservation.user.data.email|capitalize\"></td>\n                <td><a href=\"/admin/reservations/{{ reservation.id }}\"><i class=\"fa fa-cog\"></i></a></td>\n            </tr>\n            </tbody>\n\t\t\t<tbody v-else=\"\">\n\t\t\t\t<tr>\n\t\t\t\t\t<td colspan=\"10\" class=\"text-center text-muted\">\n\t\t\t\t\t\tNo reservations found.\n\t\t\t\t\t</td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"10\" class=\"text-center\">\n\t\t\t\t\t<pagination :pagination.sync=\"pagination\" :callback=\"searchReservations\" size=\"small\">\n\t\t\t\t\t</pagination>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n\t\t<modal title=\"Export Reservations List\" :show.sync=\"showExportModal\" effect=\"zoom\" width=\"400\" ok-text=\"Export\" :callback=\"exportList\">\n\t\t\t<div slot=\"modal-body\" class=\"modal-body\">\n\t\t\t\t<ul class=\"list-unstyled\">\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"given_names\"> Given Names\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"surname\"> Surname\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"group\"> Group\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"campaign\"> Campaign\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"type\"> Type\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"total_raised\"> Amout Raised\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"percent_raised\"> Percent Raised\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"registered\"> Registered On\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"gender\"> Gender\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"status\"> Status\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"age\"> Age\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li>\n\t\t\t\t\t\t<label class=\"small\" style=\"margin-bottom: 0px;\">\n\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"exportSettings.fields\" value=\"email\"> Email\n\t\t\t\t\t\t</label>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</modal>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -80005,7 +80616,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-02fd7dca", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],183:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80056,7 +80667,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3cf658c5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],184:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],191:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80124,7 +80735,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ca95a416", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119}],185:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80353,7 +80964,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-96d10a4c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],186:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80436,7 +81047,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-593b339b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],187:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],194:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80474,7 +81085,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5ce67111", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],188:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],195:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80543,7 +81154,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-29241438", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],189:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80622,7 +81233,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-79eb1ef1", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],190:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80716,7 +81327,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2017324e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],191:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80821,7 +81432,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-67cf51a3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/medicals/medical-create-update.vue":170,"vue":124,"vue-hot-reload-api":119}],192:[function(require,module,exports){
+},{"../records/medicals/medical-create-update.vue":177,"vue":124,"vue-hot-reload-api":119}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80926,7 +81537,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1d893e54", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/passports/passport-create-update.vue":172,"vue":124,"vue-hot-reload-api":119}],193:[function(require,module,exports){
+},{"../records/passports/passport-create-update.vue":179,"vue":124,"vue-hot-reload-api":119}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81031,7 +81642,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-277b5b87", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/visas/visa-create-update.vue":175,"vue":124,"vue-hot-reload-api":119}],194:[function(require,module,exports){
+},{"../records/visas/visa-create-update.vue":182,"vue":124,"vue-hot-reload-api":119}],201:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-b5f43480] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo[_v-b5f43480] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo[_v-b5f43480] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo[_v-b5f43480]:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox[_v-b5f43480]:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i[_v-b5f43480] {\n  margin-right: 10px; }\n")
 'use strict';
@@ -81194,7 +81805,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-b5f43480=\"\">\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\" _v-b5f43480=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\" _v-b5f43480=\"\"></span>\n        <strong _v-b5f43480=\"\">Well Done!</strong>\n        <p _v-b5f43480=\"\">{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\" _v-b5f43480=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\" _v-b5f43480=\"\"></span>\n        <strong _v-b5f43480=\"\">Oh No!</strong>\n        <p _v-b5f43480=\"\">{{ message }}</p>\n    </alert>\n\n    <div class=\"panel panel-default\" _v-b5f43480=\"\">\n        <div class=\"panel-heading\" _v-b5f43480=\"\">\n            <h5 _v-b5f43480=\"\">ToDos</h5>\n        </div>\n        <div class=\"list-group\" _v-b5f43480=\"\">\n            <div class=\"list-group-item\" v-if=\"canModify\" _v-b5f43480=\"\">\n                <div class=\"row\" _v-b5f43480=\"\">\n                    <div class=\"col-xs-2 col-sm-1 text-muted\" _v-b5f43480=\"\">\n                        <i class=\"fa fa-lg fa-plus-square-o\" style=\"margin-right: 10px\" _v-b5f43480=\"\"></i>\n                    </div>\n                    <div class=\"col-xs-10 col-sm-11\" _v-b5f43480=\"\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"newTodo.task\" placeholder=\"What needs to be done?\" @keyup.enter=\"createTodo\" _v-b5f43480=\"\">\n                    </div>\n                </div>\n            </div>\n            <div class=\"list-group-item\" v-if=\"todos.length < 1\" _v-b5f43480=\"\">\n                <p class=\"text-center text-muted lead\" _v-b5f43480=\"\">No tasks found.</p>\n            </div>\n            <div class=\"list-group-item todo-item\" v-for=\"todo in todos\" _v-b5f43480=\"\">\n                    <div class=\"row\" _v-b5f43480=\"\">\n                        <div class=\"col-xs-2 col-sm-1 text-muted todo-item-checkbox\" @click=\"completeTodo(todo)\" _v-b5f43480=\"\">\n                            <i class=\"fa fa-lg\" :class=\"{ 'fa-check-square-o' : todo.completed_at, 'fa-square-o' : !todo.completed_at }\" _v-b5f43480=\"\">\n                            </i>\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" v-if=\"selectedTodo.id == todo.id &amp;&amp; editMode\" _v-b5f43480=\"\">\n                            <input type=\"text\" class=\"form-control\" v-model=\"selectedTodo.task\" @blur=\"updateTodo\" @keyup.enter=\"updateTodo\" _v-b5f43480=\"\">\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" @dblclick=\"editTodo(todo)\" v-else=\"\" _v-b5f43480=\"\">\n                            <span :class=\"{ 'text-strike' : todo.completed_at }\" _v-b5f43480=\"\">{{ todo.task }}</span>\n                            <small class=\"text-muted\" v-if=\"todo.completed_at\" _v-b5f43480=\"\"><br _v-b5f43480=\"\">\n                                Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}\n                            </small>\n                        </div>\n                        <div class=\"col-xs-1 col-sm-1 text-right\" v-if=\"canModify\" _v-b5f43480=\"\">\n                            <i class=\"fa fa-times fa-lg text-muted remove-todo\" @click=\"selectedTodo = todo,deleteModal = true\" _v-b5f43480=\"\">\n                            </i>\n                        </div>\n                    </div>\n            </div>\n        </div>\n        <div class=\"panel-body text-center\" _v-b5f43480=\"\">\n            <nav _v-b5f43480=\"\">\n                <ul class=\"pager\" _v-b5f43480=\"\">\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\" class=\"previous\" _v-b5f43480=\"\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\" _v-b5f43480=\"\">\n                            <span aria-hidden=\"true\" _v-b5f43480=\"\">« <span class=\"hidden-xs\" _v-b5f43480=\"\">Previous</span></span>\n                        </a>\n                    </li>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'all'}\" @click=\"changeFilter('all')\" _v-b5f43480=\"\">\n                        All\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'active'}\" @click=\"changeFilter('active')\" _v-b5f43480=\"\">\n                        Active\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'completed'}\" @click=\"changeFilter('completed')\" _v-b5f43480=\"\">\n                        Completed\n                    </button>\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\" class=\"next\" _v-b5f43480=\"\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\" _v-b5f43480=\"\">\n                            <span aria-hidden=\"true\" _v-b5f43480=\"\"><span class=\"hidden-xs\" _v-b5f43480=\"\">Next</span> » </span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n    <p class=\"text-center\" _v-b5f43480=\"\"><small class=\"text-muted\" _v-b5f43480=\"\">Double-click to edit a todo.</small></p>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Todo\" small=\"true\" _v-b5f43480=\"\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\" _v-b5f43480=\"\">Are you sure you want to delete this Todo?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\" _v-b5f43480=\"\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\" _v-b5f43480=\"\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedTodo)\" _v-b5f43480=\"\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-b5f43480=\"\">\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\" _v-b5f43480=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\" _v-b5f43480=\"\"></span>\n        <strong _v-b5f43480=\"\">Well Done!</strong>\n        <p _v-b5f43480=\"\">{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\" _v-b5f43480=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\" _v-b5f43480=\"\"></span>\n        <strong _v-b5f43480=\"\">Oh No!</strong>\n        <p _v-b5f43480=\"\">{{ message }}</p>\n    </alert>\n\n    <div class=\"panel panel-default\" _v-b5f43480=\"\">\n        <div class=\"panel-heading\" _v-b5f43480=\"\">\n            <h5 _v-b5f43480=\"\">ToDos</h5>\n        </div>\n        <div class=\"list-group\" _v-b5f43480=\"\">\n            <div class=\"list-group-item\" v-if=\"canModify\" _v-b5f43480=\"\">\n                <div class=\"row\" _v-b5f43480=\"\">\n                    <div class=\"col-xs-2 col-sm-1 text-muted\" _v-b5f43480=\"\">\n                        <i class=\"fa fa-lg fa-plus-square-o\" style=\"margin-right: 10px\" _v-b5f43480=\"\"></i>\n                    </div>\n                    <div class=\"col-xs-10 col-sm-11\" _v-b5f43480=\"\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"newTodo.task\" placeholder=\"What needs to be done?\" @keyup.enter=\"createTodo\" _v-b5f43480=\"\">\n                    </div>\n                </div>\n            </div>\n            <div class=\"list-group-item\" v-if=\"todos.length < 1\" _v-b5f43480=\"\">\n                <p class=\"text-center text-muted lead\" _v-b5f43480=\"\">No tasks found.</p>\n            </div>\n            <div class=\"list-group-item todo-item\" v-for=\"todo in todos\" _v-b5f43480=\"\">\n                    <div class=\"row\" _v-b5f43480=\"\">\n                        <div class=\"col-xs-2 col-sm-1 text-muted todo-item-checkbox\" @click=\"completeTodo(todo)\" _v-b5f43480=\"\">\n                            <i class=\"fa fa-lg\" :class=\"{\n                               'fa-check-square-o' : todo.completed_at,\n                               'fa-square-o' : !todo.completed_at\n                               }\" _v-b5f43480=\"\">\n                            </i>\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" v-if=\"selectedTodo.id == todo.id &amp;&amp; editMode\" _v-b5f43480=\"\">\n                            <input type=\"text\" class=\"form-control\" v-model=\"selectedTodo.task\" @blur=\"updateTodo\" @keyup.enter=\"updateTodo\" _v-b5f43480=\"\">\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" @dblclick=\"editTodo(todo)\" v-else=\"\" _v-b5f43480=\"\">\n                            <span :class=\"{ 'text-strike' : todo.completed_at }\" _v-b5f43480=\"\">{{ todo.task }}</span>\n                            <small class=\"text-muted\" v-if=\"todo.completed_at\" _v-b5f43480=\"\"><br _v-b5f43480=\"\">\n                                Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}\n                            </small>\n                        </div>\n                        <div class=\"col-xs-1 col-sm-1 text-right\" v-if=\"canModify\" _v-b5f43480=\"\">\n                            <i class=\"fa fa-times fa-lg text-muted remove-todo\" @click=\"selectedTodo = todo,deleteModal = true\" _v-b5f43480=\"\">\n                            </i>\n                        </div>\n                    </div>\n            </div>\n        </div>\n        <div class=\"panel-body text-center\" _v-b5f43480=\"\">\n            <nav _v-b5f43480=\"\">\n                <ul class=\"pager\" _v-b5f43480=\"\">\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\" class=\"previous\" _v-b5f43480=\"\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\" _v-b5f43480=\"\">\n                            <span aria-hidden=\"true\" _v-b5f43480=\"\">« <span class=\"hidden-xs\" _v-b5f43480=\"\">Previous</span></span>\n                        </a>\n                    </li>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'all'}\" @click=\"changeFilter('all')\" _v-b5f43480=\"\">\n                        All\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'active'}\" @click=\"changeFilter('active')\" _v-b5f43480=\"\">\n                        Active\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'completed'}\" @click=\"changeFilter('completed')\" _v-b5f43480=\"\">\n                        Completed\n                    </button>\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\" class=\"next\" _v-b5f43480=\"\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\" _v-b5f43480=\"\">\n                            <span aria-hidden=\"true\" _v-b5f43480=\"\"><span class=\"hidden-xs\" _v-b5f43480=\"\">Next</span> » </span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n    <p class=\"text-center\" _v-b5f43480=\"\"><small class=\"text-muted\" _v-b5f43480=\"\">Double-click to edit a todo.</small></p>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Todo\" small=\"true\" _v-b5f43480=\"\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\" _v-b5f43480=\"\">Are you sure you want to delete this Todo?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\" _v-b5f43480=\"\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\" _v-b5f43480=\"\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedTodo)\" _v-b5f43480=\"\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -81209,7 +81820,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b5f43480", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],195:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81280,407 +81891,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1699c084", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],196:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-    props: ['id', 'payments', 'cost'],
-    name: 'admin-trip-costs-payments',
-    data: function data() {
-        return {
-            attemptedAddPayment: false,
-            toggleNewPayment: false,
-            showAddModal: false,
-            showEditModal: false,
-            selectedPayment: null,
-            deletePaymentModal: false,
-            newPayment: {
-                amount_owed: 0,
-                percent_owed: 0,
-                due_at: null,
-                upfront: false,
-                grace_period: 0
-            },
-            resource: this.$resource('costs/' + this.id + '/payments{/payment_id}')
-        };
-    },
-
-    watch: {
-        'selectedPayment': {
-            handler: function handler(val, oldVal) {
-                console.log(val);
-                if (val && val.amount_owed) {
-                    var max = this.calculateMaxAmount(val);
-                    if (val.amount_owed > max) val.amount_owed = this.cost.amount;
-                    val.percent_owed = val.amount_owed / this.cost.amount * 100;
-                    if (_.isFunction(this.$validate)) this.$validate('percent', true);
-                }
-
-                if (val && val.percent_owed) {
-                    var max = this.calculateMaxPercent(val);
-                    if (val.percent_owed > max) val.percent_owed = max;
-                    val.amount_owed = val.percent_owed / 100 * this.cost.amount;
-                    if (_.isFunction(this.$validate)) this.$validate('amount', true);
-                }
-            },
-            deep: true
-        },
-        'newPayment': {
-            handler: function handler(val, oldVal) {
-                console.log(val);
-                if (val && val.amount_owed) {
-                    var max = this.calculateMaxAmount(val);
-                    if (val.amount_owed > max) val.amount_owed = this.cost.amount;
-                    val.percent_owed = val.amount_owed / this.cost.amount * 100;
-                    if (_.isFunction(this.$validate)) this.$validate('percent', true);
-                }
-
-                if (val && val.percent_owed) {
-                    var max = this.calculateMaxPercent(val);
-                    if (val.percent_owed > max) val.percent_owed = max;
-                    val.amount_owed = val.percent_owed / 100 * this.cost.amount;
-                    if (_.isFunction(this.$validate)) this.$validate('amount', true);
-                }
-            },
-            deep: true
-        },
-        'showEditModal': function showEditModal(val, oldVal) {
-            this.$nextTick(function () {
-                // if edit modal closes, reset data
-                if (val !== oldVal && val === false) {
-                    this.resetPayment();
-                }
-            });
-        },
-        'showAddModal': function showAddModal(val, oldVal) {
-            this.$nextTick(function () {
-                // if add modal closes, reset data
-                if (val !== oldVal && val === false) {
-                    this.resetPayment();
-                }
-            });
-        }
-
-    },
-    methods: {
-        checkForErrorPaymentAdd: function checkForErrorPaymentAdd(field) {
-            return this.$TripPricingCostPaymentAdd && this.$TripPricingCostPaymentAdd[field.toLowerCase()].invalid && this.attemptedAddPayment;
-        },
-        checkForErrorPaymentEdit: function checkForErrorPaymentEdit(field) {
-            return this.$TripPricingCostPaymentEdit && this.$TripPricingCostPaymentEdit[field.toLowerCase()].invalid && this.attemptedAddPayment;
-        },
-        resetPayment: function resetPayment() {
-            this.newPayment = {
-                amount_owed: 0,
-                percent_owed: 0,
-                due_at: null,
-                upfront: false,
-                grace_period: 0
-            };
-            this.selectedPayment = null;
-        },
-        calculateMaxAmount: function calculateMaxAmount(thePayment) {
-            var max = this.cost.amount;
-            if (this.payments.length) {
-                this.payments.forEach(function (payment) {
-                    // must ignore current payment in editMode
-                    if (thePayment !== payment) {
-                        max -= payment.amount_owed;
-                    }
-                }, this);
-            }
-            return max;
-        },
-        calculateMaxPercent: function calculateMaxPercent(thePayment) {
-            var max = 100;
-            if (this.payments.length) {
-                this.payments.forEach(function (payment) {
-                    // must ignore current payment in editMode
-                    if (thePayment !== payment) {
-                        max -= payment.percent_owed;
-                    }
-                }, this);
-            }
-            return max;
-        },
-        checkCostsErrors: function checkCostsErrors() {
-            var errors = [];
-
-            if (!this.payments.length) {
-                errors.push('empty');
-            } else {
-                // cost payments must total full amount owed and percent owed
-                var amount = 0;
-                this.payments.forEach(function (payment, index) {
-                    amount += payment.amount_owed;
-                }, this);
-                // evaluate difference
-                if (amount != this.cost.amount) {
-                    errors.push('incomplete');
-                }
-            }
-
-            // no errors
-            errors.push(false);
-            this.costsErrors = errors;
-        },
-        editPayment: function editPayment(payment) {
-            this.showEditModal = true;
-            this.selectedPayment = payment;
-            this.selectedPayment.due_at = moment(payment.due_at).format('YYYY-MM-DD');
-        },
-        addPayment: function addPayment() {
-            this.attemptedAddPayment = true;
-            if (this.$TripPricingCostPaymentAdd.valid) {
-                this.$refs.spinner.show();
-                this.resource.save({}, this.newPayment).then(function (response) {
-                    this.payments.push(this.newPayment);
-                    this.resetPayment();
-                    this.showAddModal = false;
-                    this.attemptedAddPayment = false;
-                    this.$refs.spinner.hide();
-                });
-            }
-            this.checkCostsErrors();
-        },
-        updatePayment: function updatePayment() {
-            this.attemptedAddPayment = true;
-            if (this.$TripPricingCostPaymentEdit.valid) {
-                this.$refs.spinner.show();
-                this.resource.update({ payment_id: this.selectedPayment.id }, this.selectedPayment).then(function (response) {
-                    this.resetPayment();
-                    this.showEditModal = false;
-                    this.attemptedAddPayment = false;
-                    this.$refs.spinner.hide();
-                });
-            } else {
-                console.log('Errors');
-            }
-            this.checkCostsErrors();
-        },
-        confirmRemove: function confirmRemove(payment) {
-            this.selectedPayment = payment;
-            this.deletePaymentModal = true;
-        },
-        remove: function remove(payment) {
-            this.resource.delete({ payment_id: payment.id }).then(function (response) {
-                this.payments.$remove(payment);
-                this.selectedPayment = null;
-            });
-        }
-    },
-    ready: function ready() {
-        var self = this;
-        this.$root.$on('Cost:' + this.id + ':NewPayment', function (cost) {
-            self.showAddModal = true;
-        });
-    }
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n<table class=\"table\">\n    <thead>\n    <tr>\n        <th>Amount</th>\n        <th>Percent</th>\n        <th>Due</th>\n        <th>Grace</th>\n        <th><i class=\"fa fa-cog\"></i></th>\n    </tr>\n    </thead>\n    <tbody>\n\n    <tr v-for=\"payment in payments|orderBy 'due_at'\">\n        <td>{{ payment.amount_owed|currency }}</td>\n        <td>{{ payment.percent_owed|number }}%</td>\n        <td>{{ payment.upfront ? 'Upfront' : payment.due_at|moment 'll' }}</td>\n        <td>{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period &gt; 1 ? 'days' : 'day') }}</td>\n        <td>\n            <a class=\"btn btn-default btn-xs\" @click=\"editPayment(payment)\"><i class=\"fa fa-pencil\"></i></a>\n            <a class=\"btn btn-danger btn-xs\" @click=\"confirmRemove(payment)\"><i class=\"fa fa-times\"></i></a>\n        </td>\n    </tr>\n    </tbody>\n</table>\n<modal title=\"New Payment\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCostPaymentAdd\">\n            <form class=\"form-inline\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <label for=\"amountOwed\">Owed</label>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentAdd('amount') }\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                            <input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(newPayment)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentAdd('percent') }\">\n                            <input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n                        </div>\n                    </div>\n                </div>\n                <br>\n                <div class=\"checkbox\">\n                    <label>\n                        <input type=\"checkbox\" v-model=\"newPayment.upfront\">\n                        Due upfront?\n                    </label>\n                </div>\n                <div class=\"row\" v-if=\"!newPayment.upfront\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\">\n                            <label for=\"dueAt\">Due</label>\n                            <input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorPaymentAdd('grace') }\">\n                            <label for=\"grace_period\">Grace Period</label>\n                            <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentAdd('grace') }\">\n                                <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                <span class=\"input-group-addon\">Days</span>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetPayment()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addPayment\">Add</button>\n    </div>\n\n</modal>\n<modal title=\"Edit Payment\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCostPaymentEdit\" v-if=\"selectedPayment\">\n            <form class=\"form-inline\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <label for=\"amountOwed\">Owed</label>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentEdit('amount') }\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                            <input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(selectedPayment)\" number=\"\" v-model=\"selectedPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentEdit('percent') }\">\n                            <input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"selectedPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n                        </div>\n                    </div>\n                </div>\n                <br>\n                <div class=\"checkbox\">\n                    <label>\n                        <input type=\"checkbox\" v-model=\"selectedPayment.upfront\">\n                        Due upfront?\n                    </label>\n                </div>\n                <div class=\"row\" v-if=\"!selectedPayment.upfront\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\">\n                            <label for=\"dueAt\">Due</label>\n                            <input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"selectedPayment.due_at\" required=\"\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorPaymentEdit('grace') }\">\n                            <label for=\"grace_period\">Grace Period</label>\n                            <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentEdit('grace') }\">\n                                <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"selectedPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                <span class=\"input-group-addon\">Days</span>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, selectedPayment = null\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updatePayment\">Update</button>\n    </div>\n\n</modal>\n<modal class=\"text-center\" :show.sync=\"deletePaymentModal\" title=\"Delete Payment\" small=\"true\">\n    <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedPayment\">Are you sure you want to delete {{ selectedPayment.name }}?</div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deletePaymentModal = false\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deletePaymentModal = false,remove(selectedPayment)\">Confirm</button>\n    </div>\n</modal>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-9a5af5a0", module.exports)
-  } else {
-    hotAPI.update("_v-9a5af5a0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],197:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _adminTripCostsPayments = require('./admin-trip-costs-payments.vue');
-
-var _adminTripCostsPayments2 = _interopRequireDefault(_adminTripCostsPayments);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-    name: 'admin-trip-costs',
-    props: ['id', 'assignment'],
-    components: { adminTripCostsPayments: _adminTripCostsPayments2.default },
-    data: function data() {
-        return {
-            costs: [],
-            selectedCost: null,
-            attemptedAddCost: false,
-            costsErrors: [],
-
-            newCost: {
-                cost_assignable_id: this.id,
-                cost_assignable_type: 'trips',
-                name: '',
-                description: '',
-                active_at: '',
-                amount: 0,
-                type: '',
-                payments: [],
-                toggleNewPayment: false
-            },
-            showFilters: false,
-            showAddModal: false,
-            showEditModal: false,
-            deleteCostModal: false,
-            filters: {
-                type: ''
-            },
-            search: '',
-            sort: 'active_at',
-            resource: this.$resource('costs{/id}')
-        };
-    },
-
-    watch: {
-        // watch filters obj
-        'filters': {
-            handler: function handler(val) {
-                // console.log(val);
-                this.searchCosts();
-            },
-            deep: true
-        },
-
-        'search': function search(val) {
-            this.searchCosts();
-        },
-
-        'showEditModal': function showEditModal(val, oldVal) {
-            this.$nextTick(function () {
-                if (val !== oldVal && val === false) {
-                    this.selectedCost = null;
-                }
-            });
-        }
-    },
-    methods: {
-        checkForErrorCost: function checkForErrorCost(field) {
-            return this.$TripPricingCost && this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
-        },
-        checkCostsErrors: function checkCostsErrors() {
-            var errors = [];
-            this.costs.forEach(function (cost, index) {
-                // cost must have at least 1 payment
-                if (!cost.payments.length) {
-                    errors.push('empty');
-                } else {
-                    // cost payments must total full amount owed and percent owed
-                    var amount = 0;
-                    cost.payments.forEach(function (payment, index) {
-                        amount += payment.amount_owed;
-                    }, this);
-                    // evaluate difference
-                    if (amount != cost.amount) {
-                        errors.push('incomplete');
-                    }
-                }
-
-                // no errors
-                errors.push(false);
-            }, this);
-            this.costsErrors = errors;
-        },
-        resetCost: function resetCost() {
-            this.newCost = {
-                cost_assignable_id: this.id,
-                cost_assignable_type: 'trips',
-                name: '',
-                description: '',
-                active_at: '',
-                amount: 0,
-                type: '',
-                payments: [],
-                toggleNewPayment: false
-            };
-        },
-        editCost: function editCost(cost) {
-            this.selectedCost = cost;
-            this.selectedCost.active_at = moment(cost.active_at).format('YYYY-MM-DD');
-            this.showEditModal = true;
-        },
-        confirmRemove: function confirmRemove(cost) {
-            this.selectedCost = cost;
-            this.deleteCostModal = true;
-        },
-        remove: function remove(cost) {
-            this.resource.delete({ id: cost.id }).then(function (response) {
-                this.costs.$remove(cost);
-                this.selectedCost = null;
-            });
-        },
-        addCost: function addCost() {
-            this.attemptedAddCost = true;
-            if (this.$TripPricingCost.valid) {
-                this.resource.save(this.newCost).then(function (response) {
-                    this.costs.push(response.data.data);
-                    this.resetCost();
-                    this.showAddModal = false;
-                    this.attemptedAddCost = false;
-                });
-            }
-            this.checkCostsErrors();
-        },
-        updateCost: function updateCost() {
-            this.attemptedAddCost = true;
-            if (this.$TripPricingCost.valid) {
-                this.resource.update({ id: this.selectedCost.id }, this.selectedCost).then(function (response) {
-                    $.extend(this.costs, this.selectedCost);
-                    this.selectedCost = null;
-                    this.attemptedAddCost = false;
-                    this.showEditModal = false;
-                });
-            }
-            this.checkCostsErrors();
-        },
-        resetFilter: function resetFilter() {
-            this.search = '';
-            this.sort = 'active_at';
-            this.filters = {
-                type: ''
-            };
-        },
-        searchCosts: function searchCosts() {
-            this.$refs.spinner.show();
-            this.resource.get({
-                include: 'payments',
-                assignment: this.assignment + '|' + this.id,
-                search: this.search,
-                sort: this.sort,
-                type: this.filters.type
-            }).then(function (response) {
-                this.costs = response.data.data;
-                this.$refs.spinner.hide();
-            });
-        },
-        addPayment: function addPayment(cost) {
-            this.$root.$emit('Cost:' + cost.id + ':NewPayment');
-        }
-    },
-    ready: function ready() {
-        this.searchCosts();
-    }
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n    <hr class=\"divider inv sm\">\n    <form class=\"col-sm-12\">\n        <div class=\"form-group\">\n            <select class=\"form-control input-sm\" v-model=\"filters.type\" style=\"width:100%;\">\n                <option value=\"\">Any Type</option>\n                <option value=\"incremental\">Incremental</option>\n                <option value=\"optional\">Optional</option>\n                <option value=\"static\">Static</option>\n            </select>\n        </div>\n\n        <hr class=\"divider inv sm\">\n        <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n    </form>\n</aside>\n<form class=\"panel-body form-inline text-right\" novalidate=\"\">\n    <div class=\"input-group input-group-sm\">\n        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n    </div>\n    <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=true\">Filters</button>\n    <a class=\"btn btn-primary btn-sm\" @click=\"showAddModal=true\">New <i class=\"fa fa-plus\"></i></a>\n</form>\n<hr class=\"divider sm\">\n<template v-for=\"cost in costs\">\n    <div class=\"panel-body\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <h4>{{ cost.name|capitalize }}</h4>\n            </div>\n            <div class=\"col-sm-6 text-right hidden-xs\">\n                <div style=\"padding: 0;\">\n                    <div role=\"group\" aria-label=\"...\">\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"addPayment(cost)\"><i class=\"fa fa-plus\"></i> New Payment</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editCost(cost)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(cost)\"><i class=\"fa fa-trash\"></i> Delete</a>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-sm-6 text-center visible-xs\">\n                <div style=\"padding: 0;\">\n                    <div role=\"group\" aria-label=\"...\">\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"addPayment(cost)\"><i class=\"fa fa-plus\"></i> New Payment</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editCost(cost)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(cost)\"><i class=\"fa fa-trash\"></i> Delete</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <p class=\"small\">{{ cost.description }}</p>\n            </div>\n        </div>\n        <hr class=\"divider\">\n        <div class=\"row\">\n            <div class=\"col-sm-4 text-center\">\n                <label>Cost Type</label>\n                <p>{{ cost.type|capitalize }}</p>\n            </div>\n            <div class=\"col-sm-4 text-center\">\n                <label>Active Date</label>\n                <p>{{ cost.active_at|moment 'll' }}</p>\n            </div>\n            <div class=\"col-sm-4 text-center\">\n                <label>Cost</label>\n                <p>{{ cost.amount|currency }}</p>\n            </div>\n        </div>\n        <hr class=\"divider\">\n        <admin-trip-costs-payments :id=\"cost.id\" :cost=\"cost\" :payments.sync=\"cost.payments.data\"></admin-trip-costs-payments>\n    </div>\n    <hr class=\"divider\">\n</template>\n\n<modal title=\"New Cost\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCost\" v-if=\"!selectedCost\">\n            <form class=\"form\" novalidate=\"\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n                            <label for=\"cost_name\">Name</label>\n                            <input type=\"text\" class=\"form-control\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n                            <label for=\"cost_description\">Description</label>\n                            <textarea class=\"form-control\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n                            <label for=\"cost_type\">Type</label>\n                            <select id=\"cost_type\" class=\"form-control\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n                                <option value=\"\">-- select --</option>\n                                <option value=\"static\">Static</option>\n                                <option value=\"incremental\">Incremental</option>\n                                <option value=\"optional\">Optional</option>\n                            </select>\n                        </div>\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n                                    <label for=\"newCost_active_at\">Active</label>\n                                    <br>\n                                    <datepicker :value.sync=\"newCost.active_at\" format=\"yyyy-MM-dd\" :clear-button=\"true\">\n                                    </datepicker>\n                                    <input type=\"date\" id=\"newCost_active_at\" class=\"form-control hidden\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n                                </div>\n\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n                                    <label for=\"newCost_amount\">Amount</label>\n                                    <div class=\"input-group\">\n                                        <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                                        <input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetCost()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addCost(newCost)\">Add</button>\n    </div>\n\n</modal>\n<modal title=\"Edit Cost\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCost\" v-if=\"selectedCost\">\n            <form class=\"form\" novalidate=\"\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n                            <label for=\"cost_name\">Name</label>\n                            <input type=\"text\" class=\"form-control\" id=\"cost_name\" v-model=\"selectedCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n                            <label for=\"cost_description\">Description</label>\n                            <textarea class=\"form-control\" id=\"cost_description\" v-model=\"selectedCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n                            <label for=\"cost_type\">Type</label>\n                            <select id=\"cost_type\" class=\"form-control\" v-model=\"selectedCost.type\" v-validate:costtype=\"{ required: true }\">\n                                <option value=\"\">-- select --</option>\n                                <option value=\"static\">Static</option>\n                                <option value=\"incremental\">Incremental</option>\n                                <option value=\"optional\">Optional</option>\n                            </select>\n                        </div>\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n                                    <label for=\"selectedCost_active_at\">Active</label>\n                                    <br>\n                                    <datepicker :value.sync=\"selectedCost.active_at\" format=\"yyyy-MM-dd\" :clear-button=\"true\">\n                                    </datepicker>\n                                    <input type=\"date\" id=\"selectedCost_active_at\" class=\"form-control hidden\" v-model=\"selectedCost.active_at\" v-validate:costactive=\"{required: true}\">\n                                </div>\n\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n                                    <label for=\"selectedCost_amount\">Amount</label>\n                                    <div class=\"input-group\">\n                                        <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                                        <input type=\"number\" number=\"\" id=\"selectedCost_amount\" class=\"form-control\" v-model=\"selectedCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, selectedCost = null\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updateCost(selectedCost)\">Update</button>\n    </div>\n\n</modal>\n\n<modal class=\"text-center\" :show.sync=\"deleteCostModal\" title=\"Delete Cost\" small=\"true\">\n    <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedCost\">Are you sure you want to delete {{ selectedCost.name }}?</div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteCostModal = false\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteCostModal = false,remove(selectedCost)\">Confirm</button>\n    </div>\n</modal>\n\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-2820379a", module.exports)
-  } else {
-    hotAPI.update("_v-2820379a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"./admin-trip-costs-payments.vue":196,"vue":124,"vue-hot-reload-api":119}],198:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],203:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -81697,18 +81908,26 @@ var _settings = require('./create/settings.vue');
 
 var _settings2 = _interopRequireDefault(_settings);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _pricing = require('./create/pricing.vue');
 
-// import pricing from './create/pricing.vue';
-// import reqs from './create/requirements.vue';
-// import deadlines from './create/deadlines.vue';
+var _pricing2 = _interopRequireDefault(_pricing);
+
+var _requirements = require('./create/requirements.vue');
+
+var _requirements2 = _interopRequireDefault(_requirements);
+
+var _deadlines = require('./create/deadlines.vue');
+
+var _deadlines2 = _interopRequireDefault(_deadlines);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
 	name: 'campaign-trip-create-wizard',
 	props: ['campaignId', 'countryCode'],
 	data: function data() {
 		return {
-			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }],
+			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }, { name: 'Pricing', view: 'step3', form: '$TripPricing', valid: null, complete: false }, { name: 'Requirements', view: 'step4', form: '$TripReqs', valid: null, complete: false }, { name: 'Other Deadlines', view: 'step5', form: '$TripDeadlines', valid: null, complete: false }],
 			currentStep: null,
 			canContinue: false,
 			wizardComplete: false,
@@ -81729,7 +81948,10 @@ exports.default = {
 	},
 	components: {
 		'step1': _details2.default,
-		'step2': _settings2.default
+		'step2': _settings2.default,
+		'step3': _pricing2.default,
+		'step4': _requirements2.default,
+		'step5': _deadlines2.default
 	},
 	methods: {
 		back: function back() {
@@ -81779,7 +82001,7 @@ exports.default = {
 
 			var resource = this.$resource('trips');
 			resource.save(null, this.wizardData).then(function (resp) {
-				window.location.href = '/admin' + resp.data.data.links[0].uri;
+				window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
 			}, function (error) {
 				console.log(error);
 			});
@@ -81798,6 +82020,15 @@ exports.default = {
 			this.currentStep.complete = val;
 		},
 		'settings': function settings(val) {
+			this.currentStep.complete = val;
+		},
+		'pricing': function pricing(val) {
+			this.currentStep.complete = val;
+		},
+		'reqs': function reqs(val) {
+			this.currentStep.complete = val;
+		},
+		'deadlines': function deadlines(val) {
 			this.currentStep.complete = this.wizardComplete = val;
 		}
 	}
@@ -81818,129 +82049,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-01e85f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/details.vue":208,"./create/settings.vue":209,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],199:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-    name: 'admin-trip-deadlines',
-    props: ['id', 'assignment'],
-    data: function data() {
-        return {
-            deadlines: [],
-            selectedDeadline: null,
-            showAddModal: false,
-            showEditModal: false,
-            showDeleteModal: false,
-            attemptedAddDeadline: false,
-            attemptedEditDeadline: false,
-            newDeadline: {
-                deadline_assignable_id: this.id,
-                deadline_assignable_type: 'trips',
-                name: '',
-                item_type: '',
-                date: null,
-                grace_period: 0,
-                enforced: false
-            },
-            resource: this.$resource('deadlines{/id}')
-        };
-    },
-
-    methods: {
-        checkForAddError: function checkForAddError(field) {
-            return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
-        },
-        checkForEditError: function checkForEditError(field) {
-            return this.$TripDeadlinesEdit[field.toLowerCase()].invalid && this.attemptedEditDeadline;
-        },
-        resetDeadline: function resetDeadline() {
-            this.newDeadline = {
-                deadline_assignable_id: this.id,
-                deadline_assignable_type: 'trips',
-                item: '',
-                item_type: '',
-                date: null,
-                grace_period: 0,
-                enforced: false
-            };
-        },
-        addDeadline: function addDeadline() {
-            this.attemptedAddDeadline = true;
-            if (this.$TripDeadlinesCreate.valid) {
-                this.$refs.spinner.show();
-                this.resource.save({}, this.newDeadline).then(function (response) {
-                    this.deadlines.push(response.data.data);
-                    this.resetDeadline();
-                    this.attemptedAddDeadline = false;
-                    this.showAddModal = false;
-                    this.$refs.spinner.hide();
-                });
-            }
-        },
-        updateDeadline: function updateDeadline() {
-            this.attemptedEditDeadline = true;
-            if (this.$TripDeadlinesEdit.valid) {
-                this.$refs.spinner.show();
-                this.resource.update({ id: this.selectedDeadline.id }, this.selectedDeadline).then(function (response) {
-                    this.attemptedEditDeadline = false;
-                    this.showEditModal = false;
-                    this.$refs.spinner.hide();
-                });
-            }
-        },
-        editDeadline: function editDeadline(deadline) {
-            this.selectedDeadline = deadline;
-            this.selectedDeadline.date = moment(deadline.date).format('YYYY-MM-DD');
-            this.showEditModal = true;
-        },
-        confirmRemove: function confirmRemove(deadline) {
-            this.selectedDeadline = deadline;
-            this.showDeleteModal = true;
-        },
-        remove: function remove(deadline) {
-            this.$refs.spinner.show();
-            this.resource.delete({ id: deadline.id }).then(function (response) {
-                this.deadlines.$remove(deadline);
-                this.selectedDeadline = null;
-                this.$refs.spinner.hide();
-            });
-        },
-        searchDeadlines: function searchDeadlines() {
-            this.$refs.spinner.show();
-            this.resource.get({
-                assignment: this.assignment + '|' + this.id,
-                search: this.search,
-                sort: this.sort
-            }).then(function (response) {
-                this.deadlines = response.data.data;
-                this.$refs.spinner.hide();
-            });
-        }
-    },
-    ready: function ready() {
-        this.searchDeadlines();
-        var self = this;
-        this.$root.$on('NewDeadline', function () {
-            self.showAddModal = true;
-        });
-    }
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n<div class=\"panel-body\" v-for=\"deadline in deadlines|orderBy '-date'\">\n    <div class=\"row\">\n        <div class=\"col-xs-12 text-right hidden-xs\">\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editDeadline(deadline)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(deadline)\"><i class=\"fa fa-trash\"></i> Delete</a>\n        </div>\n        <div class=\"col-xs-12 text-center visible-xs\">\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editDeadline(deadline)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(deadline)\"><i class=\"fa fa-trash\"></i> Delete</a>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-xs-8\">\n            <h5><a href=\"#\">{{ deadline.name|capitalize }}</a></h5>\n            <h6><small>Enforced: {{ deadline.enforced ? 'Yes' : 'No' }}</small></h6>\n        </div>\n        <div class=\"col-xs-4 text-right\">\n            <h5><i class=\"fa fa-calendar\"></i> {{ deadline.date | moment 'll' }}</h5>\n            <h6><small>Grace Period: {{ deadline.grace_period }} {{ deadline.grace_period &gt; 1 ? 'days' : 'day' }}</small></h6>\n        </div>\n    </div><!-- end row -->\n    <hr class=\"divider\">\n</div>\n<modal class=\"text-center\" :show.sync=\"showAddModal\" title=\"Add Deadline\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripDeadlinesCreate\">\n            <form class=\"form\" novalidate=\"\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForAddError('name')}\">\n                            <label for=\"name\">Name</label>\n                            <input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\" v-validate:name=\"{required: true}\">\n                        </div>\n\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                    <label for=\"grace_period\">Grace Period</label>\n                                    <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                        <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                        <span class=\"input-group-addon\">Days</span>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForAddError('due')}\">\n                                    <label for=\"date\">Due</label>\n                                    <input type=\"date\" id=\"date\" class=\"form-control input-sm\" v-model=\"newDeadline.date\" v-validate:due=\"{required: true}\">\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <br>\n                        <div class=\"checkbox\">\n                            <label>\n                                <input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n                                Enforced?\n                            </label>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetDeadline()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addDeadline\">Add</button>\n    </div>\n</modal>\n<modal class=\"text-center\" :show.sync=\"showEditModal\" title=\"Edit Deadline\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripDeadlinesEdit\">\n            <form class=\"form\" novalidate=\"\" v-if=\"selectedDeadline\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForEditError('name')}\">\n                            <label for=\"name\">Name</label>\n                            <input type=\"text\" id=\"name\" v-model=\"selectedDeadline.name\" class=\"form-control input-sm\" v-validate:name=\"{required: true}\">\n                        </div>\n\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                    <label for=\"grace_period\">Grace Period</label>\n                                    <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                        <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"selectedDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                        <span class=\"input-group-addon\">Days</span>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditError('due')}\">\n                                    <label for=\"date\">Due</label>\n                                    <input type=\"date\" id=\"date\" class=\"form-control input-sm\" v-model=\"selectedDeadline.date\" v-validate:due=\"{required: true}\">\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <br>\n                        <div class=\"checkbox\">\n                            <label>\n                                <input type=\"checkbox\" v-model=\"selectedDeadline.enforced\">\n                                Enforced?\n                            </label>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, resetDeadline()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updateDeadline\">Update</button>\n    </div>\n</modal>\n<modal class=\"text-center\" :show.sync=\"showDeleteModal\" title=\"Delete Deadline\" small=\"true\">\n    <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedDeadline\">Are you sure you want to delete {{ selectedDeadline.name }}?</div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showDeleteModal = false\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"showDeleteModal = false,remove(selectedDeadline)\">Confirm</button>\n    </div>\n</modal>\n\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-2df0adef", module.exports)
-  } else {
-    hotAPI.update("_v-2df0adef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],200:[function(require,module,exports){
+},{"./create/deadlines.vue":210,"./create/details.vue":211,"./create/pricing.vue":212,"./create/requirements.vue":213,"./create/settings.vue":214,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81976,7 +82085,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-19795487", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],201:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82069,7 +82178,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-41cb11df", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],202:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],206:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -82090,18 +82199,26 @@ var _settings = require('./edit/settings.vue');
 
 var _settings2 = _interopRequireDefault(_settings);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _pricing = require('./edit/pricing.vue');
 
-// import pricing from './edit/pricing.vue';
-// import reqs from './edit/requirements.vue';
-// import deadlines from './edit/deadlines.vue';
+var _pricing2 = _interopRequireDefault(_pricing);
+
+var _requirements = require('./edit/requirements.vue');
+
+var _requirements2 = _interopRequireDefault(_requirements);
+
+var _deadlines = require('./edit/deadlines.vue');
+
+var _deadlines2 = _interopRequireDefault(_deadlines);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
 	name: 'campaign-trip-edit-wizard',
 	props: ['tripId'],
 	data: function data() {
 		return {
-			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }],
+			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }, { name: 'Pricing', view: 'step3', form: '$TripPricing', valid: null, complete: false }, { name: 'Requirements', view: 'step4', form: '$TripReqs', valid: null, complete: false }, { name: 'Other Deadlines', view: 'step5', form: '$TripDeadlines', valid: null, complete: false }],
 			currentStep: null,
 			canContinue: false,
 			wizardComplete: false,
@@ -82119,7 +82236,10 @@ exports.default = {
 	},
 	components: {
 		'step1': _details2.default,
-		'step2': _settings2.default
+		'step2': _settings2.default,
+		'step3': _pricing2.default,
+		'step4': _requirements2.default,
+		'step5': _deadlines2.default
 	},
 	methods: (0, _defineProperty3.default)({
 		back: function back() {
@@ -82178,8 +82298,8 @@ exports.default = {
 	created: function created() {
 		this.currentStep = this.stepList[0];
 
-		this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines' }).then(function (response) {
-			var trip = response.data.data;
+		this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines' }).then(function (trip) {
+			var trip = trip.data.data;
 			$.extend(trip, {
 				type: this.type,
 				group_id: this.group_id
@@ -82213,6 +82333,15 @@ exports.default = {
 			this.currentStep.complete = val;
 		},
 		'settings': function settings(val) {
+			this.currentStep.complete = val;
+		},
+		'pricing': function pricing(val) {
+			this.currentStep.complete = val;
+		},
+		'reqs': function reqs(val) {
+			this.currentStep.complete = val;
+		},
+		'deadlines': function deadlines(val) {
 			this.currentStep.complete = this.wizardComplete = val;
 		}
 	}
@@ -82233,7 +82362,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-da7ed334", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/details.vue":210,"./edit/settings.vue":211,"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],203:[function(require,module,exports){
+},{"./edit/deadlines.vue":215,"./edit/details.vue":216,"./edit/pricing.vue":217,"./edit/requirements.vue":218,"./edit/settings.vue":219,"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82338,129 +82467,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1b17f8e3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],204:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-    name: 'admin-trip-requirements',
-    props: ['id', 'requester'],
-    data: function data() {
-        return {
-            requirements: [],
-            selectedRequirement: null,
-            showAddModal: false,
-            showEditModal: false,
-            showDeleteModal: false,
-            attemptedAddRequirement: false,
-            attemptedEditRequirement: false,
-            newRequirement: {
-                requester_id: this.id,
-                requester_type: 'trip',
-                name: '',
-                document_type: '',
-                due_at: null,
-                grace_period: 0
-            },
-            resource: this.$resource('requirements{/id}'),
-            documentNames: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Testimony', 'Arrival Designation', 'Itinerary'],
-            documentTypes: ['medical_releases', 'passports', 'visas', 'referrals', 'credentials', 'arrival_designation', 'essays']
-        };
-    },
-
-    methods: {
-        checkForAddError: function checkForAddError(field) {
-            return this.$TripRequirementsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
-        },
-        checkForEditError: function checkForEditError(field) {
-            return this.$TripRequirementsEdit[field.toLowerCase()].invalid && this.attemptedEditRequirement;
-        },
-        resetRequirement: function resetRequirement() {
-            this.newRequirement = {
-                requester_id: this.id,
-                requester_type: 'trip',
-                name: '',
-                document_type: '',
-                due_at: null,
-                grace_period: 0
-            };
-        },
-        addRequirement: function addRequirement() {
-            this.attemptedAddRequirement = true;
-            if (this.$TripRequirementsCreate.valid) {
-                this.$refs.spinner.show();
-                this.resource.save({}, this.newRequirement).then(function (response) {
-                    this.requirements.push(response.data.data);
-                    this.resetRequirement();
-                    this.attemptedAddRequirement = false;
-                    this.showAddModal = false;
-                    this.$refs.spinner.hide();
-                });
-            }
-        },
-        updateRequirement: function updateRequirement() {
-            this.attemptedEditRequirement = true;
-            if (this.$TripRequirementsEdit.valid) {
-                this.$refs.spinner.show();
-                this.resource.update({ id: this.selectedRequirement.id }, this.selectedRequirement).then(function (response) {
-                    this.attemptedEditRequirement = false;
-                    this.showEditModal = false;
-                    this.$refs.spinner.hide();
-                });
-            }
-        },
-        editRequirement: function editRequirement(requirement) {
-            this.selectedRequirement = requirement;
-            this.selectedRequirement.due_at = moment(requirement.due_at).format('YYYY-MM-DD');
-            this.showEditModal = true;
-        },
-        confirmRemove: function confirmRemove(requirement) {
-            this.selectedRequirement = requirement;
-            this.showDeleteModal = true;
-        },
-        remove: function remove(requirement) {
-            this.$refs.spinner.show();
-            this.resource.delete({ id: requirement.id }).then(function (response) {
-                this.requirements.$remove(requirement);
-                this.selectedRequirement = null;
-                this.$refs.spinner.hide();
-            });
-        },
-        searchRequirements: function searchRequirements() {
-            this.$refs.spinner.show();
-            this.resource.get({
-                requester: this.requester + '|' + this.id,
-                search: this.search,
-                sort: this.sort
-            }).then(function (response) {
-                this.requirements = response.data.data;
-                this.$refs.spinner.hide();
-            });
-        }
-    },
-    ready: function ready() {
-        this.searchRequirements();
-        var self = this;
-        this.$root.$on('NewRequirement', function () {
-            self.showAddModal = true;
-        });
-    }
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n    <div class=\"panel-body\" v-for=\"requirement in requirements|orderBy '-date'\">\n        <div class=\"row\">\n            <div class=\"col-xs-12 text-right hidden-xs\">\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editRequirement(requirement)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(requirement)\"><i class=\"fa fa-trash\"></i> Delete</a>\n            </div>\n            <div class=\"col-xs-12 text-center visible-xs\">\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editRequirement(requirement)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(requirement)\"><i class=\"fa fa-trash\"></i> Delete</a>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-xs-8\">\n                <h5><a href=\"#\">{{ requirement.name|capitalize }}</a></h5>\n                <h6><small>Type: {{ requirement.document_type }}</small></h6>\n            </div>\n            <div class=\"col-xs-4 text-right\">\n                <h5><i class=\"fa fa-calendar\"></i> {{ requirement.due_at|moment 'll' }} </h5>\n                <h6><small>Grace Period: {{ requirement.grace_period }} {{ requirement.grace_period &gt; 1 ? 'days' : 'day' }}</small></h6>\n            </div>\n        </div><!-- end row -->\n        <hr class=\"divider\">\n    </div>\n    <modal class=\"text-center\" :show.sync=\"showAddModal\" title=\"Add Requirement\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"TripRequirementsCreate\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForAddError('name')}\">\n                                        <label for=\"name\">Name</label>\n                                        <select id=\"name\" class=\"form-control input-sm\" v-model=\"newRequirement.name\" v-validate:name=\"{ required: true }\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentNames\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\">\n                                        <label for=\"type\">Document Type</label>\n                                        <select id=\"type\" class=\"form-control input-sm\" v-model=\"newRequirement.document_type\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentTypes\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newRequirement.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForAddError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newRequirement.due_at\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newRequirement.enforced\">\n\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>-->\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetRequirement()\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addRequirement\">Add</button>\n        </div>\n    </modal>\n    <modal class=\"text-center\" :show.sync=\"showEditModal\" title=\"Edit Requirement\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"TripRequirementsEdit\">\n                <form class=\"form\" novalidate=\"\" v-if=\"selectedRequirement\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForEditError('name')}\">\n                                        <label for=\"name\">Name</label>\n                                        <select id=\"name\" class=\"form-control input-sm\" v-model=\"selectedRequirement.name\" v-validate:name=\"{ required: true }\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentNames\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\">\n                                        <label for=\"type\">Document Type</label>\n                                        <select id=\"type\" class=\"form-control input-sm\" v-model=\"selectedRequirement.document_type\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentTypes\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"selectedRequirement.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForEditError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"selectedRequirement.due_at\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newRequirement.enforced\">\n\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>-->\n                        </div>\n                    </div>\n                </form>\n\n            </validator>\n        </div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, resetRequirement()\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updateRequirement\">Update</button>\n        </div>\n    </modal>\n    <modal class=\"text-center\" :show.sync=\"showDeleteModal\" title=\"Delete Requirement\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedRequirement\">Are you sure you want to delete {{ selectedRequirement.name }}?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showDeleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"showDeleteModal = false,remove(selectedRequirement)\">Confirm</button>\n        </div>\n    </modal>\n\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-1dd01dec", module.exports)
-  } else {
-    hotAPI.update("_v-1dd01dec", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],205:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],208:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82522,7 +82529,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n                <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\"><i class=\"fa fa-plus icon-left\"></i> New</a>-->\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'user.data.name'}\">\n                User\n                <i @click=\"setOrderByField('user.data.name')\" v-if=\"orderByField !== 'user.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'user.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Email\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'campaign.data.name'}\">\n                Phone\n                <i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'status'}\">\n                Status\n                <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th>\n                Start &amp; End\n            </th>\n            <th><i class=\"fa fa-plane\"></i></th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n            <td>{{reservation.given_names|capitalize}} {{reservation.surname|capitalize}}</td>\n            <td>{{reservation.user.data.email}}</td>\n            <td>{{reservation.user.data.phone_one}}</td>\n            <td>{{reservation.status}}</td>\n            <td>{{reservation.created_at|moment 'll'}}</td>\n            <td>View</td>\n            <td>\n                <a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <!--<a href=\"/admin{{campaignId + reservation.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>-->\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchReservations\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n                <!--<a class=\"btn btn-primary btn-sm\" href=\"reservations/create\">New <i class=\"fa fa-plus\"></i></a>-->\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-hover\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'user.data.name'}\">\n                User\n                <i @click=\"setOrderByField('user.data.name')\" v-if=\"orderByField !== 'user.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'user.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Email\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'campaign.data.name'}\">\n                Phone\n                <i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'status'}\">\n                Status\n                <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th>\n                Start &amp; End\n            </th>\n            <th><i class=\"fa fa-plane\"></i></th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"reservation in reservations|filterBy search|orderBy orderByField direction\">\n            <td>{{reservation.given_names|capitalize}} {{reservation.surname|capitalize}}</td>\n            <td>{{reservation.user.data.email}}</td>\n            <td>{{reservation.user.data.phone_one}}</td>\n            <td>{{reservation.status}}</td>\n            <td>{{reservation.created_at|moment 'll'}}</td>\n            <td>View</td>\n            <td>\n                <a href=\"/admin{{reservation.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <!--<a href=\"/admin{{campaignId + reservation.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>-->\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchReservations\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -82533,92 +82540,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-67217e50", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],206:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'admin-trip-todos',
-	props: ['id'],
-	data: function data() {
-		return {
-			newTodo: '',
-			todos: [],
-			resource: this.$resource('trips/' + this.id + '/todos'),
-			newMode: false,
-			// editMode: false,
-			showError: false,
-			selectedTodo: null,
-			deleteModal: false,
-			errorMessage: null
-		};
-	},
-
-	methods: {
-		reset: function reset() {
-			this.newMode = false;
-			this.editMode = false;
-			this.newTodo = '';
-		},
-		createTodo: function createTodo() {
-			if (!this.newTodo) return;
-			this.todos.push(this.newTodo);
-			this.$refs.spinner.show();
-			this.resource.save({}, { todos: this.todos }).then(function (response) {
-				this.todos = response.data.data;
-				this.reset();
-				this.$refs.spinner.hide();
-			}).error(function () {
-				this.errorMessage = 'Unable to delete todo.';
-				this.showError = true;
-				this.$refs.spinner.hide();
-			});
-		},
-		remove: function remove() {
-			this.todos.$remove(this.selectedTodo);
-			this.$refs.spinner.show();
-			this.resource.save({}, { todos: this.todos }).then(function (response) {
-				this.todos = response.data.data;
-				this.reset();
-				this.$refs.spinner.hide();
-			}).error(function () {
-				this.errorMessage = 'Unable to delete todo.';
-				this.showError = true;
-				this.$refs.spinner.hide();
-			});
-		},
-		getTodos: function getTodos() {
-			this.$refs.spinner.show();
-			this.resource.get().then(function (response) {
-				this.todos = response.data.data;
-				this.$refs.spinner.hide();
-			});
-		}
-	},
-	ready: function ready() {
-		this.getTodos();
-
-		var self = this;
-		this.$root.$on('NewTodo', function () {
-			self.newMode = true;
-		});
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\t<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n\t<alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n\t\t<span class=\"icon-info-circled alert-icon-float-left\"></span>\n\t\t<strong>Oh No!</strong>\n\t\t<p>{{ errorMessage }}</p>\n\t</alert>\n\t<div class=\"list-group\">\n\t\t<div class=\"list-group-item\" v-if=\"newMode\">\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-2 col-sm-1 text-muted\">\n\t\t\t\t\t<i class=\"fa fa-lg fa-plus-square-o\" style=\"margin-right: 10px\"></i>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-xs-10 col-sm-11\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"newTodo\" placeholder=\"What needs to be done?\" @keyup.enter=\"createTodo\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div v-for=\"todo in todos\" class=\"list-group-item\">\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-10\">\n\t\t\t\t\t{{ todo }}\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-xs-2 text-right\">\n\t\t\t\t\t<!--<tooltip content=\"Edit\">\n\t\t\t\t\t\t<i class=\"fa fa-pencil fa-lg text-muted remove-todo\"\n\t\t\t\t\t\t   @click=\"selectedTodo = todo,editMode = true\">\n\t\t\t\t\t\t</i>\n\t\t\t\t\t</tooltip>-->\n\t\t\t\t\t<tooltip content=\"Delete\">\n\t\t\t\t\t\t<i class=\"fa fa-trash fa-lg text-muted remove-todo\" @click=\"selectedTodo = todo,deleteModal = true\">\n\t\t\t\t\t\t</i>\n\t\t\t\t\t</tooltip>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n    </div>\n\t<modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Todo\" small=\"true\">\n\t\t<div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Todo?</div>\n\t\t<div slot=\"modal-footer\" class=\"modal-footer\">\n\t\t\t<button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n\t\t\t<button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedTodo)\">Confirm</button>\n\t\t</div>\n\t</modal>\n\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-42b43a7e", module.exports)
-  } else {
-    hotAPI.update("_v-42b43a7e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],207:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82678,7 +82600,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters <i class=\"fa fa-times\"></i></button>\n                <a class=\"btn btn-primary btn-sm\" href=\"trips/create\"><i class=\"fa fa-plus icon-left\"></i> New</a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-striped\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'group.data.name'}\">\n                Group\n                <i @click=\"setOrderByField('group.data.name')\" v-if=\"orderByField !== 'group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'campaign.data.name'}\">\n                Campaign\n                <i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'status'}\">\n                Status\n                <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th>\n                Start &amp; End\n            </th>\n            <th><i class=\"fa fa-plane\"></i></th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"trip in trips|filterBy search|orderBy orderByField direction\">\n            <td>{{trip.group.data.name}}</td>\n            <td>{{trip.type|capitalize}}</td>\n            <td>{{trip.campaign.data.name|capitalize}}</td>\n            <td>{{trip.status}}</td>\n            <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>\n            <td>{{trip.reservations}}</td>\n            <td>\n                <a href=\"/admin{{trip.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <a href=\"/admin{{campaignId + trip.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchTrips\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters <i class=\"fa fa-times\"></i></button>\n                <a class=\"btn btn-primary btn-sm\" href=\"trips/create\">New <i class=\"fa fa-plus\"></i></a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-striped\">\n        <thead>\n        <tr>\n            <th :class=\"{'text-primary': orderByField === 'group.data.name'}\">\n                Group\n                <i @click=\"setOrderByField('group.data.name')\" v-if=\"orderByField !== 'group.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'group.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'campaign.data.name'}\">\n                Campaign\n                <i @click=\"setOrderByField('campaign.data.name')\" v-if=\"orderByField !== 'campaign.data.name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'campaign.data.name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th :class=\"{'text-primary': orderByField === 'status'}\">\n                Status\n                <i @click=\"setOrderByField('status')\" v-if=\"orderByField !== 'status'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'status'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th>\n                Start &amp; End\n            </th>\n            <th><i class=\"fa fa-plane\"></i></th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"trip in trips|filterBy search|orderBy orderByField direction\">\n            <td>{{trip.group.data.name}}</td>\n            <td>{{trip.type|capitalize}}</td>\n            <td>{{trip.campaign.data.name|capitalize}}</td>\n            <td>{{trip.status}}</td>\n            <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>\n            <td>{{trip.reservations}}</td>\n            <td>\n                <a href=\"/admin{{trip.links[0].uri}}\"><i class=\"fa fa-eye\"></i></a>\n                <a href=\"/admin{{campaignId + trip.links[0].uri}}/edit\"><i class=\"fa fa-pencil\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchTrips\"></pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -82689,7 +82611,85 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-637d2399", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],208:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],210:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-deadlines',
+	data: function data() {
+		return {
+			toggleNewDeadline: false,
+			attemptedAddDeadline: false,
+			attemptedContinue: false,
+
+			// deadlines data
+			todos: [],
+			deadlines: [],
+			newDeadline: {
+				name: '',
+				date: null,
+				grace_period: 0,
+				enforced: false
+			}
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				todos: this.todos,
+				deadlines: this.deadlines
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('deadlines', true);
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
+		},
+		resetDeadline: function resetDeadline() {
+			this.newDeadline = {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0,
+				enforced: false
+			};
+		},
+		addDeadline: function addDeadline() {
+			this.attemptedAddDeadline = true;
+			if (this.$TripDeadlinesCreate.valid) {
+				this.deadlines.push(this.newDeadline);
+				this.resetDeadline();
+				this.toggleNewDeadline = false;
+				this.attemptedAddDeadline = false;
+			}
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		this.$dispatch('deadlines', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDeadlines\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDeadlines\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Deadlines</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewDeadline=!toggleNewDeadline\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Deadline\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewDeadline\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Deadline\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripDeadlinesCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewDeadline=false\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addDeadline()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Deadline\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"deadline in deadlines|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{deadline.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.due_at|moment}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"deadlines.$remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-4a198cf4", module.exports)
+  } else {
+    hotAPI.update("_v-4a198cf4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],211:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 'use strict';
@@ -82802,7 +82802,313 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0ed0f026", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],209:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],212:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-pricing',
+	data: function data() {
+		return {
+			attemptedContinue: false,
+			attemptedAddCost: false,
+			attemptedAddPayment: false,
+			toggleNewCost: false,
+			toggleNewPayment: false,
+			selectedCost: null,
+			editCostMode: false,
+			editPaymentMode: false,
+			costsErrors: [],
+
+			// pricing data
+			costs: [],
+			newCost: {
+				name: '',
+				description: '',
+				active_at: null,
+				amount: 0,
+				type: '',
+				payments: [],
+				toggleNewPayment: false
+			},
+			newPayment: {
+				amount_owed: 0,
+				percent_owed: 0,
+				due_at: null,
+				upfront: false,
+				grace_period: 0
+			}
+		};
+	},
+
+	/*validators:{
+ 	costs
+ },*/
+	watch: {
+		'newPayment.amount_owed': function newPaymentAmount_owed(val, oldVal) {
+			var max = this.calculateMaxAmount(this.selectedCost);
+			if (val > max) this.newPayment.amount_owed = this.selectedCost.amount;
+			this.newPayment.percent_owed = val / this.selectedCost.amount * 100;
+			if (_.isFunction(this.$validate)) this.$validate('percent', true);
+		},
+		'newPayment.percent_owed': function newPaymentPercent_owed(val, oldVal) {
+			var max = this.calculateMaxPercent(this.selectedCost);
+			if (val > max) this.newPayment.percent_owed = max;
+			this.newPayment.amount_owed = val / 100 * this.selectedCost.amount;
+			if (_.isFunction(this.$validate)) this.$validate('amount', true);
+		},
+		'costs': function costs(val, oldVal) {
+			this.checkCostsErrors();
+		}
+	},
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				costs: this.costs
+			});
+		},
+		onValid: function onValid() {
+
+			this.$dispatch('pricing', true);
+			//this.$parent.details = this.details;
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripPricing[field.toLowerCase()].invalid && this.attemptedContinue;
+		},
+		checkForErrorCost: function checkForErrorCost(field) {
+			return this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
+		},
+		checkForErrorPayment: function checkForErrorPayment(field) {
+			return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
+		},
+		checkCostsErrors: function checkCostsErrors() {
+			var errors = [];
+			this.costs.forEach(function (cost, index) {
+				// cost must have at least 1 payment
+				if (!cost.payments.length) {
+					errors.push('empty');
+				} else {
+					// cost payments must total full amount owed and percent owed
+					var amount = 0;
+					cost.payments.forEach(function (payment, index) {
+						amount += payment.amount_owed;
+					}, this);
+					// evaluate difference
+					if (amount != cost.amount) {
+						errors.push('incomplete');
+					}
+				}
+
+				// no errors
+				errors.push(false);
+			}, this);
+			this.costsErrors = errors;
+		},
+		resetCost: function resetCost() {
+			this.newCost = {
+				name: '',
+				description: '',
+				active_at: null,
+				amount: 0,
+				type: '',
+				payments: [],
+				toggleNewPayment: false
+			};
+		},
+		resetPayment: function resetPayment() {
+			this.newPayment = {
+				amount_owed: 0,
+				percent_owed: 0,
+				due_at: null,
+				upfront: false,
+				grace_period: 0
+			};
+		},
+		calculateMaxAmount: function calculateMaxAmount(cost) {
+			var max = cost.amount;
+			if (cost.payments.length) {
+				cost.payments.forEach(function (payment) {
+					// must ignore current payment in editMode
+					if (this.newPayment !== payment) {
+						max -= payment.amount_owed;
+					}
+				}, this);
+			}
+			return max;
+		},
+		calculateMaxPercent: function calculateMaxPercent(cost) {
+			var max = 100;
+			if (cost.payments.length) {
+				cost.payments.forEach(function (payment) {
+					// must ignore current payment in editMode
+					if (this.newPayment !== payment) {
+						max -= payment.percent_owed;
+					}
+				}, this);
+			}
+			return max;
+		},
+		editCost: function editCost(cost) {
+			this.editCostMode = true;
+			this.toggleNewCost = true;
+			this.newCost = cost;
+		},
+		cancelEditPayment: function cancelEditPayment() {
+			this.editPaymentMode = false;
+			this.resetCost();
+		},
+		editPayment: function editPayment(payment, cost) {
+			this.editPaymentMode = true;
+			this.toggleNewPaymentForm(cost, true);
+			this.newPayment = payment;
+		},
+		toggleNewPaymentForm: function toggleNewPaymentForm(cost, updateMode) {
+			this.selectedCost = cost;
+			this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
+		},
+		addCost: function addCost() {
+			this.attemptedAddCost = true;
+			if (this.$TripPricingCost.valid) {
+				this.costs.push(this.newCost);
+				this.resetCost();
+				this.toggleNewCost = false;
+				this.attemptedAddCost = false;
+			}
+			this.checkCostsErrors();
+		},
+		updateCost: function updateCost() {
+			this.attemptedAddCost = true;
+			if (this.$TripPricingCost.valid) {
+				this.resetCost();
+				this.toggleNewCost = false;
+				this.attemptedAddCost = false;
+				this.editCostMode = false;
+			}
+			this.checkCostsErrors();
+		},
+		addPayment: function addPayment(cost) {
+			this.attemptedAddPayment = true;
+			if (this.$TripPricingCostPayment.valid) {
+				cost.payments.push(this.newPayment);
+				this.resetPayment();
+				this.selectedCost.toggleNewPayment = false;
+				this.attemptedAddPayment = false;
+			}
+			this.checkCostsErrors();
+		},
+		updatePayment: function updatePayment(cost) {
+			this.attemptedAddPayment = true;
+			if (this.$TripPricingCostPayment.valid) {
+				this.resetPayment();
+				this.selectedCost.toggleNewPayment = false;
+				this.attemptedAddPayment = false;
+				this.editPaymentMode = false;
+			}
+			this.checkCostsErrors();
+		},
+		generateUUID: function generateUUID() {
+			return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		this.$dispatch('pricing', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripPricing\" @valid=\"onValid\">\n\t\t\t<form id=\"TripPricing\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewCost=!toggleNewCost\">\n\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Cost\n\t\t\t\t\t</button>\n\n\t\t\t\t</div>\n\t\t\t\t<hr>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Pricing</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewCost\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Cost\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripPricingCost\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_description\">Description</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<textarea class=\"form-control input-sm\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_type\">Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"cost_type\" class=\"form-control input-sm\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"static\">Static</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"incremental\">Incremental</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"optional\">Optional</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_active_at\">Active</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"newCost_active_at\" class=\"form-control input-sm\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_amount\">Amount</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewCost=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addCost()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Cost\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-for=\"cost in costs\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">{{cost.name}}</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t{{cost.description}}\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t<ul class=\"list-unstyled\">\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.type|capitalize}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.active_at|moment}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.amount|currency}}</li>\n\t\t\t\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t\t<th>Amount</th>\n\t\t\t\t\t\t\t\t\t<th>Percent</th>\n\t\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"payment in cost.payments|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t\t<td>{{payment.amount_owed|currency}}</td>\n\t\t\t\t\t\t\t\t\t<td>{{payment.percent_owed|number 2}}%</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">Upfront</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.due_at\">{{payment.due_at|moment}}</span>\n\t\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">None</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">N/A</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"cost.payments.$remove(payment)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t<tr v-if=\"costsErrors[$index] != false\" class=\"danger\">\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-if=\"costsErrors[$index] === 'empty'\">\n\t\t\t\t\t\t\t\t\t\t<b>At least 1 payment is required!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t<b>Payments must total the cost amount!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t\t</table>\n\t\t\t\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t\t\t\t<li class=\"list-group-item\" v-if=\"cost.toggleNewPayment\">\n\t\t\t\t\t\t\t\t\t<validator name=\"TripPricingCostPayment\">\n\t\t\t\t\t\t\t\t\t\t<form class=\"form-inline\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"amountOwed\">Owed</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('amount') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(cost)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('percent') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t\tDue upfront?\n\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\" v-if=\"!newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"dueAt\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"!editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cost.toggleNewPayment=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-success\" @click=\"addPayment(cost)\"><i class=\"fa fa-plus\"></i> Add Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cancelEditPayment(cost)\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-info\" @click=\"updatePayment(cost)\"><i class=\"fa fa-plus\"></i> Update Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\" v-if=\"calculateMaxAmount(cost) > 0\">\n\t\t\t\t\t\t\t\t<a @click=\"toggleNewPaymentForm(cost)\" class=\"btn btn-xs btn-primary\"><i class=\"fa fa-plus\"></i> New Payment</a>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-62c6591e", module.exports)
+  } else {
+    hotAPI.update("_v-62c6591e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],213:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-requirement',
+	data: function data() {
+		return {
+			resources: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Itinerary', 'Arrival Designation'],
+			toggleNewRequirement: false,
+			attemptedAddRequirement: false,
+			attemptedContinue: false,
+
+			// requirements data
+			requirements: [],
+			newReq: {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0
+			}
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				requirements: this.requirements
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('reqs', true);
+			//this.$parent.details = this.details;
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripReqsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
+		},
+		resetRequirement: function resetRequirement() {
+			this.newReq = {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0
+			};
+		},
+		addRequirement: function addRequirement() {
+			this.attemptedAddRequirement = true;
+			if (this.$TripReqsCreate.valid) {
+				this.requirements.push(this.newReq);
+				this.resetRequirement();
+				this.toggleNewRequirement = false;
+				this.attemptedAddRequirement = false;
+			}
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		this.$dispatch('reqs', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripReqs\" @valid=\"onValid\">\n\t\t\t<form id=\"TripReqs\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Requirements</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewRequirement=!toggleNewRequirement\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Requirement\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewRequirement\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Requirement\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripReqsCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"item\">Item</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"item\" class=\"form-control input-sm\" v-model=\"newReq.item\" v-validate:item=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option :value=\"option\" v-for=\"option in resources\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"type\">Item Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"newReq.item_type\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newReq.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newReq.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newReq.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>-->\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewRequirement=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addRequirement()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Requirement\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Item</th>\n\t\t\t\t\t\t\t\t<th>Type</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<!--<th>Enforced</th>-->\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"requirement in requirements|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{requirement.item}}</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.item_type}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.due_at|moment}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<!--<td>{{requirement.enforced}}</td>-->\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"requirements.$remove(requirement)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-790256f5", module.exports)
+  } else {
+    hotAPI.update("_v-790256f5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82857,7 +83163,89 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-305758f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],210:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],215:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-deadlines',
+	data: function data() {
+		return {
+			toggleNewDeadline: false,
+			attemptedAddDeadline: false,
+			attemptedContinue: false,
+
+			// deadlines data
+			todos: [],
+			deadlines: [],
+			newDeadline: {
+				name: '',
+				date: null,
+				grace_period: 0,
+				enforced: false
+			}
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				todos: this.todos,
+				deadlines: this.deadlines
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('deadlines', true);
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
+		},
+		resetDeadline: function resetDeadline() {
+			this.newDeadline = {
+				item: '',
+				item_type: '',
+				due_at: null,
+				grace_period: 0,
+				enforced: false
+			};
+		},
+		addDeadline: function addDeadline() {
+			this.attemptedAddDeadline = true;
+			if (this.$TripDeadlinesCreate.valid) {
+				this.deadlines.push(this.newDeadline);
+				this.resetDeadline();
+				this.toggleNewDeadline = false;
+				this.attemptedAddDeadline = false;
+			}
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		$.extend(this, {
+			todos: this.$parent.trip.todos,
+			deadlines: this.$parent.trip.deadlines
+		});
+		this.$dispatch('deadlines', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDeadlines\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDeadlines\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Deadlines</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewDeadline=!toggleNewDeadline\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Deadline\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewDeadline\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Deadline\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripDeadlinesCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewDeadline=false\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addDeadline()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Deadline\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"deadline in deadlines|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{deadline.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.due_at|moment}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"deadlines.$remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-00aba794", module.exports)
+  } else {
+    hotAPI.update("_v-00aba794", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82993,7 +83381,320 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-cbdfbd0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],211:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],217:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-pricing',
+	data: function data() {
+		return {
+			attemptedContinue: false,
+			attemptedAddCost: false,
+			attemptedAddPayment: false,
+			toggleNewCost: false,
+			toggleNewPayment: false,
+			selectedCost: null,
+			editCostMode: false,
+			editPaymentMode: false,
+			costsErrors: [],
+
+			// pricing data
+			costs: [],
+			newCost: {
+				name: '',
+				description: '',
+				active_at: null,
+				amount: 0,
+				type: '',
+				payments: [],
+				toggleNewPayment: false
+			},
+			newPayment: {
+				amount_owed: 0,
+				percent_owed: 0,
+				due_at: null,
+				upfront: false,
+				grace_period: 0
+			}
+		};
+	},
+
+	/*validators:{
+  costs
+  },*/
+	watch: {
+		'newPayment.amount_owed': function newPaymentAmount_owed(val, oldVal) {
+			var max = this.calculateMaxAmount(this.selectedCost);
+			if (val > max) this.newPayment.amount_owed = this.selectedCost.amount;
+			this.newPayment.percent_owed = val / this.selectedCost.amount * 100;
+			if (_.isFunction(this.$validate)) this.$validate('percent', true);
+		},
+		'newPayment.percent_owed': function newPaymentPercent_owed(val, oldVal) {
+			var max = this.calculateMaxPercent(this.selectedCost);
+			if (val > max) this.newPayment.percent_owed = max;
+			this.newPayment.amount_owed = val / 100 * this.selectedCost.amount;
+			if (_.isFunction(this.$validate)) this.$validate('amount', true);
+		},
+		'costs': function costs(val, oldVal) {
+			this.checkCostsErrors();
+		}
+	},
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				costs: this.costs
+			});
+		},
+		onValid: function onValid() {
+
+			this.$dispatch('pricing', true);
+			//this.$parent.details = this.details;
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripPricing[field.toLowerCase()].invalid && this.attemptedContinue;
+		},
+		checkForErrorCost: function checkForErrorCost(field) {
+			return this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
+		},
+		checkForErrorPayment: function checkForErrorPayment(field) {
+			return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
+		},
+		checkCostsErrors: function checkCostsErrors() {
+			var errors = [];
+			this.costs.forEach(function (cost, index) {
+				// cost must have at least 1 payment
+				if (!cost.payments.length) {
+					errors.push('empty');
+				} else {
+					// cost payments must total full amount owed and percent owed
+					var amount = 0;
+					cost.payments.forEach(function (payment, index) {
+						amount += payment.amount_owed;
+					}, this);
+					// evaluate difference
+					if (amount != cost.amount) {
+						errors.push('incomplete');
+					}
+				}
+
+				// no errors
+				errors.push(false);
+			}, this);
+			this.costsErrors = errors;
+		},
+		resetCost: function resetCost() {
+			this.newCost = {
+				name: '',
+				description: '',
+				active_at: null,
+				amount: 0,
+				type: '',
+				payments: [],
+				toggleNewPayment: false
+			};
+		},
+		resetPayment: function resetPayment() {
+			this.newPayment = {
+				amount_owed: 0,
+				percent_owed: 0,
+				due_at: null,
+				upfront: false,
+				grace_period: 0
+			};
+		},
+		calculateMaxAmount: function calculateMaxAmount(cost) {
+			var max = cost.amount;
+			if (cost.payments.length) {
+				cost.payments.forEach(function (payment) {
+					// must ignore current payment in editMode
+					if (this.newPayment !== payment) {
+						max -= payment.amount_owed;
+					}
+				}, this);
+			}
+			return max;
+		},
+		calculateMaxPercent: function calculateMaxPercent(cost) {
+			var max = 100;
+			if (cost.payments.length) {
+				cost.payments.forEach(function (payment) {
+					// must ignore current payment in editMode
+					if (this.newPayment !== payment) {
+						max -= payment.percent_owed;
+					}
+				}, this);
+			}
+			return max;
+		},
+		editCost: function editCost(cost) {
+			this.editCostMode = true;
+			this.toggleNewCost = true;
+			this.newCost = cost;
+		},
+		cancelEditPayment: function cancelEditPayment() {
+			this.editPaymentMode = false;
+			this.resetCost();
+		},
+		editPayment: function editPayment(payment, cost) {
+			this.editPaymentMode = true;
+			this.toggleNewPaymentForm(cost, true);
+			this.newPayment = payment;
+		},
+		toggleNewPaymentForm: function toggleNewPaymentForm(cost, updateMode) {
+			this.selectedCost = cost;
+			this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
+		},
+		addCost: function addCost() {
+			this.attemptedAddCost = true;
+			if (this.$TripPricingCost.valid) {
+				this.costs.push(this.newCost);
+				this.resetCost();
+				this.toggleNewCost = false;
+				this.attemptedAddCost = false;
+			}
+			this.checkCostsErrors();
+		},
+		updateCost: function updateCost() {
+			this.attemptedAddCost = true;
+			if (this.$TripPricingCost.valid) {
+				this.resetCost();
+				this.toggleNewCost = false;
+				this.attemptedAddCost = false;
+				this.editCostMode = false;
+			}
+			this.checkCostsErrors();
+		},
+		addPayment: function addPayment(cost) {
+			this.attemptedAddPayment = true;
+			if (this.$TripPricingCostPayment.valid) {
+				cost.payments.push(this.newPayment);
+				this.resetPayment();
+				this.selectedCost.toggleNewPayment = false;
+				this.attemptedAddPayment = false;
+			}
+			this.checkCostsErrors();
+		},
+		updatePayment: function updatePayment(cost) {
+			this.attemptedAddPayment = true;
+			if (this.$TripPricingCostPayment.valid) {
+				this.resetPayment();
+				this.selectedCost.toggleNewPayment = false;
+				this.attemptedAddPayment = false;
+				this.editPaymentMode = false;
+			}
+			this.checkCostsErrors();
+		},
+		generateUUID: function generateUUID() {
+			return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
+		}
+	},
+	ready: function ready() {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		this.$set('costs', this.$parent.trip.costs);
+		// add toggle data
+		_.each(this.costs, function (cost) {
+			cost.toggleNewPayment = false;
+		});
+		this.$dispatch('pricing', true);
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripPricing\" @valid=\"onValid\">\n\t\t\t<form id=\"TripPricing\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewCost=!toggleNewCost\">\n\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Cost\n\t\t\t\t\t</button>\n\n\t\t\t\t</div>\n\t\t\t\t<hr>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Pricing</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewCost\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Cost\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripPricingCost\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_description\">Description</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<textarea class=\"form-control input-sm\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_type\">Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"cost_type\" class=\"form-control input-sm\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"static\">Static</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"incremental\">Incremental</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"optional\">Optional</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_active_at\">Active</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"newCost_active_at\" class=\"form-control input-sm\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_amount\">Amount</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewCost=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addCost()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Cost\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-for=\"cost in costs\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">{{cost.name}}</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t{{cost.description}}\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t<ul class=\"list-unstyled\">\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.type|capitalize}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.active_at|moment}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.amount|currency}}</li>\n\t\t\t\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t\t<th>Amount</th>\n\t\t\t\t\t\t\t\t\t<th>Percent</th>\n\t\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"payment in cost.payments|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t\t<td>{{payment.amount_owed|currency}}</td>\n\t\t\t\t\t\t\t\t\t<td>{{payment.percent_owed|number 2}}%</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">Upfront</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.due_at\">{{payment.due_at|moment}}</span>\n\t\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">None</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">N/A</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"cost.payments.$remove(payment)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t<tr v-if=\"costsErrors[$index] != false\" class=\"danger\">\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-if=\"costsErrors[$index] === 'empty'\">\n\t\t\t\t\t\t\t\t\t\t<b>At least 1 payment is required!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t<b>Payments must total the cost amount!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t\t</table>\n\t\t\t\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t\t\t\t<li class=\"list-group-item\" v-if=\"cost.toggleNewPayment\">\n\t\t\t\t\t\t\t\t\t<validator name=\"TripPricingCostPayment\">\n\t\t\t\t\t\t\t\t\t\t<form class=\"form-inline\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"amountOwed\">Owed</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('amount') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(cost)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('percent') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t\tDue upfront?\n\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\" v-if=\"!newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"dueAt\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"!editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cost.toggleNewPayment=false\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-success\" @click=\"addPayment(cost)\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Payment\n\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cancelEditPayment(cost)\"><i class=\"fa fa-times\"></i>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tCancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-info\" @click=\"updatePayment(cost)\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Update Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\" v-if=\"calculateMaxAmount(cost) > 0\">\n\t\t\t\t\t\t\t\t<a @click=\"toggleNewPaymentForm(cost)\" class=\"btn btn-xs btn-primary\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Payment</a>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-70156cff", module.exports)
+  } else {
+    hotAPI.update("_v-70156cff", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],218:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'trip-requirement',
+	data: function data() {
+		return {
+			resources: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Itinerary'],
+			toggleNewRequirement: false,
+			attemptedAddRequirement: false,
+			attemptedContinue: false,
+
+			// requirements data
+			requirements: [],
+			newReq: {
+				name: '',
+				document_type: '',
+				due_at: null,
+				grace_period: 0
+			}
+		};
+	},
+
+	computed: {},
+	methods: {
+		populateWizardData: function populateWizardData() {
+			$.extend(this.$parent.wizardData, {
+				requirements: this.requirements
+			});
+		},
+		onValid: function onValid() {
+			this.populateWizardData();
+			this.$dispatch('reqs', true);
+			//this.$parent.details = this.details;
+		},
+		checkForError: function checkForError(field) {
+			return this.$TripReqsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
+		},
+		resetRequirement: function resetRequirement() {
+			this.newReq = {
+				name: '',
+				document_type: '',
+				due_at: null,
+				grace_period: 0
+			};
+		},
+		addRequirement: function addRequirement() {
+			this.attemptedAddRequirement = true;
+			if (this.$TripReqsCreate.valid) {
+				this.requirements.push(this.newReq);
+				this.resetRequirement();
+				this.toggleNewRequirement = false;
+				this.attemptedAddRequirement = false;
+			}
+		}
+	},
+	activate: function activate(done) {
+		$('html, body').animate({ scrollTop: 0 }, 300);
+		$.extend(this, {
+			requirements: this.$parent.trip.requirements
+		});
+		this.$dispatch('reqs', true);
+		done();
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripReqs\" @valid=\"onValid\">\n\t\t\t<form id=\"TripReqs\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Requirements</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewRequirement=!toggleNewRequirement\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Requirement\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewRequirement\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Requirement\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripReqsCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('name')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"name\" class=\"form-control input-sm\" v-model=\"newReq.name\" v-validate:name=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option :value=\"option\" v-for=\"option in resources\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"type\">Document Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"newReq.document_type\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newReq.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newReq.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newReq.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>-->\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewRequirement=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addRequirement()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Requirement\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Type</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<!--<th>Enforced</th>-->\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"requirement in requirements|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{requirement.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.document_type}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.due_at|moment}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<!--<td>{{requirement.enforced}}</td>-->\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"requirements.$remove(requirement)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-0a518627", module.exports)
+  } else {
+    hotAPI.update("_v-0a518627", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83053,7 +83754,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-756eebba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],212:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83099,7 +83800,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-681de544", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],213:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83292,7 +83993,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b8072596", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],214:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83349,7 +84050,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-63f3eb1d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],215:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83647,7 +84348,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-830bbb3a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],216:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83692,7 +84393,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-fba89fc0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],217:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83729,7 +84430,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ee616aba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],218:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],226:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83766,7 +84467,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-45b743c0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],219:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],227:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83837,7 +84538,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-71b990ff", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],220:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],228:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -84143,7 +84844,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5dcd5b95", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":164,"./registration/additional-trip-options.vue":212,"./registration/basic-info.vue":213,"./registration/deadline-agreement.vue":214,"./registration/payment-details.vue":215,"./registration/review.vue":216,"./registration/roca.vue":217,"./registration/tos.vue":218,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],221:[function(require,module,exports){
+},{"../login.vue":170,"./registration/additional-trip-options.vue":220,"./registration/basic-info.vue":221,"./registration/deadline-agreement.vue":222,"./registration/payment-details.vue":223,"./registration/review.vue":224,"./registration/roca.vue":225,"./registration/tos.vue":226,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84520,7 +85221,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6ba4fc86", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],222:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],230:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -84645,7 +85346,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline\" novalidate=\"\">\n                    <div class=\"form-inline\" style=\"display: inline-block;\">\n                        <div class=\"form-group\">\n                            <label>Show</label>\n                            <select class=\"form-control input-sm\" v-model=\"per_page\">\n                                <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFilters\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu2\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"filters.type\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Type</option>\n\t\t\t\t\t\t\t\t\t<option value=\"avatar\">Avatar</option>\n\t\t\t\t\t\t\t\t\t<option value=\"banner\">Banner</option>\n\t\t\t\t\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t\t\t\t\t\t<option value=\"photo\">Photo</option>\n\t\t\t\t\t\t\t\t\t<option value=\"thumbnail\">Thumbnail</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n\t\t\t\t\t\t</ul>\n                    </div>\n                </form>\n            </div>\n        </div>\n        <hr>\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n\t\t\t\t<th>Preview</th>\n                <th :class=\"{'text-primary': orderByField === 'name'}\">\n                    Name\n                    <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=!direction\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction, 'fa-sort-asc': !direction}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'type'}\">\n                    Type\n                    <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=!direction\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction, 'fa-sort-asc': !direction}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'created_at'}\">\n                    Created\n                    <i @click=\"setOrderByField('created_at')\" v-if=\"orderByField !== 'created_at'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=!direction\" v-if=\"orderByField === 'created_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction, 'fa-sort-asc': !direction}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'updated_at'}\">\n                    Updated\n                    <i @click=\"setOrderByField('updated_at')\" v-if=\"orderByField !== 'updated_at'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=!direction\" v-if=\"orderByField === 'updated_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction, 'fa-sort-asc': !direction}\"></i>\n                </th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"upload in uploads\">\n                <td><img v-if=\"upload.type !== 'file'\" :src=\"checkSource(upload.source)\" width=\"100px\"></td>\n                <td v-text=\"upload.name|capitalize\"></td>\n                <td v-text=\"upload.type|capitalize\"></td>\n                <td v-text=\"upload.created_at|moment 'll'\"></td>\n                <td v-text=\"upload.updated_at|moment 'll'\"></td>\n                <td class=\"text-center\"><a href=\"/admin{{upload.links[0].uri}}/edit\"><i class=\"fa fa-gear\"></i></a></td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <pagination :pagination.sync=\"pagination\" :callback=\"searchUploads\"></pagination>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline\" novalidate=\"\">\n                    <div class=\"form-inline\" style=\"display: inline-block;\">\n                        <div class=\"form-group\">\n                            <label>Show</label>\n                            <select class=\"form-control input-sm\" v-model=\"per_page\">\n                                <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFilters\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu2\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"filters.type\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Type</option>\n\t\t\t\t\t\t\t\t\t<option value=\"avatar\">Avatar</option>\n\t\t\t\t\t\t\t\t\t<option value=\"banner\">Banner</option>\n\t\t\t\t\t\t\t\t\t<option value=\"file\">File</option>\n\t\t\t\t\t\t\t\t\t<option value=\"photo\">Photo</option>\n\t\t\t\t\t\t\t\t\t<option value=\"thumbnail\">Thumbnail</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n\t\t\t\t\t\t</ul>\n                    </div>\n                    <a class=\"btn btn-primary btn-sm\" href=\"uploads/create\">New <i class=\"fa fa-plus\"></i></a>\n                </form>\n            </div>\n        </div>\n        <hr>\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n\t\t\t\t<th>Preview</th>\n                <th :class=\"{'text-primary': orderByField === 'name'}\">\n                    Name\n                    <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=!direction\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction, 'fa-sort-asc': !direction}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'type'}\">\n                    Type\n                    <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=!direction\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction, 'fa-sort-asc': !direction}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'created_at'}\">\n                    Created\n                    <i @click=\"setOrderByField('created_at')\" v-if=\"orderByField !== 'created_at'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=!direction\" v-if=\"orderByField === 'created_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction, 'fa-sort-asc': !direction}\"></i>\n                </th>\n                <th :class=\"{'text-primary': orderByField === 'updated_at'}\">\n                    Updated\n                    <i @click=\"setOrderByField('updated_at')\" v-if=\"orderByField !== 'updated_at'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=!direction\" v-if=\"orderByField === 'updated_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction, 'fa-sort-asc': !direction}\"></i>\n                </th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"upload in uploads\">\n                <td><img v-if=\"upload.type !== 'file'\" :src=\"checkSource(upload.source)\" width=\"100px\"></td>\n                <td v-text=\"upload.name|capitalize\"></td>\n                <td v-text=\"upload.type|capitalize\"></td>\n                <td v-text=\"upload.created_at|moment 'll'\"></td>\n                <td v-text=\"upload.updated_at|moment 'll'\"></td>\n                <td class=\"text-center\"><a href=\"/admin{{upload.links[0].uri}}/edit\"><i class=\"fa fa-gear\"></i></a></td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n                        <pagination :pagination.sync=\"pagination\" :callback=\"searchUploads\"></pagination>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -84660,7 +85361,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d3f25bde", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],223:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],231:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84789,7 +85490,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9535dce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],224:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84825,7 +85526,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6613f28a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],225:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],233:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84999,7 +85700,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-fb2774cc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],226:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],234:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -85206,7 +85907,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline\" novalidate=\"\">\n                    <div class=\"form-inline\" style=\"display: inline-block;\">\n                        <div class=\"form-group\">\n                            <label>Show</label>\n                            <select class=\"form-control input-sm\" v-model=\"per_page\">\n                                <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\"> Name\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"alt_email\" :disabled=\"maxCheck('alt_email')\"> Alt Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"birthday\" :disabled=\"maxCheck('birthday')\"> Birthday\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"phone_one\" :disabled=\"maxCheck('phone_one')\"> Phone 1\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"phone_two\" :disabled=\"maxCheck('phone_two')\"> Phone 2\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"street\" :disabled=\"maxCheck('street')\"> Street\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"city\" :disabled=\"maxCheck('city')\"> City\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"zip\" :disabled=\"maxCheck('zip')\"> Zip\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"state\" :disabled=\"maxCheck('state')\"> State\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"country_name\" :disabled=\"maxCheck('country_name')\"> Country\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"public\" :disabled=\"maxCheck('public')\"> Public\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"isAdmin\" :disabled=\"maxCheck('isAdmin')\"> Admin\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"timezone\" :disabled=\"maxCheck('timezone')\"> Timezone\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm text-center\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n                    <div id=\"toggleFilters\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Filters\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu2\" style=\"min-width:300px; max-height: 575px; padding: 10px 20px; overflow: scroll;\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"countryFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getCountries()\" :value.sync=\"countriesArr\" :options=\"countriesOptions\" label=\"name\" placeholder=\"Filter Countries\"></v-select>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t<label class=\"control-label\">Public</label>\n\t\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"isPublic\" id=\"isPublic1\" v-model=\"filters.isPublic\" :value=\"null\"> Any\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"isPublic\" id=\"isPublic2\" v-model=\"filters.isPublic\" value=\"yes\"> Yes\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"isPublic\" id=\"isPublic3\" v-model=\"filters.isPublic\" value=\"no\"> No\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t<label class=\"control-label\">Admin</label>\n\t\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.isAdmin\" :value=\"null\"> Any\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.isAdmin\" value=\"yes\"> Yes\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.isAdmin\" value=\"no\"> No\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n\t\t\t\t\t\t</ul>\n                    </div>\n                </form>\n            </div>\n        </div>\n        <hr>\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                    Name\n                    <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('email')\" :class=\"{'text-primary': orderByField === 'email'}\">\n                    Email\n                    <i @click=\"setOrderByField('email')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('alt_email')\" :class=\"{'text-primary': orderByField === 'alt_email'}\">\n                    Alt Email\n                    <i @click=\"setOrderByField('alt_email')\" v-if=\"orderByField !== 'alt_email'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'alt_email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n\t\t\t\t<th v-if=\"isActive('gender')\">\n\t\t\t\t\tGender\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('status')\">\n\t\t\t\t\tStatus\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('birthday')\" :class=\"{'text-primary': orderByField === 'birthday'}\">\n\t\t\t\t\tBirthday\n\t\t\t\t\t<i @click=\"setOrderByField('birthday')\" v-if=\"orderByField !== 'birthday'\" class=\"fa fa-sort pull-right\"></i>\n\t\t\t\t\t<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'birthday'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('phone_one')\">\n\t\t\t\t\tPhone 1\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('phone_two')\">\n\t\t\t\t\tPhone 2\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('street')\">\n\t\t\t\t\tStreet\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('city')\" :class=\"{'text-primary': orderByField === 'city'}\">\n\t\t\t\t\tCity\n\t\t\t\t\t<i @click=\"setOrderByField('city')\" v-if=\"orderByField !== 'city'\" class=\"fa fa-sort pull-right\"></i>\n\t\t\t\t\t<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'city'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('zip')\" :class=\"{'text-primary': orderByField === 'zip'}\">\n                    Zip\n                    <i @click=\"setOrderByField('zip')\" v-if=\"orderByField !== 'zip'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'zip'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('state')\" :class=\"{'text-primary': orderByField === 'state'}\">\n                    State\n                    <i @click=\"setOrderByField('state')\" v-if=\"orderByField !== 'state'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'state'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('country_name')\" :class=\"{'text-primary': orderByField === 'country_name'}\">\n                    Country\n                    <i @click=\"setOrderByField('country_name')\" v-if=\"orderByField !== 'country_name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'country_name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n\t\t\t\t<th v-if=\"isActive('public')\">\n\t\t\t\t\tPublic\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('isAdmin')\">\n\t\t\t\t\tAdmin\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('timezone')\">\n\t\t\t\t\tTimezone\n\t\t\t\t</th>\n\t\t\t\t<th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"user in users|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('name')\" v-text=\"user.name|capitalize\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"user.email\"></td>\n                <td v-if=\"isActive('alt_email')\" v-text=\"user.alt_email\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"user.gender|capitalize\"></td>\n\t\t\t\t<td v-if=\"isActive('status')\" v-text=\"user.status|capitalize\"></td>\n\t\t\t\t<td v-if=\"isActive('birthday')\" v-text=\"user.birthday|moment 'll'\"></td>\n                <td v-if=\"isActive('phone_one')\" v-text=\"user.phone_one\"></td>\n                <td v-if=\"isActive('phone_two')\" v-text=\"user.phone_two\"></td>\n                <td v-if=\"isActive('street')\" v-text=\"user.street\"></td>\n                <td v-if=\"isActive('city')\" v-text=\"user.city\"></td>\n                <td v-if=\"isActive('zip')\" v-text=\"user.zip\"></td>\n                <td v-if=\"isActive('state')\" v-text=\"user.state\"></td>\n                <td v-if=\"isActive('country_name')\" v-text=\"user.country_name\"></td>\n                <td v-if=\"isActive('public')\" v-text=\"user.public?'Yes':'No'\"></td>\n                <td v-if=\"isActive('isAdmin')\" v-text=\"user.isAdmin?'Yes':'No'\"></td>\n                <td v-if=\"isActive('timezone')\" v-text=\"user.timezone\"></td>\n                <td>\n                    <a href=\"/admin{{user.links[0].uri}}\"><i class=\"fa fa-gear\"></i></a>\n                </td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t<pagination :pagination.sync=\"pagination\" :callback=\"searchUsers\"></pagination>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <form class=\"form-inline\" novalidate=\"\">\n                    <div class=\"form-inline\" style=\"display: inline-block;\">\n                        <div class=\"form-group\">\n                            <label>Show</label>\n                            <select class=\"form-control input-sm\" v-model=\"per_page\">\n                                <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"input-group input-group-sm\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                    </div>\n                    <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Sort By\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\"> Name\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"email\" :disabled=\"maxCheck('email')\"> Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"alt_email\" :disabled=\"maxCheck('alt_email')\"> Alt Email\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"gender\" :disabled=\"maxCheck('gender')\"> Gender\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"status\" :disabled=\"maxCheck('status')\"> Status\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"birthday\" :disabled=\"maxCheck('birthday')\"> Birthday\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"phone_one\" :disabled=\"maxCheck('phone_one')\"> Phone 1\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"phone_two\" :disabled=\"maxCheck('phone_two')\"> Phone 2\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"street\" :disabled=\"maxCheck('street')\"> Street\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"city\" :disabled=\"maxCheck('city')\"> City\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"zip\" :disabled=\"maxCheck('zip')\"> Zip\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"state\" :disabled=\"maxCheck('state')\"> State\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"country_name\" :disabled=\"maxCheck('country_name')\"> Country\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"public\" :disabled=\"maxCheck('public')\"> Public\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"isAdmin\" :disabled=\"maxCheck('isAdmin')\"> Admin\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<label style=\"margin-bottom: 0\" class=\"small\">\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"activeFields\" value=\"timezone\" :disabled=\"maxCheck('timezone')\"> Timezone\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm text-center\">\n\t\t\t\t\t\t\t\t\t<label>Max Visible Fields</label>\n\t\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"maxActiveFields\">\n\t\t\t\t\t\t\t\t\t\t<option v-for=\"option in maxActiveFieldsOptions\" :value=\"option\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t</ul>\n                    </div>\n                    <div id=\"toggleFilters\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                        <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu2\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Filters\n                        <span class=\"caret\"></span>\n                        </button>\n\t\t\t\t\t\t<ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu2\" style=\"min-width:300px; max-height: 575px; padding: 10px 20px; overflow: scroll;\">\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<v-select class=\"form-control\" id=\"countryFilter\" multiple=\"\" :debounce=\"250\" :on-search=\"getCountries()\" :value.sync=\"countriesArr\" :options=\"countriesOptions\" label=\"name\" placeholder=\"Filter Countries\"></v-select>\n\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"filters.gender\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Genders</option>\n\t\t\t\t\t\t\t\t\t<option value=\"male\">Male</option>\n\t\t\t\t\t\t\t\t\t<option value=\"female\">Female</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t<select class=\"form-control\" v-model=\"filters.status\" style=\"width:100%;\">\n\t\t\t\t\t\t\t\t\t<option value=\"\">Any Status</option>\n\t\t\t\t\t\t\t\t\t<option value=\"single\">Single</option>\n\t\t\t\t\t\t\t\t\t<option value=\"married\">Married</option>\n\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t<label class=\"control-label\">Public</label>\n\t\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"isPublic\" id=\"isPublic1\" v-model=\"filters.isPublic\" :value=\"null\"> Any\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"isPublic\" id=\"isPublic2\" v-model=\"filters.isPublic\" value=\"yes\"> Yes\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"isPublic\" id=\"isPublic3\" v-model=\"filters.isPublic\" value=\"no\"> No\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li style=\"padding: 3px 20px;\">\n\t\t\t\t\t\t\t\t<label class=\"control-label\">Admin</label>\n\t\t\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports1\" v-model=\"filters.isAdmin\" :value=\"null\"> Any\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports2\" v-model=\"filters.isAdmin\" value=\"yes\"> Yes\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t<label class=\"radio-inline\">\n\t\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"passports\" id=\"passports3\" v-model=\"filters.isAdmin\" value=\"no\"> No\n\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</li>\n\n\t\t\t\t\t\t\t<li role=\"separator\" class=\"divider\"></li>\n\t\t\t\t\t\t\t<button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\">Reset Filters</button>\n\t\t\t\t\t\t</ul>\n                    </div>\n                    <a class=\"btn btn-primary btn-sm\" href=\"users/create\">New <i class=\"fa fa-plus\"></i></a>\n                </form>\n            </div>\n        </div>\n        <hr>\n        <table class=\"table table-hover\">\n            <thead>\n            <tr>\n                <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                    Name\n                    <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('email')\" :class=\"{'text-primary': orderByField === 'email'}\">\n                    Email\n                    <i @click=\"setOrderByField('email')\" v-if=\"orderByField !== 'email'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('alt_email')\" :class=\"{'text-primary': orderByField === 'alt_email'}\">\n                    Alt Email\n                    <i @click=\"setOrderByField('alt_email')\" v-if=\"orderByField !== 'alt_email'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'alt_email'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n\t\t\t\t<th v-if=\"isActive('gender')\">\n\t\t\t\t\tGender\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('status')\">\n\t\t\t\t\tStatus\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('birthday')\" :class=\"{'text-primary': orderByField === 'birthday'}\">\n\t\t\t\t\tBirthday\n\t\t\t\t\t<i @click=\"setOrderByField('birthday')\" v-if=\"orderByField !== 'birthday'\" class=\"fa fa-sort pull-right\"></i>\n\t\t\t\t\t<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'birthday'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('phone_one')\">\n\t\t\t\t\tPhone 1\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('phone_two')\">\n\t\t\t\t\tPhone 2\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('street')\">\n\t\t\t\t\tStreet\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('city')\" :class=\"{'text-primary': orderByField === 'city'}\">\n\t\t\t\t\tCity\n\t\t\t\t\t<i @click=\"setOrderByField('city')\" v-if=\"orderByField !== 'city'\" class=\"fa fa-sort pull-right\"></i>\n\t\t\t\t\t<i @click=\"direction=direction*-1\" v-if=\"orderByField === 'city'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('zip')\" :class=\"{'text-primary': orderByField === 'zip'}\">\n                    Zip\n                    <i @click=\"setOrderByField('zip')\" v-if=\"orderByField !== 'zip'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'zip'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('state')\" :class=\"{'text-primary': orderByField === 'state'}\">\n                    State\n                    <i @click=\"setOrderByField('state')\" v-if=\"orderByField !== 'state'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'state'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n                <th v-if=\"isActive('country_name')\" :class=\"{'text-primary': orderByField === 'country_name'}\">\n                    Country\n                    <i @click=\"setOrderByField('country_name')\" v-if=\"orderByField !== 'country_name'\" class=\"fa fa-sort pull-right\"></i>\n                    <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'country_name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n                </th>\n\t\t\t\t<th v-if=\"isActive('public')\">\n\t\t\t\t\tPublic\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('isAdmin')\">\n\t\t\t\t\tAdmin\n\t\t\t\t</th>\n\t\t\t\t<th v-if=\"isActive('timezone')\">\n\t\t\t\t\tTimezone\n\t\t\t\t</th>\n\t\t\t\t<th><i class=\"fa fa-cog\"></i></th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr v-for=\"user in users|filterBy search|orderBy orderByField direction\">\n                <td v-if=\"isActive('name')\" v-text=\"user.name|capitalize\"></td>\n                <td v-if=\"isActive('email')\" v-text=\"user.email\"></td>\n                <td v-if=\"isActive('alt_email')\" v-text=\"user.alt_email\"></td>\n                <td v-if=\"isActive('gender')\" v-text=\"user.gender|capitalize\"></td>\n\t\t\t\t<td v-if=\"isActive('status')\" v-text=\"user.status|capitalize\"></td>\n\t\t\t\t<td v-if=\"isActive('birthday')\" v-text=\"user.birthday|moment 'll'\"></td>\n                <td v-if=\"isActive('phone_one')\" v-text=\"user.phone_one\"></td>\n                <td v-if=\"isActive('phone_two')\" v-text=\"user.phone_two\"></td>\n                <td v-if=\"isActive('street')\" v-text=\"user.street\"></td>\n                <td v-if=\"isActive('city')\" v-text=\"user.city\"></td>\n                <td v-if=\"isActive('zip')\" v-text=\"user.zip\"></td>\n                <td v-if=\"isActive('state')\" v-text=\"user.state\"></td>\n                <td v-if=\"isActive('country_name')\" v-text=\"user.country_name\"></td>\n                <td v-if=\"isActive('public')\" v-text=\"user.public?'Yes':'No'\"></td>\n                <td v-if=\"isActive('isAdmin')\" v-text=\"user.isAdmin?'Yes':'No'\"></td>\n                <td v-if=\"isActive('timezone')\" v-text=\"user.timezone\"></td>\n                <td>\n                    <a href=\"/admin{{user.links[0].uri}}\"><i class=\"fa fa-gear\"></i></a>\n                </td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <td colspan=\"7\">\n                    <div class=\"col-sm-12 text-center\">\n\t\t\t\t\t\t<pagination :pagination.sync=\"pagination\" :callback=\"searchUsers\"></pagination>\n                    </div>\n                </td>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -85221,7 +85922,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-69475ae5", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],227:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],235:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-088b9d34] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-ability[_v-088b9d34] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.ability-item:hover i.remove-ability[_v-088b9d34] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-ability[_v-088b9d34]:hover {\n  color: #d8262e; }\n")
 'use strict';
@@ -85282,7 +85983,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-088b9d34", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],228:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],236:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85393,7 +86094,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1e74bef2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],229:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],237:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85479,7 +86180,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d7753fb8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],230:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85509,7 +86210,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d31ac078", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],231:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85554,7 +86255,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-95628cf4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],232:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],240:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85674,7 +86375,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ad6362de", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],233:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],241:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.alert.top, .alert.top-right {\n    top: 80px;\n}\n")
 'use strict';
@@ -85914,7 +86615,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1d00ad31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":221,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],234:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],242:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -86181,22 +86882,6 @@ var _adminTripDelete = require('./components/trips/admin-trip-delete.vue');
 
 var _adminTripDelete2 = _interopRequireDefault(_adminTripDelete);
 
-var _adminTripCosts = require('./components/trips/admin-trip-costs.vue');
-
-var _adminTripCosts2 = _interopRequireDefault(_adminTripCosts);
-
-var _adminTripDeadlines = require('./components/trips/admin-trip-deadlines.vue');
-
-var _adminTripDeadlines2 = _interopRequireDefault(_adminTripDeadlines);
-
-var _adminTripRequirements = require('./components/trips/admin-trip-requirements.vue');
-
-var _adminTripRequirements2 = _interopRequireDefault(_adminTripRequirements);
-
-var _adminTripTodos = require('./components/trips/admin-trip-todos.vue');
-
-var _adminTripTodos2 = _interopRequireDefault(_adminTripTodos);
-
 var _adminInterestsList = require('./components/interests/admin-interests-list.vue');
 
 var _adminInterestsList2 = _interopRequireDefault(_adminInterestsList);
@@ -86261,6 +86946,34 @@ var _adminUploadsList = require('./components/uploads/admin-uploads-list.vue');
 
 var _adminUploadsList2 = _interopRequireDefault(_adminUploadsList);
 
+var _reconcileFund = require('./components/reconcile-fund.vue');
+
+var _reconcileFund2 = _interopRequireDefault(_reconcileFund);
+
+var _projectCauses = require('./components/admin/project-causes.vue');
+
+var _projectCauses2 = _interopRequireDefault(_projectCauses);
+
+var _causeEditor = require('./components/admin/cause-editor.vue');
+
+var _causeEditor2 = _interopRequireDefault(_causeEditor);
+
+var _projectsList = require('./components/admin/projects-list.vue');
+
+var _projectsList2 = _interopRequireDefault(_projectsList);
+
+var _projectEditor = require('./components/admin/project-editor.vue');
+
+var _projectEditor2 = _interopRequireDefault(_projectEditor);
+
+var _initiativesList = require('./components/admin/initiatives-list.vue');
+
+var _initiativesList2 = _interopRequireDefault(_initiativesList);
+
+var _initiativeEditor = require('./components/admin/initiative-editor.vue');
+
+var _initiativeEditor2 = _interopRequireDefault(_initiativeEditor);
+
 var _fundEditor = require('./components/financials/funds/fund-editor.vue');
 
 var _fundEditor2 = _interopRequireDefault(_fundEditor);
@@ -86296,10 +87009,10 @@ var _vueStrap2 = _interopRequireDefault(_vueStrap);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // jQuery
-
+window.$ = window.jQuery = require('jquery');
 
 // admin components
-window.$ = window.jQuery = require('jquery');
+
 window.moment = require('moment');
 window._ = require('underscore');
 window.marked = require('marked');
@@ -86417,7 +87130,15 @@ _vue2.default.filter('percentage', {
 });
 
 _vue2.default.filter('moment', function (val, format) {
-    return moment.utc(val).local().format(format || 'LL');
+    var diff = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+    var date = moment.utc(val).local().format(format || 'LL');
+
+    if (diff) {
+        date = moment.utc(val).local().fromNow();
+    }
+
+    return date;
 });
 
 var VueCropOptions = {
@@ -86541,10 +87262,6 @@ new _vue2.default({
         adminTripFacilitators: _adminTripFacilitators2.default,
         adminTripDuplicate: _adminTripDuplicate2.default,
         adminTripDelete: _adminTripDelete2.default,
-        adminTripCosts: _adminTripCosts2.default,
-        adminTripDeadlines: _adminTripDeadlines2.default,
-        adminTripRequirements: _adminTripRequirements2.default,
-        adminTripTodos: _adminTripTodos2.default,
         adminInterestsList: _adminInterestsList2.default,
         adminGroups: _adminGroupsList2.default,
         adminGroupCreate: _adminGroupCreate2.default,
@@ -86562,6 +87279,13 @@ new _vue2.default({
         adminUserDelete: _adminUserDelete2.default,
         adminUploadsList: _adminUploadsList2.default,
         adminUploadCreateUpdate: _adminUploadCreateUpdate2.default,
+        reconcileFund: _reconcileFund2.default,
+        projectCauses: _projectCauses2.default,
+        causeEditor: _causeEditor2.default,
+        projectsList: _projectsList2.default,
+        projectEditor: _projectEditor2.default,
+        initiativesList: _initiativesList2.default,
+        initiativeEditor: _initiativeEditor2.default,
         fundEditor: _fundEditor2.default,
         adminDonorsList: _adminDonorsList2.default,
         adminFundsList: _adminFundsList2.default,
@@ -86595,6 +87319,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/action-trigger.vue":126,"./components/campaigns/admin-campaign-create.vue":127,"./components/campaigns/admin-campaign-details.vue":128,"./components/campaigns/admin-campaign-edit.vue":129,"./components/campaigns/campaign-groups.vue":130,"./components/campaigns/campaigns.vue":131,"./components/campaigns/group-trips.vue":136,"./components/campaigns/groups-trips-selection-wrapper.vue":137,"./components/donate.vue":138,"./components/financials/donors/admin-donors-list.vue":139,"./components/financials/donors/donor-form.vue":140,"./components/financials/funds/admin-funds-list.vue":141,"./components/financials/funds/fund-editor.vue":142,"./components/financials/transactions/admin-transactions-list.vue":143,"./components/financials/transactions/transaction-form.vue":144,"./components/fundraisers/fundraisers-manager.vue":145,"./components/fundraisers/fundraisers-stories.vue":146,"./components/fundraisers/fundraisers-uploads.vue":147,"./components/fundraisers/fundraisers.vue":148,"./components/groups/admin-group-create.vue":149,"./components/groups/admin-group-edit.vue":150,"./components/groups/admin-group-managers.vue":151,"./components/groups/admin-groups-list.vue":152,"./components/groups/dashboard-group-reservations.vue":153,"./components/groups/dashboard-group-trips.vue":154,"./components/groups/group-interest-signup.vue":155,"./components/groups/group-profile-fundraisers.vue":156,"./components/groups/group-profile-stories.vue":157,"./components/groups/group-profile-trips.vue":158,"./components/groups/groups-list.vue":159,"./components/groups/groups.vue":160,"./components/interests/admin-interests-list.vue":161,"./components/interests/dashboard-interests-list.vue":162,"./components/interests/trip-interests-editor.vue":163,"./components/login.vue":164,"./components/modal-donate.vue":165,"./components/notes.vue":166,"./components/pagination.vue":167,"./components/records/essays/essay-create-update.vue":168,"./components/records/essays/essays-list.vue":169,"./components/records/medicals/medical-create-update.vue":170,"./components/records/medicals/medicals-list.vue":171,"./components/records/passports/passport-create-update.vue":172,"./components/records/passports/passports-list.vue":173,"./components/records/records-list.vue":174,"./components/records/visas/visa-create-update.vue":175,"./components/records/visas/visas-list.vue":176,"./components/reservations/admin-reservation-costs.vue":177,"./components/reservations/admin-reservation-create.vue":178,"./components/reservations/admin-reservation-deadlines.vue":179,"./components/reservations/admin-reservation-dues.vue":180,"./components/reservations/admin-reservation-edit.vue":181,"./components/reservations/admin-reservations-list.vue":182,"./components/reservations/donations-list.vue":183,"./components/reservations/reservation-avatar.vue":184,"./components/reservations/reservation-costs.vue":185,"./components/reservations/reservation-dues.vue":186,"./components/reservations/reservation-funding.vue":187,"./components/reservations/reservations-arrival-designation.vue":188,"./components/reservations/reservations-essays-manager.vue":189,"./components/reservations/reservations-list.vue":190,"./components/reservations/reservations-medical-releases-manager.vue":191,"./components/reservations/reservations-passports-manager.vue":192,"./components/reservations/reservations-visas-manager.vue":193,"./components/todos.vue":194,"./components/top-nav.vue":195,"./components/trips/admin-trip-costs.vue":197,"./components/trips/admin-trip-create.vue":198,"./components/trips/admin-trip-deadlines.vue":199,"./components/trips/admin-trip-delete.vue":200,"./components/trips/admin-trip-duplicate.vue":201,"./components/trips/admin-trip-edit.vue":202,"./components/trips/admin-trip-facilitators.vue":203,"./components/trips/admin-trip-requirements.vue":204,"./components/trips/admin-trip-reservations-list.vue":205,"./components/trips/admin-trip-todos.vue":206,"./components/trips/admin-trips-list.vue":207,"./components/trips/trip-details-missionaries.vue":219,"./components/trips/trip-registration-wizard.vue":220,"./components/uploads/admin-upload-create-update.vue":221,"./components/uploads/admin-uploads-list.vue":222,"./components/users/admin-user-create.vue":223,"./components/users/admin-user-delete.vue":224,"./components/users/admin-user-edit.vue":225,"./components/users/admin-users-list.vue":226,"./components/users/user-permissions.vue":227,"./components/users/user-profile-countries.vue":228,"./components/users/user-profile-fundraisers-donors.vue":229,"./components/users/user-profile-fundraisers-progress.vue":230,"./components/users/user-profile-fundraisers.vue":231,"./components/users/user-profile-stories.vue":232,"./components/users/user-settings.vue":233,"aos":1,"bootstrap-sass":18,"gsap":108,"jquery":110,"jquery.cookie":109,"marked":111,"moment":112,"scrollmagic":114,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":115,"underscore":116,"video.js":117,"videojs-youtube":118,"vue":124,"vue-resource":120,"vue-strap/dist/vue-strap.min":122,"vue-validator":123}]},{},[234]);
+},{"./components/action-trigger.vue":126,"./components/admin/cause-editor.vue":127,"./components/admin/initiative-editor.vue":128,"./components/admin/initiatives-list.vue":129,"./components/admin/project-causes.vue":130,"./components/admin/project-editor.vue":131,"./components/admin/projects-list.vue":132,"./components/campaigns/admin-campaign-create.vue":133,"./components/campaigns/admin-campaign-details.vue":134,"./components/campaigns/admin-campaign-edit.vue":135,"./components/campaigns/campaign-groups.vue":136,"./components/campaigns/campaigns.vue":137,"./components/campaigns/group-trips.vue":142,"./components/campaigns/groups-trips-selection-wrapper.vue":143,"./components/donate.vue":144,"./components/financials/donors/admin-donors-list.vue":145,"./components/financials/donors/donor-form.vue":146,"./components/financials/funds/admin-funds-list.vue":147,"./components/financials/funds/fund-editor.vue":148,"./components/financials/transactions/admin-transactions-list.vue":149,"./components/financials/transactions/transaction-form.vue":150,"./components/fundraisers/fundraisers-manager.vue":151,"./components/fundraisers/fundraisers-stories.vue":152,"./components/fundraisers/fundraisers-uploads.vue":153,"./components/fundraisers/fundraisers.vue":154,"./components/groups/admin-group-create.vue":155,"./components/groups/admin-group-edit.vue":156,"./components/groups/admin-group-managers.vue":157,"./components/groups/admin-groups-list.vue":158,"./components/groups/dashboard-group-reservations.vue":159,"./components/groups/dashboard-group-trips.vue":160,"./components/groups/group-interest-signup.vue":161,"./components/groups/group-profile-fundraisers.vue":162,"./components/groups/group-profile-stories.vue":163,"./components/groups/group-profile-trips.vue":164,"./components/groups/groups-list.vue":165,"./components/groups/groups.vue":166,"./components/interests/admin-interests-list.vue":167,"./components/interests/dashboard-interests-list.vue":168,"./components/interests/trip-interests-editor.vue":169,"./components/login.vue":170,"./components/modal-donate.vue":171,"./components/notes.vue":172,"./components/pagination.vue":173,"./components/reconcile-fund.vue":174,"./components/records/essays/essay-create-update.vue":175,"./components/records/essays/essays-list.vue":176,"./components/records/medicals/medical-create-update.vue":177,"./components/records/medicals/medicals-list.vue":178,"./components/records/passports/passport-create-update.vue":179,"./components/records/passports/passports-list.vue":180,"./components/records/records-list.vue":181,"./components/records/visas/visa-create-update.vue":182,"./components/records/visas/visas-list.vue":183,"./components/reservations/admin-reservation-costs.vue":184,"./components/reservations/admin-reservation-create.vue":185,"./components/reservations/admin-reservation-deadlines.vue":186,"./components/reservations/admin-reservation-dues.vue":187,"./components/reservations/admin-reservation-edit.vue":188,"./components/reservations/admin-reservations-list.vue":189,"./components/reservations/donations-list.vue":190,"./components/reservations/reservation-avatar.vue":191,"./components/reservations/reservation-costs.vue":192,"./components/reservations/reservation-dues.vue":193,"./components/reservations/reservation-funding.vue":194,"./components/reservations/reservations-arrival-designation.vue":195,"./components/reservations/reservations-essays-manager.vue":196,"./components/reservations/reservations-list.vue":197,"./components/reservations/reservations-medical-releases-manager.vue":198,"./components/reservations/reservations-passports-manager.vue":199,"./components/reservations/reservations-visas-manager.vue":200,"./components/todos.vue":201,"./components/top-nav.vue":202,"./components/trips/admin-trip-create.vue":203,"./components/trips/admin-trip-delete.vue":204,"./components/trips/admin-trip-duplicate.vue":205,"./components/trips/admin-trip-edit.vue":206,"./components/trips/admin-trip-facilitators.vue":207,"./components/trips/admin-trip-reservations-list.vue":208,"./components/trips/admin-trips-list.vue":209,"./components/trips/trip-details-missionaries.vue":227,"./components/trips/trip-registration-wizard.vue":228,"./components/uploads/admin-upload-create-update.vue":229,"./components/uploads/admin-uploads-list.vue":230,"./components/users/admin-user-create.vue":231,"./components/users/admin-user-delete.vue":232,"./components/users/admin-user-edit.vue":233,"./components/users/admin-users-list.vue":234,"./components/users/user-permissions.vue":235,"./components/users/user-profile-countries.vue":236,"./components/users/user-profile-fundraisers-donors.vue":237,"./components/users/user-profile-fundraisers-progress.vue":238,"./components/users/user-profile-fundraisers.vue":239,"./components/users/user-profile-stories.vue":240,"./components/users/user-settings.vue":241,"aos":1,"bootstrap-sass":18,"gsap":108,"jquery":110,"jquery.cookie":109,"marked":111,"moment":112,"scrollmagic":114,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":115,"underscore":116,"video.js":117,"videojs-youtube":118,"vue":124,"vue-resource":120,"vue-strap/dist/vue-strap.min":122,"vue-validator":123}]},{},[242]);
 
 //# sourceMappingURL=main.js.map

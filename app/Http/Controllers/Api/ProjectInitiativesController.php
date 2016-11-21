@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\v1\ProjectInitiativeRequest;
 use App\Http\Transformers\v1\ProjectInitiativeTransformer;
-use App\Models\v1\Cause;
+use App\Models\v1\ProjectCause;
+use App\Models\v1\ProjectInitiative;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -12,110 +13,97 @@ class ProjectInitiativesController extends Controller
 {
 
     /**
-     * @var Cause
+     * @var ProjectInitiative
+     */
+    private $initiative;
+    /**
+     * @var ProjectCause
      */
     private $cause;
 
     /**
      * ProjectInitiativesController constructor.
-     * @param Cause $cause
+     * @param ProjectInitiative $initiative
+     * @param ProjectCause $cause
      */
-    public function __construct(Cause $cause)
+    public function __construct(ProjectInitiative $initiative, ProjectCause $cause)
     {
+        $this->initiative = $initiative;
         $this->cause = $cause;
     }
 
     /**
-     * Get the cause by it's id.
+     * Get a list of project types.
      *
      * @param $id
-     * @return mixed
-     */
-    protected function cause($id)
-    {
-        return $this->cause->findOrFail($id);
-    }
-
-    /**
-     * Get a list of project initiatives.
-     *
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
     public function index($id, Request $request)
     {
-        $initiatives = $this->cause($id)
-                            ->initiatives()
-                            ->paginate($request->get('per_page'));
+        $types = $this->cause
+                      ->findOrFail($id)
+                      ->initiatives()
+                      ->filter($request->all())
+                      ->withCount('projects')
+                      ->paginate($request->get('per_page'));
 
-        return $this->response->paginator($initiatives, new ProjectInitiativeTransformer);
+        return $this->response->paginator($types, new ProjectInitiativeTransformer);
     }
 
     /**
-     * Get a project initiative by it's id.
+     * Get a project type by it's id.
      *
-     * @param $cause_id
-     * @param $initiative_id
+     * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function show($cause_id, $initiative_id)
+    public function show($id)
     {
-        $initiative = $this->cause($cause_id)
-                           ->initiatives()
-                           ->findOrFail($initiative_id);
+        $type = $this->initiative->findOrFail($id);
 
-        return $this->response->item($initiative, new ProjectInitiativeTransformer);
+        return $this->response->item($type, new ProjectInitiativeTransformer);
     }
 
     /**
-     * Create a new project initiative.
+     * Create a new project type.
+     *
+     * @param ProjectInitiativeRequest $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function store(ProjectInitiativeRequest $request)
+    {
+        $type = $this->initiative->create($request->all());
+
+        return $this->response->item($type, new ProjectInitiativeTransformer);
+    }
+
+    /**
+     * Update an existing project type by it's id.
      *
      * @param $id
      * @param ProjectInitiativeRequest $request
      * @return \Dingo\Api\Http\Response
      */
-    public function store($id, ProjectInitiativeRequest $request)
+    public function update($id, ProjectInitiativeRequest $request)
     {
-        $initiative = $this->cause($id)
-                           ->initiatives()
-                           ->create($request->all());
+        $type = $this->initiative->findOrFail($id);
 
-        return $this->response->item($initiative, new ProjectInitiativeTransformer);
+        $type->update($request->all());
+
+        return $this->response->item($type, new ProjectInitiativeTransformer);
     }
 
     /**
-     * Update a project initiative by it's id.
+     * Delete a project type by it's id.
      *
-     * @param $cause_id
-     * @param $initiative_id
-     * @param ProjectInitiativeRequest $request
+     * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function update($cause_id, $initiative_id, ProjectInitiativeRequest $request)
+    public function destroy($id)
     {
-        $initiative = $this->cause($cause_id)
-                           ->initiatives()
-                           ->findOrFail($initiative_id);
+        $type = $this->initiative->findOrFail($id);
 
-        $initiative->update($request->all());
-
-        return $this->response->item($initiative, new ProjectInitiativeTransformer);
-    }
-
-    /**
-     * Delete all initiatives or a specific one by it's id.
-     *
-     * @param $cause_id
-     * @param null $initiative_id
-     * @return \Dingo\Api\Http\Response
-     */
-    public function destroy($cause_id, $initiative_id = null)
-    {
-        $initiatives = $this->cause($cause_id)->initiatives();
-
-        if ( ! is_null($initiative_id)) $initiatives->findOrFail($initiative_id);
-
-        $initiatives->delete();
+        $type->delete();
 
         return $this->response->noContent();
     }

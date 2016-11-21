@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\v1\Project;
 use App\Models\v1\Campaign;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
@@ -65,6 +66,13 @@ class EventServiceProvider extends ServiceProvider
                 'balance' => 0,
                 'class' => generateQbClassName($trip),
                 'item' => 'General Donation'
+            ]);
+        });
+
+        Project::created(function ($project) {
+            $project->fund()->create([
+                'name' => $project->name . ' Project',
+                'balance' => 0
             ]);
         });
 

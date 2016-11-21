@@ -3,19 +3,14 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use EloquentFilter\Filterable;
 
 class ProjectInitiative extends Model
 {
-    use SoftDeletes, UuidForKey;
-
-    /**
-     * All of the relationships to be touched.
-     *
-     * @var array
-     */
-    protected $touches = ['cause'];
+    use Filterable, SoftDeletes, UuidForKey;
 
     /**
      * The attributes that should be mutated to dates.
@@ -23,11 +18,11 @@ class ProjectInitiative extends Model
      * @var array
      */
     protected $dates = [
-        'started_at',
-        'ended_at',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'started_at',
+        'ended_at'
     ];
 
     /**
@@ -36,44 +31,93 @@ class ProjectInitiative extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'cause_id',
+        'type',
+        'short_desc',
         'country_code',
+        'upload_id',
         'started_at',
-        'ended_at',
-        'active',
-        'rep_id'
+        'ended_at'
     ];
 
     /**
-     * The Cause the Initiative belongs to
+     * Get the project initiative's image.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function image()
+    {
+        return $this->belongsTo(Upload::class, 'upload_id');
+    }
+
+    /**
+     * Get the project initiative's cause.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function cause()
     {
-        return $this->belongsTo(Cause::class);
+        return $this->belongsTo(ProjectCause::class, 'project_cause_id');
     }
 
     /**
-     * The rep assigned to this initiative
+     * Get all the initiative's projects.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function rep()
+    public function projects()
     {
-        return $this->belongsTo(User::class, 'rep_id');
+        return $this->hasMany(Project::class);
     }
 
     /**
-     * The active packages associated with the initiative
+     * Get the project initiative's costs.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function packages()
+    public function costs()
     {
-        return $this->hasMany(ProjectPackage::class)->whereHas('type', function($type) {
-            $type->whereActive(true);
-        });
+        return $this->morphMany(Cost::class, 'cost_assignable');
+    }
+
+    /**
+     * Get the project initiative's deadlines.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function deadlines()
+    {
+        return $this->morphMany(Deadline::class, 'deadline_assignable');
+    }
+
+    /**
+     * Get all the project initiative's active costs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function activeCosts()
+    {
+        return $this->costs()->active();
+    }
+
+    /**
+     * Get new initiatives.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeNew($query)
+    {
+        return $query->where('ended_at', '>=', Carbon::now());
+    }
+
+    /**
+     * Get past initiatives.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePast($query)
+    {
+        return $query->where('ended_at', '<', Carbon::now());
     }
 }

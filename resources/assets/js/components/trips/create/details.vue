@@ -20,30 +20,6 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('description') }">
-						<label for="description" class="col-sm-2 control-label">
-							Description
-							<button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev" aria-expanded="false" aria-controls="markdownPrev">
-								Preview
-							</button>
-
-						</label>
-						<div class="col-sm-10">
-							<div class="row">
-								<div class="col-sm-12">
-									<textarea name="description" id="description" rows="5" v-model="description"
-											  class="form-control"
-											  v-validate:description="{ required: true}"></textarea>
-								</div>
-								<div class="col-sm-12 collapse" id="markdownPrev">
-									<br>
-									<div class="well" v-html="description | marked"></div>
-								</div>
-							</div>
-
-						</div>
-					</div>
-
 					<div class="form-group" :class="{ 'has-error': checkForError('type') }">
 						<label for="type" class="col-sm-2 control-label">Type</label>
 						<div class="col-sm-10">

@@ -67,6 +67,7 @@ import adminTripFacilitators from './components/trips/admin-trip-facilitators.vu
 import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripDelete from './components/trips/admin-trip-delete.vue';
 import adminTripCosts from './components/trips/admin-trip-costs.vue';
+import adminTripDescription from './components/trips/admin-trip-description.vue';
 import adminTripDeadlines from './components/trips/admin-trip-deadlines.vue';
 import adminTripRequirements from './components/trips/admin-trip-requirements.vue';
 import adminTripTodos from './components/trips/admin-trip-todos.vue';
@@ -349,6 +350,7 @@ new Vue({
         adminTripDuplicate,
         adminTripDelete,
         adminTripCosts,
+        adminTripDescription,
         adminTripDeadlines,
         adminTripRequirements,
         adminTripTodos,

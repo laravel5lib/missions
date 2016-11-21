@@ -155,7 +155,7 @@
                     enforced: false,
                 },
                 resource: this.$resource('deadlines{/id}'),
-                sort: 'due_at',
+                sort: 'date',
                 direction: 'asc'
             }
         },

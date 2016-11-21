@@ -3,13 +3,22 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
-                <h3 class="text-capitalize">{{campaign.name}} <small>&middot; Campaign</small></h3>
+                <h3 class="text-capitalize">
+					<a href="#">
+                        <img :src="campaign.avatar" alt="{{campaign.name}}" class="img-circle av-left img-sm">
+                    </a>
+                	{{campaign.name}}
+                 	<small>&middot; Campaign</small>
+                </h3>
             </div>
             <div class="col-sm-4">
                 <div class="pull-right">
                 	<hr class="divider inv sm">
-					<a href="/admin/campaigns" class="btn btn-default"><i class="fa fa-chevron-left icon-left"></i> Back</a>
-					<a class="btn btn-primary" href="/admin/campaigns/{{campaignId}}/edit"><i class="fa fa-pencil-square-o icon-left"></i> Edit</a>
+                	<hr class="divider inv">
+                	<div class="btn-group" role="group">
+						<a href="/admin/campaigns" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
+						<a class="btn btn-primary" href="/admin/campaigns/{{campaignId}}/edit">Edit</a>
+					</div>
 				</div>
             </div>
         </div>

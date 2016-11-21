@@ -5,9 +5,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3>{{ $fund->name }} <small>&middot; Fund</small></h3>
+                    <h4>
+                        <img src="/images/headshot-1.jpg" alt="" class="img-circle av-left img-sm">
+                        {{ $fund->name }} <small>&middot; Fund</small></h4>
                 </div>
                 <div class="col-sm-4 text-right">
+                    <hr class="divider inv sm">
                     <hr class="divider inv sm">
                     <div class="btn-group">
                         <a href="{{ url('admin/funds') }}" class="btn btn-primary-darker"><i class="fa fa-chevron-left"></i></a>

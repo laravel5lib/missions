@@ -6,15 +6,20 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3>{{ $user->name }}</h3>
+                    <h3>
+                        <img src="{{ image($user->avatar->source . '?w=100') }}" alt="{{ $user->name }}" class="img-circle av-left img-sm">
+                        {{ $user->name }}
+                        <small>&middot; User</small>
+                    </h3>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <div class="btn-group pull-right">
+                    <hr class="divider inv">
+                    <div class="btn-group">
                         <a href="/admin/users" class="btn btn-primary-darker"><i class="fa fa-chevron-left"></i></a>
                         <div class="btn-group">
                             <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Action <span class="caret"></span>
+                                Manage <i class="fa fa-angle-down"></i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="create">New</a></li>

@@ -31,17 +31,33 @@
     <div class="container">
             <div class="row">
                 <div class="col-md-offset-2 col-md-8">
-                    <initiative-editor id="{{ $initiative->id }}" :edit="true"></initiative-editor>
+                    <initiative-editor id="{{ $initiative->id }}"></initiative-editor>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-offset-2 col-md-8">
-                    Costs
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Pricing</h5>
+                        </div>
+                        <div class="panel-body">
+                            {{--<admin-trip-costs id="{{ $initiative->id }}"--}}
+                                              {{--assignment="project_initiatives">--}}
+                            {{--</admin-trip-costs>--}}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-offset-2 col-md-8">
-                    Deadlines
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Other Deadlines</h5>
+                        </div>
+                        <div class="panel-body">
+                            {{--<admin-trip-deadlines id="05db003b-e3f8-4cee-a47d-08bc8846511c" assignment="trips"></admin-trip-deadlines>--}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -54,7 +54,7 @@
                         </ul>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters <i class="fa fa-times"></i></button>
-                    <a class="btn btn-primary btn-sm" href="/admin/initiatives/create">New <i class="fa fa-plus"></i></a>
+                    <a class="btn btn-primary btn-sm" href="/admin/causes/{{ causeId }}/initiatives/create">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
         </div>

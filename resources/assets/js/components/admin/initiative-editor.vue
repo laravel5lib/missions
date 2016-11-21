@@ -1,26 +1,16 @@
 <template>
     <div class="panel panel-default">
+        <spinner v-ref:loader size="xl" :fixed="false" text="Loading..."></spinner>
         <div class="panel-heading">
             <div class="row">
-                <div class="col-xs-6">
-                    <h5 v-if="edit">Details</h5>
-                    <h5 v-else>Create an Initiative</h5>
-                </div>
-                <div class="col-xs-6 text-right" v-if="!editMode">
-                    <button class="btn btn-xs btn-default-hollow" @click="editMode = true">
-                        <i class="fa fa-pencil"></i> Edit
-                    </button>
-                </div>
-                <div class="col-xs-6 text-right" v-else>
-                    <button class="btn btn-xs btn-default" @click="cancel">
-                        Cancel
-                    </button>
-                    <button class="btn btn-xs btn-primary" @click="save" v-if="edit">
-                        <i class="fa fa-save"></i> Save
-                    </button>
-                    <button class="btn btn-xs btn-primary" @click="create" v-else>
-                        <i class="fa fa-plus"></i> Create
-                    </button>
+                <div class="col-xs-12">
+                    <h5>Details
+                        <span class="pull-right text-muted" v-if="! newOnly && ! readOnly">
+                            <tooltip effect="scale" placement="bottom" content="Edit">
+                                <i class="fa fa-lg fa-cog" @click="editMode = !editMode"></i>
+                            </tooltip>
+                        </span>
+                    </h5>
                 </div>
             </div>
         </div>
@@ -31,23 +21,21 @@
                     <input class="form-control" v-model="initiative.type" v-if="editMode" />
                     <p v-else>{{ initiative.type }}</p>
                     <label>Country</label>
-                    <v-select class="form-control"
-                              id="country"
-                              :value.sync="initiative.country.code"
-                              :options="countries"
-                              label="name"
-                              v-if="editMode">
-                    </v-select>
+                    <select class="form-control"
+                            v-model="initiative.country.code"
+                            v-if="editMode">
+                        <option :value="country.code" v-for="country in countries">{{ country.name }}</option>
+                    </select>
                     <p v-else>
                         {{ initiative.country.name }}
                     </p>
                 </div>
                 <div class="col-sm-6">
                     <label>Start Date</label>
-                    <input type="date" class="form-control" v-model="initiative.started_at" v-if="editMode">
+                    <input type="text" class="form-control" v-model="initiative.started_at" v-if="editMode">
                     <p v-else>{{ initiative.started_at | moment 'll' }}</p>
                     <label>End Date</label>
-                    <input type="date" class="form-control" v-model="initiative.ended_at" v-if="editMode">
+                    <input type="text" class="form-control" v-model="initiative.ended_at" v-if="editMode">
                     <p v-else>{{ initiative.ended_at | moment 'll' }}</p>
                 </div>
             </div>
@@ -56,6 +44,11 @@
             <textarea class="form-control" v-model="initiative.short_desc" v-if="editMode" rows="10"></textarea>
             <p v-else>{{ initiative.short_desc }}</p>
 
+        </div>
+        <div class="panel-footer text-right" v-if="editMode">
+            <button class="btn btn-default" @click="cancel">Cancel</button>
+            <button class="btn btn-primary" @click="save" v-if="! newOnly">Save</button>
+            <button class="btn btn-primary" @click="create" v-else>Create</button>
         </div>
 
         <alert :show.sync="showSuccess"
@@ -83,17 +76,16 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
-    import vSelect from 'vue-select';
     export default {
         name: 'initiative-editor',
-        components: {
-            'alert': VueStrap.alert,
-            'v-select': vSelect
-        },
         data() {
             return{
-                initiative: {},
+                initiative: {
+                    country: {
+                        code: null
+                    }
+                },
+                cause: {},
                 countries: [],
                 editMode: true,
                 showSuccess: false,
@@ -107,19 +99,39 @@
                 required: false,
                 default: null
             },
-            'edit': {
+            'causeId': {
+                type: String,
+                default: null
+            },
+            'readOnly': {
                 type: Boolean,
-                required: false,
+                default: false
+            },
+            'newOnly': {
+                type: Boolean,
                 default: false
             }
         },
         methods: {
+            getCause() {
+                this.$refs.loader.show();
+                this.$http.get('causes/' + this.causeId).then(function (response) {
+                    this.cause  = response.data.data;
+                    this.countries = this.cause.countries;
+                    this.$refs.loader.hide();
+                });
+            },
             fetch () {
-                this.$http.get('initiatives/' + this.id).then(function (response) {
-                    this.initiative = response.data.data;
+                this.$refs.loader.show();
+                this.$http.get('initiatives/' + this.id, {include: 'cause'}).then(function (response) {
+                    this.cause = response.data.data.cause.data;
+                    this.countries = response.data.data.cause.data.countries;
+                    this.initiative = _.omit(response.data.data, 'cause');
+                    this.$refs.loader.hide();
                 });
             },
             save() {
+                this.initiative.country_code = this.initiative.country.code;
                 this.$http.put('initiatives/' + this.id, this.initiative).then(function (response) {
                     this.initiative = response.data.data;
                     this.editMode = false;
@@ -131,34 +143,33 @@
                 });
             },
             create() {
+                this.initiative.country_code = this.initiative.country.code;
+                this.project_cause_id = this.causeId;
                 this.$http.post('initiatives', this.initiative).then(function (response) {
                     this.initiative = {};
-                    window.location.reload();
+                    window.location = '/admin/initiatives/' + response.data.data.id;
                 }).error(function () {
                     this.message = 'The initiative could not be created.';
                     this.showError = true;
                 });
             },
             cancel() {
-                if (this.edit) {
+                if ( ! this.newOnly) {
                     this.fetch();
                     this.editMode = false;
                 } else {
-                    $('#initiativeEditor').modal('hide');
+                    window.location = '/admin/causes/' + causeId + '/current-initiatives';
                 }
             }
         },
         ready () {
-            if (this.edit) {
+            if ( ! this.newOnly) {
                 this.fetch();
                 this.editMode = false;
+            } else {
+                this.editMode = true;
+                this.getCause();
             }
-
-            //this.selectedCost.active_at = moment(cost.active_at).format('YYYY-MM-DD')
-
-            this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
-			});
         }
     }
 </script>

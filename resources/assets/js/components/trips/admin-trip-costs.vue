@@ -221,7 +221,7 @@
 
                 newCost: {
                     cost_assignable_id: this.id,
-                    cost_assignable_type: 'trips',
+                    cost_assignable_type: this.assignment,
                     name: '',
                     description: '',
                     active_at: '',
@@ -294,7 +294,7 @@
             resetCost(){
                 this.newCost = {
                     cost_assignable_id: this.id,
-                    cost_assignable_type: 'trips',
+                    cost_assignable_type: this.assignment,
                     name: '',
                     description: '',
                     active_at: '',

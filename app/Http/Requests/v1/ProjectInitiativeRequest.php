@@ -25,7 +25,7 @@ class ProjectInitiativeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'         => 'required|max:50',
+            'type'         => 'required|max:50',
             'country_code' => 'required|in:' . Country::codes(),
             'short_desc'   => 'required|max:255',
             'upload_id'    => 'exists:uploads,id',

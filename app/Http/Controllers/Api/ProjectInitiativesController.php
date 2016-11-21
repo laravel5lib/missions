@@ -59,9 +59,9 @@ class ProjectInitiativesController extends Controller
      */
     public function show($id)
     {
-        $type = $this->initiative->findOrFail($id);
+        $initiative = $this->initiative->findOrFail($id);
 
-        return $this->response->item($type, new ProjectInitiativeTransformer);
+        return $this->response->item($initiative, new ProjectInitiativeTransformer);
     }
 
     /**
@@ -72,9 +72,17 @@ class ProjectInitiativesController extends Controller
      */
     public function store(ProjectInitiativeRequest $request)
     {
-        $type = $this->initiative->create($request->all());
+        $initiative = $this->initiative->create([
+            'type' => $request->get('type'),
+            'short_desc' => $request->get('short_desc'),
+            'country_code' => $request->get('country_code'),
+            'upload_id' => $request->get('upload_id', null),
+            'started_at' => $request->get('started_at'),
+            'ended_at' => $request->get('ended_at'),
+            'project_cause_id' => $request->get('project_cause_id')
+        ]);
 
-        return $this->response->item($type, new ProjectInitiativeTransformer);
+        return $this->response->item($initiative, new ProjectInitiativeTransformer);
     }
 
     /**
@@ -86,11 +94,19 @@ class ProjectInitiativesController extends Controller
      */
     public function update($id, ProjectInitiativeRequest $request)
     {
-        $type = $this->initiative->findOrFail($id);
+        $initiative = $this->initiative->findOrFail($id);
 
-        $type->update($request->all());
+        $initiative->update([
+            'type' => $request->get('type'),
+            'short_desc' => $request->get('short_desc'),
+            'country_code' => $request->get('country_code'),
+            'upload_id' => $request->get('upload_id', $initiative->upload_id),
+            'started_at' => $request->get('started_at'),
+            'ended_at' => $request->get('ended_at'),
+            'project_cause_id' => $request->get('project_cause_id', $initiative->project_cause_id)
+        ]);
 
-        return $this->response->item($type, new ProjectInitiativeTransformer);
+        return $this->response->item($initiative, new ProjectInitiativeTransformer);
     }
 
     /**
@@ -101,9 +117,9 @@ class ProjectInitiativesController extends Controller
      */
     public function destroy($id)
     {
-        $type = $this->initiative->findOrFail($id);
+        $initiative = $this->initiative->findOrFail($id);
 
-        $type->delete();
+        $initiative->delete();
 
         return $this->response->noContent();
     }

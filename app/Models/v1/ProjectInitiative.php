@@ -26,18 +26,11 @@ class ProjectInitiative extends Model
     ];
 
     /**
-     * The attributes that can be mass assigned
+     * The attributes that should not be mass assigned
      *
      * @var array
      */
-    protected $fillable = [
-        'type',
-        'short_desc',
-        'country_code',
-        'upload_id',
-        'started_at',
-        'ended_at'
-    ];
+    protected $guarded = [];
 
     /**
      * Get the project initiative's image.

@@ -27,6 +27,7 @@ Route::get('reservations/{tab?}', 'ReservationsController@index')->where('tab', 
 Route::resource('reservations', 'ReservationsController');
 
 Route::get('causes/{cause_id}/projects/create', 'ProjectsController@create');
+Route::get('causes/{cause_id}/initiatives/create', 'ProjectInitiativesController@create');
 Route::get('causes/{id}/{tab?}', 'ProjectCausesController@show')->where('tab', '.+');
 Route::resource('causes', 'ProjectCausesController');
 Route::get('initiatives/{id}', 'ProjectInitiativesController@show');

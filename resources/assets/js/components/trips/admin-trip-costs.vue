@@ -107,9 +107,7 @@
                                     <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
                                         <label for="newCost_active_at">Active</label>
                                         <br>
-                                        <datepicker :value.sync="newCost.active_at" format="yyyy-MM-dd" :clear-button="true">
-                                        </datepicker>
-                                        <input type="date" id="newCost_active_at" class="form-control hidden"
+                                        <input type="date" id="newCost_active_at" class="form-control"
                                                v-model="newCost.active_at" v-validate:costActive="{required: true}">
                                     </div>
 
@@ -167,9 +165,7 @@
                                     <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
                                         <label for="selectedCost_active_at">Active</label>
                                         <br>
-                                        <datepicker :value.sync="selectedCost.active_at" format="yyyy-MM-dd" :clear-button="true">
-                                        </datepicker>
-                                        <input type="date" id="selectedCost_active_at" class="form-control hidden"
+                                        <input type="date" id="selectedCost_active_at" class="form-control"
                                                v-model="selectedCost.active_at" v-validate:costActive="{required: true}">
                                     </div>
 

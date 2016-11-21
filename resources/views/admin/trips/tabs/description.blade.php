@@ -2,7 +2,5 @@
     <div class="panel-heading">
         <h5>Description</h5>
     </div>
-    <div class="panel-body">
-        {% $trip->description %}
-    </div>
+    <admin-trip-description id="{{ $trip->id }}"></admin-trip-description>
 </div>

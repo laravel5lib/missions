@@ -27,7 +27,7 @@ class RequirementRequest extends FormRequest
             'requester_type' => 'required|string|in:trip,reservation',
             'requester_id' => 'required|string',
             'name' => 'required|string',
-            'document_type' => 'required|in:passports,visas,medical_releases,testimonies',
+            'document_type' => 'required|in:passports,visas,medical_releases,essays,arrival_designation',
             'short_desc' => 'string|max:120',
             'due_at' => 'required|date',
             'grace_period' => 'numeric'

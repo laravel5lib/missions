@@ -104,7 +104,7 @@ class RequirementsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function delete($id)
+    public function destroy($id)
     {
         $requirement = $this->requirement->findOrFail($id);
 

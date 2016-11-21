@@ -64,7 +64,7 @@
                                 Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}
                             </small>
                         </div>
-                        <div class="col-xs-1 col-sm-1 text-right">
+                        <div class="col-xs-1 col-sm-1 text-right" v-if="canModify">
                             <i class="fa fa-times fa-lg text-muted remove-todo"
                                @click="selectedTodo = todo,deleteModal = true">
                             </i>

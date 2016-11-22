@@ -13300,7 +13300,7 @@ button.close {
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a:hover,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a:focus {
-    background-color: #090909;
+    background-color: #f6323e;
     color: #fff; }
     .navmenu-inverse .navmenu-nav > .open > a .caret, .navmenu-inverse .navmenu-nav > .open > a:hover .caret, .navmenu-inverse .navmenu-nav > .open > a:focus .caret,
     .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a .caret,
@@ -13314,7 +13314,7 @@ button.close {
     border-bottom-color: #e6e6e6; }
   .navmenu-inverse .navmenu-nav.dropdown-menu,
   .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu {
-    background-color: #090909; }
+    background-color: #f6323e; }
     .navmenu-inverse .navmenu-nav.dropdown-menu > .divider,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .divider {
       background-color: #222; }
@@ -13322,7 +13322,7 @@ button.close {
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a:hover,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a:focus {
-      background-color: black; }
+      background-color: #f51220; }
   .navmenu-inverse .navmenu-nav > li > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > li > a {
     color: #e6e6e6; }
@@ -13336,7 +13336,7 @@ button.close {
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:hover,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:focus {
     color: #fff;
-    background-color: #090909; }
+    background-color: #f6323e; }
   .navmenu-inverse .navmenu-nav > .disabled > a, .navmenu-inverse .navmenu-nav > .disabled > a:hover, .navmenu-inverse .navmenu-nav > .disabled > a:focus,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .disabled > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .disabled > a:hover,
@@ -15776,13 +15776,11 @@ body {
   /* Negative indent footer by its height */
   margin: 0 auto -200px;
   /* Pad bottom by footer height */
-  padding: 0 0 200px;
+  padding: 0 0 200px 55px;
   padding-top: 65px; }
-  #dash-page-wrap > .container {
-    padding-left: 40px !important; }
-    @media screen and (max-width: 767px) {
-      #dash-page-wrap > .container {
-        padding-left: 10px !important; } }
+  @media screen and (max-width: 991px) {
+    #dash-page-wrap {
+      padding-left: 0px; } }
 
 #admin-page-wrap {
   min-height: 100%;
@@ -15791,13 +15789,11 @@ body {
   /* Negative indent footer by its height */
   margin: 0 auto 20px;
   /* Pad bottom by footer height */
-  padding: 0 0 20px;
+  padding: 0 0 20px 55px;
   padding-top: 65px; }
-  #admin-page-wrap > .container {
-    padding-left: 40px !important; }
-    @media screen and (max-width: 767px) {
-      #admin-page-wrap > .container {
-        padding-left: 10px !important; } }
+  @media screen and (max-width: 991px) {
+    #admin-page-wrap {
+      padding-left: 0px; } }
 
 #footer-mm {
   color: #e6e6e6;
@@ -15913,6 +15909,47 @@ li.av-nav > a {
   padding-bottom: 4px; }
 
 /* Offcanvas nav */
+/* Tooltip container */
+.offcanvas-tooltip {
+  position: relative;
+  display: inline-block; }
+
+/* Tooltip text */
+.offcanvas-tooltip span {
+  visibility: hidden;
+  min-width: 120px;
+  background-color: #3e3e3e;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 4px;
+  top: -5px;
+  left: 39px;
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1 !important;
+  overflow: visible; }
+  .offcanvas-tooltip span::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    /* To the left of the tooltip */
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #3e3e3e transparent transparent; }
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.offcanvas-tooltip:hover span {
+  visibility: visible; }
+
+.offcanvas-sm .nav > li > a {
+  padding: 22px 20px; }
+
+.navmenu-fixed-left, .navbar-offcanvas.navmenu-fixed-left {
+  border: none; }
+
 .aside-backdrop {
   z-index: 1020 !important; }
 
@@ -15945,7 +15982,11 @@ li.av-nav > a {
   color: #fff; }
 
 .navbar {
-  margin-bottom: 0; }
+  margin-bottom: 0;
+  padding-left: 55px; }
+  @media screen and (max-width: 991px) {
+    .navbar {
+      padding-left: 0; } }
 
 .db-brand-xs {
   padding: 0px;

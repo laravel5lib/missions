@@ -72348,6 +72348,10 @@ exports.default = {
         icon: {
             type: String,
             default: null
+        },
+        size: {
+            type: String,
+            default: null
         }
     },
     data: function data() {
@@ -72361,7 +72365,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"btn btn-primary\" @click=\"execute\">{{text}} <i v-if=\"icon\" :class=\"icon\"></i></a>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<a class=\"btn btn-primary\" :class=\"size\" @click=\"execute\">{{text}} <i v-if=\"icon\" :class=\"icon\"></i></a>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -72373,6 +72377,640 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":124,"vue-hot-reload-api":119}],127:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueStrap = require('vue-strap/dist/vue-strap.min');
+
+var _vueStrap2 = _interopRequireDefault(_vueStrap);
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'cause-editor',
+    components: {
+        'alert': _vueStrap2.default.alert,
+        'v-select': _vueSelect2.default
+    },
+    data: function data() {
+        return {
+            cause: {},
+            countries: [],
+            editMode: true,
+            showSuccess: false,
+            showError: false,
+            message: ''
+        };
+    },
+
+    props: {
+        'id': {
+            type: String,
+            required: false,
+            default: null
+        },
+        'edit': {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
+    methods: {
+        fetch: function fetch() {
+            this.$http.get('causes/' + this.id).then(function (response) {
+                this.cause = response.data.data;
+            });
+        },
+        save: function save() {
+            this.$http.put('causes/' + this.id, this.cause).then(function (response) {
+                this.cause = response.data.data;
+                this.editMode = false;
+                this.message = 'Your changes were saved successfully.';
+                this.showSuccess = true;
+            }).error(function () {
+                this.message = 'Your changes could not be saved.';
+                this.showError = true;
+            });
+        },
+        create: function create() {
+            this.$http.post('causes', this.cause).then(function (response) {
+                this.cause = {};
+                window.location.reload();
+            }).error(function () {
+                this.message = 'The cause could not be created.';
+                this.showError = true;
+            });
+        },
+        cancel: function cancel() {
+            if (this.edit) {
+                this.fetch();
+                this.editMode = false;
+            } else {
+                $('#causeEditor').modal('hide');
+            }
+        }
+    },
+    ready: function ready() {
+        if (this.edit) {
+            this.fetch();
+            this.editMode = false;
+        }
+
+        this.$http.get('utilities/countries').then(function (response) {
+            this.countries = response.data.countries;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <div class=\"row\">\n            <div class=\"col-xs-6\">\n                <h5 v-if=\"edit\">Details</h5>\n                <h5 v-else=\"\">Create a Cause</h5>\n            </div>\n            <div class=\"col-xs-6 text-right\" v-if=\"!editMode\">\n                <button class=\"btn btn-xs btn-default-hollow\" @click=\"editMode = true\">\n                        <i class=\"fa fa-pencil\"></i> Edit\n                </button>\n            </div>\n            <div class=\"col-xs-6 text-right\" v-else=\"\">\n                <button class=\"btn btn-xs btn-default\" @click=\"cancel\">\n                    Cancel\n                </button>\n                <button class=\"btn btn-xs btn-primary\" @click=\"save\" v-if=\"edit\">\n                    <i class=\"fa fa-save\"></i> Save\n                </button>\n                <button class=\"btn btn-xs btn-primary\" @click=\"create\" v-else=\"\">\n                    <i class=\"fa fa-plus\"></i> Create\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n        <label>Name</label>\n        <input class=\"form-control\" v-model=\"cause.name\" v-if=\"editMode\">\n        <p v-else=\"\">{{ cause.name }}</p>\n        <label>Countries</label>\n        <v-select class=\"form-control\" multiple=\"\" id=\"country\" :value.sync=\"cause.countries\" :options=\"countries\" label=\"name\" v-if=\"editMode\">\n        </v-select>\n        <p v-else=\"\">\n            <span class=\"label label-default\" style=\"margin-right: 1em\" v-for=\"country in cause.countries\">\n                {{ country.name }}\n            </span>\n        </p>\n        <label>Description</label>\n        <textarea class=\"form-control\" v-model=\"cause.short_desc\" v-if=\"editMode\" rows=\"10\"></textarea>\n        <p v-else=\"\">{{ cause.short_desc }}</p>\n    </div>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-d9039234", module.exports)
+  } else {
+    hotAPI.update("_v-d9039234", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vue-strap/dist/vue-strap.min":122}],128:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'initiative-editor',
+    data: function data() {
+        return {
+            initiative: {
+                country: {
+                    code: null
+                }
+            },
+            cause: {},
+            countries: [],
+            editMode: true,
+            showSuccess: false,
+            showError: false,
+            message: ''
+        };
+    },
+
+    props: {
+        'id': {
+            type: String,
+            required: false,
+            default: null
+        },
+        'causeId': {
+            type: String,
+            default: null
+        },
+        'readOnly': {
+            type: Boolean,
+            default: false
+        },
+        'newOnly': {
+            type: Boolean,
+            default: false
+        }
+    },
+    methods: {
+        getCause: function getCause() {
+            this.$refs.loader.show();
+            this.$http.get('causes/' + this.causeId).then(function (response) {
+                this.cause = response.data.data;
+                this.countries = this.cause.countries;
+                this.$refs.loader.hide();
+            });
+        },
+        fetch: function fetch() {
+            this.$refs.loader.show();
+            this.$http.get('initiatives/' + this.id, { include: 'cause' }).then(function (response) {
+                this.cause = response.data.data.cause.data;
+                this.countries = response.data.data.cause.data.countries;
+                this.initiative = _.omit(response.data.data, 'cause');
+                this.$refs.loader.hide();
+            });
+        },
+        save: function save() {
+            this.initiative.country_code = this.initiative.country.code;
+            this.$http.put('initiatives/' + this.id, this.initiative).then(function (response) {
+                this.initiative = response.data.data;
+                this.editMode = false;
+                this.message = 'Your changes were saved successfully.';
+                this.showSuccess = true;
+            }).error(function () {
+                this.message = 'Your changes could not be saved.';
+                this.showError = true;
+            });
+        },
+        create: function create() {
+            this.initiative.country_code = this.initiative.country.code;
+            this.project_cause_id = this.causeId;
+            this.$http.post('initiatives', this.initiative).then(function (response) {
+                this.initiative = {};
+                window.location = '/admin/initiatives/' + response.data.data.id;
+            }).error(function () {
+                this.message = 'The initiative could not be created.';
+                this.showError = true;
+            });
+        },
+        cancel: function cancel() {
+            if (!this.newOnly) {
+                this.fetch();
+                this.editMode = false;
+            } else {
+                window.location = '/admin/causes/' + causeId + '/current-initiatives';
+            }
+        }
+    },
+    ready: function ready() {
+        if (!this.newOnly) {
+            this.fetch();
+            this.editMode = false;
+        } else {
+            this.editMode = true;
+            this.getCause();
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <spinner v-ref:loader=\"\" size=\"xl\" :fixed=\"false\" text=\"Loading...\"></spinner>\n    <div class=\"panel-heading\">\n        <div class=\"row\">\n            <div class=\"col-xs-12\">\n                <h5>Details\n                    <span class=\"pull-right text-muted\" v-if=\"! newOnly &amp;&amp; ! readOnly\">\n                        <tooltip effect=\"scale\" placement=\"bottom\" content=\"Edit\">\n                            <i class=\"fa fa-lg fa-cog\" @click=\"editMode = !editMode\"></i>\n                        </tooltip>\n                    </span>\n                </h5>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <label>Type</label>\n                <input class=\"form-control\" v-model=\"initiative.type\" v-if=\"editMode\">\n                <p v-else=\"\">{{ initiative.type }}</p>\n                <label>Country</label>\n                <select class=\"form-control\" v-model=\"initiative.country.code\" v-if=\"editMode\">\n                    <option :value=\"country.code\" v-for=\"country in countries\">{{ country.name }}</option>\n                </select>\n                <p v-else=\"\">\n                    {{ initiative.country.name }}\n                </p>\n            </div>\n            <div class=\"col-sm-6\">\n                <label>Start Date</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"initiative.started_at\" v-if=\"editMode\">\n                <p v-else=\"\">{{ initiative.started_at | moment 'll' }}</p>\n                <label>End Date</label>\n                <input type=\"text\" class=\"form-control\" v-model=\"initiative.ended_at\" v-if=\"editMode\">\n                <p v-else=\"\">{{ initiative.ended_at | moment 'll' }}</p>\n            </div>\n        </div>\n\n        <label>Short Description</label>\n        <textarea class=\"form-control\" v-model=\"initiative.short_desc\" v-if=\"editMode\" rows=\"10\"></textarea>\n        <p v-else=\"\">{{ initiative.short_desc }}</p>\n\n    </div>\n    <div class=\"panel-footer text-right\" v-if=\"editMode\">\n        <button class=\"btn btn-default\" @click=\"cancel\">Cancel</button>\n        <button class=\"btn btn-primary\" @click=\"save\" v-if=\"! newOnly\">Save</button>\n        <button class=\"btn btn-primary\" @click=\"create\" v-else=\"\">Create</button>\n    </div>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-4b5f2489", module.exports)
+  } else {
+    hotAPI.update("_v-4b5f2489", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],129:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'initiatives-list',
+    props: {
+        'causeId': {
+            type: String,
+            required: true
+        },
+        'list': {
+            type: String,
+            default: 'current'
+        }
+    },
+    data: function data() {
+        return {
+            initiatives: [],
+            orderByField: 'started_at',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: { current_page: 1 },
+            search: '',
+            activeFields: ['type', 'country', 'started_at', 'ended_at'],
+            maxActiveFields: 6
+        };
+    },
+
+    watch: {
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchInitiatives();
+        },
+        'page': function page(val, oldVal) {
+            this.searchInitiatives();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchInitiatives();
+        }
+    },
+
+    methods: {
+        isActive: function isActive(field) {
+            return _.contains(this.activeFields, field);
+        },
+        maxCheck: function maxCheck(field) {
+            return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields;
+        },
+        setOrderByField: function setOrderByField(field) {
+            this.orderByField = field;
+            this.direction = 1;
+            this.searchInitiatives();
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'started_at';
+            this.direction = 1;
+            this.search = null;
+        },
+        getParameters: function getParameters() {
+            var params = {
+                // include:'',
+                search: this.search,
+                per_page: this.per_page,
+                page: this.pagination.current_page,
+                sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
+            };
+
+            switch (this.list) {
+                case 'current':
+                    params.current = true;
+                    break;
+                case 'archived':
+                    params.archived = true;
+                    break;
+            }
+
+            return params;
+        },
+        searchInitiatives: function searchInitiatives() {
+            var params = this.getParameters();
+            this.$http.get('causes/' + this.causeId + '/initiatives', params).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.initiatives = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchInitiatives();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\">Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"started_at\" :disabled=\"maxCheck('started_at')\"> Started on\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"ended_at\" :disabled=\"maxCheck('ended_at')\"> Ended on\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"country\" :disabled=\"maxCheck('country')\"> Country\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"projects\" :disabled=\"maxCheck('projects')\"> Projects\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"created_at\" :disabled=\"maxCheck('created_at')\"> Created on\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters <i class=\"fa fa-times\"></i></button>\n                <a class=\"btn btn-primary btn-sm\" href=\"/admin/causes/{{ causeId }}/initiatives/create\">New <i class=\"fa fa-plus\"></i></a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-striped\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('type')\" :class=\"{'text-primary': orderByField === 'type'}\">\n                Type\n                <i @click=\"setOrderByField('type')\" v-if=\"orderByField !== 'type'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'type'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('country')\">\n                Country\n            </th>\n            <th v-if=\"isActive('started_at')\">\n                Started On\n                <i @click=\"setOrderByField('started_at')\" v-if=\"orderByField !== 'started_at'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'started_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('ended_at')\">\n                Ended On\n                <i @click=\"setOrderByField('ended_at')\" v-if=\"orderByField !== 'ended_at'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'ended_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('projects')\">\n                Projects\n            </th>\n            <th v-if=\"isActive('created_at')\">\n                Created on\n                <i @click=\"setOrderByField('created_at')\" v-if=\"orderByField !== 'created_at'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'created_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"initiatives.length > 0\">\n        <tr v-for=\"initiative in initiatives|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('type')\">{{initiative.type|capitalize}}</td>\n            <td v-if=\"isActive('country')\">{{initiative.country.name|capitalize}}</td>\n            <td v-if=\"isActive('started_at')\">{{initiative.started_at|moment 'll'}}</td>\n            <td v-if=\"isActive('ended_at')\">{{initiative.ended_at|moment 'll'}}</td>\n            <td v-if=\"isActive('projects')\">{{initiative.projects_count}}</td>\n            <td v-if=\"isActive('created_at')\">{{initiative.created_at|moment 'll'}}</td>\n            <td>\n                <a href=\"/admin/initiatives/{{initiative.id}}\"><i class=\"fa fa-cog\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tbody v-else=\"\">\n        <tr>\n            <td colspan=\"7\" class=\"text-center text-muted\">No initiatives found.</td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"7\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchInitiatives\" size=\"small\">\n                    </pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-4a739659", module.exports)
+  } else {
+    hotAPI.update("_v-4a739659", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],130:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'project-causes',
+    data: function data() {
+        return {
+            causes: {},
+            pagination: {}
+        };
+    },
+
+    methods: {
+        fetch: function fetch() {
+            this.$http.get('causes').then(function (response) {
+                this.causes = response.data.data;
+                this.pagination = response.data.meta.pagination;
+            });
+        }
+    },
+    ready: function ready() {
+        this.fetch();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <div>\n\n        <div class=\"row\" style=\"display:flex; flex-wrap: wrap; flex-direction: row;\">\n            <div v-for=\"cause in causes\" class=\"col-sm-6 col-md-4\" style=\"display:flex\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <h5 class=\"text-center\">{{ cause.name }}</h5>\n                    </div>\n                    <div class=\"panel-body text-center\">\n                        <!--<p class=\"badge\">{{ cause.status | capitalize }}</p><br>-->\n                        <p class=\"small\">{{ cause.short_desc }}</p>\n                        <label>Countries</label>\n                        <p class=\"small\"><span v-for=\"country in cause.countries\">\n\t\t\t\t\t\t\t\t{{ country.name }}<span v-show=\"$index + 1 != cause.countries.length\">, </span>\n\t\t\t\t\t\t</span></p>\n                        <label>Projects Funded</label>\n                        <p>{{ cause.projects_funded }}</p>\n                        <!--<h3 class=\"text-success\">{{ trip.starting_cost | currency }}</h3>-->\n                        <a href=\"/admin/causes/{{ cause.id }}/current-projects\" class=\"btn btn-primary-hollow btn-sm\"><i class=\"fa fa-cog\"></i> Manage</a>\n                    </div>\n                </div>\n            </div>\n        </div><!-- end row -->\n\n    </div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-c3968f9a", module.exports)
+  } else {
+    hotAPI.update("_v-c3968f9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],131:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _vueSelect = require('vue-select');
+
+var _vueSelect2 = _interopRequireDefault(_vueSelect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'project-editor',
+    components: { vSelect: _vueSelect2.default },
+    props: {
+        'id': {
+            type: String,
+            default: null
+        },
+        'causeId': {
+            type: String,
+            default: null
+        },
+        'readOnly': {
+            type: Boolean,
+            default: false
+        },
+        'newOnly': {
+            type: Boolean,
+            default: false
+        }
+    },
+    watch: {
+        'initiative.country.code': function initiativeCountryCode(val, oldVal) {
+            this.getInitiatives();
+        },
+        'sponsor': function sponsor(val, oldVal) {
+            this.selectedSponsor = val;
+        },
+        'selectedSponsor': function selectedSponsor(val, oldVal) {
+            val ? this.project.sponsor_id = val.id : this.project.sponsor_id = oldVal.id;
+        }
+    },
+    data: function data() {
+        return {
+            project: {
+                sponsor_type: 'users'
+            },
+            sponsor: {},
+            initiative: {
+                country: {
+                    code: null
+                }
+            },
+            availableInitiatives: [],
+            cause: {},
+            editMode: false,
+            sponsors: [],
+            selectedSponsor: null,
+            showSuccess: false,
+            showError: false,
+            message: null
+        };
+    },
+
+    computed: {
+        'plaque': function plaque() {
+            return this.project.plaque_prefix + ' ' + this.project.plaque_message;
+        },
+        'funded': function funded() {
+            return this.project.funded_at ? this.project.funded_at.moment('ll') : 'In progress.';
+        }
+    },
+    methods: {
+        getInitiatives: function getInitiatives() {
+            this.$http.get('causes/' + this.cause.id + '/initiatives', {
+                country: this.initiative.country.code
+            }).then(function (response) {
+                this.availableInitiatives = response.data.data;
+            });
+        },
+        getSponsors: function getSponsors(search, loading) {
+            loading(true);
+            this.$http.get(this.project.sponsor_type, { search: search }).then(function (response) {
+                this.sponsors = response.data.data;
+                loading(false);
+            });
+        },
+        getCause: function getCause() {
+            this.$refs.loader.show();
+            this.$http.get('causes/' + this.causeId).then(function (response) {
+                this.cause = response.data.data;
+                this.initiative.country = _.first(this.cause.countries);
+                this.$refs.loader.hide();
+            });
+        },
+        fetch: function fetch() {
+            this.$refs.loader.show();
+            this.$http.get('projects/' + this.id, { include: 'initiative.cause,sponsor' }).then(function (response) {
+                var arr = response.data.data;
+                this.cause = _.omit(arr.initiative.data.cause.data, 'initiatives');
+                this.initiative = arr.initiative.data;
+                this.sponsor = arr.sponsor.data;
+                this.project = _.omit(arr, ['initiative', 'sponsor']);
+                this.$refs.loader.hide();
+            });
+        },
+        save: function save() {
+            this.$refs.loader.show();
+            this.$http.put('projects/' + this.id, this.project).then(function (response) {
+                this.editMode = false;
+                this.$refs.loader.hide();
+                this.message = 'Your changes were saved successfully.', this.showSuccess = true;
+            }).error(function () {
+                this.$refs.loader.hide();
+                this.message = 'There are problems with the form.', this.showError = true;
+            });
+        },
+        create: function create() {
+            this.$refs.loader.show();
+            this.$http.post('projects', this.project).then(function (response) {
+                this.$refs.loader.hide();
+                window.location = '/admin/projects/' + response.data.data.id;
+            }).error(function () {
+                this.$refs.loader.hide();
+                this.message = 'There are problems with the form.', this.showError = true;
+            });
+        },
+        cancel: function cancel() {
+            if (!this.newOnly) {
+                this.editMode = false;
+                this.fetch();
+            } else {
+                window.location = '/admin/causes/' + this.causeId + '/current-projects';
+            }
+        }
+    },
+    ready: function ready() {
+        if (!this.newOnly) {
+            this.fetch();
+        }
+
+        if (this.newOnly) {
+            this.getCause();
+            this.editMode = true;
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <spinner v-ref:loader=\"\" size=\"xl\" :fixed=\"false\" text=\"Loading...\"></spinner>\n    <div class=\"panel-heading\">\n        <h5>\n            Details\n            <span class=\"pull-right text-muted\" v-if=\"! newOnly\">\n                <tooltip effect=\"scale\" placement=\"bottom\" content=\"Edit\">\n                    <i class=\"fa fa-lg fa-cog\" @click=\"editMode = !editMode\"></i>\n                </tooltip>\n            </span>\n        </h5>\n    </div>\n    <div class=\"panel-body\">\n        <div :class=\"{ 'col-md-7': !editMode, 'col-md-12' : editMode}\">\n            <div class=\"row\" v-if=\"! newOnly\">\n                <div class=\"col-md-12\">\n                    <label>Project ID</label>\n                    <p>{{ project.id }}</p>\n                </div>\n                <hr class=\"divider\">\n            </div>\n            <div class=\"row\">\n                <div class=\"col-md-12\">\n                    <label>Project Name</label>\n                    <input type=\"text\" v-model=\"project.name\" class=\"form-control\" v-if=\"editMode\">\n                    <p v-else=\"\">{{ project.name }}</p>\n                </div>\n            </div>\n            <hr class=\"divider\">\n            <div class=\"row\">\n                <div class=\"col-md-12\">\n                    <label>Cause</label>\n                    <p>{{ cause.name }}</p>\n                </div>\n            </div>\n            <hr class=\"divider\">\n            <div class=\"row\">\n                <div class=\"col-md-6\">\n                    <label>Country</label>\n                    <select class=\"form-control\" v-model=\"initiative.country.code\" v-if=\"editMode\">\n                        <option v-for=\"country in cause.countries\" :value=\"country.code\">{{ country.name }}</option>\n                    </select>\n                    <p v-else=\"\">{{ initiative.country.name }}</p>\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Type</label>\n                    <select class=\"form-control\" v-model=\"project.project_initiative_id\" v-if=\"editMode\">\n                        <option v-for=\"initiative in availableInitiatives\" :value=\"initiative.id\">{{ initiative.type }}</option>\n                    </select>\n                    <p v-else=\"\">{{ initiative.type }}</p>\n                </div>\n            </div>\n            <hr class=\"divider\">\n            <div class=\"row\">\n                <div class=\"col-md-6\">\n                    <label>Sponsor Name</label>\n                    <v-select class=\"form-control\" id=\"sponsor\" :value.sync=\"selectedSponsor\" :options=\"sponsors\" :on-search=\"getSponsors\" label=\"name\" v-if=\"editMode\">\n                    </v-select>\n                    <p v-else=\"\">{{ sponsor.name }}</p>\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Sponsor Type</label>\n                    <select class=\"form-control\" v-model=\"project.sponsor_type\" v-if=\"editMode\" @change=\"selectedSponsor = null\">\n                        <option value=\"users\">Individual</option>\n                        <option value=\"groups\">Group</option>\n                    </select>\n                    <p v-else=\"\">{{ project.sponsor_type == 'users' ? 'Individual' : 'Group' }}</p>\n                </div>\n            </div>\n            <hr class=\"divider\">\n            <div class=\"row\" v-if=\"editMode\">\n                <div class=\"col-md-6\">\n                    <label>Plaque Prefix</label>\n                    <select class=\"form-control\" v-model=\"project.plaque_prefix\">\n                        <option>in honor of</option>\n                        <option>in memory of</option>\n                        <option>sponsored by</option>\n                        <option>on behalf of</option>\n                    </select>\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Plaque Message</label>\n                    <input class=\"form-control\" type=\"text\" v-model=\"project.plaque_message\">\n                </div>\n            </div>\n            <div class=\"row\" v-else=\"\">\n                <div class=\"col-md-12\">\n                    <label>Plaque Message</label>\n                    <p>{{ plaque }}</p>\n                </div>\n            </div>\n            <div class=\"row\" v-if=\"! newOnly\">\n                <hr class=\"divider\">\n                <div class=\"col-md-6\">\n                    <label>Started At</label>\n                    <p>{{ project.created_at | moment 'll' }}</p>\n                </div>\n                <div class=\"col-md-6\">\n                    <label>Funded At</label>\n                    <p>{{ funded }}</p>\n                </div>\n            </div>\n            <div class=\"row\" v-if=\"! newOnly\">\n                <hr class=\"divider\">\n                <div class=\"col-md-6\">\n                    <label>Last Updated</label>\n                    <p>{{ project.updated_at | moment 'll' true }}</p>\n                </div>\n            </div>\n        </div>\n        <div class=\"col-md-5 panel panel-default panel-body text-center\" v-if=\"!editMode\">\n            <label>Email</label>\n            <p>{{ sponsor.email }}</p>\n            <label>Home Phone</label>\n            <p>{{ sponsor.phone_one }}</p>\n            <label>Mobile Phone</label>\n            <p>{{ sponsor.phone_two }}</p>\n            <label>Address</label>\n            <p>{{ sponsor.address }}</p>\n            <label>City</label>\n            <p>{{ sponsor.city }}</p>\n            <label>State/Providence</label>\n            <p>{{ sponsor.state }}</p>\n            <label>Zip/Postal Code</label>\n            <p>{{ sponsor.zip }}</p>\n            <label>Country</label>\n            <p>{{ sponsor.country_name }}</p>\n        </div>\n    </div>\n    <div class=\"panel-footer text-right\" v-if=\"editMode\">\n        <button class=\"btn btn-default\" @click=\"cancel\">Cancel</button>\n        <button class=\"btn btn-primary\" @click=\"save\" v-if=\"! newOnly\">Save</button>\n        <button class=\"btn btn-primary\" @click=\"create\" v-else=\"\">Create</button>\n    </div>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>{{ message }}</p>\n    </alert>\n\n</div><!-- end panel -->\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-aa213214", module.exports)
+  } else {
+    hotAPI.update("_v-aa213214", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],132:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'projects-list',
+    props: {
+        'causeId': {
+            type: String,
+            required: true
+        },
+        'list': {
+            type: String,
+            default: 'current'
+        }
+    },
+    data: function data() {
+        return {
+            projects: [],
+            orderByField: 'name',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: { current_page: 1 },
+            search: '',
+            activeFields: ['name', 'sponsor', 'type', 'percent_raised'],
+            maxActiveFields: 6
+        };
+    },
+
+    watch: {
+        'search': function search(val, oldVal) {
+            this.page = 1;
+            this.searchProjects();
+        },
+        'page': function page(val, oldVal) {
+            this.searchProjects();
+        },
+        'per_page': function per_page(val, oldVal) {
+            this.searchProjects();
+        }
+    },
+
+    methods: {
+        isActive: function isActive(field) {
+            return _.contains(this.activeFields, field);
+        },
+        maxCheck: function maxCheck(field) {
+            return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields;
+        },
+        setOrderByField: function setOrderByField(field) {
+            this.orderByField = field;
+            this.direction = 1;
+            this.searchProjects();
+        },
+        resetFilter: function resetFilter() {
+            this.orderByField = 'name';
+            this.direction = 1;
+            this.search = null;
+        },
+        getParameters: function getParameters() {
+            var params = {
+                include: 'sponsor,initiative',
+                search: this.search,
+                per_page: this.per_page,
+                page: this.pagination.current_page,
+                sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
+            };
+
+            switch (this.list) {
+                case 'current':
+                    params.current = true;
+                    break;
+                case 'archived':
+                    params.archived = true;
+                    break;
+            }
+
+            return params;
+        },
+        searchProjects: function searchProjects() {
+            var params = this.getParameters();
+            this.$http.get('causes/' + this.causeId + '/projects', params).then(function (response) {
+                this.pagination = response.data.meta.pagination;
+                this.projects = response.data.data;
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchProjects();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <div class=\"row\">\n        <div class=\"col-sm-12\">\n            <form class=\"form-inline text-right\" novalidate=\"\">\n                <div class=\"form-inline\" style=\"display: inline-block;\">\n                    <div class=\"form-group\">\n                        <label>Show</label>\n                        <select class=\"form-control input-sm\" v-model=\"per_page\">\n                            <option v-for=\"option in perPageOptions\" :value=\"option\">{{option}}</option>\n                        </select>\n                    </div>\n                </div>\n                <div class=\"input-group input-group-sm\">\n                    <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n                    <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n                </div>\n                <div id=\"toggleFields\" class=\"form-toggle-menu dropdown\" style=\"display: inline-block;\">\n                    <button class=\"btn btn-default btn-sm dropdown-toggle\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">\n                        Fields\n                        <span class=\"caret\"></span>\n                    </button>\n                    <ul style=\"padding: 10px 20px;\" class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"name\" :disabled=\"maxCheck('name')\">Project Name\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"sponsor\" :disabled=\"maxCheck('sponsor')\"> Sponsor\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"type\" :disabled=\"maxCheck('type')\"> Type\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"country\" :disabled=\"maxCheck('country')\"> Country\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"goal\" :disabled=\"maxCheck('goal')\"> Goal\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"amount_raised\" :disabled=\"maxCheck('amount_raised')\"> Funds Raised\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"percent_raised\" :disabled=\"maxCheck('percent_failed')\"> Percent Raised\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"funded_at\" :disabled=\"maxCheck('funded_at')\"> Funded\n                            </label>\n                        </li>\n                        <li>\n                            <label class=\"small\" style=\"margin-bottom: 0px;\">\n                                <input type=\"checkbox\" v-model=\"activeFields\" value=\"created_at\" :disabled=\"maxCheck('created_at')\"> Created on\n                            </label>\n                        </li>\n                    </ul>\n                </div>\n                <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"resetFilter()\">Reset Filters <i class=\"fa fa-times\"></i></button>\n                <a class=\"btn btn-primary btn-sm\" href=\"/admin/causes/{{ causeId }}/projects/create\">New <i class=\"fa fa-plus\"></i></a>\n            </form>\n        </div>\n    </div>\n    <hr>\n    <table class=\"table table-striped\">\n        <thead>\n        <tr>\n            <th v-if=\"isActive('name')\" :class=\"{'text-primary': orderByField === 'name'}\">\n                Name\n                <i @click=\"setOrderByField('name')\" v-if=\"orderByField !== 'name'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'name'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th v-if=\"isActive('type')\">\n                Type\n            </th>\n            <th v-if=\"isActive('country')\">\n                Country\n            </th>\n            <th v-if=\"isActive('sponsor')\">\n                Sponsor\n            </th>\n            <th v-if=\"isActive('goal')\">\n                Goal\n            </th>\n            <th v-if=\"isActive('funds_raised')\">\n                Funds Raised\n            </th>\n            <th v-if=\"isActive('percent_raised')\">\n                Percent Raised\n            </th>\n            <th v-if=\"isActive('funded_at')\">\n                Funded\n            </th>\n            <th v-if=\"isActive('created_at')\">\n                Created on\n                <i @click=\"setOrderByField('created_at')\" v-if=\"orderByField !== 'created_at'\" class=\"fa fa-sort pull-right\"></i>\n                <i @click=\"direction=direction*-1\" v-if=\"orderByField === 'created_at'\" class=\"fa pull-right\" :class=\"{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}\"></i>\n            </th>\n            <th><i class=\"fa fa-cog\"></i></th>\n        </tr>\n        </thead>\n        <tbody v-if=\"projects.length > 0\">\n        <tr v-for=\"project in projects|filterBy search|orderBy orderByField direction\">\n            <td v-if=\"isActive('name')\">{{project.name|capitalize}}</td>\n            <td v-if=\"isActive('type')\">{{project.initiative.data.type|capitalize}}</td>\n            <td v-if=\"isActive('country')\">{{project.initiative.data.country.name|capitalize}}</td>\n            <td v-if=\"isActive('sponsor')\">{{project.sponsor.data.name|capitalize}}</td>\n            <td v-if=\"isActive('goal')\">{{project.goal|currency}}</td>\n            <td v-if=\"isActive('funds_raised')\">{{project.amount_raised|currency}}</td>\n            <td v-if=\"isActive('percent_raised')\">{{project.percent_raised}}%</td>\n            <td v-if=\"isActive('funded_at')\">\n                <span v-if=\"project.funded\">{{project.funded_at|moment 'll'}}</span>\n                <span v-else=\"\">In progress</span>\n            </td>\n            <td v-if=\"isActive('created_at')\">{{project.created_at|moment 'll'}}</td>\n            <td>\n                <a href=\"/admin/projects/{{project.id}}\"><i class=\"fa fa-cog\"></i></a>\n            </td>\n        </tr>\n        </tbody>\n        <tbody v-else=\"\">\n            <tr>\n                <td colspan=\"10\" class=\"text-center text-muted\">No projects found.</td>\n            </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <td colspan=\"10\">\n                <div class=\"col-sm-12 text-center\">\n                    <pagination :pagination.sync=\"pagination\" :callback=\"searchProjects\" size=\"small\">\n                    </pagination>\n                </div>\n            </td>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-55cad24c", module.exports)
+  } else {
+    hotAPI.update("_v-55cad24c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],133:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72498,7 +73136,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-402a95aa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],128:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],134:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -72558,7 +73196,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"white-header-bg\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col-sm-8\">\n                <h3 class=\"text-capitalize\">{{campaign.name}} <small>· Campaign</small></h3>\n            </div>\n            <div class=\"col-sm-4\">\n                <div class=\"pull-right\">\n                \t<hr class=\"divider inv sm\">\n\t\t\t\t\t<a href=\"/admin/campaigns\" class=\"btn btn-default\"><i class=\"fa fa-chevron-left icon-left\"></i> Back</a>\n\t\t\t\t\t<a class=\"btn btn-primary\" href=\"/admin/campaigns/{{campaignId}}/edit\"><i class=\"fa fa-pencil-square-o icon-left\"></i> Edit</a>\n\t\t\t\t</div>\n            </div>\n        </div>\n    </div>\n</div>\n<hr class=\"divider inv lg\">\n<div class=\"container\">\n\t<div class=\"row\">\n\t\t<div class=\"col-sm-3\">\n\t\t\t<div class=\"panel panel-default\">\n\t\t\t\t<ul class=\"nav nav-pills nav-stacked\">\n\t\t\t\t\t<li :class=\"{'active': currentView === 'details'}\">\n\t\t\t\t\t\t<a @click=\"toView('details')\">Details</a>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li :class=\"{'active': currentView === 'trips'}\">\n\t\t\t\t\t\t<a @click=\"toView('trips')\">Trips</a>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"col-sm-9\">\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<component :is=\"currentView\" transition=\"fade\" transition-mode=\"out-in\">\n\n\t\t\t\t\t</component>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"white-header-bg\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col-sm-8\">\n                <h3 class=\"text-capitalize\">\n\t\t\t\t\t<a href=\"#\">\n                        <img :src=\"campaign.avatar\" alt=\"{{campaign.name}}\" class=\"img-circle av-left img-sm\">\n                    </a>\n                \t{{campaign.name}}\n                 \t<small>· Campaign</small>\n                </h3>\n            </div>\n            <div class=\"col-sm-4\">\n                <div class=\"pull-right\">\n                \t<hr class=\"divider inv sm\">\n                \t<hr class=\"divider inv\">\n                \t<div class=\"btn-group\" role=\"group\">\n\t\t\t\t\t\t<a href=\"/admin/campaigns\" class=\"btn btn-primary-darker\"><span class=\"fa fa-chevron-left icon-left\"></span></a>\n\t\t\t\t\t\t<a class=\"btn btn-primary\" href=\"/admin/campaigns/{{campaignId}}/edit\">Edit</a>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n            </div>\n        </div>\n    </div>\n</div>\n<hr class=\"divider inv lg\">\n<div class=\"container\">\n\t<div class=\"row\">\n\t\t<div class=\"col-sm-3\">\n\t\t\t<div class=\"panel panel-default\">\n\t\t\t\t<ul class=\"nav nav-pills nav-stacked\">\n\t\t\t\t\t<li :class=\"{'active': currentView === 'details'}\">\n\t\t\t\t\t\t<a @click=\"toView('details')\">Details</a>\n\t\t\t\t\t</li>\n\t\t\t\t\t<li :class=\"{'active': currentView === 'trips'}\">\n\t\t\t\t\t\t<a @click=\"toView('trips')\">Trips</a>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</div>\n\t\t<div class=\"col-sm-9\">\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t<component :is=\"currentView\" transition=\"fade\" transition-mode=\"out-in\">\n\n\t\t\t\t\t</component>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -72573,7 +73211,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6c0d9684", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./details/details.vue":132,"./details/regions.vue":133,"./details/transports.vue":134,"./details/trips.vue":135,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],129:[function(require,module,exports){
+},{"./details/details.vue":138,"./details/regions.vue":139,"./details/transports.vue":140,"./details/trips.vue":141,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],135:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72744,7 +73382,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3a603938", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],130:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72818,7 +73456,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-12a47980", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],131:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72857,7 +73495,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-58d98fb2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],132:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],138:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72898,7 +73536,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c27860f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],133:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],139:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72933,7 +73571,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-88b7227e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],134:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],140:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -72967,7 +73605,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2299a818", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],135:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],141:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73038,7 +73676,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-19c29ab0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],136:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],142:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73114,7 +73752,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1c3f53a2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],137:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],143:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n")
 'use strict';
@@ -73172,7 +73810,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-94fcdc0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./campaign-groups.vue":130,"./group-trips.vue":136,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],138:[function(require,module,exports){
+},{"./campaign-groups.vue":136,"./group-trips.vue":142,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -73620,7 +74258,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-52666078", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],139:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],145:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -73972,7 +74610,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3e2654be", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],140:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74143,7 +74781,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-fdcee0c6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],141:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],147:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -74364,7 +75002,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-72f10bfc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],142:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74376,6 +75014,10 @@ exports.default = {
         'id': {
             type: String,
             required: true
+        },
+        'readOnly': {
+            type: Boolean,
+            default: false
         }
     },
     data: function data() {
@@ -74414,7 +75056,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <div class=\"row\">\n            <div class=\"col-xs-4\">\n                <h5 class=\"panel-header\">Details</h5>\n            </div>\n            <div class=\"col-xs-8 text-right\">\n                <button class=\"btn btn-xs btn-default-hollow\" @click=\"reconcile\" v-if=\"!editMode\">\n                    <i class=\"fa fa-calculator\"></i> Reconcile\n                </button>\n                <button class=\"btn btn-xs btn-default\" @click=\"editMode = !editMode\" v-if=\"!editMode\">\n                    Edit\n                </button>\n                <button class=\"btn btn-xs btn-default\" @click=\"editMode = !editMode\" v-if=\"editMode\">\n                    Cancel\n                </button>\n                <button class=\"btn btn-xs btn-primary\" @click=\"save\" v-if=\"editMode\">\n                    Save\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n        <label>Balance</label>\n        <h4 :class=\"{'text-success' : fund.balance > 0, 'text-danger' : fund.balance < 0}\">\n            {{ fund.balance | currency }}\n        </h4>\n        <label>Fund Name</label>\n        <input class=\"form-control\" v-model=\"fund.name\" v-if=\"editMode\">\n        <p v-else=\"\">{{ fund.name }}</p>\n        <label>QuickBooks Class</label>\n        <input class=\"form-control\" v-model=\"fund.class\" v-if=\"editMode\">\n        <p v-else=\"\">{{ fund.class }}</p>\n        <label>QuickBooks Item</label>\n        <input class=\"form-control\" v-model=\"fund.item\" v-if=\"editMode\">\n        <p v-else=\"\">{{ fund.item }}</p>\n        <label>Type</label>\n        <p>{{ fund.type | capitalize }}</p>\n        <label>Last Updated</label>\n        <p>{{ fund.updated_at | moment 'lll' }}</p>\n    </div>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Awesome!</strong>\n        <p>{{ message }}</p>\n    </alert>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <div class=\"row\">\n            <div class=\"col-xs-4\">\n                <h5 class=\"panel-header\">Details</h5>\n            </div>\n            <div class=\"col-xs-8 text-right\" v-if=\" ! readOnly\">\n                <button class=\"btn btn-xs btn-default-hollow\" @click=\"reconcile\" v-if=\"!editMode\">\n                    <i class=\"fa fa-calculator\"></i> Reconcile\n                </button>\n                <button class=\"btn btn-xs btn-default\" @click=\"editMode = !editMode\" v-if=\"!editMode\">\n                    Edit\n                </button>\n                <button class=\"btn btn-xs btn-default\" @click=\"editMode = !editMode\" v-if=\"editMode\">\n                    Cancel\n                </button>\n                <button class=\"btn btn-xs btn-primary\" @click=\"save\" v-if=\"editMode\">\n                    Save\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n        <label>Balance</label>\n        <h4 :class=\"{'text-success' : fund.balance > 0, 'text-danger' : fund.balance < 0}\">\n            {{ fund.balance | currency }}\n        </h4>\n        <label>Fund Name</label>\n        <input class=\"form-control\" v-model=\"fund.name\" v-if=\"editMode\">\n        <p v-else=\"\">{{ fund.name }}</p>\n        <label>QuickBooks Class</label>\n        <input class=\"form-control\" v-model=\"fund.class\" v-if=\"editMode\">\n        <p v-else=\"\">{{ fund.class }}</p>\n        <label>QuickBooks Item</label>\n        <input class=\"form-control\" v-model=\"fund.item\" v-if=\"editMode\">\n        <p v-else=\"\">{{ fund.item }}</p>\n        <label>Type</label>\n        <p>{{ fund.type | capitalize }}</p>\n        <label>Last Updated</label>\n        <p>{{ fund.updated_at | moment 'lll' }}</p>\n    </div>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Awesome!</strong>\n        <p>{{ message }}</p>\n    </alert>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -74425,7 +75067,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-59741304", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],143:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],149:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -74682,7 +75324,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-454ad5be", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],144:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74877,7 +75519,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-65b2af1d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../donors/donor-form.vue":140,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],145:[function(require,module,exports){
+},{"../donors/donor-form.vue":146,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -74992,7 +75634,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-76dd8b48", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],146:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75116,7 +75758,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4773c802", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],147:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],153:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\nvideo {\n    width: 100%;\n    height: auto;\n}\n\n.carousel { overflow: hidden; }\n.carousel-indicators li { visibility: hidden; }\n\n.carousel-inner .item {\n    font-size:10px;\n    color:#0404B4\n}\n\n.carousel-control {\n    z-index: 10;\n    width: 30px;\n    height: 50px;\n    top: 40%;\n}\n.carousel-control.left,\n.carousel-control.right { background: none }\n\n.carousel-control.left > span.fa {  }\n.carousel-control.right > span.fa {  }\n\n.carousel-control > span.fa {\n    background-color: #EB0A18;\n    border-radius: 3px;\n}\n")
 'use strict';
@@ -75304,7 +75946,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-02bfe2c1", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],148:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75380,7 +76022,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-60464908", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],149:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75491,7 +76133,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0f6c0d9e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],150:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75649,7 +76291,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7071c3a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],151:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75750,7 +76392,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1244b388", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],152:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -75829,7 +76471,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6170d6da", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],153:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],159:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -76132,7 +76774,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4d4691e4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],154:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76176,7 +76818,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-15f24781", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],155:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76273,7 +76915,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3253a032", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],156:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76317,7 +76959,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-24620ef0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],157:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76431,7 +77073,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3568e8fb", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],158:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76466,7 +77108,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-38497816", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],159:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76540,7 +77182,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-a95a0ede", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],160:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76711,7 +77353,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-cf6ec6ac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],161:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76883,7 +77525,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7fba023b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],162:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76940,7 +77582,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7f80c956", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],163:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -76999,7 +77641,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-04e65764", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],164:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],170:[function(require,module,exports){
 'use strict';
 
 var _vueSelect = require('vue-select');
@@ -77165,7 +77807,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7dce67a4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],165:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77314,7 +77956,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1e536124", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./donate.vue":138,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],166:[function(require,module,exports){
+},{"./donate.vue":144,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77478,7 +78120,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4f7b5afc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],167:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77595,7 +78237,42 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-bee86e22", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/object/assign":3,"vue":124,"vue-hot-reload-api":119}],168:[function(require,module,exports){
+},{"babel-runtime/core-js/object/assign":3,"vue":124,"vue-hot-reload-api":119}],174:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'reconcile-fund',
+    props: ['id'],
+    data: function data() {
+        return {
+            showSuccess: false
+        };
+    },
+
+    methods: {
+        reconcile: function reconcile() {
+            this.$http.put('funds/' + this.id + '/reconcile').then(function (response) {
+                this.showSuccess = true;
+            });
+        }
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n    <btn class=\"btn btn-sm btn-default\" @click=\"reconcile\"><i class=\"fa fa-calculator\"></i> Reconcile</btn>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Awesome!</strong>\n        <p>Fund has been reconciled!</p>\n    </alert>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-627dafb9", module.exports)
+  } else {
+    hotAPI.update("_v-627dafb9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77714,7 +78391,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9bbb6c9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],169:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77778,7 +78455,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1be69c3e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],170:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -77980,7 +78657,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-81b8d51a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],171:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78058,7 +78735,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0460b004", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],172:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78239,7 +78916,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e64c6ba2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],173:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78318,7 +78995,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-40f458ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],174:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78355,7 +79032,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-558d51ea", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],175:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78523,7 +79200,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-793ad0cd", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],176:[function(require,module,exports){
+},{"../../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78602,7 +79279,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6c464550", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],177:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -78845,7 +79522,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-86b15298", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],178:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],185:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -79075,7 +79752,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0375b904", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../trips/registration/additional-trip-options.vue":213,"../trips/registration/basic-info.vue":214,"../trips/registration/review.vue":217,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],179:[function(require,module,exports){
+},{"../trips/registration/additional-trip-options.vue":220,"../trips/registration/basic-info.vue":221,"../trips/registration/review.vue":224,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79276,7 +79953,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-45829fee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],180:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79497,7 +80174,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-30337481", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],181:[function(require,module,exports){
+},{"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79683,7 +80360,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1bac2c0c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],182:[function(require,module,exports){
+},{"../../components/uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],189:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n\n@media (min-width: 991px) {\n\t.aside.left {\n\t\tleft: 55px;\n\t}\n}\n")
 'use strict';
@@ -80029,7 +80706,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0ff77a9a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],183:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80080,7 +80757,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5e12a7a6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],184:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],191:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80148,7 +80825,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-73e4e546", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119}],185:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80377,7 +81054,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-72fce31c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],186:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80460,7 +81137,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-231765fa", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],187:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],194:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80498,7 +81175,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c6cc02ae", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],188:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],195:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80567,7 +81244,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-efe544c0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],189:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80646,7 +81323,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-10639489", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],190:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80740,7 +81417,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-01de7a71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],191:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80845,7 +81522,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-35c3a93b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/medicals/medical-create-update.vue":170,"vue":124,"vue-hot-reload-api":119}],192:[function(require,module,exports){
+},{"../records/medicals/medical-create-update.vue":177,"vue":124,"vue-hot-reload-api":119}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -80950,7 +81627,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5d37e43e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/passports/passport-create-update.vue":172,"vue":124,"vue-hot-reload-api":119}],193:[function(require,module,exports){
+},{"../records/passports/passport-create-update.vue":179,"vue":124,"vue-hot-reload-api":119}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81055,7 +81732,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1bd1d2ef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../records/visas/visa-create-update.vue":175,"vue":124,"vue-hot-reload-api":119}],194:[function(require,module,exports){
+},{"../records/visas/visa-create-update.vue":182,"vue":124,"vue-hot-reload-api":119}],201:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-e87a91b0] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-todo[_v-e87a91b0] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.todo-item:hover i.remove-todo[_v-e87a91b0] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-todo[_v-e87a91b0]:hover {\n  color: #d8262e; }\n\n/* line 18, stdin */\n.todo-item-checkbox[_v-e87a91b0]:hover {\n  color: #000; }\n\n/* line 22, stdin */\n.todo-item-checkbox i[_v-e87a91b0] {\n  margin-right: 10px; }\n")
 'use strict';
@@ -81218,7 +81895,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-e87a91b0=\"\">\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\" _v-e87a91b0=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\" _v-e87a91b0=\"\"></span>\n        <strong _v-e87a91b0=\"\">Well Done!</strong>\n        <p _v-e87a91b0=\"\">{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\" _v-e87a91b0=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\" _v-e87a91b0=\"\"></span>\n        <strong _v-e87a91b0=\"\">Oh No!</strong>\n        <p _v-e87a91b0=\"\">{{ message }}</p>\n    </alert>\n\n    <div class=\"panel panel-default\" _v-e87a91b0=\"\">\n        <div class=\"panel-heading\" _v-e87a91b0=\"\">\n            <h5 _v-e87a91b0=\"\">ToDos</h5>\n        </div>\n        <div class=\"list-group\" _v-e87a91b0=\"\">\n            <div class=\"list-group-item\" v-if=\"canModify\" _v-e87a91b0=\"\">\n                <div class=\"row\" _v-e87a91b0=\"\">\n                    <div class=\"col-xs-2 col-sm-1 text-muted\" _v-e87a91b0=\"\">\n                        <i class=\"fa fa-lg fa-plus-square-o\" style=\"margin-right: 10px\" _v-e87a91b0=\"\"></i>\n                    </div>\n                    <div class=\"col-xs-10 col-sm-11\" _v-e87a91b0=\"\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"newTodo.task\" placeholder=\"What needs to be done?\" @keyup.enter=\"createTodo\" _v-e87a91b0=\"\">\n                    </div>\n                </div>\n            </div>\n            <div class=\"list-group-item\" v-if=\"todos.length < 1\" _v-e87a91b0=\"\">\n                <p class=\"text-center text-muted lead\" _v-e87a91b0=\"\">No tasks found.</p>\n            </div>\n            <div class=\"list-group-item todo-item\" v-for=\"todo in todos\" _v-e87a91b0=\"\">\n                    <div class=\"row\" _v-e87a91b0=\"\">\n                        <div class=\"col-xs-2 col-sm-1 text-muted todo-item-checkbox\" @click=\"completeTodo(todo)\" _v-e87a91b0=\"\">\n                            <i class=\"fa fa-lg\" :class=\"{\n                               'fa-check-square-o' : todo.completed_at,\n                               'fa-square-o' : !todo.completed_at\n                               }\" _v-e87a91b0=\"\">\n                            </i>\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" v-if=\"selectedTodo.id == todo.id &amp;&amp; editMode\" _v-e87a91b0=\"\">\n                            <input type=\"text\" class=\"form-control\" v-model=\"selectedTodo.task\" @blur=\"updateTodo\" @keyup.enter=\"updateTodo\" _v-e87a91b0=\"\">\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" @dblclick=\"editTodo(todo)\" v-else=\"\" _v-e87a91b0=\"\">\n                            <span :class=\"{ 'text-strike' : todo.completed_at }\" _v-e87a91b0=\"\">{{ todo.task }}</span>\n                            <small class=\"text-muted\" v-if=\"todo.completed_at\" _v-e87a91b0=\"\"><br _v-e87a91b0=\"\">\n                                Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}\n                            </small>\n                        </div>\n                        <div class=\"col-xs-1 col-sm-1 text-right\" v-if=\"canModify\" _v-e87a91b0=\"\">\n                            <i class=\"fa fa-times fa-lg text-muted remove-todo\" @click=\"selectedTodo = todo,deleteModal = true\" _v-e87a91b0=\"\">\n                            </i>\n                        </div>\n                    </div>\n            </div>\n        </div>\n        <div class=\"panel-body text-center\" _v-e87a91b0=\"\">\n            <nav _v-e87a91b0=\"\">\n                <ul class=\"pager\" _v-e87a91b0=\"\">\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\" class=\"previous\" _v-e87a91b0=\"\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\" _v-e87a91b0=\"\">\n                            <span aria-hidden=\"true\" _v-e87a91b0=\"\">« <span class=\"hidden-xs\" _v-e87a91b0=\"\">Previous</span></span>\n                        </a>\n                    </li>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'all'}\" @click=\"changeFilter('all')\" _v-e87a91b0=\"\">\n                        All\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'active'}\" @click=\"changeFilter('active')\" _v-e87a91b0=\"\">\n                        Active\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'completed'}\" @click=\"changeFilter('completed')\" _v-e87a91b0=\"\">\n                        Completed\n                    </button>\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\" class=\"next\" _v-e87a91b0=\"\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\" _v-e87a91b0=\"\">\n                            <span aria-hidden=\"true\" _v-e87a91b0=\"\"><span class=\"hidden-xs\" _v-e87a91b0=\"\">Next</span> » </span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n    <p class=\"text-center\" _v-e87a91b0=\"\"><small class=\"text-muted\" _v-e87a91b0=\"\">Double-click to edit a todo.</small></p>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Todo\" small=\"true\" _v-e87a91b0=\"\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\" _v-e87a91b0=\"\">Are you sure you want to delete this Todo?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\" _v-e87a91b0=\"\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\" _v-e87a91b0=\"\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedTodo)\" _v-e87a91b0=\"\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div _v-e87a91b0=\"\">\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\" _v-e87a91b0=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\" _v-e87a91b0=\"\"></span>\n        <strong _v-e87a91b0=\"\">Well Done!</strong>\n        <p _v-e87a91b0=\"\">{{ message }}</p>\n    </alert>\n\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\" _v-e87a91b0=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\" _v-e87a91b0=\"\"></span>\n        <strong _v-e87a91b0=\"\">Oh No!</strong>\n        <p _v-e87a91b0=\"\">{{ message }}</p>\n    </alert>\n\n    <div class=\"panel panel-default\" _v-e87a91b0=\"\">\n        <div class=\"panel-heading\" _v-e87a91b0=\"\">\n            <h5 _v-e87a91b0=\"\">ToDos</h5>\n        </div>\n        <div class=\"list-group\" _v-e87a91b0=\"\">\n            <div class=\"list-group-item\" v-if=\"canModify\" _v-e87a91b0=\"\">\n                <div class=\"row\" _v-e87a91b0=\"\">\n                    <div class=\"col-xs-2 col-sm-1 text-muted\" _v-e87a91b0=\"\">\n                        <i class=\"fa fa-lg fa-plus-square-o\" style=\"margin-right: 10px\" _v-e87a91b0=\"\"></i>\n                    </div>\n                    <div class=\"col-xs-10 col-sm-11\" _v-e87a91b0=\"\">\n                        <input type=\"text\" class=\"form-control\" v-model=\"newTodo.task\" placeholder=\"What needs to be done?\" @keyup.enter=\"createTodo\" _v-e87a91b0=\"\">\n                    </div>\n                </div>\n            </div>\n            <div class=\"list-group-item\" v-if=\"todos.length < 1\" _v-e87a91b0=\"\">\n                <p class=\"text-center text-muted lead\" _v-e87a91b0=\"\">No tasks found.</p>\n            </div>\n            <div class=\"list-group-item todo-item\" v-for=\"todo in todos\" _v-e87a91b0=\"\">\n                    <div class=\"row\" _v-e87a91b0=\"\">\n                        <div class=\"col-xs-2 col-sm-1 text-muted todo-item-checkbox\" @click=\"completeTodo(todo)\" _v-e87a91b0=\"\">\n                            <i class=\"fa fa-lg\" :class=\"{ 'fa-check-square-o' : todo.completed_at, 'fa-square-o' : !todo.completed_at }\" _v-e87a91b0=\"\">\n                            </i>\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" v-if=\"selectedTodo.id == todo.id &amp;&amp; editMode\" _v-e87a91b0=\"\">\n                            <input type=\"text\" class=\"form-control\" v-model=\"selectedTodo.task\" @blur=\"updateTodo\" @keyup.enter=\"updateTodo\" _v-e87a91b0=\"\">\n                        </div>\n                        <div class=\"col-xs-9 col-sm-10\" @dblclick=\"editTodo(todo)\" v-else=\"\" _v-e87a91b0=\"\">\n                            <span :class=\"{ 'text-strike' : todo.completed_at }\" _v-e87a91b0=\"\">{{ todo.task }}</span>\n                            <small class=\"text-muted\" v-if=\"todo.completed_at\" _v-e87a91b0=\"\"><br _v-e87a91b0=\"\">\n                                Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}\n                            </small>\n                        </div>\n                        <div class=\"col-xs-1 col-sm-1 text-right\" v-if=\"canModify\" _v-e87a91b0=\"\">\n                            <i class=\"fa fa-times fa-lg text-muted remove-todo\" @click=\"selectedTodo = todo,deleteModal = true\" _v-e87a91b0=\"\">\n                            </i>\n                        </div>\n                    </div>\n            </div>\n        </div>\n        <div class=\"panel-body text-center\" _v-e87a91b0=\"\">\n            <nav _v-e87a91b0=\"\">\n                <ul class=\"pager\" _v-e87a91b0=\"\">\n                    <li :class=\"{ 'disabled': pagination.current_page == 1 }\" class=\"previous\" _v-e87a91b0=\"\">\n                        <a aria-label=\"Previous\" @click=\"page=pagination.current_page-1\" _v-e87a91b0=\"\">\n                            <span aria-hidden=\"true\" _v-e87a91b0=\"\">« <span class=\"hidden-xs\" _v-e87a91b0=\"\">Previous</span></span>\n                        </a>\n                    </li>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'all'}\" @click=\"changeFilter('all')\" _v-e87a91b0=\"\">\n                        All\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'active'}\" @click=\"changeFilter('active')\" _v-e87a91b0=\"\">\n                        Active\n                    </button>\n                    <button class=\"btn btn-default-hollow btn-xs\" :class=\"{ 'btn-primary-hollow' : filterBy == 'completed'}\" @click=\"changeFilter('completed')\" _v-e87a91b0=\"\">\n                        Completed\n                    </button>\n                    <li :class=\"{ 'disabled': pagination.current_page == pagination.total_pages }\" class=\"next\" _v-e87a91b0=\"\">\n                        <a aria-label=\"Next\" @click=\"page=pagination.current_page+1\" _v-e87a91b0=\"\">\n                            <span aria-hidden=\"true\" _v-e87a91b0=\"\"><span class=\"hidden-xs\" _v-e87a91b0=\"\">Next</span> » </span>\n                        </a>\n                    </li>\n                </ul>\n            </nav>\n        </div>\n    </div>\n    <p class=\"text-center\" _v-e87a91b0=\"\"><small class=\"text-muted\" _v-e87a91b0=\"\">Double-click to edit a todo.</small></p>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Todo\" small=\"true\" _v-e87a91b0=\"\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\" _v-e87a91b0=\"\">Are you sure you want to delete this Todo?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\" _v-e87a91b0=\"\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\" _v-e87a91b0=\"\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedTodo)\" _v-e87a91b0=\"\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -81233,7 +81910,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e87a91b0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],195:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81304,7 +81981,407 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f813726", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],196:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],203:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    props: ['id', 'payments', 'cost'],
+    name: 'admin-trip-costs-payments',
+    data: function data() {
+        return {
+            attemptedAddPayment: false,
+            toggleNewPayment: false,
+            showAddModal: false,
+            showEditModal: false,
+            selectedPayment: null,
+            deletePaymentModal: false,
+            newPayment: {
+                amount_owed: 0,
+                percent_owed: 0,
+                due_at: null,
+                upfront: false,
+                grace_period: 0
+            },
+            resource: this.$resource('costs/' + this.id + '/payments{/payment_id}')
+        };
+    },
+
+    watch: {
+        'selectedPayment': {
+            handler: function handler(val, oldVal) {
+                console.log(val);
+                if (val && val.amount_owed) {
+                    var max = this.calculateMaxAmount(val);
+                    if (val.amount_owed > max) val.amount_owed = this.cost.amount;
+                    val.percent_owed = val.amount_owed / this.cost.amount * 100;
+                    if (_.isFunction(this.$validate)) this.$validate('percent', true);
+                }
+
+                if (val && val.percent_owed) {
+                    var max = this.calculateMaxPercent(val);
+                    if (val.percent_owed > max) val.percent_owed = max;
+                    val.amount_owed = val.percent_owed / 100 * this.cost.amount;
+                    if (_.isFunction(this.$validate)) this.$validate('amount', true);
+                }
+            },
+            deep: true
+        },
+        'newPayment': {
+            handler: function handler(val, oldVal) {
+                console.log(val);
+                if (val && val.amount_owed) {
+                    var max = this.calculateMaxAmount(val);
+                    if (val.amount_owed > max) val.amount_owed = this.cost.amount;
+                    val.percent_owed = val.amount_owed / this.cost.amount * 100;
+                    if (_.isFunction(this.$validate)) this.$validate('percent', true);
+                }
+
+                if (val && val.percent_owed) {
+                    var max = this.calculateMaxPercent(val);
+                    if (val.percent_owed > max) val.percent_owed = max;
+                    val.amount_owed = val.percent_owed / 100 * this.cost.amount;
+                    if (_.isFunction(this.$validate)) this.$validate('amount', true);
+                }
+            },
+            deep: true
+        },
+        'showEditModal': function showEditModal(val, oldVal) {
+            this.$nextTick(function () {
+                // if edit modal closes, reset data
+                if (val !== oldVal && val === false) {
+                    this.resetPayment();
+                }
+            });
+        },
+        'showAddModal': function showAddModal(val, oldVal) {
+            this.$nextTick(function () {
+                // if add modal closes, reset data
+                if (val !== oldVal && val === false) {
+                    this.resetPayment();
+                }
+            });
+        }
+
+    },
+    methods: {
+        checkForErrorPaymentAdd: function checkForErrorPaymentAdd(field) {
+            return this.$TripPricingCostPaymentAdd && this.$TripPricingCostPaymentAdd[field.toLowerCase()].invalid && this.attemptedAddPayment;
+        },
+        checkForErrorPaymentEdit: function checkForErrorPaymentEdit(field) {
+            return this.$TripPricingCostPaymentEdit && this.$TripPricingCostPaymentEdit[field.toLowerCase()].invalid && this.attemptedAddPayment;
+        },
+        resetPayment: function resetPayment() {
+            this.newPayment = {
+                amount_owed: 0,
+                percent_owed: 0,
+                due_at: null,
+                upfront: false,
+                grace_period: 0
+            };
+            this.selectedPayment = null;
+        },
+        calculateMaxAmount: function calculateMaxAmount(thePayment) {
+            var max = this.cost.amount;
+            if (this.payments.length) {
+                this.payments.forEach(function (payment) {
+                    // must ignore current payment in editMode
+                    if (thePayment !== payment) {
+                        max -= payment.amount_owed;
+                    }
+                }, this);
+            }
+            return max;
+        },
+        calculateMaxPercent: function calculateMaxPercent(thePayment) {
+            var max = 100;
+            if (this.payments.length) {
+                this.payments.forEach(function (payment) {
+                    // must ignore current payment in editMode
+                    if (thePayment !== payment) {
+                        max -= payment.percent_owed;
+                    }
+                }, this);
+            }
+            return max;
+        },
+        checkCostsErrors: function checkCostsErrors() {
+            var errors = [];
+
+            if (!this.payments.length) {
+                errors.push('empty');
+            } else {
+                // cost payments must total full amount owed and percent owed
+                var amount = 0;
+                this.payments.forEach(function (payment, index) {
+                    amount += payment.amount_owed;
+                }, this);
+                // evaluate difference
+                if (amount != this.cost.amount) {
+                    errors.push('incomplete');
+                }
+            }
+
+            // no errors
+            errors.push(false);
+            this.costsErrors = errors;
+        },
+        editPayment: function editPayment(payment) {
+            this.showEditModal = true;
+            this.selectedPayment = payment;
+            this.selectedPayment.due_at = moment(payment.due_at).format('YYYY-MM-DD');
+        },
+        addPayment: function addPayment() {
+            this.attemptedAddPayment = true;
+            if (this.$TripPricingCostPaymentAdd.valid) {
+                this.$refs.spinner.show();
+                this.resource.save({}, this.newPayment).then(function (response) {
+                    this.payments.push(this.newPayment);
+                    this.resetPayment();
+                    this.showAddModal = false;
+                    this.attemptedAddPayment = false;
+                    this.$refs.spinner.hide();
+                });
+            }
+            this.checkCostsErrors();
+        },
+        updatePayment: function updatePayment() {
+            this.attemptedAddPayment = true;
+            if (this.$TripPricingCostPaymentEdit.valid) {
+                this.$refs.spinner.show();
+                this.resource.update({ payment_id: this.selectedPayment.id }, this.selectedPayment).then(function (response) {
+                    this.resetPayment();
+                    this.showEditModal = false;
+                    this.attemptedAddPayment = false;
+                    this.$refs.spinner.hide();
+                });
+            } else {
+                console.log('Errors');
+            }
+            this.checkCostsErrors();
+        },
+        confirmRemove: function confirmRemove(payment) {
+            this.selectedPayment = payment;
+            this.deletePaymentModal = true;
+        },
+        remove: function remove(payment) {
+            this.resource.delete({ payment_id: payment.id }).then(function (response) {
+                this.payments.$remove(payment);
+                this.selectedPayment = null;
+            });
+        }
+    },
+    ready: function ready() {
+        var self = this;
+        this.$root.$on('Cost:' + this.id + ':NewPayment', function (cost) {
+            self.showAddModal = true;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n<table class=\"table\">\n    <thead>\n    <tr>\n        <th>Amount</th>\n        <th>Percent</th>\n        <th>Due</th>\n        <th>Grace</th>\n        <th><i class=\"fa fa-cog\"></i></th>\n    </tr>\n    </thead>\n    <tbody>\n\n    <tr v-for=\"payment in payments|orderBy 'due_at'\">\n        <td>{{ payment.amount_owed|currency }}</td>\n        <td>{{ payment.percent_owed|number }}%</td>\n        <td>{{ payment.upfront ? 'Upfront' : payment.due_at|moment 'll' }}</td>\n        <td>{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period &gt; 1 ? 'days' : 'day') }}</td>\n        <td>\n            <a class=\"btn btn-default btn-xs\" @click=\"editPayment(payment)\"><i class=\"fa fa-pencil\"></i></a>\n            <a class=\"btn btn-danger btn-xs\" @click=\"confirmRemove(payment)\"><i class=\"fa fa-times\"></i></a>\n        </td>\n    </tr>\n    </tbody>\n</table>\n<modal title=\"New Payment\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCostPaymentAdd\">\n            <form class=\"form-inline\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <label for=\"amountOwed\">Owed</label>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentAdd('amount') }\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                            <input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(newPayment)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentAdd('percent') }\">\n                            <input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n                        </div>\n                    </div>\n                </div>\n                <br>\n                <div class=\"checkbox\">\n                    <label>\n                        <input type=\"checkbox\" v-model=\"newPayment.upfront\">\n                        Due upfront?\n                    </label>\n                </div>\n                <div class=\"row\" v-if=\"!newPayment.upfront\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\">\n                            <label for=\"dueAt\">Due</label>\n                            <input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorPaymentAdd('grace') }\">\n                            <label for=\"grace_period\">Grace Period</label>\n                            <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentAdd('grace') }\">\n                                <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                <span class=\"input-group-addon\">Days</span>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetPayment()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addPayment\">Add</button>\n    </div>\n\n</modal>\n<modal title=\"Edit Payment\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCostPaymentEdit\" v-if=\"selectedPayment\">\n            <form class=\"form-inline\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <label for=\"amountOwed\">Owed</label>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentEdit('amount') }\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                            <input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(selectedPayment)\" number=\"\" v-model=\"selectedPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentEdit('percent') }\">\n                            <input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"selectedPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n                            <span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n                        </div>\n                    </div>\n                </div>\n                <br>\n                <div class=\"checkbox\">\n                    <label>\n                        <input type=\"checkbox\" v-model=\"selectedPayment.upfront\">\n                        Due upfront?\n                    </label>\n                </div>\n                <div class=\"row\" v-if=\"!selectedPayment.upfront\">\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\">\n                            <label for=\"dueAt\">Due</label>\n                            <input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"selectedPayment.due_at\" required=\"\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorPaymentEdit('grace') }\">\n                            <label for=\"grace_period\">Grace Period</label>\n                            <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPaymentEdit('grace') }\">\n                                <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"selectedPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                <span class=\"input-group-addon\">Days</span>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, selectedPayment = null\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updatePayment\">Update</button>\n    </div>\n\n</modal>\n<modal class=\"text-center\" :show.sync=\"deletePaymentModal\" title=\"Delete Payment\" small=\"true\">\n    <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedPayment\">Are you sure you want to delete {{ selectedPayment.name }}?</div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deletePaymentModal = false\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deletePaymentModal = false,remove(selectedPayment)\">Confirm</button>\n    </div>\n</modal>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-43aa36d0", module.exports)
+  } else {
+    hotAPI.update("_v-43aa36d0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],204:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _adminTripCostsPayments = require('./admin-trip-costs-payments.vue');
+
+var _adminTripCostsPayments2 = _interopRequireDefault(_adminTripCostsPayments);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: 'admin-trip-costs',
+    props: ['id', 'assignment'],
+    components: { adminTripCostsPayments: _adminTripCostsPayments2.default },
+    data: function data() {
+        return {
+            costs: [],
+            selectedCost: null,
+            attemptedAddCost: false,
+            costsErrors: [],
+
+            newCost: {
+                cost_assignable_id: this.id,
+                cost_assignable_type: this.assignment,
+                name: '',
+                description: '',
+                active_at: '',
+                amount: 0,
+                type: '',
+                payments: [],
+                toggleNewPayment: false
+            },
+            showFilters: false,
+            showAddModal: false,
+            showEditModal: false,
+            deleteCostModal: false,
+            filters: {
+                type: ''
+            },
+            search: '',
+            sort: 'active_at',
+            resource: this.$resource('costs{/id}')
+        };
+    },
+
+    watch: {
+        // watch filters obj
+        'filters': {
+            handler: function handler(val) {
+                // console.log(val);
+                this.searchCosts();
+            },
+            deep: true
+        },
+
+        'search': function search(val) {
+            this.searchCosts();
+        },
+
+        'showEditModal': function showEditModal(val, oldVal) {
+            this.$nextTick(function () {
+                if (val !== oldVal && val === false) {
+                    this.selectedCost = null;
+                }
+            });
+        }
+    },
+    methods: {
+        checkForErrorCost: function checkForErrorCost(field) {
+            return this.$TripPricingCost && this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
+        },
+        checkCostsErrors: function checkCostsErrors() {
+            var errors = [];
+            this.costs.forEach(function (cost, index) {
+                // cost must have at least 1 payment
+                if (!cost.payments.length) {
+                    errors.push('empty');
+                } else {
+                    // cost payments must total full amount owed and percent owed
+                    var amount = 0;
+                    cost.payments.forEach(function (payment, index) {
+                        amount += payment.amount_owed;
+                    }, this);
+                    // evaluate difference
+                    if (amount != cost.amount) {
+                        errors.push('incomplete');
+                    }
+                }
+
+                // no errors
+                errors.push(false);
+            }, this);
+            this.costsErrors = errors;
+        },
+        resetCost: function resetCost() {
+            this.newCost = {
+                cost_assignable_id: this.id,
+                cost_assignable_type: this.assignment,
+                name: '',
+                description: '',
+                active_at: '',
+                amount: 0,
+                type: '',
+                payments: [],
+                toggleNewPayment: false
+            };
+        },
+        editCost: function editCost(cost) {
+            this.selectedCost = cost;
+            this.selectedCost.active_at = moment(cost.active_at).format('YYYY-MM-DD');
+            this.showEditModal = true;
+        },
+        confirmRemove: function confirmRemove(cost) {
+            this.selectedCost = cost;
+            this.deleteCostModal = true;
+        },
+        remove: function remove(cost) {
+            this.resource.delete({ id: cost.id }).then(function (response) {
+                this.costs.$remove(cost);
+                this.selectedCost = null;
+            });
+        },
+        addCost: function addCost() {
+            this.attemptedAddCost = true;
+            if (this.$TripPricingCost.valid) {
+                this.resource.save(this.newCost).then(function (response) {
+                    this.costs.push(response.data.data);
+                    this.resetCost();
+                    this.showAddModal = false;
+                    this.attemptedAddCost = false;
+                });
+            }
+            this.checkCostsErrors();
+        },
+        updateCost: function updateCost() {
+            this.attemptedAddCost = true;
+            if (this.$TripPricingCost.valid) {
+                this.resource.update({ id: this.selectedCost.id }, this.selectedCost).then(function (response) {
+                    $.extend(this.costs, this.selectedCost);
+                    this.selectedCost = null;
+                    this.attemptedAddCost = false;
+                    this.showEditModal = false;
+                });
+            }
+            this.checkCostsErrors();
+        },
+        resetFilter: function resetFilter() {
+            this.search = '';
+            this.sort = 'active_at';
+            this.filters = {
+                type: ''
+            };
+        },
+        searchCosts: function searchCosts() {
+            this.$refs.spinner.show();
+            this.resource.get({
+                include: 'payments',
+                assignment: this.assignment + '|' + this.id,
+                search: this.search,
+                sort: this.sort,
+                type: this.filters.type
+            }).then(function (response) {
+                this.costs = response.data.data;
+                this.$refs.spinner.hide();
+            });
+        },
+        addPayment: function addPayment(cost) {
+            this.$root.$emit('Cost:' + cost.id + ':NewPayment');
+        }
+    },
+    ready: function ready() {
+        this.searchCosts();
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n<aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n    <hr class=\"divider inv sm\">\n    <form class=\"col-sm-12\">\n        <div class=\"form-group\">\n            <select class=\"form-control input-sm\" v-model=\"filters.type\" style=\"width:100%;\">\n                <option value=\"\">Any Type</option>\n                <option value=\"incremental\">Incremental</option>\n                <option value=\"optional\">Optional</option>\n                <option value=\"static\">Static</option>\n            </select>\n        </div>\n\n        <hr class=\"divider inv sm\">\n        <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n    </form>\n</aside>\n<form class=\"panel-body form-inline text-right\" novalidate=\"\">\n    <div class=\"input-group input-group-sm\">\n        <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search for anything\">\n        <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n    </div>\n    <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=true\">Filters</button>\n    <a class=\"btn btn-primary btn-sm\" @click=\"showAddModal=true\">New <i class=\"fa fa-plus\"></i></a>\n</form>\n<hr class=\"divider sm\">\n<template v-for=\"cost in costs\">\n    <div class=\"panel-body\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <h4>{{ cost.name|capitalize }}</h4>\n            </div>\n            <div class=\"col-sm-6 text-right hidden-xs\">\n                <div style=\"padding: 0;\">\n                    <div role=\"group\" aria-label=\"...\">\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"addPayment(cost)\"><i class=\"fa fa-plus\"></i> New Payment</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editCost(cost)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(cost)\"><i class=\"fa fa-trash\"></i> Delete</a>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-sm-6 text-center visible-xs\">\n                <div style=\"padding: 0;\">\n                    <div role=\"group\" aria-label=\"...\">\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"addPayment(cost)\"><i class=\"fa fa-plus\"></i> New Payment</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editCost(cost)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                        <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(cost)\"><i class=\"fa fa-trash\"></i> Delete</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-sm-12\">\n                <p class=\"small\">{{ cost.description }}</p>\n            </div>\n        </div>\n        <hr class=\"divider\">\n        <div class=\"row\">\n            <div class=\"col-sm-4 text-center\">\n                <label>Cost Type</label>\n                <p>{{ cost.type|capitalize }}</p>\n            </div>\n            <div class=\"col-sm-4 text-center\">\n                <label>Active Date</label>\n                <p>{{ cost.active_at|moment 'll' }}</p>\n            </div>\n            <div class=\"col-sm-4 text-center\">\n                <label>Cost</label>\n                <p>{{ cost.amount|currency }}</p>\n            </div>\n        </div>\n        <hr class=\"divider\">\n        <admin-trip-costs-payments :id=\"cost.id\" :cost=\"cost\" :payments.sync=\"cost.payments.data\"></admin-trip-costs-payments>\n    </div>\n    <hr class=\"divider\">\n</template>\n\n<modal title=\"New Cost\" :show.sync=\"showAddModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCost\" v-if=\"!selectedCost\">\n            <form class=\"form\" novalidate=\"\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n                            <label for=\"cost_name\">Name</label>\n                            <input type=\"text\" class=\"form-control\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n                            <label for=\"cost_description\">Description</label>\n                            <textarea class=\"form-control\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n                            <label for=\"cost_type\">Type</label>\n                            <select id=\"cost_type\" class=\"form-control\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n                                <option value=\"\">-- select --</option>\n                                <option value=\"static\">Static</option>\n                                <option value=\"incremental\">Incremental</option>\n                                <option value=\"optional\">Optional</option>\n                            </select>\n                        </div>\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n                                    <label for=\"newCost_active_at\">Active</label>\n                                    <br>\n                                    <datepicker :value.sync=\"newCost.active_at\" format=\"yyyy-MM-dd\" :clear-button=\"true\">\n                                    </datepicker>\n                                    <input type=\"date\" id=\"newCost_active_at\" class=\"form-control hidden\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n                                </div>\n\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n                                    <label for=\"newCost_amount\">Amount</label>\n                                    <div class=\"input-group\">\n                                        <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                                        <input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetCost()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addCost(newCost)\">Add</button>\n    </div>\n\n</modal>\n<modal title=\"Edit Cost\" :show.sync=\"showEditModal\" effect=\"fade\" width=\"800\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripPricingCost\" v-if=\"selectedCost\">\n            <form class=\"form\" novalidate=\"\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n                            <label for=\"cost_name\">Name</label>\n                            <input type=\"text\" class=\"form-control\" id=\"cost_name\" v-model=\"selectedCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n                            <label for=\"cost_description\">Description</label>\n                            <textarea class=\"form-control\" id=\"cost_description\" v-model=\"selectedCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n                        </div>\n                        <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n                            <label for=\"cost_type\">Type</label>\n                            <select id=\"cost_type\" class=\"form-control\" v-model=\"selectedCost.type\" v-validate:costtype=\"{ required: true }\">\n                                <option value=\"\">-- select --</option>\n                                <option value=\"static\">Static</option>\n                                <option value=\"incremental\">Incremental</option>\n                                <option value=\"optional\">Optional</option>\n                            </select>\n                        </div>\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n                                    <label for=\"selectedCost_active_at\">Active</label>\n                                    <br>\n                                    <datepicker :value.sync=\"selectedCost.active_at\" format=\"yyyy-MM-dd\" :clear-button=\"true\">\n                                    </datepicker>\n                                    <input type=\"date\" id=\"selectedCost_active_at\" class=\"form-control hidden\" v-model=\"selectedCost.active_at\" v-validate:costactive=\"{required: true}\">\n                                </div>\n\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n                                    <label for=\"selectedCost_amount\">Amount</label>\n                                    <div class=\"input-group\">\n                                        <span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n                                        <input type=\"number\" number=\"\" id=\"selectedCost_amount\" class=\"form-control\" v-model=\"selectedCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, selectedCost = null\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updateCost(selectedCost)\">Update</button>\n    </div>\n\n</modal>\n\n<modal class=\"text-center\" :show.sync=\"deleteCostModal\" title=\"Delete Cost\" small=\"true\">\n    <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedCost\">Are you sure you want to delete {{ selectedCost.name }}?</div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteCostModal = false\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteCostModal = false,remove(selectedCost)\">Confirm</button>\n    </div>\n</modal>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-05c36332", module.exports)
+  } else {
+    hotAPI.update("_v-05c36332", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"./admin-trip-costs-payments.vue":203,"vue":124,"vue-hot-reload-api":119}],205:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -81321,26 +82398,18 @@ var _settings = require('./create/settings.vue');
 
 var _settings2 = _interopRequireDefault(_settings);
 
-var _pricing = require('./create/pricing.vue');
-
-var _pricing2 = _interopRequireDefault(_pricing);
-
-var _requirements = require('./create/requirements.vue');
-
-var _requirements2 = _interopRequireDefault(_requirements);
-
-var _deadlines = require('./create/deadlines.vue');
-
-var _deadlines2 = _interopRequireDefault(_deadlines);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import pricing from './create/pricing.vue';
+// import reqs from './create/requirements.vue';
+// import deadlines from './create/deadlines.vue';
 
 exports.default = {
 	name: 'campaign-trip-create-wizard',
 	props: ['campaignId', 'countryCode'],
 	data: function data() {
 		return {
-			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }, { name: 'Pricing', view: 'step3', form: '$TripPricing', valid: null, complete: false }, { name: 'Requirements', view: 'step4', form: '$TripReqs', valid: null, complete: false }, { name: 'Other Deadlines', view: 'step5', form: '$TripDeadlines', valid: null, complete: false }],
+			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }],
 			currentStep: null,
 			canContinue: false,
 			wizardComplete: false,
@@ -81361,10 +82430,7 @@ exports.default = {
 	},
 	components: {
 		'step1': _details2.default,
-		'step2': _settings2.default,
-		'step3': _pricing2.default,
-		'step4': _requirements2.default,
-		'step5': _deadlines2.default
+		'step2': _settings2.default
 	},
 	methods: {
 		back: function back() {
@@ -81414,7 +82480,7 @@ exports.default = {
 
 			var resource = this.$resource('trips');
 			resource.save(null, this.wizardData).then(function (resp) {
-				window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
+				window.location.href = '/admin' + resp.data.data.links[0].uri;
 			}, function (error) {
 				console.log(error);
 			});
@@ -81433,15 +82499,6 @@ exports.default = {
 			this.currentStep.complete = val;
 		},
 		'settings': function settings(val) {
-			this.currentStep.complete = val;
-		},
-		'pricing': function pricing(val) {
-			this.currentStep.complete = val;
-		},
-		'reqs': function reqs(val) {
-			this.currentStep.complete = val;
-		},
-		'deadlines': function deadlines(val) {
 			this.currentStep.complete = this.wizardComplete = val;
 		}
 	}
@@ -81462,7 +82519,131 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4eaab280", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./create/deadlines.vue":203,"./create/details.vue":204,"./create/pricing.vue":205,"./create/requirements.vue":206,"./create/settings.vue":207,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],197:[function(require,module,exports){
+},{"./create/details.vue":216,"./create/settings.vue":217,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],206:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-trip-deadlines',
+    props: ['id', 'assignment'],
+    data: function data() {
+        return {
+            deadlines: [],
+            selectedDeadline: null,
+            showAddModal: false,
+            showEditModal: false,
+            showDeleteModal: false,
+            attemptedAddDeadline: false,
+            attemptedEditDeadline: false,
+            newDeadline: {
+                deadline_assignable_id: this.id,
+                deadline_assignable_type: this.assignment,
+                name: '',
+                item_type: '',
+                date: null,
+                grace_period: 0,
+                enforced: false
+            },
+            resource: this.$resource('deadlines{/id}'),
+            sort: 'date',
+            direction: 'asc'
+        };
+    },
+
+    methods: {
+        checkForAddError: function checkForAddError(field) {
+            return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
+        },
+        checkForEditError: function checkForEditError(field) {
+            return this.$TripDeadlinesEdit[field.toLowerCase()].invalid && this.attemptedEditDeadline;
+        },
+        resetDeadline: function resetDeadline() {
+            this.newDeadline = {
+                deadline_assignable_id: this.id,
+                deadline_assignable_type: this.assignment,
+                item: '',
+                item_type: '',
+                date: null,
+                grace_period: 0,
+                enforced: false
+            };
+        },
+        addDeadline: function addDeadline() {
+            this.attemptedAddDeadline = true;
+            if (this.$TripDeadlinesCreate.valid) {
+                this.$refs.spinner.show();
+                this.resource.save({}, this.newDeadline).then(function (response) {
+                    this.deadlines.push(response.data.data);
+                    this.resetDeadline();
+                    this.attemptedAddDeadline = false;
+                    this.showAddModal = false;
+                    this.searchDeadlines();
+                });
+            }
+        },
+        updateDeadline: function updateDeadline() {
+            this.attemptedEditDeadline = true;
+            if (this.$TripDeadlinesEdit.valid) {
+                this.$refs.spinner.show();
+                this.resource.update({ id: this.selectedDeadline.id }, this.selectedDeadline).then(function (response) {
+                    this.attemptedEditDeadline = false;
+                    this.showEditModal = false;
+                    this.searchDeadlines();
+                });
+            }
+        },
+        editDeadline: function editDeadline(deadline) {
+            this.selectedDeadline = deadline;
+            this.selectedDeadline.date = moment(deadline.date).format('YYYY-MM-DD');
+            this.showEditModal = true;
+        },
+        confirmRemove: function confirmRemove(deadline) {
+            this.selectedDeadline = deadline;
+            this.showDeleteModal = true;
+        },
+        remove: function remove(deadline) {
+            this.$refs.spinner.show();
+            this.resource.delete({ id: deadline.id }).then(function (response) {
+                this.deadlines.$remove(deadline);
+                this.selectedDeadline = null;
+                this.searchDeadlines();
+            });
+        },
+        searchDeadlines: function searchDeadlines() {
+            this.$refs.spinner.show();
+            this.resource.get({
+                assignment: this.assignment + '|' + this.id,
+                search: this.search,
+                sort: this.sort + '|' + this.direction
+            }).then(function (response) {
+                this.deadlines = response.data.data;
+                this.$refs.spinner.hide();
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchDeadlines();
+        var self = this;
+        this.$root.$on('NewDeadline', function () {
+            self.showAddModal = true;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n<div class=\"panel-body\" v-for=\"deadline in deadlines\">\n    <div class=\"row\">\n        <div class=\"col-xs-12 text-right hidden-xs\">\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editDeadline(deadline)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(deadline)\"><i class=\"fa fa-trash\"></i> Delete</a>\n        </div>\n        <div class=\"col-xs-12 text-center visible-xs\">\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editDeadline(deadline)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n            <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(deadline)\"><i class=\"fa fa-trash\"></i> Delete</a>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-xs-8\">\n            <h5><a href=\"#\">{{ deadline.name|capitalize }}</a></h5>\n            <h6><small>Enforced: {{ deadline.enforced ? 'Yes' : 'No' }}</small></h6>\n        </div>\n        <div class=\"col-xs-4 text-right\">\n            <h5><i class=\"fa fa-calendar\"></i> {{ deadline.date | moment 'll' }}</h5>\n            <h6><small>Grace Period: {{ deadline.grace_period }} {{ deadline.grace_period &gt; 1 ? 'days' : 'day' }}</small></h6>\n        </div>\n    </div><!-- end row -->\n    <hr class=\"divider\">\n</div>\n<modal class=\"text-center\" :show.sync=\"showAddModal\" title=\"Add Deadline\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripDeadlinesCreate\">\n            <form class=\"form\" novalidate=\"\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForAddError('name')}\">\n                            <label for=\"name\">Name</label>\n                            <input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\" v-validate:name=\"{required: true}\">\n                        </div>\n\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                    <label for=\"grace_period\">Grace Period</label>\n                                    <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                        <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                        <span class=\"input-group-addon\">Days</span>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForAddError('due')}\">\n                                    <label for=\"date\">Due</label>\n                                    <input type=\"date\" id=\"date\" class=\"form-control input-sm\" v-model=\"newDeadline.date\" v-validate:due=\"{required: true}\">\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <br>\n                        <div class=\"checkbox\">\n                            <label>\n                                <input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n                                Enforced?\n                            </label>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetDeadline()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addDeadline\">Add</button>\n    </div>\n</modal>\n<modal class=\"text-center\" :show.sync=\"showEditModal\" title=\"Edit Deadline\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n        <validator name=\"TripDeadlinesEdit\">\n            <form class=\"form\" novalidate=\"\" v-if=\"selectedDeadline\">\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"form-group\" :class=\"{'has-error': checkForEditError('name')}\">\n                            <label for=\"name\">Name</label>\n                            <input type=\"text\" id=\"name\" v-model=\"selectedDeadline.name\" class=\"form-control input-sm\" v-validate:name=\"{required: true}\">\n                        </div>\n\n                        <div class=\"row\">\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                    <label for=\"grace_period\">Grace Period</label>\n                                    <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                        <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"selectedDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                        <span class=\"input-group-addon\">Days</span>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"col-sm-6\">\n                                <div class=\"form-group\" :class=\"{'has-error': checkForEditError('due')}\">\n                                    <label for=\"date\">Due</label>\n                                    <input type=\"date\" id=\"date\" class=\"form-control input-sm\" v-model=\"selectedDeadline.date\" v-validate:due=\"{required: true}\">\n                                </div>\n\n                            </div>\n                        </div>\n\n                        <br>\n                        <div class=\"checkbox\">\n                            <label>\n                                <input type=\"checkbox\" v-model=\"selectedDeadline.enforced\">\n                                Enforced?\n                            </label>\n                        </div>\n                    </div>\n                </div>\n            </form>\n        </validator>\n    </div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, resetDeadline()\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updateDeadline\">Update</button>\n    </div>\n</modal>\n<modal class=\"text-center\" :show.sync=\"showDeleteModal\" title=\"Delete Deadline\" small=\"true\">\n    <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedDeadline\">Are you sure you want to delete {{ selectedDeadline.name }}?</div>\n    <div slot=\"modal-footer\" class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showDeleteModal = false\">Cancel</button>\n        <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"showDeleteModal = false,remove(selectedDeadline)\">Confirm</button>\n    </div>\n</modal>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-2f3764f2", module.exports)
+  } else {
+    hotAPI.update("_v-2f3764f2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81498,7 +82679,70 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1f88c822", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],198:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],208:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+
+var marked = require('marked');
+exports.default = {
+    name: 'admin-trip-description',
+    props: ['id'],
+    data: function data() {
+        return {
+            // trip: null,
+            description: '',
+            resource: this.$resource('trips{/id}'),
+            showSuccess: false
+        };
+    },
+
+    filters: {
+        marked: marked
+    },
+    methods: {
+        checkForError: function checkForError(field) {
+            // if user clicked continue button while the field is invalid trigger error styles
+            return this.$TripDescription[field.toLowerCase()].invalid && this.attemptedContinue;
+        },
+        update: function update() {
+            // var trip = this.trip;
+            // trip.description = this.description;
+
+            this.$refs.spinner.show();
+            this.resource.update({ id: this.id }, {
+                description: this.description
+            }).then(function (response) {
+                this.trip = response.data.data;
+                this.description = response.data.data.description;
+                this.$refs.spinner.hide();
+                this.showSuccess = true;
+            });
+        }
+    },
+    ready: function ready() {
+        this.resource.get({ id: this.id }).then(function (response) {
+            // this.trip = response.data.data;
+            this.description = response.data.data.description;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n<div class=\"panel-body\">\n    <validator name=\"TripDescription\">\n        <form>\n            <div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n                <label for=\"description\" class=\"col-sm-2 control-label\">\n                    Description\n                    <button class=\"btn btn-default btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#markdownPrev\" aria-expanded=\"false\" aria-controls=\"markdownPrev\">\n                        Preview\n                    </button>\n                    <hr class=\"divider inv sm\">\n                    <button class=\"btn btn-primary btn-xs\" type=\"button\" @click=\"update\">\n                        Update\n                    </button>\n\n                </label>\n                <div class=\"col-sm-10\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                                <textarea rows=\"5\" v-model=\"description\" class=\"form-control\" v-validate:description=\"{ required: true}\"></textarea>\n                        </div>\n\n                    </div>\n\n                </div>\n            </div>\n            <hr class=\"divider inv\">\n        </form>\n    </validator>\n    <div class=\"collapse\" id=\"markdownPrev\" v-html=\"description | marked\"></div>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>Trip Description Updated!</p>\n    </alert>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-377e82e8", module.exports)
+  } else {
+    hotAPI.update("_v-377e82e8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81591,7 +82835,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-07829d12", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],199:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],210:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -81612,26 +82856,18 @@ var _settings = require('./edit/settings.vue');
 
 var _settings2 = _interopRequireDefault(_settings);
 
-var _pricing = require('./edit/pricing.vue');
-
-var _pricing2 = _interopRequireDefault(_pricing);
-
-var _requirements = require('./edit/requirements.vue');
-
-var _requirements2 = _interopRequireDefault(_requirements);
-
-var _deadlines = require('./edit/deadlines.vue');
-
-var _deadlines2 = _interopRequireDefault(_deadlines);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import pricing from './edit/pricing.vue';
+// import reqs from './edit/requirements.vue';
+// import deadlines from './edit/deadlines.vue';
 
 exports.default = {
 	name: 'campaign-trip-edit-wizard',
 	props: ['tripId'],
 	data: function data() {
 		return {
-			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }, { name: 'Pricing', view: 'step3', form: '$TripPricing', valid: null, complete: false }, { name: 'Requirements', view: 'step4', form: '$TripReqs', valid: null, complete: false }, { name: 'Other Deadlines', view: 'step5', form: '$TripDeadlines', valid: null, complete: false }],
+			stepList: [{ name: 'Details', view: 'step1', form: '$TripDetails', valid: null, complete: false }, { name: 'Registration Settings', view: 'step2', form: '$TripSettings', valid: null, complete: false }],
 			currentStep: null,
 			canContinue: false,
 			wizardComplete: false,
@@ -81649,10 +82885,7 @@ exports.default = {
 	},
 	components: {
 		'step1': _details2.default,
-		'step2': _settings2.default,
-		'step3': _pricing2.default,
-		'step4': _requirements2.default,
-		'step5': _deadlines2.default
+		'step2': _settings2.default
 	},
 	methods: (0, _defineProperty3.default)({
 		back: function back() {
@@ -81711,8 +82944,8 @@ exports.default = {
 	created: function created() {
 		this.currentStep = this.stepList[0];
 
-		this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines' }).then(function (trip) {
-			var trip = trip.data.data;
+		this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines' }).then(function (response) {
+			var trip = response.data.data;
 			$.extend(trip, {
 				type: this.type,
 				group_id: this.group_id
@@ -81746,15 +82979,6 @@ exports.default = {
 			this.currentStep.complete = val;
 		},
 		'settings': function settings(val) {
-			this.currentStep.complete = val;
-		},
-		'pricing': function pricing(val) {
-			this.currentStep.complete = val;
-		},
-		'reqs': function reqs(val) {
-			this.currentStep.complete = val;
-		},
-		'deadlines': function deadlines(val) {
 			this.currentStep.complete = this.wizardComplete = val;
 		}
 	}
@@ -81775,7 +82999,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-1684d064", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./edit/deadlines.vue":208,"./edit/details.vue":209,"./edit/pricing.vue":210,"./edit/requirements.vue":211,"./edit/settings.vue":212,"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],200:[function(require,module,exports){
+},{"./edit/details.vue":218,"./edit/settings.vue":219,"babel-runtime/helpers/defineProperty":16,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81880,7 +83104,131 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9f5ddb6a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],201:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],212:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    name: 'admin-trip-requirements',
+    props: ['id', 'requester'],
+    data: function data() {
+        return {
+            requirements: [],
+            selectedRequirement: null,
+            showAddModal: false,
+            showEditModal: false,
+            showDeleteModal: false,
+            attemptedAddRequirement: false,
+            attemptedEditRequirement: false,
+            newRequirement: {
+                requester_id: this.id,
+                requester_type: this.requester,
+                name: '',
+                document_type: '',
+                due_at: null,
+                grace_period: 0
+            },
+            resource: this.$resource('requirements{/id}'),
+            documentNames: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Testimony', 'Arrival Designation', 'Itinerary'],
+            documentTypes: ['medical_releases', 'passports', 'visas', 'referrals', 'credentials', 'arrival_designation', 'essays'],
+            sort: 'due_at',
+            direction: 'asc'
+        };
+    },
+
+    methods: {
+        checkForAddError: function checkForAddError(field) {
+            return this.$TripRequirementsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
+        },
+        checkForEditError: function checkForEditError(field) {
+            return this.$TripRequirementsEdit[field.toLowerCase()].invalid && this.attemptedEditRequirement;
+        },
+        resetRequirement: function resetRequirement() {
+            this.newRequirement = {
+                requester_id: this.id,
+                requester_type: 'trip',
+                name: '',
+                document_type: '',
+                due_at: null,
+                grace_period: 0
+            };
+        },
+        addRequirement: function addRequirement() {
+            this.attemptedAddRequirement = true;
+            if (this.$TripRequirementsCreate.valid) {
+                this.$refs.spinner.show();
+                this.resource.save({}, this.newRequirement).then(function (response) {
+                    this.requirements.push(response.data.data);
+                    this.resetRequirement();
+                    this.attemptedAddRequirement = false;
+                    this.showAddModal = false;
+                    this.searchRequirements();
+                });
+            }
+        },
+        updateRequirement: function updateRequirement() {
+            this.attemptedEditRequirement = true;
+            if (this.$TripRequirementsEdit.valid) {
+                this.$refs.spinner.show();
+                this.resource.update({ id: this.selectedRequirement.id }, this.selectedRequirement).then(function (response) {
+                    this.attemptedEditRequirement = false;
+                    this.showEditModal = false;
+                    this.searchRequirements();
+                });
+            }
+        },
+        editRequirement: function editRequirement(requirement) {
+            this.selectedRequirement = requirement;
+            this.selectedRequirement.due_at = moment(requirement.due_at).format('YYYY-MM-DD');
+            this.showEditModal = true;
+        },
+        confirmRemove: function confirmRemove(requirement) {
+            this.selectedRequirement = requirement;
+            this.showDeleteModal = true;
+        },
+        remove: function remove(requirement) {
+            this.$refs.spinner.show();
+            this.resource.delete({ id: requirement.id }).then(function (response) {
+                this.requirements.$remove(requirement);
+                this.selectedRequirement = null;
+                this.searchRequirements();
+            });
+        },
+        searchRequirements: function searchRequirements() {
+            this.$refs.spinner.show();
+            this.resource.get({
+                requester: this.requester + '|' + this.id,
+                search: this.search,
+                sort: this.sort + '|' + this.direction
+            }).then(function (response) {
+                this.requirements = response.data.data;
+                this.$refs.spinner.hide();
+            });
+        }
+    },
+    ready: function ready() {
+        this.searchRequirements();
+        var self = this;
+        this.$root.$on('NewRequirement', function () {
+            self.showAddModal = true;
+        });
+    }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n    <spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n    <div class=\"panel-body\" v-for=\"requirement in requirements\">\n        <div class=\"row\">\n            <div class=\"col-xs-12 text-right hidden-xs\">\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editRequirement(requirement)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(requirement)\"><i class=\"fa fa-trash\"></i> Delete</a>\n            </div>\n            <div class=\"col-xs-12 text-center visible-xs\">\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"editRequirement(requirement)\"><i class=\"fa fa-pencil\"></i> Edit</a>\n                <a class=\"btn btn-xs btn-default-hollow small\" @click=\"confirmRemove(requirement)\"><i class=\"fa fa-trash\"></i> Delete</a>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-xs-8\">\n                <h5><a href=\"#\">{{ requirement.name|capitalize }}</a></h5>\n                <h6><small>Type: {{ requirement.document_type }}</small></h6>\n            </div>\n            <div class=\"col-xs-4 text-right\">\n                <h5><i class=\"fa fa-calendar\"></i> {{ requirement.due_at|moment 'll' }} </h5>\n                <h6><small>Grace Period: {{ requirement.grace_period }} {{ requirement.grace_period &gt; 1 ? 'days' : 'day' }}</small></h6>\n            </div>\n        </div><!-- end row -->\n        <hr class=\"divider\">\n    </div>\n    <modal class=\"text-center\" :show.sync=\"showAddModal\" title=\"Add Requirement\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"TripRequirementsCreate\">\n                <form class=\"form\" novalidate=\"\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForAddError('name')}\">\n                                        <label for=\"name\">Name</label>\n                                        <select id=\"name\" class=\"form-control input-sm\" v-model=\"newRequirement.name\" v-validate:name=\"{ required: true }\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentNames\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\">\n                                        <label for=\"type\">Document Type</label>\n                                        <select id=\"type\" class=\"form-control input-sm\" v-model=\"newRequirement.document_type\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentTypes\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForAddError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newRequirement.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForAddError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newRequirement.due_at\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newRequirement.enforced\">\n\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>-->\n                        </div>\n                    </div>\n                </form>\n            </validator>\n        </div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showAddModal = false, resetRequirement()\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"addRequirement\">Add</button>\n        </div>\n    </modal>\n    <modal class=\"text-center\" :show.sync=\"showEditModal\" title=\"Edit Requirement\">\n        <div slot=\"modal-body\" class=\"modal-body\">\n            <validator name=\"TripRequirementsEdit\">\n                <form class=\"form\" novalidate=\"\" v-if=\"selectedRequirement\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForEditError('name')}\">\n                                        <label for=\"name\">Name</label>\n                                        <select id=\"name\" class=\"form-control input-sm\" v-model=\"selectedRequirement.name\" v-validate:name=\"{ required: true }\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentNames\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\">\n                                        <label for=\"type\">Document Type</label>\n                                        <select id=\"type\" class=\"form-control input-sm\" v-model=\"selectedRequirement.document_type\">\n                                            <option value=\"\">-- select --</option>\n                                            <option :value=\"option\" v-for=\"option in documentTypes\">{{option}}</option>\n                                        </select>\n                                    </div>\n                                </div>\n                            </div>\n\n                            <div class=\"row\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                        <label for=\"grace_period\">Grace Period</label>\n                                        <div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForEditError('grace') }\">\n                                            <input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"selectedRequirement.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n                                            <span class=\"input-group-addon\">Days</span>\n                                        </div>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"form-group\" :class=\"{'has-error': checkForEditError('due')}\">\n                                        <label for=\"due_at\">Due</label>\n                                        <input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"selectedRequirement.due_at\" v-validate:due=\"{required: true}\">\n                                    </div>\n\n                                </div>\n                            </div>\n\n                            <br>\n                            <!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newRequirement.enforced\">\n\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t</div>-->\n                        </div>\n                    </div>\n                </form>\n\n            </validator>\n        </div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showEditModal = false, resetRequirement()\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"updateRequirement\">Update</button>\n        </div>\n    </modal>\n    <modal class=\"text-center\" :show.sync=\"showDeleteModal\" title=\"Delete Requirement\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedRequirement\">Are you sure you want to delete {{ selectedRequirement.name }}?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"showDeleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"showDeleteModal = false,remove(selectedRequirement)\">Confirm</button>\n        </div>\n    </modal>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-99ed9158", module.exports)
+  } else {
+    hotAPI.update("_v-99ed9158", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -81953,7 +83301,92 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-25146f20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],202:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],214:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	name: 'admin-trip-todos',
+	props: ['id'],
+	data: function data() {
+		return {
+			newTodo: '',
+			todos: [],
+			resource: this.$resource('trips/' + this.id + '/todos'),
+			newMode: false,
+			// editMode: false,
+			showError: false,
+			selectedTodo: null,
+			deleteModal: false,
+			errorMessage: null
+		};
+	},
+
+	methods: {
+		reset: function reset() {
+			this.newMode = false;
+			this.editMode = false;
+			this.newTodo = '';
+		},
+		createTodo: function createTodo() {
+			if (!this.newTodo) return;
+			this.todos.push(this.newTodo);
+			this.$refs.spinner.show();
+			this.resource.save({}, { todos: this.todos }).then(function (response) {
+				this.todos = response.data.data;
+				this.reset();
+				this.$refs.spinner.hide();
+			}).error(function () {
+				this.errorMessage = 'Unable to delete todo.';
+				this.showError = true;
+				this.$refs.spinner.hide();
+			});
+		},
+		remove: function remove() {
+			this.todos.$remove(this.selectedTodo);
+			this.$refs.spinner.show();
+			this.resource.save({}, { todos: this.todos }).then(function (response) {
+				this.todos = response.data.data;
+				this.reset();
+				this.$refs.spinner.hide();
+			}).error(function () {
+				this.errorMessage = 'Unable to delete todo.';
+				this.showError = true;
+				this.$refs.spinner.hide();
+			});
+		},
+		getTodos: function getTodos() {
+			this.$refs.spinner.show();
+			this.resource.get().then(function (response) {
+				this.todos = response.data.data;
+				this.$refs.spinner.hide();
+			});
+		}
+	},
+	ready: function ready() {
+		this.getTodos();
+
+		var self = this;
+		this.$root.$on('NewTodo', function () {
+			self.newMode = true;
+		});
+	}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\t<spinner v-ref:spinner=\"\" size=\"md\" text=\"Loading\"></spinner>\n\t<alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n\t\t<span class=\"icon-info-circled alert-icon-float-left\"></span>\n\t\t<strong>Oh No!</strong>\n\t\t<p>{{ errorMessage }}</p>\n\t</alert>\n\t<div class=\"list-group\">\n\t\t<div class=\"list-group-item\" v-if=\"newMode\">\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-2 col-sm-1 text-muted\">\n\t\t\t\t\t<i class=\"fa fa-lg fa-plus-square-o\" style=\"margin-right: 10px\"></i>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-xs-10 col-sm-11\">\n\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" v-model=\"newTodo\" placeholder=\"What needs to be done?\" @keyup.enter=\"createTodo\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div v-for=\"todo in todos\" class=\"list-group-item\">\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-xs-10\">\n\t\t\t\t\t{{ todo }}\n\t\t\t\t</div>\n\t\t\t\t<div class=\"col-xs-2 text-right\">\n\t\t\t\t\t<!--<tooltip content=\"Edit\">\n\t\t\t\t\t\t<i class=\"fa fa-pencil fa-lg text-muted remove-todo\"\n\t\t\t\t\t\t   @click=\"selectedTodo = todo,editMode = true\">\n\t\t\t\t\t\t</i>\n\t\t\t\t\t</tooltip>-->\n\t\t\t\t\t<tooltip content=\"Delete\">\n\t\t\t\t\t\t<i class=\"fa fa-trash fa-lg text-muted remove-todo\" @click=\"selectedTodo = todo,deleteModal = true\">\n\t\t\t\t\t\t</i>\n\t\t\t\t\t</tooltip>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n    </div>\n\t<modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Todo\" small=\"true\">\n\t\t<div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Todo?</div>\n\t\t<div slot=\"modal-footer\" class=\"modal-footer\">\n\t\t\t<button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n\t\t\t<button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedTodo)\">Confirm</button>\n\t\t</div>\n\t</modal>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-876de34e", module.exports)
+  } else {
+    hotAPI.update("_v-876de34e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":124,"vue-hot-reload-api":119}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82024,85 +83457,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-41204f31", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],203:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-deadlines',
-	data: function data() {
-		return {
-			toggleNewDeadline: false,
-			attemptedAddDeadline: false,
-			attemptedContinue: false,
-
-			// deadlines data
-			todos: [],
-			deadlines: [],
-			newDeadline: {
-				name: '',
-				date: null,
-				grace_period: 0,
-				enforced: false
-			}
-		};
-	},
-
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				todos: this.todos,
-				deadlines: this.deadlines
-			});
-		},
-		onValid: function onValid() {
-			this.populateWizardData();
-			this.$dispatch('deadlines', true);
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
-		},
-		resetDeadline: function resetDeadline() {
-			this.newDeadline = {
-				item: '',
-				item_type: '',
-				due_at: null,
-				grace_period: 0,
-				enforced: false
-			};
-		},
-		addDeadline: function addDeadline() {
-			this.attemptedAddDeadline = true;
-			if (this.$TripDeadlinesCreate.valid) {
-				this.deadlines.push(this.newDeadline);
-				this.resetDeadline();
-				this.toggleNewDeadline = false;
-				this.attemptedAddDeadline = false;
-			}
-		}
-	},
-	activate: function activate(done) {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		this.$dispatch('deadlines', true);
-		done();
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDeadlines\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDeadlines\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Deadlines</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewDeadline=!toggleNewDeadline\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Deadline\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewDeadline\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Deadline\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripDeadlinesCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewDeadline=false\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addDeadline()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Deadline\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"deadline in deadlines|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{deadline.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.due_at|moment}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"deadlines.$remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-8ed335c4", module.exports)
-  } else {
-    hotAPI.update("_v-8ed335c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],204:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],216:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#TripDetailsForm .form-horizontal .radio, .form-horizontal .checkbox {\n\tmin-height: 24px;\n\tpadding-top: 0;\n}\n")
 'use strict';
@@ -82200,7 +83555,7 @@ exports.default = {
 	}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDetails\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDetailsForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Campaign</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<p>{{$parent.campaign.name|capitalize}}</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Group</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select class=\"form-control\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('description') }\">\n\t\t\t\t\t<label for=\"description\" class=\"col-sm-2 control-label\">\n\t\t\t\t\t\tDescription\n\t\t\t\t\t\t<button class=\"btn btn-primary btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#markdownPrev\" aria-expanded=\"false\" aria-controls=\"markdownPrev\">\n\t\t\t\t\t\t\tPreview\n\t\t\t\t\t\t</button>\n\n\t\t\t\t\t</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t<textarea name=\"description\" id=\"description\" rows=\"5\" v-model=\"description\" class=\"form-control\" v-validate:description=\"{ required: true}\"></textarea>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-12 collapse\" id=\"markdownPrev\">\n\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t<div class=\"well\" v-html=\"description | marked\"></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"full\">Full</option>\n\t\t\t\t\t\t\t<option value=\"media\">Media</option>\n\t\t\t\t\t\t\t<option value=\"medical\">Medical</option>\n\t\t\t\t\t\t\t<option value=\"short\">Short</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('prospects') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Perfect For</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"group\" :value.sync=\"prospectsObj\" :options=\"prospectsList\" label=\"name\" placeholder=\"Select Prospects\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" multiple=\"\" v-model=\"prospects\" v-validate:prospects=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"prospect.value\" v-for=\"prospect in prospectsList\">{{prospect.name}}\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('difficulty') }\">\n\t\t\t\t\t<label for=\"difficulty\" class=\"col-sm-2 control-label\">Difficulty</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"difficulty\" class=\"form-control input-sm\" v-model=\"difficulty\" v-validate:difficulty=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"level_1\">Level 1</option>\n\t\t\t\t\t\t\t<option value=\"level_2\">Level 2</option>\n\t\t\t\t\t\t\t<option value=\"level_3\">Level 3</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n\t\t\t\t\t<label for=\"companion_limit\" class=\"col-sm-2 control-label\">Companion Limit</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"companion_limit\" v-model=\"companion_limit\" class=\"form-control\" v-validate:companions=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('rep') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Trip Rep.</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"rep\" :value.sync=\"repObj\" :options=\"reps\" label=\"name\"></v-select>\n\t\t\t\t\t\t<!--v-validate:rep=\"{ required: false}\"-->\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"rep_id\">\n\t\t\t\t\t\t\t<option v-for=\"rep in reps\" :value=\"rep\">{{rep}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDetails\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDetailsForm\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Campaign</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<p>{{$parent.campaign.name|capitalize}}</p>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('group') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Group</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select class=\"form-control\" id=\"group\" :value.sync=\"groupObj\" :options=\"groups\" :on-search=\"getGroups\" label=\"name\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"group_id\" v-validate:group=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"group.id\" v-for=\"group in groups\">{{group.name}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('type') }\">\n\t\t\t\t\t<label for=\"type\" class=\"col-sm-2 control-label\">Type</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"type\" v-validate:type=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"full\">Full</option>\n\t\t\t\t\t\t\t<option value=\"media\">Media</option>\n\t\t\t\t\t\t\t<option value=\"medical\">Medical</option>\n\t\t\t\t\t\t\t<option value=\"short\">Short</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('prospects') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Perfect For</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"group\" :value.sync=\"prospectsObj\" :options=\"prospectsList\" label=\"name\" placeholder=\"Select Prospects\"></v-select>\n\t\t\t\t\t\t<select hidden=\"\" multiple=\"\" v-model=\"prospects\" v-validate:prospects=\"{ required: true}\">\n\t\t\t\t\t\t\t<option :value=\"prospect.value\" v-for=\"prospect in prospectsList\">{{prospect.name}}\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('difficulty') }\">\n\t\t\t\t\t<label for=\"difficulty\" class=\"col-sm-2 control-label\">Difficulty</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<select id=\"difficulty\" class=\"form-control input-sm\" v-model=\"difficulty\" v-validate:difficulty=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t<option value=\"level_1\">Level 1</option>\n\t\t\t\t\t\t\t<option value=\"level_2\">Level 2</option>\n\t\t\t\t\t\t\t<option value=\"level_3\">Level 3</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('companions') }\">\n\t\t\t\t\t<label for=\"companion_limit\" class=\"col-sm-2 control-label\">Companion Limit</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-users\"></i></span>\n\t\t\t\t\t\t\t<input type=\"number\" id=\"companion_limit\" v-model=\"companion_limit\" class=\"form-control\" v-validate:companions=\"{ required: true, min:0 }\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"help-block\">Number of companions a user can have. Leave at 0 to disable\n\t\t\t\t\t\t\tcompanions.\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': (checkForError('start') || checkForError('end')) }\">\n\t\t\t\t\t<label for=\"started_at\" class=\"col-sm-2 control-label\">Dates</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('start') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Start</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"started_at\" id=\"started_at\" v-validate:start=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{ 'has-error': checkForError('end') }\">\n\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">End</span>\n\t\t\t\t\t\t\t\t\t<input type=\"date\" class=\"form-control\" v-model=\"ended_at\" id=\"ended_at\" v-validate:end=\"{ required: true }\" required=\"\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t\t<div class=\"form-group\" :class=\"{ 'has-error': checkForError('rep') }\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Trip Rep.</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<v-select multiple=\"\" class=\"form-control\" id=\"rep\" :value.sync=\"repObj\" :options=\"reps\" label=\"name\"></v-select>\n\t\t\t\t\t\t<!--v-validate:rep=\"{ required: false}\"-->\n\t\t\t\t\t\t<select hidden=\"\" v-model=\"rep_id\">\n\t\t\t\t\t\t\t<option v-for=\"rep in reps\" :value=\"rep\">{{rep}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -82215,313 +83570,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-087e8cf6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],205:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-pricing',
-	data: function data() {
-		return {
-			attemptedContinue: false,
-			attemptedAddCost: false,
-			attemptedAddPayment: false,
-			toggleNewCost: false,
-			toggleNewPayment: false,
-			selectedCost: null,
-			editCostMode: false,
-			editPaymentMode: false,
-			costsErrors: [],
-
-			// pricing data
-			costs: [],
-			newCost: {
-				name: '',
-				description: '',
-				active_at: null,
-				amount: 0,
-				type: '',
-				payments: [],
-				toggleNewPayment: false
-			},
-			newPayment: {
-				amount_owed: 0,
-				percent_owed: 0,
-				due_at: null,
-				upfront: false,
-				grace_period: 0
-			}
-		};
-	},
-
-	/*validators:{
- 	costs
- },*/
-	watch: {
-		'newPayment.amount_owed': function newPaymentAmount_owed(val, oldVal) {
-			var max = this.calculateMaxAmount(this.selectedCost);
-			if (val > max) this.newPayment.amount_owed = this.selectedCost.amount;
-			this.newPayment.percent_owed = val / this.selectedCost.amount * 100;
-			if (_.isFunction(this.$validate)) this.$validate('percent', true);
-		},
-		'newPayment.percent_owed': function newPaymentPercent_owed(val, oldVal) {
-			var max = this.calculateMaxPercent(this.selectedCost);
-			if (val > max) this.newPayment.percent_owed = max;
-			this.newPayment.amount_owed = val / 100 * this.selectedCost.amount;
-			if (_.isFunction(this.$validate)) this.$validate('amount', true);
-		},
-		'costs': function costs(val, oldVal) {
-			this.checkCostsErrors();
-		}
-	},
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				costs: this.costs
-			});
-		},
-		onValid: function onValid() {
-
-			this.$dispatch('pricing', true);
-			//this.$parent.details = this.details;
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripPricing[field.toLowerCase()].invalid && this.attemptedContinue;
-		},
-		checkForErrorCost: function checkForErrorCost(field) {
-			return this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
-		},
-		checkForErrorPayment: function checkForErrorPayment(field) {
-			return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
-		},
-		checkCostsErrors: function checkCostsErrors() {
-			var errors = [];
-			this.costs.forEach(function (cost, index) {
-				// cost must have at least 1 payment
-				if (!cost.payments.length) {
-					errors.push('empty');
-				} else {
-					// cost payments must total full amount owed and percent owed
-					var amount = 0;
-					cost.payments.forEach(function (payment, index) {
-						amount += payment.amount_owed;
-					}, this);
-					// evaluate difference
-					if (amount != cost.amount) {
-						errors.push('incomplete');
-					}
-				}
-
-				// no errors
-				errors.push(false);
-			}, this);
-			this.costsErrors = errors;
-		},
-		resetCost: function resetCost() {
-			this.newCost = {
-				name: '',
-				description: '',
-				active_at: null,
-				amount: 0,
-				type: '',
-				payments: [],
-				toggleNewPayment: false
-			};
-		},
-		resetPayment: function resetPayment() {
-			this.newPayment = {
-				amount_owed: 0,
-				percent_owed: 0,
-				due_at: null,
-				upfront: false,
-				grace_period: 0
-			};
-		},
-		calculateMaxAmount: function calculateMaxAmount(cost) {
-			var max = cost.amount;
-			if (cost.payments.length) {
-				cost.payments.forEach(function (payment) {
-					// must ignore current payment in editMode
-					if (this.newPayment !== payment) {
-						max -= payment.amount_owed;
-					}
-				}, this);
-			}
-			return max;
-		},
-		calculateMaxPercent: function calculateMaxPercent(cost) {
-			var max = 100;
-			if (cost.payments.length) {
-				cost.payments.forEach(function (payment) {
-					// must ignore current payment in editMode
-					if (this.newPayment !== payment) {
-						max -= payment.percent_owed;
-					}
-				}, this);
-			}
-			return max;
-		},
-		editCost: function editCost(cost) {
-			this.editCostMode = true;
-			this.toggleNewCost = true;
-			this.newCost = cost;
-		},
-		cancelEditPayment: function cancelEditPayment() {
-			this.editPaymentMode = false;
-			this.resetCost();
-		},
-		editPayment: function editPayment(payment, cost) {
-			this.editPaymentMode = true;
-			this.toggleNewPaymentForm(cost, true);
-			this.newPayment = payment;
-		},
-		toggleNewPaymentForm: function toggleNewPaymentForm(cost, updateMode) {
-			this.selectedCost = cost;
-			this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
-		},
-		addCost: function addCost() {
-			this.attemptedAddCost = true;
-			if (this.$TripPricingCost.valid) {
-				this.costs.push(this.newCost);
-				this.resetCost();
-				this.toggleNewCost = false;
-				this.attemptedAddCost = false;
-			}
-			this.checkCostsErrors();
-		},
-		updateCost: function updateCost() {
-			this.attemptedAddCost = true;
-			if (this.$TripPricingCost.valid) {
-				this.resetCost();
-				this.toggleNewCost = false;
-				this.attemptedAddCost = false;
-				this.editCostMode = false;
-			}
-			this.checkCostsErrors();
-		},
-		addPayment: function addPayment(cost) {
-			this.attemptedAddPayment = true;
-			if (this.$TripPricingCostPayment.valid) {
-				cost.payments.push(this.newPayment);
-				this.resetPayment();
-				this.selectedCost.toggleNewPayment = false;
-				this.attemptedAddPayment = false;
-			}
-			this.checkCostsErrors();
-		},
-		updatePayment: function updatePayment(cost) {
-			this.attemptedAddPayment = true;
-			if (this.$TripPricingCostPayment.valid) {
-				this.resetPayment();
-				this.selectedCost.toggleNewPayment = false;
-				this.attemptedAddPayment = false;
-				this.editPaymentMode = false;
-			}
-			this.checkCostsErrors();
-		},
-		generateUUID: function generateUUID() {
-			return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
-		}
-	},
-	activate: function activate(done) {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		this.$dispatch('pricing', true);
-		done();
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripPricing\" @valid=\"onValid\">\n\t\t\t<form id=\"TripPricing\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewCost=!toggleNewCost\">\n\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Cost\n\t\t\t\t\t</button>\n\n\t\t\t\t</div>\n\t\t\t\t<hr>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Pricing</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewCost\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Cost\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripPricingCost\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_description\">Description</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<textarea class=\"form-control input-sm\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_type\">Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"cost_type\" class=\"form-control input-sm\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"static\">Static</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"incremental\">Incremental</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"optional\">Optional</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_active_at\">Active</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"newCost_active_at\" class=\"form-control input-sm\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_amount\">Amount</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewCost=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addCost()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Cost\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-for=\"cost in costs\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">{{cost.name}}</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t{{cost.description}}\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t<ul class=\"list-unstyled\">\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.type|capitalize}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.active_at|moment}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.amount|currency}}</li>\n\t\t\t\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t\t<th>Amount</th>\n\t\t\t\t\t\t\t\t\t<th>Percent</th>\n\t\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"payment in cost.payments|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t\t<td>{{payment.amount_owed|currency}}</td>\n\t\t\t\t\t\t\t\t\t<td>{{payment.percent_owed|number 2}}%</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">Upfront</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.due_at\">{{payment.due_at|moment}}</span>\n\t\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">None</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">N/A</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"cost.payments.$remove(payment)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t<tr v-if=\"costsErrors[$index] != false\" class=\"danger\">\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-if=\"costsErrors[$index] === 'empty'\">\n\t\t\t\t\t\t\t\t\t\t<b>At least 1 payment is required!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t<b>Payments must total the cost amount!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t\t</table>\n\t\t\t\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t\t\t\t<li class=\"list-group-item\" v-if=\"cost.toggleNewPayment\">\n\t\t\t\t\t\t\t\t\t<validator name=\"TripPricingCostPayment\">\n\t\t\t\t\t\t\t\t\t\t<form class=\"form-inline\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"amountOwed\">Owed</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('amount') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(cost)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('percent') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t\tDue upfront?\n\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\" v-if=\"!newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"dueAt\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"!editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cost.toggleNewPayment=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-success\" @click=\"addPayment(cost)\"><i class=\"fa fa-plus\"></i> Add Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cancelEditPayment(cost)\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-info\" @click=\"updatePayment(cost)\"><i class=\"fa fa-plus\"></i> Update Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\" v-if=\"calculateMaxAmount(cost) > 0\">\n\t\t\t\t\t\t\t\t<a @click=\"toggleNewPaymentForm(cost)\" class=\"btn btn-xs btn-primary\"><i class=\"fa fa-plus\"></i> New Payment</a>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-5c73f5ee", module.exports)
-  } else {
-    hotAPI.update("_v-5c73f5ee", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],206:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-requirement',
-	data: function data() {
-		return {
-			resources: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Itinerary', 'Arrival Designation'],
-			toggleNewRequirement: false,
-			attemptedAddRequirement: false,
-			attemptedContinue: false,
-
-			// requirements data
-			requirements: [],
-			newReq: {
-				item: '',
-				item_type: '',
-				due_at: null,
-				grace_period: 0
-			}
-		};
-	},
-
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				requirements: this.requirements
-			});
-		},
-		onValid: function onValid() {
-			this.populateWizardData();
-			this.$dispatch('reqs', true);
-			//this.$parent.details = this.details;
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripReqsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
-		},
-		resetRequirement: function resetRequirement() {
-			this.newReq = {
-				item: '',
-				item_type: '',
-				due_at: null,
-				grace_period: 0
-			};
-		},
-		addRequirement: function addRequirement() {
-			this.attemptedAddRequirement = true;
-			if (this.$TripReqsCreate.valid) {
-				this.requirements.push(this.newReq);
-				this.resetRequirement();
-				this.toggleNewRequirement = false;
-				this.attemptedAddRequirement = false;
-			}
-		}
-	},
-	activate: function activate(done) {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		this.$dispatch('reqs', true);
-		done();
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripReqs\" @valid=\"onValid\">\n\t\t\t<form id=\"TripReqs\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Requirements</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewRequirement=!toggleNewRequirement\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Requirement\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewRequirement\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Requirement\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripReqsCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"item\">Item</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"item\" class=\"form-control input-sm\" v-model=\"newReq.item\" v-validate:item=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option :value=\"option\" v-for=\"option in resources\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"type\">Item Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"newReq.item_type\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newReq.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newReq.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newReq.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>-->\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewRequirement=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addRequirement()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Requirement\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Item</th>\n\t\t\t\t\t\t\t\t<th>Type</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<!--<th>Enforced</th>-->\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"requirement in requirements|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{requirement.item}}</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.item_type}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.due_at|moment}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<!--<td>{{requirement.enforced}}</td>-->\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"requirements.$remove(requirement)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-af5f3746", module.exports)
-  } else {
-    hotAPI.update("_v-af5f3746", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],207:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82576,89 +83625,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-49d154f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],208:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-deadlines',
-	data: function data() {
-		return {
-			toggleNewDeadline: false,
-			attemptedAddDeadline: false,
-			attemptedContinue: false,
-
-			// deadlines data
-			todos: [],
-			deadlines: [],
-			newDeadline: {
-				name: '',
-				date: null,
-				grace_period: 0,
-				enforced: false
-			}
-		};
-	},
-
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				todos: this.todos,
-				deadlines: this.deadlines
-			});
-		},
-		onValid: function onValid() {
-			this.populateWizardData();
-			this.$dispatch('deadlines', true);
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
-		},
-		resetDeadline: function resetDeadline() {
-			this.newDeadline = {
-				item: '',
-				item_type: '',
-				due_at: null,
-				grace_period: 0,
-				enforced: false
-			};
-		},
-		addDeadline: function addDeadline() {
-			this.attemptedAddDeadline = true;
-			if (this.$TripDeadlinesCreate.valid) {
-				this.deadlines.push(this.newDeadline);
-				this.resetDeadline();
-				this.toggleNewDeadline = false;
-				this.attemptedAddDeadline = false;
-			}
-		}
-	},
-	activate: function activate(done) {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		$.extend(this, {
-			todos: this.$parent.trip.todos,
-			deadlines: this.$parent.trip.deadlines
-		});
-		this.$dispatch('deadlines', true);
-		done();
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripDeadlines\" @valid=\"onValid\">\n\t\t\t<form id=\"TripDeadlines\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Deadlines</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewDeadline=!toggleNewDeadline\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Deadline\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewDeadline\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Deadline\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripDeadlinesCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('item')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" id=\"name\" v-model=\"newDeadline.name\" class=\"form-control input-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newDeadline.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newDeadline.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newDeadline.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewDeadline=false\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addDeadline()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Deadline\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<th>Enforced</th>\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"deadline in deadlines|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{deadline.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.due_at|moment}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>\n\t\t\t\t\t\t\t\t<td>{{deadline.enforced}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"deadlines.$remove(deadline)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-03d4d92c", module.exports)
-  } else {
-    hotAPI.update("_v-03d4d92c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],209:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -82794,320 +83761,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5888d913", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],210:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-pricing',
-	data: function data() {
-		return {
-			attemptedContinue: false,
-			attemptedAddCost: false,
-			attemptedAddPayment: false,
-			toggleNewCost: false,
-			toggleNewPayment: false,
-			selectedCost: null,
-			editCostMode: false,
-			editPaymentMode: false,
-			costsErrors: [],
-
-			// pricing data
-			costs: [],
-			newCost: {
-				name: '',
-				description: '',
-				active_at: null,
-				amount: 0,
-				type: '',
-				payments: [],
-				toggleNewPayment: false
-			},
-			newPayment: {
-				amount_owed: 0,
-				percent_owed: 0,
-				due_at: null,
-				upfront: false,
-				grace_period: 0
-			}
-		};
-	},
-
-	/*validators:{
-  costs
-  },*/
-	watch: {
-		'newPayment.amount_owed': function newPaymentAmount_owed(val, oldVal) {
-			var max = this.calculateMaxAmount(this.selectedCost);
-			if (val > max) this.newPayment.amount_owed = this.selectedCost.amount;
-			this.newPayment.percent_owed = val / this.selectedCost.amount * 100;
-			if (_.isFunction(this.$validate)) this.$validate('percent', true);
-		},
-		'newPayment.percent_owed': function newPaymentPercent_owed(val, oldVal) {
-			var max = this.calculateMaxPercent(this.selectedCost);
-			if (val > max) this.newPayment.percent_owed = max;
-			this.newPayment.amount_owed = val / 100 * this.selectedCost.amount;
-			if (_.isFunction(this.$validate)) this.$validate('amount', true);
-		},
-		'costs': function costs(val, oldVal) {
-			this.checkCostsErrors();
-		}
-	},
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				costs: this.costs
-			});
-		},
-		onValid: function onValid() {
-
-			this.$dispatch('pricing', true);
-			//this.$parent.details = this.details;
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripPricing[field.toLowerCase()].invalid && this.attemptedContinue;
-		},
-		checkForErrorCost: function checkForErrorCost(field) {
-			return this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
-		},
-		checkForErrorPayment: function checkForErrorPayment(field) {
-			return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
-		},
-		checkCostsErrors: function checkCostsErrors() {
-			var errors = [];
-			this.costs.forEach(function (cost, index) {
-				// cost must have at least 1 payment
-				if (!cost.payments.length) {
-					errors.push('empty');
-				} else {
-					// cost payments must total full amount owed and percent owed
-					var amount = 0;
-					cost.payments.forEach(function (payment, index) {
-						amount += payment.amount_owed;
-					}, this);
-					// evaluate difference
-					if (amount != cost.amount) {
-						errors.push('incomplete');
-					}
-				}
-
-				// no errors
-				errors.push(false);
-			}, this);
-			this.costsErrors = errors;
-		},
-		resetCost: function resetCost() {
-			this.newCost = {
-				name: '',
-				description: '',
-				active_at: null,
-				amount: 0,
-				type: '',
-				payments: [],
-				toggleNewPayment: false
-			};
-		},
-		resetPayment: function resetPayment() {
-			this.newPayment = {
-				amount_owed: 0,
-				percent_owed: 0,
-				due_at: null,
-				upfront: false,
-				grace_period: 0
-			};
-		},
-		calculateMaxAmount: function calculateMaxAmount(cost) {
-			var max = cost.amount;
-			if (cost.payments.length) {
-				cost.payments.forEach(function (payment) {
-					// must ignore current payment in editMode
-					if (this.newPayment !== payment) {
-						max -= payment.amount_owed;
-					}
-				}, this);
-			}
-			return max;
-		},
-		calculateMaxPercent: function calculateMaxPercent(cost) {
-			var max = 100;
-			if (cost.payments.length) {
-				cost.payments.forEach(function (payment) {
-					// must ignore current payment in editMode
-					if (this.newPayment !== payment) {
-						max -= payment.percent_owed;
-					}
-				}, this);
-			}
-			return max;
-		},
-		editCost: function editCost(cost) {
-			this.editCostMode = true;
-			this.toggleNewCost = true;
-			this.newCost = cost;
-		},
-		cancelEditPayment: function cancelEditPayment() {
-			this.editPaymentMode = false;
-			this.resetCost();
-		},
-		editPayment: function editPayment(payment, cost) {
-			this.editPaymentMode = true;
-			this.toggleNewPaymentForm(cost, true);
-			this.newPayment = payment;
-		},
-		toggleNewPaymentForm: function toggleNewPaymentForm(cost, updateMode) {
-			this.selectedCost = cost;
-			this.selectedCost.toggleNewPayment = !this.selectedCost.toggleNewPayment;
-		},
-		addCost: function addCost() {
-			this.attemptedAddCost = true;
-			if (this.$TripPricingCost.valid) {
-				this.costs.push(this.newCost);
-				this.resetCost();
-				this.toggleNewCost = false;
-				this.attemptedAddCost = false;
-			}
-			this.checkCostsErrors();
-		},
-		updateCost: function updateCost() {
-			this.attemptedAddCost = true;
-			if (this.$TripPricingCost.valid) {
-				this.resetCost();
-				this.toggleNewCost = false;
-				this.attemptedAddCost = false;
-				this.editCostMode = false;
-			}
-			this.checkCostsErrors();
-		},
-		addPayment: function addPayment(cost) {
-			this.attemptedAddPayment = true;
-			if (this.$TripPricingCostPayment.valid) {
-				cost.payments.push(this.newPayment);
-				this.resetPayment();
-				this.selectedCost.toggleNewPayment = false;
-				this.attemptedAddPayment = false;
-			}
-			this.checkCostsErrors();
-		},
-		updatePayment: function updatePayment(cost) {
-			this.attemptedAddPayment = true;
-			if (this.$TripPricingCostPayment.valid) {
-				this.resetPayment();
-				this.selectedCost.toggleNewPayment = false;
-				this.attemptedAddPayment = false;
-				this.editPaymentMode = false;
-			}
-			this.checkCostsErrors();
-		},
-		generateUUID: function generateUUID() {
-			return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
-		}
-	},
-	ready: function ready() {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		this.$set('costs', this.$parent.trip.costs);
-		// add toggle data
-		_.each(this.costs, function (cost) {
-			cost.toggleNewPayment = false;
-		});
-		this.$dispatch('pricing', true);
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripPricing\" @valid=\"onValid\">\n\t\t\t<form id=\"TripPricing\" class=\"form-horizontal\" novalidate=\"\">\n\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewCost=!toggleNewCost\">\n\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Cost\n\t\t\t\t\t</button>\n\n\t\t\t\t</div>\n\t\t\t\t<hr>\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Pricing</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewCost\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Cost\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripPricingCost\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costName')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"form-control input-sm\" id=\"cost_name\" v-model=\"newCost.name\" v-validate:costname=\"{required: true}\" placeholder=\"Name\" autofocus=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costDescription')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_description\">Description</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<textarea class=\"form-control input-sm\" id=\"cost_description\" v-model=\"newCost.description\" v-validate:costdescription=\"{required: true, minlength:1}\"></textarea>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costType')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"cost_type\">Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"cost_type\" class=\"form-control input-sm\" v-model=\"newCost.type\" v-validate:costtype=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"static\">Static</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"incremental\">Incremental</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"optional\">Optional</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costActive')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_active_at\">Active</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"newCost_active_at\" class=\"form-control input-sm\" v-model=\"newCost.active_at\" v-validate:costactive=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorCost('costAmount')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"newCost_amount\">Amount</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"number\" number=\"\" id=\"newCost_amount\" class=\"form-control\" v-model=\"newCost.amount\" v-validate:costamount=\"{required: true, min: 1}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewCost=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addCost()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Cost\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-for=\"cost in costs\" :class=\"{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">{{cost.name}}</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t{{cost.description}}\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t<ul class=\"list-unstyled\">\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.type|capitalize}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.active_at|moment}}</li>\n\t\t\t\t\t\t\t\t\t\t\t<li>{{cost.amount|currency}}</li>\n\t\t\t\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t\t<th>Amount</th>\n\t\t\t\t\t\t\t\t\t<th>Percent</th>\n\t\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t\t<tr v-for=\"payment in cost.payments|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t\t<td>{{payment.amount_owed|currency}}</td>\n\t\t\t\t\t\t\t\t\t<td>{{payment.percent_owed|number 2}}%</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">Upfront</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.due_at\">{{payment.due_at|moment}}</span>\n\t\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">None</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<span v-if=\"payment.upfront\">N/A</span>\n\t\t\t\t\t\t\t\t\t\t<span v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t\t{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>\n\t\t\t\t\t\t\t\t\t\t<a @click=\"cost.payments.$remove(payment)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t<tr v-if=\"costsErrors[$index] != false\" class=\"danger\">\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-if=\"costsErrors[$index] === 'empty'\">\n\t\t\t\t\t\t\t\t\t\t<b>At least 1 payment is required!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t\t<td colspan=\"5\" v-else=\"\">\n\t\t\t\t\t\t\t\t\t\t<b>Payments must total the cost amount!</b>\n\t\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t\t</table>\n\t\t\t\t\t\t\t<ul class=\"list-group\">\n\t\t\t\t\t\t\t\t<li class=\"list-group-item\" v-if=\"cost.toggleNewPayment\">\n\t\t\t\t\t\t\t\t\t<validator name=\"TripPricingCostPayment\">\n\t\t\t\t\t\t\t\t\t\t<form class=\"form-inline\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"amountOwed\">Owed</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('amount') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-usd\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"amountOwed\" class=\"form-control\" type=\"number\" :max=\"calculateMaxAmount(cost)\" number=\"\" v-model=\"newPayment.amount_owed\" v-validate:amount=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('percent') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"percentOwed\" class=\"form-control\" type=\"number\" number=\"\" :max=\"calculateMaxPercent(cost)\" v-model=\"newPayment.percent_owed|number 2\" v-validate:percent=\"{required: true, min: 0.01}\" debounce=\"100\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\"><i class=\"fa fa-percent\"></i></span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t\tDue upfront?\n\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\" v-if=\"!newPayment.upfront\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"dueAt\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"dueAt\" class=\"form-control input-sm\" type=\"date\" v-model=\"newPayment.due_at\" required=\"\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newPayment.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"!editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cost.toggleNewPayment=false\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-times\"></i> Cancel\n\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-success\" @click=\"addPayment(cost)\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Payment\n\t\t\t\t\t\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\" v-if=\"editPaymentMode\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"cancelEditPayment(cost)\"><i class=\"fa fa-times\"></i>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tCancel</a>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-info\" @click=\"updatePayment(cost)\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Update Payment</a>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\" v-if=\"calculateMaxAmount(cost) > 0\">\n\t\t\t\t\t\t\t\t<a @click=\"toggleNewPaymentForm(cost)\" class=\"btn btn-xs btn-primary\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Payment</a>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-2e8e2497", module.exports)
-  } else {
-    hotAPI.update("_v-2e8e2497", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],211:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	name: 'trip-requirement',
-	data: function data() {
-		return {
-			resources: ['Medical Release', 'Passport', 'Visa', 'Referral', 'Credentials', 'Minor Release', 'Immunization', 'Itinerary'],
-			toggleNewRequirement: false,
-			attemptedAddRequirement: false,
-			attemptedContinue: false,
-
-			// requirements data
-			requirements: [],
-			newReq: {
-				name: '',
-				document_type: '',
-				due_at: null,
-				grace_period: 0
-			}
-		};
-	},
-
-	computed: {},
-	methods: {
-		populateWizardData: function populateWizardData() {
-			$.extend(this.$parent.wizardData, {
-				requirements: this.requirements
-			});
-		},
-		onValid: function onValid() {
-			this.populateWizardData();
-			this.$dispatch('reqs', true);
-			//this.$parent.details = this.details;
-		},
-		checkForError: function checkForError(field) {
-			return this.$TripReqsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
-		},
-		resetRequirement: function resetRequirement() {
-			this.newReq = {
-				name: '',
-				document_type: '',
-				due_at: null,
-				grace_period: 0
-			};
-		},
-		addRequirement: function addRequirement() {
-			this.attemptedAddRequirement = true;
-			if (this.$TripReqsCreate.valid) {
-				this.requirements.push(this.newReq);
-				this.resetRequirement();
-				this.toggleNewRequirement = false;
-				this.attemptedAddRequirement = false;
-			}
-		}
-	},
-	activate: function activate(done) {
-		$('html, body').animate({ scrollTop: 0 }, 300);
-		$.extend(this, {
-			requirements: this.$parent.trip.requirements
-		});
-		this.$dispatch('reqs', true);
-		done();
-	}
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n\t<div class=\"col-sm-12\">\n\t\t<validator name=\"TripReqs\" @valid=\"onValid\">\n\t\t\t<form id=\"TripReqs\" class=\"form-horizontal\" novalidate=\"\">\n\n\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t<label class=\"col-sm-2 control-label\">Requirements</label>\n\t\t\t\t\t<div class=\"col-sm-10\">\n\t\t\t\t\t\t<div class=\"text-right\">\n\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-sm btn-primary\" @click=\"toggleNewRequirement=!toggleNewRequirement\">\n\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> New Requirement\n\t\t\t\t\t\t\t</button>\n\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<hr>\n\n\t\t\t\t\t\t<div class=\"panel panel-default\" v-if=\"toggleNewRequirement\">\n\t\t\t\t\t\t\t<div class=\"panel-heading\">\n\t\t\t\t\t\t\t\tNew Requirement\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-body\">\n\t\t\t\t\t\t\t\t<validator name=\"TripReqsCreate\">\n\t\t\t\t\t\t\t\t\t<form class=\"form\" novalidate=\"\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-12\">\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('name')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"name\">Name</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"name\" class=\"form-control input-sm\" v-model=\"newReq.name\" v-validate:name=\"{ required: true }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option :value=\"option\" v-for=\"option in resources\">{{option}}</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"type\">Document Type</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<select id=\"type\" class=\"form-control input-sm\" v-model=\"newReq.document_type\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"\">-- select --</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"grace_period\">Grace Period</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"input-group input-group-sm\" :class=\"{'has-error': checkForErrorPayment('grace') }\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input id=\"grace_period\" type=\"number\" class=\"form-control\" number=\"\" v-model=\"newReq.grace_period\" v-validate:grace=\"{required: true, min:0}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"input-group-addon\">Days</span>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<div class=\"form-group\" :class=\"{'has-error': checkForError('due')}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<label for=\"due_at\">Due</label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"date\" id=\"due_at\" class=\"form-control input-sm\" v-model=\"newReq.due_at\" v-validate:due=\"{required: true}\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t\t\t\t\t\t<!--<div class=\"checkbox\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t<label>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" v-model=\"newReq.enforced\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnforced?\n\t\t\t\t\t\t\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t\t\t\t\t\t\t</div>-->\n\t\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</form>\n\t\t\t\t\t\t\t\t</validator>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div class=\"panel-footer text-right\">\n\t\t\t\t\t\t\t\t<a class=\"btn btn-xs btn-default\" @click=\"toggleNewRequirement=false\"><i class=\"fa fa-times\"></i> Cancel</a>\n\t\t\t\t\t\t\t\t<button type=\"button\" class=\"btn btn-xs btn-success\" @click=\"addRequirement()\">\n\t\t\t\t\t\t\t\t\t<i class=\"fa fa-plus\"></i> Add Requirement\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\n\t\t\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t\t\t<thead>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t<th>Name</th>\n\t\t\t\t\t\t\t\t<th>Type</th>\n\t\t\t\t\t\t\t\t<th>Due</th>\n\t\t\t\t\t\t\t\t<th>Grace</th>\n\t\t\t\t\t\t\t\t<!--<th>Enforced</th>-->\n\t\t\t\t\t\t\t\t<th>Actions</th>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</thead>\n\t\t\t\t\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr v-for=\"requirement in requirements|orderBy 'due_at'\">\n\t\t\t\t\t\t\t\t<td>{{requirement.name}}</td>\n\t\t\t\t\t\t\t\t<td>{{requirement.document_type}}</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.due_at|moment}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t\t<!--<td>{{requirement.enforced}}</td>-->\n\t\t\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\t\t<!--<a @click=\"editPayment(payment, cost)\"><i class=\"fa fa-pencil\"></i></a>-->\n\t\t\t\t\t\t\t\t\t<a @click=\"requirements.$remove(requirement)\"><i class=\"fa fa-times\"></i></a>\n\t\t\t\t\t\t\t\t</td>\n\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t</tbody>\n\t\t\t\t\t\t</table>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</form>\n\t\t</validator>\n\t</div>\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-3dd864e2", module.exports)
-  } else {
-    hotAPI.update("_v-3dd864e2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":124,"vue-hot-reload-api":119}],212:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119,"vue-select":121}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83167,7 +83821,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f3e5b1bc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],213:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83213,7 +83867,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-424f54dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],214:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83406,7 +84060,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-3935869d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],215:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83463,7 +84117,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ca5dc6f6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],216:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83761,7 +84415,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-40feac0a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],217:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83806,7 +84460,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9d0c84f0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],218:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83843,7 +84497,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-5f91920b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],219:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],226:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83880,7 +84534,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-235a6f58", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],220:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],227:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -83951,7 +84605,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c5dc1f32", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],221:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],228:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.fade-transition {\n\t-webkit-transition: opacity .3s ease;\n\ttransition: opacity .3s ease;\n}\n\n.fade-enter, .fade-leave {\n\topacity: 0;\n}\n\n.step1 {}\n")
 'use strict';
@@ -84257,7 +84911,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-6fb76f2d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../login.vue":164,"./registration/additional-trip-options.vue":213,"./registration/basic-info.vue":214,"./registration/deadline-agreement.vue":215,"./registration/payment-details.vue":216,"./registration/review.vue":217,"./registration/roca.vue":218,"./registration/tos.vue":219,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],222:[function(require,module,exports){
+},{"../login.vue":170,"./registration/additional-trip-options.vue":220,"./registration/basic-info.vue":221,"./registration/deadline-agreement.vue":222,"./registration/payment-details.vue":223,"./registration/review.vue":224,"./registration/roca.vue":225,"./registration/tos.vue":226,"vue":124,"vue-hot-reload-api":119,"vueify/lib/insert-css":125}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84634,7 +85288,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e6a8f7c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],223:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],230:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -84774,7 +85428,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-507a71a9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],224:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],231:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84903,7 +85557,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-e7b14e18", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],225:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -84939,7 +85593,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-b88f63ba", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],226:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],233:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85113,7 +85767,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-372d71fc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],227:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],234:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n#toggleFilters li {\n\tmargin-bottom: 3px;\n}\n")
 'use strict';
@@ -85335,7 +85989,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-46ea867d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],228:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":2,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],235:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-4d454604] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-ability[_v-4d454604] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.ability-item:hover i.remove-ability[_v-4d454604] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-ability[_v-4d454604]:hover {\n  color: #d8262e; }\n")
 'use strict';
@@ -85396,7 +86050,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-4d454604", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],229:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],236:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85507,7 +86161,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-0a7ed88a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],230:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119,"vue-select":121}],237:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85593,7 +86247,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-69badce8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],231:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85623,7 +86277,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ea6dd1a8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],232:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85668,7 +86322,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-718e65c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":124,"vue-hot-reload-api":119}],233:[function(require,module,exports){
+},{"vue":124,"vue-hot-reload-api":119}],240:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85788,7 +86442,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-63c1ee29", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"marked":111,"vue":124,"vue-hot-reload-api":119}],234:[function(require,module,exports){
+},{"marked":111,"vue":124,"vue-hot-reload-api":119}],241:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.alert.top, .alert.top-right {\n    top: 80px;\n}\n")
 'use strict';
@@ -86028,7 +86682,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2d9ee899", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../uploads/admin-upload-create-update.vue":222,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],235:[function(require,module,exports){
+},{"../uploads/admin-upload-create-update.vue":229,"vue":124,"vue-hot-reload-api":119,"vue-select":121,"vueify/lib/insert-css":125}],242:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -86295,6 +86949,26 @@ var _adminTripDelete = require('./components/trips/admin-trip-delete.vue');
 
 var _adminTripDelete2 = _interopRequireDefault(_adminTripDelete);
 
+var _adminTripCosts = require('./components/trips/admin-trip-costs.vue');
+
+var _adminTripCosts2 = _interopRequireDefault(_adminTripCosts);
+
+var _adminTripDescription = require('./components/trips/admin-trip-description.vue');
+
+var _adminTripDescription2 = _interopRequireDefault(_adminTripDescription);
+
+var _adminTripDeadlines = require('./components/trips/admin-trip-deadlines.vue');
+
+var _adminTripDeadlines2 = _interopRequireDefault(_adminTripDeadlines);
+
+var _adminTripRequirements = require('./components/trips/admin-trip-requirements.vue');
+
+var _adminTripRequirements2 = _interopRequireDefault(_adminTripRequirements);
+
+var _adminTripTodos = require('./components/trips/admin-trip-todos.vue');
+
+var _adminTripTodos2 = _interopRequireDefault(_adminTripTodos);
+
 var _adminInterestsList = require('./components/interests/admin-interests-list.vue');
 
 var _adminInterestsList2 = _interopRequireDefault(_adminInterestsList);
@@ -86358,6 +87032,34 @@ var _adminUserDelete2 = _interopRequireDefault(_adminUserDelete);
 var _adminUploadsList = require('./components/uploads/admin-uploads-list.vue');
 
 var _adminUploadsList2 = _interopRequireDefault(_adminUploadsList);
+
+var _reconcileFund = require('./components/reconcile-fund.vue');
+
+var _reconcileFund2 = _interopRequireDefault(_reconcileFund);
+
+var _projectCauses = require('./components/admin/project-causes.vue');
+
+var _projectCauses2 = _interopRequireDefault(_projectCauses);
+
+var _causeEditor = require('./components/admin/cause-editor.vue');
+
+var _causeEditor2 = _interopRequireDefault(_causeEditor);
+
+var _projectsList = require('./components/admin/projects-list.vue');
+
+var _projectsList2 = _interopRequireDefault(_projectsList);
+
+var _projectEditor = require('./components/admin/project-editor.vue');
+
+var _projectEditor2 = _interopRequireDefault(_projectEditor);
+
+var _initiativesList = require('./components/admin/initiatives-list.vue');
+
+var _initiativesList2 = _interopRequireDefault(_initiativesList);
+
+var _initiativeEditor = require('./components/admin/initiative-editor.vue');
+
+var _initiativeEditor2 = _interopRequireDefault(_initiativeEditor);
 
 var _fundEditor = require('./components/financials/funds/fund-editor.vue');
 
@@ -86515,7 +87217,15 @@ _vue2.default.filter('percentage', {
 });
 
 _vue2.default.filter('moment', function (val, format) {
-    return moment.utc(val).local().format(format || 'LL');
+    var diff = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+    var date = moment.utc(val).local().format(format || 'LL');
+
+    if (diff) {
+        date = moment.utc(val).local().fromNow();
+    }
+
+    return date;
 });
 
 var VueCropOptions = {
@@ -86639,6 +87349,11 @@ new _vue2.default({
         adminTripFacilitators: _adminTripFacilitators2.default,
         adminTripDuplicate: _adminTripDuplicate2.default,
         adminTripDelete: _adminTripDelete2.default,
+        adminTripCosts: _adminTripCosts2.default,
+        adminTripDescription: _adminTripDescription2.default,
+        adminTripDeadlines: _adminTripDeadlines2.default,
+        adminTripRequirements: _adminTripRequirements2.default,
+        adminTripTodos: _adminTripTodos2.default,
         adminInterestsList: _adminInterestsList2.default,
         adminGroups: _adminGroupsList2.default,
         adminGroupCreate: _adminGroupCreate2.default,
@@ -86656,6 +87371,13 @@ new _vue2.default({
         adminUserDelete: _adminUserDelete2.default,
         adminUploadsList: _adminUploadsList2.default,
         adminUploadCreateUpdate: _adminUploadCreateUpdate2.default,
+        reconcileFund: _reconcileFund2.default,
+        projectCauses: _projectCauses2.default,
+        causeEditor: _causeEditor2.default,
+        projectsList: _projectsList2.default,
+        projectEditor: _projectEditor2.default,
+        initiativesList: _initiativesList2.default,
+        initiativeEditor: _initiativeEditor2.default,
         fundEditor: _fundEditor2.default,
         adminDonorsList: _adminDonorsList2.default,
         adminFundsList: _adminFundsList2.default,
@@ -86689,6 +87411,6 @@ new _vue2.default({
     }
 });
 
-},{"./components/action-trigger.vue":126,"./components/campaigns/admin-campaign-create.vue":127,"./components/campaigns/admin-campaign-details.vue":128,"./components/campaigns/admin-campaign-edit.vue":129,"./components/campaigns/campaign-groups.vue":130,"./components/campaigns/campaigns.vue":131,"./components/campaigns/group-trips.vue":136,"./components/campaigns/groups-trips-selection-wrapper.vue":137,"./components/donate.vue":138,"./components/financials/donors/admin-donors-list.vue":139,"./components/financials/donors/donor-form.vue":140,"./components/financials/funds/admin-funds-list.vue":141,"./components/financials/funds/fund-editor.vue":142,"./components/financials/transactions/admin-transactions-list.vue":143,"./components/financials/transactions/transaction-form.vue":144,"./components/fundraisers/fundraisers-manager.vue":145,"./components/fundraisers/fundraisers-stories.vue":146,"./components/fundraisers/fundraisers-uploads.vue":147,"./components/fundraisers/fundraisers.vue":148,"./components/groups/admin-group-create.vue":149,"./components/groups/admin-group-edit.vue":150,"./components/groups/admin-group-managers.vue":151,"./components/groups/admin-groups-list.vue":152,"./components/groups/dashboard-group-reservations.vue":153,"./components/groups/dashboard-group-trips.vue":154,"./components/groups/group-interest-signup.vue":155,"./components/groups/group-profile-fundraisers.vue":156,"./components/groups/group-profile-stories.vue":157,"./components/groups/group-profile-trips.vue":158,"./components/groups/groups-list.vue":159,"./components/groups/groups.vue":160,"./components/interests/admin-interests-list.vue":161,"./components/interests/dashboard-interests-list.vue":162,"./components/interests/trip-interests-editor.vue":163,"./components/login.vue":164,"./components/modal-donate.vue":165,"./components/notes.vue":166,"./components/pagination.vue":167,"./components/records/essays/essay-create-update.vue":168,"./components/records/essays/essays-list.vue":169,"./components/records/medicals/medical-create-update.vue":170,"./components/records/medicals/medicals-list.vue":171,"./components/records/passports/passport-create-update.vue":172,"./components/records/passports/passports-list.vue":173,"./components/records/records-list.vue":174,"./components/records/visas/visa-create-update.vue":175,"./components/records/visas/visas-list.vue":176,"./components/reservations/admin-reservation-costs.vue":177,"./components/reservations/admin-reservation-create.vue":178,"./components/reservations/admin-reservation-deadlines.vue":179,"./components/reservations/admin-reservation-dues.vue":180,"./components/reservations/admin-reservation-edit.vue":181,"./components/reservations/admin-reservations-list.vue":182,"./components/reservations/donations-list.vue":183,"./components/reservations/reservation-avatar.vue":184,"./components/reservations/reservation-costs.vue":185,"./components/reservations/reservation-dues.vue":186,"./components/reservations/reservation-funding.vue":187,"./components/reservations/reservations-arrival-designation.vue":188,"./components/reservations/reservations-essays-manager.vue":189,"./components/reservations/reservations-list.vue":190,"./components/reservations/reservations-medical-releases-manager.vue":191,"./components/reservations/reservations-passports-manager.vue":192,"./components/reservations/reservations-visas-manager.vue":193,"./components/todos.vue":194,"./components/top-nav.vue":195,"./components/trips/admin-trip-create.vue":196,"./components/trips/admin-trip-delete.vue":197,"./components/trips/admin-trip-duplicate.vue":198,"./components/trips/admin-trip-edit.vue":199,"./components/trips/admin-trip-facilitators.vue":200,"./components/trips/admin-trip-reservations-list.vue":201,"./components/trips/admin-trips-list.vue":202,"./components/trips/trip-details-missionaries.vue":220,"./components/trips/trip-registration-wizard.vue":221,"./components/uploads/admin-upload-create-update.vue":222,"./components/uploads/admin-uploads-list.vue":223,"./components/users/admin-user-create.vue":224,"./components/users/admin-user-delete.vue":225,"./components/users/admin-user-edit.vue":226,"./components/users/admin-users-list.vue":227,"./components/users/user-permissions.vue":228,"./components/users/user-profile-countries.vue":229,"./components/users/user-profile-fundraisers-donors.vue":230,"./components/users/user-profile-fundraisers-progress.vue":231,"./components/users/user-profile-fundraisers.vue":232,"./components/users/user-profile-stories.vue":233,"./components/users/user-settings.vue":234,"aos":1,"bootstrap-sass":18,"gsap":108,"jquery":110,"jquery.cookie":109,"marked":111,"moment":112,"scrollmagic":114,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":115,"underscore":116,"video.js":117,"videojs-youtube":118,"vue":124,"vue-resource":120,"vue-strap/dist/vue-strap.min":122,"vue-validator":123}]},{},[235]);
+},{"./components/action-trigger.vue":126,"./components/admin/cause-editor.vue":127,"./components/admin/initiative-editor.vue":128,"./components/admin/initiatives-list.vue":129,"./components/admin/project-causes.vue":130,"./components/admin/project-editor.vue":131,"./components/admin/projects-list.vue":132,"./components/campaigns/admin-campaign-create.vue":133,"./components/campaigns/admin-campaign-details.vue":134,"./components/campaigns/admin-campaign-edit.vue":135,"./components/campaigns/campaign-groups.vue":136,"./components/campaigns/campaigns.vue":137,"./components/campaigns/group-trips.vue":142,"./components/campaigns/groups-trips-selection-wrapper.vue":143,"./components/donate.vue":144,"./components/financials/donors/admin-donors-list.vue":145,"./components/financials/donors/donor-form.vue":146,"./components/financials/funds/admin-funds-list.vue":147,"./components/financials/funds/fund-editor.vue":148,"./components/financials/transactions/admin-transactions-list.vue":149,"./components/financials/transactions/transaction-form.vue":150,"./components/fundraisers/fundraisers-manager.vue":151,"./components/fundraisers/fundraisers-stories.vue":152,"./components/fundraisers/fundraisers-uploads.vue":153,"./components/fundraisers/fundraisers.vue":154,"./components/groups/admin-group-create.vue":155,"./components/groups/admin-group-edit.vue":156,"./components/groups/admin-group-managers.vue":157,"./components/groups/admin-groups-list.vue":158,"./components/groups/dashboard-group-reservations.vue":159,"./components/groups/dashboard-group-trips.vue":160,"./components/groups/group-interest-signup.vue":161,"./components/groups/group-profile-fundraisers.vue":162,"./components/groups/group-profile-stories.vue":163,"./components/groups/group-profile-trips.vue":164,"./components/groups/groups-list.vue":165,"./components/groups/groups.vue":166,"./components/interests/admin-interests-list.vue":167,"./components/interests/dashboard-interests-list.vue":168,"./components/interests/trip-interests-editor.vue":169,"./components/login.vue":170,"./components/modal-donate.vue":171,"./components/notes.vue":172,"./components/pagination.vue":173,"./components/reconcile-fund.vue":174,"./components/records/essays/essay-create-update.vue":175,"./components/records/essays/essays-list.vue":176,"./components/records/medicals/medical-create-update.vue":177,"./components/records/medicals/medicals-list.vue":178,"./components/records/passports/passport-create-update.vue":179,"./components/records/passports/passports-list.vue":180,"./components/records/records-list.vue":181,"./components/records/visas/visa-create-update.vue":182,"./components/records/visas/visas-list.vue":183,"./components/reservations/admin-reservation-costs.vue":184,"./components/reservations/admin-reservation-create.vue":185,"./components/reservations/admin-reservation-deadlines.vue":186,"./components/reservations/admin-reservation-dues.vue":187,"./components/reservations/admin-reservation-edit.vue":188,"./components/reservations/admin-reservations-list.vue":189,"./components/reservations/donations-list.vue":190,"./components/reservations/reservation-avatar.vue":191,"./components/reservations/reservation-costs.vue":192,"./components/reservations/reservation-dues.vue":193,"./components/reservations/reservation-funding.vue":194,"./components/reservations/reservations-arrival-designation.vue":195,"./components/reservations/reservations-essays-manager.vue":196,"./components/reservations/reservations-list.vue":197,"./components/reservations/reservations-medical-releases-manager.vue":198,"./components/reservations/reservations-passports-manager.vue":199,"./components/reservations/reservations-visas-manager.vue":200,"./components/todos.vue":201,"./components/top-nav.vue":202,"./components/trips/admin-trip-costs.vue":204,"./components/trips/admin-trip-create.vue":205,"./components/trips/admin-trip-deadlines.vue":206,"./components/trips/admin-trip-delete.vue":207,"./components/trips/admin-trip-description.vue":208,"./components/trips/admin-trip-duplicate.vue":209,"./components/trips/admin-trip-edit.vue":210,"./components/trips/admin-trip-facilitators.vue":211,"./components/trips/admin-trip-requirements.vue":212,"./components/trips/admin-trip-reservations-list.vue":213,"./components/trips/admin-trip-todos.vue":214,"./components/trips/admin-trips-list.vue":215,"./components/trips/trip-details-missionaries.vue":227,"./components/trips/trip-registration-wizard.vue":228,"./components/uploads/admin-upload-create-update.vue":229,"./components/uploads/admin-uploads-list.vue":230,"./components/users/admin-user-create.vue":231,"./components/users/admin-user-delete.vue":232,"./components/users/admin-user-edit.vue":233,"./components/users/admin-users-list.vue":234,"./components/users/user-permissions.vue":235,"./components/users/user-profile-countries.vue":236,"./components/users/user-profile-fundraisers-donors.vue":237,"./components/users/user-profile-fundraisers-progress.vue":238,"./components/users/user-profile-fundraisers.vue":239,"./components/users/user-profile-stories.vue":240,"./components/users/user-settings.vue":241,"aos":1,"bootstrap-sass":18,"gsap":108,"jquery":110,"jquery.cookie":109,"marked":111,"moment":112,"scrollmagic":114,"scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap":115,"underscore":116,"video.js":117,"videojs-youtube":118,"vue":124,"vue-resource":120,"vue-strap/dist/vue-strap.min":122,"vue-validator":123}]},{},[242]);
 
 //# sourceMappingURL=main.js.map

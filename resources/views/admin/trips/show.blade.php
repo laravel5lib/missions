@@ -17,7 +17,7 @@
                 <hr class="divider inv">
                 <div class="btn-group pull-right">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Actions <span class="caret"></span>
+                        Manage <i class="fa fa-angle-down"></i>
                     </button>
                     <ul class="dropdown-menu">
                         <li><a href="{{ Request::url() }}/edit">Edit</a></li>

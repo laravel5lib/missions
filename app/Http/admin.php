@@ -26,6 +26,13 @@ Route::resource('interests', 'TripInterestsController');
 Route::get('reservations/{tab?}', 'ReservationsController@index')->where('tab', 'current|archived|dropped|prospects');
 Route::resource('reservations', 'ReservationsController');
 
+Route::get('causes/{cause_id}/projects/create', 'ProjectsController@create');
+Route::get('causes/{cause_id}/initiatives/create', 'ProjectInitiativesController@create');
+Route::get('causes/{id}/{tab?}', 'ProjectCausesController@show')->where('tab', '.+');
+Route::resource('causes', 'ProjectCausesController');
+Route::get('initiatives/{id}', 'ProjectInitiativesController@show');
+Route::get('projects/{id}/{tab?}', 'ProjectsController@show');
+
 Route::resource('users', 'UsersController');
 
 Route::resource('uploads', 'UploadsController');

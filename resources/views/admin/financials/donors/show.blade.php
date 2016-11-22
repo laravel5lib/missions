@@ -10,7 +10,7 @@
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
                     <a href="{{ url('admin/donors/'. $donor->id .'/edit') }}" class="btn btn-primary">
-                        <i class="fa fa-pencil"></i> Edit
+                        Edit
                     </a>
                 </div>
             </div>

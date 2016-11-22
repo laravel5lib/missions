@@ -9,7 +9,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <hr class="divider inv sm">
-                <a href="/admin/campaigns/create" class="btn btn-primary">New <i class="fa fa-plus"></i></a>
+                <a href="/admin/campaigns/create" class="btn btn-primary"><i class="fa fa-plus icon-left"></i> New</a>
             </div>
         </div>
         <div class="row visible-xs">
@@ -17,7 +17,7 @@
                 <h3>Campaigns</h3>
             </div>
             <div class="col-sm-4 text-center">
-                <a href="/admin/campaigns/create" class="btn btn-primary">New <i class="fa fa-plus"></i></a>
+                <a href="/admin/campaigns/create" class="btn btn-primary"><i class="fa fa-plus icon-left"></i> New</a>
                 <hr class="divider inv sm">
             </div>
         </div>

@@ -13,9 +13,9 @@
                     <hr class="divider inv sm">
                     <!-- Split button -->
                     <div class="btn-group">
-                        <a type="button" href="{{ url('admin/transactions/' . $transaction->id . '/edit') }}" class="btn btn-primary"><i class="fa fa-pencil"></i> Edit</a>
+                        <a type="button" href="{{ url('admin/transactions/' . $transaction->id . '/edit') }}" class="btn btn-primary">Edit</a>
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
+                            <i class="fa fa-angle-down"></i>
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">

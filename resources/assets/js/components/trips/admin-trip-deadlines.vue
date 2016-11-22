@@ -147,7 +147,7 @@
                 attemptedEditDeadline: false,
                 newDeadline: {
                     deadline_assignable_id: this.id,
-                    deadline_assignable_type: 'trips',
+                    deadline_assignable_type: this.assignment,
                     name: '',
                     item_type: '',
                     date: null,
@@ -169,7 +169,7 @@
             resetDeadline(){
                 this.newDeadline = {
                     deadline_assignable_id: this.id,
-                    deadline_assignable_type: 'trips',
+                    deadline_assignable_type: this.assignment,
                     item: '',
                     item_type: '',
                     date: null,

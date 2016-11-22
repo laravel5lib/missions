@@ -178,7 +178,7 @@
                 attemptedEditRequirement: false,
                 newRequirement: {
                     requester_id: this.id,
-                    requester_type: 'trip',
+                    requester_type: this.requester,
                     name: '',
                     document_type: '',
                     due_at: null,
@@ -238,7 +238,7 @@
                         this.resetRequirement();
                         this.attemptedAddRequirement = false;
                         this.showAddModal = false;
-                        this.searchDeadlines();
+                        this.searchRequirements();
                     })
                 }
             },
@@ -249,7 +249,7 @@
                     this.resource.update({ id: this.selectedRequirement.id}, this.selectedRequirement).then(function (response) {
                         this.attemptedEditRequirement = false;
                         this.showEditModal = false;
-                        this.searchDeadlines();
+                        this.searchRequirements();
                     })
                 }
             },
@@ -267,7 +267,7 @@
                 this.resource.delete({ id: requirement.id }).then(function (response) {
                     this.requirements.$remove(requirement);
                     this.selectedRequirement = null;
-                    this.searchDeadlines();
+                    this.searchRequirements();
                 });
             },
             searchRequirements(){

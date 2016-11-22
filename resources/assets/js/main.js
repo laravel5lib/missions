@@ -128,7 +128,6 @@ Vue.component('modal', VueStrap.modal);
 Vue.component('accordion', VueStrap.accordion);
 Vue.component('alert', VueStrap.alert);
 Vue.component('aside', VueStrap.aside);
-Vue.component('datepicker', VueStrap.datepicker);
 Vue.component('panel', VueStrap.panel);
 Vue.component('progressbar', VueStrap.progressbar);
 Vue.component('spinner', VueStrap.spinner);
@@ -137,12 +136,16 @@ Vue.component('tabs', VueStrap.tabs);
 Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
 // Vue.component('vSelect', require('vue-select'));
+import myDatepicker from 'vue-datepicker/vue-datepicker-1.vue'
+Vue.component('date-picker', myDatepicker);
 
 // Vue Resource
 Vue.use(require('vue-resource'));
 // Vue Validator
 Vue.use(require('vue-validator'));
-
+// Vue Textarea Autosize
+var VueAutosize = require('vue-autosize')
+Vue.use(VueAutosize)
 
 Vue.http.options.root = '/api';
 Vue.http.interceptors.push({

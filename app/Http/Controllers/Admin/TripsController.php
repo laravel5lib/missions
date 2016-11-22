@@ -31,8 +31,8 @@ class TripsController extends Controller
 
     public function edit($tripId)
     {
-
-        return view('admin.trips.edit')->with('tripId', $tripId);
+        $trip = $this->api->get('trips/'.$tripId, ['include' => 'campaign']);
+        return view('admin.trips.edit', compact('tripId', 'trip'));
     }
 
     public function create($campaignId)

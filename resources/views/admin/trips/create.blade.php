@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <campaign-trip-create-wizard campaign-id="{{ $campaign->id }}" country-code="{{ $campaign->country_code }}"></campaign-trip-create-wizard>
+                <admin-trip-create-update campaign-id="{{ $campaign->id }}" country-code="{{ $campaign->country_code }}"></admin-trip-create-update>
             </div>
         </div>
     </div>

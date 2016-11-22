@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\CreditTransaction;
 use App\DonationTransaction;
+use App\Http\Requests\v1\ExportRequest;
+use App\Jobs\ExportTransactions;
 use App\RefundTransaction;
 use App\TransferTransaction;
 use App\Models\v1\Transaction;
@@ -15,16 +17,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionsController extends Controller
 {
-    // EXCEL:
-        // Donor Name
-        // Address
-        // City, State, Zip
-        // Country
-        // Class
-        // Item
-        // Amount
-        // Date
-
     /**
      * @var Transaction
      */
@@ -62,35 +54,28 @@ class TransactionsController extends Controller
     /**
      * Export transactions.
      *
-     * @param Request $request
+     * @param ExportRequest $request
      * @return mixed
      */
-    public function export(Request $request)
+    public function export(ExportRequest $request)
     {
         $transactions = $this->transaction
-                             ->filter($request->all())
-                             ->with('fund')
-                             ->get();
+            ->filter($request->all())
+            ->with('donor', 'fund')
+            ->get();
 
-        $data = $transactions->map(function($transaction) {
-            return [
-                'description' => $transaction->description,
-                'amount' => $transaction->amount,
-                'class' => $transaction->fund->class,
-                'item' => $transaction->fund->item
-            ];
-        });
+        $fields = $request->get('fields');
 
-        return Excel::create('transactions', function($excel) use($data) {
+        $this->dispatch(new ExportTransactions(
+            $transactions,
+            $fields,
+            $request->get('email'),
+            snake_case($request->get('filename'))
+        ));
 
-            $excel->sheet('Transactions', function($sheet) use($data) {
-
-                $sheet->fromArray($data);
-                $sheet->freezeFirstRow();
-
-            });
-
-        })->export('csv');
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
     }
 
     /**

@@ -169,27 +169,65 @@
             </tr>
             </tfoot>
         </table>
-        <modal title="Export Transactions List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
+        <modal title="Export List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
             <div slot="modal-body" class="modal-body">
-                <ul class="list-unstyled">
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="description"> Description
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="type"> Type
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="amount"> Amount
-                        </label>
-                    </li>
-                </ul>
+                <validator name="validation" :classes="{ invalid: 'has-error' }">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Filename</label>
+                        <input type="text" class="form-control" v-model="exportSettings.filename" placeholder="Enter an optional file name">
+                    </div>
+                    <div v-validate-class class="col-sm-6 form-group">
+                        <label>Send Report to Email</label>
+                        <input type="text"
+                               class="form-control"
+                               v-model="exportSettings.email"
+                               placeholder="Enter an email address"
+                               initial="off"
+                               v-validate:email="{email: { rule: true, message: 'Enter a valid email.'}}">
+                    </div>
+                </div>
+                <hr class="divider inv">
+                <div class="row">
+                    <div v-validate-class class="col-xs-8 form-group">
+                        <label>Choose Fields to Include:</label>
+                    </div>
+                    <div class="col-xs-4 text-right">
+                        <button class="btn btn-link btn-xs" @click="selectAllFields" v-text="exportSelectButton"></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" v-for="(key, value) in exportOptions">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       v-model="exportSettings.fields"
+                                       :value="key"
+                                       initial="off"
+                                       v-validate:fields="{required: { rule: true, message: 'At least one field is required.' }}">
+                                {{ value }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                </validator>
             </div>
         </modal>
+        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <span class="icon-ok-circled alert-icon-float-left"></span>
+            <strong>Awesome!</strong>
+            <p>{{ message }}</p>
+        </alert>
+        <alert :show.sync="showError"
+               placement="top-right"
+               :duration="6000"
+               type="danger"
+               width="400px"
+               dismissable>
+            <span class="icon-info-circled alert-icon-float-left"></span>
+            <strong>Oh No!</strong>
+            <p>{{ message }}</p>
+        </alert>
     </div>
 </template>
 <style>
@@ -250,9 +288,30 @@
                 showFilters: false,
                 showExportModal: false,
                 exportSettings: {
-                    fields: [],
-                }
-
+                    fields: ['description', 'amount', 'date'],
+                    email: '',
+                    filename: ''
+                },
+                exportOptions: {
+                    description: 'Description',
+                    amount: 'Amount',
+                    payment_type: 'Payment Type',
+                    type: 'Transaction Type',
+                    date: 'Transaction Date',
+                    class: 'QuickBooks Class',
+                    item: 'QuickBooks Item',
+                    fund_name: 'Fund Name',
+                    donor_name: 'Donor Name',
+                    donor_email: 'Donor Email',
+                    donor_phone: 'Donor Phone',
+                    donor_address_one: 'Donor Address',
+                    donor_address_two: 'Donor City, State & Zip',
+                    donor_country: 'Donor Country'
+                },
+                exportSelectButton: 'Select all',
+                showSuccess: false,
+                showError: false,
+                message: null
             }
         },
         watch: {
@@ -297,6 +356,15 @@
 
         },
         methods: {
+            selectAllFields() {
+                if (this.exportSettings.fields.length == _.keys(this.exportOptions).length) {
+                    this.exportSettings.fields = [];
+                    this.exportSelectButton = 'Select all';
+                } else {
+                    this.exportSettings.fields = _.keys(this.exportOptions);
+                    this.exportSelectButton = 'Deselect all';
+                }
+            },
             updateConfig(){
                 localStorage[this.storageName] = JSON.stringify({
                     activeFields: this.activeFields,
@@ -378,14 +446,27 @@
                 });
             },
             exportList(){
+
+                var self = this;
+                this.$validate(true, function() {
+                    if (self.$validation.invalid) {
+                        self.message = _.first(self.$validation.errors).message;
+                        self.showError = true;
+                        throw new Error("Validation errors");
+                    }
+                });
+
                 var params = this.getListSettings();
                 $.extend(params, this.exportSettings);
                 // Send to api route
 
                 this.$http.post('transactions/export', params).then(function (response) {
+                    this.message = response.data.message;
+                    this.showSuccess = true;
                     console.log(response);
                 }, function (error) {
-                    console.log(error);
+                    this.message = 'Unable to export the list.';
+                    this.showError = true;
                 })
             }
         },

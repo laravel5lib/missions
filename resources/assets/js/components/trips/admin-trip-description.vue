@@ -13,8 +13,8 @@
                                 <hr class="divider inv sm">
                             </div>
                             <div class="col-sm-12">
-                                <textarea rows="5" v-autosize="description" class="form-control"
-                                          v-validate:description="{ required: true}">{{description}}</textarea>
+                                <textarea rows="5" v-autosize="description" v-model="description" class="form-control"
+                                          v-validate:description="{ required: true}" placeholder="Please add a description" v-html="description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
             </validator>
         </template>
         <template v-else>
-            <div v-html="description | marked"></div>
+            <div v-html="(description || 'No Description') | marked"></div>
         </template>
 
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
@@ -40,7 +40,7 @@
         props: ['id'],
         data(){
             return {
-                editMode: true,
+                editMode: false,
                 description: '',
                 resource: this.$resource('trips{/id}'),
                 showSuccess: false

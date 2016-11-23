@@ -5,7 +5,10 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<aside :show.sync="showRight" placement="right" header="Missions.Me" :width="275">
+		<aside :show.sync="showRight" placement="right" :width="275">
+		<div slot="header" class="text-center">
+		    <img class="img-xs" style="margin-right:-20px;opacity:.4;margin-top:4px;margin-bottom:4px;" src="images/mm-icon-lightgray.png" alt="Missions.Me">
+		</div>
 			<ul class="nav navmenu-nav">
 				<li class="donate-nav"><a class="navDonate" href="/fundraisers"><i class="fa fa-heart"></i> Donate To A Cause</a>
 				</li>

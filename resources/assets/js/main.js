@@ -151,8 +151,8 @@ Vue.use(require('vue-resource'));
 // Vue Validator
 Vue.use(require('vue-validator'));
 // Vue Textarea Autosize
-var VueAutosize = require('vue-autosize')
-Vue.use(VueAutosize)
+var VueAutosize = require('vue-autosize');
+Vue.use(VueAutosize);
 
 Vue.http.options.root = '/api';
 Vue.http.interceptors.push({
@@ -291,11 +291,19 @@ Vue.directive('crop', {
 new Vue({
     el: '#app',
     data: {
-      user: {
-        name: '',
-        email: '',
-        public: false
-      }
+        user: {
+            name: '',
+            email: '',
+            public: false
+        },
+        datePickerSettings: {
+            type: 'min',
+            week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+            month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            format: 'YYYY-MM-DD HH:mm:ss',
+            inputStyle: { width: '100%', border: 'none'},
+            color: { header: '#F74451'}
+        }
     },
     components: {
         login,

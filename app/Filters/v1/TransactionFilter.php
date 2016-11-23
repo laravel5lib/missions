@@ -68,6 +68,8 @@ class TransactionFilter extends Filter
      */
     public function minAmount($amount)
     {
+        if (! $amount) return null;
+
         return $this->where('amount', '>=', $amount);
     }
 
@@ -79,6 +81,8 @@ class TransactionFilter extends Filter
      */
     public function maxAmount($amount)
     {
+        if (! $amount) return null;
+
         return $this->where('amount', '<=', $amount);
     }
 }

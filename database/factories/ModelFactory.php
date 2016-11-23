@@ -456,6 +456,9 @@ $factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker)
         'company'      => $faker->optional(0.7)->company,
         'zip'          => $faker->postcode,
         'country_code' => $faker->countryCode,
+        'address'      => $faker->streetAddress,
+        'city'         => $faker->city,
+        'state'        => $faker->state,
     ];
 });
 

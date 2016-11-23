@@ -13,7 +13,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Transformers\v1\TransactionTransformer;
 use Dingo\Api\Contract\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
-use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionsController extends Controller
 {
@@ -30,10 +29,12 @@ class TransactionsController extends Controller
     /**
      * TransactionsController constructor.
      * @param Transaction $transaction
+     * @param Request $request
      */
-    public function __construct(Transaction $transaction)
+    public function __construct(Transaction $transaction, Request $request)
     {
         $this->transaction = $transaction;
+        $this->request = $request;
     }
 
     /**

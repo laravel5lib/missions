@@ -19,12 +19,11 @@ class TransactionFilter extends Filter
         'description', 'payment->zip', 'payment->last_four',
         'payment->brand', 'payment->cardholder', 'payment->number',
         'payment->charge_id', 'fund.name', 'donor.name',
-        'fund.class', 'fund.item'
+        'fund.class', 'fund.item', 'donor.phone', 'donor.email'
     ];
 
     public $sortable = [
-        'description', 'type', 'amount',
-        'fund.class', 'fund.item', 'fund.name'
+        'description', 'type', 'amount', 'created_at'
     ];
 
     /**

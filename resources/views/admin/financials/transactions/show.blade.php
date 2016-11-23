@@ -1,6 +1,4 @@
 @extends('admin.layouts.default')
-@inject('fund', 'App\Models\v1\Fund')
-@inject('refund', 'App\Models\v1\Transaction')
 
 @section('content')
     <div class="white-header-bg">

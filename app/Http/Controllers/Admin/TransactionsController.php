@@ -36,4 +36,17 @@ class TransactionsController extends Controller
 
         return view('admin.financials.transactions.show', compact('transaction'));
     }
+
+    /**
+     * Edit the specified resource.
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit($id)
+    {
+        $transaction = $this->api->get('transactions/' . $id);
+
+        return view('admin.financials.transactions.edit', compact('transaction'));
+    }
 }

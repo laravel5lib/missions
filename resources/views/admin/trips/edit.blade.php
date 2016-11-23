@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <campaign-trip-edit-wizard trip-id="{{ $tripId }}"></campaign-trip-edit-wizard>
+                <admin-trip-create-update trip-id="{{ $tripId }}" campaign-id="{{ $trip->campaign->id }}" country-code="{{ $trip->campaign->country_code }}" :is-update="true"></admin-trip-create-update>
             </div>
         </div>
     </div>

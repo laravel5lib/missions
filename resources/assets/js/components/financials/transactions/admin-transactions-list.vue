@@ -247,8 +247,8 @@
                     <span v-text="transaction.amount|currency" :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}"></span>
                 </td>
                 <td v-if="isActive('donor')" v-text="transaction.donor.data.name"></td>
-                <td v-if="isActive('class')" v-text="transaction.description"></td>
-                <td v-if="isActive('item')" v-text="transaction.description"></td>
+                <td v-if="isActive('class')" v-text="transaction.fund.data.class"></td>
+                <td v-if="isActive('item')" v-text="transaction.fund.data.item"></td>
                 <td v-if="isActive('last_four')" v-text="transaction.payment.last_four"></td>
                 <td v-if="isActive('card_brand')" v-text="transaction.payment.brand"></td>
                 <td v-if="isActive('cardholder')" v-text="transaction.payment.cardholder"></td>

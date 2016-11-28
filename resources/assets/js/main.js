@@ -143,7 +143,8 @@ Vue.component('tabs', VueStrap.tabs);
 Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
 // Vue.component('vSelect', require('vue-select'));
-import myDatepicker from 'vue-datepicker/vue-datepicker-1.vue'
+// import myDatepicker from 'vue-datepicker/vue-datepicker-1.vue'
+import myDatepicker from './components/date-picker.vue'
 Vue.component('date-picker', myDatepicker);
 
 // Vue Resource

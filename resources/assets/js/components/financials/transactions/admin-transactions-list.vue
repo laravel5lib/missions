@@ -88,6 +88,10 @@
                             </li>
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="class" :disabled="maxCheck('class')"> Class
+                                </label>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
                                     <input type="checkbox" v-model="activeFields" value="item" :disabled="maxCheck('item')"> Item
                                 </label>
                             </li>

@@ -1,205 +1,227 @@
 <template>
-    <spinner v-ref:spinner size="md" text="Loading"></spinner>
-    <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
-        <hr class="divider inv sm">
-        <form class="col-sm-12">
-            <div class="form-group">
-                <select class="form-control input-sm" v-model="filters.type" style="width:100%;">
-                    <option value="">Any Type</option>
-                    <option value="incremental">Incremental</option>
-                    <option value="optional">Optional</option>
-                    <option value="static">Static</option>
-                </select>
-            </div>
-
+    <section>
+        <spinner v-ref:spinner size="md" text="Loading"></spinner>
+        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
-            <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+            <form class="col-sm-12">
+                <div class="form-group">
+                    <select class="form-control input-sm" v-model="filters.type" style="width:100%;">
+                        <option value="">Any Type</option>
+                        <option value="incremental">Incremental</option>
+                        <option value="optional">Optional</option>
+                        <option value="static">Static</option>
+                    </select>
+                </div>
+
+                <hr class="divider inv sm">
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+            </form>
+        </aside>
+        <form class="panel-body form-inline text-right" novalidate>
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+            </div>
+            <button class="btn btn-default btn-sm" type="button" @click="showFilters=true">Filters</button>
+            <a class="btn btn-primary btn-sm" @click="showAddModal=true">New <i class="fa fa-plus"></i></a>
         </form>
-    </aside>
-    <form class="panel-body form-inline text-right" novalidate>
-        <div class="input-group input-group-sm">
-            <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
-            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-        </div>
-        <button class="btn btn-default btn-sm" type="button" @click="showFilters=true">Filters</button>
-        <a class="btn btn-primary btn-sm" @click="showAddModal=true">New <i class="fa fa-plus"></i></a>
-    </form>
-    <hr class="divider sm">
-    <template v-for="cost in costs">
-        <div class="panel-body" :class="{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4>{{ cost.name|capitalize }}</h4>
-                </div>
-                <div class="col-sm-6 text-right hidden-xs">
-                    <div style="padding: 0;">
-                        <div role="group" aria-label="...">
-                            <a class="btn btn-xs btn-default-hollow small" @click="addPayment(cost)"><i class="fa fa-plus"></i> New Payment</a>
-                            <a class="btn btn-xs btn-default-hollow small" @click="editCost(cost)"><i class="fa fa-pencil"></i> Edit</a>
-                            <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> Delete</a>
+        <hr class="divider sm">
+        <template v-for="cost in costs">
+            <div class="panel-body" :class="{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>{{ cost.name|capitalize }}</h4>
+                    </div>
+                    <div class="col-sm-6 text-right hidden-xs">
+                        <div style="padding: 0;">
+                            <div role="group" aria-label="...">
+                                <a class="btn btn-xs btn-default-hollow small" @click="addPayment(cost)"><i class="fa fa-plus"></i> New Payment</a>
+                                <a class="btn btn-xs btn-default-hollow small" @click="editCost(cost)"><i class="fa fa-pencil"></i> Edit</a>
+                                <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 text-center visible-xs">
+                        <div style="padding: 0;">
+                            <div role="group" aria-label="...">
+                                <a class="btn btn-xs btn-default-hollow small" @click="addPayment(cost)"><i class="fa fa-plus"></i> New Payment</a>
+                                <a class="btn btn-xs btn-default-hollow small" @click="editCost(cost)"><i class="fa fa-pencil"></i> Edit</a>
+                                <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> Delete</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 text-center visible-xs">
-                    <div style="padding: 0;">
-                        <div role="group" aria-label="...">
-                            <a class="btn btn-xs btn-default-hollow small" @click="addPayment(cost)"><i class="fa fa-plus"></i> New Payment</a>
-                            <a class="btn btn-xs btn-default-hollow small" @click="editCost(cost)"><i class="fa fa-pencil"></i> Edit</a>
-                            <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> Delete</a>
-                        </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p class="small">{{ cost.description }}</p>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <p class="small">{{ cost.description }}</p>
+                <hr class="divider">
+                <div class="row">
+                    <div class="col-sm-4 text-center">
+                        <label>Cost Type</label>
+                        <p>{{ cost.type|capitalize }}</p>
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <label>Active Date</label>
+                        <p>{{ cost.active_at|moment 'll' }}</p>
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <label>Cost</label>
+                        <p>{{ cost.amount|currency }}</p>
+                    </div>
                 </div>
-            </div>
-            <hr class="divider">
-            <div class="row">
-                <div class="col-sm-4 text-center">
-                    <label>Cost Type</label>
-                    <p>{{ cost.type|capitalize }}</p>
-                </div>
-                <div class="col-sm-4 text-center">
-                    <label>Active Date</label>
-                    <p>{{ cost.active_at|moment 'll' }}</p>
-                </div>
-                <div class="col-sm-4 text-center">
-                    <label>Cost</label>
-                    <p>{{ cost.amount|currency }}</p>
-                </div>
+                <hr class="divider">
+                <admin-trip-costs-payments :id="cost.id" :cost="cost" :payments.sync="cost.payments.data"></admin-trip-costs-payments>
             </div>
             <hr class="divider">
-            <admin-trip-costs-payments :id="cost.id" :cost="cost" :payments.sync="cost.payments.data"></admin-trip-costs-payments>
-        </div>
-        <hr class="divider">
-    </template>
+        </template>
 
-    <modal title="New Cost" :show.sync="showAddModal" effect="fade" width="800">
-        <div slot="modal-body" class="modal-body">
-            <validator name="TripPricingCost" v-if="!selectedCost">
-                <form class="form" novalidate>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
-                                <label for="cost_name">Name</label>
-                                <input type="text" class="form-control" id="cost_name"
-                                       v-model="newCost.name" v-validate:costName="{required: true}"
-                                       placeholder="Name" autofocus>
-                            </div>
-                            <div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
-                                <label for="cost_description">Description</label>
-                                <textarea class="form-control" id="cost_description"
-                                          v-model="newCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
-                            </div>
-                            <div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
-                                <label for="cost_type">Type</label>
-                                <select id="cost_type" class="form-control" v-model="newCost.type" v-validate:costType="{ required: true }">
-                                    <option value="">-- select --</option>
-                                    <option value="static">Static</option>
-                                    <option value="incremental">Incremental</option>
-                                    <option value="optional">Optional</option>
-                                </select>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
-                                        <label for="newCost_active_at">Active</label>
-                                        <br>
-                                        <input type="date" id="newCost_active_at" class="form-control"
-                                               v-model="newCost.active_at" v-validate:costActive="{required: true}">
-                                    </div>
-
+        <modal title="New Cost" :show.sync="showAddModal" effect="fade" width="800">
+            <div slot="modal-body" class="modal-body">
+                <validator name="TripPricingCost" v-if="!selectedCost">
+                    <form class="form" novalidate>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
+                                    <label for="cost_name">Name</label>
+                                    <input type="text" class="form-control" id="cost_name"
+                                           v-model="newCost.name" v-validate:costName="{required: true}"
+                                           placeholder="Name" autofocus>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
-                                        <label for="newCost_amount">Amount</label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                            <input type="number" number id="newCost_amount" class="form-control"
-                                                   v-model="newCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                <div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
+                                    <label for="cost_description">Description</label>
+                                    <textarea class="form-control" id="cost_description"
+                                              v-model="newCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
+                                </div>
+                                <div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
+                                    <label for="cost_type">Type</label>
+                                    <select id="cost_type" class="form-control" v-model="newCost.type" v-validate:costType="{ required: true }">
+                                        <option value="">-- select --</option>
+                                        <option value="static">Static</option>
+                                        <option value="incremental">Incremental</option>
+                                        <option value="optional">Optional</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
+                                            <label for="newCost_active_at">Active</label>
+                                            <br>
+                                            <input type="date" id="newCost_active_at" class="form-control"
+                                                   v-model="newCost.active_at" v-validate:costActive="{required: true}">
+                                        </div>
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
+                                            <label for="newCost_amount">Amount</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-usd"></i></span>
+                                                <input type="number" number id="newCost_amount" class="form-control"
+                                                       v-model="newCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </validator>
-        </div>
-        <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetCost()'>Cancel</button>
-            <button type="button" class="btn btn-primary btn-sm" @click='addCost(newCost)'>Add</button>
-        </div>
+                    </form>
+                </validator>
+            </div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetCost()'>Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='addCost(newCost)'>Add</button>
+            </div>
 
-    </modal>
-    <modal title="Edit Cost" :show.sync="showEditModal" effect="fade" width="800">
-        <div slot="modal-body" class="modal-body">
-            <validator name="TripPricingCost" v-if="selectedCost">
-                <form class="form" novalidate>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
-                                <label for="cost_name">Name</label>
-                                <input type="text" class="form-control" id="cost_name"
-                                       v-model="selectedCost.name" v-validate:costName="{required: true}"
-                                       placeholder="Name" autofocus>
-                            </div>
-                            <div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
-                                <label for="cost_description">Description</label>
-                                <textarea class="form-control" id="cost_description"
-                                          v-model="selectedCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
-                            </div>
-                            <div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
-                                <label for="cost_type">Type</label>
-                                <select id="cost_type" class="form-control" v-model="selectedCost.type" v-validate:costType="{ required: true }">
-                                    <option value="">-- select --</option>
-                                    <option value="static">Static</option>
-                                    <option value="incremental">Incremental</option>
-                                    <option value="optional">Optional</option>
-                                </select>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
-                                        <label for="selectedCost_active_at">Active</label>
-                                        <br>
-                                        <input type="date" id="selectedCost_active_at" class="form-control"
-                                               v-model="selectedCost.active_at" v-validate:costActive="{required: true}">
-                                    </div>
-
+        </modal>
+        <modal title="Edit Cost" :show.sync="showEditModal" effect="fade" width="800">
+            <div slot="modal-body" class="modal-body">
+                <validator name="TripPricingCost" v-if="selectedCost">
+                    <form class="form" novalidate>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
+                                    <label for="cost_name">Name</label>
+                                    <input type="text" class="form-control" id="cost_name"
+                                           v-model="selectedCost.name" v-validate:costName="{required: true}"
+                                           placeholder="Name" autofocus>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
-                                        <label for="selectedCost_amount">Amount</label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                            <input type="number" number id="selectedCost_amount" class="form-control"
-                                                   v-model="selectedCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                <div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
+                                    <label for="cost_description">Description</label>
+                                    <textarea class="form-control" id="cost_description"
+                                              v-model="selectedCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
+                                </div>
+                                <div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
+                                    <label for="cost_type">Type</label>
+                                    <select id="cost_type" class="form-control" v-model="selectedCost.type" v-validate:costType="{ required: true }">
+                                        <option value="">-- select --</option>
+                                        <option value="static">Static</option>
+                                        <option value="incremental">Incremental</option>
+                                        <option value="optional">Optional</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
+                                            <label for="selectedCost_active_at">Active</label>
+                                            <br>
+                                            <input type="date" id="selectedCost_active_at" class="form-control"
+                                                   v-model="selectedCost.active_at" v-validate:costActive="{required: true}">
+                                        </div>
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
+                                            <label for="selectedCost_amount">Amount</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-usd"></i></span>
+                                                <input type="number" number id="selectedCost_amount" class="form-control"
+                                                       v-model="selectedCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </form>
+                </validator>
+            </div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='showEditModal = false, selectedCost = null'>Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='updateCost(selectedCost)'>Update</button>
+            </div>
+
+        </modal>
+        <modal title="Delete Cost" :show.sync="showDeleteModal" effect="fade" small="true">
+            <div slot="modal-body" class="modal-body">
+                <p v-if="selectedCost" class="text-center">Are you sure you want to delete {{ selectedCost.name }}?</p>
+            </div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false,selectedCost = null'>Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='doRemove(selectedCost)'>Confirm</button>
+            </div>
+        </modal>
+
+        <!--<div class="modal fade" tabindex="-1" role="deleteDialog" :show.sync="showDeleteModal">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" @click="showDeleteModal = false,selectedCost = null"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Delete Cost</h4>
                     </div>
-                </form>
-            </validator>
-        </div>
-        <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default btn-sm" @click='showEditModal = false, selectedCost = null'>Cancel</button>
-            <button type="button" class="btn btn-primary btn-sm" @click='updateCost(selectedCost)'>Update</button>
-        </div>
+                    <div class="modal-body">
+                        <p v-if="selectedCost" class="text-center">Are you sure you want to delete {{ selectedCost.name }}?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false,selectedCost = null'>Cancel</button>
+                        <button type="button" class="btn btn-primary btn-sm" @click='doRemove(selectedCost)'>Confirm</button>
+                    </div>
+                </div>&lt;!&ndash; /.modal-content &ndash;&gt;
+            </div>&lt;!&ndash; /.modal-dialog &ndash;&gt;
+        </div>&lt;!&ndash; /.modal &ndash;&gt;-->
 
-    </modal>
-
-    <modal class="text-center" :show.sync="deleteCostModal" title="Delete Cost" small="true">
-        <div slot="modal-body" class="modal-body text-center" v-if="selectedCost">Are you sure you want to delete {{ selectedCost.name }}?</div>
-        <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default btn-sm" @click='deleteCostModal = false'>Cancel</button>
-            <button type="button" class="btn btn-primary btn-sm" @click='deleteCostModal = false,remove(selectedCost)'>Confirm</button>
-        </div>
-    </modal>
+    </section>
 
 </template>
 <script type="text/javascript">
@@ -229,7 +251,7 @@
                 showFilters: false,
                 showAddModal: false,
                 showEditModal: false,
-                deleteCostModal: false,
+                showDeleteModal: false,
                 filters: {
                     type: '',
                 },
@@ -256,6 +278,14 @@
                 this.$nextTick(function () {
                     if (val !== oldVal && val === false) {
                         this.selectedCost = null;
+                    }
+                })
+            },
+            'showDeleteModal': function (val, oldVal) {
+                this.$nextTick(function () {
+                    // overide modal close issue
+                    if (val !== oldVal && val === false) {
+                        $('body').css({'overflow-y': 'auto'});
                     }
                 })
             }
@@ -307,12 +337,13 @@
             },
             confirmRemove(cost) {
                 this.selectedCost = cost;
-                this.deleteCostModal = true;
+                this.showDeleteModal = true;
             },
-            remove(cost){
+            doRemove(cost){
                 this.resource.delete({ id: cost.id }).then(function (response) {
-                    this.costs.$remove(cost);
                     this.selectedCost = null;
+                    this.showDeleteModal = false;
+                    this.costs.$remove(cost);
                 });
             },
             addCost(){

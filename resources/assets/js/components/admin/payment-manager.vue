@@ -1,5 +1,4 @@
 <template>
-    <spinner v-ref:spinner size="md" text="Loading"></spinner>
     <table class="table">
         <thead>
         <tr>
@@ -315,16 +314,16 @@
             addPayment(){
                 this.attemptedAddPayment = true;
                 if (this.$TripPricingCostPaymentAdd.valid) {
-                    this.$refs.spinner.show();
+                    this.$root.$emit('SpinnerOn');
                     this.resource.save({}, this.newPayment).then(function (response) {
                         this.payments.push(this.newPayment);
                         this.resetPayment();
                         this.showAddModal = false;
                         this.attemptedAddPayment = false;
-                        this.$refs.spinner.hide();
+                        this.$root.$emit('SpinnerOff');
                     }, function (error) {
                         console.log(error.data.errors);
-                        this.$refs.spinner.hide();
+                        this.$root.$emit('SpinnerOff');
                     });
 
                 }
@@ -333,15 +332,15 @@
             updatePayment(){
                 this.attemptedAddPayment = true;
                 if (this.$TripPricingCostPaymentEdit.valid) {
-                    this.$refs.spinner.show();
+                    this.$root.$emit('SpinnerOn');
                     this.resource.update({payment_id: this.selectedPayment.id}, this.selectedPayment).then(function (response) {
                         this.resetPayment();
                         this.showEditModal = false;
                         this.attemptedAddPayment = false;
-                        this.$refs.spinner.hide();
+                        this.$root.$emit('SpinnerOff');
                     }, function (error) {
                         console.log(error.data.errors);
-                        this.$refs.spinner.hide();
+                        this.$root.$emit('SpinnerOff');
                     });
 
                 } else {

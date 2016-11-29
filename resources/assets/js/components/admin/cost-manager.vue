@@ -423,9 +423,9 @@
                     });
                     if (parseFloat(cost.amount) !== parseFloat(t)) {
                         this.unSyncedCosts.push(cost.id);
-                        this.unSyncedCosts = _.uniq(this.unSyncedCosts);
                     }
-                }.bind(this))
+                }.bind(this));
+                this.unSyncedCosts = _.uniq(this.unSyncedCosts);
             },
             isOutOfSync(cost){
                 return _.contains(this.unSyncedCosts, cost.id);
@@ -437,6 +437,12 @@
             let self = this;
             this.$root.$on('CheckPaymentsSync', function () {
                 self.checkPaymentsSync();
+            });
+            this.$root.$on('SpinnerOn', function () {
+                self.$refs.spinner.show();
+            });
+            this.$root.$on('SpinnerOff', function () {
+                self.$refs.spinner.hide();
             });
         }
     }

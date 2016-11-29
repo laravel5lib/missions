@@ -36,13 +36,13 @@
                             <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentAdd('amount') }">
                                 <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                 <input id="amountOwed" class="form-control" type="number" :max="calculateMaxAmount(newPayment)" number v-model="newPayment.amount_owed"
-                                       v-validate:amount="{required: true, min: 0.01}" debounce="100">
+                                       v-validate:amount="{required: true, min: 0.01}" @change="modifyPercentOwed(newPayment)">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentAdd('percent') }">
-                                <input id="percentOwed" class="form-control" type="number" :max="calculateMaxPercent(cost)" v-model="newPayment.percent_owed|number 2"
-                                       v-validate:percent="{required: true, min: 0.01}" debounce="100">
+                                <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(newPayment)" v-model="newPayment.percent_owed|number 2"
+                                       v-validate:percent="{required: true, min: 0.01}" @change="modifyAmountOwed(newPayment)">
                                 <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                             </div>
                         </div>
@@ -83,54 +83,56 @@
     </modal>
     <modal title="Edit Payment" :show.sync="showEditModal" effect="fade" width="800">
         <div slot="modal-body" class="modal-body">
-            <validator name="TripPricingCostPaymentEdit" v-if="selectedPayment">
-                <form class="form-inline">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label for="amountOwed">Owed</label>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('amount') }">
-                                <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                <input id="amountOwed" class="form-control" type="number" number :max="calculateMaxAmount(selectedPayment)" v-model="selectedPayment.amount_owed"
-                                       v-validate:amount="{required: true, min: 0.01}" @change="modifyPercentOwed(selectedPayment)" >
+            <template v-if="selectedPayment">
+                <validator name="TripPricingCostPaymentEdit">
+                    <form class="form-inline">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label for="amountOwed">Owed</label>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('percent') }">
-                                <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(selectedPayment)" v-model="selectedPayment.percent_owed"
-                                       v-validate:percent="{required: true, min: 0.01}" @change="modifyAmountOwed(selectedPayment)">
-                                <span class="input-group-addon"><i class="fa fa-percent"></i></span>
+                            <div class="col-sm-6">
+                                <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('amount') }">
+                                    <span class="input-group-addon"><i class="fa fa-usd"></i></span>
+                                    <input id="amountOwed" class="form-control" type="number" number :max="calculateMaxAmount(selectedPayment)" v-model="selectedPayment.amount_owed"
+                                           v-validate:amount="{required: true, min: 0.01}" @change="modifyPercentOwed(selectedPayment)" >
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" v-model="selectedPayment.upfront">
-                            Due upfront?
-                        </label>
-                    </div>
-                    <div class="row" v-if="!selectedPayment.upfront">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="dueAt">Due</label>
-                                <input id="dueAt" class="form-control input-sm" type="date" v-model="selectedPayment.due_at" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group" :class="{'has-error': checkForErrorPaymentEdit('grace') }">
-                                <label for="grace_period">Grace Period</label>
-                                <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('grace') }">
-                                    <input id="grace_period" type="number" class="form-control" number v-model="selectedPayment.grace_period"
-                                           v-validate:grace="{required: true, min:0}">
-                                    <span class="input-group-addon">Days</span>
+                            <div class="col-sm-6">
+                                <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('percent') }">
+                                    <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(selectedPayment)" v-model="selectedPayment.percent_owed"
+                                           v-validate:percent="{required: true, min: 0.01}" @change="modifyAmountOwed(selectedPayment)">
+                                    <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </validator>
+                        <br>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" v-model="selectedPayment.upfront">
+                                Due upfront?
+                            </label>
+                        </div>
+                        <div class="row" v-if="!selectedPayment.upfront">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="dueAt">Due</label>
+                                    <input id="dueAt" class="form-control input-sm" type="date" v-model="selectedPayment.due_at" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group" :class="{'has-error': checkForErrorPaymentEdit('grace') }">
+                                    <label for="grace_period">Grace Period</label>
+                                    <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('grace') }">
+                                        <input id="grace_period" type="number" class="form-control" number v-model="selectedPayment.grace_period"
+                                               v-validate:grace="{required: true, min:0}">
+                                        <span class="input-group-addon">Days</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </validator>
+            </template>
         </div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='showEditModal = false, selectedPayment = null'>Cancel</button>
@@ -301,6 +303,8 @@
                 // no errors
                 errors.push(false);
                 this.costsErrors = errors;
+
+                this.$root.$emit('CheckPaymentsSync');
             },
             editPayment(payment){
                 this.showEditModal = true;
@@ -317,6 +321,9 @@
                         this.showAddModal = false;
                         this.attemptedAddPayment = false;
                         this.$refs.spinner.hide();
+                    }, function (error) {
+                        console.log(error.data.errors);
+                        this.$refs.spinner.hide();
                     });
 
                 }
@@ -330,6 +337,9 @@
                         this.resetPayment();
                         this.showEditModal = false;
                         this.attemptedAddPayment = false;
+                        this.$refs.spinner.hide();
+                    }, function (error) {
+                        console.log(error.data.errors);
                         this.$refs.spinner.hide();
                     });
 
@@ -354,7 +364,7 @@
             let self = this;
             this.$root.$on('Cost:' + this.id + ':NewPayment', function (cost) {
                 self.showAddModal = true;
-            })
+            });
         }
     }
 </script>

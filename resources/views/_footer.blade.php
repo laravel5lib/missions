@@ -4,7 +4,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-1 text-center">
-        <img class="img-xs" src="/images/mm-icon-lightgray.png" alt="">
+        <img class="img-xs" src="{{ url('/images/mm-icon-lightgray.png') }}" alt="">
       </div><!-- end col -->
       <hr class="divider inv sm visible-xs">
       <div class="col-sm-11 col-sm-offset-0 col-xs-10 col-xs-offset-1">

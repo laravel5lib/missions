@@ -46,5 +46,21 @@ return [
                 'url' => 'essays'
             ]
         ]
+    ],
+    'admin' => [
+        'project' => [
+            [
+                'label' => 'Details',
+                'url' => 'details'
+            ],
+            [
+                'label' => 'Costs',
+                'url' => 'costs'
+            ],
+            [
+                'label' => 'Funds',
+                'url' => 'funds'
+            ],
+        ]
     ]
 ];

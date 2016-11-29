@@ -65,7 +65,13 @@ import adminTrips from './components/trips/admin-trips-list.vue';
 import adminTripReservationsList from './components/trips/admin-trip-reservations-list.vue';
 import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
 import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
+import adminTripCreateUpdate from './components/trips/admin-trip-create-update.vue';
 import adminTripDelete from './components/trips/admin-trip-delete.vue';
+import costManager from './components/admin/cost-manager.vue';
+import adminTripDescription from './components/trips/admin-trip-description.vue';
+import deadlinesManager from './components/admin/deadlines-manager.vue';
+import adminTripRequirements from './components/trips/admin-trip-requirements.vue';
+import adminTripTodos from './components/trips/admin-trip-todos.vue';
 import adminInterestsList from './components/interests/admin-interests-list.vue';
 import adminGroups from './components/groups/admin-groups-list.vue';
 import adminGroupCreate from './components/groups/admin-group-create.vue';
@@ -83,6 +89,13 @@ import adminUserEdit from './components/users/admin-user-edit.vue';
 import adminUserDelete from './components/users/admin-user-delete.vue';
 import adminUploadsList from './components/uploads/admin-uploads-list.vue';
 import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
+import reconcileFund from './components/reconcile-fund.vue';
+import projectCauses from './components/admin/project-causes.vue';
+import causeEditor from './components/admin/cause-editor.vue';
+import projectsList from './components/admin/projects-list.vue';
+import projectEditor from './components/admin/project-editor.vue';
+import initiativesList from './components/admin/initiatives-list.vue';
+import initiativeEditor from './components/admin/initiative-editor.vue';
 import fundEditor from './components/financials/funds/fund-editor.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
 import adminFundsList from './components/financials/funds/admin-funds-list.vue';
@@ -90,6 +103,7 @@ import adminTransactionsList from './components/financials/transactions/admin-tr
 import transactionForm from './components/financials/transactions/transaction-form.vue';
 import donorForm from './components/financials/donors/donor-form.vue';
 import tripInterestEditor from './components/interests/trip-interests-editor.vue';
+import refundForm from './components/financials/transactions/refund-form.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -122,7 +136,6 @@ Vue.component('modal', VueStrap.modal);
 Vue.component('accordion', VueStrap.accordion);
 Vue.component('alert', VueStrap.alert);
 Vue.component('aside', VueStrap.aside);
-Vue.component('datepicker', VueStrap.datepicker);
 Vue.component('panel', VueStrap.panel);
 Vue.component('progressbar', VueStrap.progressbar);
 Vue.component('spinner', VueStrap.spinner);
@@ -131,12 +144,17 @@ Vue.component('tabs', VueStrap.tabs);
 Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
 // Vue.component('vSelect', require('vue-select'));
+// import myDatepicker from 'vue-datepicker/vue-datepicker-1.vue'
+import myDatepicker from './components/date-picker.vue'
+Vue.component('date-picker', myDatepicker);
 
 // Vue Resource
 Vue.use(require('vue-resource'));
 // Vue Validator
 Vue.use(require('vue-validator'));
-
+// Vue Textarea Autosize
+var VueAutosize = require('vue-autosize');
+Vue.use(VueAutosize);
 
 Vue.http.options.root = '/api';
 Vue.http.interceptors.push({
@@ -211,8 +229,14 @@ Vue.filter('percentage', {
     }
 });
 
-Vue.filter('moment', function (val, format) {
-    return moment.utc(val).local().format(format||'LL');
+Vue.filter('moment', function (val, format, diff = false) {
+    var date = moment.utc(val).local().format(format||'LL');
+
+    if(diff) {
+        date = moment.utc(val).local().fromNow();
+    }
+
+    return date;
 });
 
 var VueCropOptions = {
@@ -269,11 +293,22 @@ Vue.directive('crop', {
 new Vue({
     el: '#app',
     data: {
-      user: {
-        name: '',
-        email: '',
-        public: false
-      }
+        user: {
+            name: '',
+            email: '',
+            public: false
+        },
+        datePickerSettings: {
+            type: 'min',
+            week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+            month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            format: 'YYYY-MM-DD HH:mm:ss',
+            inputStyle: { width: '100%', border: 'none'},
+            color: { header: '#F74451'}
+        },
+        showSuccess: false,
+        showError: false,
+        message: ''
     },
     components: {
         login,
@@ -340,10 +375,16 @@ new Vue({
         campaignTripCreateWizard,
         campaignTripEditWizard,
         adminTrips,
+        adminTripCreateUpdate,
         adminTripReservationsList,
         adminTripFacilitators,
         adminTripDuplicate,
         adminTripDelete,
+        costManager,
+        adminTripDescription,
+        deadlinesManager,
+        adminTripRequirements,
+        adminTripTodos,
         adminInterestsList,
         adminGroups,
         adminGroupCreate,
@@ -361,13 +402,21 @@ new Vue({
         adminUserDelete,
         adminUploadsList,
         adminUploadCreateUpdate,
+        reconcileFund,
+        projectCauses,
+        causeEditor,
+        projectsList,
+        projectEditor,
+        initiativesList,
+        initiativeEditor,
         fundEditor,
         adminDonorsList,
         adminFundsList,
         adminTransactionsList,
         transactionForm,
         donorForm,
-        tripInterestEditor
+        tripInterestEditor,
+        refundForm
     },
     http: {
         headers: {
@@ -390,6 +439,16 @@ new Vue({
           // Save user info
           this.user = user;
           this.authenticated = true;
+        }
+    },
+    events: {
+        'showSuccess': function (msg) {
+            this.message = msg;
+            this.showSuccess = true;
+        },
+        'showError': function (msg) {
+            this.message = msg;
+            this.showError = true;
         }
     }
 });

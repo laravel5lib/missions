@@ -1,5 +1,4 @@
 @extends('admin.layouts.default')
-@inject('fund', 'App\Models\v1\Fund')
 @inject('refund', 'App\Models\v1\Transaction')
 
 @section('content')
@@ -13,14 +12,14 @@
                     <hr class="divider inv sm">
                     <!-- Split button -->
                     <div class="btn-group">
-                        <a type="button" href="{{ url('admin/transactions/' . $transaction->id . '/edit') }}" class="btn btn-primary"><i class="fa fa-pencil"></i> Edit</a>
+                        <a type="button" href="{{ url('admin/transactions/' . $transaction->id . '/edit') }}" class="btn btn-primary">Edit</a>
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
+                            <i class="fa fa-angle-down"></i>
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
                             @if($transaction->type == 'donation')
-                                <li><a href="#">Refund Transaction</a></li>
+                                <li><a data-toggle="modal" data-target="#refund">Refund Transaction</a></li>
                             @endif
                             <li><a href="#">Delete Transaction</a></li>
                             <li role="separator" class="divider"></li>
@@ -173,4 +172,12 @@
             </div>
         </div>
     </div>
+
+    @if($transaction->type == 'donation')
+    <div class="modal fade" id="refund" tabindex="-1">
+        <div class="modal-dialog">
+            <refund-form transaction-id="{{ $transaction->id }}"></refund-form>
+        </div>
+    </div>
+    @endif
 @stop

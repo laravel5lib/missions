@@ -50,7 +50,7 @@
                     <li data-toggle="tooltip" title="Fundraisers" role="presentation"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i> <span class="hidden-xs">Fundraisers</span></a></li>
                     <li data-toggle="tooltip" title="Stories" role="presentation"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-comments"></i> <span class="hidden-xs">Stories</span></a></li>
                     @can('edit', $group)
-                    <li data-toggle="tooltip" title="Dashboard" class="pull-right"><a href="#"><i class="fa fa-tachometer"></i></a></li>
+                    <li data-toggle="tooltip" title="Dashboard" class="pull-right"><a href="/dashboard"><i class="fa fa-tachometer"></i></a></li>
                     @endcan
                 </ul>
                 <div class="tab-content">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Transformers\v1;
 
+use App\Models\v1\Group;
 use App\Models\v1\Project;
 use League\Fractal;
 
@@ -13,11 +14,11 @@ class ProjectTransformer extends Fractal\TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'package',
         'notes',
         'costs',
         'sponsor',
-        'rep'
+        'rep',
+        'initiative'
     ];
 
     /**
@@ -29,21 +30,20 @@ class ProjectTransformer extends Fractal\TransformerAbstract
     public function transform(Project $project)
     {
         return [
-            'id'                 => $project->id,
-            'project_package_id' => $project->project_package_id,
-            'rep_id'             => $project->rep_id ? $project->rep_id : $project->package->initiative->rep_id,
-            'sponsor_id'         => $project->sponsor_id,
-            'sponsor_type'       => $project->sponsor_type,
-            'plaque'             => [
-                'prefix'  => $project->plaque_prefix,
-                'message' => $project->plaque_message
-            ],
-            'funded_at'          => $project->funded_at ? $project->funded_at->toDateTimeString() : null,
-            'launched_at'        => $project->launched_at ? $project->launched_at->toDateTimeString() : null,
-            'completed_at'       => $project->completed_at ? $project->completed_at->toDateTimeString() : null,
-            'created_at'         => $project->created_at->toDateTimeString(),
-            'updated_at'         => $project->updated_at->toDateTimeString(),
-            'links'              => [
+            'id'                    => $project->id,
+            'name'                  => $project->name,
+            'project_initiative_id' => $project->project_initiative_id,
+            'sponsor_id'            => $project->sponsor_id,
+            'sponsor_type'          => $project->sponsor_type,
+            'plaque_prefix'         => $project->plaque_prefix,
+            'plaque_message'        => $project->plaque_message,
+            'goal'                  => (int) $project->goal,
+            'amount_raised'         => (int) $project->amount_raised,
+            'percent_raised'        => (int) $project->precent_raised,
+            'funded_at'             => $project->funded_at ? $project->funded_at->toDateTimeString() : null,
+            'created_at'            => $project->created_at->toDateTimeString(),
+            'updated_at'            => $project->updated_at->toDateTimeString(),
+            'links'                 => [
                 [
                     'rel' => 'self',
                     'uri' => url('/api/projects/' . $project->id),
@@ -53,14 +53,31 @@ class ProjectTransformer extends Fractal\TransformerAbstract
     }
 
     /**
-     * Include package.
+     * Include sponsor.
      *
      * @param Project $project
      * @return Fractal\Resource\Item
      */
-    public function includePackage(Project $project)
+    public function includeSponsor(Project $project)
     {
-        return $this->item($project->package, new ProjectPackageTransformer);
+        if($project->sponsor instanceof Group) {
+            return $this->item($project->sponsor, new GroupTransformer);
+        }
+
+        return $this->item($project->sponsor, new UserTransformer);
+    }
+
+    /**
+     * Include initiative.
+     *
+     * @param Project $project
+     * @return Fractal\Resource\Item
+     */
+    public function includeInitiative(Project $project)
+    {
+        $initiative = $project->initiative;
+
+        return $this->item($initiative, new ProjectInitiativeTransformer);
     }
 
     /**

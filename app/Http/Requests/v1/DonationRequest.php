@@ -24,7 +24,7 @@ class DonationRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'amount'             => 'required|numeric',
             'description'        => 'string|max:120',
             'comment'            => 'string|max:120',
@@ -51,5 +51,23 @@ class DonationRequest extends FormRequest
             'card.exp_year'      => 'required_with:card|digits:4',
             'card.cvc'           => 'required_with:card|digits_between:3,4',
         ];
+
+        if ($this->isMethod('put')) {
+            $rules = [
+                'amount'             => 'required|numeric',
+                'description'        => 'string|max:120',
+                'comment'            => 'string|max:120',
+                'fund_id'            => 'required|string|exists:funds,id',
+                'donor_id'           => 'required|string|exists:donors,id',
+                'payment'            => 'required|array',
+                'payment.type'       => 'required|in:cash,check,card',
+                'payment.number'     => 'required_if:payment.type,check|string',
+                'card'               => 'array',
+                'card.card_id'       => 'string',
+                'card.cardholder'    => 'required_with:card|string',
+            ];
+        }
+
+        return $rules;
     }
 }

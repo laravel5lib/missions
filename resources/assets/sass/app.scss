@@ -177,6 +177,10 @@ body {
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
 }
+body:not(.modal-open) {
+  overflow-y: auto !important;
+
+}
 /* Parallax Headers */
 .content-page-header {
   position: relative;
@@ -350,13 +354,10 @@ body {
   /* Negative indent footer by its height */
   margin: 0 auto -200px;
   /* Pad bottom by footer height */
-  padding: 0 0 200px;
+  padding: 0 0 200px 55px;
   padding-top: 65px;
-  & > .container {
-    padding-left: 40px !important;
-    @media screen and (max-width: 767px) {
-      padding-left: 10px !important;
-    }
+  @media screen and (max-width: 991px) {
+    padding-left: 0px;
   }
 }
 #admin-page-wrap {
@@ -366,13 +367,10 @@ body {
   /* Negative indent footer by its height */
   margin: 0 auto 20px;
   /* Pad bottom by footer height */
-  padding: 0 0 20px;
+  padding: 0 0 20px 55px;
   padding-top: 65px;
-  & > .container {
-    padding-left: 40px !important;
-    @media screen and (max-width: 767px) {
-      padding-left: 10px !important;
-    }
+  @media screen and (max-width: 991px) {
+    padding-left: 0px;
   }
 }
 #footer-mm {
@@ -502,6 +500,51 @@ li.av-nav > a {
 }
 
 /* Offcanvas nav */
+/* Tooltip container */
+.offcanvas-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tooltip text */
+.offcanvas-tooltip span {
+    visibility: hidden;
+    min-width: 120px;
+    background-color: $gray-darker;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 4px;
+    top: -5px;
+    left: 39px; 
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1 !important;
+    overflow: visible;
+    &::after {
+      content: " ";
+      position: absolute;
+      top: 50%;
+      right: 100%; /* To the left of the tooltip */
+      margin-top: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent $gray-darker transparent transparent;
+    }
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.offcanvas-tooltip:hover span {
+    visibility: visible;
+}
+
+.offcanvas-sm .nav > li > a {
+  padding: 22px 20px;
+}
+.navmenu-fixed-left, .navbar-offcanvas.navmenu-fixed-left {
+  border: none;
+}
 .aside-backdrop {
   z-index: 1020 !important;
 }
@@ -539,6 +582,10 @@ li.av-nav > a {
 }
 .navbar {
   margin-bottom:0;
+  padding-left: 55px;
+  @media screen and (max-width: 991px) {
+    padding-left: 0;
+  }
 }
 .db-brand-xs {
   padding: 0px;
@@ -610,7 +657,7 @@ li.av-nav > a {
 }
 .onenation-vision {
   color: #fff;
-  background: $gray-darker url(../images/1n1d17/vision-bg.jpg) no-repeat center fixed;
+  background: $gray-darker url(../../images/1n1d17/vision-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -618,7 +665,7 @@ li.av-nav > a {
   padding: 200px 0 200px;
 }
 .onenation-exp {
-  background: #fff url(../images/1n1d17/experience-bg.jpg) no-repeat center fixed;
+  background: #fff url(../../images/1n1d17/experience-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -626,7 +673,7 @@ li.av-nav > a {
   padding: 200px 0 200px;
 }
 .onenation-header {
-  background: $gray-darker url(../images/1n1d17/reveal-bg.jpg) no-repeat center fixed;
+  background: $gray-darker url(../../images/1n1d17/reveal-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -641,7 +688,7 @@ img.onenation-logo {
 }
 .india-vision {
   color: #fff;
-  background: $gray-darker url(../images/india/paperboard-bg.jpg) no-repeat center fixed;
+  background: $gray-darker url(../../images/india/paperboard-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -649,7 +696,7 @@ img.onenation-logo {
   padding: 100px 0 100px;
 }
 .india-exp {
-  background: #fff url(../images/india/experience-bg.jpg) no-repeat center fixed;
+  background: #fff url(../../images/india/experience-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -773,7 +820,7 @@ $img-base-size: 40px;
 }
 .angel-house-bg {
   color: #fff;
-  background-image: url(../images/home/angel-house-bg.jpg);
+  background-image: url(../../images/home/angel-house-bg.jpg);
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -788,7 +835,7 @@ h1.home-college-header {
 }
 .change-world-bg {
   color: #fff;
-  background-image: url(../images/home/change-world-bg.jpg);
+  background-image: url(../../images/home/change-world-bg.jpg);
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -888,7 +935,7 @@ h1.home-college-header {
 
 @media (max-width: 767px) {
     .college-vid-bg {
-      background: url('../images/college/home-placeholder.jpg') center center / cover no-repeat;
+      background: url('../../images/college/home-placeholder.jpg') center center / cover no-repeat;
     }
     .college-vid-bg-video {
       display: none;

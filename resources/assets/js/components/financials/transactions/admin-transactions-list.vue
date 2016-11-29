@@ -47,7 +47,7 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <form class="form-inline text-right" novalidate>
+                <form class="form-inline" novalidate>
                     <div class="form-inline" style="display: inline-block;">
                         <div class="form-group">
                             <label>Show</label>
@@ -81,6 +81,50 @@
                                     <input type="checkbox" v-model="activeFields" value="amount" :disabled="maxCheck('amount')"> Amount
                                 </label>
                             </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="donor" :disabled="maxCheck('donor')"> Donor
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="class" :disabled="maxCheck('class')"> Class
+                                </label>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="item" :disabled="maxCheck('item')"> Item
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="last_four" :disabled="maxCheck('last_four')"> Card Last Four
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="cardholder" :disabled="maxCheck('cardholder')"> Cardholder
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="donor_phone" :disabled="maxCheck('donor_phone')"> Donor Phone
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="donor_email" :disabled="maxCheck('donor_email')"> Donor Email
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="fund_name" :disabled="maxCheck('fund_name')"> Fund Name
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="created_at" :disabled="maxCheck('created_at')"> Created
+                                </label>
+                            </li>
                             <li role="separator" class="divider"></li>
                             <li>
                                 <div style="margin-bottom: 0px;" class="input-group input-group-sm">
@@ -106,23 +150,23 @@
         </div>
         <hr class="divider sm">
         <div>
-            Active Filters:
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.donor" @click="filters.donor = ''" >
+            <label>Active Filters</label>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.donor" @click="filters.donor = ''" >
                 Donor
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.minAmount" @click="filters.minAmount = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.minAmount" @click="filters.minAmount = ''" >
                 Min Amount
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.maxAmount" @click="filters.maxAmount = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.maxAmount" @click="filters.maxAmount = ''" >
                 Max Amount
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.type && filters.type.length" @click="filters.type = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.type && filters.type.length" @click="filters.type = ''" >
                 Type
-                <span class="badge">x</span>
-            </button>
+                <i class="fa fa-close"></i>
+            </span>
         </div>
         <hr class="divider sm">
         <table class="table table-hover">
@@ -138,12 +182,62 @@
                     <i @click="setOrderByField('description')" v-if="orderByField !== 'description'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'description'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-
                 <th v-if="isActive('amount')" :class="{'text-primary': orderByField === 'amount'}">
                     Amount
                     <i @click="setOrderByField('amount')" v-if="orderByField !== 'amount'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'amount'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
+                <th v-if="isActive('donor')" :class="{'text-primary': orderByField === 'donor'}">
+                    Donor
+                    <i @click="setOrderByField('donor')" v-if="orderByField !== 'donor'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'donor'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('class')" :class="{'text-primary': orderByField === 'class'}">
+                    Class
+                    <i @click="setOrderByField('class')" v-if="orderByField !== 'class'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'class'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('item')" :class="{'text-primary': orderByField === 'item'}">
+                    Item
+                    <i @click="setOrderByField('item')" v-if="orderByField !== 'item'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'item'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('last_four')" :class="{'text-primary': orderByField === 'last_four'}">
+                    Card Last Four
+                    <i @click="setOrderByField('last_four')" v-if="orderByField !== 'last_four'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'last_four'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('card_brand')" :class="{'text-primary': orderByField === 'card_brand'}">
+                    Card Brand
+                    <i @click="setOrderByField('card_brand')" v-if="orderByField !== 'card_brand'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'card_brand'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('cardholder')" :class="{'text-primary': orderByField === 'cardholder'}">
+                    Card Holder
+                    <i @click="setOrderByField('cardholder')" v-if="orderByField !== 'cardholder'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'cardholder'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('donor_phone')" :class="{'text-primary': orderByField === 'donor_phone'}">
+                    Donor phone
+                    <i @click="setOrderByField('donor_phone')" v-if="orderByField !== 'donor_phone'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'donor_phone'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('donor_email')" :class="{'text-primary': orderByField === 'donor_email'}">
+                    Donor Email
+                    <i @click="setOrderByField('donor_email')" v-if="orderByField !== 'donor_email'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'donor_email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('fund_name')" :class="{'text-primary': orderByField === 'fund_name'}">
+                    Fund Name
+                    <i @click="setOrderByField('fund_name')" v-if="orderByField !== 'fund_name'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'fund_name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('created_at')" :class="{'text-primary': orderByField === 'created_at'}">
+                    Created
+                    <i @click="setOrderByField('created_at')" v-if="orderByField !== 'created_at'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'created_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
@@ -156,6 +250,16 @@
                 <td v-if="isActive('amount')">
                     <span v-text="transaction.amount|currency" :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}"></span>
                 </td>
+                <td v-if="isActive('donor')" v-text="transaction.donor.data.name"></td>
+                <td v-if="isActive('class')" v-text="transaction.fund.data.class"></td>
+                <td v-if="isActive('item')" v-text="transaction.fund.data.item"></td>
+                <td v-if="isActive('last_four')" v-text="transaction.payment.last_four"></td>
+                <td v-if="isActive('card_brand')" v-text="transaction.payment.brand"></td>
+                <td v-if="isActive('cardholder')" v-text="transaction.payment.cardholder"></td>
+                <td v-if="isActive('donor_phone')" v-text="transaction.donor.data.phone"></td>
+                <td v-if="isActive('donor_email')" v-text="transaction.donor.data.email"></td>
+                <td v-if="isActive('fund_name')" v-text="transaction.fund.data.name"></td>
+                <td v-if="isActive('created_at')" v-text="transaction.created_at|moment 'll'"></td>
                 <td><a href="/admin/transactions/{{ transaction.id }}"><i class="fa fa-cog"></i></a></td>
             </tr>
             </tbody>
@@ -169,27 +273,65 @@
             </tr>
             </tfoot>
         </table>
-        <modal title="Export Transactions List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
+        <modal title="Export List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
             <div slot="modal-body" class="modal-body">
-                <ul class="list-unstyled">
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="description"> Description
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="type"> Type
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="amount"> Amount
-                        </label>
-                    </li>
-                </ul>
+                <validator name="validation" :classes="{ invalid: 'has-error' }">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Filename</label>
+                        <input type="text" class="form-control" v-model="exportSettings.filename" placeholder="Enter an optional file name">
+                    </div>
+                    <div v-validate-class class="col-sm-6 form-group">
+                        <label>Send Report to Email</label>
+                        <input type="text"
+                               class="form-control"
+                               v-model="exportSettings.email"
+                               placeholder="Enter an email address"
+                               initial="off"
+                               v-validate:email="{email: { rule: true, message: 'Enter a valid email.'}}">
+                    </div>
+                </div>
+                <hr class="divider inv">
+                <div class="row">
+                    <div v-validate-class class="col-xs-8 form-group">
+                        <label>Choose Fields to Include:</label>
+                    </div>
+                    <div class="col-xs-4 text-right">
+                        <button class="btn btn-link btn-xs" @click="selectAllFields" v-text="exportSelectButton"></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" v-for="(key, value) in exportOptions">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       v-model="exportSettings.fields"
+                                       :value="key"
+                                       initial="off"
+                                       v-validate:fields="{required: { rule: true, message: 'At least one field is required.' }}">
+                                {{ value }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                </validator>
             </div>
         </modal>
+        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <span class="icon-ok-circled alert-icon-float-left"></span>
+            <strong>Awesome!</strong>
+            <p>{{ message }}</p>
+        </alert>
+        <alert :show.sync="showError"
+               placement="top-right"
+               :duration="6000"
+               type="danger"
+               width="400px"
+               dismissable>
+            <span class="icon-info-circled alert-icon-float-left"></span>
+            <strong>Oh No!</strong>
+            <p>{{ message }}</p>
+        </alert>
     </div>
 </template>
 <style>
@@ -235,6 +377,7 @@
                 search: '',
                 activeFields: ['description', 'type', 'amount'],
                 maxActiveFields: 3,
+                maxActiveFieldsOptions: [3, 4, 5, 6, 7, 8],
 
                 // filter vars
                 donorsOptions: [],
@@ -250,9 +393,30 @@
                 showFilters: false,
                 showExportModal: false,
                 exportSettings: {
-                    fields: [],
-                }
-
+                    fields: ['description', 'amount', 'date'],
+                    email: '',
+                    filename: ''
+                },
+                exportOptions: {
+                    description: 'Description',
+                    amount: 'Amount',
+                    payment_type: 'Payment Type',
+                    type: 'Transaction Type',
+                    date: 'Transaction Date',
+                    class: 'QuickBooks Class',
+                    item: 'QuickBooks Item',
+                    fund_name: 'Fund Name',
+                    donor_name: 'Donor Name',
+                    donor_email: 'Donor Email',
+                    donor_phone: 'Donor Phone',
+                    donor_address_one: 'Donor Address',
+                    donor_address_two: 'Donor City, State & Zip',
+                    donor_country: 'Donor Country'
+                },
+                exportSelectButton: 'Select all',
+                showSuccess: false,
+                showError: false,
+                message: null
             }
         },
         watch: {
@@ -297,6 +461,15 @@
 
         },
         methods: {
+            selectAllFields() {
+                if (this.exportSettings.fields.length == _.keys(this.exportOptions).length) {
+                    this.exportSettings.fields = [];
+                    this.exportSelectButton = 'Select all';
+                } else {
+                    this.exportSettings.fields = _.keys(this.exportOptions);
+                    this.exportSelectButton = 'Deselect all';
+                }
+            },
             updateConfig(){
                 localStorage[this.storageName] = JSON.stringify({
                     activeFields: this.activeFields,
@@ -348,7 +521,7 @@
             },
             getListSettings(){
                 var params = {
-                    include: '',
+                    include: 'donor,fund',
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
@@ -378,14 +551,27 @@
                 });
             },
             exportList(){
+
+                var self = this;
+                this.$validate(true, function() {
+                    if (self.$validation.invalid) {
+                        self.message = _.first(self.$validation.errors).message;
+                        self.showError = true;
+                        throw new Error("Validation errors");
+                    }
+                });
+
                 var params = this.getListSettings();
                 $.extend(params, this.exportSettings);
                 // Send to api route
 
                 this.$http.post('transactions/export', params).then(function (response) {
+                    this.message = response.data.message;
+                    this.showSuccess = true;
                     console.log(response);
                 }, function (error) {
-                    console.log(error);
+                    this.message = 'Unable to export the list.';
+                    this.showError = true;
                 })
             }
         },

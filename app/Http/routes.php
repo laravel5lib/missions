@@ -221,6 +221,9 @@ Route::get('/1n1d13', function () {
 Route::get('/1n1d15', function () {
     return view('site.1n1d15');
 });
+Route::get('/sponsor-a-project', function () {
+    return view('site.sponsor-a-project');
+});
 
 Route::get('/{slug}', function ($slug) {
     return $slug;

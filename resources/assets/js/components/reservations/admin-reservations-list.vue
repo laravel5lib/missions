@@ -97,7 +97,7 @@
 
 		<div class="row">
             <div class="col-sm-12">
-                <form class="form-inline text-right" novalidate>
+                <form class="form-inline" novalidate>
                 	<div class="form-inline" style="display: inline-block;">
                     	<div class="form-group">
 	                        <label>Show</label>
@@ -189,7 +189,7 @@
                     </div>
 					<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
 						Filters
-						<span class="caret"></span>
+						<i class="fa fa-filter"></i>
 					</button>
 					<button class="btn btn-default btn-sm" type="button" @click="showExportModal=true">
 						Export
@@ -201,46 +201,46 @@
         </div>
         <hr class="divider sm">
 		<div>
-			Active Filters:
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.tags.length" @click="filters.tags = []" >
+			<label>Active Filters</label>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.tags.length" @click="filters.tags = []" >
 				Tags
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.user.length" @click="filters.user = []" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.user.length" @click="filters.user = []" >
 				Users
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.groups.length" @click="filters.groups = []" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.groups.length" @click="filters.groups = []" >
 				Groups
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
 				Campaign
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.gender.length" @click="filters.gender = ''" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.gender.length" @click="filters.gender = ''" >
 				Gender
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.status.length" @click="filters.status = ''" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.status.length" @click="filters.status = ''" >
 				Status
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.shirtSize.length" @click="filters.shirtSize = ''" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.shirtSize.length" @click="filters.shirtSize = ''" >
 				Shirt Size
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.hasCompanions !== null" @click="filters.hasCompanions = null" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.hasCompanions !== null" @click="filters.hasCompanions = null" >
 				Companions
-				<span class="badge">x</span>
-			</button>
-			<button type="button"class="btn btn-xs btn-default" v-show="filters.hasPassport !== null" @click="filters.hasPassport = null" >
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.hasPassport !== null" @click="filters.hasPassport = null" >
 				Passport
-				<span class="badge">x</span>
-			</button>
+				<i class="fa fa-close"></i>
+			</span>
 		</div>
         <hr class="divider sm">
-        <table class="table table-hover">
+        <table class="table table-striped">
             <thead>
             <tr>
                 <th v-if="isActive('given_names')" :class="{'text-primary': orderByField === 'given_names'}">
@@ -296,7 +296,7 @@
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody v-if="reservations.length > 0">
             <tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
                 <td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
                 <td v-if="isActive('surname')" v-text="reservation.surname"></td>
@@ -313,12 +313,20 @@
                 <td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
             </tr>
             </tbody>
+			<tbody v-else>
+				<tr>
+					<td colspan="10" class="text-center text-muted">
+						No reservations found.
+					</td>
+				</tr>
+			</tbody>
             <tfoot>
             <tr>
-                <td colspan="7">
-                    <div class="col-sm-12 text-center">
-						<pagination :pagination.sync="pagination" :callback="searchReservations"></pagination>
-                    </div>
+                <td colspan="10" class="text-center">
+					<pagination :pagination.sync="pagination"
+								:callback="searchReservations"
+								size="small">
+					</pagination>
                 </td>
             </tr>
             </tfoot>
@@ -431,7 +439,7 @@
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: { current_page: 1 },
                 search: '',
-				activeFields: ['given_names', 'surname', 'group', 'campaign', 'type', 'registered'],
+				activeFields: ['given_names', 'surname', 'group', 'campaign', 'type', 'percent_raised'],
 				maxActiveFields: 6,
 				maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
 				groupsArr: [],

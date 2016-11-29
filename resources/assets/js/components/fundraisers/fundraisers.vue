@@ -87,10 +87,7 @@
 
                 // pagination vars
                 search: '',
-                page: 1,
-                //per_page: 6,
                 pagination: { current_page: 1 },
-                // pathName: window.location.pathname
             }
         },
         computed: {
@@ -110,7 +107,7 @@
                         return'@' + fundraiser.sponsor.data.url + '/' + fundraiser.url
                         break
                     case 'groups':
-                        return 'groups' + fundraiser.sponsor.data.url + '/' + fundraiser.url
+                        return 'groups/' + fundraiser.sponsor.data.url + '/' + fundraiser.url
                         break;
                 }
             },

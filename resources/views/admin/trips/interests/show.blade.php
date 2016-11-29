@@ -30,7 +30,7 @@
         </div>
         <div class="row">
             <div class="col-md-offset-2 col-md-8">
-                <todos type="trip-interests"
+                <todos type="trip_interests"
                        id="{{ $interest->id }}"
                        user_id="{{ auth()->user()->id }}"
                        :can-modify="{{ auth()->user()->can('modify-todos') }}">
@@ -39,7 +39,7 @@
         </div>
         <div class="row">
             <div class="col-md-offset-2 col-md-8">
-                <notes type="trip-interests"
+                <notes type="trip_interests"
                        id="{{ $interest->id }}"
                        user_id="{{ auth()->user()->id }}"
                        :per_page="3"

@@ -5,7 +5,7 @@
                 <div class="col-xs-4">
                     <h5 class="panel-header">Details</h5>
                 </div>
-                <div class="col-xs-8 text-right">
+                <div class="col-xs-8 text-right" v-if=" ! readOnly">
                     <button class="btn btn-xs btn-default-hollow" @click="reconcile" v-if="!editMode">
                         <i class="fa fa-calculator"></i> Reconcile
                     </button>
@@ -61,6 +61,10 @@
             'id': {
                 type: String,
                 required: true
+            },
+            'readOnly': {
+                type: Boolean,
+                default: false
             }
         },
         data(){

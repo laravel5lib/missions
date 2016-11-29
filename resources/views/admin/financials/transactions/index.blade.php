@@ -17,6 +17,10 @@
                 @include('admin.financials.partials._tabs')
             </div>
         </div>
-        <admin-transactions-list></admin-transactions-list>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <admin-transactions-list></admin-transactions-list>
+            </div><!-- end panel-body -->
+        </div><!-- end panel -->
     </div>
 @stop

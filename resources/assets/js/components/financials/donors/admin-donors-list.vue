@@ -78,7 +78,7 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <form class="form-inline text-right" novalidate>
+                <form class="form-inline" novalidate>
                     <div class="form-inline" style="display: inline-block;">
                         <div class="form-group">
                             <label>Show</label>
@@ -152,39 +152,39 @@
         </div>
         <hr class="divider sm">
         <div>
-            Active Filters:
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.reservation && filters.reservation.length" @click="filters.reservation = ''" >
+            <label>Active Filters</label>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.reservation && filters.reservation.length" @click="filters.reservation = ''" >
                 Reservation
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.group && filters.group.length" @click="filters.group = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.group && filters.group.length" @click="filters.group = ''" >
                 Group
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.campaign && filters.campaign.length" @click="filters.campaign = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.campaign && filters.campaign.length" @click="filters.campaign = ''" >
                 Campaign
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.cause && filters.cause.length" @click="filters.cause = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.cause && filters.cause.length" @click="filters.cause = ''" >
                 Cause
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.trip && filters.trip.length" @click="filters.trip = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.trip && filters.trip.length" @click="filters.trip = ''" >
                 Trip
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.project && filters.project.length" @click="filters.project = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.project && filters.project.length" @click="filters.project = ''" >
                 Project
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.starts && filters.starts.length" @click="filters.starts = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.starts && filters.starts.length" @click="filters.starts = ''" >
                 Starts
-                <span class="badge">x</span>
-            </button>
-            <button type="button"class="btn btn-xs btn-default" v-show="filters.ends && filters.ends.length" @click="filters.ends = ''" >
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.ends && filters.ends.length" @click="filters.ends = ''" >
                 Ends
-                <span class="badge">x</span>
-            </button>
+                <i class="fa fa-close"></i>
+            </span>
         </div>
         <hr class="divider sm">
         <table class="table table-hover">

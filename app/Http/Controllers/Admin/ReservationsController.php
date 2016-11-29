@@ -46,7 +46,9 @@ class ReservationsController extends Controller
 
         $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments']);
 
-        return view('admin.reservations.show', compact('reservation'));
+        $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
+
+        return view('admin.reservations.show', compact('reservation', 'rep'));
     }
 
     /**

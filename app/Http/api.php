@@ -43,7 +43,8 @@ $api->version('v1', [
     $api->post('groups/submit', 'GroupsController@submit');
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
-    $api->resource('trips.requirements', 'TripRequirementsController');
+    $api->get('trips/{id}/todos', 'TripTodosController@index');
+    $api->post('trips/{id}/todos', 'TripTodosController@store');
     $api->post('trips/{id}/register', 'TripsController@register');
     $api->resource('interests', 'TripInterestsController');
     $api->resource('reservations', 'ReservationsController');
@@ -69,15 +70,19 @@ $api->version('v1', [
     $api->resource('funds', 'FundsController');
     $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
     $api->resource('transactions', 'TransactionsController');
+    $api->resource('causes', 'ProjectCausesController');
+    $api->get('causes/{cause}/initiatives', 'ProjectInitiativesController@index');
+    $api->resource('initiatives', 'ProjectInitiativesController', ['except' => 'index']);
+    $api->get('causes/{cause}/projects', 'ProjectsController@index');
+    $api->resource('projects', 'ProjectsController', ['except' => 'index']);
     $api->post('transactions/export', 'TransactionsController@export');
-    $api->resource('causes', 'CausesController');
-    $api->resource('causes/{cause}/initiatives', 'ProjectInitiativesController');
-    $api->resource('initiatives/{initiative}/packages', 'ProjectPackagesController');
-    $api->resource('projects/types', 'ProjectTypesController');
-    $api->resource('projects', 'ProjectsController');
     $api->resource('notes', 'NotesController');
     $api->resource('todos', 'TodosController');
     $api->resource('essays', 'EssaysController');
+    $api->resource('costs', 'CostsController');
+    $api->resource('costs.payments', 'CostPaymentsController');
+    $api->resource('requirements', 'RequirementsController');
+    $api->resource('deadlines', 'DeadlinesController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

@@ -6,22 +6,29 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3>{{ $user->name }}</h3>
+                    <h3>
+                        <img src="{{ image($user->avatar->source . '?w=100') }}" alt="{{ $user->name }}" class="img-circle av-left img-sm">
+                        {{ $user->name }}
+                        <small>&middot; User</small>
+                    </h3>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <div class="btn-group pull-right">
-                        <a href="/admin/users" class="btn btn-primary"><i class="fa fa-chevron-left"></i></a>
-                        <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Action <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="create">New</a></li>
-                            <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                            {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
-                            <li role="separator" class="divider"></li>
-                            <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
-                        </ul>
+                    <hr class="divider inv">
+                    <div class="btn-group">
+                        <a href="/admin/users" class="btn btn-primary-darker"><i class="fa fa-chevron-left"></i></a>
+                        <div class="btn-group">
+                            <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Manage <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="create">New</a></li>
+                                <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                                {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
+                                <li role="separator" class="divider"></li>
+                                <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

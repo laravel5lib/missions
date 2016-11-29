@@ -48,10 +48,7 @@
                     <div class="row">
                         <div class="col-xs-2 col-sm-1 text-muted todo-item-checkbox" @click="completeTodo(todo)">
                             <i class="fa fa-lg"
-                               :class="{
-                               'fa-check-square-o' : todo.completed_at,
-                               'fa-square-o' : !todo.completed_at
-                               }">
+                               :class="{ 'fa-check-square-o' : todo.completed_at, 'fa-square-o' : !todo.completed_at }">
                             </i>
                         </div>
                         <div class="col-xs-9 col-sm-10" v-if="selectedTodo.id == todo.id && editMode">

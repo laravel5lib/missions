@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\v1\ProjectCause;
+use App\Models\v1\ProjectType;
+use App\Models\v1\Project;
 use App\Models\v1\User;
 use App\Models\v1\Campaign;
 use App\Models\v1\Group;
@@ -65,6 +68,8 @@ class BouncerSeeder extends Seeder
         Bouncer::allow('admin')->to('create', Upload::class);
         Bouncer::allow('admin')->to('edit', Upload::class);
         Bouncer::allow('admin')->to('delete', Upload::class);
+        // projects
+        Bouncer::allow('admin')->to('manage-projects');
         // todos
         Bouncer::allow('admin')->to('modify-todos');
         // notes

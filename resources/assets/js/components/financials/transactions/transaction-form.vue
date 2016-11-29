@@ -1,35 +1,28 @@
 <template>
     <div>
-
-        <alert :show.sync="showSuccess"
-               placement="top-right"
-               :duration="3000"
-               type="success"
-               width="400px"
-               dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Well Done!</strong>
-            <p>{{ message }}</p>
-        </alert>
-
-        <alert :show.sync="showError"
-               placement="top-right"
-               :duration="6000"
-               type="danger"
-               width="400px"
-               dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>{{ message }}</p>
-        </alert>
+        <div class="alert alert-info" v-if="editingCreditCard">
+            <h5>Edits to credit card transactions are limited.</h5>
+            <p>You should refund the transaction and start over.<p>
+        </div>
 
         <div class="panel panel-default">
-            <spinner v-ref:transactionspinner size="xl" :fixed="true" text="Saving..."></spinner>
             <div class="panel-body">
+                <spinner v-ref:transactionspinner size="xl" :fixed="false" :text="spinnerText"></spinner>
+                <div class="row" v-if="editing">
+                    <div class="col-xs-12">
+                        <label>Designated Fund</label>
+                        <v-select class="form-control" id="designatedFund" :debounce="250" :on-search="getFunds"
+                                  :value.sync="designatedFund" :options="funds" label="name"
+                                  placeholder="Select a fund"></v-select>
+                        <span class="help-block small" v-show="designatedFund">
+                            <a href="#" @click="fundInfoMode"><i class="fa fa-question-circle"></i> View Fund Details</a>
+                        </span>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-xs-6">
                         <label>Transaction Type</label>
-                        <select v-model="transaction.type" class="form-control">
+                        <select v-model="transaction.type" class="form-control" :disabled="editing">
                             <option value="donation">Donation</option>
                             <option value="transfer">Transfer</option>
                             <option value="credit">Credit</option>
@@ -39,7 +32,11 @@
                         <label>Amount</label>
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            <input type="text" class="form-control" placeholder="0.00" v-model="transaction.amount">
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="0.00"
+                                   v-model="transaction.amount"
+                                   :disabled="editingCreditCard">
                         </div>
                     </div>
                 </div>
@@ -80,11 +77,15 @@
                         </div>
                         <div class="col-xs-6">
                             <label>Payment Method</label>
-                            <select class="form-control" v-model="transaction.payment.type">
+                            <select class="form-control" v-model="transaction.payment.type" :disabled="editingCreditCard">
                                 <option value="card">Credit Card</option>
                                 <option value="check">Check</option>
                                 <option value="cash">Cash</option>
                             </select>
+                        </div>
+                        <div class="col-xs-12">
+                            <label>Comment</label>
+                            <textarea class="form-control" v-model="transaction.comment"></textarea>
                         </div>
                     </div>
                     <div class="row" v-if="transaction.payment.type == 'card'">
@@ -94,21 +95,21 @@
                         </div>
                         <div class="col-xs-6">
                             <label>Card Number</label>
-                            <input class="form-control" type="text" v-model="card.number" />
+                            <input class="form-control" type="text" v-model="card.number" :disabled="editingCreditCard" />
                         </div>
                         <div class="col-xs-4">
                             <label>CVC Code</label>
-                            <input class="form-control" type="text" v-model="card.cvc" maxlength="4" />
+                            <input class="form-control" type="text" v-model="card.cvc" maxlength="4" :disabled="editingCreditCard" />
                         </div>
                         <div class="col-xs-4">
                             <label>Exp. Month</label>
-                            <select class="form-control" v-model="card.exp_month">
+                            <select class="form-control" v-model="card.exp_month" :disabled="editingCreditCard">
                                 <option v-for="month in monthList" value="{{month}}">{{month}}</option>
                             </select>
                         </div>
                         <div class="col-xs-4">
                             <label>Exp. Year</label>
-                            <select class="form-control" v-model="card.exp_year">
+                            <select class="form-control" v-model="card.exp_year" :disabled="editingCreditCard">
                                 <option v-for="year in yearList" value="{{year}}">{{year}}</option>
                             </select>
                         </div>
@@ -122,14 +123,16 @@
                 </div>
             </div>
             <div class="panel-body text-right">
-                <button class="btn btn-default btn-md" @click="reset">Reset</button>
-                <button class="btn btn-primary btn-md" @click="create">Create</button>
+                <button class="btn btn-default btn-md" @click="cancel" v-if="editing">Cancel</button>
+                <button class="btn btn-default btn-md" @click="reset" v-else>Reset</button>
+                <button class="btn btn-primary btn-md" @click="update" v-if="editing">Update</button>
+                <button class="btn btn-primary btn-md" @click="create" v-else>Create</button>
             </div>
         </div>
 
         <!-- New Donor Modal -->
         <div class="modal fade" tabindex="-1" role="dialog" id="newDonor">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog" role="document">
                 <donor-form @donor-created="donorCreated" @cancel="newDonorMode"></donor-form>
             </div>
         </div>
@@ -234,7 +237,7 @@
 
     </div>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from "vue-select";
     import donorForm from '../donors/donor-form.vue';
     export default{
@@ -243,6 +246,14 @@
             'fundId': {
                 type: String,
                 required: true
+            },
+            'id': {
+                type: String,
+                default: null
+            },
+            'editing': {
+                type: Boolean,
+                default: false
             }
         },
         components: {
@@ -263,7 +274,7 @@
                 toFund: null,
                 fromFund: null,
                 selectedFund: null,
-                selectedTransaction: null,
+                designatedFund: null,
                 donors: null,
                 selectedDonor: null,
                 card: {
@@ -272,14 +283,18 @@
                     exp_year: null,
                     exp_month: null
                 },
-                message: '',
-                showSuccess: false,
-                showError: false,
                 monthList: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-                transfer_type: 'to'
+                transfer_type: 'to',
+                spinnerText: 'Loading...'
             }
         },
         computed: {
+            editingCreditCard() {
+                if (this.editing && this.transaction.payment.type == 'card') {
+                    return true;
+                }
+                return false;
+            },
             yearList() {
                 var num, today, years, yyyy;
                 today = new Date;
@@ -315,11 +330,6 @@
                     this.donors = response.data.data;
                 });
             },
-            getTransactions(search) {
-                this.$http.get('transactions?type=donation&per_page=10', {search: search}).then(function (response) {
-                    this.transactions = response.data.data;
-                });
-            },
             donorCreated(donor) {
                 $('#newDonor').modal('hide');
                 this.$http.get('donors/' + donor).then(function (response) {
@@ -339,7 +349,6 @@
                 this.toFund = null;
                 this.fromFund = null;
                 this.selectedFund = null;
-                this.selectedTransaction = null;
                 this.donors = null;
                 this.selectedDonor = null;
                 this.card = {
@@ -350,9 +359,64 @@
                     exp_year: null
                 };
             },
+            cancel() {
+                window.location = '/admin/transactions/' + this.id;
+            },
+            fetch() {
+                this.$refs.transactionspinner.show();
+
+                this.$http.get('transactions/' + this.id, {include: 'donor,fund'}).then(function (response) {
+                    this.$refs.transactionspinner.hide();
+                    this.transaction = response.data.data;
+                    this.designatedFund = this.transaction.fund.data;
+
+                    if (this.transaction.type == 'transfer') {
+                        this.transaction.amount < 0 ? this.transfer_type = 'from' : this.transfer_type = 'to';
+                        this.selectedFund.id = this.transaction.payment.fund_id;
+                    }
+
+                    if (this.transaction.type == 'donation') {
+
+                        this.selectedDonor = this.transaction.donor.data;
+
+                        if (this.transaction.payment.type == 'card') {
+                            this.card.cardholder = this.transaction.payment.cardholder;
+                            this.card.number = this.transaction.payment.last_four;
+                        }
+                    }
+
+                }).error(function (response) {
+                    this.$refs.transactionspinner.hide();
+                    this.$dispatch('showError', 'Unable to retrieve transaction.');
+                });
+            },
             create() {
                 this.$refs.transactionspinner.show();
 
+                var data = this.prepareData();
+
+                this.$http.post('transactions', data).then(function (response) {
+                    this.$refs.transactionspinner.hide();
+                    this.$dispatch('showSuccess', 'Transaction successfully created.');
+                }).error(function (response) {
+                    this.$refs.transactionspinner.hide();
+                    this.$dispatch('showError', 'There are errors on the form.');
+                });
+            },
+            update() {
+                this.$refs.transactionspinner.show();
+
+                var data = this.prepareData();
+
+                this.$http.put('transactions/' + this.id, data).then(function (response) {
+                    this.$refs.transactionspinner.hide();
+                    this.$dispatch('showSuccess', 'Transaction updated successfully.');
+                }).error(function (response) {
+                    this.$refs.transactionspinner.hide();
+                    this.$dispatch('showError', 'There are errors on the form.');
+                });
+            },
+            prepareData() {
                 var data = {
                     payment: {}
                 };
@@ -374,6 +438,7 @@
                 if (this.transaction.type == 'donation') {
                     data.type = this.transaction.type;
                     data.amount = this.transaction.amount;
+                    data.comment = this.transaction.comment;
                     data.fund_id = this.fundId;
                     if (this.selectedDonor && this.selectedDonor.id) {
                         data.donor_id = this.selectedDonor.id;
@@ -385,23 +450,15 @@
                         data.payment.number = this.transaction.payment.number;
                     }
                     if (this.transaction.payment.type == 'card') {
+                        data.card = this.card;
                     }
                 }
 
-                this.$http.post('transactions', data).then(function (response) {
-                    this.$refs.transactionspinner.hide();
-                    this.message = 'Transaction successfully created.';
-                    this.showSuccess = true;
-                    console.log(response);
-                }).error(function (response) {
-                    this.$refs.transactionspinner.hide();
-                    console.log(response);
-                    this.message = 'There are errors on the form.';
-                    this.showError = true;
-                });;
+                return data;
             }
         },
         ready() {
+            if (this.editing) { this.fetch() };
         }
     }
 </script>

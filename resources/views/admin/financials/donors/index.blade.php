@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-sm-4">
                     <hr class="divider inv sm">
-                    <a href="{{ url('admin/donors/create') }}" class="btn btn-primary pull-right">New <i class="fa fa-plus"></i></a>
+                    <a href="{{ url('admin/donors/create') }}" class="btn btn-primary pull-right"><i class="fa fa-plus icon-left"></i> New</a>
                 </div>
             </div>
         </div>
@@ -21,6 +21,10 @@
                 @include('admin.financials.partials._tabs')
             </div>
         </div>
-        <admin-donors-list></admin-donors-list>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <admin-donors-list></admin-donors-list>
+            </div><!-- end panel-body -->
+        </div><!-- end panel -->
     </div>
 @stop

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\v1\ProjectRequest;
 use App\Http\Transformers\v1\ProjectTransformer;
 use App\Models\v1\Project;
+use App\Models\v1\ProjectCause;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,14 +16,20 @@ class ProjectsController extends Controller
      * @var Project
      */
     private $project;
+    /**
+     * @var ProjectCause
+     */
+    private $cause;
 
     /**
      * ProjectsController constructor.
      * @param Project $project
+     * @param ProjectCause $cause
      */
-    public function __construct(Project $project)
+    public function __construct(Project $project, ProjectCause $cause)
     {
         $this->project = $project;
+        $this->cause = $cause;
     }
 
     /**
@@ -31,9 +38,13 @@ class ProjectsController extends Controller
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function index(Request $request)
+    public function index($causeId, Request $request)
     {
-        $projects = $this->project->paginate($request->get('per_page', 10));
+        $projects = $this->cause
+                         ->findOrFail($causeId)
+                         ->projects()
+                         ->filter($request->all())
+                         ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($projects, new ProjectTransformer);
     }
@@ -59,13 +70,16 @@ class ProjectsController extends Controller
      */
     public function store(ProjectRequest $request)
     {
-        $project = $this->project->create($request->all());
+        $project = $this->project->create([
+            'name' => $request->get('name'),
+            'project_initiative_id' => $request->get('project_initiative_id'),
+            'sponsor_id' => $request->get('sponsor_id'),
+            'sponsor_type' => $request->get('sponsor_type'),
+            'plaque_prefix' => $request->get('plaque_prefix'),
+            'plaque_message' => $request->get('plaque_message')
+        ]);
 
-        if ($request->has('costs')) {
-            $project->syncCosts($request->get('costs'));
-        }
-
-        return $this->response($project, new ProjectTransformer);
+        return $this->response->item($project, new ProjectTransformer);
     }
 
     /**
@@ -79,13 +93,16 @@ class ProjectsController extends Controller
     {
         $project = $this->project->findOrFail($id);
 
-        $project->update($request->all());
+        $project->update([
+            'name' => $request->get('name'),
+            'project_initiative_id' => $request->get('project_initiative_id'),
+            'sponsor_id' => $request->get('sponsor_id'),
+            'sponsor_type' => $request->get('sponsor_type'),
+            'plaque_prefix' => $request->get('plaque_prefix'),
+            'plaque_message' => $request->get('plaque_message'),
+        ]);
 
-        if ($request->has('costs')) {
-            $project->syncCosts($request->get('costs'));
-        }
-
-        return $this->response($project, new ProjectTransformer);
+        return $this->response->item($project, new ProjectTransformer);
     }
 
     /**

@@ -6,14 +6,16 @@
         <div class="row">
             <div class="col-sm-8">
                 <h3>
+                    <img src="{{ image($group->avatar->source . '?w=100') }}" alt="{{ $group->name }}" class="img-circle av-left img-sm">
                     {{ $group->name }} <small>&middot; Group</small>
                 </h3>
             </div>
             <div class="col-sm-4">
                 <hr class="divider inv sm">
+                <hr class="divider inv">
                 <div class="btn-group pull-right">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Action <span class="caret"></span>
+                        Manage <i class="fa fa-angle-down"></i>
                     </button>
                     <ul class="dropdown-menu">
                         <li><a href="create">New</a></li>
@@ -33,7 +35,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-default">
                 	  <div class="panel-heading">
-                			<h5>{{ $group->name }} <small>&middot; Details</small></h5>
+                			<h5>Group Details</h5>
                 	  </div>
                 	  <div class="panel-body">
                 			<div class="col-sm-8">

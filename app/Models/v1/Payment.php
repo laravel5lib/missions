@@ -35,9 +35,4 @@ class Payment extends Model
     {
         return $query->where('due_at', '<', Carbon::now());
     }
-
-    public function getBalanceDue()
-    {
-        return $this->cost->getBalanceDue($this->due_at);
-    }
 }

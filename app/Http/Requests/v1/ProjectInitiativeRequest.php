@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\v1;
 
-use App\Http\Requests\Request;
+use App\Utilities\v1\Country;
+use Dingo\Api\Http\FormRequest;
 
-class ProjectInitiativeRequest extends Request
+class ProjectInitiativeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +25,13 @@ class ProjectInitiativeRequest extends Request
     public function rules()
     {
         return [
-            'name'         => 'required|max:50',
-            'country_code' => 'required',
-            'started_at'   => 'date',
-            'ended_at'     => 'date',
+            'type'         => 'required|max:50',
+            'country_code' => 'required|in:' . Country::codes(),
+            'short_desc'   => 'required|max:255',
+            'upload_id'    => 'exists:uploads,id',
             'active'       => 'boolean',
-            'rep_id'       => 'exists:users,id'
+            'started_at'   => 'required|date',
+            'ended_at'     => 'required|date'
         ];
     }
 }

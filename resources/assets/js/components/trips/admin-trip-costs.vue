@@ -83,55 +83,57 @@
 
         <modal title="New Cost" :show.sync="showAddModal" effect="fade" width="800">
             <div slot="modal-body" class="modal-body">
-                <validator name="TripPricingCost" v-if="!selectedCost">
-                    <form class="form" novalidate>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
-                                    <label for="cost_name">Name</label>
-                                    <input type="text" class="form-control" id="cost_name"
-                                           v-model="newCost.name" v-validate:costName="{required: true}"
-                                           placeholder="Name" autofocus>
-                                </div>
-                                <div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
-                                    <label for="cost_description">Description</label>
-                                    <textarea class="form-control" id="cost_description"
-                                              v-model="newCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
-                                </div>
-                                <div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
-                                    <label for="cost_type">Type</label>
-                                    <select id="cost_type" class="form-control" v-model="newCost.type" v-validate:costType="{ required: true }">
-                                        <option value="">-- select --</option>
-                                        <option value="static">Static</option>
-                                        <option value="incremental">Incremental</option>
-                                        <option value="optional">Optional</option>
-                                    </select>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
-                                            <label for="newCost_active_at">Active</label>
-                                            <br>
-                                            <input type="date" id="newCost_active_at" class="form-control"
-                                                   v-model="newCost.active_at" v-validate:costActive="{required: true}">
-                                        </div>
-
+                <template v-if="!selectedCost">
+                    <validator name="TripPricingCost">
+                        <form class="form" novalidate>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
+                                        <label for="cost_name">Name</label>
+                                        <input type="text" class="form-control" id="cost_name"
+                                               v-model="newCost.name" v-validate:costName="{required: true}"
+                                               placeholder="Name" autofocus>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
-                                            <label for="newCost_amount">Amount</label>
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                                <input type="number" number id="newCost_amount" class="form-control"
-                                                       v-model="newCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
+                                        <label for="cost_description">Description</label>
+                                        <textarea class="form-control" id="cost_description"
+                                                  v-model="newCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
+                                    </div>
+                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
+                                        <label for="cost_type">Type</label>
+                                        <select id="cost_type" class="form-control" v-model="newCost.type" v-validate:costType="{ required: true }">
+                                            <option value="">-- select --</option>
+                                            <option value="static">Static</option>
+                                            <option value="incremental">Incremental</option>
+                                            <option value="optional">Optional</option>
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
+                                                <label for="newCost_active_at">Active</label>
+                                                <br>
+                                                <input type="date" id="newCost_active_at" class="form-control"
+                                                       v-model="newCost.active_at" v-validate:costActive="{required: true}">
+                                            </div>
+
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
+                                                <label for="newCost_amount">Amount</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-usd"></i></span>
+                                                    <input type="number" number id="newCost_amount" class="form-control"
+                                                           v-model="newCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                </validator>
+                        </form>
+                    </validator>
+                </template>
             </div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetCost()'>Cancel</button>
@@ -141,55 +143,58 @@
         </modal>
         <modal title="Edit Cost" :show.sync="showEditModal" effect="fade" width="800">
             <div slot="modal-body" class="modal-body">
-                <validator name="TripPricingCost" v-if="selectedCost">
-                    <form class="form" novalidate>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
-                                    <label for="cost_name">Name</label>
-                                    <input type="text" class="form-control" id="cost_name"
-                                           v-model="selectedCost.name" v-validate:costName="{required: true}"
-                                           placeholder="Name" autofocus>
-                                </div>
-                                <div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
-                                    <label for="cost_description">Description</label>
-                                    <textarea class="form-control" id="cost_description"
-                                              v-model="selectedCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
-                                </div>
-                                <div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
-                                    <label for="cost_type">Type</label>
-                                    <select id="cost_type" class="form-control" v-model="selectedCost.type" v-validate:costType="{ required: true }">
-                                        <option value="">-- select --</option>
-                                        <option value="static">Static</option>
-                                        <option value="incremental">Incremental</option>
-                                        <option value="optional">Optional</option>
-                                    </select>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
-                                            <label for="selectedCost_active_at">Active</label>
-                                            <br>
-                                            <input type="date" id="selectedCost_active_at" class="form-control"
-                                                   v-model="selectedCost.active_at" v-validate:costActive="{required: true}">
-                                        </div>
-
+                <template v-if="selectedCost">
+                    <validator name="TripPricingCost">
+                        <form class="form" novalidate>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
+                                        <label for="cost_name">Name</label>
+                                        <input type="text" class="form-control" id="cost_name"
+                                               v-model="selectedCost.name" v-validate:costName="{required: true}"
+                                               placeholder="Name" autofocus>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
-                                            <label for="selectedCost_amount">Amount</label>
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                                <input type="number" number id="selectedCost_amount" class="form-control"
-                                                       v-model="selectedCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
+                                        <label for="cost_description">Description</label>
+                                        <textarea class="form-control" id="cost_description"
+                                                  v-model="selectedCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
+                                    </div>
+                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
+                                        <label for="cost_type">Type</label>
+                                        <select id="cost_type" class="form-control" v-model="selectedCost.type" v-validate:costType="{ required: true }">
+                                            <option value="">-- select --</option>
+                                            <option value="static">Static</option>
+                                            <option value="incremental">Incremental</option>
+                                            <option value="optional">Optional</option>
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
+                                                <label for="selectedCost_active_at">Active</label>
+                                                <br>
+                                                <input type="date" id="selectedCost_active_at" class="form-control"
+                                                       v-model="selectedCost.active_at" v-validate:costActive="{required: true}">
+                                            </div>
+
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
+                                                <label for="selectedCost_amount">Amount</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-usd"></i></span>
+                                                    <input type="number" number id="selectedCost_amount" class="form-control"
+                                                           v-model="selectedCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                </validator>
+                        </form>
+                    </validator>
+
+                </template>
             </div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='showEditModal = false, selectedCost = null'>Cancel</button>
@@ -361,6 +366,9 @@
                         this.showAddModal = false;
                         this.attemptedAddCost = false;
                         this.searchCosts();
+                    }, function (error) {
+                        console.log(error.data.errors);
+                        this.$refs.spinner.hide();
                     });
                 }
                 this.checkCostsErrors();
@@ -375,7 +383,10 @@
                         this.attemptedAddCost = false;
                         this.showEditModal = false;
                         this.searchCosts();
-                    })
+                    }, function (error) {
+                        console.log(error.data.errors);
+                        this.$refs.spinner.hide();
+                    });
                 }
                 this.checkCostsErrors();
             },
@@ -422,6 +433,11 @@
         },
         ready(){
             this.searchCosts();
+
+            let self = this;
+            this.$root.$on('CheckPaymentsSync', function () {
+                self.checkPaymentsSync();
+            });
         }
     }
 </script>

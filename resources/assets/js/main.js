@@ -69,7 +69,7 @@ import adminTripCreateUpdate from './components/trips/admin-trip-create-update.v
 import adminTripDelete from './components/trips/admin-trip-delete.vue';
 import costManager from './components/admin/cost-manager.vue';
 import adminTripDescription from './components/trips/admin-trip-description.vue';
-import adminTripDeadlines from './components/trips/admin-trip-deadlines.vue';
+import deadlinesManager from './components/admin/deadlines-manager.vue';
 import adminTripRequirements from './components/trips/admin-trip-requirements.vue';
 import adminTripTodos from './components/trips/admin-trip-todos.vue';
 import adminInterestsList from './components/interests/admin-interests-list.vue';
@@ -382,7 +382,7 @@ new Vue({
         adminTripDelete,
         costManager,
         adminTripDescription,
-        adminTripDeadlines,
+        deadlinesManager,
         adminTripRequirements,
         adminTripTodos,
         adminInterestsList,

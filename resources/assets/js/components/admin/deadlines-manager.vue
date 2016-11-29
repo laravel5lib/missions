@@ -134,7 +134,7 @@
 </template>
 <script type="text/javascript">
     export default{
-    	name: 'admin-trip-deadlines',
+    	name: 'deadlines-manager',
         props: ['id', 'assignment'],
         data(){
             return{

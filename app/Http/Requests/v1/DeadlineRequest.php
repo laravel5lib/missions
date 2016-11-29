@@ -24,7 +24,7 @@ class DeadlineRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'deadline_assignable_type' => 'required|in:trips,reservations,projects',
+            'deadline_assignable_type' => 'required|in:trips,reservations,projects,project-initiatives',
             'deadline_assignable_id' => 'required|string',
             'name' => 'required|string',
             'date' => 'required|date',

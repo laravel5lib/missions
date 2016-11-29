@@ -503,7 +503,7 @@
                 dobMonth: null,
                 dobDay: null,
                 dobYear: null,
-                resource: this.$resource('users/me'),
+                resource: this.$resource('users/me?include=links'),
                 errors: {},
                 showError: false,
                 showSuccess: false,
@@ -578,11 +578,28 @@
                         url: this.public ? this.url : undefined,
                         avatar_upload_id: this.avatar_upload_id,
                         banner_upload_id: this.banner_upload_id,
-                        facebook: this.facebook,
-                        twitter: this.twitter,
-                        instagram: this.instagram,
-                        linkedIn: this.linkedIn,
-                        website: this.website,
+                        links: [
+                            {
+                                name: 'facebook',
+                                url: this.facebook
+                            },
+                            {
+                                name: 'twitter',
+                                url: this.twitter
+                            },
+                            {
+                                name: 'instagram',
+                                url: this.instagram
+                            },
+                            {
+                                name: 'linkedin',
+                                url: this.linkedIn
+                            },
+                            {
+                                name: 'website',
+                                url: this.website
+                            }
+                        ]
                 }).then(function (response) {
                         this.setUserData(response.data.data);
                         this.showSuccess = true;
@@ -634,11 +651,11 @@
                 this.alt_email = user.alt_email;
                 this.avatar_upload_id = user.avatar_upload_id;
                 this.banner_upload_id = user.banner_upload_id;
-                this.facebook = user.facebook;
-                this.twitter = user.twitter;
-                this.instagram = user.instagram;
-                this.linkedIn = user.linkedIn;
-                this.website = user.website;
+                this.facebook = _.findWhere(user.links.data, {name: "facebook"}).url;
+                this.twitter = _.findWhere(user.links.data, {name: "twitter"}).url;
+                this.instagram = _.findWhere(user.links.data, {name: "instagram"}).url;
+                this.linkedIn = _.findWhere(user.links.data, {name: "linkedin"}).url;
+                this.website = '';
             }
         },
         ready(){

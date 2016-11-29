@@ -1,5 +1,6 @@
 <template>
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline text-right" novalidate>
@@ -203,10 +204,12 @@
                 return params;
             },
             searchInitiatives(){
+                this.$refs.spinner.show();
                 var params = this.getParameters();
                 this.$http.get('causes/' + this.causeId + '/initiatives', params).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.initiatives = response.data.data;
+                    this.$refs.spinner.hide();
                 })
             }
         },

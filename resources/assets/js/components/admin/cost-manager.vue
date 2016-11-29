@@ -423,9 +423,9 @@
                     });
                     if (parseFloat(cost.amount) !== parseFloat(t)) {
                         this.unSyncedCosts.push(cost.id);
-                        this.unSyncedCosts = _.uniq(this.unSyncedCosts);
                     }
-                }.bind(this))
+                }.bind(this));
+                this.unSyncedCosts = _.uniq(this.unSyncedCosts);
             },
             isOutOfSync(cost){
                 return _.contains(this.unSyncedCosts, cost.id);
@@ -438,12 +438,11 @@
             this.$root.$on('CheckPaymentsSync', function () {
                 self.checkPaymentsSync();
             });
-
             this.$root.$on('SpinnerOn', function () {
-                this.$refs.spinner.show();
+                self.$refs.spinner.show();
             });
             this.$root.$on('SpinnerOff', function () {
-                this.$refs.spinner.hide();
+                self.$refs.spinner.hide();
             });
         }
     }

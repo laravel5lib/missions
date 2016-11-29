@@ -438,6 +438,13 @@
             this.$root.$on('CheckPaymentsSync', function () {
                 self.checkPaymentsSync();
             });
+
+            this.$root.$on('SpinnerOn', function () {
+                this.$refs.spinner.show();
+            });
+            this.$root.$on('SpinnerOff', function () {
+                this.$refs.spinner.hide();
+            });
         }
     }
 </script>

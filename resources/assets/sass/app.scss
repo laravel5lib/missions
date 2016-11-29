@@ -653,7 +653,7 @@ li.av-nav > a {
 }
 .onenation-vision {
   color: #fff;
-  background: $gray-darker url(../images/1n1d17/vision-bg.jpg) no-repeat center fixed;
+  background: $gray-darker url(../../images/1n1d17/vision-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -661,7 +661,7 @@ li.av-nav > a {
   padding: 200px 0 200px;
 }
 .onenation-exp {
-  background: #fff url(../images/1n1d17/experience-bg.jpg) no-repeat center fixed;
+  background: #fff url(../../images/1n1d17/experience-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -669,7 +669,7 @@ li.av-nav > a {
   padding: 200px 0 200px;
 }
 .onenation-header {
-  background: $gray-darker url(../images/1n1d17/reveal-bg.jpg) no-repeat center fixed;
+  background: $gray-darker url(../../images/1n1d17/reveal-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -684,7 +684,7 @@ img.onenation-logo {
 }
 .india-vision {
   color: #fff;
-  background: $gray-darker url(../images/india/paperboard-bg.jpg) no-repeat center fixed;
+  background: $gray-darker url(../../images/india/paperboard-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -692,7 +692,7 @@ img.onenation-logo {
   padding: 100px 0 100px;
 }
 .india-exp {
-  background: #fff url(../images/india/experience-bg.jpg) no-repeat center fixed;
+  background: #fff url(../../images/india/experience-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -816,7 +816,7 @@ $img-base-size: 40px;
 }
 .angel-house-bg {
   color: #fff;
-  background-image: url(../images/home/angel-house-bg.jpg);
+  background-image: url(../../images/home/angel-house-bg.jpg);
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -831,7 +831,7 @@ h1.home-college-header {
 }
 .change-world-bg {
   color: #fff;
-  background-image: url(../images/home/change-world-bg.jpg);
+  background-image: url(../../images/home/change-world-bg.jpg);
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -931,7 +931,7 @@ h1.home-college-header {
 
 @media (max-width: 767px) {
     .college-vid-bg {
-      background: url('../images/college/home-placeholder.jpg') center center / cover no-repeat;
+      background: url('../../images/college/home-placeholder.jpg') center center / cover no-repeat;
     }
     .college-vid-bg-video {
       display: none;

@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-default">
-        <spinner v-ref:loader size="xl" :fixed="false" text="Loading..."></spinner>
+        <spinner v-ref:spinner size="md" text="Loading..."></spinner>
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-12">
@@ -51,28 +51,6 @@
             <button class="btn btn-primary" @click="create" v-else>Create</button>
         </div>
 
-        <alert :show.sync="showSuccess"
-               placement="top-right"
-               :duration="3000"
-               type="success"
-               width="400px"
-               dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Well Done!</strong>
-            <p>{{ message }}</p>
-        </alert>
-
-        <alert :show.sync="showError"
-               placement="top-right"
-               :duration="6000"
-               type="danger"
-               width="400px"
-               dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>{{ message }}</p>
-        </alert>
-
     </div>
 </template>
 <script>
@@ -88,9 +66,7 @@
                 cause: {},
                 countries: [],
                 editMode: true,
-                showSuccess: false,
-                showError: false,
-                message: ''
+                loading: false
             }
         },
         props: {
@@ -114,20 +90,20 @@
         },
         methods: {
             getCause() {
-                this.$refs.loader.show();
+                this.$refs.spinner.show();
                 this.$http.get('causes/' + this.causeId).then(function (response) {
                     this.cause  = response.data.data;
                     this.countries = this.cause.countries;
-                    this.$refs.loader.hide();
+                    this.$refs.spinner.hide();
                 });
             },
             fetch () {
-                this.$refs.loader.show();
+                //this.$refs.spinner.show();
                 this.$http.get('initiatives/' + this.id, {include: 'cause'}).then(function (response) {
                     this.cause = response.data.data.cause.data;
                     this.countries = response.data.data.cause.data.countries;
                     this.initiative = _.omit(response.data.data, 'cause');
-                    this.$refs.loader.hide();
+                    //this.$refs.spinner.hide();
                 });
             },
             save() {
@@ -135,11 +111,9 @@
                 this.$http.put('initiatives/' + this.id, this.initiative).then(function (response) {
                     this.initiative = response.data.data;
                     this.editMode = false;
-                    this.message = 'Your changes were saved successfully.';
-                    this.showSuccess = true;
+                    this.$dispatch('showSuccess', 'Your changes were saved successfully.');
                 }).error(function () {
-                    this.message = 'Your changes could not be saved.';
-                    this.showError = true;
+                    this.$dispatch('showError', 'Your changes could not be saved.');
                 });
             },
             create() {
@@ -149,8 +123,7 @@
                     this.initiative = {};
                     window.location = '/admin/initiatives/' + response.data.data.id;
                 }).error(function () {
-                    this.message = 'The initiative could not be created.';
-                    this.showError = true;
+                    this.$dispatch('showError', 'The initiative could not be created.');
                 });
             },
             cancel() {

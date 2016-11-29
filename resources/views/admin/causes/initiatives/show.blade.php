@@ -40,11 +40,7 @@
                         <div class="panel-heading">
                             <h5>Pricing</h5>
                         </div>
-                        <div class="panel-body">
-                            {{--<admin-trip-costs id="{{ $initiative->id }}"--}}
-                                              {{--assignment="project_initiatives">--}}
-                            {{--</admin-trip-costs>--}}
-                        </div>
+                        <cost-manager id="{{ $initiative->id }}" assignment="project-initiatives"></cost-manager>
                     </div>
                 </div>
             </div>
@@ -55,7 +51,7 @@
                             <h5>Other Deadlines</h5>
                         </div>
                         <div class="panel-body">
-                            {{--<admin-trip-deadlines id="05db003b-e3f8-4cee-a47d-08bc8846511c" assignment="trips"></admin-trip-deadlines>--}}
+                            {{--<admin-trip-deadlines id="{{ $initiative->id }}" assignment="project-initiatives"></admin-trip-deadlines>--}}
                         </div>
                     </div>
                 </div>

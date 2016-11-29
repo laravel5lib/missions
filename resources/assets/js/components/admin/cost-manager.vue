@@ -76,7 +76,7 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <strong>Note!</strong> Please, check payments.
                 </div>
-                <admin-trip-costs-payments :id="cost.id" :cost="cost" :payments.sync="cost.payments.data"></admin-trip-costs-payments>
+                <payment-manager :id="cost.id" :cost="cost" :payments.sync="cost.payments.data"></payment-manager>
             </div>
             <hr class="divider">
         </template>
@@ -84,7 +84,7 @@
         <modal title="New Cost" :show.sync="showAddModal" effect="fade" width="800">
             <div slot="modal-body" class="modal-body">
                 <template v-if="!selectedCost">
-                    <validator name="TripPricingCost">
+                    <validator name="validateCost">
                         <form class="form" novalidate>
                             <div class="row">
                                 <div class="col-sm-12">
@@ -144,7 +144,7 @@
         <modal title="Edit Cost" :show.sync="showEditModal" effect="fade" width="800">
             <div slot="modal-body" class="modal-body">
                 <template v-if="selectedCost">
-                    <validator name="TripPricingCost">
+                    <validator name="validateCost">
                         <form class="form" novalidate>
                             <div class="row">
                                 <div class="col-sm-12">
@@ -234,11 +234,11 @@
 
 </template>
 <script type="text/javascript">
-    import adminTripCostsPayments from './admin-trip-costs-payments.vue'
+    import paymentManager from './payment-manager.vue'
     export default{
-        name: 'admin-trip-costs',
+        name: 'cost-manager',
         props: ['id', 'assignment'],
-        components: { adminTripCostsPayments },
+        components: { paymentManager },
         data(){
             return {
                 costs: [],
@@ -303,7 +303,7 @@
         },
         methods: {
             checkForErrorCost(field){
-                return this.$TripPricingCost && this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
+                return this.$validateCost && this.$validateCost[field.toLowerCase()].invalid && this.attemptedAddCost;
             },
             checkCostsErrors(){
                 var errors = [];
@@ -359,7 +359,7 @@
             },
             addCost(){
                 this.attemptedAddCost = true;
-                if (this.$TripPricingCost.valid) {
+                if (this.$validateCost.valid) {
                     this.resource.save(this.newCost, { include: 'payments'}).then(function (response) {
                         this.costs.push(response.data.data);
                         this.resetCost();
@@ -375,7 +375,7 @@
             },
             updateCost(){
                 this.attemptedAddCost = true;
-                if (this.$TripPricingCost.valid) {
+                if (this.$validateCost.valid) {
                     this.resource.update({id: this.selectedCost.id, include: 'payments'}, this.selectedCost).then(function (response) {
                         this.showReminder = response.data.data.id;
                         $.extend(this.costs, this.selectedCost);

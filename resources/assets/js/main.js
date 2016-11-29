@@ -67,7 +67,7 @@ import adminTripFacilitators from './components/trips/admin-trip-facilitators.vu
 import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripCreateUpdate from './components/trips/admin-trip-create-update.vue';
 import adminTripDelete from './components/trips/admin-trip-delete.vue';
-import adminTripCosts from './components/trips/admin-trip-costs.vue';
+import costManager from './components/admin/cost-manager.vue';
 import adminTripDescription from './components/trips/admin-trip-description.vue';
 import adminTripDeadlines from './components/trips/admin-trip-deadlines.vue';
 import adminTripRequirements from './components/trips/admin-trip-requirements.vue';
@@ -103,6 +103,7 @@ import adminTransactionsList from './components/financials/transactions/admin-tr
 import transactionForm from './components/financials/transactions/transaction-form.vue';
 import donorForm from './components/financials/donors/donor-form.vue';
 import tripInterestEditor from './components/interests/trip-interests-editor.vue';
+import refundForm from './components/financials/transactions/refund-form.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -304,7 +305,10 @@ new Vue({
             format: 'YYYY-MM-DD HH:mm:ss',
             inputStyle: { width: '100%', border: 'none'},
             color: { header: '#F74451'}
-        }
+        },
+        showSuccess: false,
+        showError: false,
+        message: ''
     },
     components: {
         login,
@@ -376,7 +380,7 @@ new Vue({
         adminTripFacilitators,
         adminTripDuplicate,
         adminTripDelete,
-        adminTripCosts,
+        costManager,
         adminTripDescription,
         adminTripDeadlines,
         adminTripRequirements,
@@ -412,6 +416,7 @@ new Vue({
         transactionForm,
         donorForm,
         tripInterestEditor,
+        refundForm
     },
     http: {
         headers: {
@@ -434,6 +439,16 @@ new Vue({
           // Save user info
           this.user = user;
           this.authenticated = true;
+        }
+    },
+    events: {
+        'showSuccess': function (msg) {
+            this.message = msg;
+            this.showSuccess = true;
+        },
+        'showError': function (msg) {
+            this.message = msg;
+            this.showError = true;
         }
     }
 });

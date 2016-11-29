@@ -15,7 +15,8 @@
         <tr v-for="payment in payments|orderBy 'due_at'">
             <td>{{ payment.amount_owed|currency }}</td>
             <td>{{ payment.percent_owed|number }}%</td>
-            <td>{{ payment.upfront ? 'Upfront' : payment.due_at|moment 'll' }}</td>
+            <td v-if="payment.due_at">{{ payment.due_at|moment 'll' }}</td>
+            <td v-else>Upfront</td>
             <td>{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period > 1 ? 'days' : 'day') }}</td>
             <td>
                 <a class="btn btn-default btn-xs" @click="editPayment(payment)"><i class="fa fa-pencil"></i></a>
@@ -151,7 +152,7 @@
 <script type="text/javascript">
     export default{
         props: ['id', 'payments', 'cost'],
-        name: 'admin-trip-costs-payments',
+        name: 'payment-manager',
         data(){
             return {
                 attemptedAddPayment: false,

@@ -355,7 +355,7 @@
             addCost(){
                 this.attemptedAddCost = true;
                 if (this.$TripPricingCost.valid) {
-                    this.resource.save(this.newCost).then(function (response) {
+                    this.resource.save(this.newCost, { include: 'payments'}).then(function (response) {
                         this.costs.push(response.data.data);
                         this.resetCost();
                         this.showAddModal = false;

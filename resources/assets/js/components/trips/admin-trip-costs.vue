@@ -72,6 +72,10 @@
                     </div>
                 </div>
                 <hr class="divider">
+                <div class="alert alert-info alert-dismissible" role="alert" v-if="isOutOfSync(cost)">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Note!</strong> Please, check payments.
+                </div>
                 <admin-trip-costs-payments :id="cost.id" :cost="cost" :payments.sync="cost.payments.data"></admin-trip-costs-payments>
             </div>
             <hr class="divider">
@@ -234,8 +238,10 @@
             return {
                 costs: [],
                 selectedCost: null,
+                showReminder: null,
                 attemptedAddCost: false,
                 costsErrors:[],
+                unSyncedCosts: [],
 
                 newCost: {
                     cost_assignable_id: this.id,
@@ -354,6 +360,7 @@
                         this.resetCost();
                         this.showAddModal = false;
                         this.attemptedAddCost = false;
+                        this.searchCosts();
                     });
                 }
                 this.checkCostsErrors();
@@ -361,11 +368,13 @@
             updateCost(){
                 this.attemptedAddCost = true;
                 if (this.$TripPricingCost.valid) {
-                    this.resource.update({id: this.selectedCost.id}, this.selectedCost).then(function (response) {
+                    this.resource.update({id: this.selectedCost.id, include: 'payments'}, this.selectedCost).then(function (response) {
+                        this.showReminder = response.data.data.id;
                         $.extend(this.costs, this.selectedCost);
                         this.selectedCost = null;
                         this.attemptedAddCost = false;
                         this.showEditModal = false;
+                        this.searchCosts();
                     })
                 }
                 this.checkCostsErrors();
@@ -387,11 +396,28 @@
                     type: this.filters.type
                 }).then(function (response) {
                     this.costs = response.data.data;
-                    this.$refs.spinner.hide()
+                    this.$refs.spinner.hide();
+                    this.checkPaymentsSync();
                 });
             },
             addPayment(cost){
                 this.$root.$emit('Cost:' + cost.id + ':NewPayment')
+            },
+            checkPaymentsSync(){
+                let arr = [];
+                _.each(this.costs, function (cost) {
+                    let t = 0;
+                    _.each(cost.payments.data, function (payment) {
+                        t += payment.amount_owed;
+                    });
+                    if (parseFloat(cost.amount) !== parseFloat(t)) {
+                        this.unSyncedCosts.push(cost.id);
+                        this.unSyncedCosts = _.uniq(this.unSyncedCosts);
+                    }
+                }.bind(this))
+            },
+            isOutOfSync(cost){
+                return _.contains(this.unSyncedCosts, cost.id);
             }
         },
         ready(){

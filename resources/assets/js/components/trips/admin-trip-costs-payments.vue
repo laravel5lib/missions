@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentAdd('percent') }">
-                                <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(cost)" v-model="newPayment.percent_owed|number 2"
+                                <input id="percentOwed" class="form-control" type="number" :max="calculateMaxPercent(cost)" v-model="newPayment.percent_owed|number 2"
                                        v-validate:percent="{required: true, min: 0.01}" debounce="100">
                                 <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                             </div>
@@ -92,14 +92,14 @@
                         <div class="col-sm-6">
                             <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('amount') }">
                                 <span class="input-group-addon"><i class="fa fa-usd"></i></span>
-                                <input id="amountOwed" class="form-control" type="number" :max="calculateMaxAmount(selectedPayment)" number v-model="selectedPayment.amount_owed"
-                                       v-validate:amount="{required: true, min: 0.01}" debounce="100">
+                                <input id="amountOwed" class="form-control" type="number" number :max="calculateMaxAmount(selectedPayment)" v-model="selectedPayment.amount_owed"
+                                       v-validate:amount="{required: true, min: 0.01}" @change="modifyPercentOwed(selectedPayment)" >
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('percent') }">
-                                <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(cost)" v-model="selectedPayment.percent_owed|number 2"
-                                       v-validate:percent="{required: true, min: 0.01}" debounce="100">
+                                <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(selectedPayment)" v-model="selectedPayment.percent_owed"
+                                       v-validate:percent="{required: true, min: 0.01}" @change="modifyAmountOwed(selectedPayment)">
                                 <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                             </div>
                         </div>
@@ -169,11 +169,11 @@
             }
         },
         watch: {
-            'selectedPayment': {
+            /*'selectedPayment': {
                 handler: function (val, oldVal) {
                     console.log(val);
                     if(val && val.amount_owed) {
-                        var max = this.calculateMaxAmount(val);
+                        let max = this.calculateMaxAmount(val);
                         if (val.amount_owed > max)
                             val.amount_owed = this.cost.amount;
                         val.percent_owed = (val.amount_owed / this.cost.amount) * 100;
@@ -182,7 +182,7 @@
                     }
 
                     if(val && val.percent_owed) {
-                        var max = this.calculateMaxPercent(val);
+                        let max = this.calculateMaxPercent(val);
                         if (val.percent_owed > max)
                             val.percent_owed = max;
                         val.amount_owed = (val.percent_owed / 100) * this.cost.amount;
@@ -195,17 +195,8 @@
             'newPayment': {
                 handler: function (val, oldVal) {
                     console.log(val);
-                    if(val && val.amount_owed) {
-                        var max = this.calculateMaxAmount(val);
-                        if (val.amount_owed > max)
-                            val.amount_owed = this.cost.amount;
-                        val.percent_owed = (val.amount_owed / this.cost.amount) * 100;
-                        if (_.isFunction(this.$validate))
-                            this.$validate('percent', true);
-                    }
-
                     if(val && val.percent_owed) {
-                        var max = this.calculateMaxPercent(val);
+                        let max = this.calculateMaxPercent(val);
                         if (val.percent_owed > max)
                             val.percent_owed = max;
                         val.amount_owed = (val.percent_owed / 100) * this.cost.amount;
@@ -214,7 +205,7 @@
                     }
                 },
                 deep: true
-            },
+            },*/
             'showEditModal': function (val, oldVal) {
                 this.$nextTick(function () {
                     // if edit modal closes, reset data
@@ -250,8 +241,24 @@
                 };
                 this.selectedPayment = null;
             },
+            modifyAmountOwed(val){
+                let max = this.calculateMaxAmount(val);
+                if (val.amount_owed > max)
+                    val.amount_owed = this.cost.amount;
+                val.amount_owed = this.cost.amount * (val.percent_owed / 100);
+                if (_.isFunction(this.$validate))
+                    this.$validate('percent', true);
+            },
+            modifyPercentOwed(val){
+                let max = this.calculateMaxPercent(val);
+                if (val.percent_owed > max)
+                    val.percent_owed = max;
+                val.percent_owed = val.amount_owed / this.cost.amount * 100;
+                if (_.isFunction(this.$validate))
+                    this.$validate('amount', true);
+            },
             calculateMaxAmount(thePayment){
-                var max = this.cost.amount;
+                let max = this.cost.amount;
                 if (this.payments.length) {
                     this.payments.forEach(function (payment) {
                         // must ignore current payment in editMode
@@ -263,7 +270,7 @@
                 return max;
             },
             calculateMaxPercent(thePayment){
-                var max = 100;
+                let max = 100;
                 if (this.payments.length) {
                     this.payments.forEach(function (payment) {
                         // must ignore current payment in editMode
@@ -275,13 +282,13 @@
                 return max;
             },
             checkCostsErrors(){
-                var errors = [];
+                let errors = [];
 
                 if (!this.payments.length) {
                     errors.push('empty');
                 } else {
                     // cost payments must total full amount owed and percent owed
-                    var amount = 0;
+                    let amount = 0;
                     this.payments.forEach(function (payment, index) {
                         amount += payment.amount_owed;
                     }, this);
@@ -344,7 +351,7 @@
 
         },
         ready(){
-            var self = this;
+            let self = this;
             this.$root.$on('Cost:' + this.id + ':NewPayment', function (cost) {
                 self.showAddModal = true;
             })

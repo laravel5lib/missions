@@ -71,6 +71,15 @@ class CostsController extends Controller
             'active_at' => $request->get('active_at')
         ]);
 
+        // Set one default payment
+        $cost->payments()->create([
+            'amount_owed' => $cost->amount,
+            'percent_owed' => 100,
+            'due_at' => null,
+            'upfront' => true,
+            'grace_period' => 0
+        ]);
+
         return $this->response->item($cost, new CostTransformer);
     }
 

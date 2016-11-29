@@ -1,4 +1,5 @@
 @extends('admin.layouts.default')
+@inject('refund', 'App\Models\v1\Transaction')
 
 @section('content')
     <div class="white-header-bg">
@@ -18,7 +19,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             @if($transaction->type == 'donation')
-                                <li><a href="#">Refund Transaction</a></li>
+                                <li><a data-toggle="modal" data-target="#refund">Refund Transaction</a></li>
                             @endif
                             <li><a href="#">Delete Transaction</a></li>
                             <li role="separator" class="divider"></li>
@@ -171,4 +172,12 @@
             </div>
         </div>
     </div>
+
+    @if($transaction->type == 'donation')
+    <div class="modal fade" id="refund" tabindex="-1">
+        <div class="modal-dialog">
+            <refund-form transaction-id="{{ $transaction->id }}"></refund-form>
+        </div>
+    </div>
+    @endif
 @stop

@@ -2,5 +2,5 @@
     <div class="panel-heading">
         <h5>Pricing</h5>
     </div>
-    <admin-trip-costs id="{{ $trip->id }}" assignment="trips"></admin-trip-costs>
+    <cost-manager id="{{ $trip->id }}" assignment="trips"></cost-manager>
 </div>

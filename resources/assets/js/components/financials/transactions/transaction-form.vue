@@ -1,28 +1,5 @@
 <template>
     <div>
-
-        <alert :show.sync="showSuccess"
-               placement="top-right"
-               :duration="3000"
-               type="success"
-               width="400px"
-               dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Well Done!</strong>
-            <p>{{ message }}</p>
-        </alert>
-
-        <alert :show.sync="showError"
-               placement="top-right"
-               :duration="6000"
-               type="danger"
-               width="400px"
-               dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>{{ message }}</p>
-        </alert>
-
         <div class="alert alert-info" v-if="editingCreditCard">
             <h5>Edits to credit card transactions are limited.</h5>
             <p>You should refund the transaction and start over.<p>
@@ -301,9 +278,6 @@
                     exp_year: null,
                     exp_month: null
                 },
-                message: '',
-                showSuccess: false,
-                showError: false,
                 monthList: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
                 transfer_type: 'to',
                 spinnerText: 'Loading...'
@@ -408,8 +382,7 @@
 
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.message = 'Unable to retrieve transaction.';
-                    this.showError = true;
+                    this.$dispatch('showError', 'Unable to retrieve transaction.');
                 });
             },
             create() {
@@ -419,14 +392,10 @@
 
                 this.$http.post('transactions', data).then(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.message = 'Transaction successfully created.';
-                    this.showSuccess = true;
-                    console.log(response);
+                    this.$dispatch('showSuccess', 'Transaction successfully created.');
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
-                    console.log(response);
-                    this.message = 'There are errors on the form.';
-                    this.showError = true;
+                    this.$dispatch('showError', 'There are errors on the form.');
                 });
             },
             update() {
@@ -436,12 +405,10 @@
 
                 this.$http.put('transactions/' + this.id, data).then(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.message = 'Transaction updated successfully.';
-                    this.showSuccess = true;
+                    this.$dispatch('showSuccess', 'Transaction updated successfully.');
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.message = 'There are errors on the form.';
-                    this.showError = true;
+                    this.$dispatch('showError', 'There are errors on the form.');
                 });
             },
             prepareData() {

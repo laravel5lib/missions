@@ -94,8 +94,8 @@
 				<p>Consistent monthly partners and general donations build the foundation that help Missions.Me fulfill its vision of reaching a hurting world.</p>
 			</div>
 			<div class="col-sm-3">
-				<a class="btn btn-md btn-primary btn-block" href="#">Partner Monthly</a><br>
-				<a class="btn btn-md btn-primary btn-block" href="#">Financial Accountability</a>
+				<a class="btn btn-md btn-primary btn-block" href="/support-monthly">Partner Monthly</a><br>
+				<a class="btn btn-md btn-primary btn-block" href="/fundraisers#accountability">Financial Accountability</a>
 			</div>
 		</div><!-- end row -->
 	</div>
@@ -136,7 +136,7 @@
 			</div><!-- end row -->
 			<div class="row">
 				<hr class="divider inv">
-				<p class="text-center"><a class="btn btn-primary btn-lg" href="#">Become A Partner</a></p>
+				<p class="text-center"><a class="btn btn-primary btn-lg" href="/support-monthly">Become A Partner</a></p>
 			</div>
 	</div>
 	</div><!-- end container -->
@@ -246,7 +246,7 @@
 		</div><!-- end row -->
 		<div class="row">
 			<hr class="divider inv">
-			<p class="text-center"><a class="btn btn-primary btn-lg" href="#">Become A Legacy Partner</a></p>
+			<p class="text-center"><a class="btn btn-primary btn-lg" href="/support-monthly">Become A Legacy Partner</a></p>
 		</div>
 	</div>
 	</div><!-- end container -->
@@ -306,9 +306,9 @@
 	<div class="content-section">
 		<div class="row">
 			<div class="col-sm-4 col-sm-offset-4 text-center">
-				<a href="#" class="btn btn-white-hollow btn-lg btn-block">One-Time Donation</a>
-				<a href="#" class="btn btn-white-hollow btn-lg btn-block">Become A Monthly Partner</a>
-				<a href="#" class="btn btn-white-hollow btn-lg btn-block">Become A Legacy Partner</a>
+				<a href="/donate" class="btn btn-white-hollow btn-lg btn-block">One-Time Donation</a>
+				<a href="/support-monthly" class="btn btn-white-hollow btn-lg btn-block">Become A Monthly Partner</a>
+				<a href="/support-monthly" class="btn btn-white-hollow btn-lg btn-block">Become A Legacy Partner</a>
 			</div>
 		</div><!-- end row -->
 	</div>

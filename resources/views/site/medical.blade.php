@@ -207,7 +207,7 @@
 		<div class="c-page-bg-text">
 			<div class="col-sm-8 col-sm-offset-2 text-center">
 				<h2>Start funding a medical team.</h2>
-				<p><a class="btn btn-primary btn-lg" href="#">Donate To The Cause</a></p>
+				<p><a class="btn btn-primary btn-lg" href="/donate">Donate To The Cause</a></p>
 			</div>
 		</div><!-- end c-page-header-content -->
 </div><!-- end c-page-header -->

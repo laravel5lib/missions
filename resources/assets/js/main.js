@@ -170,6 +170,44 @@ Vue.http.interceptors.push({
             headers.Authorization = token
         }
 
+        // Only POST and PUT Requests
+        if (_.contains(['POST', 'PUT'],request.method)) {
+            /*
+             * Date Conversion: Local to UTC
+             */
+            // search nested objects/arrays for dates to convert
+            // YYYY-MM-DD
+            let dateRegex = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
+            // YYYY-MM-DD HH:MM:SS
+            let dateTimeRegex = /^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/;
+            searchObjAndConvertDates(request.data);
+
+            function searchObjAndConvertDates(obj) {
+                _.each(obj, function (value, key) {
+                    // nested search
+                    if (_.isObject(value) || _.isArray(value))
+                        searchObjAndConvertDates(value);
+
+                    let testDate = _.isString(value) && value.length === 10 && dateRegex.test(value);
+                    let testDateTime = _.isString(value) && value.length === 19 && dateTimeRegex.test(value);
+
+
+                    if (testDate) {
+                        // console.log('then: ', value);
+                        obj[key] = moment(value).startOf('day').utc().format('YYYY-MM-DD');
+                        // console.log('now: ', value);
+                    }
+
+                    if (testDateTime) {
+                        // console.log('then: ', value);
+                        obj[key] = moment(value).utc().format('YYYY-MM-DD HH:mm:ss');
+                        // console.log('now: ', value);
+                    }
+
+
+                });
+            }
+        }
         return request
     },
 
@@ -229,14 +267,19 @@ Vue.filter('percentage', {
     }
 });
 
-Vue.filter('moment', function (val, format, diff = false) {
-    var date = moment.utc(val).local().format(format||'LL');
+Vue.filter('moment', {
+    read: function(val, format, diff = false) {
+        var date = moment.utc(val).local().format(format||'LL');
 
-    if(diff) {
-        date = moment.utc(val).local().fromNow();
+        if(diff) {
+            date = moment.utc(val).local().fromNow();
+        }
+
+        return date;
+    },
+    write: function(val, oldVal) {
+        return val
     }
-
-    return date;
 });
 
 var VueCropOptions = {
@@ -288,6 +331,10 @@ Vue.directive('crop', {
         this.vm.jcrop.destroy();
         this.vm.jcrop = null
     }
+});
+
+Vue.mixin({
+    methods: {}
 });
 
 new Vue({

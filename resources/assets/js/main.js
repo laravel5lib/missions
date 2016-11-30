@@ -267,14 +267,19 @@ Vue.filter('percentage', {
     }
 });
 
-Vue.filter('moment', function (val, format, diff = false) {
-    var date = moment.utc(val).local().format(format||'LL');
+Vue.filter('moment', {
+    read: function(val, format, diff = false) {
+        var date = moment.utc(val).local().format(format||'LL');
 
-    if(diff) {
-        date = moment.utc(val).local().fromNow();
+        if(diff) {
+            date = moment.utc(val).local().fromNow();
+        }
+
+        return date;
+    },
+    write: function(val, oldVal) {
+        return val
     }
-
-    return date;
 });
 
 var VueCropOptions = {

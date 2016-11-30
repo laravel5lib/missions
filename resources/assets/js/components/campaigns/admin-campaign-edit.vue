@@ -59,7 +59,7 @@
 			<div class="form-group">
 				<div class="col-sm-12">
 					<label for="published_at">Published Date</label>
-					<input type="datetime-local" class="form-control" v-model="published_at" id="published_at">
+					<input type="datetime-local" class="form-control" v-model="published_at | moment 'YYYY-MM-DDTHH:mm:ss.SSS'" id="published_at">
 				</div>
 			</div>
 
@@ -317,7 +317,7 @@
 				this.short_desc = campaign.description;
 				this.started_at = campaign.started_at;
 				this.ended_at = campaign.ended_at;
-				this.published_at = moment(campaign.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
+				this.published_at = campaign.published_at;
 				this.page_url = campaign.page_url;
 				this.page_src = campaign.page_src;
 				this.countryCodeObj = _.findWhere(this.countries, { name: campaign.country });

@@ -322,7 +322,6 @@
 			finish(){
 				// if details form is incomplete
 				this.attemptedContinue = true;
-				this.populateWizardData(true);
 				if (this.$TripCreateUpdate.valid) {
 					let resource = this.$resource('trips{/id}');
 					if (this.isUpdate) {

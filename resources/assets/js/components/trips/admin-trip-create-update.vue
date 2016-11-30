@@ -326,8 +326,9 @@
 				if (this.$TripCreateUpdate.valid) {
 					let resource = this.$resource('trips{/id}');
 					if (this.isUpdate) {
-						resource.update({id: this.tripId}, this.wizardData).then(function (resp) {
+						resource.update({id: this.tripId}, this.wizardData).then(function (response) {
 							$.extend(this, response.data.data);
+							this.difficulty = response.data.data.difficulty.toLowerCase().replace(' ', '_');
 							this.attemptedContinue = false;
 							this.showSuccess = true;
 						}, function (error) {

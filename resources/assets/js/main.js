@@ -188,13 +188,20 @@ Vue.http.interceptors.push({
                     if (_.isObject(value) || _.isArray(value))
                         searchObjAndConvertDates(value);
 
-                    // let testDate = _.isString(value) && value.length === 10 && dateRegex.test(value);
+                    let testDate = _.isString(value) && value.length === 10 && dateRegex.test(value);
                     let testDateTime = _.isString(value) && value.length === 19 && dateTimeRegex.test(value);
 
+
+                    if (testDate) {
+                        // console.log('then: ', value);
+                        obj[key] = moment(value).startOf('day').utc().format('YYYY-MM-DD');
+                        // console.log('now: ', value);
+                    }
+
                     if (testDateTime) {
-                        console.log('then: ', value);
+                        // console.log('then: ', value);
                         obj[key] = moment(value).utc().format('YYYY-MM-DD HH:mm:ss');
-                        console.log('now: ', value);
+                        // console.log('now: ', value);
                     }
 
 

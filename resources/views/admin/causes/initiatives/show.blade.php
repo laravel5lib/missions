@@ -48,11 +48,16 @@
                 <div class="col-md-offset-2 col-md-8">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h5>Other Deadlines</h5>
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <h5>Other Deadlines</h5>
+                                </div>
+                                <div class="col-xs-4 text-right">
+                                    <action-trigger text="New Deadline" icon="fa fa-plus" event="NewDeadline" size="btn-sm"></action-trigger>
+                                </div>
+                            </div>
                         </div>
-                        <div class="panel-body">
-                            {{--<admin-trip-deadlines id="{{ $initiative->id }}" assignment="project-initiatives"></admin-trip-deadlines>--}}
-                        </div>
+                        <deadlines-manager id="{{ $initiative->id }}" assignment="project-initiatives"></deadlines-manager>
                     </div>
                 </div>
             </div>

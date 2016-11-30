@@ -1,6 +1,5 @@
 <template>
     <div class="panel panel-default">
-        <spinner v-ref:spinner size="md" text="Loading..."></spinner>
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-12">
@@ -15,6 +14,7 @@
             </div>
         </div>
         <div class="panel-body">
+            <spinner v-ref:spinner size="md" text="Loading..."></spinner>
             <div class="row">
                 <div class="col-sm-6">
                     <label>Type</label>
@@ -98,12 +98,12 @@
                 });
             },
             fetch () {
-                //this.$refs.spinner.show();
+                this.$refs.spinner.show();
                 this.$http.get('initiatives/' + this.id, {include: 'cause'}).then(function (response) {
                     this.cause = response.data.data.cause.data;
                     this.countries = response.data.data.cause.data.countries;
                     this.initiative = _.omit(response.data.data, 'cause');
-                    //this.$refs.spinner.hide();
+                    this.$refs.spinner.hide();
                 });
             },
             save() {

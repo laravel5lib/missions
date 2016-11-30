@@ -9,5 +9,5 @@
             </div>
         </div>
     </div>
-    <admin-trip-deadlines id="{{ $trip->id }}" assignment="trips"></admin-trip-deadlines>
+    <deadlines-manager id="{{ $trip->id }}" assignment="trips"></deadlines-manager>
 </div>

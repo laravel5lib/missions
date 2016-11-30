@@ -15,7 +15,7 @@ class UserTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'reservations', 'notes', 'managing', 'facilitating',
         'passports', 'visas', 'uploads', 'accolades', 'fundraisers',
-        'medical_releases', 'roles'
+        'medical_releases', 'roles', 'links'
     ];
 
     /**
@@ -60,6 +60,19 @@ class UserTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    /**
+     * Include links.
+     *
+     * @param User $user
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeLinks(User $user)
+    {
+        $links = $user->links;
+
+        return $this->collection($links, new LinkTransformer);
     }
 
     /**

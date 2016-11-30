@@ -83,6 +83,10 @@
                                 <option value="cash">Cash</option>
                             </select>
                         </div>
+                        <div class="col-xs-12">
+                            <label>Comment</label>
+                            <textarea class="form-control" v-model="transaction.comment"></textarea>
+                        </div>
                     </div>
                     <div class="row" v-if="transaction.payment.type == 'card'">
                         <div class="col-xs-6">
@@ -121,7 +125,8 @@
             <div class="panel-body text-right">
                 <button class="btn btn-default btn-md" @click="cancel" v-if="editing">Cancel</button>
                 <button class="btn btn-default btn-md" @click="reset" v-else>Reset</button>
-                <button class="btn btn-primary btn-md" @click="create">Create</button>
+                <button class="btn btn-primary btn-md" @click="update" v-if="editing">Update</button>
+                <button class="btn btn-primary btn-md" @click="create" v-else>Create</button>
             </div>
         </div>
 
@@ -232,7 +237,7 @@
 
     </div>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from "vue-select";
     import donorForm from '../donors/donor-form.vue';
     export default{
@@ -433,6 +438,7 @@
                 if (this.transaction.type == 'donation') {
                     data.type = this.transaction.type;
                     data.amount = this.transaction.amount;
+                    data.comment = this.transaction.comment;
                     data.fund_id = this.fundId;
                     if (this.selectedDonor && this.selectedDonor.id) {
                         data.donor_id = this.selectedDonor.id;
@@ -444,6 +450,7 @@
                         data.payment.number = this.transaction.payment.number;
                     }
                     if (this.transaction.payment.type == 'card') {
+                        data.card = this.card;
                     }
                 }
 

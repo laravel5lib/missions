@@ -313,7 +313,7 @@
 				});
 			},
 			onValid(){
-				this.populateWizardData(false);
+				this.populateWizardData(true);
 			},
 			checkForError(field){
 				// if user clicked continue button while the field is invalid trigger error styles
@@ -322,6 +322,7 @@
 			finish(){
 				// if details form is incomplete
 				this.attemptedContinue = true;
+				this.populateWizardData(false);
 				if (this.$TripCreateUpdate.valid) {
 					let resource = this.$resource('trips{/id}');
 					if (this.isUpdate) {

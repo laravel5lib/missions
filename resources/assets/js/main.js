@@ -192,9 +192,9 @@ Vue.http.interceptors.push({
                     let testDateTime = _.isString(value) && value.length === 19 && dateTimeRegex.test(value);
 
                     if (testDateTime) {
-                        // console.log('then: ', value);
-                        value = moment(value).utc().format('YYYY-MM-DD HH:mm:ss');
-                        // console.log('now: ', value);
+                        console.log('then: ', value);
+                        obj[key] = moment(value).utc().format('YYYY-MM-DD HH:mm:ss');
+                        console.log('now: ', value);
                     }
 
 

@@ -97,6 +97,8 @@ class ReservationPayment {
      */
     public function updateBalances($amount)
     {
+        // Fund balance should be spread out over the fund's balance
+        // needs to decrement or increment a due's balance based on changes to the fund's balance.
         while ($amount <> 0)
         {
             $due = $this->reservation->dues()

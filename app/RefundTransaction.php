@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use App\Events\TransactionWasCreated;
 use App\Http\Requests\v1\Transactions\RefundRequest;
 use Dingo\Api\Contract\Http\Request;
 
@@ -25,13 +26,15 @@ class RefundTransaction extends TransactionHandler
             'type' => 'refund',
             'amount' => -$request->get('amount'),
             'fund_id' => $refundable->fund_id,
-            'payment' => [
+            'details' => [
                 'refund_id' => $refund_id,
                 'reason' => $request->get('reason'),
                 'transaction_id' => $request->get('transaction_id')
             ],
             'description' => 'Refund to ' . $refundable->fund->name
         ]);
+
+        event(new TransactionWasCreated($transaction));
 
         return $transaction;
     }

@@ -11,19 +11,26 @@ class CreditTransaction extends TransactionHandler
     {
         $this->validate();
 
-        $fund = $this->fund->findOrFail($request->get('fund_id'));
-
         $transaction = $this->transaction->create([
             'type' => 'credit',
             'amount' => $request->get('amount'),
-            'fund_id' => $fund->id,
-            'payments' => ['reason' => $request->get('reason')],
-            'description' => 'Credit to ' . $fund->name
+            'fund_id' => $request->get('fund_id'),
+            'details' => ['reason' => $request->get('reason')]
         ]);
 
         event(new TransactionWasCreated($transaction));
 
         return $transaction;
+    }
+
+    public function destroy($id)
+    {
+        $transaction = $this->transaction->findOrFail($id);
+        $fund = $transaction->fund;
+
+        $transaction->delete();
+
+        $fund->reconcile();
     }
 
     private function validate()

@@ -19,7 +19,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sm-4 col-xs-12">
-                <div class="panel panel-default profile-pic-panel">
+                <div class="panel panel-default profile-pic-panel" data-aos="fade-up">
                     <img src="{{ image($group->avatar->source) }}" alt="{{ $group->name }}" class="img-responsive">
                     <div class="panel-body">
                         <h4>{{ $group->name }}</h4>
@@ -34,7 +34,7 @@
                         </ul>
                     </div><!-- end panel-body -->
                 </div><!-- end panel-default -->
-                <div class="panel panel-default">
+                <div class="panel panel-default" data-aos="fade-up">
                     <div class="panel-heading">
                         <h5>Need Help?</h5>
                     </div><!-- end panel-heading -->

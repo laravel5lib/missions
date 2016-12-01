@@ -9,9 +9,12 @@
                 </div>
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <a href="{{ url('admin/donors/'. $donor->id .'/edit') }}" class="btn btn-primary">
-                        Edit
-                    </a>
+                    <div class="btn-group">
+                        <a href="{{ url('admin/donors') }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
+                        <a href="{{ url('admin/donors/'. $donor->id .'/edit') }}" class="btn btn-primary">
+                            Edit
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -22,7 +22,7 @@
       <a href="/admin/funds"><div class="offcanvas-tooltip"><i class="fa fa-usd" style="margin-left:3px;"></i><span>Funds</span></div></a>
     </li>
     <li @if(in_array(request()->segment(2), ['causes', 'projects', 'initiatives']))class="active"@endif>
-        <a href="/admin/causes"><i class="fa fa-tint"></i></a>
+        <a href="/admin/causes"><i class="fa fa-tint" style="margin-left:3px;"></i></a>
     </li>
   </ul>
 </div>

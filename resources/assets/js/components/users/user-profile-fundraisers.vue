@@ -1,6 +1,6 @@
 <template>
     <div>
-            <p class="text-muted text-center" v-if="fundraisers.length < 1">No fundraisers found.</p>
+            <p class="text-muted text-center" v-if="fundraisers.length < 1"><em>No fundraisers found.</em></p>
             <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
                 <div class="panel panel-default">
                     <div class="panel-heading">

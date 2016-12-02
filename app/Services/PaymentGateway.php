@@ -124,10 +124,10 @@ class PaymentGateway {
     {
         $charge = $this->stripe->charges()->create([
             'customer'    => $customer_id,
-            'currency'    => $params['currency'],
+            'currency'    => 'usd',
             'amount'      => $params['amount'],
             'source'      => $card_id,
-            'description' => $params['description'],
+//            'description' => $params['description'],
             'capture'     => false
         ]);
 

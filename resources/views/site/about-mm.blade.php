@@ -348,7 +348,7 @@
                   </div>
                   <div id="collapseSeven" class="panel-collapse collapse">
                     <div class="panel-body">
-                      <p class="small">Neil Keena is a creative, organized, and detailed individual who thrives on innovation. He has a deep passion for the Church and it's global mission. Neil has been designing web applications since 2004; developing for a wide range of companies, government agencies, educational organizations, and non-profits. Neil currently serves as senior web developer with Missions.Me and volunteers as Youth Director of Oakland Church. He resides in Rochester, MI and can usually be found in the gym when he's not behind a computer screen.</p>
+                      <p class="small">The only thing Neil loves more than turning caffeine into code is his passion for the church and it's global mission. Neil is the director of web development and actively volunteers at Oakland Church. He loves to read, watch documentaries, and might be a bit of a Star Wars fan. Born and raised in sunny San Diego, CA he now resides in Rochester, MI with his wife, Cathleen.</p>
                     </div><!-- end panel-body -->
                   </div><!-- end panel-collapse -->
                 </div><!-- end panel -->
@@ -374,13 +374,13 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/staff/rossi.jpg">
                   <div class="panel-body">
-                    <h5>Cathleen Rossi</h5>
+                    <h5>Cathleen Keena</h5>
                     <p class="small">Missions.Me College Director</p>
                     <h6 class="bold uppercaseit"><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine">Read Bio</a></h6>
                   </div>
                   <div id="collapseNine" class="panel-collapse collapse">
                     <div class="panel-body">
-                      <p class="small">Cat’s love for people and passion for restoring lives are at the core of all she does. Cat is the director of our Missions.Me College and actively volunteers at Oakland Church. She studied at Central Michigan University earning a bachelor's degree in Family Studies and Psychology. Some of Cat’s favorite things are tacos, Honduran coffee, reading, and going on adventures. Cat currently resides in Bloomfield Hills and will soon be Mrs. Keena in October 2016.</p>
+                      <p class="small">Cat’s love for people and passion for restoring lives are at the core of all she does. Cat is the director of our Missions.Me College and actively volunteers at Oakland Church. She studied at Central Michigan University earning a bachelor's degree in Family Studies and Psychology. Some of Cat’s favorite things are tacos, Honduran coffee, reading, and going on adventures. Cat currently resides in Rochester, MI with her husband, Neil.</p>
                     </div><!-- end panel-body -->
                   </div><!-- end panel-collapse -->
                 </div><!-- end panel -->

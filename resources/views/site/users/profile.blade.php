@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sm-4 col-xs-12">
-                <div class="panel panel-default profile-pic-panel">
+                <div class="panel panel-default profile-pic-panel" data-aos="fade-up">
                     <img src="{{ image($user->avatar->source) }}" alt="{{ $user->name }}" class="img-responsive">
                     <div class="panel-body">
                         <div class="row">
@@ -44,7 +44,7 @@
                 </div><!-- end panel-default -->
 
                 @if(count($user->getGroups()))
-                <div class="panel panel-default">
+                <div class="panel panel-default" data-aos="fade-up">
                     <div class="panel-heading">
                         <h5>Groups Traveled With</h5>
                     </div><!-- end panel-heading -->

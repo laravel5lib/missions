@@ -14,6 +14,6 @@
         </div>
     </div>
     <div class="panel-footer text-center" style="padding:10px;">
-        <a class="small" style="color:#bcbcbc;" href="#">View Other Campaigns</a>
+        <a class="small" style="color:#bcbcbc;" href="/campaigns">View Other Campaigns</a>
     </div>
 </div>

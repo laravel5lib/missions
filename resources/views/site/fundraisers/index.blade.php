@@ -7,8 +7,8 @@
     	<div class="content-section">
 	    	<div class="row">
 	    		<div class="col-sm-12 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-		        	<h1 class="text-center">Top 4 Ways People Reach Their Goal</h1>
-		        	<p class="text-primary-darker text-center">Fundraising doesn't have to be a daunting task.<br>Have fun with it!</p>
+		        	<h1 class="text-center" id="fundraising">Top 4 Ways People Reach Their Goal</h1>
+		        	<p class="text-primary-darker text-center">Fundraising doesn't have to be a scary task.<br>Have fun with it!</p>
 		        	<hr class="divider inv lg">
 				    <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 			        	<div class="col-sm-3" style="display:flex">
@@ -88,7 +88,7 @@
     	<div class="content-section">
 	    	<div class="row">
 	    		<div class="col-sm-12 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-		        	<h1 class="text-primary dash-trailing">Financial Accountability</h1>
+		        	<h1 class="text-primary dash-trailing" id="accountability">Financial Accountability</h1>
 				    <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 			        	<div class="col-sm-4" style="display:flex">
 				        	<div class="panel panel-default">

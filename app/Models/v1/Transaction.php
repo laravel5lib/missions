@@ -6,24 +6,65 @@ use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
 {
-    use UuidForKey, Filterable, Taggable;
+    use UuidForKey, Filterable, Taggable, SoftDeletes;
 
+    /**
+     * The table used by the model.
+     *
+     * @var string
+     */
     protected $table = 'transactions';
 
+    /**
+     * Relationships to include by default.
+     *
+     * @var string
+     */
+    protected $with = 'fund';
+
     protected $fillable = [
-        'amount', 'type', 'payment', 'fund_id', 'donor_id', 'description'
+        'amount', 'type', 'details', 'fund_id', 'donor_id'
     ];
 
-    public function setPaymentAttribute($value)
+    /**
+     * Get the transactions description.
+     *
+     * @return string
+     */
+    public function getDescriptionAttribute()
     {
-        $this->attributes['payment'] = json_encode($value);
+        $direction = $this->amount > 0 ? ' to ' : ' from ';
+
+        return ucfirst(str_replace('_', ' ', $this->type) . $direction . $this->fund->name);
     }
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['description'];
+
+    /**
+     * Set the transaction's details.
+     *
+     * @param $value
+     */
+    public function setDetailsAttribute($value)
+    {
+        $this->attributes['details'] = json_encode($value);
+    }
+
+    /**
+     * Attributes that should be cast to native types.
+     * @var array
+     */
     protected $casts = [
-        'payment' => 'array',
+        'details' => 'array',
     ];
 
     /**

@@ -22,14 +22,13 @@ class TransactionTransformer extends TransformerAbstract {
             'amount'      => (int) $transaction->amount,
             'type'        => $transaction->type,
             'description' => $transaction->description,
-            'comment' => $transaction->comment,
-            'payment'     => $transaction->payment,
+            'details'     => $transaction->details,
             'created_at'  => $transaction->created_at->toRfc3339String(),
             'updated_at'  => $transaction->updated_at->toRfc3339String(),
             'links'       => [
                 [
                     'rel' => 'self',
-                    'uri' => '/funds/' . $transaction->id,
+                    'uri' => '/transactions/' . $transaction->id,
                 ]
             ]
         ];

@@ -16,14 +16,14 @@ class TransactionFilter extends Filter
      * @var array
      */
     public $searchable = [
-        'description', 'payment->zip', 'payment->last_four',
-        'payment->brand', 'payment->cardholder', 'payment->number',
-        'payment->charge_id', 'fund.name', 'donor.name',
+        'details->last_four',
+        'details->brand', 'details->cardholder', 'details->number',
+        'details->charge_id', 'fund.name', 'donor.name',
         'fund.class', 'fund.item', 'donor.phone', 'donor.email'
     ];
 
     public $sortable = [
-        'description', 'type', 'amount', 'created_at'
+        'type', 'amount', 'created_at'
     ];
 
     /**

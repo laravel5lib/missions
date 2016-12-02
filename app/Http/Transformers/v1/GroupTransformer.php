@@ -46,7 +46,7 @@ class GroupTransformer extends TransformerAbstract
             'phone_one'    => $group->phone_one,
             'phone_two'    => $group->phone_two,
             'email'        => $group->email,
-            'avatar'       => $group->avatar ? image($group->avatar->source) : null,
+            'avatar'       => $group->avatar ? image($group->avatar->source) : url('/images/placeholders/logo-placeholder.png'),
             'banner'       => $group->banner ? image($group->banner->source) : null,
             'created_at'   => $group->created_at->toDateTimeString(),
             'updated_at'   => $group->updated_at->toDateTimeString(),

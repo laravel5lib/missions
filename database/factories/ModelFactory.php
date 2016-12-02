@@ -830,16 +830,14 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\
     return [
         'fund_id' => $fund['id'],
         'donor_id' => $donor['id'],
-        'description' => 'Donation to ' . $fund['name'],
-        'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2),
         'type' => 'donation',
         'amount' => $faker->randomNumber(2),
-        'payment' => [
+        'details' => [
             'type' => 'card',
             'last_four' => substr($faker->creditCardNumber, -4),
             'cardholder' => $faker->name,
-            'zip' => $faker->postcode,
-            'brand' => $faker->creditCardType
+            'brand' => $faker->creditCardType,
+            'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
         ],
         'created_at' => $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray()),
     ];
@@ -852,15 +850,13 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'anonymous', function(Faker
     return [
         'fund_id' => $fund['id'],
         'donor_id' => App\Models\v1\Donor::where('name', 'anonymous')->pluck('id'),
-        'description' => 'Donation to ' . $fund['name'],
         'type' => 'donation',
         'amount' => $faker->randomNumber(2),
-        'payment' => [
+        'details' => [
             'type' => 'card',
-            'last_four', '1234',
-            'cardholder' => 'John Doe',
-            'zip' => '56789',
-            'brand' => 'visa'
+            'last_four' => substr($faker->creditCardNumber, -4),
+            'cardholder' => $faker->name,
+            'brand' => $faker->creditCardType,
         ],
         'created_at' => $faker->dateTimeThisYear
     ];
@@ -872,11 +868,10 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_from', function(F
 
     return [
         'fund_id' => $fund['id'],
-        'description' => 'Transfer from ' . $fund['name'],
         'donor_id' => null,
         'type' => 'transfer',
         'amount' => -$faker->randomNumber(2),
-        'payment' => null,
+        'details' => null,
     ];
 });
 
@@ -886,11 +881,10 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Fak
 
     return [
         'fund_id' => $fund['id'],
-        'description' => 'Transfer to ' . $fund['name'],
         'donor_id' => null,
         'type' => 'transfer',
         'amount' => $faker->randomNumber(2),
-        'payment' => null,
+        'details' => null,
     ];
 });
 

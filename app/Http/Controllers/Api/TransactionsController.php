@@ -111,6 +111,7 @@ class TransactionsController extends Controller
     /**
      * Update a Transaction.
      *
+     * @param $id
      * @return \Dingo\Api\Http\Response
      */
     public function update($id)
@@ -118,6 +119,19 @@ class TransactionsController extends Controller
         $transaction = $this->getTransactionHandler()->update($id, $this->request);
 
         return $this->response->item($transaction, new TransactionTransformer);
+    }
+
+    /**
+     * Delete a transaction.
+     *
+     * @param $id
+     * @return \Dingo\Api\Http\Response
+     */
+    public function destroy($id)
+    {
+        $this->getTransactionHandler()->destroy($id);
+
+        return $this->response->noContent();
     }
 
     /**

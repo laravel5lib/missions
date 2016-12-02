@@ -25,7 +25,7 @@
             <span class="sr-only">Next</span>
           </a>
     </div> -->
-    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <div id="carousel-example-generic" class="carousel slide campaign-carousel" data-ride="carousel">
           <div class="carousel-inner">
             <div class="item active">
               <img src="../images/1n1d17/1n1d17-campaign-banner.jpg" alt="#1N1D17">
@@ -34,7 +34,7 @@
                 <h3>1Nation1Day 2017</h3>
                 <p>1Nation1Day Nicaragua will be the largest global missions outreach in history.</p>
                 <a href="#" class="btn btn-primary btn-sm">More Details</a>
-                <hr class="divider inv" />
+                <hr class="divider inv hidden-xs" />
               </div>
             </div>
           </div>

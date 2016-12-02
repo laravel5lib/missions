@@ -48,7 +48,7 @@ class UserTransformer extends TransformerAbstract
             'timezone'     => $user->timezone,
             'bio'          => $user->bio,
             'url'          => $user->url,
-            'avatar'       => $user->avatar ? image($user->avatar->source) : null,
+            'avatar'       => $user->avatar ? image($user->avatar->source) : url('/images/placeholders/user-placeholder.png'),
             'banner'       => $user->banner ? image($user->banner->source) : null,
             'public'       => (bool) $user->public,
             'created_at'   => $user->created_at->toDateTimeString(),

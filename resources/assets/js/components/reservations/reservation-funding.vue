@@ -6,25 +6,27 @@
                     <h5>{{ reservation.fund.data.name }}</h5>
                 </div>
                 <div class="col-xs-4 text-right">
-                    <label>Transaction Type</label>
-                    <select class="form-control" v-model="type">
-                        <option value=''>All</option>
-                        <option value='donation'>Donation</option>
-                        <option value='fee'>Fee</option>
-                        <option value='payment'>Payment</option>
-                        <option value='refund'>Refund</option>
-                        <option value='transfer'>Transfer</option>
-                    </select>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label>Transaction Type</label>
+                            <select class="form-control input-sm" v-model="type">
+                                <option value=''>All</option>
+                                <option value='donation'>Donation</option>
+                                <option value='fee'>Fee</option>
+                                <option value='payment'>Payment</option>
+                                <option value='refund'>Refund</option>
+                                <option value='transfer'>Transfer</option>
+                            </select>
+                        </div><!-- form-group -->
+                    </div><!-- form-inline -->
                 </div>
             </div>
         </div>
         <ul class="list-group">
-            <li class="list-group-item" :class="reservation.fund.data.balance > 0 ? 'list-group-item-success' : 'list-group-item-danger'">
-                <h4 class="text-center text-white">{{ reservation.fund.data.balance|currency }} <small class="text-white">Total In Fund</small></h4>
-            </li>
             <li class="list-group-item" v-for="transaction in transactions|filterBy type">
                 <hr class="divider inv sm">
-                <h4 class="list-group-item-heading" :class="transaction.amount > 0 ? 'text-success' : 'text-danger'">{{ transaction.amount|currency }} {{ transaction.description }}</h4>
+                <h3 class="list-group-item-heading" :class="transaction.amount > 0 ? 'text-success' : 'text-danger'">{{ transaction.amount|currency }}</h3>
+                <p class="text-muted small">{{ transaction.description }}<p>
                 <template v-if="transaction.comment">
                 <hr class="divider inv sm">
                 <div class="well">

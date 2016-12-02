@@ -943,6 +943,37 @@ h1.home-college-header {
 }
 
 /* Fundraiser Carousel */
+@media screen and (max-width: 991px) {
+  .campaign-carousel .carousel-caption {
+      bottom: 0px;
+      h3 {
+        font-size: 2em;
+      }
+      h6 {
+        font-size: .7em;
+      }
+      p {
+        font-size: 1em;
+      }
+  }
+}
+@media screen and (max-width: 767px) {
+  .campaign-carousel .carousel-caption {
+    h3 {
+      font-size: 1.8em;
+    }
+    h6 {
+      font-size: .7em;
+    }
+    p {
+      display: none;
+    }
+    .btn-sm {
+      padding: 3px 15px;
+      font-size: 11px;
+    }
+  }
+}
 .carousel-control > span.fa {
   background-color: #454545 !important;
 }

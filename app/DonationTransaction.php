@@ -15,17 +15,9 @@ class DonationTransaction extends TransactionHandler
      */
     public function create(Request $request)
     {
-        app(DonationRequest::class)->validate();
+        $this->validate();
 
-        // merge defaults
-        $fund = $this->fund->findOrFail($request->get('fund_id'));
-        $request->merge([
-            'type' => 'donation',
-            'description' => 'Donation to ' . $fund->name,
-            'currency' => 'usd'
-        ]);
-
-        if ($request->get('payment.type') == 'card') {
+        if ($request->get('details.type') == 'card') {
             // has a credit card token already been created and provided?
             // if not, tokenize the card details.
             $request->has('token') ?
@@ -39,7 +31,7 @@ class DonationTransaction extends TransactionHandler
             $this->merchant->captureCharge($charge['id']);
 
             // rebuild the payment array with new details
-            $request['payment'] = [
+            $request['details'] = [
                 'type' => 'card',
                 'charge_id' => $charge['id'],
                 'brand' => $charge['source']['brand'],
@@ -61,34 +53,32 @@ class DonationTransaction extends TransactionHandler
     }
 
     /**
-     * Update a donation.
-     *
+     * Delete a donation.
      * @param $id
-     * @param Request $request
      */
-    public function update($id, Request $request)
+    public function destroy($id)
+    {
+        $transaction = $this->transaction->findOrFail($id);
+        $fund = $transaction->fund;
+
+        // Refund the credit card
+        if (isset($transaction->details['charge_id'])) {
+            $this->merchant->refundCharge(
+                $transaction->details['charge_id'],
+                $transaction->amount
+            );
+        }
+
+        $transaction->delete();
+
+        $fund->reconcile();
+    }
+
+    /**
+     * Validate incoming request.
+     */
+    private function validate()
     {
         app(DonationRequest::class)->validate();
-
-        dd($request->all());
-
-        // merge defaults
-        $fund = $this->fund->findOrFail($request->get('fund_id'));
-        $request->merge([
-            'description' => 'Donation to ' . $fund->name,
-            'donor_id' => $request->get('donor_id')
-        ]);
-
-        $transaction = $this->transaction->findOrFail($id);
-
-        $request['payment'] = [
-            'type' => $transaction->payment['type'],
-            'charge_id' => $transaction->payment['charge_id'],
-            'brand' => $transaction->payment['brand'],
-            'last_four' => $transaction->payment['last_four'],
-            'cardholder' => $request->get('card.cardholder'),
-        ];
-
-        $transaction->update($request->all());
     }
 }

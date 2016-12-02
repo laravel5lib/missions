@@ -99,4 +99,14 @@ class ProjectCause extends Model
         return $countries->all();
     }
 
+    /**
+     * Get the cause's fund.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function fund()
+    {
+        return $this->morphOne(Fund::class, 'fundable');
+    }
+
 }

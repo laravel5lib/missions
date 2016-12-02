@@ -10,7 +10,7 @@
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
                     <button data-toggle="modal" data-target="#causeEditor" class="btn btn-primary">
-                        New <i class="fa fa-plus"></i>
+                        <i class="fa fa-plus icon-left"></i> New 
                     </button>
                 </div>
             </div>

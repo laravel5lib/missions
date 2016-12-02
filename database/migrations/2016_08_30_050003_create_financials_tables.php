@@ -46,12 +46,11 @@ class CreateFinancialsTables extends Migration
             $table->uuid('id')->primary();
             $table->integer('amount');
             $table->string('type');
-            $table->json('payment')->nullable();
+            $table->json('details')->nullable();
             $table->uuid('fund_id')->index();
             $table->uuid('donor_id')->nullable()->index();
-            $table->string('description');
-            $table->string('comment', 120)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table('transactions', function($table)

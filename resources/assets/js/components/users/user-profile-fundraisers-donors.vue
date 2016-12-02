@@ -28,7 +28,7 @@
                     <h5>
                         <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
                         <small class="small">by <a :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>
-                        <br /><small>{{ donation.comment }}</small>
+                        <br /><small>{{ donation.details.comment }}</small>
                     </h5>
                 </div>
             </div>

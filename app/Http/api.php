@@ -54,6 +54,7 @@ $api->version('v1', [
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
     $api->get('fundraisers/{id}/donations', 'FundraisersController@donations');
     $api->resource('donors', 'DonorsController');
+    $api->post('donors/export', 'DonorsController@export');
     $api->resource('donations', 'DonationsController');
     $api->post('donations/authorize', 'DonationsController@authorizeCard');
     $api->resource('passports', 'PassportsController');
@@ -68,14 +69,15 @@ $api->version('v1', [
     $api->resource('accommodations.occupants', 'OccupantsController');
     $api->resource('stories', 'StoriesController');
     $api->resource('funds', 'FundsController');
+    $api->post('funds/export', 'FundsController@export');
     $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
     $api->resource('transactions', 'TransactionsController');
+    $api->post('transactions/export', 'TransactionsController@export');
     $api->resource('causes', 'ProjectCausesController');
     $api->get('causes/{cause}/initiatives', 'ProjectInitiativesController@index');
     $api->resource('initiatives', 'ProjectInitiativesController', ['except' => 'index']);
     $api->get('causes/{cause}/projects', 'ProjectsController@index');
     $api->resource('projects', 'ProjectsController', ['except' => 'index']);
-    $api->post('transactions/export', 'TransactionsController@export');
     $api->resource('notes', 'NotesController');
     $api->resource('todos', 'TodosController');
     $api->resource('essays', 'EssaysController');

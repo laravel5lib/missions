@@ -19,25 +19,17 @@ class TransferTransaction extends TransactionHandler
     {
         $this->validate();
 
+        // abstract to custom validation rule
         $from_fund = $this->fund->findOrFail($request->get('from_fund_id'));
-
         if ($from_fund->balance < $request->get('amount')) {
             throw new ValidationHttpException(['Insufficient funds.']);
         }
 
-        $to_fund = $this->fund->findOrFail($request->get('to_fund_id'));
-
         // Transfer from
         $from = $this->transaction->create([
             'type' => 'transfer',
-            'description' => 'Transfer from ' . $from_fund->name,
             'amount' => -$request->get('amount'),
-            'fund_id' => $from_fund->id,
-            'payment' => [
-                'label' => 'Transferred to',
-                'fund_id' => $to_fund->id,
-                'fund_name' => $to_fund->name
-            ]
+            'fund_id' => $request->get('from_fund_id')
         ]);
 
         event(new TransactionWasCreated($from));
@@ -45,20 +37,42 @@ class TransferTransaction extends TransactionHandler
         // Transfer to
         $to = $this->transaction->create([
             'type' => 'transfer',
-            'description' => 'Transfer to ' . $to_fund->name,
             'amount' => $request->get('amount'),
-            'fund_id' => $to_fund->id,
-            'payment' => [
-                'label' => 'Transferred from',
-                'fund_id' => $from_fund->id,
-                'fund_name' => $from_fund->name
-            ]
+            'fund_id' => $request->get('to_fund_id')
         ]);
 
         event(new TransactionWasCreated($to));
 
-        return collect([$from, $to]);
+        $to->details = [
+            'related_transaction_id' => $from->id
+        ];
+        $to->save();
 
+        $from->details = [
+            'related_transaction_id' => $to->id
+        ];
+        $from->save();
+
+        return collect([$from, $to]);
+    }
+
+    /**
+     * Delete a transfer.
+     *
+     * @param $id
+     */
+    public function destroy($id)
+    {
+        $transaction = $this->transaction->findOrFail($id);
+        $related = $transaction->details['related_transaction_id'];
+        $fund = $transaction->fund;
+        $transaction->delete();
+        $fund->reconcile();
+
+        $relatedTransaction = $this->transaction->findOrFail($related);
+        $relatedFund = $relatedTransaction->fund;
+        $relatedTransaction->delete();
+        $relatedFund->reconcile();
     }
 
     /**

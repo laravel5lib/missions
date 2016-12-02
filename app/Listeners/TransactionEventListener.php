@@ -14,9 +14,7 @@ class TransactionEventListener {
     public function updateFundBalance($event) {
         $transaction = $event->transaction;
 
-        $balance = $transaction->fund->balance + $transaction->amount;
-        $transaction->fund->balance = $balance;
-        $transaction->fund->save();
+        $transaction->fund->reconcile();
 
         if($transaction->type == 'donation') {
             event(new DonationWasMade($transaction, $transaction->donor));
@@ -29,6 +27,10 @@ class TransactionEventListener {
      * @param $event
      */
     public function applyAsPayment($event) {
+        // REFACTOR
+        // Listen for changes to fund balance
+        // Then update a reservation's dues
+        // Then update a project's dues
         $transaction = $event->transaction;
 
         if ($transaction->fund->fundable instanceof Reservation) {

@@ -106,28 +106,6 @@
                 <button class="btn btn-primary" v-if="isUpdate" @click="update">Save</button>
             </div>
         </validator>
-
-        <alert :show.sync="showSuccess"
-               placement="top-right"
-               :duration="3000"
-               type="success"
-               width="400px"
-               dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Well Done!</strong>
-            <p>{{ message }}</p>
-        </alert>
-
-        <alert :show.sync="showError"
-               placement="top-right"
-               :duration="6000"
-               type="danger"
-               width="400px"
-               dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>{{ message }}</p>
-        </alert>
     </div>
 </template>
 <script>
@@ -164,9 +142,6 @@
                 countries: [],
                 users: [],
                 groups: [],
-                message: '',
-                showSuccess: false,
-                showError: false,
                 countryCodeObj: null,
                 userObj: null,
                 groupObj: null,
@@ -223,27 +198,22 @@
                 })
                 this.$http.post('donors', this.donor).then(function (response) {
                     this.$refs.donorspinner.hide();
-                    this.message = 'Donor created successfully.';
-                    this.showSuccess = true;
+                    this.$dispatch('showSuccess', 'Donor created successfully.');
                     this.$dispatch('donor-created', response.data.data.id);
                 }).error(function (response) {
                     this.$refs.donorspinner.hide();
-                    console.log(response);
-                    this.message = 'There are errors on the form.';
-                    this.showError = true;
+                    this.$dispatch('showError', 'There are errors on the form');
                 });
             },
             update() {
                 this.accountError = false;
                 this.$http.put('donors/' + this.donorId, this.donor).then(function (response) {
-                    this.message = 'Donor updated successfully.';
-                    this.showSuccess = true;
+                    this.$dispatch('showSuccess', 'Donor updated successfully.');
                 }).error(function (response) {
                     if(_.contains(_.keys(response.errors), 'account_id')) {
                         this.accountError = true;
                     }
-                    this.message = 'There are errors on the form.';
-                    this.showError = true;
+                    this.$dispatch('showError', 'There are errors on the form.');
                 });
             },
             cancel() {
@@ -251,7 +221,10 @@
                     console.log('cancelled');
 				    this.$dispatch('cancel');
 			    } else {
-			        return window.location.href = '/admin/donors'
+			        if( this.isUpdate) {
+			            return window.location.href = '/admin/donors/' + this.donorId;
+			        }
+			        return window.location.href = '/admin/donors';
 			    }
             },
             getCountries() {

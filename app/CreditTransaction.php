@@ -7,18 +7,20 @@ use Dingo\Api\Contract\Http\Request;
 
 class CreditTransaction extends TransactionHandler
 {
+
+    /**
+     * @param Request $request
+     * @return object
+     */
     public function create(Request $request)
     {
         $this->validate();
 
-        $fund = $this->fund->findOrFail($request->get('fund_id'));
-
         $transaction = $this->transaction->create([
             'type' => 'credit',
             'amount' => $request->get('amount'),
-            'fund_id' => $fund->id,
-            'payments' => ['reason' => $request->get('reason')],
-            'description' => 'Credit to ' . $fund->name
+            'fund_id' => $request->get('fund_id'),
+            'details' => ['reason' => $request->get('reason')]
         ]);
 
         event(new TransactionWasCreated($transaction));
@@ -26,6 +28,24 @@ class CreditTransaction extends TransactionHandler
         return $transaction;
     }
 
+    /**
+     * Delete a credit.
+     *
+     * @param $id
+     */
+    public function destroy($id)
+    {
+        $transaction = $this->transaction->findOrFail($id);
+        $fund = $transaction->fund;
+
+        $transaction->delete();
+
+        $fund->reconcile();
+    }
+
+    /**
+     * Validate incoming request.
+     */
     private function validate()
     {
         app(CreditRequest::class)->validate();

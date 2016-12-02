@@ -11,7 +11,11 @@
                     <td class="text-right text-muted" style="vertical-align:middle;font-size:10px;">{{ $donation->created_at->diffForHumans() }}</td>
                 </tr>
                 @empty
-                    <tr><td><p class="text-muted text-center lead"><strong>Don't give up!</strong><br /><small>No recent donations.</small></p></td></tr>
+                    <div style="padding: 40px 0;">
+                        <p class="text-muted text-center"><em>No recent donations but don't give up!<br/><small>Check out these fundraising tips.</small></em></p>
+                        <hr class="divider inv">
+                        <p class="text-center"><a class="btn btn-link btn-sm" href="/fundraisers#fundraising">Fundraising Tips</a></p>
+                    </div>
                 @endforelse
             </tbody>
         </table>

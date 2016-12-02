@@ -11,7 +11,9 @@
                     <td style="padding:10px 15px;font-size:10px;vertical-align:middle;" class="text-right text-muted">{{ $requirement->due_at->format('M j') }}</td>
                 </tr>
                 @empty
-                    <tr><td><p class="text-muted text-center lead"><strong>Everything is in order!</strong><br /><small>No requirements pending.</small></p></td></tr>
+                    <div style="padding: 40px 0;">
+                        <p class="text-muted text-center"><em>Everything is in order!<br/><small>No requirements pending.</small></em></p>
+                    </div>
                 @endforelse
             </tbody>
         </table>

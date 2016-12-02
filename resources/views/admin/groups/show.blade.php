@@ -10,21 +10,24 @@
                     {{ $group->name }} <small>&middot; Group</small>
                 </h3>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 text-right">
                 <hr class="divider inv sm">
                 <hr class="divider inv">
-                <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Manage <i class="fa fa-angle-down"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="create">New</a></li>
-                        <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                        {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
-                        {{--<li role="separator" class="divider"></li>--}}
-                        <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
-                    </ul>
-                </div>
+                <div class="btn-group">
+                    <a href="{{ url('admin/groups') }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
+                    <div class="btn-group">
+                        <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Manage <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="create">New</a></li>
+                            <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                            {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
+                            {{--<li role="separator" class="divider"></li>--}}
+                            <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
+                        </ul>
+                    </div><!-- end btn-group -->
+                </div><!-- end btn-group -->
             </div>
         </div>
     </div>

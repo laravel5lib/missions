@@ -13,10 +13,8 @@
                         <label>Designated Fund</label>
                         <v-select class="form-control" id="designatedFund" :debounce="250" :on-search="getFunds"
                                   :value.sync="designatedFund" :options="funds" label="name"
-                                  placeholder="Select a fund"></v-select>
-                        <span class="help-block small" v-show="designatedFund">
-                            <a href="#" @click="fundInfoMode"><i class="fa fa-question-circle"></i> View Fund Details</a>
-                        </span>
+                                  placeholder="Select a fund" v-if="!editing"></v-select>
+                        <p v-else>{{ designatedFund.name }}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -274,7 +272,9 @@
                 toFund: null,
                 fromFund: null,
                 selectedFund: null,
-                designatedFund: null,
+                designatedFund: {
+                    name: null
+                },
                 donors: null,
                 selectedDonor: null,
                 card: {
@@ -398,6 +398,7 @@
                 this.$http.post('transactions', data).then(function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$dispatch('showSuccess', 'Transaction successfully created.');
+                    this.$dispatch('transactionCreated');
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$dispatch('showError', 'There are errors on the form.');

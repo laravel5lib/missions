@@ -140,11 +140,10 @@
                         Filters
                         <span class="caret"></span>
                     </button>
-                    <button class="btn btn-default btn-sm" type="button" @click="showExportModal=true">
-                        Export
-                        <span class="fa fa-download"></span>
-                    </button>
-                    <!--<a class="btn btn-primary btn-sm" href="transactions/create">New <i class="fa fa-plus"></i> </a>-->
+                    <export-utility url="transactions/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
                 </form>
             </div>
         </div>
@@ -267,71 +266,12 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" :callback="searchTransactions"></pagination>
+                        <pagination :pagination.sync="pagination" size="small" :callback="searchTransactions"></pagination>
                     </div>
                 </td>
             </tr>
             </tfoot>
         </table>
-        <modal title="Export List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
-            <div slot="modal-body" class="modal-body">
-                <validator name="validation" :classes="{ invalid: 'has-error' }">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <label>Filename</label>
-                        <input type="text" class="form-control" v-model="exportSettings.filename" placeholder="Enter an optional file name">
-                    </div>
-                    <div v-validate-class class="col-sm-6 form-group">
-                        <label>Send Report to Email</label>
-                        <input type="text"
-                               class="form-control"
-                               v-model="exportSettings.email"
-                               placeholder="Enter an email address"
-                               initial="off"
-                               v-validate:email="{email: { rule: true, message: 'Enter a valid email.'}}">
-                    </div>
-                </div>
-                <hr class="divider inv">
-                <div class="row">
-                    <div v-validate-class class="col-xs-8 form-group">
-                        <label>Choose Fields to Include:</label>
-                    </div>
-                    <div class="col-xs-4 text-right">
-                        <button class="btn btn-link btn-xs" @click="selectAllFields" v-text="exportSelectButton"></button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-6" v-for="(key, value) in exportOptions">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"
-                                       v-model="exportSettings.fields"
-                                       :value="key"
-                                       initial="off"
-                                       v-validate:fields="{required: { rule: true, message: 'At least one field is required.' }}">
-                                {{ value }}
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                </validator>
-            </div>
-        </modal>
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Awesome!</strong>
-            <p>{{ message }}</p>
-        </alert>
-        <alert :show.sync="showError"
-               placement="top-right"
-               :duration="6000"
-               type="danger"
-               width="400px"
-               dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>{{ message }}</p>
-        </alert>
     </div>
 </template>
 <style>
@@ -347,9 +287,10 @@
 </style>
 <script type="text/javascript">
     import vSelect from "vue-select";
+    import exportUtility from '../../export-utility.vue';
     export default{
         name: 'admin-transactions-list',
-        components: {vSelect},
+        components: {vSelect, exportUtility},
         props:{
             fund: {
                 type: String,
@@ -391,12 +332,6 @@
                     type: null,
                 },
                 showFilters: false,
-                showExportModal: false,
-                exportSettings: {
-                    fields: ['description', 'amount', 'date'],
-                    email: '',
-                    filename: ''
-                },
                 exportOptions: {
                     description: 'Description',
                     amount: 'Amount',
@@ -413,7 +348,7 @@
                     donor_address_two: 'Donor City, State & Zip',
                     donor_country: 'Donor Country'
                 },
-                exportSelectButton: 'Select all',
+                exportFilters: {},
                 showSuccess: false,
                 showError: false,
                 message: null
@@ -461,15 +396,6 @@
 
         },
         methods: {
-            selectAllFields() {
-                if (this.exportSettings.fields.length == _.keys(this.exportOptions).length) {
-                    this.exportSettings.fields = [];
-                    this.exportSelectButton = 'Select all';
-                } else {
-                    this.exportSettings.fields = _.keys(this.exportOptions);
-                    this.exportSelectButton = 'Deselect all';
-                }
-            },
             updateConfig(){
                 localStorage[this.storageName] = JSON.stringify({
                     activeFields: this.activeFields,
@@ -531,6 +457,8 @@
 
                 $.extend(params, this.filters);
 
+                this.exportFilters = params;
+
                 return params;
             },
             getDonors(search, loading){
@@ -549,30 +477,11 @@
                 }).then(function () {
                     this.updateConfig();
                 });
-            },
-            exportList(){
-
-                var self = this;
-                this.$validate(true, function() {
-                    if (self.$validation.invalid) {
-                        self.message = _.first(self.$validation.errors).message;
-                        self.showError = true;
-                        throw new Error("Validation errors");
-                    }
-                });
-
-                var params = this.getListSettings();
-                $.extend(params, this.exportSettings);
-                // Send to api route
-
-                this.$http.post('transactions/export', params).then(function (response) {
-                    this.message = response.data.message;
-                    this.showSuccess = true;
-                    console.log(response);
-                }, function (error) {
-                    this.message = 'Unable to export the list.';
-                    this.showError = true;
-                })
+            }
+        },
+        events: {
+            'refreshTransactions': function() {
+                this.searchTransactions();
             }
         },
         ready() {

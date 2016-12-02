@@ -9,9 +9,12 @@
                 </div>
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <a href="{{ url('admin/donors/'. $donor->id .'/edit') }}" class="btn btn-primary">
-                        Edit
-                    </a>
+                    <div class="btn-group">
+                        <a href="{{ url('admin/donors') }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
+                        <a href="{{ url('admin/donors/'. $donor->id .'/edit') }}" class="btn btn-primary">
+                            Edit
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -19,7 +22,7 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-offset-2 col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5 class="panel-header">Details</h5>
@@ -64,7 +67,7 @@
                             <div class="col-sm-6">
                                 <label>Address</label>
                                 <p>
-                                    {{ $donor->address ?  $donor->address . '<br />' : '' }}
+                                    {!! $donor->address ?  $donor->address . '<br />' : '' !!}
                                     {{ $donor->city ? $donor->city . ', ' : '' }}
                                     {{ $donor->state }}
                                     {{ $donor->zip }}
@@ -85,21 +88,29 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+        </div>
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Transactions</h5>
+                    </div>
+                    <div class="panel-body">
+                        <admin-transactions-list donor="{{ $donor->id }}"
+                                                 storage-name="AdminDonorTransactionsConfig">
+                        </admin-transactions-list>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
                 <notes type="donors"
                        id="{{ $donor->id }}"
                        user_id="{{ auth()->user()->id }}"
                        :per_page="3"
                        :can-modify="{{ auth()->user()->can('modify-notes') }}">
                 </notes>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h5>Transactions</h5>
-                <admin-transactions-list donor="{{ $donor->id }}"
-                                         storage-name="AdminDonorTransactionsConfig">
-                </admin-transactions-list>
             </div>
         </div>
     </div>

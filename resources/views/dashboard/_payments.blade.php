@@ -19,7 +19,9 @@
                     </td>
                 </tr>
             @empty
-                <tr><td><p class="text-muted text-center lead"><strong>All paid up!</strong><br /><small>No payments due.</small></p></td></tr>
+                <div style="padding: 40px 0;">
+                    <p class="text-muted text-center"><em>Congrats, you're all paid up!<br/><small>Start a new project or go on a trip!</small></em></p>
+                </div>
             @endforelse
             </tbody>
         </table>

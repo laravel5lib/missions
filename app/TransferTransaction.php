@@ -43,10 +43,14 @@ class TransferTransaction extends TransactionHandler
 
         event(new TransactionWasCreated($to));
 
-        $to->details = ['related_transaction_id' => $from->id];
+        $to->details = [
+            'related_transaction_id' => $from->id
+        ];
         $to->save();
 
-        $from->details = ['related_transaction_id' => $to->id];
+        $from->details = [
+            'related_transaction_id' => $to->id
+        ];
         $from->save();
 
         return collect([$from, $to]);

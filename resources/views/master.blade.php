@@ -30,7 +30,7 @@
            dismissable>
         <span class="icon-ok-circled alert-icon-float-left"></span>
         <strong>Well Done!</strong>
-        <p>{{ @message }}</p>
+        <p>@{{ message }}</p>
     </alert>
 
     <alert :show.sync="showError"
@@ -41,7 +41,7 @@
            dismissable>
         <span class="icon-info-circled alert-icon-float-left"></span>
         <strong>Oh No!</strong>
-        <p>{{ @message }}</p>
+        <p>@{{ message }}</p>
     </alert>
 
      <script src="{{ elixir('js/main.js') }}"></script>

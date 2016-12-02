@@ -96,14 +96,14 @@ import projectsList from './components/admin/projects-list.vue';
 import projectEditor from './components/admin/project-editor.vue';
 import initiativesList from './components/admin/initiatives-list.vue';
 import initiativeEditor from './components/admin/initiative-editor.vue';
-import fundEditor from './components/financials/funds/fund-editor.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
 import adminFundsList from './components/financials/funds/admin-funds-list.vue';
 import adminTransactionsList from './components/financials/transactions/admin-transactions-list.vue';
-import transactionForm from './components/financials/transactions/transaction-form.vue';
 import donorForm from './components/financials/donors/donor-form.vue';
 import tripInterestEditor from './components/interests/trip-interests-editor.vue';
 import refundForm from './components/financials/transactions/refund-form.vue';
+import transactionDelete from './components/financials/transactions/transaction-delete.vue';
+import fundManager from './components/financials/funds/fund-manager.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -456,14 +456,14 @@ new Vue({
         projectEditor,
         initiativesList,
         initiativeEditor,
-        fundEditor,
         adminDonorsList,
         adminFundsList,
         adminTransactionsList,
-        transactionForm,
         donorForm,
         tripInterestEditor,
-        refundForm
+        refundForm,
+        transactionDelete,
+        fundManager
     },
     http: {
         headers: {

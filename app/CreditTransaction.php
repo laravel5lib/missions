@@ -7,6 +7,11 @@ use Dingo\Api\Contract\Http\Request;
 
 class CreditTransaction extends TransactionHandler
 {
+
+    /**
+     * @param Request $request
+     * @return object
+     */
     public function create(Request $request)
     {
         $this->validate();
@@ -23,6 +28,11 @@ class CreditTransaction extends TransactionHandler
         return $transaction;
     }
 
+    /**
+     * Delete a credit.
+     *
+     * @param $id
+     */
     public function destroy($id)
     {
         $transaction = $this->transaction->findOrFail($id);
@@ -33,6 +43,9 @@ class CreditTransaction extends TransactionHandler
         $fund->reconcile();
     }
 
+    /**
+     * Validate incoming request.
+     */
     private function validate()
     {
         app(CreditRequest::class)->validate();

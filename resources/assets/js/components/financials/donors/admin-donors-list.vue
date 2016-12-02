@@ -142,11 +142,10 @@
                         Filters
                         <span class="caret"></span>
                     </button>
-                    <button class="btn btn-default btn-sm" type="button" @click="showExportModal=true">
-                        Export
-                        <span class="fa fa-download"></span>
-                    </button>
-                    <!--<a class="btn btn-primary btn-sm" href="donors/create">New <i class="fa fa-plus"></i> </a>-->
+                    <export-utility url="donors/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
                 </form>
             </div>
         </div>
@@ -234,48 +233,12 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" :callback="searchDonors"></pagination>
+                        <pagination :pagination.sync="pagination" class="small" :callback="searchDonors"></pagination>
                     </div>
                 </td>
             </tr>
             </tfoot>
         </table>
-        <modal title="Export Donors List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
-            <div slot="modal-body" class="modal-body">
-                <ul class="list-unstyled">
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="name"> Name
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="company"> Company
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="email"> Email
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="phone"> Phone
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="zip"> Zip
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="amount"> Amount
-                        </label>
-                    </li>
-                </ul>
-            </div>
-        </modal>
     </div>
 </template>
 <style>
@@ -291,9 +254,10 @@
 </style>
 <script type="text/javascript">
     import vSelect from "vue-select";
+    import exportUtility from "../../export-utility.vue";
     export default{
         name: 'admin-donors-list',
-        components: {vSelect},
+        components: {vSelect, exportUtility},
         props:{
             storageName: {
                 type: String,
@@ -344,11 +308,21 @@
                     ends:'',
                 },
                 showFilters: false,
-                showExportModal: false,
-                exportSettings: {
-                    fields: [],
-                }
-
+                exportOptions: {
+                    name: 'Name',
+                    company: 'Company',
+                    email: 'Email',
+                    phone: 'Phone',
+                    address: 'Address',
+                    city: 'City',
+                    state: 'State/Providence',
+                    zip: 'Zip/Postal Code',
+                    country: 'Country',
+                    account_type: 'Account Type',
+                    created: 'Created On',
+                    updated: 'Updated On'
+                },
+                exportFilters: {}
             }
         },
         watch: {
@@ -496,6 +470,8 @@
 
                 $.extend(params, this.filters);
 
+                this.exportFilters = params;
+
                 return params;
             },
             getGroups(search, loading){
@@ -562,17 +538,6 @@
                 }).then(function () {
                     this.updateConfig();
                 });
-            },
-            exportList(){
-                var params = this.getListSettings();
-                $.extend(params, this.exportSettings);
-                // Send to api route
-
-                this.$http.post('donors/export', params).then(function (response) {
-                    console.log(response);
-                }, function (error) {
-                    console.log(error);
-                })
             }
         },
         ready() {

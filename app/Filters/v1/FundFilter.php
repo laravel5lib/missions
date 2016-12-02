@@ -32,6 +32,8 @@ class FundFilter extends Filter
      */
     public function minBalance($amount)
     {
+        if (! $amount) return null;
+
         return $this->where('balance', '>=', $amount);
     }
 
@@ -43,6 +45,8 @@ class FundFilter extends Filter
      */
     public function maxBalance($amount)
     {
+        if (! $amount) return null;
+
         return $this->where('balance', '<=', $amount);
     }
 

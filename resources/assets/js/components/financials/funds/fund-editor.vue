@@ -1,6 +1,7 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">
+            <spinner v-ref:spinner size="md" text="Updating..."></spinner>
             <div class="row">
                 <div class="col-xs-4">
                     <h5 class="panel-header">Details</h5>
@@ -28,30 +29,41 @@
             </div>
         </div>
         <div class="panel-body">
+        <validator name="validation" :classes="{ invalid: 'has-error' }">
             <label>Balance</label>
             <h4 :class="{'text-success' : fund.balance > 0, 'text-danger' : fund.balance < 0}">
                 {{ fund.balance | currency }}
             </h4>
-            <label>Fund Name</label>
-            <input class="form-control" v-model="fund.name" v-if="editMode">
-            <p v-else>{{ fund.name }}</p>
-            <label>QuickBooks Class</label>
-            <input class="form-control" v-model="fund.class" v-if="editMode">
-            <p v-else>{{ fund.class }}</p>
-            <label>QuickBooks Item</label>
-            <input class="form-control" v-model="fund.item" v-if="editMode">
-            <p v-else>{{ fund.item }}</p>
+            <div :class="{ 'has-error' : $validation.name.invalid}">
+                <label>Fund Name</label>
+                <template v-if="editMode">
+                    <input class="form-control" v-model="fund.name"
+                           initial="off" v-validate:name="{required: true}">
+                </template>
+                <p v-else>{{ fund.name }}</p>
+            </div>
+            <div :class="{ 'has-error' : $validation.qbclass.invalid}">
+                <label>Account Class</label>
+                <template v-if="editMode">
+                    <input class="form-control" v-model="fund.class"
+                           initial="off" v-validate:qbclass="{required: true}">
+                </template>
+                <p v-else>{{ fund.class }}</p>
+            </div>
+            <div :class="{ 'has-error' : $validation.qbitem.invalid}">
+                <label>Account Item</label>
+                <template v-if="editMode">
+                    <input class="form-control" v-model="fund.item"
+                           initial="off" v-validate:qbitem="{required: true}">
+                </template>
+                <p v-else>{{ fund.item }}</p>
+            </div>
             <label>Type</label>
             <p>{{ fund.type | capitalize }}</p>
             <label>Last Updated</label>
             <p>{{ fund.updated_at | moment 'lll' }}</p>
+        </validator>
         </div>
-
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Awesome!</strong>
-            <p>{{ message }}</p>
-        </alert>
     </div>
 </template>
 <script>
@@ -70,31 +82,47 @@
         data(){
             return{
                 fund: {},
-                showSuccess: false,
-                message: '',
                 editMode: false
             }
         },
         methods: {
             fetch() {
+                this.$refs.spinner.show();
                 this.$http.get('funds/' + this.id).then(function (response) {
                     this.fund = response.data.data;
+                    this.$refs.spinner.hide();
                 });
             },
             save() {
-                this.$http.put('funds/' + this.id, this.fund).then(function (response) {
-                    this.message = 'Fund has been updated!';
-                    this.showSuccess = true;
-                    this.editMode = false;
-                    this.fetch();
-                });
+                // validate manually
+                var self = this
+                this.$validate(true, function () {
+                    if (self.$validation.invalid) {
+                        console.log('validation errors');
+                    } else {
+                        self.$refs.spinner.show();
+                        self.$http.put('funds/' + self.id, self.fund).then(function (response) {
+                            self.$refs.spinner.hide();
+                            self.$dispatch('showSuccess', 'Fund has been updated!');
+                            self.editMode = false;
+                            self.fetch();
+                        }).error(function (response) {
+                            self.$refs.spinner.hide();
+                            self.$dispatch('showError', 'There are errors on the form');
+                        });
+                    }
+                })
             },
             reconcile() {
                 this.$http.put('funds/' + this.id + '/reconcile').then(function (response) {
-                    this.message = 'Fund has been reconciled!';
-                    this.showSuccess = true;
+                    this.$dispatch('showSuccess', 'Fund has been reconciled!');
                     this.fetch();
                 });
+            }
+        },
+        events: {
+            'reconcileFund': function() {
+                this.reconcile();
             }
         },
         ready() {

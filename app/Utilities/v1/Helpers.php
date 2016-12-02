@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\v1\Campaign;
+use App\Models\v1\Project;
+use App\Models\v1\ProjectCause;
 use App\Models\v1\Reservation;
 use App\Models\v1\Trip;
 use Carbon\Carbon;

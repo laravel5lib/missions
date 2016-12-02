@@ -398,6 +398,7 @@
                 this.$http.post('transactions', data).then(function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$dispatch('showSuccess', 'Transaction successfully created.');
+                    this.$dispatch('transactionCreated');
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$dispatch('showError', 'There are errors on the form.');

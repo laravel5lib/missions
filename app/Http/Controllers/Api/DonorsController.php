@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\v1\DonorRequest;
+use App\Http\Requests\v1\ExportRequest;
 use App\Http\Transformers\v1\DonorTransformer;
+use App\Jobs\ExportDonors;
 use App\Models\v1\Donor;
 use App\Services\PaymentGateway;
 use Illuminate\Http\Request;
@@ -119,5 +121,31 @@ class DonorsController extends Controller
         });
 
         return $this->response->noContent();
+    }
+
+    /**
+     * Export donors.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $donors = $this->donor
+            ->filter($request->all())
+            ->get();
+
+        $fields = $request->get('fields');
+
+        $this->dispatch(new ExportDonors(
+            $donors,
+            $fields,
+            $request->get('email'),
+            snake_case($request->get('filename'))
+        ));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
     }
 }

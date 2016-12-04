@@ -151,11 +151,27 @@ class PaymentGateway {
      *
      * @param $charge_id
      * @param $amount
+     * @param array $parameters
      * @return mixed
      */
-    public function refundCharge($charge_id, $amount)
+    public function refundCharge($charge_id, $amount, $parameters = [])
     {
-        $refund = $this->stripe->refunds()->create($charge_id, $amount);
+        $refund = $this->stripe->refunds()->create($charge_id, $amount, $parameters);
+
+        return $refund['id'];
+    }
+
+    /**
+     * Update a refund.
+     *
+     * @param $charge_id
+     * @param $refund_id
+     * @param array $parameters
+     * @return mixed
+     */
+    public function updateRefund($charge_id, $refund_id, $parameters = [])
+    {
+        $refund = $this->stripe->refund()->update($charge_id, $refund_id, $parameters);
 
         return $refund['id'];
     }

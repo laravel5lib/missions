@@ -7,8 +7,12 @@
                     <label>Type</label>
                     <select class="form-control" v-model="filters.type">
                         <option value="">All Types</option>
-                        <option value="reservation">Reservation</option>
+                        <option value="campaign">Campaign</option>
+                        <option value="group">Group</option>
                         <option value="trip">Trip</option>
+                        <option value="reservation">Reservation</option>
+                        <option value="project_cause">Project Cause</option>
+                        <option value="project">Project</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -70,6 +74,16 @@
                             </li>
                             <li>
                                 <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="item" :disabled="maxCheck('item')"> Item
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="class" :disabled="maxCheck('class')"> Class
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
                                     <input type="checkbox" v-model="activeFields" value="balance" :disabled="maxCheck('balance')"> Balance
                                 </label>
                             </li>
@@ -88,11 +102,10 @@
                         Filters
                         <span class="caret"></span>
                     </button>
-                    <button class="btn btn-default btn-sm" type="button" @click="showExportModal=true">
-                        Export
-                        <span class="fa fa-download"></span>
-                    </button>
-                    <!--<a class="btn btn-primary btn-sm" href="funds/create">New <i class="fa fa-plus"></i> </a>-->
+                    <export-utility url="funds/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
                 </form>
             </div>
         </div>
@@ -126,7 +139,16 @@
                     <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-
+                <th v-if="isActive('item')" :class="{'text-primary': orderByField === 'item'}">
+                    Item
+                    <i @click="setOrderByField('item')" v-if="orderByField !== 'item'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'item'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
+                <th v-if="isActive('class')" :class="{'text-primary': orderByField === 'class'}">
+                    Class
+                    <i @click="setOrderByField('class')" v-if="orderByField !== 'class'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'class'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                </th>
                 <th v-if="isActive('balance')" :class="{'text-primary': orderByField === 'balance'}">
                     Balance
                     <i @click="setOrderByField('balance')" v-if="orderByField !== 'balance'" class="fa fa-sort pull-right"></i>
@@ -141,6 +163,12 @@
                 <td v-if="isActive('type')">
                     <span class="label label-default" v-text="fund.type|capitalize"></span>
                 </td>
+                <td v-if="isActive('item')">
+                    {{ fund.item|capitalize }}
+                </td>
+                <td v-if="isActive('class')">
+                    {{ fund.class|capitalize }}
+                </td>
                 <td v-if="isActive('balance')">
                     <span v-text="fund.balance|currency" :class="{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}"></span>
                 </td>
@@ -151,33 +179,12 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" :callback="searchFunds"></pagination>
+                        <pagination :pagination.sync="pagination" size="small" :callback="searchFunds"></pagination>
                     </div>
                 </td>
             </tr>
             </tfoot>
         </table>
-        <modal title="Export Funds List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
-            <div slot="modal-body" class="modal-body">
-                <ul class="list-unstyled">
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="name"> Name
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="type"> Type
-                        </label>
-                    </li>
-                    <li>
-                        <label class="small" style="margin-bottom: 0px;">
-                            <input type="checkbox" v-model="exportSettings.fields" value="balance"> Balance
-                        </label>
-                    </li>
-                </ul>
-            </div>
-        </modal>
     </div>
 </template>
 <style>
@@ -193,9 +200,10 @@
 </style>
 <script type="text/javascript">
     import vSelect from "vue-select";
+    import exportUtility from '../../export-utility.vue';
     export default{
         name: 'admin-funds-list',
-        components: {vSelect},
+        components: {vSelect, exportUtility},
         props:{
             storageName: {
                 type: String,
@@ -225,11 +233,15 @@
                     type: null,
                 },
                 showFilters: false,
-                showExportModal: false,
-                exportSettings: {
-                    fields: [],
-                }
-
+                exportOptions: {
+                    name: 'Name',
+                    type: 'Type',
+                    balance: 'Balance',
+                    class: 'Account Class',
+                    item: 'Account Item',
+                    created: 'Created On'
+                },
+                exportFilters: {}
             }
         },
         watch: {
@@ -324,6 +336,8 @@
 
                 $.extend(params, this.filters);
 
+                this.exportFilters = params;
+
                 return params;
             },
             searchFunds(){
@@ -335,17 +349,6 @@
                 }).then(function () {
                     this.updateConfig();
                 });
-            },
-            exportList(){
-                var params = this.getListSettings();
-                $.extend(params, this.exportSettings);
-                // Send to api route
-
-                this.$http.post('funds/export', params).then(function (response) {
-                    console.log(response);
-                }, function (error) {
-                    console.log(error);
-                })
             }
         },
         ready() {

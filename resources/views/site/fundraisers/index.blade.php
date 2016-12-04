@@ -2,6 +2,36 @@
 
 @section('content')
     <fundraisers></fundraisers>
+<div id="carousel-fundraising-platform" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <li data-target="#carousel-fundraising-platform" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-fundraising-platform"></li>
+          </ol>
+          <div class="carousel-inner" role="listbox">
+          	<div class="item active">
+	            <img class="img-responsive" src="../images/cover-photo2.jpg">
+	            <div class="carousel-caption">
+	            	<h3 class="dash-trailing">Fundraising Made Easy</h3>
+	                <p>The whole idea is to make fundraising easy. We've done that with your personalized Missions.Me Profile.</p>
+	            </div>
+	        </div>
+			<div class="item">
+	            <img class="img-responsive" src="../images/cover-photo.jpg">
+	            <div class="carousel-caption">
+	            	<h3 class="dash-trailing">Your Profile</h3>
+	                <p>The whole idea is to make fundraising easy. We've done that with your personalized Missions.Me Profile.</p>
+	            </div>
+	        </div>	        
+          </div>
+          <a class="left carousel-control" href="#carousel-fundraising-platform" role="button" data-slide="prev">
+            <span class="fa fa-angle-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="right carousel-control" href="#carousel-fundraising-platform" role="button" data-slide="next">
+            <span class="fa fa-angle-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+</div><!-- end carousel -->
 <div class="dark-bg-primary">
     <div class="container">
     	<div class="content-section">

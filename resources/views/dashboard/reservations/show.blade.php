@@ -40,4 +40,5 @@
             </div>
         </div>
     </div>
+    <hr class="divider inv xlg">
 @stop

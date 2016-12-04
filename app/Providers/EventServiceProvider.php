@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\v1\Project;
 use App\Models\v1\Campaign;
+use App\Models\v1\ProjectCause;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
@@ -72,7 +73,18 @@ class EventServiceProvider extends ServiceProvider
         Project::created(function ($project) {
             $project->fund()->create([
                 'name' => $project->name . ' Project',
-                'balance' => 0
+                'balance' => 0,
+                'class' => str_plural($project->initiative->cause->name),
+                'item' => $project->name .' - '. $project->initiative->cause->name
+            ]);
+        });
+
+        ProjectCause::created(function ($cause) {
+            $cause->fund()->create([
+                'name' => $cause->name . ' Cause',
+                'balance' => 0,
+                'class' => str_plural($cause->name),
+                'item' => 'General Donation'
             ]);
         });
 

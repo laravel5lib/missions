@@ -15,7 +15,7 @@ class DonationTransaction extends TransactionHandler
      */
     public function create(Request $request)
     {
-        app(DonationRequest::class)->validate();
+        $this->validate();
 
         if ($request->get('details.type') == 'card') {
             // has a credit card token already been created and provided?
@@ -72,5 +72,13 @@ class DonationTransaction extends TransactionHandler
         $transaction->delete();
 
         $fund->reconcile();
+    }
+
+    /**
+     * Validate incoming request.
+     */
+    private function validate()
+    {
+        app(DonationRequest::class)->validate();
     }
 }

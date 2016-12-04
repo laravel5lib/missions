@@ -47,28 +47,26 @@
         <template v-if="fundraisers.length">
             <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex">
                 <div class="panel panel-default">
-                    <div class="panel-heading text-center" style="padding:5px 20px;">
-                        <h6>{{ fundraiser.name }}</h6>
-                    </div><!-- end panel-heading -->
                     <!--<img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">-->
                     <div class="panel-body">
+                        <a :href="calcPath(fundraiser)"><h6>{{ fundraiser.name }}</h6></a>
                         <div class="row">
                             <div class="col-xs-6 col-sm-12 col-md-6">
-                                <label>Raised</label>
-                                <h4 class="text-success" style="margin-top:0;">{{ fundraiser.raised_amount | currency }}</h4>
+                                <label style="margin-bottom:0;">Raised</label>
+                                <p class="text-success small" style="margin-bottom:0;">{{ fundraiser.raised_amount | currency }}</p>
                             </div>
                             <div class="col-xs-6 col-sm-12 col-md-6">
-                                <label>Expires</label>
-                                <p class="small">{{ fundraiser.ended_at | moment 'll'  }}</p>
+                                <label style="margin-bottom:0;">Expires</label>
+                                <p class="small" style="margin-bottom:0;">{{ fundraiser.ended_at | moment 'll'  }}</p>
                             </div>
                         </div><!-- end row -->
                         <label><span>{{ fundraiser.raised_percent|number }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></label>
-                        <div class="progress" style="height: 9px;">
+                        <div class="progress" style="height:9px;margin-bottom:15px;">
                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: fundraiser.raised_percent + '%'}">
                                 <span class="sr-only">{{ fundraiser.raised_percent|number }}% Complete (success)</span>
                             </div>
                         </div>
-                        <p><a class="btn btn-primary btn-block btn-sm" :href="calcPath(fundraiser)">Details</a></p>
+                        <p class="text-center" style="margin-bottom:0;"><a class="btn btn-primary-hollow btn-sm" :href="calcPath(fundraiser)">Details</a></p>
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
             </div><!-- end col -->
@@ -78,7 +76,7 @@
         </template>
         <template v-else>
             <div class="col-xs-12 text-center">
-                <p class="lead text-muted">Hmmmm. We couldn't find any fundraisers matching your search.</p>
+                <p class="text-muted"><em>Hmmmm. We couldn't find any fundraisers matching your search.</em></p>
             </div>
         </template>
 
@@ -92,7 +90,7 @@
             return{
                 featuredFundraisers: [],
                 fundraisers: [],
-                fundraisersLimit: 6,
+                fundraisersLimit: 8,
 
                 // pagination vars
                 search: '',

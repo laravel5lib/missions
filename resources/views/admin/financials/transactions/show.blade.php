@@ -23,7 +23,7 @@
                             @if($transaction->type == 'donation')
                                 <li><a data-toggle="modal" data-target="#refund">Refund Transaction</a></li>
                             @endif
-                            <li><a href="#">Delete Transaction</a></li>
+                            <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
                         </ul>
                     </div>
                 </div>
@@ -66,13 +66,22 @@
                             </div>
                         </div>
 
+                        @if($transaction->details && $transaction->type == 'credit')
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label>Reason</label>
+                                <p>{{ $transaction->details['reason'] }}</p>
+                            </div>
+                        </div>
+                        @endif
+
                         @if($transaction->details && $transaction->type == 'refund')
                         <div class="row">
                             <div class="col-xs-6">
                                 <label>Related Transaction</label>
-                                <a href="/admin/transactions/{{ $transaction->details['transaction_id'] }}">
+                                <p><a href="/admin/transactions/{{ $transaction->details['transaction_id'] }}">
                                     {{ $refund->findOrFail($transaction->details['transaction_id'])->description }}
-                                </a>
+                                </a></p>
                             </div>
                             <div class="col-xs-6">
                                 <label>Reason</label>
@@ -87,9 +96,9 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label>Related Transaction</label>
-                                    <a href="/admin/transactions/{{ $transaction->details['related_transaction_id'] }}">
+                                    <p><a href="/admin/transactions/{{ $transaction->details['related_transaction_id'] }}">
                                         {{ $transaction->details['related_transaction_id'] }}
-                                    </a>
+                                    </a></p>
                                 </div>
                             </div>
                         @endif
@@ -196,4 +205,6 @@
         </div>
     </div>
     @endif
+
+    <transaction-delete transaction-id="{{ $transaction->id }}"></transaction-delete>
 @stop

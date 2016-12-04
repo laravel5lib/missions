@@ -2,66 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Jobs\Job;
-use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Maatwebsite\Excel\Facades\Excel;
-
-class ExportTransactions extends Job implements ShouldQueue
+class ExportTransactions extends Exporter
 {
-    use InteractsWithQueue, SerializesModels;
-    /**
-     * @var Collection
-     */
-    private $transactions;
-
-    /**
-     * @var $fields
-     */
-    private $fields;
-    /**
-     * @var
-     */
-    private $email;
-    /**
-     * @var
-     */
-    private $fileName;
-
-    /**
-     * Create a new job instance.
-     *
-     * @param Collection $transactions
-     * @param array $fields
-     * @param $email
-     * @param null $fileName
-     */
-    public function __construct(Collection $transactions, array $fields = [], $email, $fileName = null)
-    {
-        $this->transactions = $transactions;
-        $this->fields = $fields;
-        $this->email = $email;
-        $this->fileName = $fileName ? $fileName . '_' . time() : time();
-    }
-
-    /**
-     * Execute the job.
-     *
-     * @param Mailer $mailer
-     */
-    public function handle(Mailer $mailer)
-    {
-        $data = $this->transactions->map(function($transaction) {
-                    return $this->getColumns($transaction);
-                })->all();
-
-        $this->createExport($data)->sendEmail($mailer);
-    }
-
-    private function getColumns($transaction)
+    public function columns($transaction)
     {
         $columns = [
             'description' => $transaction->description,
@@ -91,35 +34,6 @@ class ExportTransactions extends Job implements ShouldQueue
             $columns['donor_country'] = country($transaction->donor->country_code);
         }
 
-        return collect($columns)->filter(function($value, $key) {
-            return in_array($key, $this->fields);
-        })->all();
-    }
-
-    private function createExport($data)
-    {
-        Excel::create($this->fileName, function($excel) use($data) {
-
-            $excel->sheet('Transactions', function($sheet) use($data) {
-
-                $sheet->fromArray($data);
-                $sheet->freezeFirstRow();
-
-            });
-
-        })->store('csv');
-
-        return $this;
-    }
-
-    private function sendEmail($mailer)
-    {
-        $data = ['file' => $this->fileName.'.csv'];
-
-        $mailer->send('emails.reports.export', $data, function ($message) {
-            $message->to($this->email);
-            $message->subject('Your report is ready!');
-            $message->attach(storage_path('exports/' . $this->fileName.'.csv'));
-        });
+        return $columns;
     }
 }

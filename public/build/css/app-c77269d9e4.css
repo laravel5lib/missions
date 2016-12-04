@@ -16405,6 +16405,15 @@ h1.home-college-header {
     display: none; } }
 
 /* Fundraiser Carousel */
+#carousel-fundraising-platform {
+  background-color: #fff;
+  min-height: 500px; }
+  #carousel-fundraising-platform .carousel-caption {
+    color: #3e3e3e;
+    text-align: left;
+    left: 10%;
+    width: 450px; }
+
 @media screen and (max-width: 991px) {
   .campaign-carousel .carousel-caption {
     bottom: 0px; }

@@ -7,21 +7,24 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-12">
-                        <h4>
-                            Funding Progress
-                            {{--<span class="pull-right">${{ number_format($$reservation->getTotalOwed(),2) }}</span>--}}
-                        </h4>
+                    <div class="col-sm-6 col-md-4 text-center">
+                        <label>Funding Progress</label>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ $reservation->getPercentRaised() }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{ $reservation->getPercentRaised() }}%;">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $reservation->getPercentRaised() }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{ $reservation->getPercentRaised() }}%;">
                                 {{ $reservation->getPercentRaised() }}% of ${{ $reservation->getTotalCost() }} Raised
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
-                        <h4>Fund</h4>
-                        <hr>
+                    <div class="col-sm-6 col-md-4 text-center">
+                        <label>Total In Fund</label>
+                        <h2 class="text-success" style="margin-top:0;">${{ number_format($reservation->getTotalRaised(),2) }}</h2>
                     </div>
+                    <div class="col-sm-6 col-md-4 text-center">
+                        <label>Remaining To Raise</label>
+                        <h2 class="text-info" style="margin-top:0;">${{ number_format($reservation->getTotalOwed(),2) }}</h2>
+                    </div>
+                </div><!-- end row -->
+                <div class="row">
                     <div class="col-sm-12">
                         <reservation-funding id="{{ $reservation->id }}"></reservation-funding>
                     </div>

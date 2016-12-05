@@ -1,5 +1,35 @@
 <template>
     <div>
+        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+            <hr class="divider inv sm">
+            <form class="col-sm-12">
+
+                <div class="form-group">
+                    <select  class="form-control input-sm" v-model="filters.type">
+                        <option value="">Any Type</option>
+                        <option value="ministry">Ministry</option>
+                        <option value="family">Family</option>
+                        <option value="international">International</option>
+                        <option value="media">Media</option>
+                        <option value="medical">Medical</option>
+                        <option value="leader">Leader</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control input-sm" v-model="filters.status" style="width:100%;">
+                        <option value="">Any Status</option>
+                        <option value="active">Active</option>
+                        <option value="closed">Closed</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+
+                <hr class="divider inv sm">
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+            </form>
+        </aside>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
@@ -27,7 +57,10 @@
                                 <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
                             </div>
-                            <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters</button>
+                            <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
+                                Filters
+                                <i class="fa fa-filter"></i>
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -83,12 +116,17 @@
         </div><!-- end panel -->
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'admin-trips',
         data(){
             return{
+                showFilters: false,
                 campaignId: this.$parent.campaignId,
+                filters: {
+                    type: '',
+                    status: ''
+                },
                 trips: [],
                 orderByField: 'group.data.name',
                 direction: 1,
@@ -100,6 +138,14 @@
             }
         },
         watch: {
+                  // watch filters obj
+            'filters': {
+                handler: function (val) {
+                    // console.log(val);
+                    this.searchTrips();
+                },
+                deep: true
+            },
             'search': function (val, oldVal) {
                 this.page = 1;
                 this.searchTrips();
@@ -118,15 +164,22 @@
                 this.orderByField = 'group.data.name';
                 this.direction = 1;
                 this.search = null;
+                this.filters = {
+                    type: '',
+                    status: ''
+                };
             },
             searchTrips(){
-                this.$http.get('trips', {
+                let params = {
                     campaign_id: this.campaignId,
                     include:'campaign,group',
                     search: this.searchText,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
-                }).then(function (response) {
+                };
+                $.extend(params, this.filters);
+
+                this.$http.get('trips', params).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.trips = response.data.data;
                 })

@@ -84,7 +84,7 @@
                                          :class="{ 'has-error': checkForError('start') }">
                                         <span class="input-group-addon">Start</span>
 										<date-picker class="form-control" :time.sync="started_at"></date-picker>
-										<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
+										<input type="datetime" class="form-control hidden" v-model="started_at | moment 'LLLL'" id="started_at"
                                                v-validate:start="{ required: true }" required>
                                     </div>
                                 </div>
@@ -93,7 +93,7 @@
                                          :class="{ 'has-error': checkForError('end') }">
                                         <span class="input-group-addon">End</span>
 										<date-picker class="form-control" :time.sync="ended_at"></date-picker>
-										<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
+										<input type="datetime" class="form-control hidden" v-model="ended_at | moment 'LLLL'" id="ended_at"
                                                v-validate:end="{ required: true }" required>
                                     </div>
                                 </div>
@@ -132,7 +132,7 @@
 						<label for="closed_at" class="col-sm-2 control-label">Registration Closes</label>
 						<div class="col-sm-10">
 							<date-picker class="form-control input-sm" :time.sync="closed_at"></date-picker>
-							<input type="datetime" class="form-control input-sm hidden" v-model="closed_at" v-validate:closed="{ required: true }" id="closed_at">
+							<input type="datetime" class="form-control input-sm hidden" v-model="closed_at | moment 'LLLL'" v-validate:closed="{ required: true }" id="closed_at">
 						</div>
 					</div>
 
@@ -140,7 +140,7 @@
 						<label for="published_at" class="col-sm-2 control-label">Publish</label>
 						<div class="col-sm-10">
 							<date-picker class="form-control input-sm" :time.sync="published_at"></date-picker>
-							<input type="datetime" class="form-control input-sm hidden" v-model="published_at" id="published_at">
+							<input type="datetime" class="form-control input-sm hidden" v-model="published_at | moment 'LLLL'" id="published_at">
 						</div>
 					</div>
 

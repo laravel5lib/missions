@@ -148,6 +148,8 @@ Vue.component('tooltip', VueStrap.tooltip);
 import myDatepicker from './components/date-picker.vue'
 Vue.component('date-picker', myDatepicker);
 
+// Vue Cookie
+Vue.use(require('vue-cookie'));
 // Vue Resource
 Vue.use(require('vue-resource'));
 // Vue Validator

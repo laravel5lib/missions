@@ -90,31 +90,16 @@
         </div>
 
         <hr class="divider inv sm">
-        <!--<template v-if="activeView==='donors'">
-            <div class="panel panel-default" v-for="donor in donors">
-                <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
-                    <h5>
-                        <a role="button">
-                            {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
-                        </a>
-                    </h5>
-                </div>
+        <div class="list-group">
+            <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions|filterBy type">
+                <h5>
+                    <span class="text-success">{{ transaction.amount|currency }}</span> was {{ action }}<br>
+                    <small v-if="contains(['donation'], transaction.type)" class="small">by <a :href="'@' + transaction.donor.data.account_url">{{ transaction.donor.data.name || 'Anonymous' }}</a> on {{ transaction.created_at|moment 'll'}}</small>
+                    <br />
+                    <small v-if="transaction.details">{{ transaction.details.comment }}</small>
+                </h5>
             </div>
-        </template>-->
-
-        <!--<template v-if="activeView === 'donations'">-->
-            <div class="panel panel-default" v-for="transaction in transactions|filterBy type">
-                <div class="panel-heading" role="tab" id="heading-{{ transaction.id }}">
-                    <h5>
-                        <span class="text-success">{{ transaction.amount|currency }}</span> was {{ action }}<br>
-                        <small v-if="contains(['donation'], transaction.type)" class="small">by <a :href="'@' + transaction.donor.data.account_url">{{ transaction.donor.data.name || 'Anonymous' }}</a> on {{ transaction.created_at|moment 'll'}}</small>
-                        <br />
-                        <small v-if="transaction.details">{{ transaction.details.comment }}</small>
-                    </h5>
-                </div>
-            </div>
-        <!--</template>-->
-
+        </div>
 
         <div class="row">
             <div class="col-sm-12 text-center">
@@ -124,13 +109,13 @@
                             <a>{{ pagination.total }} {{ activeView | capitalize }}s</a>
                         </li>
                         <li :class="{ 'disabled': pagination.current_page == 1 }">
-                            <a aria-label="Previous" @click="page=pagination.current_page-1">
+                            <a aria-label="Previous" @click="pagination.current_page = pagination.current_page-1">
                                 <span aria-hidden="true">&laquo; Back</span>
                             </a>
                         </li>
                         <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
                         <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                            <a aria-label="Next" @click="page=pagination.current_page+1">
+                            <a aria-label="Next" @click="pagination.current_page = pagination.current_page+1">
                                 <span aria-hidden="true">Next &raquo;</span>
                             </a>
                         </li>
@@ -151,8 +136,6 @@
                 transactions: null,
                 type: '',
                 display: true,
-                // donors: [],
-                // donations: [],
                 activeView: 'donation',
 
                 // pagination vars
@@ -182,8 +165,8 @@
             }
         },
         watch: {
-            'page': function (val, oldVal) {
-                this.searchDonors();
+            'pagination.current_page': function (val, oldVal) {
+                this.searchTransactions();
             },
         },
         methods: {
@@ -192,23 +175,9 @@
             },
             toggleView(view){
                 this.activeView = this.type = view;
-
-//                this.activeView = this.activeView === 'donors' ? 'donations' : 'donors';
             },
-            /*searchDonors(){
-             this.$http.get('fundraisers{/id}/donors', {id: this.id}).then(function (response) {
-             this.donors = response.data.data;
-             this.pagination = response.data.meta.pagination;
-             });
-             },
-             searchDonations(){
-             this.$http.get('fundraisers{/id}/donations', {id: this.id, include: 'donor'}).then(function (response) {
-             this.donations = response.data.data;
-             this.pagination = response.data.meta.pagination;
-             });
-             },*/
             searchTransactions(){
-                this.$http.get('transactions', {include: 'donor', fund: this.id}).then(function (response) {
+                this.$http.get('transactions', {include: 'donor', fund: this.id, page: this.pagination.current_page}).then(function (response) {
                     this.transactions = response.data.data;
                     this.pagination = response.data.meta.pagination;
                 });

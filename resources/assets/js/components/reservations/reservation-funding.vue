@@ -1,57 +1,18 @@
-<!--<template>
-    <div class="panel panel-default panel-primary" v-if="reservation">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-xs-8">
-                    <h5>{{ reservation.fund.data.name }}</h5>
-                </div>
-                <div class="col-xs-4 text-right">
-                    <div class="form-inline">
-                        <div class="form-group">
-                            <label>Transaction Type</label>
-                            <select class="form-control input-sm" v-model="type">
-                                <option value=''>All</option>
-                                <option value='donation'>Donation</option>
-                                <option value='fee'>Fee</option>
-                                <option value='payment'>Payment</option>
-                                <option value='refund'>Refund</option>
-                                <option value='transfer'>Transfer</option>
-                            </select>
-                        </div>&lt;!&ndash; form-group &ndash;&gt;
-                    </div>&lt;!&ndash; form-inline &ndash;&gt;
-                </div>
-            </div>
-        </div>
-        <ul class="list-group">
-            <li class="list-group-item" v-for="transaction in transactions|filterBy type">
-                <hr class="divider inv sm">
-                <h3 class="list-group-item-heading" :class="transaction.amount > 0 ? 'text-success' : 'text-danger'">{{ transaction.amount|currency }}</h3>
-                <p class="text-muted small">{{ transaction.description }}<p>
-                <template v-if="transaction.comment">
-                    <hr class="divider inv sm"/>
-                    <div class="well">
-                        &lt;!&ndash;<div class="list-group-item-text">
-                            <p class="small"><b>Description:</b> </p>
-                        </div>&ndash;&gt;
-                            &lt;!&ndash;<hr class="divider">&ndash;&gt;
-                        <div class="list-group-item-text">
-                            <p class="small"><b>Comment:</b> {{ transaction.comment }}</p>
-                        </div>
-                    </div>
-                </template>
-            </li>
-        </ul>
-    </div>
-</template>-->
 <template>
     <div v-if="display">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-xs-8">
+                <div class="col-xs-12 col-sm-8">
                     <h5 v-if="fund">{{ fund.name }}</h5>
                 </div>
-                <div class="col-xs-4 text-right visible-xs">
-                    <div class="form-inline">
+                <div class="col-xs-12 col-sm-4 visible-xs">
+                    <div class="btn-group btn-group-sm btn-group-justified" role="group" aria-label="...">
+                        <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donor'}" @click="toggleView('donor')">Donors</a>
+                        <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donation'}" @click="toggleView('donation')">Transactions</a>
+                    </div>
+                </div>
+                <div class="col-xs-12 visible-xs" v-if="activeView !== 'donor'">
+                    <form class="form-inline">
                         <div class="form-group">
                             <label>Transaction Type</label>
                             <select class="form-control input-sm" v-model="type">
@@ -63,30 +24,18 @@
                                 <option value='transfer'>Transfer</option>
                             </select>
                         </div><!-- form-group -->
-                    </div><!-- form-inline -->
+                    </form><!-- form-inline -->
                 </div>
             </div>
         </div>
 
         <div class="btn-group btn-group-sm btn-group-justified hidden-xs" role="group" aria-label="...">
-            <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donor'}" @click="toggleView('donor')">Donors</button>
-            </div>
-            <div class="btn-group btn-group-sm" role="group">
-                <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donation'}" @click="toggleView('donation')">Donations</a>
-            </div>
-            <div class="btn-group btn-group-sm" role="group">
-                <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'fee'}" @click="toggleView('fee')">Fees</a>
-            </div>
-            <div class="btn-group btn-group-sm" role="group">
-                <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'payment'}" @click="toggleView('payment')">Payment</a>
-            </div>
-            <div class="btn-group btn-group-sm" role="group">
-                <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'refund'}" @click="toggleView('refund')">Refunds</a>
-            </div>
-            <div class="btn-group btn-group-sm" role="group">
-                <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'transfer'}" @click="toggleView('transfer')">Transfers</a>
-            </div>
+            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donor'}" @click="toggleView('donor')">Donors</a>
+            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donation'}" @click="toggleView('donation')">Donations</a>
+            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'fee'}" @click="toggleView('fee')">Fees</a>
+            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'payment'}" @click="toggleView('payment')">Payment</a>
+            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'refund'}" @click="toggleView('refund')">Refunds</a>
+            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'transfer'}" @click="toggleView('transfer')">Transfers</a>
         </div>
 
         <hr class="divider inv sm">

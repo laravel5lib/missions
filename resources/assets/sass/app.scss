@@ -818,24 +818,21 @@ $img-base-size: 40px;
 .home-half-section {
   padding: 3%;
 }
-.angel-house-bg {
-  color: #fff;
-  background-image: url(../../images/home/angel-house-bg.jpg);
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: scroll;
-  background-size: cover;
-  background-color: $gray-darker;
-  .content-section {
-    padding: 120px 0px;
-  }
-}
 h1.home-college-header {
   margin-top: 40px;
 }
-.change-world-bg {
+.parallaxOnenation {
+  height: 100vh;
+  overflow: hidden;
+}
+.parallaxOnenation > * {
+  height: 200%;
+  position: relative;
+  top: -80%;
+}
+.onenation-home-bg {
   color: #fff;
-  background-image: url(../../images/home/change-world-bg.jpg);
+  background-image: url(../../images/home/1n1d-bg.jpg);
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -844,9 +841,10 @@ h1.home-college-header {
   a {
     color: #fff;
   }
-  .content-section {
-    padding: 80px 0px;
-  }
+}
+.onenation-home-section {
+  position: absolute;
+  top:23%;
 }
 
 // -- Panel -- //
@@ -905,7 +903,7 @@ h1.home-college-header {
 
 @media (max-width: 767px) {
     .vid-bg {
-        background: url('../video/video-placeholder.png') center center / cover no-repeat;
+        background: url('../../video/video-placeholder.png') center center / cover no-repeat;
     }
 
     .vid-bg-video {
@@ -1084,8 +1082,8 @@ h1.home-college-header {
   Icons
  ================= */
 
-/* footer social icons */
-ul.social-network {
+/* social icons */
+ul.social-network-hollow {
   list-style: none;
   display: inline;
   margin-left:0 !important;
@@ -1096,7 +1094,60 @@ ul.social-network {
   }
 }
 
-/* footer social icons */
+/* social icons */
+.social-network-hollow a:hover {
+  background-color:$brand-primary;
+  border-color:$brand-primary;
+  i {
+    color:#fff;
+  }
+}
+a.socialIcon:hover, .socialHoverClass {
+  color:$brand-primary;
+}
+
+.social-circle-hollow {
+  li a {
+    display:inline-block;
+    position:relative;
+    margin:0 auto 0 auto;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    border-radius:50%;
+    text-align:center;
+    width:35px;
+    height:35px;
+    font-size:12px;
+    background:transparent;
+    border:1px solid $gray-darker;
+  }
+  li i {
+    margin:0;
+    line-height:35px;
+    text-align:center;
+  }
+}
+
+.social-circle-hollow li a:hover i, .triggeredHover {
+  -moz-transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+  -ms--transform: rotate(360deg);
+  transform: rotate(360deg);
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.social-circle-hollow i {
+  color: $gray-darker;
+  -webkit-transition: all 0.8s;
+  -moz-transition: all 0.8s;
+  -o-transition: all 0.8s;
+  -ms-transition: all 0.8s;
+  transition: all 0.8s;
+}
+
 .social-network a:hover {
   background-color: $brand-primary;
   i {
@@ -1122,7 +1173,7 @@ a.socialIcon:hover, .socialHoverClass {
     background: $gray-dark;
   }
   li i {
-    margin:0;
+    margin:1px 0 0;
     line-height:25px;
     text-align: center;
   }

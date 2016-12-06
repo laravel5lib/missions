@@ -69,9 +69,9 @@
         </div>
 
         <div class="btn-group btn-group-sm btn-group-justified hidden-xs" role="group" aria-label="...">
-            <!--<div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donors'}" @click="toggleView('donors')">Donors</button>
-            </div>-->
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donor'}" @click="toggleView('donor')">Donors</button>
+            </div>
             <div class="btn-group btn-group-sm" role="group">
                 <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donation'}" @click="toggleView('donation')">Donations</a>
             </div>
@@ -90,57 +90,94 @@
         </div>
 
         <hr class="divider inv sm">
-        <div class="list-group">
-            <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions|filterBy type">
-                <h5>
-                    <span class="text-success">{{ transaction.amount|currency }}</span> was {{ action }}<br>
-                    <small v-if="contains(['donation'], transaction.type)" class="small">by <a :href="'@' + transaction.donor.data.account_url">{{ transaction.donor.data.name || 'Anonymous' }}</a> on {{ transaction.created_at|moment 'll'}}</small>
-                    <br />
-                    <small v-if="transaction.details">{{ transaction.details.comment }}</small>
-                </h5>
+        <template v-if="activeView === 'donor'">
+            <div class="list-group">
+                <div class="list-group-item" role="tab" id="heading-{{ donor.id }}" v-for="donor in donors">
+                    <h5>
+                        <a role="button">
+                            {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
+                        </a>
+                    </h5>
+                </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <nav>
+                        <ul class="pagination pagination-sm">
+                            <li>
+                                <a>{{ donorPagination.total }} {{ activeView | capitalize }}s</a>
+                            </li>
+                            <li :class="{ 'disabled': donorPagination.current_page == 1 }">
+                                <a aria-label="Previous" @click="donorPagination.current_page = donorPagination.current_page-1">
+                                    <span aria-hidden="true">&laquo; Back</span>
+                                </a>
+                            </li>
+                            <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
+                            <li :class="{ 'disabled': donorPagination.current_page == donorPagination.total_pages }">
+                                <a aria-label="Next" @click="donorPagination.current_page = donorPagination.current_page+1">
+                                    <span aria-hidden="true">Next &raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </template>
+        <template v-if="activeView !== 'donor'">
+            <div class="list-group">
+                <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions|filterBy type">
+                    <h5>
+                        <span class="text-success">{{ transaction.amount|currency }}</span> was {{ action }}<br>
+                        <small v-if="contains(['donation'], transaction.type)" class="small">by <a :href="'@' + transaction.donor.data.account_url">{{ transaction.donor.data.name || 'Anonymous' }}</a> on {{ transaction.created_at|moment 'll'}}</small>
+                        <br />
+                        <small v-if="transaction.details">{{ transaction.details.comment }}</small>
+                    </h5>
+                </div>
+            </div>
 
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <nav>
-                    <ul class="pagination pagination-sm">
-                        <li>
-                            <a>{{ pagination.total }} {{ activeView | capitalize }}s</a>
-                        </li>
-                        <li :class="{ 'disabled': pagination.current_page == 1 }">
-                            <a aria-label="Previous" @click="pagination.current_page = pagination.current_page-1">
-                                <span aria-hidden="true">&laquo; Back</span>
-                            </a>
-                        </li>
-                        <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-                        <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                            <a aria-label="Next" @click="pagination.current_page = pagination.current_page+1">
-                                <span aria-hidden="true">Next &raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <nav>
+                        <ul class="pagination pagination-sm">
+                            <li>
+                                <a>{{ pagination.total }} {{ activeView | capitalize }}s</a>
+                            </li>
+                            <li :class="{ 'disabled': pagination.current_page == 1 }">
+                                <a aria-label="Previous" @click="pagination.current_page = pagination.current_page-1">
+                                    <span aria-hidden="true">&laquo; Back</span>
+                                </a>
+                            </li>
+                            <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
+                            <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
+                                <a aria-label="Next" @click="pagination.current_page = pagination.current_page+1">
+                                    <span aria-hidden="true">Next &raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 <script type="text/javascript">
     var marked = require('marked');
     export default{
         name: 'reservation-funding',
-        props: ['id'],
+        props: ['reservationId', 'fundId'],
         data(){
             return {
                 fund: null,
-                transactions: null,
+                donors: [],
+                transactions: [],
                 type: '',
                 display: true,
-                activeView: 'donation',
+                activeView: 'donor',
 
                 // pagination vars
                 page: 1,
                 per_page: 10,
+                donorPagination: {current_page: 1},
                 pagination: {current_page: 1},
             }
         },
@@ -165,6 +202,9 @@
             }
         },
         watch: {
+            'donorPagination.current_page': function (val, oldVal) {
+                this.searchDonors();
+            },
             'pagination.current_page': function (val, oldVal) {
                 this.searchTransactions();
             },
@@ -176,28 +216,28 @@
             toggleView(view){
                 this.activeView = this.type = view;
             },
+            searchDonors(){
+                this.$http.get('donors', {reservation: this.reservationId, page: this.donorPagination.current_page}).then(function (response) {
+                    this.donors = response.data.data;
+                    this.donorPagination = response.data.meta.pagination;
+                });
+            },
             searchTransactions(){
-                this.$http.get('transactions', {include: 'donor', fund: this.id, page: this.pagination.current_page}).then(function (response) {
+                this.$http.get('transactions', {include: 'donor', fund: this.fundId, page: this.pagination.current_page}).then(function (response) {
                     this.transactions = response.data.data;
                     this.pagination = response.data.meta.pagination;
                 });
             }
         },
         ready(){
-            this.$http.get('funds/' + this.id).then(function (response) {
+            this.$http.get('funds/' + this.fundId).then(function (response) {
                 this.fund = response.data.data;
             });
 
-            this.$root.$on('Fundraiser:DisplayTransactions', function (display) {
-                this.display = display;
-
-                if (this.display) {
-                    this.searchTransactions();
-                }
-            }.bind(this));
 
             if (this.display) {
                 this.searchTransactions();
+                this.searchDonors();
             }
         }
     }

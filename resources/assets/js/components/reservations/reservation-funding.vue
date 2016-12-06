@@ -45,12 +45,12 @@
 </template>-->
 <template>
     <div v-if="display">
-        <div class="panel-heading visible-xs">
+        <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-8">
                     <h5 v-if="fund">{{ fund.name }}</h5>
                 </div>
-                <div class="col-xs-4 text-right">
+                <div class="col-xs-4 text-right visible-xs">
                     <div class="form-inline">
                         <div class="form-group">
                             <label>Transaction Type</label>

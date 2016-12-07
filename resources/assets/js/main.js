@@ -19,6 +19,7 @@ import groupTripWrapper from './components/campaigns/groups-trips-selection-wrap
 import groupInterestSignup from './components/groups/group-interest-signup.vue';
 import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
 import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
+import userProjectsList from './components/projects/user-projects-list.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
 import recordsList from './components/records/records-list.vue';
@@ -335,8 +336,18 @@ Vue.directive('crop', {
     }
 });
 
+// Disable tooltips on all components
 Vue.mixin({
-    methods: {}
+    ready() {
+        function isTouchDevice(){
+            return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+        }
+
+        if(isTouchDevice()) {
+            $("[rel='tooltip']").tooltip('destroy');
+        }
+
+    }
 });
 
 new Vue({
@@ -374,6 +385,7 @@ new Vue({
         tripDetailsMissionaries,
         tripRegistrationWizard,
         reservationsList,
+        userProjectsList,
         donationsList,
         fundraisersManager,
         fundraisersStories,

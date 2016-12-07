@@ -43,9 +43,9 @@
         </div>
     </div>
     <hr class="divider inv lg">
-    <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+    <div class="container" style="display:flex; flex-wrap: wrap;">
         <template v-if="fundraisers.length">
-            <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex">
+            <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex; flex-direction:column;">
                 <div class="panel panel-default">
                     <!--<img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">-->
                     <div class="panel-body">

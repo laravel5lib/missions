@@ -15658,6 +15658,10 @@ a {
 p.large-type {
   max-width: 420px; }
 
+p.large-line-height {
+  line-height: 2em;
+  font-weight: 100; }
+
 .dash-trailing:after {
   background: #f6323e;
   display: block;
@@ -16305,6 +16309,26 @@ img.onenation-logo {
     text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.9); }
 
 /* Home Page */
+.home-vision {
+  padding-top: 20px;
+  padding-bottom: 20px; }
+  @media screen and (max-width: 767px) {
+    .home-vision {
+      padding-top: 10px;
+      padding-bottom: 0px; }
+      .home-vision h4 {
+        font-size: 15px; } }
+
+.home-social {
+  border-left: 1px solid #e6e6e6;
+  padding-top: 29px;
+  padding-bottom: 29px; }
+  @media screen and (max-width: 767px) {
+    .home-social {
+      border-left: none;
+      padding-top: 10px;
+      padding-bottom: 15px; } }
+
 .home-half-section {
   padding: 3%; }
 
@@ -16314,6 +16338,9 @@ h1.home-college-header {
 .parallaxOnenation {
   height: 100vh;
   overflow: hidden; }
+  @media screen and (max-width: 767px) {
+    .parallaxOnenation {
+      height: 120vh; } }
 
 .parallaxOnenation > * {
   height: 200%;
@@ -16334,6 +16361,11 @@ h1.home-college-header {
 .onenation-home-section {
   position: absolute;
   top: 23%; }
+  @media screen and (max-width: 767px) {
+    .onenation-home-section {
+      top: 14%; }
+      .onenation-home-section img {
+        width: 97%; } }
 
 .max-panel-height {
   max-height: 390px;

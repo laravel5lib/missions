@@ -1,6 +1,13 @@
 <template>
     <div class="row" v-if="loaded">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
+            <div class="text-center">
+                <form novalidate>
+                    <a class="btn btn-default-hollow btn-sm" @click="toggleChangeState()"><i class="fa fa-pencil icon-left"></i> Change Medical Release</a>
+                    <a class="btn btn-primary-hollow btn-sm" href="/dashboard/records/medical-releases/create"><i class="fa fa-plus"></i> Add New Medical Release</a>
+                </form>
+            </div>
+            <hr class="divider inv">
             <div class="panel panel-default" v-if="medicalRelease">
                 <div style="min-height:220px;" class="panel-body">
                     <a role="button" :href="'/dashboard/records' + medicalRelease.links[0].uri">
@@ -23,24 +30,7 @@
                     </p>
                 </div>
             </div>
-            <div v-if="!medicalRelease" class="alert alert-info" role="alert">This reservation has no Medical Release(s) assigned to it. Please select one or add one.</div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="panel panel-default">
-                <div style="min-height:220px;" class="panel-body">
-                    <form novalidate>
-                        <label>Actions</label>
-                        <a class="btn btn-block btn-info btn-sm" @click="toggleChangeState()">
-                            <i class="fa fa-pencil"></i> Change Medical Release
-                        </a>
-                        <a class="btn btn-block btn-primary btn-sm" href="/dashboard/records/medical-releases/create">
-                            <i class="fa fa-plus"></i> Add New Medical Release
-                        </a>
-                    </form>
-
-                </div><!-- end panel-body -->
-            </div>
+            <div v-if="!medicalRelease" role="alert"><p class="text-center text-muted"><em>This reservation has no Medical Release(s) assigned to it. Please select one or add one.</em></p></div>
         </div>
 
         <div class="col-sm-12" v-if="changeState">

@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-sm-12" v-if="loaded && !passports.length">
-            <div class="alert alert-info" role="alert">No records found</div>
+            <p class="text-center text-muted" role="alert"><em>No records found</em></p>
         </div>
 
         <div class="col-md-4 col-sm-6" v-for="passport in paginatedPassports">

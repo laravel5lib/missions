@@ -1,6 +1,13 @@
 <template>
     <div class="row" v-if="loaded">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
+            <div class="text-center">
+                <form novalidate>
+                    <a class="btn btn-default-hollow btn-sm" @click="toggleChangeState()"><i class="fa fa-pencil icon-left"></i> Change Passport</a>
+                    <a class="btn btn-primary-hollow btn-sm" href="/dashboard/records/passports/create"><i class="fa fa-plus icon-left"></i> Add New Passport</a>
+                </form>
+            </div>
+            <hr class="divider inv">
             <div class="panel panel-default" v-if="passport">
                 <div style="min-height:220px;" class="panel-body">
                     <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{passport.citizenship_name}}</h6>
@@ -21,24 +28,7 @@
                     </p>
                 </div><!-- end panel-body -->
             </div>
-            <div v-if="!passport" class="alert alert-info" role="alert">This reservation has no passport(s) assigned to it. Please select one or add one.</div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="panel panel-default">
-                <div style="min-height:220px;" class="panel-body">
-                    <form novalidate>
-                        <label>Actions</label>
-                        <a class="btn btn-block btn-info btn-sm" @click="toggleChangeState()">
-                            <i class="fa fa-pencil"></i> Change Passport
-                        </a>
-                        <a class="btn btn-block btn-primary btn-sm" href="/dashboard/records/passports/create">
-                            <i class="fa fa-plus"></i> Add New Passport
-                        </a>
-                    </form>
-
-                </div><!-- end panel-body -->
-            </div>
+            <div v-if="!passport" role="alert"><p class="text-muted text-center"><em>This reservation has no passport(s) assigned to it. Please select one or add one.</em></p></div>
         </div>
 
         <div class="col-sm-12" v-if="changeState">

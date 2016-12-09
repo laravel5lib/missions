@@ -12,16 +12,22 @@
     @foreach($reservation->requirements as $requirement)
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h5>{{ $requirement->name }}
-                        <small> Due: {{ carbon($requirement->due_at)->toFormattedDateString() }} <i class="fa fa-calendar"></i></small>
-                        @if($requirement->pivot->status == 'complete')
-                            <span class="badge {{ $requirement->pivot->status }} badge-success pull-right"><i class="fa fa-check"></i> Complete</span>
-                        @elseif($requirement->pivot->status == 'reviewing')
-                            <span class="badge {{ $requirement->pivot->status }} badge-info pull-right"><i class="fa fa-circle-o-notch fa-spin"></i> Reviewing</span>
-                        @elseif($requirement->pivot->status == 'incomplete')
-                            <span class="badge {{ $requirement->pivot->status }} badge-danger pull-right"><i class="fa fa-exclamation"></i> Incomplete</span>
-                        @endif
-                    </h5>
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <h5>{{ $requirement->name }}
+                                @if($requirement->pivot->status == 'complete')
+                                    <span class="label {{ $requirement->pivot->status }} label-success"><i class="fa fa-check"></i><span class="hidden-xs"> Complete</span></span>
+                                @elseif($requirement->pivot->status == 'reviewing')
+                                    <span class="label {{ $requirement->pivot->status }} label-info"><i class="fa fa-circle-o-notch fa-spin"></i><span class="hidden-xs"> Reviewing</span></span>
+                                @elseif($requirement->pivot->status == 'incomplete')
+                                    <span class="label {{ $requirement->pivot->status }} label-danger"><i class="fa fa-exclamation"></i><span class="hidden-xs"> Incomplete<span></span>
+                                @endif
+                            </h5>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <label style="margin:13px 0px;">Due {{ carbon($requirement->due_at)->toFormattedDateString() }}</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="panel-body">
                         @if($requirement->document_type === 'medical_releases')

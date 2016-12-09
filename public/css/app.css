@@ -15929,9 +15929,13 @@ body:not(.modal-open) {
   #footer-mm hr.divider {
     border-color: #808080; }
   #footer-mm li a {
-    color: #808080; }
+    color: #808080;
+    line-height: 2em; }
+    #footer-mm li a:hover {
+      color: #f6323e; }
   #footer-mm address {
-    color: #808080; }
+    color: #808080;
+    line-height: 2em; }
 
 #footer-mm-last {
   color: #808080;

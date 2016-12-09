@@ -40,7 +40,7 @@
     </template>
 
     <div class="col-xs-12" v-if="reservations.length < 1">
-        <div class="alert alert-info">No reservations found</div>
+        <p class="text-muted text-center"><em>No reservations found</em></p>
     </div>
 </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-sm-12" v-if="loaded && !visas.length">
-            <div class="alert alert-info" role="alert">No records found</div>
+            <div role="alert"><p class="text-center text-muted"><em>No records found</em></p></div>
         </div>
 
 

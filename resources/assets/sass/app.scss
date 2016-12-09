@@ -162,7 +162,6 @@ p.large-line-height {
   .footer-social-icons {
     font-size: 32px;
     padding-top: 18px;
-
     a {
       color: #777;
     }
@@ -389,9 +388,14 @@ body:not(.modal-open) {
     }
     li a {
     color: $gray-dark;
-  }
+    line-height:2em;
+      &:hover {
+        color: $brand-primary;
+      }
+    }
   address {
     color: $gray-dark;
+    line-height: 2em;
   }
 }
 #footer-mm-last {

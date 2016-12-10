@@ -17,5 +17,8 @@
       <a href="/dashboard/groups"><i class="fa fa-users"></i></a>
     </li>
     @endif
+    <li @if(request()->segment(2) == 'projects')class="active"@endif>
+      <a href="/dashboard/projects"><i class="fa fa-tint"></i></a>
+    </li>
   </ul>
 </div>

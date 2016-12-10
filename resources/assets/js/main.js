@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import contactForm from './components/contact-form.vue';
 import login from './components/login.vue';
 import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
@@ -372,6 +373,7 @@ new Vue({
     },
     components: {
         login,
+        contactForm,
         fundraisers,
         campaigns,
         groups,
@@ -494,6 +496,17 @@ new Vue({
         $(window).on('resize', function(){
             this.$emit('Window:resize');
         }.bind(this));
+
+        this.$on('showSuccess', function (msg) {
+            this.message = msg;
+            this.showSuccess = true;
+        });
+
+        this.$on('showError', function (msg) {
+            this.message = msg;
+            this.showError = true;
+        });
+
     },
     methods: {
         setUser: function (user) {

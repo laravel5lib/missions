@@ -337,13 +337,20 @@ Vue.directive('crop', {
     }
 });
 
-// Disable tooltips on all components
 Vue.mixin({
+    methods: {
+        /*showSpinner(){
+            this.$refs.spinner.show();
+        },
+        hideSpinner(){
+            this.$refs.spinner.hide();
+        },*/
+    },
     ready() {
         function isTouchDevice(){
             return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
         }
-
+        // Disable tooltips on all components on mobile
         if(isTouchDevice()) {
             $("[rel='tooltip']").tooltip('destroy');
         }

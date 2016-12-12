@@ -78,11 +78,10 @@
                 </div>
             </template>
 
-            <div class="col-xs-12" v-if="reservations.length < 1">
-                <div class="alert alert-info">No reservations found</div>
-            </div>
-        </div>
+    <div class="col-xs-12" v-if="reservations.length < 1">
+        <p class="text-muted text-center"><em>No reservations found</em></p>
     </div>
+</div>
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";

@@ -1,33 +1,21 @@
 <template>
     <div class="row">
         <div class="col-sm-12" v-if="loaded && !essays.length">
-            <div class="alert alert-info" role="alert">No records found</div>
+            <p class="text-center text-muted" role="alert"><em>No records found</em></p>
         </div>
 
         <div class="col-md-4 col-sm-6" v-for="essay in essays">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h6 class="text-uppercase"><i class="fa fa-file"></i> {{essay.subject}}</h6>
+                    <label>{{essay.subject}}</label>
                     <a role="button" :href="'/dashboard/records/essays/' + essay.id">
-                        <h4 style="text-transform:capitalize;" class="text-primary">
+                        <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
                             {{essay.author_name}}
-                        </h4>
+                        </h5>
                     </a>
-                    <hr class="divider lg">
-                    <!--<p class="small">-->
-                        <!--<b>ID:</b> {{passport.number}}-->
-                        <!--<br>-->
-                        <!--<b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}-->
-                        <!--<br>-->
-                        <!--<b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}-->
-                        <!--<br>-->
-                        <!--<b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}-->
-                    <!--</p>-->
-                </div><!-- end panel-body -->
-                <div class="panel-footer" style="padding: 0;">
-                    <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
-                        <a class="btn btn-info" :href="'/dashboard/records/essays/' + essay.id + '/edit'"><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger" @click="selectedEssay = essay, deleteModal = true"><i class="fa fa-times"></i></a>
+                    <div style="position:absolute;right:20px;top:5px;">
+                        <a style="margin-right:3px;" :href="'/dashboard/records/essays/' + essay.id + '/edit'"><i class="fa fa-pencil"></i></a> 
+                        <a @click="selectedEssay = essay, deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
             </div>

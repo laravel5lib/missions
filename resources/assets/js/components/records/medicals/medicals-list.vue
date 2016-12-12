@@ -1,7 +1,7 @@
 <template>
 	<div class="row">
 		<div class="col-sm-12" v-if="loaded && !medical_releases.length">
-			<div class="alert alert-info" role="alert">No records found</div>
+			<p class="text-center text-muted" role="alert"><em>No records found</em></p>
 		</div>
 
 		<div class="col-sm-4" v-for="medical_release in paginatedMedical_releases">

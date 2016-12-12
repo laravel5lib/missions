@@ -94,6 +94,10 @@ a {
 p.large-type {
   max-width: 420px;
 }
+p.large-line-height {
+  line-height: 2em;
+  font-weight: 100;
+}
 
 .dash-trailing:after {
     background: $brand-primary;
@@ -158,7 +162,6 @@ p.large-type {
   .footer-social-icons {
     font-size: 32px;
     padding-top: 18px;
-
     a {
       color: #777;
     }
@@ -385,9 +388,14 @@ body:not(.modal-open) {
     }
     li a {
     color: $gray-dark;
-  }
+    line-height:2em;
+      &:hover {
+        color: $brand-primary;
+      }
+    }
   address {
     color: $gray-dark;
+    line-height: 2em;
   }
 }
 #footer-mm-last {
@@ -815,6 +823,27 @@ $img-base-size: 40px;
 }
 
 /* Home Page */
+.home-vision {
+  padding-top:20px;
+  padding-bottom:20px;
+  @media screen and (max-width: 767px) {
+    h4 {
+      font-size:15px;
+    }
+    padding-top:10px;
+    padding-bottom:0px;
+  }
+}
+.home-social {
+  border-left:1px solid #e6e6e6;
+  padding-top:29px;
+  padding-bottom:29px;
+  @media screen and (max-width: 767px) {
+    border-left:none;
+    padding-top:10px;
+    padding-bottom:15px;
+  }
+}
 .home-half-section {
   padding: 3%;
 }
@@ -824,6 +853,9 @@ h1.home-college-header {
 .parallaxOnenation {
   height: 100vh;
   overflow: hidden;
+  @media screen and (max-width: 767px) {
+    height: 120vh;
+  }
 }
 .parallaxOnenation > * {
   height: 200%;
@@ -845,6 +877,12 @@ h1.home-college-header {
 .onenation-home-section {
   position: absolute;
   top:23%;
+  @media screen and (max-width: 767px) {
+    top:14%;
+    img {
+      width:97%;
+    }
+  }
 }
 
 // -- Panel -- //

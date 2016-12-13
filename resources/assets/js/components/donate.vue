@@ -7,20 +7,18 @@
                     <div class="row">
                         <div class="col-sm-12 text-center">
                             <label>Recipient</label>
-                            <h4>{{ recipient }}</h4>
+                            <h4 class="text-primary" style="margin-top:0px;">{{ recipient }}</h4>
                         </div>
                     </div>
-                    <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-sm-12" :class="{ 'has-error': checkForError('amount')}">
-                            <label>Amount</label>
+                            <label>Enter Donation Amount</label>
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
-                                <input type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                                <input style="font-size:22px;color:#05ce7b;" type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
                             </div>
                         </div>
                     </div>
-                    <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-sm-12" :class="{ 'has-error': checkForError('donor')}">
                             <label>Donor Name</label>
@@ -36,14 +34,13 @@
                     <hr class="divider inv sm">
                     <div class="row" v-if="!child">
                         <div class="col-sm-12 text-center">
-                            <div class="form-group">
+                            <div class="form-group" style="margin-bottom:0;">
                                 <div class="">
                                     <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
-                                    <a @click="nextState()" class="btn btn-primary">Next</a>
+                                    <a @click="nextState()" class="btn btn-primary">Next <i style="margin-left:3px;font-size:.8em;vertical-align:middle;" class="fa fa-chevron-right"></i></a>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </template>
                 <template v-if="isState('form', 2)">
@@ -51,24 +48,23 @@
                     <!-- Credit Card -->
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
+                            <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
                                 <label for="cardHolderName">Card Holder's Name</label>
                                 <div class="input-group">
-                                    <span class="input-group-addon input"><span class="fa fa-user"></span></span>
-                                    <input type="text" class="form-control input" id="cardHolderName" placeholder="Name on card"
-                                           v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
+                                    <span class="input-group-addon input input-sm"><span class="fa fa-user"></span></span>
+                                    <input type="text" class="form-control input input-sm" id="cardHolderName" placeholder="Name on card"
+                                               v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
+                            <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
                                 <label for="cardNumber">Card Number</label>
                                 <div class="input-group">
-                                    <span class="input-group-addon input"><span class="fa fa-lock"></span></span>
-                                    <input type="text" class="form-control input" id="cardNumber" placeholder="Valid Card Number"
+                                    <span class="input-group-addon input input-sm"><span class="fa fa-lock"></span></span>
+                                    <input type="text" class="form-control input input-sm" id="cardNumber" placeholder="Valid Card Number"
                                            v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
                                            @keyup="formatCard($event)" maxlength="19"/>
                                 </div>
@@ -76,57 +72,53 @@
                             </div>
                         </div>
                     </div>
-                    <hr class="divider inv sm">
                     <div class="row">
-                        <label style="display:block;margin-left: 10px;" for="expiryMonth">EXPIRY DATE</label>
+                        <label style="display:block;margin-left: 10px;margin-top:6px;" for="expiryMonth">Exp Date</label>
                         <div class="col-xs-6 col-md-6">
                             <div :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
-                                <select v-model="cardMonth" class="form-control input" id="expiryMonth" v-validate:month="{ required: true }">
+                                <select v-model="cardMonth" class="form-control input input-sm" id="expiryMonth" v-validate:month="{ required: true }">
                                     <option v-for="month in monthList" value="{{month}}">{{month}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-xs-6 col-md-6">
                             <div :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
-                                <select v-model="cardYear" class="form-control input" id="expiryYear" v-validate:year="{ required: true }">
+                                <select v-model="cardYear" class="form-control input input-sm" id="expiryYear" v-validate:year="{ required: true }">
                                     <option v-for="year in yearList" value="{{year}}">{{year}}</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-xs-6 col-md-6">
                             <div :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
                                 <label for="cvCode">
                                     CV CODE</label>
-                                <input type="text" class="form-control input" id="cvCode" maxlength="3" v-model="cardCVC"
+                                <input type="text" class="form-control input input-sm" id="cvCode" maxlength="3" v-model="cardCVC"
                                        placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 3 }"/>
                                 <span class="help-block" v-if="checkForError('code') || validationErrors.cardCVC">{{stripeError ? stripeError.message : 'Invalid CVC number'}}</span>
                             </div>
                         </div>
                     </div>
-                    <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-sm-12">
                             <div :class="{ 'has-error': checkForError('email') }">
                                 <label for="infoEmailAddress">Billing Email</label>
-                                <input type="text" class="form-control input" v-model="cardEmail" v-validate:email="['oneOrOther']" id="infoEmailAddress">
+                                <input type="text" class="form-control input input-sm" v-model="cardEmail" v-validate:email="['oneOrOther']" id="infoEmailAddress">
                             </div>
                         </div>
                     </div>
-                    <hr class="divider inv sm">
                     <div class="row">
                         <div class="col-sm-6">
                             <div :class="{ 'has-error': checkForError('phone') }">
                                 <label for="infoPhone">Billing Phone</label>
-                                <input type="tel" class="form-control input" v-model="cardPhone | phone" v-validate:phone="['oneOrOther']" id="infoPhone">
+                                <input type="tel" class="form-control input input-sm" v-model="cardPhone | phone" v-validate:phone="['oneOrOther']" id="infoPhone">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div :class="{ 'has-error': checkForError('zip') }">
                                 <label for="infoZip">ZIP</label>
-                                <input type="text" class="form-control input" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
+                                <input type="text" class="form-control input input-sm" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
                             </div>
                         </div>
                     </div>
@@ -140,67 +132,70 @@
                             </div>
                         </div>
                     </div>
-                    <hr class="divider inv sm">
                     <div class="col-sm-12 text-center" v-if="!child">
-                        <div class="form-group">
+                        <div class="form-group" style="margin-bottom:0;">
                             <div class="">
                                 <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
-                                <a @click="createToken" class="btn btn-primary">Review Donation</a>
+                                <a @click="createToken" class="btn btn-primary">Review Donation <i style="margin-left:3px;font-size:.8em;vertical-align:middle;" class="fa fa-chevron-right"></i></a>
                             </div>
                         </div>
                     </div>
                 </template>
-                <hr class="divider inv sm">
             </form>
             <div v-show="donationState === 'review'">
                 <spinner v-ref:donationSpinner size="xl" :fixed="false" text="Processing Donation"></spinner>
                 <div class="row">
-                    <h4 class="text-center">Donation Details</h4>
-                    <hr class="divider lg">
-                    <div class="col-sm-12">
-                        <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Card Holder Name</h6>
-                        <h5>{{cardHolderName}}</h5>
-                        <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Card Number</h6>
-                        <h5>{{cardNumber}}</h5>
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Card Exp</h6>
-                                <h5>{{cardMonth}}/{{cardYear}}</h5>
-                            </div>
-                            <div class="col-xs-8">
-                                <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Billing Email</h6>
-                                <h5>{{cardEmail}}</h5>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Billing Zip</h6>
-                                <h5>{{cardZip}}</h5>
-                            </div>
-                            <div class="col-xs-8">
-                                <h6 style="color:#808080;font-size:10px;letter-spacing:1px;" class="text-uppercase">Save Payment Method</h6>
-                                <h5>{{cardSave ? 'Yes' : 'No'}}</h5>
-                            </div>
-                        </div>
+                    <div class="col-sm-12 text-center">
+                        <label>Donation Amount</label>
+                        <h3 class="text-success" style="margin-top:0px;margin-bottom:0px;">{{amount|currency}}</h3>
+                        <label>Recipient</label>
+                        <p style="margin-bottom:0;">{{recipient}}</p>
+                        <label>Designation</label>
+                        <p style="margin-bottom:0;">{{title}}</p>
                     </div>
                     <div class="col-sm-12">
-                        <div class="well">
-                            <p class="list-group-item-text"><span style="text-transform:uppercase;font-size:9px;font-weight:bold;display:block;letter-spacing:1px;">Recipient:</span> {{recipient}}</p>
-                            <hr class="divider inv sm">
-                            <p class="list-group-item-text"><span style="text-transform:uppercase;font-size:9px;font-weight:bold;display:block;letter-spacing:1px;">Designation:</span> {{title}}</p>
-                            <hr class="divider inv sm">
-                            <p class="list-group-item-text"><span style="text-transform:uppercase;font-size:9px;font-weight:bold;display:block;letter-spacing:1px;">Amount to be charged:</span> {{amount|currency}}</p>
-                            <hr class="divider sm">
-                            <p style="color:#808080;font-size:9px;" class="list-group-item-text">
-                                <b>Disclaimer:</b>
-                                All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.
-                            </p>
-                        </div>
+                        <hr class="divider inv">
+                        <div class="panel panel-default" style="border-color:#47ada0;">
+                            <div class="panel-heading" style="background-color:#8ed4cc;border-color:#47ada0;">
+                                <h6 style="font-size:.6em;color:#47ada0;text-transform:uppercase;letter-spacing:1px;margin-top:0;margin-bottom:0;"><i class="fa fa-lock icon-left" style="font-size:1.3em;vertical-align:middle;"></i> Secure Information</h6>
+                            </div><!-- end panel-heading -->
+                            <div class="panel-body" style="padding:10px;">
+                                <label>Card Holder Name</label>
+                                <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardHolderName}}</p>
+                                <label>Card Number</label>
+                                <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardNumber}}</p>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <label>Card Exp</label>
+                                        <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardMonth}}/{{cardYear}}</p>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <label>Billing Email</label>
+                                        <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardEmail}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <label>Billing Zip</label>
+                                        <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardZip}}</p>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <label>Save Payment Method</label>
+                                        <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardSave ? 'Yes' : 'No'}}</p>
+                                    </div>
+                                </div>
+                            </div><!-- end panel-body -->
+                        </div><!-- end panel -->
+                        <p style="color:#808080;font-size:9px;" class="list-group-item-text">
+                            <b>Disclaimer:</b>
+                            All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.
+                        </p>
+                        <hr class="divider inv sm">
                     </div>
                 </div>
                 <div class="text-center" v-if="!child">
-                    <a @click="goToState('form')" class="btn btn-default">Reset</a>
                     <a @click="submit" class="btn btn-primary">Donate</a>
+                    <a @click="goToState('form')"><h6 class="text-uppercase" style="color:#808080;"><i class="fa fa-refresh icon-left"></i> Reset</h6></a>
                 </div>
             </div>
             <div class="" v-show="donationState === 'confirmation'">

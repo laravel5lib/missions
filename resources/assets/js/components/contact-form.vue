@@ -12,8 +12,8 @@
                 <div class="col-sm-6">
                     <label for="name">Your Church/Organization</label>
                     <input type="text" class="form-control" name="organization" id="organization" v-model="organization"
-                           placeholder="Church Name" v-validate:organization="{ required: true, minlength:1, maxlength:100 }"
-                           maxlength="100" minlength="1" required>
+                           placeholder="Church Name"
+                           maxlength="100" minlength="1">
                 </div>
             </div>
 
@@ -31,7 +31,7 @@
             <div class="form-group" :class="{ 'has-error': checkForError('comments') }">
                 <div class="col-sm-12">
                     <label for="name">Questions, Comments, or Ideas</label>
-                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" v-validate:comments="{required: true}"></textarea>
+                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" v-validate:comments="{required: true}" rows=10></textarea>
                 </div>
             </div>
             <div class="form-group">

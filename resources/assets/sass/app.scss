@@ -481,9 +481,11 @@ li.av-nav > a {
   ul.nav {
     margin-bottom: 100px;
     li > a {
-      font-size: .9em;
+      font-size: .8em;
       color: #e6e6e6;
-      padding: 5px 20px !important;
+      padding: 4px 20px !important;
+      text-transform: uppercase;
+      letter-spacing: 2px;
       &:hover, &:focus {
         color: #f6323e;
       }
@@ -718,6 +720,21 @@ img.onenation-logo {
 .col-no-padding {
     padding-left: 0;
     padding-right: 0;
+}
+
+.donate-bg {
+  color: #fff;
+  background: $brand-primary url(../../images/donate/donate-bg.jpg) no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  @media screen and (max-width: 991px) {
+    background: $brand-primary url(../../images/donate/donate-bg-medium.jpg) no-repeat center fixed;
+  }
+  @media screen and (max-width: 767px) {
+    background: $brand-primary;
+  }
 }
 
 // -- Custom Image Sizes -- //

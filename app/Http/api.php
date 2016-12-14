@@ -76,8 +76,7 @@ $api->version('v1', [
     $api->resource('causes', 'ProjectCausesController');
     $api->get('causes/{cause}/initiatives', 'ProjectInitiativesController@index');
     $api->resource('initiatives', 'ProjectInitiativesController', ['except' => 'index']);
-    $api->get('causes/{cause}/projects', 'ProjectsController@index');
-    $api->resource('projects', 'ProjectsController'/*, ['except' => 'index']*/);
+    $api->resource('projects', 'ProjectsController');
     $api->resource('notes', 'NotesController');
     $api->resource('todos', 'TodosController');
     $api->resource('essays', 'EssaysController');

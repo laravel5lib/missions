@@ -87,14 +87,25 @@ class TripFilter extends Filter
     }
 
     /**
-     * Find by types.
+     * Find by type.
      *
-     * @param $types
+     * @param $type
      * @return mixed
      */
-    public function types($types)
+    public function type($type)
     {
-        return $this->whereIn('type', $types);
+        return $this->where('type', $type);
+    }
+
+    /**
+     * Find by status.
+     *
+     * @param $status
+     * @return mixed
+     */
+    public function status($status)
+    {
+        return $this->{$status}();
     }
 
     /**

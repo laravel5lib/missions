@@ -11,7 +11,7 @@ class ReservationFilter extends Filter
     * @var array
     */
     public $relations = [
-        'trip' => ['groups', 'campaign']
+        'trip' => ['groups', 'campaign', 'type']
     ];
 
     /**

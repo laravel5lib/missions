@@ -53,4 +53,17 @@ class ProjectFilter extends Filter
     {
         return $this->funded();
     }
+
+    /**
+     * Belongs to cause.
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function cause($id)
+    {
+        return $this->whereHas('initiative', function($initiative) use($id) {
+           return $initiative->where('project_cause_id', $id);
+        });
+    }
 }

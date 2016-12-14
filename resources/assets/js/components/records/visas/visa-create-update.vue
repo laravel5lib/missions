@@ -1,6 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="CreateUpdateVisa" @touched="onTouched">
         <form id="CreateUpdateVisa" class="form-horizontal" novalidate>
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="row">
                 <div class="col-sm-6">
                     <div :class="{ 'has-error': checkForError('givennames') }">
@@ -107,7 +108,7 @@
 
     </validator>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     export default{
@@ -172,7 +173,8 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateVisa.valid) {
-                    var resource = this.$resource('visas{/id}');
+                    this.$refs.spinner.show();
+                    let resource = this.$resource('visas{/id}');
                     resource.save(null, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -188,6 +190,7 @@
                         window.location.href = '/dashboard/records/visas';
                     }, function (error) {
                         this.showError = true;
+                        this.$refs.spinner.hide();
                         debugger;
                     });
                 } else {
@@ -197,7 +200,8 @@
             update(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateVisa.valid) {
-                    var resource = this.$resource('visas{/id}');
+                    this.$refs.spinner.show();
+                    let resource = this.$resource('visas{/id}');
                     resource.update({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -210,7 +214,9 @@
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                         // window.location.href = '/dashboard/visas';
+                        this.$refs.spinner.hide();
                     }, function (error) {
+                        this.$refs.spinner.hide();
                         debugger;
                     });
                 }
@@ -234,13 +240,13 @@
                 this.countries = response.data.countries;
             });
 
-            var fetchURL = this.isUpdate ? 'users/me?include=visas' : 'users/me';
+            let fetchURL = this.isUpdate ? 'users/me?include=visas' : 'users/me';
             this.$http(fetchURL).then(function (response) {
                 // this.user = response.data.data;
                 this.user_id = response.data.data.id;
 
                 if (this.isUpdate) {
-                    var visa = _.findWhere(response.data.data.visas.data, {id: this.id});
+                    let visa = _.findWhere(response.data.data.visas.data, {id: this.id});
                     $.extend(this, visa);
 
                     this.countryObj = _.findWhere(this.countries, {code: visa.country_code})

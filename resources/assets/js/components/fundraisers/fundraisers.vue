@@ -44,6 +44,8 @@
     </div>
     <hr class="divider inv lg">
     <div class="container" style="display:flex; flex-wrap: wrap;">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+
         <template v-if="fundraisers.length">
             <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex; flex-direction:column;">
                 <div class="panel panel-default">
@@ -111,14 +113,15 @@
             calcPath(fundraiser){
                 switch (fundraiser.sponsor_type) {
                     case 'users':
-                        return'@' + fundraiser.sponsor.data.url + '/' + fundraiser.url
-                        break
+                        return'@' + fundraiser.sponsor.data.url + '/' + fundraiser.url;
+                        break;
                     case 'groups':
-                        return 'groups/' + fundraiser.sponsor.data.url + '/' + fundraiser.url
+                        return 'groups/' + fundraiser.sponsor.data.url + '/' + fundraiser.url;
                         break;
                 }
             },
             searchFundraisers(){
+                this.$refs.spinner.show();
                 this.$http.get('fundraisers', {
                     active: true,
                     include: 'sponsor',
@@ -130,6 +133,10 @@
                     this.fundraisers = response.data.data;
                     this.featuredFundraisers = _.first(this.fundraisers, 5);
                     this.pagination = response.data.meta.pagination;
+                    this.$refs.spinner.hide();
+                }, function (error) {
+                    this.$refs.spinner.hide();
+                    //TODO add error alert
                 });
             },
             seeAll(){

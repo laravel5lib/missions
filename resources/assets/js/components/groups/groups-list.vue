@@ -1,5 +1,6 @@
 <template>
 <div>
+    <spinner v-ref:spinner size="sm" text="Loading"></spinner>
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-0">
             <hr class="divider inv">
@@ -43,7 +44,7 @@
     </div>-->
 </div>
 </template>
-<script>
+<script type="text/javascript">
 //    import groupEdit from './admin-group-edit.vue';
     export default{
         name: 'groups-list',
@@ -79,16 +80,18 @@
             rememberSelection(){
                 localStorage.currentGroup = this.currentGroup;
                 if (this.groupId !== this.currentGroup) {
-                    var group = _.findWhere(this.groups, {id: this.currentGroup});
+                    let group = _.findWhere(this.groups, {id: this.currentGroup});
                     location.pathname = '/' + location.pathname.split('/')[1] + group.links[0].uri;
                 }
             },
             getGroups(){
+                this.$refs.spinner.show();
                 this.$http.get('users/me', {
                     include: 'managing',
                     user: new Array(this.userId)
                 }).then(function (response) {
                     this.groups = response.data.data.managing.data;
+                    this.$refs.spinner.hide();
                 })
             },
         },

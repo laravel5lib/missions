@@ -1,8 +1,9 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <!--<button class="btn btn-primary btn-xs" @click="add"><span
-                class="fa fa-plus"></span> Add Existing
-        </button>-->
+					   class="fa fa-plus"></span> Add Existing
+			   </button>-->
         <!--<button class="btn btn-primary btn-xs" @click="addNew"><span
                 class="fa fa-plus"></span> Create New
         </button>-->
@@ -82,7 +83,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select';
     export default{
         name: 'admin-reservation-dues',
@@ -119,8 +120,8 @@
         computed:{},
         methods: {
             dateIsBetween(a, b){
-                    var start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
-                var stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
+                    let start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
+                let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
             },
@@ -167,7 +168,7 @@
             updateDue(){
                 console.log(this.editedDue.due_at);
                 // prep current dues
-                var dues = [];
+                let dues = [];
                 _.each(this.reservation.dues.data, function (due) {
                     if (due.cost_id === this.editedDue.cost_id) {
                         dues.push({ id: this.editedDue.cost_id, grace_period: this.editedDue.grace_period, due_at: this.editedDue.due_at });
@@ -176,13 +177,13 @@
                     }
                 }.bind(this));
 
-                var reservation = this.preppedReservation;
+                let reservation = this.preppedReservation;
                 reservation.dues = dues;
 
                 return this.doUpdate(reservation);
             },
             remove(due){
-                var reservation = this.preppedReservation;
+                let reservation = this.preppedReservation;
                 reservation.dues = [];
                 _.each(this.reservation.dues.data, function (cs) {
                     if (cs.due_id !== due.due_id) {
@@ -195,30 +196,30 @@
             },
             addDues(){
                 // prep current dues
-                var currentDueIds = [];
+                let currentDueIds = [];
                 _.each(this.reservation.dues.data, function (due) {
                     currentDueIds.push({ id: due.id || due.due_id, locked: due.locked })
                 });
 
                 // prep added dues
-                var selectedDueIds = [];
+                let selectedDueIds = [];
                 _.each(this.selectedDues, function (due) {
                     selectedDueIds.push({ id: due.id })
                 });
 
                 // merge arrays
-                var newDues = _.union(currentDueIds, selectedDueIds);
+                let newDues = _.union(currentDueIds, selectedDueIds);
                 // filter possible duplicates
                 newDues = _.uniq(newDues);
 
-                var reservation = this.preppedReservation;
+                let reservation = this.preppedReservation;
                 reservation.dues = newDues;
 
                 return this.doUpdate(reservation);
             },
             addNew(){
                 // get trip object
-                var trip = this.reservation.trip.data;
+                let trip = this.reservation.trip.data;
 
                 // get only ids of current dues so we don't change anything
                 trip.dues = [];
@@ -230,10 +231,11 @@
                 delete trip.difficulty;
                 delete trip.rep_id;
 
+                this.$refs.spinner.show();
                 this.$http.put('trips/' + trip.id, trip).then(function (response) {
-                    var thisTrip = response.data.data;
+                    let thisTrip = response.data.data;
                     this.selecteddues = new Array(this.newDeadline);
-
+                    this.$refs.spinner.hide();
                     return this.adddues();
 
                 });
@@ -244,9 +246,11 @@
 
             },
             doUpdate(reservation){
+                this.$refs.spinner.show();
                 return this.resource.update(reservation).then(function (response) {
                     this.setReservationData(response.data.data);
                     this.selectedDues = [];
+                    this.$refs.spinner.hide();
                 });
             },
             setReservationData(reservation){
@@ -272,8 +276,10 @@
             }
         },
         ready(){
+            this.$refs.spinner.show();
             this.resource.get().then(function (response) {
                 this.setReservationData(response.data.data)
+                this.$refs.spinner.hide();
             });
 
             //Listen to Event Bus

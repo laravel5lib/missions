@@ -1,9 +1,11 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<validator name="UpdateCampaign" @touched="onTouched">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<form id="UpdateCampaignForm" class="form-horizontal" novalidate>
 			<div class="row">
 				<div class="col-sm-12">
-					<a class="pull-right" data-toggle="modal" data-target="#deleteConfirmationModal"><h6><i class="fa fa-trash"></i> Delete</h6></a>
+					<a class="pull-right" data-toggle="modal" data-target="#deleteConfirmationModal"><h6><i
+							class="fa fa-trash"></i> Delete</h6></a>
 				</div>
 			</div>
 			<div class="form-group" :class="{ 'has-error': checkForError('name') }">
@@ -17,8 +19,10 @@
 			<div class="form-group" :class="{ 'has-error': checkForError('country') }">
 				<div class="col-sm-12">
 					<label for="country">Country</label>
-					<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-					<select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
+					<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
+							  label="name"></v-select>
+					<select hidden name="country" id="country" class="hidden" v-model="country_code"
+							v-validate:country="{ required: true }">
 						<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 					</select>
 				</div>
@@ -59,7 +63,8 @@
 			<div class="form-group">
 				<div class="col-sm-12">
 					<label for="published_at">Published Date</label>
-					<input type="datetime-local" class="form-control" v-model="published_at | moment 'YYYY-MM-DDTHH:mm:ss.SSS'" id="published_at">
+					<input type="datetime-local" class="form-control"
+						   v-model="published_at | moment 'YYYY-MM-DDTHH:mm:ss.SSS'" id="published_at">
 				</div>
 			</div>
 
@@ -70,7 +75,7 @@
 						<div class="input-group">
 							<span class="input-group-addon">www.missions.me/campaigns/</span>
 							<input type="text" id="page_url" v-model="page_url" class="form-control"
-								   v-validate:url="{ required: false }" />
+								   v-validate:url="{ required: false }"/>
 						</div>
 						<div v-if="errors.page_url" class="help-block">{{errors.page_url.toString()}}</div>
 					</div>
@@ -82,7 +87,7 @@
 						<div class="input-group">
 							<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
 							<input type="text" id="page_src" v-model="page_src" class="form-control"
-								   v-validate:src="{ required: false }" />
+								   v-validate:src="{ required: false }"/>
 							<span class="input-group-addon">.blade.php</span>
 						</div>
 					</div>
@@ -94,19 +99,23 @@
 					<div class="media">
 						<div class="media-left">
 							<a href="#">
-								<img class="media-object" :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100" :alt="selectedAvatar ? selectedAvatar.name : ''">
+								<img class="media-object"
+									 :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100"
+									 :alt="selectedAvatar ? selectedAvatar.name : ''">
 							</a>
 						</div>
 						<div class="media-body">
 							<h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
-							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
+							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+									data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
 								Set Avatar
 							</button>
 						</div>
 					</div>
 					<div class="collapse" id="avatarCollapse">
 						<div class="well">
-							<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
+							<upload-create-update type="avatar" :lock-type="true" :is-child="true"
+												  :tags="['campaign']"></upload-create-update>
 						</div>
 					</div>
 				</div><!-- end col -->
@@ -114,12 +123,15 @@
 					<div class="media">
 						<div class="media-left">
 							<a href="#">
-								<img class="media-object" :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100" :alt="selectedBanner ? selectedBanner.name : ''">
+								<img class="media-object"
+									 :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100"
+									 :alt="selectedBanner ? selectedBanner.name : ''">
 							</a>
 						</div>
 						<div class="media-body">
 							<h4 class="media-heading">{{selectedBanner ? selectedBanner.name : ''}}</h4>
-							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
+							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+									data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
 								Set Banner
 							</button>
 						</div>
@@ -127,7 +139,8 @@
 
 					<div class="collapse" id="bannerCollapse">
 						<div class="well">
-							<upload-create-update type="banner" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
+							<upload-create-update type="banner" :lock-type="true" :is-child="true"
+												  :tags="['campaign']"></upload-create-update>
 						</div>
 					</div>
 				</div><!-- end col -->
@@ -154,15 +167,18 @@
 			<p>There are errors on the form.</p>
 		</alert>
 
-		<modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+		<modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel"
+			   :callback="forceBack">
 			<div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
 		</modal>
 
-		<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModal">
+		<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog"
+			 aria-labelledby="deleteConfirmationModal">
 			<div class="modal-dialog modal-sm">
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+								aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title text-center" id="myModalLabel">Are You Sure?</h4>
 					</div>
 					<div class="modal-body">
@@ -181,7 +197,7 @@
 
 	</validator>
 </template>
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
 	export default{
@@ -256,6 +272,7 @@
 
 				this.attemptSubmit = true;
 				if (this.$UpdateCampaign.valid) {
+					this.$refs.spinner.show();
 					this.resource.update({id: this.campaignId}, {
 						name: this.name,
 						country_code: this.country_code,
@@ -269,14 +286,16 @@
 						banner_upload_id: this.banner_upload_id,
 
 					}).then(function (resp) {
-						resp.data.data.published_at = moment(resp.data.data.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS')
+						resp.data.data.published_at = moment(resp.data.data.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
 						$.extend(this, resp.data.data);
 //						window.location.href = '/admin/campaigns/'
 						this.showSuccess = true;
 						this.hasChanged = false;
+						this.$refs.spinner.hide();
 					}, function (error) {
 						this.errors = error.data.errors;
 						this.showError = true;
+						this.$refs.spinner.hide();
 					});
 				} else {
 					this.showError = true;
@@ -284,6 +303,7 @@
 			},
 			deleteCampaign(){
 				// delete campaign
+				this.$refs.spinner.show();
 				this.resource.delete({id: this.campaignId}).then(function(response) {
 					window.location.href = '/admin/campaigns/'
 				});
@@ -306,13 +326,14 @@
 			}
 		},
 		created(){
+			this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.data.countries;
 			});
 
 			// get campaign data
 			this.resource.get({id: this.campaignId}).then(function(response) {
-				var campaign = response.data.data;
+				let campaign = response.data.data;
 				this.name = campaign.name;
 				this.short_desc = campaign.description;
 				this.started_at = campaign.started_at;
@@ -322,8 +343,10 @@
 				this.page_src = campaign.page_src;
 				this.countryCodeObj = _.findWhere(this.countries, { name: campaign.country });
 				this.country_code = this.countryCodeObj.code;
+				this.$refs.spinner.hide();
 			});
 
 		}
 	}
+
 </script> 

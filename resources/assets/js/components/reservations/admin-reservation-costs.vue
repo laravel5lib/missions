@@ -1,5 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+
         <button class="btn btn-primary btn-xs" @click="add">
             <span class="fa fa-plus"></span> Add Existing
         </button>
@@ -65,7 +67,6 @@
             </div>
         </modal>
 
-
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Well Done!</strong>
@@ -115,8 +116,8 @@
         computed:{},
         methods: {
             dateIsBetween(a, b){
-                    var start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
-                var stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
+                    let start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
+                let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
             },
@@ -144,12 +145,12 @@
             },
             costLocking(cost, status) {
                 cost.locked = status;
-                   var costs = [];
+                   let costs = [];
                 _.each(this.reservation.costs.data, function (c) {
                     costs.push({id: c.cost_id, locked: c.locked});
                 });
 
-                var reservation = this.preppedReservation;
+                let reservation = this.preppedReservation;
                 reservation.costs = costs;
 
                 return this.doUpdate(reservation, 'Cost' + (status ? ' locked ' : ' unlocked ') + 'successfully');
@@ -175,7 +176,7 @@
             },
             updateCost(){
                 // prep current costs
-                var costs = [];
+                let costs = [];
                 _.each(this.reservation.costs.data, function (cost) {
                     if (cost.cost_id === this.editedCost.cost_id) {
                         costs.push({
@@ -190,7 +191,7 @@
                     }
                 }.bind(this));
 
-                var reservation = this.preppedReservation;
+                let reservation = this.preppedReservation;
                 reservation.costs = costs;
 
                 return this.doUpdate(reservation);
@@ -200,7 +201,7 @@
                 this.deleteModal = true;
             },
             remove(cost){
-                var reservation = this.preppedReservation;
+                let reservation = this.preppedReservation;
                 reservation.costs = [];
                 _.each(this.reservation.costs.data, function (cs) {
                     if (cs.cost_id !== cost.cost_id) {
@@ -213,30 +214,30 @@
             },
             addCosts(){
                 // prep current costs
-                var currentCostIds = [];
+                let currentCostIds = [];
                 _.each(this.reservation.costs.data, function (cost) {
                     currentCostIds.push({ id: cost.id || cost.cost_id, locked: cost.locked })
                 });
 
                 // prep added costs
-                var selectedCostIds = [];
+                let selectedCostIds = [];
                 _.each(this.selectedCosts, function (cost) {
                     selectedCostIds.push({ id: cost.id })
                 });
 
                 // merge arrays
-                var newCosts = _.union(currentCostIds, selectedCostIds);
+                let newCosts = _.union(currentCostIds, selectedCostIds);
                 // filter possible duplicates
                 newCosts = _.uniq(newCosts);
 
-                var reservation = this.preppedReservation;
+                let reservation = this.preppedReservation;
                 reservation.costs = newCosts;
 
                 return this.doUpdate(reservation);
             },
             addNew(){
                 // get trip object
-                var trip = this.reservation.trip.data;
+                let trip = this.reservation.trip.data;
 
                 // get only ids of current costs so we don't change anything
                 trip.costs = [];
@@ -244,12 +245,13 @@
                     trip.costs.push({id: dl.id});
                 });
                 trip.costs.push(this.newDeadline);
-                // remove tranformer modified values
+                // remove transformer modified values
                 delete trip.difficulty;
                 delete trip.rep_id;
 
+                this.$refs.spinner.show();
                 this.$http.put('trips/' + trip.id, trip).then(function (response) {
-                    var thisTrip = response.data.data;
+                    let thisTrip = response.data.data;
                     this.selectedcosts = new Array(this.newDeadline);
 
                     return this.addCosts();
@@ -263,13 +265,14 @@
             },
             doUpdate(reservation, success){
 
-
+                this.$refs.spinner.show();
                 return this.resource.update(reservation).then(function (response) {
                     this.setReservationData(response.data.data);
                     this.selectedCosts = [];
                     this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
                     this.successMessage = success || 'Costs updated Successfully';
                     this.showSuccess = true;
+                    this.$refs.spinner.hide();
                 });
             },
             setReservationData(reservation){
@@ -292,8 +295,10 @@
             }
         },
         ready(){
+            this.$refs.spinner.show();
             this.resource.get().then(function (response) {
                 this.setReservationData(response.data.data);
+                this.$refs.spinner.hide();
             });
 
         }

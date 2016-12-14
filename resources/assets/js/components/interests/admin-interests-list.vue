@@ -131,88 +131,91 @@
             </span>
         </div>
         <hr class="divider sm">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">
-                    Name
-                    <i @click="setOrderByField('name')" v-if="orderByField !== 'name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('email')" :class="{'text-primary': orderByField === 'email'}">
-                    Email
-                    <i @click="setOrderByField('type')" v-if="orderByField !== 'email'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('phone')" :class="{'text-primary': orderByField === 'phone'}">
-                    Phone
-                    <i @click="setOrderByField('phone')" v-if="orderByField !== 'phone'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'phone'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('status')" :class="{'text-primary': orderByField === 'status'}">
-                    Status
-                    <i @click="setOrderByField('status')" v-if="orderByField !== 'status'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'status'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('campaign')" :class="{'text-primary': orderByField === 'trip.data.campaign.data.name'}">
-                    Campaign
-                    <i @click="setOrderByField('trip.data.campaign.data.name')" v-if="orderByField !== 'trip.data.campaign.data.name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('type')" :class="{'text-primary': orderByField === 'trip.data.type'}">
-                    Trip Type
-                    <i @click="setOrderByField('trip.data.type')" v-if="orderByField !== 'trip.data.type'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('group')" :class="{'text-primary': orderByField === 'trip.data.group.data.name'}">
-                    Group
-                    <i @click="setOrderByField('trip.data.group.data.name')" v-if="orderByField !== 'status'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.group.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th><i class="fa fa-cog"></i></th>
-            </tr>
-            </thead>
-            <tbody v-if="interests.length > 0">
-            <tr v-for="interest in interests|filterBy search|orderBy orderByField direction">
-                <td v-if="isActive('name')">{{interest.name|capitalize}}</td>
-                <td v-if="isActive('email')">{{interest.email}}</td>
-                <td v-if="isActive('phone')">{{interest.phone}}</td>
-                <td v-if="isActive('status')">
+        <div>
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">
+                        Name
+                        <i @click="setOrderByField('name')" v-if="orderByField !== 'name'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('email')" :class="{'text-primary': orderByField === 'email'}">
+                        Email
+                        <i @click="setOrderByField('type')" v-if="orderByField !== 'email'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('phone')" :class="{'text-primary': orderByField === 'phone'}">
+                        Phone
+                        <i @click="setOrderByField('phone')" v-if="orderByField !== 'phone'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'phone'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('status')" :class="{'text-primary': orderByField === 'status'}">
+                        Status
+                        <i @click="setOrderByField('status')" v-if="orderByField !== 'status'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'status'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('campaign')" :class="{'text-primary': orderByField === 'trip.data.campaign.data.name'}">
+                        Campaign
+                        <i @click="setOrderByField('trip.data.campaign.data.name')" v-if="orderByField !== 'trip.data.campaign.data.name'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('type')" :class="{'text-primary': orderByField === 'trip.data.type'}">
+                        Trip Type
+                        <i @click="setOrderByField('trip.data.type')" v-if="orderByField !== 'trip.data.type'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('group')" :class="{'text-primary': orderByField === 'trip.data.group.data.name'}">
+                        Group
+                        <i @click="setOrderByField('trip.data.group.data.name')" v-if="orderByField !== 'status'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.group.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th><i class="fa fa-cog"></i></th>
+                </tr>
+                </thead>
+                <tbody v-if="interests.length > 0">
+                <tr v-for="interest in interests|filterBy search|orderBy orderByField direction">
+                    <td v-if="isActive('name')">{{interest.name|capitalize}}</td>
+                    <td v-if="isActive('email')">{{interest.email}}</td>
+                    <td v-if="isActive('phone')">{{interest.phone}}</td>
+                    <td v-if="isActive('status')">
                     <span class="label"
                           :class="{ 'label-success' : interest.status == 'converted',
                                     'label-default' : interest.status == 'declined',
                                     'label-danger' : interest.status == 'undecided'}">
                         {{interest.status}}
                     </span>
-                </td>
-                <td v-if="isActive('campaign')">{{interest.trip.data.campaign.data.name}}</td>
-                <td v-if="isActive('type')">{{interest.trip.data.type}}</td>
-                <td v-if="isActive('group')">{{interest.trip.data.group.data.name}}</td>
-                <td>
-                    <a href="/admin/interests/{{ interest.id }}"><i class="fa fa-cog"></i></a>
-                </td>
-            </tr>
-            </tbody>
-            <tbody v-else>
-            <tr>
-                <td colspan="8" class="text-center text-muted">
-                    No interests found.
-                </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="8">
-                    <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination"
-                                    :callback="searchInterests"
-                                    size="small">
-                        </pagination>
-                    </div>
-                </td>
-            </tr>
-            </tfoot>
-        </table>
+                    </td>
+                    <td v-if="isActive('campaign')">{{interest.trip.data.campaign.data.name}}</td>
+                    <td v-if="isActive('type')">{{interest.trip.data.type}}</td>
+                    <td v-if="isActive('group')">{{interest.trip.data.group.data.name}}</td>
+                    <td>
+                        <a href="/admin/interests/{{ interest.id }}"><i class="fa fa-cog"></i></a>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody v-else>
+                <tr>
+                    <td colspan="8" class="text-center text-muted">
+                        No interests found.
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="8">
+                        <div class="col-sm-12 text-center">
+                            <pagination :pagination.sync="pagination"
+                                        :callback="searchInterests"
+                                        size="small">
+                            </pagination>
+                        </div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 </template>
 <script type="text/javascript">
@@ -319,7 +322,7 @@
                 })
             },
             searchInterests(){
-                var params = {
+                let params = {
                     include:'trip.group,trip.campaign',
                     search: this.searchText,
                     per_page: this.per_page,
@@ -327,14 +330,17 @@
                 };
                 $.extend(params, this.filters);
 
+                this.$refs.spinner.show();
                 this.$http.get('interests', params).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.interests = response.data.data;
+                    this.$refs.spinner.hide();
                 })
             }
         },
         ready(){
             // populate
+            this.$refs.spinner.show();
             this.getGroups();
             this.getCampaigns();
             this.getTrips();

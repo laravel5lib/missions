@@ -1,5 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<div class="panel-heading">
 			<div class="row">
 				<div class="col-xs-6">
@@ -16,7 +17,8 @@
 			<div class="media" v-for="manager in managers" track-by="id">
 				<div class="media-left media-top">
 					<a href="#">
-						<img :src="manager.avatar + '?w=50&h=50'" class="media-object img-rounded" alt="{{ manager.name }}">
+						<img :src="manager.avatar + '?w=50&h=50'" class="media-object img-rounded"
+							 alt="{{ manager.name }}">
 					</a>
 				</div>
 				<div class="media-body">
@@ -27,7 +29,7 @@
 						</a>
 					</p>
 				</div>
-				<hr />
+				<hr/>
 			</div>
 		</div>
 		<div class="modal fade" id="AddManagerModal">
@@ -60,7 +62,7 @@
 		</div><!-- /.modal -->
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
 	export default {
 		name: 'admin-group-managers',
@@ -100,7 +102,7 @@
 				// Add Manager
 				this.attemptSubmit = true;
 				if (this.$AddManager.valid) {
-					var managersArr = this.managers;
+					let managersArr = this.managers;
 					managersArr.push({id: this.user_id});
 					this.group.managers = _.pluck(managersArr, 'id');
 					this.updateGroup();
@@ -109,12 +111,13 @@
 			removeManager: function removeManager(manager) {
 				// Remove Manager
 				this.managers.$remove(manager);
-				var managersArr = this.managers;
+				let managersArr = this.managers;
 				this.group.managers = _.pluck(managersArr, 'id');
 				this.updateGroup();
 			},
 			updateGroup: function updateGroup() {
 				// Update Group
+				this.$refs.spinner.show();
 				this.resource.update({id: this.groupId}, this.group).then(function (response) {
 					this.group = response.data.data;
 					this.managers = this.group.managers.data;
@@ -122,19 +125,26 @@
 					this.userObj = null;
 					this.attemptSubmit = false;
 					$('#AddManagerModal').modal('hide');
+					this.$refs.spinner.hide();
 				}, function (response) {
 					console.log(response);
+					this.$refs.spinner.hide();
+					//TODO add error alert
 				});
 			}
 		},
 		ready: function ready() {
+			this.$refs.spinner.show();
 			this.resource.get({id: this.groupId}).then(function (response) {
 				this.group = response.data.data;
 				this.managers = this.group.managers.data;
 				//                $.extend(this.$data, response.data.data);
+				this.$refs.spinner.hide();
 			}, function (response) {
 				console.log('Update Failed! :(');
 				console.log(response);
+				this.$refs.spinner.hide();
+				//TODO add error alert
 			});
 		}
 	};

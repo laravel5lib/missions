@@ -1,5 +1,6 @@
 <template>
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
                 <h3>Passports <a href="/dashboard/passports" class="btn btn-xs btn-default-hollow">View All</a></h3>
@@ -65,7 +66,7 @@
     </div>
     <hr class="divider inv lg">
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'records-list',
         data(){
@@ -78,10 +79,12 @@
             }
         },
         ready(){
+            this.$refs.spinner.show();
             this.$http('users/me?include=passports,visas').then(function (response) {
                 this.visas = response.data.data.visas.data;
                 this.passports = response.data.data.passports.data;
                 this.loaded = true;
+                this.$refs.spinner.hide();
             });
         }
     }

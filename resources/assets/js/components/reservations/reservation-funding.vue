@@ -39,74 +39,77 @@
         </div>
 
         <hr class="divider inv sm">
-        <template v-if="activeView === 'donor'">
-            <div class="list-group">
-                <div class="list-group-item" role="tab" id="heading-{{ donor.id }}" v-for="donor in donors">
-                    <h5>
-                        <a role="button">
-                            {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
-                        </a>
-                    </h5>
+        <div style="position:relative">
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <template v-if="activeView === 'donor'">
+                <div class="list-group">
+                    <div class="list-group-item" role="tab" id="heading-{{ donor.id }}" v-for="donor in donors">
+                        <h5>
+                            <a role="button">
+                                {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
+                            </a>
+                        </h5>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 text-center">
-                    <nav>
-                        <ul class="pagination pagination-sm">
-                            <li>
-                                <a>{{ donorPagination.total }} {{ activeView | capitalize }}s</a>
-                            </li>
-                            <li :class="{ 'disabled': donorPagination.current_page == 1 }">
-                                <a aria-label="Previous" @click="donorPagination.current_page = donorPagination.current_page-1">
-                                    <span aria-hidden="true">&laquo; Back</span>
-                                </a>
-                            </li>
-                            <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-                            <li :class="{ 'disabled': donorPagination.current_page == donorPagination.total_pages }">
-                                <a aria-label="Next" @click="donorPagination.current_page = donorPagination.current_page+1">
-                                    <span aria-hidden="true">Next &raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <nav>
+                            <ul class="pagination pagination-sm">
+                                <li>
+                                    <a>{{ donorPagination.total }} {{ activeView | capitalize }}s</a>
+                                </li>
+                                <li :class="{ 'disabled': donorPagination.current_page == 1 }">
+                                    <a aria-label="Previous" @click="donorPagination.current_page = donorPagination.current_page-1">
+                                        <span aria-hidden="true">&laquo; Back</span>
+                                    </a>
+                                </li>
+                                <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
+                                <li :class="{ 'disabled': donorPagination.current_page == donorPagination.total_pages }">
+                                    <a aria-label="Next" @click="donorPagination.current_page = donorPagination.current_page+1">
+                                        <span aria-hidden="true">Next &raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
-            </div>
-        </template>
-        <template v-if="activeView !== 'donor'">
-            <div class="list-group">
-                <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions|filterBy type">
-                    <h5>
-                        <span class="text-success">{{ transaction.amount|currency }}</span> was {{ action }}<br>
-                        <small v-if="contains(['donation'], transaction.type)" class="small">by <a :href="'@' + transaction.donor.data.account_url">{{ transaction.donor.data.name || 'Anonymous' }}</a> on {{ transaction.created_at|moment 'll'}}</small>
-                        <br />
-                        <small v-if="transaction.details">{{ transaction.details.comment }}</small>
-                    </h5>
+            </template>
+            <template v-if="activeView !== 'donor'">
+                <div class="list-group">
+                    <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions|filterBy type">
+                        <h5>
+                            <span class="text-success">{{ transaction.amount|currency }}</span> was {{ action }}<br>
+                            <small v-if="contains(['donation'], transaction.type)" class="small">by <a :href="'@' + transaction.donor.data.account_url">{{ transaction.donor.data.name || 'Anonymous' }}</a> on {{ transaction.created_at|moment 'll'}}</small>
+                            <br />
+                            <small v-if="transaction.details">{{ transaction.details.comment }}</small>
+                        </h5>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-sm-12 text-center">
-                    <nav>
-                        <ul class="pagination pagination-sm">
-                            <li>
-                                <a>{{ pagination.total }} {{ activeView | capitalize }}s</a>
-                            </li>
-                            <li :class="{ 'disabled': pagination.current_page == 1 }">
-                                <a aria-label="Previous" @click="pagination.current_page = pagination.current_page-1">
-                                    <span aria-hidden="true">&laquo; Back</span>
-                                </a>
-                            </li>
-                            <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-                            <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                                <a aria-label="Next" @click="pagination.current_page = pagination.current_page+1">
-                                    <span aria-hidden="true">Next &raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <nav>
+                            <ul class="pagination pagination-sm">
+                                <li>
+                                    <a>{{ pagination.total }} {{ activeView | capitalize }}s</a>
+                                </li>
+                                <li :class="{ 'disabled': pagination.current_page == 1 }">
+                                    <a aria-label="Previous" @click="pagination.current_page = pagination.current_page-1">
+                                        <span aria-hidden="true">&laquo; Back</span>
+                                    </a>
+                                </li>
+                                <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
+                                <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
+                                    <a aria-label="Next" @click="pagination.current_page = pagination.current_page+1">
+                                        <span aria-hidden="true">Next &raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
-            </div>
-        </template>
+            </template>
+        </div>
     </div>
 </template>
 <script type="text/javascript">
@@ -166,15 +169,19 @@
                 this.activeView = this.type = view;
             },
             searchDonors(){
+                this.$refs.spinner.show();
                 this.$http.get('donors', {reservation: this.reservationId, page: this.donorPagination.current_page}).then(function (response) {
                     this.donors = response.data.data;
                     this.donorPagination = response.data.meta.pagination;
+                    this.$refs.spinner.hide();
                 });
             },
             searchTransactions(){
+                this.$refs.spinner.show();
                 this.$http.get('transactions', {include: 'donor', fund: this.fundId, page: this.pagination.current_page}).then(function (response) {
                     this.transactions = response.data.data;
                     this.pagination = response.data.meta.pagination;
+                    this.$refs.spinner.hide();
                 });
             }
         },

@@ -1,9 +1,10 @@
 <template>
     <div class="row">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+
         <div class="col-sm-12" v-if="loaded && !visas.length">
             <div role="alert"><p class="text-center text-muted"><em>No records found</em></p></div>
         </div>
-
 
         <div class="col-sm-4" v-for="visa in paginatedVisas">
             <div class="panel panel-default">
@@ -57,7 +58,7 @@
         </modal>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'visas-list',
         data(){
@@ -90,10 +91,10 @@
         methods:{
             // emulate pagination
             paginate(){
-                var array = [];
-                var start = (this.pagination.current_page - 1) * this.per_page;
-                var end   = start + this.per_page;
-                var range = _.range(start, end);
+                let array = [];
+                let start = (this.pagination.current_page - 1) * this.per_page;
+                let end   = start + this.per_page;
+                let range = _.range(start, end);
                 _.each(range, function (index) {
                     if (this.visas[index])
                         array.push(this.visas[index]);
@@ -102,20 +103,24 @@
             },
             removeVisa(visa){
                 if(visa) {
+                    this.$refs.spinner.show();
                     this.$http.delete('visas/' + visa.id).then(function (response) {
                         this.visas = _.reject(this.visas, function (item) {
                             return item.id === visa.id;
                         });
                         this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
+                        this.$refs.spinner.hide();
                     });
                 }
             }
         },
         ready(){
+            this.$refs.spinner.show();
             this.$http('users/me?include=visas').then(function (response) {
                 this.visas = response.data.data.visas.data;
                 this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
                 this.loaded = true;
+                this.$refs.spinner.hide();
             });
         }
     }

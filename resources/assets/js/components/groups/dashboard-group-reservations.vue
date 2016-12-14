@@ -1,5 +1,6 @@
 <template>
     <div>
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
@@ -264,7 +265,7 @@
 				this.searchReservations();
 			},
 			'tagsString': function (val) {
-				var tags = val.split(/[\s,]+/);
+				let tags = val.split(/[\s,]+/);
 				this.filters.tags = tags[0] !== '' ? tags : '';
 				this.searchReservations();
 			},
@@ -363,14 +364,14 @@
                 return code;
             },
             totalAmountRaised(reservation){
-                var total = 0;
+                let total = 0;
                 _.each(reservation.fundraisers.data, function (fundraiser) {
                     total += fundraiser.raised_amount;
                 });
                 return total;
             },
             totalPercentRaised(reservation){
-                var totalDue = 0;
+                let totalDue = 0;
                 _.each(reservation.costs.data, function (cost) {
                     totalDue += cost.amount;
                 });
@@ -381,7 +382,7 @@
                 return moment().diff(birthday, 'years')
             },
             searchReservations(){
-            	var params = {
+            	let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
 					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
 					search: this.search,
@@ -393,15 +394,20 @@
 				$.extend(params, {
 					age: [ this.ageMin, this.ageMax]
 				});
-                this.$http.get('reservations', params).then(function (response) {
-                    var self = this;
+				this.$refs.spinner.show();
+				this.$http.get('reservations', params).then(function (response) {
+                    let self = this;
                     _.each(response.data.data, function (reservation) {
                         reservation.amount_raised = this.totalAmountRaised(reservation);
                         reservation.percent_raised = this.totalPercentRaised(reservation);
                     }, this);
                     this.reservations = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                })
+					this.$refs.spinner.hide();
+				}, function (error) {
+					this.$refs.spinner.hide();
+					//TODO add error alert
+				});
             },
 			getGroups(search, loading){
 				loading ? loading(true) : void 0;
@@ -428,7 +434,7 @@
         ready(){
             // load view state
 			if (localStorage.AdminReservationsListConfig) {
-				var config = JSON.parse(localStorage.AdminReservationsListConfig);
+				let config = JSON.parse(localStorage.AdminReservationsListConfig);
 				this.activeFields = config.activeFields;
 				this.maxActiveFields = config.maxActiveFields;
 			}
@@ -439,9 +445,9 @@
 
 			//Manually handle dropdown functionality to keep dropdown open until finished
 			$('.form-toggle-menu .dropdown-menu').on('click', function(event){
-				var events = $._data(document, 'events') || {};
+				let events = $._data(document, 'events') || {};
 				events = events.click || [];
-				for(var i = 0; i < events.length; i++) {
+				for(let i = 0; i < events.length; i++) {
 					if(events[i].selector) {
 
 						//Check if the clicked element matches the event selector

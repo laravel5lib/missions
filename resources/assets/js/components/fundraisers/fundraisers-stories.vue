@@ -1,5 +1,6 @@
 <template>
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <template v-if="isUser()">
         <div class="panel panel-default panel-body">
             <div class="row">
@@ -121,7 +122,7 @@
         </modal>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     var marked = require('marked');
     export default{
         name: 'fundraisers-stories',
@@ -179,11 +180,16 @@
                         story.publications.push({ type: 'users', id: this.authId });
                     }
 
+                    this.$refs.spinner.show();
                     this.$http.put('stories/' + story.id, story).then(function (response) {
                         this.editMode = false;
                         this.resetData();
-                        return response.data.data;
                         //this.searchStories();
+                        this.$refs.spinner.hide();
+                        return response.data.data;
+                    }, function (error) {
+                        this.$refs.spinner.hide();
+                        //TODO add error alert
                     });
                 }
             },
@@ -196,16 +202,20 @@
                         story.publications.push({ type: 'users', id: this.authId });
                     }
 
+                    this.$refs.spinner.show();
                     this.$http.post('stories', story).then(function (response) {
                         this.newMode = false;
                         this.resetData();
                         this.searchStories();
-                    }, function (response) {
-                        debugger;
+                        this.$refs.spinner.hide();
+                    }, function (error) {
+                        this.$refs.spinner.hide();
+                        //TODO add error alert
                     });
                 }
             },
             searchStories(){
+                this.$refs.spinner.show();
                 this.$http.get('stories', {
                     fundraiser: this.id,
                     page: this.pagination.current_page,
@@ -213,6 +223,10 @@
                 }).then(function(response) {
                     this.stories = response.data.data;
                     this.pagination = response.data.meta.pagination;
+                    this.$refs.spinner.hide();
+                }, function (error) {
+                    this.$refs.spinner.hide();
+                    //TODO add error alert
                 });
             },
             resetData(){

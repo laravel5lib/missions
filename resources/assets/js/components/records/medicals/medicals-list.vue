@@ -1,5 +1,6 @@
 <template>
 	<div class="row">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<div class="col-sm-12" v-if="loaded && !medical_releases.length">
 			<p class="text-center text-muted" role="alert"><em>No records found</em></p>
 		</div>
@@ -92,10 +93,10 @@
 		methods: {
 			// emulate pagination
 			paginate(){
-				var array = [];
-				var start = (this.pagination.current_page - 1) * this.per_page;
-				var end = start + this.per_page;
-				var range = _.range(start, end);
+				let array = [];
+				let start = (this.pagination.current_page - 1) * this.per_page;
+				let end = start + this.per_page;
+				let range = _.range(start, end);
 				_.each(range, function (index) {
 					if (this.medical_releases[index])
 						array.push(this.medical_releases[index]);
@@ -104,19 +105,23 @@
 			},
 			removeMedicalRelease(medical_release){
 				if (medical_release) {
+					this.$refs.spinner.show();
 					this.$http.delete('medical/releases/' + medical_release.id).then(function (response) {
 						this.medical_releases.$remove(medical_release);
 						this.paginatedMedical_releases.$remove(medical_release);
 						this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
+						this.$refs.spinner.hide();
 					});
 				}
 			}
 		},
 		ready(){
+			this.$refs.spinner.show();
 			this.$http('users/me?include=medical_releases').then(function (response) {
 				this.medical_releases = response.data.data.medical_releases.data;
 				this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
 				this.loaded = true;
+				this.$refs.spinner.hide();
 			});
 		}
 	}

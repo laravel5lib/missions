@@ -53,17 +53,20 @@
                 <div class="col-xs-12 col-sm-6 col-md-4" v-for="project in projects">
                     <div class="panel panel-default">
                         <div class="panel-heading text-center">
-                            <h5 class="text-uppercase">{{ project.name }}</h5>
+                            <h5 class="text-uppercase">{{ project.initiative.data.type }}<br />
+                            <small>{{ project.initiative.data.cause.data.name }}</small></h5>
                         </div>
                         <div class="panel-body text-center" :class="'panel-' + project.initiative.data.type">
-                            <!--<img :src="project.avatar" class="img-circle img-md">-->
+                            <h4>{{ project.name }}</h4>
                             <hr class="divider inv sm">
-                            <h4>{{ project.plaque_prefix|capitalize }} {{ project.sponsor.data.name }}</h4>
-                            <p class="text-capitalize small">{{ project.initiative.data.short_desc }}</p>
-                            <label style="margin-bottom:2px;">Raised</label>
-                            <p class="text-capitalize small" style="margin-top:2px;">{{ project.plaque_prefix }} of {{ project.goal|currency}}</p>
+                            <!--<img :src="project.sponsor.data.avatar" class="img-circle img-md">-->
+                            <!--<hr class="divider inv sm">-->
+                            <label style="margin-bottom:2px;">Sponsor</label>
+                            <p class="text-capitalize small">{{ project.sponsor.data.name }}</p>
                             <label style="margin-bottom:2px;font-size:10px;">Country</label>
                             <p class="text-capitalize small" style="margin-top:2px;">{{ project.initiative.data.country.name }}</p>
+                            <label style="margin-bottom:2px;">Raised</label>
+                            <p class="text-capitalize small" style="margin-top:2px;">{{ project.goal|currency}}</p>
                             <hr class="divider inv sm">
                             <a class="btn btn-sm btn-primary" href="/dashboard/projects/{{ project.id }}">View Project</a>
                         </div>
@@ -134,7 +137,7 @@
             },
             getProjects(){
                 let params = {
-                    include:'sponsor,initiative',
+                    include:'sponsor,initiative.cause',
                     search: this.search,
                     page: this.pagination.current_page
                 };

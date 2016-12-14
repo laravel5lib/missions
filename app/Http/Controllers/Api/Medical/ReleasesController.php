@@ -23,8 +23,6 @@ class ReleasesController extends Controller
     public function __construct(MedicalRelease $release)
     {
         $this->release = $release;
-
-        $this->middleware('api.auth',  ['only' => ['store','update','destroy']]);
     }
 
     /**
@@ -35,12 +33,9 @@ class ReleasesController extends Controller
      */
     public function index(Request $request)
     {
-        $releases = $this->release;
-
-        if($request->has('user_id'))
-            $releases = $releases->where('user_id', $request->get('user_id'));
-
-        $releases = $releases->paginate($request->get('per_page', 25));
+        $releases = $this->release
+                        ->filter($request->all())
+                        ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($releases, new MedicalReleaseTransformer);
     }

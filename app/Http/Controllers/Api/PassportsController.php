@@ -24,9 +24,6 @@ class PassportsController extends Controller
     public function __construct(Passport $passport)
     {
         $this->passport = $passport;
-
-        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
     }
 
     /**
@@ -37,12 +34,9 @@ class PassportsController extends Controller
      */
     public function index(Request $request)
     {
-        $passports = $this->passport;
-
-        if($request->has('user_id'))
-            $passports = $passports->where('user_id', $request->get('user_id'));
-
-        $passports = $passports->paginate(25);
+        $passports = $this->passport
+                        ->filter($request->all())
+                        ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($passports, new PassportTransformer);
     }

@@ -1,6 +1,6 @@
 <?php namespace App\Filters\v1;
 
-class EssayFilter extends Filter
+class MedicalReleaseFilter extends Filter
 {
     use Manageable;
 
@@ -17,17 +17,17 @@ class EssayFilter extends Filter
      *
      * @var array
      */
-    public $sortable = ['author_name', 'subject'];
+    public $sortable = ['name', 'created_at', 'updated_at'];
 
     /**
      * Default searchable fields.
      *
      * @var array
      */
-    public $searchable = ['author_name', 'content'];
+    public $searchable = ['name', 'ins_provider', 'ins_policy_no'];
 
     /**
-     * Filter by user id.
+     * By user id.
      *
      * @param $id
      * @return \Illuminate\Database\Eloquent\Builder
@@ -35,16 +35,5 @@ class EssayFilter extends Filter
     public function user($id)
     {
         return $this->where('user_id', $id);
-    }
-
-    /**
-     * Filter by subject.
-     *
-     * @param $subject
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function subject($subject)
-    {
-        return $this->where('subject', $subject);
     }
 }

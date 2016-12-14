@@ -1,6 +1,8 @@
 <?php namespace App\Filters\v1;
 
-class EssayFilter extends Filter
+use Carbon\Carbon;
+
+class VisaFilter extends Filter
 {
     use Manageable;
 
@@ -17,17 +19,17 @@ class EssayFilter extends Filter
      *
      * @var array
      */
-    public $sortable = ['author_name', 'subject'];
+    public $sortable = ['given_names', 'surname'];
 
     /**
      * Default searchable fields.
      *
      * @var array
      */
-    public $searchable = ['author_name', 'content'];
+    public $searchable = ['given_names', 'surname', 'number'];
 
     /**
-     * Filter by user id.
+     * By user id.
      *
      * @param $id
      * @return \Illuminate\Database\Eloquent\Builder
@@ -38,13 +40,12 @@ class EssayFilter extends Filter
     }
 
     /**
-     * Filter by subject.
+     * By expired.
      *
-     * @param $subject
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function subject($subject)
+    public function expired()
     {
-        return $this->where('subject', $subject);
+        return $this->where('expires_at', '<=', Carbon::now());
     }
 }

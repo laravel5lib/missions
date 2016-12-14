@@ -532,12 +532,12 @@
             },
             searchDonors(){
                 let params = this.getListSettings();
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('donors', params).then(function (response) {
                     let self = this;
                     this.donors = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 }).then(function () {
                     this.updateConfig();
                 });
@@ -550,7 +550,7 @@
                 this.filters = config.filters;
             }
             // populate
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             this.getGroups();
             this.getCampaigns();
             this.searchDonors();

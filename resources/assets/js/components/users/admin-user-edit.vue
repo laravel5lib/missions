@@ -1,6 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="EditUser" @touched="onTouched">
-        <form id="EditUserForm" class="form-horizontal" novalidate>
+        <form id="EditUserForm" class="form-horizontal" novalidate style="position:relative;">
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="form-group" :class="{ 'has-error': checkForError('name') }">
                 <label for="name" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-10">

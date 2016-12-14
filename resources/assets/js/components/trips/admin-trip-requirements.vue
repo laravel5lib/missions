@@ -232,7 +232,7 @@
             addRequirement(){
                 this.attemptedAddRequirement = true;
                 if(this.$TripRequirementsCreate.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     this.resource.save({}, this.newRequirement).then(function (response) {
                         this.requirements.push(response.data.data);
                         this.resetRequirement();
@@ -245,7 +245,7 @@
             updateRequirement(){
                 this.attemptedEditRequirement = true;
                 if(this.$TripRequirementsEdit.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     this.resource.update({ id: this.selectedRequirement.id}, this.selectedRequirement).then(function (response) {
                         this.attemptedEditRequirement = false;
                         this.showEditModal = false;
@@ -263,7 +263,7 @@
                 this.showDeleteModal = true;
             },
             remove(requirement){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.resource.delete({ id: requirement.id }).then(function (response) {
                     this.requirements.$remove(requirement);
                     this.selectedRequirement = null;
@@ -271,7 +271,7 @@
                 });
             },
             searchRequirements(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.resource.get({
                     requester: this.requester + '|' + this.id,
                     search: this.search,

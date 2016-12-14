@@ -286,10 +286,10 @@
             },
         },
         ready(){
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
                 this.setReservationData(response.data.data);
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
             });
         }
     }

@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <div class="row">
+    <div style="position:relative;">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<div class="row">
             <div class="col-sm-12">
                 <form class="form-inline" novalidate>
                     <div class="form-inline" style="display: inline-block;">

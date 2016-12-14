@@ -645,7 +645,7 @@
 			},
             searchReservations(){
             	let params = this.getListSettings();
-				this.$refs.spinner.show();
+				// this.$refs.spinner.show();
 				this.$http.get('reservations', params).then(function (response) {
                     let self = this;
                     _.each(response.data.data, function (reservation) {
@@ -653,10 +653,10 @@
                     }, this);
                     this.reservations = response.data.data;
                     this.pagination = response.data.meta.pagination;
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				}).then(function () {
 					this.updateConfig();
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				})
             },
 			getGroups(search, loading){

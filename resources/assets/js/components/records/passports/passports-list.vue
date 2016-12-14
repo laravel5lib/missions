@@ -104,24 +104,24 @@
             },
             removePassport(passport){
                 if(passport) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     this.$http.delete('passports/' + passport.id).then(function (response) {
                         this.passports = _.reject(this.passports, function (item) {
                             return item.id === passport.id;
                         });
                         this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     });
                 }
             }
         },
         ready(){
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             this.$http('users/me?include=passports').then(function (response) {
                 this.passports = response.data.data.passports.data;
                 this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
                 this.loaded = true;
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
             });
         }
     }

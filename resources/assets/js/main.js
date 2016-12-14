@@ -174,8 +174,30 @@ Vue.http.interceptors.push({
             headers.Authorization = token
         }
 
+
+        // Show Spinners in all components where they exist
+        if (_.contains(['GET', 'POST', 'PUT'],request.method)) {
+            // debugger;
+            if (this.$refs.spinner) {
+                switch (request.method) {
+                    case 'GET':
+                        this.$refs.spinner.show({text: 'Loading'});
+                        break;
+                    case 'POST':
+                        this.$refs.spinner.show({text: 'Saving'});
+                        break;
+                    case 'PUT':
+                        this.$refs.spinner.show({text: 'Updating'});
+                        break;
+                }
+            }
+        }
+
         // Only POST and PUT Requests
         if (_.contains(['POST', 'PUT'],request.method)) {
+            console.log(this);
+            console.log(request);
+
             /*
              * Date Conversion: Local to UTC
              */
@@ -216,6 +238,11 @@ Vue.http.interceptors.push({
     },
 
     response: function (response) {
+        // Hide Spinners in all components where they exist
+        if (this.$refs.spinner) {
+            this.$refs.spinner.hide();
+        }
+
         if (response.status && response.status === 401) {
             $.removeCookie('api_token');
             console.log('not logged in');

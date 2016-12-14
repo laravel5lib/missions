@@ -324,7 +324,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateMedicalRelease.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     this.resource.save(null, {
                         name: this.name,
                         ins_provider: this.ins_provider,
@@ -338,7 +338,7 @@
                         window.location.href = '/dashboard/records/medical-releases';
                     }, function (error) {
                         this.showError = true;
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     });
                 } else {
                     this.showError = true;
@@ -347,7 +347,7 @@
             update(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateMedicalRelease.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     this.resource.update({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -359,9 +359,9 @@
                         user_id: this.user_id,
                     }).then(function (resp) {
                         this.showSuccess = true;
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     }, function (error) {
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                         console.log(error);
                     });
                 }
@@ -381,7 +381,7 @@
             }
         },
         ready(){
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             let fetchURL = this.isUpdate ? 'medical/releases/' + this.id : 'users/me';
             this.$http(fetchURL).then(function (response) {
                 // this.user = response.data.data;
@@ -391,7 +391,7 @@
                     let medical_releases = _.findWhere(response.data.data.medical_releases.data, {id: this.id});
                     $.extend(this, medical_releases);
                 }
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
             });
         }
 

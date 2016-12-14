@@ -87,10 +87,10 @@
         },
         methods: {
             fetch() {
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('funds/' + this.id).then(function (response) {
                     this.fund = response.data.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             save() {

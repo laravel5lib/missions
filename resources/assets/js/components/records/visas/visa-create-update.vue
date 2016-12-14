@@ -173,7 +173,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateVisa.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     let resource = this.$resource('visas{/id}');
                     resource.save(null, {
                         given_names: this.given_names,
@@ -190,7 +190,7 @@
                         window.location.href = '/dashboard/records/visas';
                     }, function (error) {
                         this.showError = true;
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                         debugger;
                     });
                 } else {
@@ -200,7 +200,7 @@
             update(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateVisa.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     let resource = this.$resource('visas{/id}');
                     resource.update({id:this.id}, {
                         given_names: this.given_names,
@@ -214,9 +214,9 @@
                     }).then(function (resp) {
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                         // window.location.href = '/dashboard/visas';
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     }, function (error) {
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                         debugger;
                     });
                 }

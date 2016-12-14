@@ -68,7 +68,7 @@
 					//search: this.searchText,
 					page: this.page,
 				});
-				this.$refs.spinner.show();
+				// this.$refs.spinner.show();
 				resource.query({id: this.id}).then(function (group) {
 					this.group = group.data.data;
 					let t = this.group.trips.data, cId = this.campaignId, arr = [], calcLowest = this.calcStartingCost;
@@ -80,9 +80,9 @@
 
 					});
 					this.trips = arr;
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				}, function (error) {
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				});
 			},
 			calcStartingCost(costs) {

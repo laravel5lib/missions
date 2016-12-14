@@ -80,35 +80,35 @@
 			createTodo() {
 				if (! this.newTodo) return;
 				this.todos.push(this.newTodo);
-				this.$refs.spinner.show();
+				// this.$refs.spinner.show();
 				this.resource.save({}, {todos: this.todos}).then(function (response) {
 					this.todos = response.data.data;
 					this.reset();
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				}).error(function () {
 					this.errorMessage = 'Unable to delete todo.';
 					this.showError = true;
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				});
 			},
 			remove() {
 				this.todos.$remove(this.selectedTodo);
-				this.$refs.spinner.show();
+				// this.$refs.spinner.show();
 				this.resource.save({}, {todos: this.todos}).then(function (response) {
 					this.todos = response.data.data;
 					this.reset();
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				}).error(function () {
 					this.errorMessage = 'Unable to delete todo.';
 					this.showError = true;
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				});
 			},
             getTodos(){
-				this.$refs.spinner.show();
+				// this.$refs.spinner.show();
 				this.resource.get().then(function (response) {
                     this.todos = response.data.data;
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				});
             }
         },

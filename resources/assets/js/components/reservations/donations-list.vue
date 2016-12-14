@@ -66,12 +66,12 @@
         },
         methods: {
             getDonations(){
-				this.$refs.spinner.show();
+				// this.$refs.spinner.show();
 				this.$http.get('fundraisers.donations', {
 
                 }).then(function (response) {
                     this.donations = response.data.data;
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				})
             },
         },

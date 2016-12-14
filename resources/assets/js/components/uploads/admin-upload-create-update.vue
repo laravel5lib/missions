@@ -1,5 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
-	<div>
+	<div style="position:relative">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<form class="form-inline" v-if="isChild && !uiLocked" novalidate>
 			<div class="row">
 				<div class="col-sm-offset-2 col-sm-10">

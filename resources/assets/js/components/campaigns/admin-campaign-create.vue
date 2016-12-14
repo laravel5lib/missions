@@ -209,7 +209,7 @@
 			submit(){
 				this.attemptSubmit = true;
 				if (this.$CreateCampaign.valid) {
-					this.$refs.spinner.show();
+					// this.$refs.spinner.show();
 					var resource = this.$resource('campaigns');
 					resource.save(null, {
 						name: this.name,
@@ -228,7 +228,7 @@
 					}, function (error) {
 						this.errors = error.data.errors;
 						this.showError = true;
-						this.$refs.spinner.hide();
+						// this.$refs.spinner.hide();
 					});
 				} else {
 					this.showError = true;
@@ -252,10 +252,10 @@
 			}
 		},
 		ready(){
-			this.$refs.spinner.show();
+			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.data.countries;
-				this.$refs.spinner.hide();
+				// this.$refs.spinner.hide();
 			});
 		}
 	}

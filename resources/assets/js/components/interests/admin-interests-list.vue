@@ -330,17 +330,17 @@
                 };
                 $.extend(params, this.filters);
 
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('interests', params).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.interests = response.data.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 })
             }
         },
         ready(){
             // populate
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             this.getGroups();
             this.getCampaigns();
             this.getTrips();

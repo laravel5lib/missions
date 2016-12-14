@@ -272,7 +272,7 @@
 
 				this.attemptSubmit = true;
 				if (this.$UpdateCampaign.valid) {
-					this.$refs.spinner.show();
+					// this.$refs.spinner.show();
 					this.resource.update({id: this.campaignId}, {
 						name: this.name,
 						country_code: this.country_code,
@@ -291,11 +291,11 @@
 //						window.location.href = '/admin/campaigns/'
 						this.showSuccess = true;
 						this.hasChanged = false;
-						this.$refs.spinner.hide();
+						// this.$refs.spinner.hide();
 					}, function (error) {
 						this.errors = error.data.errors;
 						this.showError = true;
-						this.$refs.spinner.hide();
+						// this.$refs.spinner.hide();
 					});
 				} else {
 					this.showError = true;
@@ -303,7 +303,7 @@
 			},
 			deleteCampaign(){
 				// delete campaign
-				this.$refs.spinner.show();
+				// this.$refs.spinner.show();
 				this.resource.delete({id: this.campaignId}).then(function(response) {
 					window.location.href = '/admin/campaigns/'
 				});
@@ -326,7 +326,7 @@
 			}
 		},
 		created(){
-			this.$refs.spinner.show();
+			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.data.countries;
 			});
@@ -343,7 +343,7 @@
 				this.page_src = campaign.page_src;
 				this.countryCodeObj = _.findWhere(this.countries, { name: campaign.country });
 				this.country_code = this.countryCodeObj.code;
-				this.$refs.spinner.hide();
+				// this.$refs.spinner.hide();
 			});
 
 		}

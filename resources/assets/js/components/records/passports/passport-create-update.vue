@@ -194,7 +194,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdatePassport.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     let resource = this.$resource('passports{/id}');
                     resource.save(null, {
                         given_names: this.given_names,
@@ -214,7 +214,7 @@
                     }, function (error) {
                         this.showError = true;
                         debugger;
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     });
                 } else {
                     this.showError = true;
@@ -223,7 +223,7 @@
             update(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdatePassport.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     let resource = this.$resource('passports{/id}');
                     resource.update({id:this.id}, {
                         given_names: this.given_names,
@@ -240,9 +240,9 @@
 //                        window.location.href = '/dashboard/passports';
                         this.showSuccess = true;
                         this.hasChanged = false;
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     }, function (error) {
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                         debugger;
                     });
                 }
@@ -262,7 +262,7 @@
             }
         },
         ready(){
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.data.countries;
             });
@@ -279,7 +279,7 @@
                     this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country})
                     this.citizenshipObj = _.findWhere(this.countries, {code: passport.citizenship})
                 }
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
             });
         }
 

@@ -28,11 +28,11 @@
         },
         activate(done){
             // get transport data
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             let resource = this.$resource('transports', {'campaign_id': this.$parent.campaignId});
             resource.get().then(function(response) {
                 this.transports = response.data.data;
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
             });
             done();
         }

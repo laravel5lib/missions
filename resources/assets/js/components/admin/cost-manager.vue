@@ -368,7 +368,7 @@
                         this.searchCosts();
                     }, function (error) {
                         console.log(error.data.errors);
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     });
                 }
                 this.checkCostsErrors();
@@ -385,7 +385,7 @@
                         this.searchCosts();
                     }, function (error) {
                         console.log(error.data.errors);
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     });
                 }
                 this.checkCostsErrors();
@@ -398,7 +398,7 @@
                 }
             },
             searchCosts(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.resource.get({
                     include: 'payments',
                     assignment: this.assignment + '|' + this.id,
@@ -407,7 +407,7 @@
                     type: this.filters.type
                 }).then(function (response) {
                     this.costs = response.data.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                     this.checkPaymentsSync();
                 });
             },

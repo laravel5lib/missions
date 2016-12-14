@@ -63,7 +63,7 @@
         },
         methods: {
             searchInterests() {
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('interests', {
                     group: this.groupId,
                     trip: this.tripId,
@@ -74,7 +74,7 @@
                 }).then(function (response) {
                     this.interests = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             }
         },

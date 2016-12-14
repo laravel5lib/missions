@@ -41,12 +41,12 @@
             }
         },
         ready(){
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             this.resource.query().then(function(trips){
                 this.trips = trips.data.data
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
             }, function (error) {
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
                 //TODO add error alert
             }).then(function () {
                 $('[data-toggle="tooltip"]').tooltip();

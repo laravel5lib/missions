@@ -68,12 +68,12 @@
                 }
             },
             searchEssays(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http('essays?user=' + this.userId).then(function (response) {
                     this.essays = response.data.data;
                     this.pagination = response.data.meta.pagination;
                     this.loaded = true;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             }
         },

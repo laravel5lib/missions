@@ -117,7 +117,7 @@
 			},
 			updateGroup: function updateGroup() {
 				// Update Group
-				this.$refs.spinner.show();
+				// this.$refs.spinner.show();
 				this.resource.update({id: this.groupId}, this.group).then(function (response) {
 					this.group = response.data.data;
 					this.managers = this.group.managers.data;
@@ -125,25 +125,25 @@
 					this.userObj = null;
 					this.attemptSubmit = false;
 					$('#AddManagerModal').modal('hide');
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				}, function (response) {
 					console.log(response);
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 					//TODO add error alert
 				});
 			}
 		},
 		ready: function ready() {
-			this.$refs.spinner.show();
+			// this.$refs.spinner.show();
 			this.resource.get({id: this.groupId}).then(function (response) {
 				this.group = response.data.data;
 				this.managers = this.group.managers.data;
 				//                $.extend(this.$data, response.data.data);
-				this.$refs.spinner.hide();
+				// this.$refs.spinner.hide();
 			}, function (response) {
 				console.log('Update Failed! :(');
 				console.log(response);
-				this.$refs.spinner.hide();
+				// this.$refs.spinner.hide();
 				//TODO add error alert
 			});
 		}

@@ -180,13 +180,13 @@
                     page: this.pagination.current_page,
                 };
                 $.extend(params, this.filters);
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('trips', params).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.trips = response.data.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 }, function (error) {
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 })
             }
 

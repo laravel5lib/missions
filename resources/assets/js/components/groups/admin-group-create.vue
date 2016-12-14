@@ -176,7 +176,7 @@
                     let resource = this.$resource('groups');
 
                     let formData = this.data
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     resource.save(null, {
                         name: this.name,
                         description: this.description,
@@ -195,11 +195,11 @@
                         email: this.email
                     }).then(function (resp) {
                         window.location.href = '/admin' + resp.data.data.links[0].uri;
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     }, function (error) {
                         console.log(error);
                         this.showError = true;
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                         //TODO add error alert
                         debugger;
                     });
@@ -209,14 +209,14 @@
             }
         },
         ready(){
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.data.countries;
             });
 
             this.$http.get('utilities/timezones').then(function (response) {
                 this.timezones = response.data.timezones;
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
             });
             //TODO use promises defers here
         }

@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div style="position:relative;">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+
         <template v-if="isUser()">
         <div class="row hidden-xs">
             <div class="col-sm-8">
@@ -178,9 +180,11 @@
                     story.author_type = 'users';
                     story.publications = [{ type: 'users', id: this.id }];
 
+                    // this.$refs.spinner.show();
                     this.$http.put('stories/' + story.id, story).then(function (response) {
                         this.editMode = false;
                         this.resetData();
+                        // this.$refs.spinner.show();
                         return response.data.data;
                         //this.searchStories();
                     });

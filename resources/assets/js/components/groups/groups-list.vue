@@ -85,13 +85,13 @@
                 }
             },
             getGroups(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('users/me', {
                     include: 'managing',
                     user: new Array(this.userId)
                 }).then(function (response) {
                     this.groups = response.data.data.managing.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 })
             },
         },

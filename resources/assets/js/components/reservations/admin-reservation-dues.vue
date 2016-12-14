@@ -231,11 +231,11 @@
                 delete trip.difficulty;
                 delete trip.rep_id;
 
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.put('trips/' + trip.id, trip).then(function (response) {
                     let thisTrip = response.data.data;
                     this.selecteddues = new Array(this.newDeadline);
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                     return this.adddues();
 
                 });
@@ -246,11 +246,11 @@
 
             },
             doUpdate(reservation){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 return this.resource.update(reservation).then(function (response) {
                     this.setReservationData(response.data.data);
                     this.selectedDues = [];
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             setReservationData(reservation){
@@ -276,10 +276,10 @@
             }
         },
         ready(){
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
                 this.setReservationData(response.data.data)
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
             });
 
             //Listen to Event Bus

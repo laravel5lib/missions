@@ -121,7 +121,7 @@
                 }
             },
             searchFundraisers(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('fundraisers', {
                     active: true,
                     include: 'sponsor',
@@ -133,9 +133,9 @@
                     this.fundraisers = response.data.data;
                     this.featuredFundraisers = _.first(this.fundraisers, 5);
                     this.pagination = response.data.meta.pagination;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 }, function (error) {
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                     //TODO add error alert
                 });
             },

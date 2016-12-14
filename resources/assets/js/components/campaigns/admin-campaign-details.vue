@@ -84,12 +84,12 @@
 		},
 		created(){
 			this.currentView = 'details';
-			this.$refs.spinner.show();
+			// this.$refs.spinner.show();
 			// get campaign data
 			let resource = this.$resource('campaigns{/id}', {'include': 'trips.group'});
 			resource.get({id: this.campaignId}).then(function(response) {
 				this.campaign = response.data.data;
-				this.$refs.spinner.hide();
+				// this.$refs.spinner.hide();
 			});
 		},
 		components: {

@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <div>
+    <div style="position:relative;">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
         <button class="btn btn-primary btn-xs" @click="add">
@@ -249,7 +249,7 @@
                 delete trip.difficulty;
                 delete trip.rep_id;
 
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.put('trips/' + trip.id, trip).then(function (response) {
                     let thisTrip = response.data.data;
                     this.selectedcosts = new Array(this.newDeadline);
@@ -265,14 +265,14 @@
             },
             doUpdate(reservation, success){
 
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 return this.resource.update(reservation).then(function (response) {
                     this.setReservationData(response.data.data);
                     this.selectedCosts = [];
                     this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
                     this.successMessage = success || 'Costs updated Successfully';
                     this.showSuccess = true;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             setReservationData(reservation){
@@ -295,10 +295,10 @@
             }
         },
         ready(){
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
                 this.setReservationData(response.data.data);
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
             });
 
         }

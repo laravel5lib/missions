@@ -169,19 +169,19 @@
                 this.activeView = this.type = view;
             },
             searchDonors(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('donors', {reservation: this.reservationId, page: this.donorPagination.current_page}).then(function (response) {
                     this.donors = response.data.data;
                     this.donorPagination = response.data.meta.pagination;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             searchTransactions(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('transactions', {include: 'donor', fund: this.fundId, page: this.pagination.current_page}).then(function (response) {
                     this.transactions = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             }
         },

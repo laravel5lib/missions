@@ -343,14 +343,14 @@
             },
             searchFunds(){
                 let params = this.getListSettings();
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('funds', params).then(function (response) {
                     let self = this;
                     this.funds = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 }, function (error) {
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                     //TODO add error alert
                 }).then(function () {
                     this.updateConfig();

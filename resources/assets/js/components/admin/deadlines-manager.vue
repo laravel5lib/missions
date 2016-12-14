@@ -180,7 +180,7 @@
             addDeadline(){
                 this.attemptedAddDeadline = true;
                 if(this.$TripDeadlinesCreate.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     this.resource.save({}, this.newDeadline).then(function (response) {
                         this.deadlines.push(response.data.data);
                         this.resetDeadline();
@@ -193,7 +193,7 @@
             updateDeadline(){
                 this.attemptedEditDeadline = true;
                 if(this.$TripDeadlinesEdit.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     this.resource.update({ id: this.selectedDeadline.id}, this.selectedDeadline).then(function (response) {
                         this.attemptedEditDeadline = false;
                         this.showEditModal = false;
@@ -211,7 +211,7 @@
                 this.showDeleteModal = true;
             },
             remove(deadline){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.resource.delete({ id: deadline.id }).then(function (response) {
                     this.deadlines.$remove(deadline);
                     this.selectedDeadline = null;
@@ -219,7 +219,7 @@
                 });
             },
             searchDeadlines(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.resource.get({
                     assignment: this.assignment + '|' + this.id,
                     search: this.search,

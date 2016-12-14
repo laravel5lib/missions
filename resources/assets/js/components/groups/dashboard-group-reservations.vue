@@ -394,7 +394,7 @@
 				$.extend(params, {
 					age: [ this.ageMin, this.ageMax]
 				});
-				this.$refs.spinner.show();
+				// this.$refs.spinner.show();
 				this.$http.get('reservations', params).then(function (response) {
                     let self = this;
                     _.each(response.data.data, function (reservation) {
@@ -403,9 +403,9 @@
                     }, this);
                     this.reservations = response.data.data;
                     this.pagination = response.data.meta.pagination;
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				}, function (error) {
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 					//TODO add error alert
 				});
             },

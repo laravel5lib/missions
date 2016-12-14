@@ -254,7 +254,7 @@
                 delete trip.difficulty;
                 delete trip.rep_id;
 
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.put('trips/' + trip.id + '?include=deadlines', trip).then(function (response) {
                     let thisTrip = response.data.data;
                     this.selectedDeadlines = new Array(_.findWhere(response.data.data.deadlines.data, { name: this.newDeadline.name }));
@@ -264,7 +264,7 @@
                 });
             },
             doUpdate(reservation){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 return this.resource.update(reservation).then(function (response) {
                     this.setReservationData(response.data.data);
                     this.selectedDeadlines = [];
@@ -273,7 +273,7 @@
                     this.showAddModal = false;
                     this.showEditModal = false;
                     this.showNewModal = false;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             getDeadlines(search, loading){
@@ -301,10 +301,10 @@
             }
         },
         ready(){
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
                 this.setReservationData(response.data.data)
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
             });
 
         }

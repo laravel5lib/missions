@@ -208,16 +208,16 @@
             },
             update() {
                 this.accountError = false;
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.put('donors/' + this.donorId, this.donor).then(function (response) {
                     this.$dispatch('showSuccess', 'Donor updated successfully.');
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 }).error(function (response) {
                     if(_.contains(_.keys(response.errors), 'account_id')) {
                         this.accountError = true;
                     }
                     this.$dispatch('showError', 'There are errors on the form.');
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             cancel() {
@@ -232,24 +232,24 @@
 			    }
             },
             getCountries() {
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('utilities/countries').then(function (response) {
                     this.countries = response.data.countries;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             getUsers(search) {
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('users?per_page=10', {search: search}).then(function (response) {
                     this.users = response.data.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             getGroups(search) {
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('groups?per_page=10', {search: search}).then(function (response) {
                     this.groups = response.data.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             }
         },

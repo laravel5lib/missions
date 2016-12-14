@@ -125,7 +125,7 @@
         },
         methods: {
             fetch() {
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('interests/' + this.id, {
                     include: 'trip.campaign,trip.group'
                 }).then(function (response) {
@@ -134,11 +134,11 @@
                     interest.trip.campaign = interest.trip.campaign.data;
                     interest.trip.group = interest.trip.group.data;
                     this.interest = interest;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 })
             },
             save() {
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.put('interests/' + this.id, this.interest).then(function (response) {
                     this.message = 'Trip interest has been updated!';
                     this.showSuccess = true;

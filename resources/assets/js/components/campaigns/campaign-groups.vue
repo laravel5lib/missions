@@ -77,7 +77,7 @@
 					page: this.pagination.current_page
 				});
 
-				this.$refs.spinner.show();
+				// this.$refs.spinner.show();
 				resource.query().then(function (trips) {
 					this.pagination = trips.data.meta.pagination;
 					let arr = [];
@@ -85,9 +85,9 @@
 						arr.push(trips.data.data[i].group.data)
 					}
 					this.groups = arr;
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 				}, function (error) {
-					this.$refs.spinner.hide();
+					// this.$refs.spinner.hide();
 					//TODO error alert message
 				});
 			},

@@ -375,7 +375,7 @@
 					this.groupsLimit = this.groups.length
 				},*/
             searchGroups(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.resource.query(null, {
                     search: this.search,
                     page: this.pagination.current_page,
@@ -383,9 +383,9 @@
                 }).then(function(groups){
                     this.groups = groups.data.data;
                     this.pagination = groups.data.meta.pagination;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 }, function (error) {
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                     //TODO add error alert
                 }).then(function () {
 
@@ -417,7 +417,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateGroup.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     this.$http.post('groups/submit', {
                         name: this.name,
                         type: this.type,
@@ -442,10 +442,10 @@
                         this.showSuccess = true;
                         //TODO use universal alert
                         this.resetForm();
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     }, function (error) {
                         this.errors = error.data.errors
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     });
                 }
             }

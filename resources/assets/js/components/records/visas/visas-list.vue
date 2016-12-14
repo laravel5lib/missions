@@ -103,24 +103,24 @@
             },
             removeVisa(visa){
                 if(visa) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     this.$http.delete('visas/' + visa.id).then(function (response) {
                         this.visas = _.reject(this.visas, function (item) {
                             return item.id === visa.id;
                         });
                         this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     });
                 }
             }
         },
         ready(){
-            this.$refs.spinner.show();
+            // this.$refs.spinner.show();
             this.$http('users/me?include=visas').then(function (response) {
                 this.visas = response.data.data.visas.data;
                 this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
                 this.loaded = true;
-                this.$refs.spinner.hide();
+                // this.$refs.spinner.hide();
             });
         }
     }

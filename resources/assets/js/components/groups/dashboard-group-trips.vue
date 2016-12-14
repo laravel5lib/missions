@@ -42,13 +42,13 @@
         },
         methods:{
             searchTrips(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.resource.query().then(function(response){
                     this.trips = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 }, function (error) {
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                     //TODO add error alert
                 }).then(function () {
                     $('[data-toggle="tooltip"]').tooltip();

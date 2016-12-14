@@ -105,23 +105,23 @@
 			},
 			removeMedicalRelease(medical_release){
 				if (medical_release) {
-					this.$refs.spinner.show();
+					// this.$refs.spinner.show();
 					this.$http.delete('medical/releases/' + medical_release.id).then(function (response) {
 						this.medical_releases.$remove(medical_release);
 						this.paginatedMedical_releases.$remove(medical_release);
 						this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
-						this.$refs.spinner.hide();
+						// this.$refs.spinner.hide();
 					});
 				}
 			}
 		},
 		ready(){
-			this.$refs.spinner.show();
+			// this.$refs.spinner.show();
 			this.$http('users/me?include=medical_releases').then(function (response) {
 				this.medical_releases = response.data.data.medical_releases.data;
 				this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
 				this.loaded = true;
-				this.$refs.spinner.hide();
+				// this.$refs.spinner.hide();
 			});
 		}
 	}

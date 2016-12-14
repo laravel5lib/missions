@@ -197,7 +197,7 @@
                 this.type = '';
             },
             searchGroups(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('groups', {
                     include:'trips:onlyPublished,notes',
                     search: this.searchText,
@@ -207,9 +207,9 @@
                 }).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.groups = response.data.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 }, function (error) {
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                     //TODO add error alert
                 })
             }

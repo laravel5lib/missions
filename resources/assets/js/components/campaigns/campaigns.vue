@@ -352,12 +352,12 @@
 			}
 		},
 		ready(){
-			this.$refs.spinner.show();
+			// this.$refs.spinner.show();
 			this.resource.query().then(function (campaigns) {
 				this.campaigns = campaigns.data.data;
-				this.$refs.spinner.hide();
+				// this.$refs.spinner.hide();
 			}, function (error) {
-				this.$refs.spinner.hide();
+				// this.$refs.spinner.hide();
 				//TODO error alert message
 			}).then(function () {
 

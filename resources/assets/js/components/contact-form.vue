@@ -86,16 +86,16 @@
                 };
 
                 if (this.$CreateGroup.valid) {
-                    this.$refs.spinner.show();
+                    // this.$refs.spinner.show();
                     this.$http.post('contact', data).then(function (response) {
                         console.log(response);
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                         this.$root.$emit('showSuccess', 'Message Sent. Thank you for contacting us!');
                         this.reset();
                     }, function (error) {
                         console.log(error);
                         this.$root.$emit('showError', 'Something went wrong...');
-                        this.$refs.spinner.hide();
+                        // this.$refs.spinner.hide();
                     });
                 } else {
                     this.$root.$emit('showError', 'Please check that the form is complete');

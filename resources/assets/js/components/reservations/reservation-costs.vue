@@ -20,7 +20,7 @@
         <hr class="divider inv sm">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h5>Costs</h5>
+                <h5>Applied Costs</h5>
             </div><!-- end panel-heading -->
 
             <div class="list-group">

@@ -1,5 +1,6 @@
 <template>
     <div class="row">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="col-sm-12" v-if="loaded && !passports.length">
             <p class="text-center text-muted" role="alert"><em>No records found</em></p>
         </div>
@@ -58,7 +59,7 @@
         </modal>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'passports-list',
         data(){
@@ -91,10 +92,10 @@
         methods:{
             // emulate pagination
             paginate(){
-                var array = [];
-                var start = (this.pagination.current_page - 1) * this.per_page;
-                var end   = start + this.per_page;
-                var range = _.range(start, end);
+                let array = [];
+                let start = (this.pagination.current_page - 1) * this.per_page;
+                let end   = start + this.per_page;
+                let range = _.range(start, end);
                 _.each(range, function (index) {
                     if (this.passports[index])
                         array.push(this.passports[index]);
@@ -103,20 +104,24 @@
             },
             removePassport(passport){
                 if(passport) {
+                    // this.$refs.spinner.show();
                     this.$http.delete('passports/' + passport.id).then(function (response) {
                         this.passports = _.reject(this.passports, function (item) {
                             return item.id === passport.id;
                         });
                         this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
+                        // this.$refs.spinner.hide();
                     });
                 }
             }
         },
         ready(){
+            // this.$refs.spinner.show();
             this.$http('users/me?include=passports').then(function (response) {
                 this.passports = response.data.data.passports.data;
                 this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
                 this.loaded = true;
+                // this.$refs.spinner.hide();
             });
         }
     }

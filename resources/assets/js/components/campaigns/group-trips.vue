@@ -1,5 +1,7 @@
 <template>
 	<div>
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+
 		<div class="dark-bg-primary">
 			<div class="container">
 				<hr class="divider inv xlg">
@@ -59,17 +61,17 @@
 		},
 		methods: {
 			getTrips(){
-				var resource = this.$resource('groups{/id}', {
+				let resource = this.$resource('groups{/id}', {
 					include: "trips.costs",
 					//campaign: this.id,
 					//per_page: 8,
 					//search: this.searchText,
 					page: this.page,
 				});
-
+				// this.$refs.spinner.show();
 				resource.query({id: this.id}).then(function (group) {
 					this.group = group.data.data;
-					var t = this.group.trips.data, cId = this.campaignId, arr = [], calcLowest = this.calcStartingCost;
+					let t = this.group.trips.data, cId = this.campaignId, arr = [], calcLowest = this.calcStartingCost;
 					t.forEach(function (val, i) {
 						if( val.campaign_id === cId) {
 							val.lowest = calcLowest(val.costs.data);
@@ -78,10 +80,13 @@
 
 					});
 					this.trips = arr;
+					// this.$refs.spinner.hide();
+				}, function (error) {
+					// this.$refs.spinner.hide();
 				});
 			},
 			calcStartingCost(costs) {
-				var lowest;
+				let lowest;
 				costs.forEach(function(val, i) {
 					if (val.amount < lowest || isNaN(lowest) ) {
 						lowest = val.amount;

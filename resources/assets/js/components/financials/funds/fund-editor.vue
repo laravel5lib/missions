@@ -66,7 +66,7 @@
         </div>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'fund-editor',
         props: {
@@ -87,15 +87,15 @@
         },
         methods: {
             fetch() {
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('funds/' + this.id).then(function (response) {
                     this.fund = response.data.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             save() {
                 // validate manually
-                var self = this
+                let self = this;
                 this.$validate(true, function () {
                     if (self.$validation.invalid) {
                         console.log('validation errors');
@@ -103,19 +103,19 @@
                         self.$refs.spinner.show();
                         self.$http.put('funds/' + self.id, self.fund).then(function (response) {
                             self.$refs.spinner.hide();
-                            self.$dispatch('showSuccess', 'Fund has been updated!');
+                            self.$root.$emit('showSuccess', 'Fund has been updated!');
                             self.editMode = false;
                             self.fetch();
                         }).error(function (response) {
                             self.$refs.spinner.hide();
-                            self.$dispatch('showError', 'There are errors on the form');
+                            self.$root.$emit('showError', 'There are errors on the form');
                         });
                     }
                 })
             },
             reconcile() {
                 this.$http.put('funds/' + this.id + '/reconcile').then(function (response) {
-                    this.$dispatch('showSuccess', 'Fund has been reconciled!');
+                    this.$root.$emit('showSuccess', 'Fund has been reconciled!');
                     this.fetch();
                 });
             }

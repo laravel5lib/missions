@@ -1,5 +1,7 @@
 <template>
     <div class="panel panel-default">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
@@ -105,7 +107,7 @@
 
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         data() {
             return {
@@ -123,17 +125,20 @@
         },
         methods: {
             fetch() {
+                // this.$refs.spinner.show();
                 this.$http.get('interests/' + this.id, {
                     include: 'trip.campaign,trip.group'
                 }).then(function (response) {
-                    var interest = response.data.data;
+                    let interest = response.data.data;
                     interest.trip = interest.trip.data;
                     interest.trip.campaign = interest.trip.campaign.data;
                     interest.trip.group = interest.trip.group.data;
                     this.interest = interest;
+                    // this.$refs.spinner.hide();
                 })
             },
             save() {
+                // this.$refs.spinner.show();
                 this.$http.put('interests/' + this.id, this.interest).then(function (response) {
                     this.message = 'Trip interest has been updated!';
                     this.showSuccess = true;

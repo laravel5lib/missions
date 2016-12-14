@@ -25,7 +25,7 @@
         </div>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'refund-form',
         props: {
@@ -55,11 +55,11 @@
                     type: 'refund'
                 }).then(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.$dispatch('showSuccess', 'Transaction successfully refunded.');
+                    this.$root.$emit('showSuccess', 'Transaction successfully refunded.');
                     window.location = '/admin/transactions/' + response.data.data.id;
                 }).error(function (response) {
-                    this.$refs.transactionspinner.hide();
-                    this.$dispatch('showError', 'There are errors on the form.');
+                    this.$root.$emit.transactionspinner.hide();
+                    this.$root.$emit('showError', 'There are errors on the form.');
                 });
             }
         }

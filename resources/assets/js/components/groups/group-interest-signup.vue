@@ -86,7 +86,7 @@
         </validator>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'group-interest-signup',
         props: ['id'],
@@ -110,25 +110,16 @@
                 return _.where(this.allTrips, {campaign_id: this.campaign_id});
             }
         },
-        ready() {
-            this.$http.get('groups/' + this.id, {include: 'trips.campaign'}).then(function (response) {
-                this.group = response.data.data;
-                this.allTrips = response.data.data.trips.data;
-                var campaigns = _.mapObject(response.data.data.trips.data, 'campaign');
-                this.campaigns = this.removeDuplicates(campaigns, 'id');
-                console.log(this.campaigns);
-            })
-        },
         methods: {
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$Interest[field].invalid && this.attemptSubmit;
             },
             removeDuplicates(arr, prop) {
-                var new_arr = [];
-                var lookup  = {};
+                let new_arr = [];
+                let lookup  = {};
 
-                for (var i in arr) {
+                for (let i in arr) {
                     lookup[arr[i]['data'][prop]] = arr[i];
                 }
 
@@ -161,6 +152,15 @@
                     this.showError = true;
                 }
             }
-        }
+        },
+        ready() {
+            this.$http.get('groups/' + this.id, {include: 'trips.campaign'}).then(function (response) {
+                this.group = response.data.data;
+                this.allTrips = response.data.data.trips.data;
+                let campaigns = _.mapObject(response.data.data.trips.data, 'campaign');
+                this.campaigns = this.removeDuplicates(campaigns, 'id');
+                console.log(this.campaigns);
+            })
+        },
     }
 </script>

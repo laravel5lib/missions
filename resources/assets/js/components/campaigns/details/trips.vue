@@ -42,6 +42,8 @@
                 </div>
             </div><!-- end panel-heading -->
             <div class="panel-body">
+                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+
                 <div class="row">
                     <div class="col-sm-12">
                         <form class="form-inline" novalidate>
@@ -178,10 +180,13 @@
                     page: this.pagination.current_page,
                 };
                 $.extend(params, this.filters);
-
+                // this.$refs.spinner.show();
                 this.$http.get('trips', params).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.trips = response.data.data;
+                    // this.$refs.spinner.hide();
+                }, function (error) {
+                    // this.$refs.spinner.hide();
                 })
             }
 

@@ -1,5 +1,6 @@
 <template>
-    <div class="panel panel-default">
+    <div class="panel panel-default" style="position:relative;">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="panel-heading">
             <h5 class="panel-header">Permissions <button class="btn btn-xs btn-default-hollow pull-right" style="margin-top:-3px"
                     @click="showAbilities = !showAbilities">

@@ -40,52 +40,55 @@
             </div>
         </div>
         <hr>
-        <table class="table table-hover">
-            <thead>
-            <tr>
-				<th>Preview</th>
-                <th :class="{'text-primary': orderByField === 'name'}">
-                    Name
-                    <i @click="setOrderByField('name')" v-if="orderByField !== 'name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=!direction" v-if="orderByField === 'name'" class="fa pull-right" :class="{'fa-sort-desc': direction, 'fa-sort-asc': !direction}"></i>
-                </th>
-                <th :class="{'text-primary': orderByField === 'type'}">
-                    Type
-                    <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=!direction" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction, 'fa-sort-asc': !direction}"></i>
-                </th>
-                <th :class="{'text-primary': orderByField === 'created_at'}">
-                    Created
-                    <i @click="setOrderByField('created_at')" v-if="orderByField !== 'created_at'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=!direction" v-if="orderByField === 'created_at'" class="fa pull-right" :class="{'fa-sort-desc': direction, 'fa-sort-asc': !direction}"></i>
-                </th>
-                <th :class="{'text-primary': orderByField === 'updated_at'}">
-                    Updated
-                    <i @click="setOrderByField('updated_at')" v-if="orderByField !== 'updated_at'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=!direction" v-if="orderByField === 'updated_at'" class="fa pull-right" :class="{'fa-sort-desc': direction, 'fa-sort-asc': !direction}"></i>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="upload in uploads">
-                <td><img v-if="upload.type !== 'file'" :src="checkSource(upload.source)" width="100px"/></td>
-                <td v-text="upload.name|capitalize"></td>
-                <td v-text="upload.type|capitalize"></td>
-                <td v-text="upload.created_at|moment 'll'"></td>
-                <td v-text="upload.updated_at|moment 'll'"></td>
-                <td class="text-center"><a href="/admin{{upload.links[0].uri}}/edit"><i class="fa fa-gear"></i></a></td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="7">
-                    <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" :callback="searchUploads"></pagination>
-                    </div>
-                </td>
-            </tr>
-            </tfoot>
-        </table>
+        <div style="position:relative">
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Preview</th>
+                    <th :class="{'text-primary': orderByField === 'name'}">
+                        Name
+                        <i @click="setOrderByField('name')" v-if="orderByField !== 'name'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=!direction" v-if="orderByField === 'name'" class="fa pull-right" :class="{'fa-sort-desc': direction, 'fa-sort-asc': !direction}"></i>
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'type'}">
+                        Type
+                        <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=!direction" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction, 'fa-sort-asc': !direction}"></i>
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'created_at'}">
+                        Created
+                        <i @click="setOrderByField('created_at')" v-if="orderByField !== 'created_at'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=!direction" v-if="orderByField === 'created_at'" class="fa pull-right" :class="{'fa-sort-desc': direction, 'fa-sort-asc': !direction}"></i>
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'updated_at'}">
+                        Updated
+                        <i @click="setOrderByField('updated_at')" v-if="orderByField !== 'updated_at'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=!direction" v-if="orderByField === 'updated_at'" class="fa pull-right" :class="{'fa-sort-desc': direction, 'fa-sort-asc': !direction}"></i>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="upload in uploads">
+                    <td><img v-if="upload.type !== 'file'" :src="checkSource(upload.source)" width="100px"/></td>
+                    <td v-text="upload.name|capitalize"></td>
+                    <td v-text="upload.type|capitalize"></td>
+                    <td v-text="upload.created_at|moment 'll'"></td>
+                    <td v-text="upload.updated_at|moment 'll'"></td>
+                    <td class="text-center"><a href="/admin{{upload.links[0].uri}}/edit"><i class="fa fa-gear"></i></a></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="7">
+                        <div class="col-sm-12 text-center">
+                            <pagination :pagination.sync="pagination" :callback="searchUploads"></pagination>
+                        </div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 </template>
 <style>

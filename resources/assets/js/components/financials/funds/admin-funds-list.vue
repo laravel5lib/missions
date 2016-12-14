@@ -1,5 +1,6 @@
 <template>
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
@@ -257,7 +258,7 @@
                 this.searchFunds();
             },
             'tagsString': function (val) {
-                var tags = val.split(/[\s,]+/);
+                let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchFunds();
             },
@@ -325,7 +326,7 @@
                 });
             },
             getListSettings(){
-                var params = {
+                let params = {
                     include: '',
                     search: this.search,
                     per_page: this.per_page,
@@ -341,11 +342,16 @@
                 return params;
             },
             searchFunds(){
-                var params = this.getListSettings();
+                let params = this.getListSettings();
+                // this.$refs.spinner.show();
                 this.$http.get('funds', params).then(function (response) {
-                    var self = this;
+                    let self = this;
                     this.funds = response.data.data;
                     this.pagination = response.data.meta.pagination;
+                    // this.$refs.spinner.hide();
+                }, function (error) {
+                    // this.$refs.spinner.hide();
+                    //TODO add error alert
                 }).then(function () {
                     this.updateConfig();
                 });
@@ -354,7 +360,7 @@
         ready() {
             // load view state
             if (localStorage[this.storageName]) {
-                var config = JSON.parse(localStorage[this.storageName]);
+                let config = JSON.parse(localStorage[this.storageName]);
                 this.filters = config.filters;
             }
             // populate
@@ -362,9 +368,9 @@
 
             //Manually handle dropdown functionality to keep dropdown open until finished
             $('.form-toggle-menu .dropdown-menu').on('click', function(event){
-                var events = $._data(document, 'events') || {};
+                let events = $._data(document, 'events') || {};
                 events = events.click || [];
-                for(var i = 0; i < events.length; i++) {
+                for(let i = 0; i < events.length; i++) {
                     if(events[i].selector) {
 
                         //Check if the clicked element matches the event selector

@@ -231,12 +231,12 @@
                 return params;
             },
             searchProjects(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 var params = this.getParameters();
                 this.$http.get('projects', params).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.projects = response.data.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 })
             }
         },

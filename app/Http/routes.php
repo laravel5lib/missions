@@ -103,9 +103,9 @@ Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
     Route::get('reservations', 'ReservationsController@index');
     Route::get('reservations/{id}/{tab?}', 'ReservationsController@show');
 
-    Route::get('projects', function () {
-        return view('dashboard.projects.index');
-    });
+    Route::get('projects', 'ProjectsController@index');
+    Route::get('projects/{id}/{tab?}', 'ProjectsController@show');
+
 
 });
 

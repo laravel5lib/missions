@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import contactForm from './components/contact-form.vue';
 import login from './components/login.vue';
 import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
@@ -19,6 +20,7 @@ import groupTripWrapper from './components/campaigns/groups-trips-selection-wrap
 import groupInterestSignup from './components/groups/group-interest-signup.vue';
 import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
 import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
+import userProjectsList from './components/projects/user-projects-list.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
 import recordsList from './components/records/records-list.vue';
@@ -148,6 +150,8 @@ Vue.component('tooltip', VueStrap.tooltip);
 import myDatepicker from './components/date-picker.vue'
 Vue.component('date-picker', myDatepicker);
 
+// Vue Cookie
+Vue.use(require('vue-cookie'));
 // Vue Resource
 Vue.use(require('vue-resource'));
 // Vue Validator
@@ -334,7 +338,24 @@ Vue.directive('crop', {
 });
 
 Vue.mixin({
-    methods: {}
+    methods: {
+        /*showSpinner(){
+            this.$refs.spinner.show();
+        },
+        hideSpinner(){
+            this.$refs.spinner.hide();
+        },*/
+    },
+    ready() {
+        function isTouchDevice(){
+            return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+        }
+        // Disable tooltips on all components on mobile
+        if(isTouchDevice()) {
+            $("[rel='tooltip']").tooltip('destroy');
+        }
+
+    }
 });
 
 new Vue({
@@ -359,6 +380,7 @@ new Vue({
     },
     components: {
         login,
+        contactForm,
         fundraisers,
         campaigns,
         groups,
@@ -372,6 +394,7 @@ new Vue({
         tripDetailsMissionaries,
         tripRegistrationWizard,
         reservationsList,
+        userProjectsList,
         donationsList,
         fundraisersManager,
         fundraisersStories,
@@ -480,6 +503,17 @@ new Vue({
         $(window).on('resize', function(){
             this.$emit('Window:resize');
         }.bind(this));
+
+        this.$on('showSuccess', function (msg) {
+            this.message = msg;
+            this.showSuccess = true;
+        });
+
+        this.$on('showError', function (msg) {
+            this.message = msg;
+            this.showError = true;
+        });
+
     },
     methods: {
         setUser: function (user) {

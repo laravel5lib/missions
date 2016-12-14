@@ -1,33 +1,36 @@
 <template>
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<form class="form-horizontal" role="form" v-if="currentState==='login'">
-				<div id="alerts" v-if="messages.length > 0">
-					<div v-for="message in messages" class="alert alert-{{ message.type }} alert-dismissible"
-						 role="alert">
-						{{ message.message }}
-					</div>
-				</div><!-- end alert -->
-				<div class="form-group">
-					<div class="col-xs-10  col-xs-offset-1">
-						<label class="control-label">E-Mail Address</label>
-						<input type="email" class="form-control" v-model="user.email"/>
-					</div><!-- end col -->
-				</div><!-- end form-group -->
-				<div class="form-group">
-					<div class="col-xs-10  col-xs-offset-1">
-						<label class="control-label">Password</label>
-						<input type="password" class="form-control" v-model="user.password"/>
-					</div><!-- end col -->
-				</div><!-- end form-group -->
-				<div class="form-group">
-					<div class="col-xs-10  col-xs-offset-1">
-						<button type="submit" class="btn btn-primary btn-block" @click="attempt">
-							Login
-						</button>
-					</div><!-- end col -->
-				</div><!-- end form-group -->
-			</form><!-- end form -->
+			<template v-if="currentState==='login'">
+				<validator name="LoginForm">
+					<form class="form-horizontal" role="form" >
+						<div id="alerts" v-if="messages.length > 0">
+							<div v-for="message in messages" class="alert alert-{{ message.type }} alert-dismissible"
+								 role="alert">
+								{{ message.message }}
+							</div>
+						</div><!-- end alert -->
+						<div class="form-group" :class="{ 'has-error': checkForLoginError('email') }">
+							<div class="col-xs-10 col-xs-offset-1">
+								<label class="control-label">E-Mail Address</label>
+								<input type="email" class="form-control" v-model="user.email" v-validate:email="['email', 'required']" required/>
+							</div><!-- end col -->
+						</div><!-- end form-group -->
+						<div class="form-group" :class="{ 'has-error': checkForLoginError('password') }">
+							<div class="col-xs-10 col-xs-offset-1">
+								<label class="control-label">Password</label>
+								<input type="password" class="form-control" v-model="user.password" v-validate:password="{ required: true }" required/>
+							</div><!-- end col -->
+						</div><!-- end form-group -->
+						<div class="form-group">
+							<div class="col-xs-10 col-xs-offset-1">
+								<button type="submit" class="btn btn-primary btn-block" @click="attempt">Login</button>
+							</div><!-- end col -->
+						</div><!-- end form-group -->
+					</form><!-- end form -->
+				</validator>
+			</template>
+
 			<form class="form-horizontal" role="form" v-if="currentState==='reset'">
 				<div id="alerts" v-if="messages.length > 0">
 					<div v-for="message in messages" class="alert alert-{{ message.type }} alert-dismissible"
@@ -295,6 +298,7 @@
 		components: {vSelect},
 		data: function () {
 			return {
+				attemptedLogin: false,
 				currentState: 'login',
 				user: {
 					email: null,
@@ -333,47 +337,59 @@
 				this.newUser.country_code = _.isObject(val) ? val.code : null;
 			}
 		},
-		computed: {
-
-		},
-
+		computed: {},
 		methods: {
+			checkForLoginError(field){
+				// if user clicked continue button while the field is invalid trigger error styles
+				return this.$LoginForm[field.toLowerCase()].invalid && this.attemptedLogin
+			},
 			attempt: function (e) {
 				e.preventDefault();
-				var that = this;
-				that.$http.post('/login', this.user).then(
-						function (response) {
-							// reload to set cookie
-							if(this.isChildComponent) {
-								window.location.reload();
-							}
-							that.getUserData(response.data.redirect_to);
-						},
-						function (response) {
-							that.messages = [];
-							if (response.status && response.status === 401) that.messages.push({
-								type: 'danger',
-								message: 'Sorry, we couldn\'t find an account that matches the email and password you provided.'
-							});
+				this.attemptedLogin = true;
+				let that = this;
+				if (this.$LoginForm.valid) {
+					that.$http.post('/login', this.user).then(
+							function (response) {
+								console.log();
+								// set cookie - name, token
+								this.$cookie.set('api_token', response.data.token);
+								// reload to set cookie
+								/*if (this.isChildComponent) {
+									window.location.reload();
+								}*/
+								if (response.data.redirect_to)
+									that.getUserData(response.data.redirect_to);
+							},
+							function (response) {
+								that.messages = [];
+								if (response.status && response.status === 401) {
+									that.messages.push({
+										type: 'danger',
+										message: 'Sorry, we couldn\'t find an account that matches the email and password you provided.'
+									});
+								}
 
-							if (response.status && response.status === 422) {
-								that.messages = [{
-									type: 'danger',
-									message: 'Please enter a valid email and password.'
-								}]
+								if (response.status && response.status === 422) {
+									that.messages = [{
+										type: 'danger',
+										message: 'Please enter a valid email and password.'
+									}]
+								}
 							}
-						}
-				)
+					)
+				} else {
+					this.messages = [{type: 'warning', message: 'Please check the form'}];
+				}
 			},
 
-			getUserData: function (redirectTo) {
-				var that = this;
-				var deferred = $.Deferred();
-				that.$http.get('/api/users/me').then(
+			getUserData: function (redirectTo, ignoreRedirect) {
+				let that = this;
+				let deferred = $.Deferred();
+				that.$http.get('users/me').then(
 						function (response) {
 							that.$dispatch('userHasLoggedIn', response.data.data);
 
-							if (that.isChildComponent) {
+							if (that.isChildComponent || ignoreRedirect) {
 								that.userData = response.data.data;
 								deferred.resolve(response.data.data);
 							} else {
@@ -392,19 +408,25 @@
 			registerUser: function (e) {
 				e.preventDefault();
 				$.extend(this.newUser, {
-					dob: moment().set({year: this.newUser.dobYear, month: this.newUser.dobMonth, day:this.newUser.dobDay}).format('LL')
+					dob: moment().set({
+						year: this.newUser.dobYear,
+						month: this.newUser.dobMonth,
+						day: this.newUser.dobDay
+					}).format('LL')
 				});
 
-				this.$http.post('/api/register', this.newUser).then(function (response) {
+				this.$http.post('register', this.newUser).then(function (response) {
 					console.log(response.data.token);
+					// set cookie - name, token
+					this.$cookie.set('api_token', response.data.token);
 					// reload to set cookie
-					if(this.isChildComponent) {
+					/*if (this.isChildComponent) {
 						window.location.reload();
-					}
+					}*/
 					this.getUserData();
 				}, function (response) {
 					console.log(response);
-					var messages = [];
+					let messages = [];
 					_.each(response.data.errors, function (error) {
 						messages.push({
 							type: 'danger',

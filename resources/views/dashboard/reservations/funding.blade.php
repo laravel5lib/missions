@@ -26,7 +26,7 @@
                 </div><!-- end row -->
                 <div class="row">
                     <div class="col-sm-12">
-                        <reservation-funding id="{{ $reservation->id }}"></reservation-funding>
+                        <reservation-funding reservation-id="{{ $reservation->id }}" fund-id="{{ $reservation->fund->id }}"></reservation-funding>
                     </div>
                 </div>
             </div><!-- end panel-body -->

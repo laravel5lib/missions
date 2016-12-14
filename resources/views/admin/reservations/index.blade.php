@@ -29,7 +29,7 @@
                 <h3>Reservations</h3>
             </div>
             <div class="col-sm-4 text-center">
-                <a href="/admin/trips/create" class="btn btn-primary">New <i class="fa fa-plus"></i></a>
+                <a href="/admin/trips" class="btn btn-primary">New <i class="fa fa-plus"></i></a>
                 <hr class="divider inv sm">
             </div>
         </div>

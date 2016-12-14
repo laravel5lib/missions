@@ -144,7 +144,7 @@
 
                 var data = {
                     // reservation data
-                    given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
+                    given_names: this.userInfo.firstName,
                     surname: this.userInfo.lastName,
                     gender: this.userInfo.gender,
                     status: this.userInfo.relationshipStatus,
@@ -160,7 +160,7 @@
                     phone_two: this.userInfo.mobile,
                     user_id: this.userData.id,
 					trip_id: this.tripId,
-                    companion_lyimit: this.companion_limit,
+                    companion_limit: this.companion_limit,
                     costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static),
                 };
 
@@ -181,7 +181,8 @@
                 this.$http.post('reservations', data).then(function (response) {
                     this.$root.$emit('AdminTrip:RefreshReservations');
                     this.$refs.reservationspinner.hide();
-                    $('#addReservationModal').modal('hide');
+                    location.href = '/admin/reservations/' + response.data.data.id
+                    /*$('#addReservationModal').modal('hide');
                     $.extend(this, {
                         stepList:[
                             {name: 'Basic Info', view: 'step1', complete:false},
@@ -203,7 +204,7 @@
                         paymentInfo: {},
                         upfrontTotal: 0,
                         fundraisingGoal: 0
-                    })
+                    })*/
                 }, function (response) {
                     console.log(response);
                     this.$refs.reservationspinner.hide();

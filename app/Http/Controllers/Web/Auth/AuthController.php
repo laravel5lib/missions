@@ -78,13 +78,14 @@ class AuthController extends Controller
             $cookie = $this->makeApiTokenCookie($token);
 
             if ($request->ajax() || $request->wantsJson()) {
-                return response()->json(['redirect_to' => '/dashboard'])
+                return response()->json(['redirect_to' => '/dashboard', 'token' => sprintf('Bearer %s', $token)])
                                  ->withCookie($cookie);
             }
 
             return redirect()->intended('/dashboard')
                              ->withCookie($cookie);
         }
+        return response()->json(['error' => 'invalid_credentials'], 401);
     }
 
     /**
@@ -112,7 +113,7 @@ class AuthController extends Controller
         $cookie = $this->makeApiTokenCookie($token);
 
         if ($request->ajax() || $request->wantsJson()) {
-            return response()->json(['redirect_to' => '/dashboard'])
+            return response()->json(['redirect_to' => '/dashboard', 'token' => sprintf('Bearer %s', $token)])
                              ->withCookie($cookie);
         }
 

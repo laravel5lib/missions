@@ -1,5 +1,6 @@
 <template>
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
@@ -39,7 +40,7 @@
                 <form class="form-inline">
                     <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
                         <label>
-                            <input type="checkbox" v-model="includeManaging"> Include my group's reservations
+                            <input type="checkbox" v-model="includeManaging"> Include my group's projects
                         </label>
                     </div>
                     <div class="input-group input-group-sm">
@@ -74,19 +75,20 @@
                     </div>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <pagination :pagination.sync="pagination" :callback="getReservations"></pagination>
+                    <pagination :pagination.sync="pagination" :callback="getProjects"></pagination>
                 </div>
             </template>
 
-    <div class="col-xs-12" v-if="reservations.length < 1">
-        <p class="text-muted text-center"><em>No reservations found</em></p>
+            <div class="col-xs-12" v-if="reservations.length < 1">
+                <div class="alert alert-info">No reservations found</div>
+            </div>
+        </div>
     </div>
-</div>
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
     export default{
-        name: 'reservations-list',
+        name: 'user-projects-list',
         components: {vSelect},
         props: ['userId', 'type'],
         data(){
@@ -114,7 +116,7 @@
             'filters': {
                 handler: function (val) {
                     // console.log(val);
-                    this.getReservations();
+                    this.getProjects();
                 },
                 deep: true
             },
@@ -125,28 +127,28 @@
                 this.filters.campaign = val ? val.id : '';
             },
             'search': function (val, oldVal) {
-                this.getReservations();
+                this.getProjects();
             },
             'includeManaging': function (val, oldVal) {
-                this.getReservations();
+                this.getProjects();
             }
         },
         methods: {
             country(code){
                 return code;
             },
-            getReservations(){
+            getProjects(){
                 let params = {
-                    include: 'trip.campaign,trip.group',
+                    include:'sponsor,initiative',
                     search: this.search,
                     page: this.pagination.current_page
                 };
 
-                if (this.includeManaging) {
+                /*if (this.includeManaging) {
                     params.trip = this.trips;
                 } else {
                     params.user = new Array(this.userId);
-                }
+                }*/
 
                 switch (this.type) {
                     case 'active':
@@ -159,9 +161,11 @@
                 $.extend(params, this.filters);
 
 
-                this.$http.get('reservations', params).then(function (response) {
-                    this.reservations = response.data.data
+                this.$refs.spinner.show();
+                this.$http.get('projects', params).then(function (response) {
+                    this.reservations = response.data.data;
                     this.pagination = response.data.meta.pagination;
+                    this.$refs.spinner.hide();
                 });
             },
             getGroups(search, loading){
@@ -181,7 +185,7 @@
 
         },
         ready(){
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
+            this.$http.get('users/' + this.userId + '?include=facilitating,managing.projects').then(function (response) {
                 let user = response.data.data;
                 let managing = [];
 
@@ -199,7 +203,7 @@
                 }
             });
 
-            this.getReservations();
+            this.getProjects();
         }
     }
 </script>

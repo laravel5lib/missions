@@ -239,7 +239,7 @@ Vue.http.interceptors.push({
 
     response: function (response) {
         // Hide Spinners in all components where they exist
-        if (this.$refs.spinner) {
+        if (this.$refs.spinner && !_.isUndefined(this.$refs.spinner._started)) {
             this.$refs.spinner.hide();
         }
 

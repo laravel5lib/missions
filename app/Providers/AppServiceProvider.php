@@ -49,7 +49,8 @@ class AppServiceProvider extends ServiceProvider
             return new TransactionHandler(
                 $app->make('App\Models\v1\Transaction'),
                 $app->make('App\Services\PaymentGateway'),
-                $app->make('App\Models\v1\Donor')
+                $app->make('App\Models\v1\Donor'),
+                $app->make('App\Models\v1\Fund')
             );
         });
 

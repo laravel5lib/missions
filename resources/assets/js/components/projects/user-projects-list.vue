@@ -1,20 +1,13 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
 
-                <div class="form-group">
-                    <v-select class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-                              :value.sync="groupsArr" :options="groupOptions" label="name"
-                              placeholder="Filter Groups"></v-select>
-                </div>
-
                 <div class="form-group" v-if="!tripId">
-                    <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-                              :value.sync="campaignObj" :options="campaignOptions" label="name"
-                              placeholder="Filter by Campaign"></v-select>
+                    <v-select class="form-control" id="causeFilter" :debounce="250" :on-search="getCauses"
+                              :value.sync="causeObj" :options="causeOptions" label="name"
+                              placeholder="Filter by Cause"></v-select>
                 </div>
 
                 <div class="form-group">
@@ -54,23 +47,28 @@
                 </form>
                 <hr class="divider sm inv">
             </div>
-            <template v-if="reservations.length > 0">
-                <div class="col-xs-12 col-sm-6 col-md-4" v-for="reservation in reservations">
+            <div class="col-xs-12" style="position:relative">
+                <!--<spinner v-ref:spinner size="sm" text="Loading"></spinner>-->
+                <template v-if="projects.length > 0">
+                <div class="col-xs-12 col-sm-6 col-md-4" v-for="project in projects">
                     <div class="panel panel-default">
-                        <div class="panel-heading text-center" :class="'panel-' + reservation.trip.data.type">
-                            <h5 class="text-uppercase">{{ reservation.trip.data.type }}</h5>
+                        <div class="panel-heading text-center">
+                            <h5 class="text-uppercase">{{ project.initiative.data.type }}<br />
+                            <small>{{ project.initiative.data.cause.data.name }}</small></h5>
                         </div>
-                        <div class="panel-body text-center">
-                            <img :src="reservation.avatar" class="img-circle img-md">
+                        <div class="panel-body text-center" :class="'panel-' + project.initiative.data.type">
+                            <h4>{{ project.name }}</h4>
                             <hr class="divider inv sm">
-                            <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>
-                            <p class="text-capitalize small">{{ reservation.trip.data.group.data.name }}</p>
-                            <label style="margin-bottom:2px;">Campaign</label>
-                            <p class="text-capitalize small" style="margin-top:2px;">{{ reservation.trip.data.campaign.data.name }}</p>
+                            <!--<img :src="project.sponsor.data.avatar" class="img-circle img-md">-->
+                            <!--<hr class="divider inv sm">-->
+                            <label style="margin-bottom:2px;">Sponsor</label>
+                            <p class="text-capitalize small">{{ project.sponsor.data.name }}</p>
                             <label style="margin-bottom:2px;font-size:10px;">Country</label>
-                            <p class="text-capitalize small" style="margin-top:2px;">{{ reservation.country_name }}</p>
+                            <p class="text-capitalize small" style="margin-top:2px;">{{ project.initiative.data.country.name }}</p>
+                            <label style="margin-bottom:2px;">Raised</label>
+                            <p class="text-capitalize small" style="margin-top:2px;">{{ project.goal|currency}}</p>
                             <hr class="divider inv sm">
-                            <a class="btn btn-sm btn-primary" href="/dashboard/reservations/{{ reservation.id }}">View Reservation</a>
+                            <a class="btn btn-sm btn-primary" href="/dashboard/projects/{{ project.id }}">View Project</a>
                         </div>
                     </div>
                 </div>
@@ -78,9 +76,9 @@
                     <pagination :pagination.sync="pagination" :callback="getProjects"></pagination>
                 </div>
             </template>
-
-            <div class="col-xs-12" v-if="reservations.length < 1">
-                <div class="alert alert-info">No reservations found</div>
+            </div>
+            <div class="col-xs-12" v-if="projects.length < 1">
+                <div class="alert alert-info">No projects found</div>
             </div>
         </div>
     </div>
@@ -93,7 +91,7 @@
         props: ['userId', 'type'],
         data(){
             return {
-                reservations: [],
+                projects: [],
                 pagination: { current_page: 1},
                 trips: [],
                 includeManaging: false,
@@ -102,11 +100,11 @@
                 isFacilitator: false,
                 groupsArr: [],
                 groupOptions: [],
-                campaignObj: null,
-                campaignOptions: [],
+                causeObj: null,
+                causeOptions: [],
                 filters: {
                     groups: '',
-                    campaign: '',
+                    cause: '',
                     type: ''
                 }
             }
@@ -123,8 +121,8 @@
             'groupsArr': function (val) {
                 this.filters.groups = _.pluck(val, 'id')||'';
             },
-            'campaignObj': function (val) {
-                this.filters.campaign = val ? val.id : '';
+            'causeObj': function (val) {
+                this.filters.cause = val ? val.id : '';
             },
             'search': function (val, oldVal) {
                 this.getProjects();
@@ -139,7 +137,7 @@
             },
             getProjects(){
                 let params = {
-                    include:'sponsor,initiative',
+                    include:'sponsor,initiative.cause',
                     search: this.search,
                     page: this.pagination.current_page
                 };
@@ -161,11 +159,11 @@
                 $.extend(params, this.filters);
 
 
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('projects', params).then(function (response) {
-                    this.reservations = response.data.data;
+                    this.projects = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             getGroups(search, loading){
@@ -175,10 +173,10 @@
                     loading ? loading(false) : void 0;
                 })
             },
-            getCampaigns(search, loading){
+            getCauses(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('campaigns', { search: search}).then(function (response) {
-                    this.campaignOptions = response.data.data;
+                this.$http.get('causes', { search: search}).then(function (response) {
+                    this.causeOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -203,6 +201,7 @@
                 }
             });
 
+            this.getCauses();
             this.getProjects();
         }
     }

@@ -39,17 +39,22 @@ class UtilitiesController extends Controller
 
     public function  sendContactEmail(Request $request)
     {
-        $data = collect([
-            'from' => $request->get('from'),
+        $data = [
+            'email' => $request->get('email'),
             'name' => $request->get('name'),
             'organization' => $request->get('organization'),
             'phone_one' => $request->get('phone_one'),
             'comments' => $request->get('comments'),
-        ]);
+        ];
 
         Mail::queue('emails.contact', ['data' => $data], function ($m) use ($data) {
             $m->to('go@missions.me', 'Missions.me')->subject('Contact from Missions.Me Visitor!');
         });
 
+    }
+
+    public function getPastTrips()
+    {
+       return config('accolades.trips');
     }
 }

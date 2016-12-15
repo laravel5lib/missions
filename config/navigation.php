@@ -42,6 +42,10 @@ return [
                 'url' => 'medical-releases'
             ],
             [
+                'label' => 'Referrals',
+                'url' => 'referrals'
+            ],
+            [
                 'label' => 'Essays',
                 'url' => 'essays'
             ]

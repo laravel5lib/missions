@@ -20,13 +20,21 @@ class UserTableSeeder extends Seeder
             ]);
             $user->stories()->saveMany(factory(App\Models\v1\Story::class, 3)->make(['author_id' => $user->id, 'author_type' => 'users']));
             $user->accolades()->save(factory(App\Models\v1\Accolade::class)->make());
+            $user->accolades()->save(factory(App\Models\v1\Accolade::class, 'trip_history')->make());
             $user->essays()->save(factory(App\Models\v1\Essay::class)->make());
+            $user->passports()->save(factory(App\Models\v1\Passport::class)->make());
+            $user->visas()->save(factory(App\Models\v1\Visa::class)->make());
+            $user->referrals()->save(factory(App\Models\v1\Referral::class)->make());
         });
         factory(App\Models\v1\User::class, 'joe')->create();
         factory(App\Models\v1\User::class, config('seeders.users'))->create()->each(function($user) {
             $user->stories()->saveMany(factory(App\Models\v1\Story::class, 2)->make(['author_id' => $user->id, 'author_type' => 'users']));
             $user->accolades()->save(factory(App\Models\v1\Accolade::class)->make());
+            $user->accolades()->save(factory(App\Models\v1\Accolade::class, 'trip_history')->make());
             $user->essays()->save(factory(App\Models\v1\Essay::class)->make());
+            $user->passports()->save(factory(App\Models\v1\Passport::class)->make());
+            $user->visas()->save(factory(App\Models\v1\Visa::class)->make());
+            $user->referrals()->save(factory(App\Models\v1\Referral::class)->make());
         });
     }
 }

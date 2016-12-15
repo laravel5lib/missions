@@ -1,5 +1,6 @@
 <template>
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <template v-if="isManager()">
             <div class="row hidden-xs">
                 <div class="col-sm-8">
@@ -172,9 +173,11 @@
                     story.author_type = 'users';
                     story.publications = [{ type: 'users', id: this.id }];
 
+                    // this.$refs.spinner.show();
                     this.$http.put('stories/' + story.id, story).then(function (response) {
                         this.editMode = false;
                         this.resetData();
+                        // this.$refs.spinner.hide();
                         return response.data.data;
                         //this.searchStories();
                     });
@@ -185,16 +188,21 @@
                     story.author_id = this.authId;
                     story.author_type = 'users';
 
+                    // this.$refs.spinner.show();
                     this.$http.post('stories', story).then(function (response) {
                         this.newMode = false;
                         this.resetData();
                         this.searchStories();
+                        // this.$refs.spinner.hide();
                     }, function (response) {
+                        // this.$refs.spinner.hide();
+                        //TODO add error alert
                         debugger;
                     });
                 }
             },
             searchStories(){
+                // this.$refs.spinner.show();
                 this.$http.get('stories', {
                     group: this.id,
                     page: this.pagination.current_page,
@@ -202,6 +210,7 @@
                 }).then(function(response) {
                     this.stories = response.data.data;
                     this.pagination = response.data.meta.pagination;
+                    // this.$refs.spinner.hide();
                 });
             },
             resetData(){

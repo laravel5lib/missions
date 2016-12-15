@@ -12,22 +12,21 @@ class Referral extends Model
     
     protected $table = 'referrals';
 
-    protected $fillable = [
-        'name', 'user_id', 'referral_name', 'referral_email', 'referral_phone',
-        'status', 'response_type', 'response_id', 'sent_at'
-    ];
+    protected $guarded = [];
 
     protected $hidden = [];
 
     protected $dates = ['created_at', 'updated_at', 'sent_at'];
 
+    protected $casts = ['response' => 'json'];
+
+    public function setResponseAttribute($value)
+    {
+        $this->attributes['response'] = json_encode($value);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function response()
-    {
-        return $this->morphTo();
     }
 }

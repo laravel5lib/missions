@@ -1,7 +1,8 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="CreateUser" :groups="['passwordGroup']">
-        <form id="CreateUserForm" class="form-horizontal" novalidate>
-            <div class="row" :class="{ 'has-error': checkForError('name') }">
+        <form id="CreateUserForm" class="form-horizontal" novalidate style="position:relative;">
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <div class="form-group" :class="{ 'has-error': checkForError('name') }">
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"

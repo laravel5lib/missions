@@ -387,7 +387,7 @@
 
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.$dispatch('showError', 'Unable to retrieve transaction.');
+                    this.$root.$emit('showError', 'Unable to retrieve transaction.');
                 });
             },
             create() {
@@ -397,11 +397,11 @@
 
                 this.$http.post('transactions', data).then(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.$dispatch('showSuccess', 'Transaction successfully created.');
-                    this.$dispatch('transactionCreated');
+                    this.$root.$emit('showSuccess', 'Transaction successfully created.');
+                    this.$root.$emit('transactionCreated');
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.$dispatch('showError', 'There are errors on the form.');
+                    this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
             update() {
@@ -411,10 +411,10 @@
 
                 this.$http.put('transactions/' + this.id, data).then(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.$dispatch('showSuccess', 'Transaction updated successfully.');
+                    this.$root.$emit('showSuccess', 'Transaction updated successfully.');
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.$dispatch('showError', 'There are errors on the form.');
+                    this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
             prepareData() {

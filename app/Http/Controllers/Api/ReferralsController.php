@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use App\Http\Requests\v1\ReferralRequest;
 use App\Http\Transformers\v1\ReferralTransformer;
 use App\Models\v1\Referral;
@@ -24,8 +23,6 @@ class ReferralsController extends Controller
      */
     public function __construct(Referral $referral)
     {
-        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
         $this->referral = $referral;
     }
 
@@ -37,12 +34,9 @@ class ReferralsController extends Controller
      */
     public function index(Request $request)
     {
-        $referrals = $this->referral;
-
-        if($request->has('user_id'))
-            $referrals = $referrals->where('user_id', $request->get('user_id'));
-
-        $referrals = $referrals->paginate($request->get('per_page', 25));
+        $referrals = $this->referral
+                        ->filter($request->all())
+                        ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($referrals, new ReferralTransformer);
     }
@@ -68,9 +62,16 @@ class ReferralsController extends Controller
      */
     public function store(ReferralRequest $request)
     {
-        $referral = new Referral($request->all);
-        $referral->sent_at = Carbon::now();
-        $referral->save();
+        $referral = Referral::create([
+            'user_id' => $request->get('user_id'),
+            'name' => $request->get('name'),
+            'type' => $request->get('type'),
+            'referral_name' => $request->get('referral_name'),
+            'referral_email' => $request->get('referral_email'),
+            'referral_phone' => $request->get('referral_phone'),
+            'status' => 'sent',
+            'sent_at' => Carbon::now()
+        ]);
 
         // generate a url to response form
         // email url to referral_email
@@ -91,7 +92,16 @@ class ReferralsController extends Controller
     {
         $referral = $this->referral->findOrFail($id);
 
-        $referral->update($request->all());
+        $referral->update([
+            'user_id' => $request->get('user_id', $referral->user_id),
+            'name' => $request->get('name', $referral->name),
+            'type' => $request->get('type', $referral->type),
+            'referral_name' => $request->get('referral_name', $referral->referral_name),
+            'referral_email' => $request->get('referral_email', $referral->referral_email),
+            'referral_phone' => $request->get('referral_phone', $referral->referral_phone),
+            'status' => $request->get('status', $referral->status),
+            'sent_at' => $request->get('sent_at', $referral->sent_at)
+        ]);
 
         return $this->response->item($referral, new ReferralTransformer);
     }

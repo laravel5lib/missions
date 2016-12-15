@@ -426,6 +426,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get all the user's referrals.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function referrals()
+    {
+        return $this->hasMany(Referral::class);
+    }
+
+    /**
      * Get all the user's contacts.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

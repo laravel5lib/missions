@@ -1,7 +1,7 @@
-`
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <div>
-        <div class="panel panel-default" data-aos="fade-up">
+    <div style="position:relative;">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<div class="panel panel-default" data-aos="fade-up">
             <div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-8">

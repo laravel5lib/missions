@@ -90,20 +90,20 @@
         },
         methods: {
             getCause() {
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('causes/' + this.causeId).then(function (response) {
                     this.cause  = response.data.data;
                     this.countries = this.cause.countries;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             fetch () {
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 this.$http.get('initiatives/' + this.id, {include: 'cause'}).then(function (response) {
                     this.cause = response.data.data.cause.data;
                     this.countries = response.data.data.cause.data.countries;
                     this.initiative = _.omit(response.data.data, 'cause');
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 });
             },
             save() {

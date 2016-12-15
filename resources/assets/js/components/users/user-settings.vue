@@ -1,6 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="UserSettings" @touched="onTouched">
-        <form id="UserSettingsForm" class="" novalidate>
+        <form id="UserSettingsForm" class="" novalidate style="position:relative;">
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="row">
                 <div class="col-sm-6">
                     <div class="panel panel-default">
@@ -555,6 +556,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$UserSettings.valid) {
+                    // this.$refs.spinner.show();
                     this.resource.update({id: this.userId}, {
                         name: this.name,
                         email: this.email,
@@ -604,11 +606,12 @@
                         this.setUserData(response.data.data);
                         this.showSuccess = true;
                         this.hasChanged = false;
-
+                        // this.$refs.spinner.hide();
                     }, function (error) {
                         console.log(error);
                         this.errors = error.data.errors;
                         this.showError = true;
+                        // this.$refs.spinner.hide();
                     });
                 } else {
                     this.showError = true;
@@ -659,6 +662,7 @@
             }
         },
         ready(){
+            // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.data.countries;
             });
@@ -672,6 +676,7 @@
             }, function (response) {
                 console.log('Update Failed! :(');
                 console.log(response);
+                // this.$refs.spinner.hide();
             });
 
             this.$root.$on('save-settings', function () {

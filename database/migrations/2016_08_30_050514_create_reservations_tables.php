@@ -29,6 +29,7 @@ class CreateReservationsTables extends Migration
             $table->string('zip', 15)->nullable();
             $table->string('country_code', 2)->default('us');
             $table->string('arrival_designation')->nullable();
+            $table->json('airport_preference')->nullable();
             $table->uuid('user_id')->index();
             $table->uuid('trip_id')->index();
             $table->uuid('rep_id')->index()->nullable();

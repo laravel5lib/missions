@@ -1,60 +1,63 @@
 <template>
-    <div v-if="display && donors.length > 0">
-        <div class="btn-group btn-group-sm" role="group" aria-label="...">
-            <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donors'}" @click="toggleView('donors')">Donors</button>
-            </div>
-            <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donations'}" @click="toggleView('donations')">Donations</button>
-            </div>
-        </div>
-
-        <hr class="divider inv sm">
-        <template v-if="activeView==='donors'">
-            <div class="panel panel-default" v-for="donor in donors">
-                <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
-                    <h5>
-                        <a role="button">
-                            {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
-                        </a>
-                    </h5>
+    <div style="position:relative">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <div v-if="display && donors.length > 0">
+            <div class="btn-group btn-group-sm" role="group" aria-label="...">
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donors'}" @click="toggleView('donors')">Donors</button>
+                </div>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donations'}" @click="toggleView('donations')">Donations</button>
                 </div>
             </div>
-        </template>
 
-        <template v-if="activeView === 'donations'">
-            <div class="panel panel-default" v-for="donation in donations">
-                <div class="panel-heading" role="tab" id="heading-{{ donation.id }}">
-                    <h5>
-                        <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
-                        <small class="small">by <a :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>
-                        <br /><small>{{ donation.details.comment }}</small>
-                    </h5>
+            <hr class="divider inv sm">
+            <template v-if="activeView==='donors'">
+                <div class="panel panel-default" v-for="donor in donors">
+                    <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
+                        <h5>
+                            <a role="button">
+                                {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
+                            </a>
+                        </h5>
+                    </div>
                 </div>
-            </div>
-        </template>
+            </template>
+
+            <template v-if="activeView === 'donations'">
+                <div class="panel panel-default" v-for="donation in donations">
+                    <div class="panel-heading" role="tab" id="heading-{{ donation.id }}">
+                        <h5>
+                            <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
+                            <small class="small">by <a :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>
+                            <br /><small>{{ donation.details.comment }}</small>
+                        </h5>
+                    </div>
+                </div>
+            </template>
 
 
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <nav>
-                    <ul class="pagination pagination-sm">
-                        <li>
-                            <a>{{ pagination.total }} {{ activeView === 'donors' ? 'Donors' : 'Donations' }}</a>
-                        </li>
-                        <li :class="{ 'disabled': pagination.current_page == 1 }">
-                            <a aria-label="Previous" @click="page=pagination.current_page-1">
-                                <span aria-hidden="true">&laquo; Back</span>
-                            </a>
-                        </li>
-                        <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-                        <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                            <a aria-label="Next" @click="page=pagination.current_page+1">
-                                <span aria-hidden="true">Next &raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <nav>
+                        <ul class="pagination pagination-sm">
+                            <li>
+                                <a>{{ pagination.total }} {{ activeView === 'donors' ? 'Donors' : 'Donations' }}</a>
+                            </li>
+                            <li :class="{ 'disabled': pagination.current_page == 1 }">
+                                <a aria-label="Previous" @click="page=pagination.current_page-1">
+                                    <span aria-hidden="true">&laquo; Back</span>
+                                </a>
+                            </li>
+                            <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
+                            <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
+                                <a aria-label="Next" @click="page=pagination.current_page+1">
+                                    <span aria-hidden="true">Next &raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>

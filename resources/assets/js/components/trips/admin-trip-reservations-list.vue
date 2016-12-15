@@ -21,60 +21,63 @@
             </div>
         </div>
         <hr>
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th :class="{'text-primary': orderByField === 'user.data.name'}">
-                    User
-                    <i @click="setOrderByField('user.data.name')" v-if="orderByField !== 'user.data.name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'user.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th :class="{'text-primary': orderByField === 'type'}">
-                    Email
-                    <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th :class="{'text-primary': orderByField === 'campaign.data.name'}">
-                    Phone
-                    <i @click="setOrderByField('campaign.data.name')" v-if="orderByField !== 'campaign.data.name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th :class="{'text-primary': orderByField === 'status'}">
-                    Status
-                    <i @click="setOrderByField('status')" v-if="orderByField !== 'status'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'status'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th>
-                    Start &amp; End
-                </th>
-                <th><i class="fa fa-plane"></i></th>
-                <th><i class="fa fa-cog"></i></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
-                <td>{{reservation.given_names|capitalize}} {{reservation.surname|capitalize}}</td>
-                <td>{{reservation.user.data.email}}</td>
-                <td>{{reservation.user.data.phone_one}}</td>
-                <td>{{reservation.status}}</td>
-                <td>{{reservation.created_at|moment 'll'}}</td>
-                <td>View</td>
-                <td>
-                    <a href="/admin{{reservation.links[0].uri}}"><i class="fa fa-eye"></i></a>
-                    <!--<a href="/admin{{campaignId + reservation.links[0].uri}}/edit"><i class="fa fa-pencil"></i></a>-->
-                </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="7">
-                    <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" :callback="searchReservations"></pagination>
-                    </div>
-                </td>
-            </tr>
-            </tfoot>
-        </table>
+        <div style="position:relative">
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th :class="{'text-primary': orderByField === 'user.data.name'}">
+                        User
+                        <i @click="setOrderByField('user.data.name')" v-if="orderByField !== 'user.data.name'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'user.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'type'}">
+                        Email
+                        <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'campaign.data.name'}">
+                        Phone
+                        <i @click="setOrderByField('campaign.data.name')" v-if="orderByField !== 'campaign.data.name'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th :class="{'text-primary': orderByField === 'status'}">
+                        Status
+                        <i @click="setOrderByField('status')" v-if="orderByField !== 'status'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'status'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th>
+                        Start &amp; End
+                    </th>
+                    <th><i class="fa fa-plane"></i></th>
+                    <th><i class="fa fa-cog"></i></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
+                    <td>{{reservation.given_names|capitalize}} {{reservation.surname|capitalize}}</td>
+                    <td>{{reservation.user.data.email}}</td>
+                    <td>{{reservation.user.data.phone_one}}</td>
+                    <td>{{reservation.status}}</td>
+                    <td>{{reservation.created_at|moment 'll'}}</td>
+                    <td>View</td>
+                    <td>
+                        <a href="/admin{{reservation.links[0].uri}}"><i class="fa fa-eye"></i></a>
+                        <!--<a href="/admin{{campaignId + reservation.links[0].uri}}/edit"><i class="fa fa-pencil"></i></a>-->
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="7">
+                        <div class="col-sm-12 text-center">
+                            <pagination :pagination.sync="pagination" :callback="searchReservations"></pagination>
+                        </div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 </template>
 <script type="text/javascript">

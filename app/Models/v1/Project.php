@@ -49,6 +49,26 @@ class Project extends Model
     }
 
     /**
+     * Get the projects user sponsor.
+     *
+     * @return mixed
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'sponsor_id')->where('sponsor_type', 'users');
+    }
+
+    /**
+     * Get the projects group sponsor.
+     *
+     * @return mixed
+     */
+    public function group()
+    {
+        return $this->belongsTo(Group::class, 'sponsor_id')->where('sponsor_type', 'groups');
+    }
+
+    /**
      * Get the project's initiative.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

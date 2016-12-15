@@ -1,5 +1,5 @@
 <template>
-    <div>
+	<div>
 		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
@@ -96,8 +96,8 @@
 		</aside>
 
 		<div class="row">
-            <div class="col-sm-12">
-                <form class="form-inline" novalidate>
+			<div class="col-sm-12">
+				<form class="form-inline" novalidate>
                 	<div class="form-inline" style="display: inline-block;">
                     	<div class="form-group">
 	                        <label>Show</label>
@@ -240,97 +240,100 @@
 			</span>
 		</div>
         <hr class="divider sm">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th v-if="isActive('given_names')" :class="{'text-primary': orderByField === 'given_names'}">
-                    Given Names
-                    <i @click="setOrderByField('given_names')" v-if="orderByField !== 'given_names'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'given_names'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('surname')" :class="{'text-primary': orderByField === 'surname'}">
-                    Surname
-                    <i @click="setOrderByField('surname')" v-if="orderByField !== 'surname'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'surname'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('group')" :class="{'text-primary': orderByField === 'trip.data.group.data.name'}">
-                    Group
-                    <i @click="setOrderByField('trip.data.group.data.name')" v-if="orderByField !== 'trip.data.group.data.name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.group.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('campaign')" :class="{'text-primary': orderByField === 'trip.data.campaign.data.name'}">
-                    Campaign
-                    <i @click="setOrderByField('trip.data.campaign.data.name')" v-if="orderByField !== 'trip.data.campaign.data.name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('type')" :class="{'text-primary': orderByField === 'trip.data.type'}">
-                    Type
-                    <i @click="setOrderByField('trip.data.type')" v-if="orderByField !== 'trip.data.type'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('total_raised')" :class="{'text-primary': orderByField === 'total_raised'}">
-                    $ Raised
-                    <i @click="setOrderByField('total_raised')" v-if="orderByField !== 'total_raised'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'total_raised'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('percent_raised')" :class="{'text-primary': orderByField === 'percent_raised'}">
-                    % Raised
-                    <i @click="setOrderByField('percent_raised')" v-if="orderByField !== 'percent_raised'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'percent_raised'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('registered')">
-                    Registered On
-                </th>
-                <th v-if="isActive('gender')">
-                    Gender
-                </th>
-                <th v-if="isActive('status')">
-                    Status
-                </th>
-                <th v-if="isActive('age')">
-                    Age
-                </th>
-                <th v-if="isActive('email')">
-                    Email
-                </th>
-                <th><i class="fa fa-cog"></i></th>
-            </tr>
-            </thead>
-            <tbody v-if="reservations.length > 0">
-            <tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
-                <td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
-                <td v-if="isActive('surname')" v-text="reservation.surname"></td>
-                <td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
-                <td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
-                <td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
-                <td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
-                <td v-if="isActive('percent_raised')">{{reservation.percent_raised|number '2'}}%</td>
-                <td v-if="isActive('registered')" v-text="reservation.created_at|moment 'll'"></td>
-                <td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
-                <td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
-                <td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
-                <td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
-                <td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
-            </tr>
-            </tbody>
-			<tbody v-else>
+		<div>
+			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+			<table class="table table-striped">
+				<thead>
+				<tr>
+					<th v-if="isActive('given_names')" :class="{'text-primary': orderByField === 'given_names'}">
+						Given Names
+						<i @click="setOrderByField('given_names')" v-if="orderByField !== 'given_names'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'given_names'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+					</th>
+					<th v-if="isActive('surname')" :class="{'text-primary': orderByField === 'surname'}">
+						Surname
+						<i @click="setOrderByField('surname')" v-if="orderByField !== 'surname'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'surname'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+					</th>
+					<th v-if="isActive('group')" :class="{'text-primary': orderByField === 'trip.data.group.data.name'}">
+						Group
+						<i @click="setOrderByField('trip.data.group.data.name')" v-if="orderByField !== 'trip.data.group.data.name'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'trip.data.group.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+					</th>
+					<th v-if="isActive('campaign')" :class="{'text-primary': orderByField === 'trip.data.campaign.data.name'}">
+						Campaign
+						<i @click="setOrderByField('trip.data.campaign.data.name')" v-if="orderByField !== 'trip.data.campaign.data.name'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'trip.data.campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+					</th>
+					<th v-if="isActive('type')" :class="{'text-primary': orderByField === 'trip.data.type'}">
+						Type
+						<i @click="setOrderByField('trip.data.type')" v-if="orderByField !== 'trip.data.type'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'trip.data.type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+					</th>
+					<th v-if="isActive('total_raised')" :class="{'text-primary': orderByField === 'total_raised'}">
+						$ Raised
+						<i @click="setOrderByField('total_raised')" v-if="orderByField !== 'total_raised'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'total_raised'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+					</th>
+					<th v-if="isActive('percent_raised')" :class="{'text-primary': orderByField === 'percent_raised'}">
+						% Raised
+						<i @click="setOrderByField('percent_raised')" v-if="orderByField !== 'percent_raised'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'percent_raised'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+					</th>
+					<th v-if="isActive('registered')">
+						Registered On
+					</th>
+					<th v-if="isActive('gender')">
+						Gender
+					</th>
+					<th v-if="isActive('status')">
+						Status
+					</th>
+					<th v-if="isActive('age')">
+						Age
+					</th>
+					<th v-if="isActive('email')">
+						Email
+					</th>
+					<th><i class="fa fa-cog"></i></th>
+				</tr>
+				</thead>
+				<tbody v-if="reservations.length > 0">
+				<tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
+					<td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
+					<td v-if="isActive('surname')" v-text="reservation.surname"></td>
+					<td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
+					<td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
+					<td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
+					<td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
+					<td v-if="isActive('percent_raised')">{{reservation.percent_raised|number '2'}}%</td>
+					<td v-if="isActive('registered')" v-text="reservation.created_at|moment 'll'"></td>
+					<td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
+					<td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
+					<td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
+					<td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
+					<td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
+				</tr>
+				</tbody>
+				<tbody v-else>
 				<tr>
 					<td colspan="10" class="text-center text-muted">
 						No reservations found.
 					</td>
 				</tr>
-			</tbody>
-            <tfoot>
-            <tr>
-                <td colspan="10" class="text-center">
-					<pagination :pagination.sync="pagination"
-								:callback="searchReservations"
-								size="small">
-					</pagination>
-                </td>
-            </tr>
-            </tfoot>
-        </table>
+				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="10" class="text-center">
+						<pagination :pagination.sync="pagination"
+									:callback="searchReservations"
+									size="small">
+						</pagination>
+					</td>
+				</tr>
+				</tfoot>
+			</table>
+		</div>
 		<modal title="Export Reservations List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
 			<div slot="modal-body" class="modal-body">
 				<ul class="list-unstyled">
@@ -507,7 +510,7 @@
 //				this.searchReservations();
 			},
 			'tagsString': function (val) {
-				var tags = val.split(/[\s,]+/);
+				let tags = val.split(/[\s,]+/);
 				this.filters.tags = tags[0] !== '' ? tags : '';
 				this.searchReservations();
 			},
@@ -612,7 +615,7 @@
                 return moment().diff(birthday, 'years')
             },
 			getListSettings(){
-				var params = {
+				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
 					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
 					search: this.search,
@@ -641,16 +644,19 @@
 				return params;
 			},
             searchReservations(){
-            	var params = this.getListSettings();
-                this.$http.get('reservations', params).then(function (response) {
-                    var self = this;
+            	let params = this.getListSettings();
+				// this.$refs.spinner.show();
+				this.$http.get('reservations', params).then(function (response) {
+                    let self = this;
                     _.each(response.data.data, function (reservation) {
                         reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
                     }, this);
                     this.reservations = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                }).then(function () {
+					// this.$refs.spinner.hide();
+				}).then(function () {
 					this.updateConfig();
+					// this.$refs.spinner.hide();
 				})
             },
 			getGroups(search, loading){
@@ -675,7 +681,7 @@
 				})
 			},
 			exportList(){
-				var params = this.getListSettings();
+				let params = this.getListSettings();
 				$.extend(params, this.exportSettings);
 				// Send to api route
 
@@ -689,7 +695,7 @@
         ready(){
             // load view state
 			if (localStorage[this.storageName]) {
-				var config = JSON.parse(localStorage[this.storageName]);
+				let config = JSON.parse(localStorage[this.storageName]);
 				this.activeFields = config.activeFields;
 				this.maxActiveFields = config.maxActiveFields;
 				this.filters = config.filters;
@@ -701,7 +707,7 @@
 			// assign values from url search
 			if (window.location.search !== '') {
 				_.each(location.search.substr(1).split('&'), function (search) {
-					var arr = search.split('=');
+					let arr = search.split('=');
 					switch (arr[0]) {
 						case 'campaign':
 							this.$http.get('campaigns/' + arr[1]).then(function (response) {
@@ -716,9 +722,9 @@
 
 			//Manually handle dropdown functionality to keep dropdown open until finished
 			$('.form-toggle-menu .dropdown-menu').on('click', function(event){
-				var events = $._data(document, 'events') || {};
+				let events = $._data(document, 'events') || {};
 				events = events.click || [];
-				for(var i = 0; i < events.length; i++) {
+				for(let i = 0; i < events.length; i++) {
 					if(events[i].selector) {
 
 						//Check if the clicked element matches the event selector

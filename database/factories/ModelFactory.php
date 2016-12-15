@@ -561,7 +561,47 @@ $factory->define(App\Models\v1\MedicalAllergy::class, function (Faker\Generator 
 /**
  * Referral Factory
  */
-
+$factory->define(App\Models\v1\Referral::class, function (Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->firstName,
+        'type' => 'pastoral',
+        'referral_name' => $faker->name,
+        'referral_phone' => $faker->phoneNumber,
+        'referral_email' => $faker->email,
+        'status' => 'sent',
+        'response' => [
+            [
+                'q' => 'How Long have you known the applicant?',
+                'a' => ''
+            ],
+            [
+                'q' => 'Please list any current roles the applicant serves in at your church:',
+                'a' => ''
+            ],
+            [
+                'q' => 'To the best of your knowledge, what is the current state of the applicant\'s spiritual walk?',
+                'a' => ''
+            ],
+            [
+                'q' => 'Do you have any reservations about sending this applicant into a foreign nation where spiritual, physical, and social endurance is tested?',
+                'a' => ''
+            ],
+            [
+                'q' => 'What are the applicant\'s significant strengths?',
+                'a' => ''
+            ],
+            [
+                'q' => 'What are the applicant\'s significant weaknesses?',
+                'a' => ''
+            ],
+            [
+                'q' => 'Would you recommend this applicant for a leadership role with Missions.me? If so, why?',
+                'a' => ''
+            ]
+        ]
+    ];
+});
 
 /**
  * Interaction/Decision Factory
@@ -807,6 +847,17 @@ $factory->define(App\Models\v1\Accolade::class, function(Faker\Generator $faker)
         'display_name' => 'Countries Visited',
         'name'         => 'countries_visited',
         'items'        => $faker->randomElements($countries, 4)
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Accolade::class, 'trip_history', function(Faker\Generator $faker)
+{
+    $trips = config('accolades.trips');
+
+    return [
+        'display_name' => 'Trip History',
+        'name'         => 'trip_history',
+        'items'        => $faker->randomElements($trips, 4)
     ];
 });
 

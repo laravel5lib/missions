@@ -1,26 +1,33 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width"/>
-</head>
-<body style="background:#f7f7f7;">
-<div style="margin:20px 20px 0px;background:#fff;border-radius: 4px 4px 0px 0px;">
-    <h3>Contact Form Submission</h3>
-</div>
-<div style="margin:0px 20px 0px;background:#fff;border-top:1px solid #f7f7f7;border-bottom:1px solid #f7f7f7;padding: 40px 80px;">
-    <dl>
-        <dt>Name</dt>
-        <dd>{{ $data['name'] }}</dd>
-        <dt>Organization</dt>
-        <dd>{{ $data['organization'] }}</dd>
-        <dt>From</dt>
-        <dd>{{ $data['from'] }}</dd>
-        <dt>Phone</dt>
-        <dd>{{ $data['phone_one'] }}</dd>
-        <dt>Comments</dt>
-        <dd>{{ $data['comments'] }}</dd>
-    </dl>
-</div>
-</body>
-</html>
+@extends('emails.layouts.default')
+
+@section('content')
+
+    <h3 style="color: #242424;font-family:Helvetica, Arial, sans-serif;color:#242424;">New Contact</h3>
+
+    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;">Missions.Me has received a new online contact. Please review the contact's information below and follow up.</p>
+
+    <table style="border-collapse: collapse;font-size:12px;color: #242424;font-family:Helvetica, Arial, sans-serif;border: 2px solid #e6e6e6;">
+        <tbody>
+        <tr>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Name:</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $data['name'] }}</td>
+        </tr>
+        <tr>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Organization:</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $data['organization'] }}</td>
+        </tr>
+        <tr>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Email:</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $data['email'] }}</td>
+        </tr>
+        <tr>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Phone:</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $data['phone_one'] }}</td>
+        </tr>
+        <tr>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">Comments/Questions:</td>
+            <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">{{ $data['comments'] }}</td>
+        </tr>
+        </tbody>
+    </table>
+@endsection

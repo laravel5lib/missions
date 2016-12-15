@@ -21,7 +21,7 @@
         </div>
     </section>
 </template>
-<script>
+<script type="text/javascript">
     import fundEditor from '../funds/fund-editor.vue';
     import transactionForm from '../transactions/transaction-form.vue';
     import adminTransactionsList from '../transactions/admin-transactions-list.vue';
@@ -35,7 +35,7 @@
         },
         data(){
             return{
-                msg:'hello vue'
+
             }
         },
         components:{

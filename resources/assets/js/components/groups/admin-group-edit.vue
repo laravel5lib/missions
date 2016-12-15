@@ -1,5 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="UpdateGroup" @touched="onTouched">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <form id="UpdateGroupForm" class="form-horizontal" novalidate>
             <div class="row form-group" :class="{ 'has-error': checkForError('name') }">
                 <div class="col-sm-12">
@@ -148,7 +149,7 @@
         </form>
     </validator>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from "vue-select";
     export default{
         name: 'group-edit',
@@ -216,7 +217,8 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$UpdateGroup.valid) {
-                    var formData = this.data;
+                    let formData = this.data;
+                    // this.$refs.spinner.show();
                     this.resource.update({id: this.groupId}, {
                         name: this.name,
                         description: this.description,
@@ -235,12 +237,16 @@
                         url: this.url,
                         email: this.email
                     }).then(function (resp) {
+                        //TODO switch to universal alerts
                         this.showSuccess = true;
                         this.hasChanged = false;
+                        // this.$refs.spinner.hide();
                     }, function (error) {
                         console.log(error);
                         this.showError = true;
+                        // this.$refs.spinner.hide();
                         debugger;
+                        //TODO add error alert
                     });
                 } else {
                     this.showError = true;
@@ -248,6 +254,7 @@
             }
         },
         ready() {
+            // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.data.countries;
             });
@@ -257,7 +264,7 @@
             });
 
             this.resource.get({id: this.groupId}).then(function (response) {
-                var group = response.data.data;
+                let group = response.data.data;
                 this.name = group.name;
                 this.description = group.description;
                 this.type = group.type;
@@ -275,9 +282,12 @@
                 this.status = group.status;
                 this.url = group.url;
                 this.email = group.email;
+                // this.$refs.spinner.hide();
             }, function (response) {
                 console.log('Update Failed! :(');
                 console.log(response);
+                // this.$refs.spinner.hide();
+                //TODO add error alert
             });
         }
     }

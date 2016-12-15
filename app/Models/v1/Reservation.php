@@ -61,6 +61,23 @@ class Reservation extends Model
     public $timestamps = true;
 
     /**
+     * Attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    public $casts = ['airport_preference' => 'array'];
+
+    /**
+     * Set Airport Preference Attribute.
+     *
+     * @param $value
+     */
+    public function setAirportPreferenceAttribute($value)
+    {
+        $this->attributes['airport_preference'] = json_encode($value);
+    }
+
+    /**
      * Get the user that owns the reservation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

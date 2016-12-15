@@ -1,5 +1,7 @@
 <?php namespace App\Filters\v1;
 
+use App\Models\v1\User;
+
 class ProjectFilter extends Filter
 {
     /**
@@ -22,7 +24,7 @@ class ProjectFilter extends Filter
      *
      * @var array
      */
-    public $searchable = ['name'];
+    public $searchable = ['name', 'user.name', 'group.name', 'initiative.type'];
 
     /**
      * Is currently active.
@@ -52,6 +54,49 @@ class ProjectFilter extends Filter
     public function funded()
     {
         return $this->funded();
+    }
+
+    /**
+     * By groups managed by the user.
+     *
+     * @param $user_id
+     * @return mixed
+     */
+    public function manager($user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        $groups = $user->managing()->pluck('id');
+
+        return $this->where(function($query) use($groups) {
+            return $query->where('sponsor_type', 'groups')->whereIn('sponsor_id', $groups);
+        })->orWhere(function($query) use($user_id) {
+            return $query->where('sponsor_type', 'users')->where('sponsor_id', $user_id);
+        });
+    }
+
+    /**
+     * By user sponsor.
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function user($id)
+    {
+        return $this->where('sponsor_type', 'users')
+                    ->where('sponsor_id', $id);
+    }
+
+    /**
+     * By group sponsors.
+     *
+     * @param $ids
+     * @return mixed
+     */
+    public function groups($ids)
+    {
+        return $this->where('sponsor_type', 'groups')
+                    ->whereIn('sponsor_id', $ids);
     }
 
     /**

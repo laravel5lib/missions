@@ -1,4 +1,5 @@
 <template>
+    <spinner v-ref:spinner size="sm" text="Loading"></spinner>
     <div class="row">
         <div class="col-sm-12">
             <form class="form-inline text-right" novalidate>
@@ -40,7 +41,7 @@
     </div>
 
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'dashboard-interests-list',
         props: ['groupId', 'tripId'],
@@ -62,6 +63,7 @@
         },
         methods: {
             searchInterests() {
+                // this.$refs.spinner.show();
                 this.$http.get('interests', {
                     group: this.groupId,
                     trip: this.tripId,
@@ -72,6 +74,7 @@
                 }).then(function (response) {
                     this.interests = response.data.data;
                     this.pagination = response.data.meta.pagination;
+                    // this.$refs.spinner.hide();
                 });
             }
         },

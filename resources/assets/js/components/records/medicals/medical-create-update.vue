@@ -1,6 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="CreateUpdateMedicalRelease" @touched="onTouched">
         <form id="CreateUpdateMedicalRelease" class="form-horizontal" novalidate>
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
@@ -323,6 +324,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateMedicalRelease.valid) {
+                    // this.$refs.spinner.show();
                     this.resource.save(null, {
                         name: this.name,
                         ins_provider: this.ins_provider,
@@ -336,6 +338,7 @@
                         window.location.href = '/dashboard/records/medical-releases';
                     }, function (error) {
                         this.showError = true;
+                        // this.$refs.spinner.hide();
                     });
                 } else {
                     this.showError = true;
@@ -344,6 +347,7 @@
             update(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateMedicalRelease.valid) {
+                    // this.$refs.spinner.show();
                     this.resource.update({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -355,7 +359,9 @@
                         user_id: this.user_id,
                     }).then(function (resp) {
                         this.showSuccess = true;
+                        // this.$refs.spinner.hide();
                     }, function (error) {
+                        // this.$refs.spinner.hide();
                         console.log(error);
                     });
                 }
@@ -375,17 +381,17 @@
             }
         },
         ready(){
-
-            var fetchURL = this.isUpdate ? 'medical/releases/' + this.id : 'users/me';
+            // this.$refs.spinner.show();
+            let fetchURL = this.isUpdate ? 'medical/releases/' + this.id : 'users/me';
             this.$http(fetchURL).then(function (response) {
                 // this.user = response.data.data;
                 this.user_id = response.data.data.id;
 
                 if (this.isUpdate) {
-                    var medical_releases = _.findWhere(response.data.data.medical_releases.data, {id: this.id});
+                    let medical_releases = _.findWhere(response.data.data.medical_releases.data, {id: this.id});
                     $.extend(this, medical_releases);
-
                 }
+                // this.$refs.spinner.hide();
             });
         }
 

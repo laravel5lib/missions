@@ -37,7 +37,7 @@
                 </div>
             </div>
 
-            <div class="row form-group col-sm-offset-2">
+            <div class="row">
                 <div class="col-sm-4">
                         <label for="infoZip">ZIP/Postal Code</label>
                         <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': checkForError('type') }">
+            <div class="row" :class="{ 'has-error': checkForError('type') }">
                 <div class="col-sm-6">
                     <label for="country">Type</label>
                     <select name="type" id="type" class="form-control" v-model="type" v-validate:type="{ required: true }" required>
@@ -72,7 +72,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row form-group">
+            <div class="row">
                 <div class="col-sm-6">
                         <label for="infoPhone">Phone 1</label>
                         <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
@@ -83,16 +83,16 @@
                 </div>
             </div>
 
-            <div class="row form-group">
+            <div class="row">
                 <div class="col-sm-12">
                     <label for="name">Email</label>
                     <input type="text" class="form-control" name="email" id="email" v-model="email">
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="status" class="col-sm-2 control-label">Status</label>
-                <div class="col-sm-10">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="status" class="control-label">Status</label>
                     <select class="form-control" name="status" id="status" v-model="status">
                         <option value="approved">Approved</option>
                         <option value="pending">Pending</option>
@@ -100,9 +100,9 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="public" class="col-sm-2 control-label">Visibility</label>
-                <div class="col-sm-10">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="public" class="control-label">Visibility</label><br>
                     <label class="radio-inline">
                         <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
                     </label>
@@ -114,8 +114,8 @@
 
             <template v-if="!!public">
                 <div class="form-group" :class="{ 'has-error': checkForError('url') }">
-                    <label for="url" class="col-sm-2 control-label">Url Slug</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-12">
+                        <label for="url" class="control-label">Url Slug</label>
                         <div class="input-group">
                             <span class="input-group-addon">www.missions.me/groups/</span>
                             <input type="text" id="url" v-model="url" class="form-control" v-validate:url="{ required: !!public }"/>

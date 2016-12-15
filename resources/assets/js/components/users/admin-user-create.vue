@@ -1,31 +1,31 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="CreateUser" :groups="['passwordGroup']">
         <form id="CreateUserForm" class="form-horizontal" novalidate>
-            <div class="form-group" :class="{ 'has-error': checkForError('name') }">
-                <label for="name" class="col-sm-2 control-label">Name</label>
-                <div class="col-sm-10">
+            <div class="row" :class="{ 'has-error': checkForError('name') }">
+                <div class="col-sm-12">
+                    <label for="name" class="control-label">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
                            placeholder="User Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('email') }">
-                <label for="name" class="col-sm-2 control-label">Email</label>
-                <div class="col-sm-10">
-                    <input type="email" class="form-control" name="email" id="email" v-model="email"
+            <div class="row">
+                <div class="col-sm-6">
+                    <div :class="{ 'has-error': checkForError('email') }">
+                        <label for="name" class="control-label">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" v-model="email"
                            v-validate:email="{ required: true, minlength:1, maxlength:100 }">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">Alt. Email</label>
-                <div class="col-sm-10">
+                <div class="col-sm-6">
+                    <label for="name" class="control-label">Alt. Email</label>
                     <input type="email" class="form-control" name="alt_email" id="alt_email" v-model="alt_email">
                 </div>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }">
-                <label for="name" class="col-sm-2 control-label">Password</label>
-                <div class="col-sm-10">
+            <div class="row" :class="{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }">
+                <div class="col-sm-12">
+                    <label for="name" class="control-label">Password</label>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('password') }">
@@ -59,10 +59,9 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Date of Birth</label>
-
-                <div class="col-sm-10">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="control-label">Date of Birth</label>
                     <div class="row">
                         <div class="col-xs-5">
                             <select class="form-control" name="dob_month" v-model="dobMonth" required>
@@ -211,75 +210,72 @@
                     </div>
                 </div><!-- end col -->
             </div><!-- end form-group -->
-
-            <div class="form-group" :class="{ 'has-error': checkForError('gender') }">
-                <label for="gender" class="col-sm-2 control-label">Gender</label>
-                <div class="col-sm-10">
-                    <label class="radio-inline">
-                        <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="gender2" id="gender2" value="Female" v-model="gender" v-validate:gender> Female
-                    </label>
+            <div class="row">
+                <div :class="{ 'has-error': checkForError('gender') }">
+                    <div class="col-sm-6">
+                        <label for="gender" class="control-label">Gender</label><br>
+                        <label class="radio-inline">
+                            <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="gender2" id="gender2" value="Female" v-model="gender" v-validate:gender> Female
+                        </label>
+                    </div>
+                </div>
+                <div :class="{ 'has-error': checkForError('status') }">
+                    <div class="col-sm-6">
+                        <label for="status" class="control-label">Status</label><br>
+                        <label class="radio-inline">
+                            <input type="radio" name="status" id="status" value="Single" v-model="status" v-validate:status="{required: {rule: true}}"> Single
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="status2" id="status2" value="Married" v-model="status" v-validate:status> Married
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': checkForError('status') }">
-                <label for="status" class="col-sm-2 control-label">Status</label>
-                <div class="col-sm-10">
-                    <label class="radio-inline">
-                        <input type="radio" name="status" id="status" value="Single" v-model="status" v-validate:status="{required: {rule: true}}"> Single
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="status2" id="status2" value="Married" v-model="status" v-validate:status> Married
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="bio">Bio</label>
-                <div class="col-sm-10">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="control-label" for="bio">Bio</label>
                     <textarea class="form-control" v-model="bio" id="bio" placeholder="User Bio" maxlength="120"></textarea>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="infoAddress">Address 1</label>
-                <div class="col-sm-10">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="control-label" for="infoAddress">Address 1</label>
                     <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="infoAddress2">Address 2</label>
-                <div class="col-sm-10">
+                <div class="col-sm-6">
+                    <label class="control-label" for="infoAddress2">Address 2</label>
                     <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
                 </div>
             </div>
 
-            <div class="row col-sm-offset-2">
+            <div class="row">
                 <div class="col-sm-6">
-                    <div class="form-group">
+                    <div>
                         <label for="infoCity">City</label>
                         <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="form-group">
+                    <div>
                         <label for="infoState">State/Prov.</label>
                         <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
                     </div>
                 </div>
             </div>
 
-            <div class="row col-sm-offset-2">
+            <div class="row">
                 <div class="col-sm-4">
-                    <div class="form-group">
+                    <div>
                         <label for="infoZip">ZIP/Postal Code</label>
                         <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
                     </div>
                 </div>
-                <div class="col-sm-8">
-                    <div class="form-group" :class="{ 'has-error': checkForError('country') }">
-
+                <div class="col-sm-4">
+                    <div :class="{ 'has-error': checkForError('country') }">
                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
                         <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
@@ -287,37 +283,35 @@
                         </select>
                     </div>
                 </div>
-            </div>
-
-            <div class="form-group" :class="{ 'has-error': checkForError('timezone') }">
-                <label for="timezone" class="col-sm-2 control-label">Timezone</label>
-
-                <div class="col-sm-10">
-                    <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
-                    <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
-                        <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
-                    </select>
+                <div class="col-sm-4">
+                    <div :class="{ 'has-error': checkForError('timezone') }">
+                        <label for="timezone" class="control-label">Timezone</label>
+                        <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                        <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
+                            <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div class="row col-sm-offset-2">
+            <div class="row">
                 <div class="col-sm-6">
-                    <div class="form-group">
+                    <div>
                         <label for="infoPhone">Phone 1</label>
                         <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="form-group">
+                    <div>
                         <label for="infoMobile">Phone 2</label>
                         <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
                     </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="public" class="col-sm-2 control-label">Public</label>
-                <div class="col-sm-10">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="public" class="control-label">Public</label><br>
                     <label class="radio-inline">
                         <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
                     </label>
@@ -326,17 +320,18 @@
                     </label>
                 </div>
             </div>
-            <div class="form-group" v-if="!!public">
-                <label for="url" class="col-sm-2 control-label">Url Slug</label>
-                <div class="col-sm-10">
+            <div class="row" v-if="!!public">
+                <div class="col-sm-12">
+                    <label for="url" class="control-label">Url Slug</label>
                     <div class="input-group">
                         <span class="input-group-addon">www.missions.me/users/</span>
                         <input type="text" id="url" v-model="url" class="form-control" required v-validate:url="{ required: !!public }"/>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+            <hr class="divider inv">
+            <div class="row">
+                <div class="col-sm-12 text-center">
                     <a href="/admin/users" class="btn btn-default">Cancel</a>
                     <a @click="submit()" class="btn btn-primary">Create</a>
                 </div>
@@ -346,7 +341,6 @@
                 <strong>Oh No!</strong>
                 <p>There are errors on the form.</p>
             </alert>
-
         </form>
     </validator>
 </template>

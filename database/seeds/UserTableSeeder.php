@@ -24,6 +24,7 @@ class UserTableSeeder extends Seeder
             $user->essays()->save(factory(App\Models\v1\Essay::class)->make());
             $user->passports()->save(factory(App\Models\v1\Passport::class)->make());
             $user->visas()->save(factory(App\Models\v1\Visa::class)->make());
+            $user->referrals()->save(factory(App\Models\v1\Referral::class)->make());
         });
         factory(App\Models\v1\User::class, 'joe')->create();
         factory(App\Models\v1\User::class, config('seeders.users'))->create()->each(function($user) {
@@ -33,6 +34,7 @@ class UserTableSeeder extends Seeder
             $user->essays()->save(factory(App\Models\v1\Essay::class)->make());
             $user->passports()->save(factory(App\Models\v1\Passport::class)->make());
             $user->visas()->save(factory(App\Models\v1\Visa::class)->make());
+            $user->referrals()->save(factory(App\Models\v1\Referral::class)->make());
         });
     }
 }

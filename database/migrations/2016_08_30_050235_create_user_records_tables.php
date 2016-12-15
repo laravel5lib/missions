@@ -66,12 +66,12 @@ class CreateUserRecordsTables extends Migration
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
             $table->string('name');
+            $table->string('type');
             $table->string('referral_name');
             $table->string('referral_email');
             $table->string('referral_phone');
             $table->string('status');
-            $table->uuid('response_id')->index();
-            $table->string('response_type');
+            $table->json('response')->nullable();
             $table->timestamp('sent_at');
             $table->timestamps();
         });

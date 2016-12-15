@@ -25,11 +25,13 @@ class ReferralRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'type' => 'required|in:pastoral',
             'user_id' => 'required|exists:users,id',
             'referral_name' => 'required|string',
             'referral_email' => 'required|email',
             'referral_phone' => 'required|string',
-            'status' => 'required|string'
+            'sent_at' => 'date',
+            'status' => 'sometimes|required|in:sent,received'
         ];
     }
 }

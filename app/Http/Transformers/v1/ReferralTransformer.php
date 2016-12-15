@@ -13,7 +13,7 @@ class ReferralTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'response'
+        'user'
     ];
 
     /**
@@ -28,10 +28,12 @@ class ReferralTransformer extends TransformerAbstract
             'id' => $referral->id,
             'user_id' => $referral->user_id,
             'name' => $referral->name,
+            'type' => $referral->type,
             'referral_name' => $referral->referral_name,
             'referral_email' => $referral->referral_email,
             'referral_phone' => $referral->referral_phone,
             'status' => $referral->status,
+            'response' => $referral->response,
             'sent_at' => $referral->sent_at->toDateTimeString(),
             'created_at' => $referral->created_at->toDateTimeString(),
             'updated_at' => $referral->updated_at->toDateTimeString(),

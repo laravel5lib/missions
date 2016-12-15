@@ -810,6 +810,17 @@ $factory->define(App\Models\v1\Accolade::class, function(Faker\Generator $faker)
     ];
 });
 
+$factory->defineAs(App\Models\v1\Accolade::class, 'trip_history', function(Faker\Generator $faker)
+{
+    $trips = config('accolades.trips');
+
+    return [
+        'display_name' => 'Trip History',
+        'name'         => 'trip_history',
+        'items'        => $faker->randomElements($trips, 4)
+    ];
+});
+
 $factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
 {
     return [

@@ -52,4 +52,9 @@ class UtilitiesController extends Controller
         });
 
     }
+
+    public function getPastTrips()
+    {
+       return config('accolades.trips');
+    }
 }

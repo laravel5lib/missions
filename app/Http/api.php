@@ -100,6 +100,7 @@ $api->version('v1', [
         $api->get('countries', 'UtilitiesController@getCountries');
         $api->get('countries/{$code}', 'UtilitiesController@getCountry');
         $api->get('timezones', 'UtilitiesController@getTimezones');
+        $api->get('past-trips', 'UtilitiesController@getPastTrips');
     });
 
     $api->post('contact', 'UtilitiesController@sendContactEmail');

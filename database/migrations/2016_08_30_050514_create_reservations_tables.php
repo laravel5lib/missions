@@ -28,16 +28,9 @@ class CreateReservationsTables extends Migration
             $table->string('state', 100)->nullable();
             $table->string('zip', 15)->nullable();
             $table->string('country_code', 2)->default('us');
-            $table->string('arrival_designation')->nullable();
-            $table->json('airport_preference')->nullable();
             $table->uuid('user_id')->index();
             $table->uuid('trip_id')->index();
             $table->uuid('rep_id')->index()->nullable();
-            $table->uuid('passport_id')->index()->nullable();
-            $table->uuid('visa_id')->index()->nullable();
-            $table->uuid('medical_release_id')->index()->nullable();
-            $table->uuid('testimony_id')->index()->nullable();
-            $table->uuid('recommendation_id')->index()->nullable();
             $table->uuid('avatar_upload_id')->nullable();
             $table->integer('companion_limit')->unsigned()->default(0);
             $table->timestamps();
@@ -58,14 +51,6 @@ class CreateReservationsTables extends Migration
                 ->references('id')->on('users')
                 ->onDelete('set null');
 
-            $table->foreign('passport_id')
-                ->references('id')->on('passports')
-                ->onDelete('set null');
-
-            $table->foreign('visa_id')
-                ->references('id')->on('visas')
-                ->onDelete('set null');
-
             $table->foreign('avatar_upload_id')
                 ->references('id')->on('uploads')
                 ->onDelete('set null');
@@ -76,6 +61,8 @@ class CreateReservationsTables extends Migration
             $table->uuid('reservation_id')->index();
             $table->integer('grace_period')->default(0);
             $table->string('status');
+            $table->string('document_type')->nullable();
+            $table->uuid('document_id')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });

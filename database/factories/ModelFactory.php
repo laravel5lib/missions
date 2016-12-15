@@ -82,9 +82,6 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         'phone_two'          => $faker->phoneNumber,
         'trip_id'            => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
         'companion_limit'    => random_int(0, 3),
-        'passport_id'        => $faker->randomElement(App\Models\v1\Passport::lists('id')->toArray()),
-        'visa_id'            => $faker->randomElement(App\Models\v1\Visa::lists('id')->toArray()),
-        'medical_release_id' => $faker->randomElement(App\Models\v1\MedicalRelease::lists('id')->toArray()),
         'avatar_upload_id'   => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray())
     ];
 });

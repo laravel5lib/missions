@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Transformers\v1\RequirementTransformer;
-use App\Models\v1\Requirement;
+use App\Http\Transformers\v1\ReservationRequirementTransformer;
 use App\Models\v1\Reservation;
 use Illuminate\Http\Request;
 
@@ -17,20 +17,14 @@ class ReservationRequirementsController extends Controller
      * @var Reservation
      */
     private $reservation;
-    /**
-     * @var Requirement
-     */
-    private $requirement;
 
     /**
      * ReservationRequirementsController constructor.
      * @param Reservation $reservation
-     * @param Requirement $requirement
      */
-    public function __construct(Reservation $reservation, Requirement $requirement)
+    public function __construct(Reservation $reservation)
     {
         $this->reservation = $reservation;
-        $this->requirement = $requirement;
     }
 
     /**
@@ -47,6 +41,6 @@ class ReservationRequirementsController extends Controller
                             ->requirements()
                             ->paginate($request->get('per_page', 10));
 
-        return $this->response->paginator($requirements, new RequirementTransformer);
+        return $this->response->paginator($requirements, new ReservationRequirementTransformer);
     }
 }

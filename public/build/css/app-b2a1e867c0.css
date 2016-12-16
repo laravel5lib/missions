@@ -16624,6 +16624,10 @@ a.socialIcon:hover, .socialHoverClass {
 a.socialIcon:hover, .socialHoverClass {
   color: #f6323e; }
 
+.social-circle > li {
+  padding-left: 0px !important;
+  padding-right: 0px !important; }
+
 .social-circle li a {
   display: inline-block;
   position: relative;

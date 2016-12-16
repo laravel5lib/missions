@@ -413,6 +413,10 @@ body:not(.modal-open) {
   }
 }
 
+.input-group .form-control.date-picker-active {
+  z-index: initial;
+}
+
 /* File Upload styles */
 .inputfile {
   width: 0.1px;

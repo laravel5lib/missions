@@ -15949,6 +15949,9 @@ body:not(.modal-open) {
     #footer-mm-last ul a {
       color: #808080; }
 
+.input-group .form-control.date-picker-active {
+  z-index: initial; }
+
 /* File Upload styles */
 .inputfile {
   width: 0.1px;

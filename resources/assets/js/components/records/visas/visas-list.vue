@@ -6,30 +6,32 @@
             <div role="alert"><p class="text-center text-muted"><em>No records found</em></p></div>
         </div>
 
-        <div class="col-sm-4" v-for="visa in paginatedVisas">
+        <div class="col-sm-6 col-md-4" v-for="visa in paginatedVisas">
             <div class="panel panel-default">
                 <div style="min-height:220px;" class="panel-body">
-                    <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{visa.country_name}}</h6>
                     <a role="button" :href="'/dashboard' + visa.links[0].uri">
-                        <h5 style="text-transform:capitalize;" class="text-primary">
+                        <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
                             {{visa.given_names}} {{visa.surname}}
                         </h5>
                     </a>
-                    <hr class="divider lg">
-                    <p class="small">
-                        <b>ID:</b> {{visa.number}}
-                        <br>
-                        <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}
-                        <br>
-                        <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}
-                    </p>
-                </div><!-- end panel-body -->
-                <div class="panel-footer" style="padding: 0;">
-                    <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
-                            <a class="btn btn-info" :href="'/dashboard' + visa.links[0].uri + '/edit'"><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger" @click="selectedVisa = visa,deleteModal = true"><i class="fa fa-times"></i></a>
+                    <div style="position:absolute;right:25px;top:12px;">
+                        <a style="margin-right:3px;" :href="'/dashboard' + visa.links[0].uri + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a @click="selectedVisa = visa,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
-                </div>
+                    <hr class="divider">
+                    <label>ID</label>
+                    <p class="small">{{visa.number}}</p>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>ISSUED ON</label>
+                            <p class="small">{{visa.issued_at|moment 'll'}}</p>
+                        </div><!-- end col -->
+                        <div class="col-sm-6">
+                            <label>EXPIRES ON</label>
+                            <p class="small">{{visa.expires_at|moment 'll'}}</p>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                </div><!-- end panel-body -->
             </div>
         </div>
         <div class="col-sm-12 text-center">

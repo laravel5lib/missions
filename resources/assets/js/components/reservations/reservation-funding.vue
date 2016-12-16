@@ -46,7 +46,7 @@
                     <div class="list-group-item" role="tab" id="heading-{{ donor.id }}" v-for="donor in donors">
                         <h5>
                             <a role="button">
-                                {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
+                                {{ donor.name }} <span class="small">donated <span class="text-success">{{donor.total_donated|currency}}</span></span>
                             </a>
                         </h5>
                     </div>

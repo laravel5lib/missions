@@ -194,7 +194,7 @@ Vue.http.interceptors.push({
         }
 
         // Only POST and PUT Requests to our API
-        if (_.contains(['POST', 'PUT'],request.method) && requrest.root === '/api') {
+        if (_.contains(['POST', 'PUT'],request.method) && request.root === '/api') {
             console.log(this);
             console.log(request);
 

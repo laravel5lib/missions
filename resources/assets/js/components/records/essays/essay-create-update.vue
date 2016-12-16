@@ -18,7 +18,7 @@
 
             <div class="form-group" v-for="QA in content">
                 <label class="control-label" v-text="QA.q"></label>
-                <textarea class="form-control" v-model="QA.a"></textarea>
+                <textarea autosize class="form-control" v-model="QA.a" rows="10"></textarea>
             </div>
 
             <div class="form-group">

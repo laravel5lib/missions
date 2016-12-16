@@ -193,8 +193,8 @@ Vue.http.interceptors.push({
             }
         }
 
-        // Only POST and PUT Requests
-        if (_.contains(['POST', 'PUT'],request.method)) {
+        // Only POST and PUT Requests to our API
+        if (_.contains(['POST', 'PUT'],request.method) && requrest.root === '/api') {
             console.log(this);
             console.log(request);
 
@@ -310,6 +310,24 @@ Vue.filter('moment', {
     },
     write: function(val, oldVal) {
         return val
+    }
+});
+
+Vue.filter('momentUTC', {
+    read: function(value) {
+        return moment.utc(value);
+    },
+    write: function(value, oldVal) {
+        return moment.utc(value);
+    }
+});
+
+Vue.filter('momentLocal', {
+    read: function(value) {
+        return moment.isMoment(value) ? value.local() : null;
+    },
+    write: function(value, oldVal) {
+        return moment.isMoment(value) ? value.local() : null;
     }
 });
 

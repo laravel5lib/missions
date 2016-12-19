@@ -57,6 +57,7 @@ class CreateReservationsTables extends Migration
         });
 
         Schema::create('reservation_requirements', function(Blueprint $table) {
+            $table->uuid('id')->index();
             $table->uuid('requirement_id')->index();
             $table->uuid('reservation_id')->index();
             $table->integer('grace_period')->default(0);

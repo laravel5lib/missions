@@ -2,10 +2,14 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 class ReservationRequirement extends Model
 {
+    use UuidForKey, Filterable;
+
     protected $table = 'reservation_requirements';
 
     protected $guarded = [];

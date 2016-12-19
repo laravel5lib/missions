@@ -60,19 +60,7 @@ class TransactionsController extends Controller
      */
     public function export(ExportRequest $request)
     {
-        $transactions = $this->transaction
-            ->filter($request->all())
-            ->with('donor', 'fund')
-            ->get();
-
-        $fields = $request->get('fields');
-
-        $this->dispatch(new ExportTransactions(
-            $transactions,
-            $fields,
-            $request->get('email'),
-            snake_case($request->get('filename'))
-        ));
+        $this->dispatch(new ExportTransactions($request->all()));
 
         return $this->response()->created(null, [
             'message' => 'Report is being generated and will be available shortly.'

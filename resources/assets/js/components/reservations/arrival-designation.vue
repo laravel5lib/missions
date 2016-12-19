@@ -26,9 +26,13 @@
 </template>
 <script>
     export default {
-        name: 'reservations-arrival-designation',
+        name: 'arrival-designation',
         props: {
             'reservationId': {
+                type: String,
+                required: true
+            },
+            'requirementId': {
                 type: String,
                 required: true
             }

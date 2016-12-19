@@ -870,6 +870,9 @@ $factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
     ];
 });
 
+/**
+ * Transaction Factory
+ */
 $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\Generator $faker)
 {
     $fund = $faker->randomElement(App\Models\v1\Fund::get()->toArray());
@@ -885,6 +888,25 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\
             'last_four' => substr($faker->creditCardNumber, -4),
             'cardholder' => $faker->name,
             'brand' => $faker->creditCardType,
+            'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
+        ],
+        'created_at' => $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray()),
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Transaction::class, 'check', function(Faker\Generator $faker)
+{
+    $fund = $faker->randomElement(App\Models\v1\Fund::get()->toArray());
+    $donor = $faker->randomElement(App\Models\v1\Donor::get()->toArray());
+
+    return [
+        'fund_id' => $fund['id'],
+        'donor_id' => $donor['id'],
+        'type' => 'donation',
+        'amount' => $faker->randomNumber(2),
+        'details' => [
+            'type' => 'check',
+            'number' => $faker->randomDigitNotNull,
             'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
         ],
         'created_at' => $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray()),

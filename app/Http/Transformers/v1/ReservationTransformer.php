@@ -201,7 +201,7 @@ class ReservationTransformer extends TransformerAbstract
     {
         $requirements = $reservation->requirements;
 
-        return $this->collection($requirements, new RequirementTransformer);
+        return $this->collection($requirements, new ReservationRequirementTransformer);
     }
 
     /**

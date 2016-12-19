@@ -127,18 +127,7 @@ class FundsController extends Controller
      */
     public function export(ExportRequest $request)
     {
-        $funds = $this->fund
-            ->filter($request->all())
-            ->get();
-
-        $fields = $request->get('fields');
-
-        $this->dispatch(new ExportFunds(
-            $funds,
-            $fields,
-            $request->get('email'),
-            snake_case($request->get('filename'))
-        ));
+        $this->dispatch(new ExportFunds($request->all()));
 
         return $this->response()->created(null, [
             'message' => 'Report is being generated and will be available shortly.'

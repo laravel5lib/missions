@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Jobs\Job;
 use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,9 +15,9 @@ class Exporter extends Job implements ShouldQueue
     use InteractsWithQueue, SerializesModels;
 
     /**
-     * @var Collection
+     * @var Request
      */
-    protected $collection;
+    protected $request;
 
     /**
      * @var $fields
@@ -35,17 +35,14 @@ class Exporter extends Job implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param Collection $collection
-     * @param array $fields
-     * @param $email
-     * @param null $fileName
+     * @param array $request
      */
-    public function __construct(Collection $collection, array $fields = [], $email, $fileName = null)
+    public function __construct(array $request)
     {
-        $this->collection = $collection;
-        $this->fields = $fields;
-        $this->email = $email;
-        $this->fileName = $fileName ? $fileName . '_' . time() : time();
+        $this->request = $request;
+        $this->fields = $request['fields'];
+        $this->email = $request['email'];
+        $this->fileName = $request['filename'] ? snake_case($request['filename'] .'_'. time()) : time();
     }
 
     /**
@@ -54,7 +51,9 @@ class Exporter extends Job implements ShouldQueue
      */
     public function handle(Mailer $mailer)
     {
-        $data = $this->collection->map(function($collection) {
+        $collection = $this->data($this->request);
+
+        $data = $collection->map(function($collection) {
             return $this->filter($collection);
         })->all();
 

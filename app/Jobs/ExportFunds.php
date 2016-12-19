@@ -2,8 +2,15 @@
 
 namespace App\Jobs;
 
+use App\Models\v1\Fund;
+
 class ExportFunds extends Exporter
 {
+    public function data($request)
+    {
+        return Fund::filter($request)->get();
+    }
+
     public function columns($fund)
     {
         return [

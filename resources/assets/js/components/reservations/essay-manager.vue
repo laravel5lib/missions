@@ -62,9 +62,9 @@
 <script type="text/javascript">
     // import essayCreateUpdate from '../records/essays/essay-create-update.vue';
     export default{
-        name: 'reservations-essays-manager',
+        name: 'essay-manager',
         // components:{essayCreateUpdate},
-        props:['reservationId', 'essayId', 'userId'],
+        props:['reservationId', 'essayId', 'userId', 'requirementId'],
         data(){
             return{
                 essay:null,

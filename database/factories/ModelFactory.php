@@ -82,9 +82,6 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         'phone_two'          => $faker->phoneNumber,
         'trip_id'            => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
         'companion_limit'    => random_int(0, 3),
-        'passport_id'        => $faker->randomElement(App\Models\v1\Passport::lists('id')->toArray()),
-        'visa_id'            => $faker->randomElement(App\Models\v1\Visa::lists('id')->toArray()),
-        'medical_release_id' => $faker->randomElement(App\Models\v1\MedicalRelease::lists('id')->toArray()),
         'avatar_upload_id'   => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray())
     ];
 });
@@ -561,7 +558,47 @@ $factory->define(App\Models\v1\MedicalAllergy::class, function (Faker\Generator 
 /**
  * Referral Factory
  */
-
+$factory->define(App\Models\v1\Referral::class, function (Faker\Generator $faker)
+{
+    return [
+        'name' => $faker->firstName,
+        'type' => 'pastoral',
+        'referral_name' => $faker->name,
+        'referral_phone' => $faker->phoneNumber,
+        'referral_email' => $faker->email,
+        'status' => 'sent',
+        'response' => [
+            [
+                'q' => 'How Long have you known the applicant?',
+                'a' => ''
+            ],
+            [
+                'q' => 'Please list any current roles the applicant serves in at your church:',
+                'a' => ''
+            ],
+            [
+                'q' => 'To the best of your knowledge, what is the current state of the applicant\'s spiritual walk?',
+                'a' => ''
+            ],
+            [
+                'q' => 'Do you have any reservations about sending this applicant into a foreign nation where spiritual, physical, and social endurance is tested?',
+                'a' => ''
+            ],
+            [
+                'q' => 'What are the applicant\'s significant strengths?',
+                'a' => ''
+            ],
+            [
+                'q' => 'What are the applicant\'s significant weaknesses?',
+                'a' => ''
+            ],
+            [
+                'q' => 'Would you recommend this applicant for a leadership role with Missions.me? If so, why?',
+                'a' => ''
+            ]
+        ]
+    ];
+});
 
 /**
  * Interaction/Decision Factory
@@ -810,6 +847,17 @@ $factory->define(App\Models\v1\Accolade::class, function(Faker\Generator $faker)
     ];
 });
 
+$factory->defineAs(App\Models\v1\Accolade::class, 'trip_history', function(Faker\Generator $faker)
+{
+    $trips = config('accolades.trips');
+
+    return [
+        'display_name' => 'Trip History',
+        'name'         => 'trip_history',
+        'items'        => $faker->randomElements($trips, 4)
+    ];
+});
+
 $factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
 {
     return [
@@ -822,6 +870,9 @@ $factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
     ];
 });
 
+/**
+ * Transaction Factory
+ */
 $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\Generator $faker)
 {
     $fund = $faker->randomElement(App\Models\v1\Fund::get()->toArray());
@@ -837,6 +888,25 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\
             'last_four' => substr($faker->creditCardNumber, -4),
             'cardholder' => $faker->name,
             'brand' => $faker->creditCardType,
+            'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
+        ],
+        'created_at' => $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray()),
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Transaction::class, 'check', function(Faker\Generator $faker)
+{
+    $fund = $faker->randomElement(App\Models\v1\Fund::get()->toArray());
+    $donor = $faker->randomElement(App\Models\v1\Donor::get()->toArray());
+
+    return [
+        'fund_id' => $fund['id'],
+        'donor_id' => $donor['id'],
+        'type' => 'donation',
+        'amount' => $faker->randomNumber(2),
+        'details' => [
+            'type' => 'check',
+            'number' => $faker->randomDigitNotNull,
             'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
         ],
         'created_at' => $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray()),

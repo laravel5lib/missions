@@ -168,110 +168,113 @@
             </span>
         </div>
         <hr class="divider sm">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th v-if="isActive('type')" :class="{'text-primary': orderByField === 'type'}">
-                    Type
-                    <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('description')" :class="{'text-primary': orderByField === 'description'}">
-                    Description
-                    <i @click="setOrderByField('description')" v-if="orderByField !== 'description'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'description'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('amount')" :class="{'text-primary': orderByField === 'amount'}">
-                    Amount
-                    <i @click="setOrderByField('amount')" v-if="orderByField !== 'amount'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'amount'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('donor')" :class="{'text-primary': orderByField === 'donor'}">
-                    Donor
-                    <i @click="setOrderByField('donor')" v-if="orderByField !== 'donor'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'donor'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('class')" :class="{'text-primary': orderByField === 'class'}">
-                    Class
-                    <i @click="setOrderByField('class')" v-if="orderByField !== 'class'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'class'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('item')" :class="{'text-primary': orderByField === 'item'}">
-                    Item
-                    <i @click="setOrderByField('item')" v-if="orderByField !== 'item'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'item'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('last_four')" :class="{'text-primary': orderByField === 'last_four'}">
-                    Card Last Four
-                    <i @click="setOrderByField('last_four')" v-if="orderByField !== 'last_four'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'last_four'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('card_brand')" :class="{'text-primary': orderByField === 'card_brand'}">
-                    Card Brand
-                    <i @click="setOrderByField('card_brand')" v-if="orderByField !== 'card_brand'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'card_brand'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('cardholder')" :class="{'text-primary': orderByField === 'cardholder'}">
-                    Card Holder
-                    <i @click="setOrderByField('cardholder')" v-if="orderByField !== 'cardholder'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'cardholder'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('donor_phone')" :class="{'text-primary': orderByField === 'donor_phone'}">
-                    Donor phone
-                    <i @click="setOrderByField('donor_phone')" v-if="orderByField !== 'donor_phone'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'donor_phone'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('donor_email')" :class="{'text-primary': orderByField === 'donor_email'}">
-                    Donor Email
-                    <i @click="setOrderByField('donor_email')" v-if="orderByField !== 'donor_email'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'donor_email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('fund_name')" :class="{'text-primary': orderByField === 'fund_name'}">
-                    Fund Name
-                    <i @click="setOrderByField('fund_name')" v-if="orderByField !== 'fund_name'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'fund_name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
-                <th v-if="isActive('created_at')" :class="{'text-primary': orderByField === 'created_at'}">
-                    Created
-                    <i @click="setOrderByField('created_at')" v-if="orderByField !== 'created_at'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'created_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
-                </th>
+        <div style="position: relative">
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th v-if="isActive('type')" :class="{'text-primary': orderByField === 'type'}">
+                        Type
+                        <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('description')" :class="{'text-primary': orderByField === 'description'}">
+                        Description
+                        <i @click="setOrderByField('description')" v-if="orderByField !== 'description'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'description'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('amount')" :class="{'text-primary': orderByField === 'amount'}">
+                        Amount
+                        <i @click="setOrderByField('amount')" v-if="orderByField !== 'amount'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'amount'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('donor')" :class="{'text-primary': orderByField === 'donor'}">
+                        Donor
+                        <i @click="setOrderByField('donor')" v-if="orderByField !== 'donor'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'donor'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('class')" :class="{'text-primary': orderByField === 'class'}">
+                        Class
+                        <i @click="setOrderByField('class')" v-if="orderByField !== 'class'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'class'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('item')" :class="{'text-primary': orderByField === 'item'}">
+                        Item
+                        <i @click="setOrderByField('item')" v-if="orderByField !== 'item'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'item'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('last_four')" :class="{'text-primary': orderByField === 'last_four'}">
+                        Card Last Four
+                        <i @click="setOrderByField('last_four')" v-if="orderByField !== 'last_four'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'last_four'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('card_brand')" :class="{'text-primary': orderByField === 'card_brand'}">
+                        Card Brand
+                        <i @click="setOrderByField('card_brand')" v-if="orderByField !== 'card_brand'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'card_brand'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('cardholder')" :class="{'text-primary': orderByField === 'cardholder'}">
+                        Card Holder
+                        <i @click="setOrderByField('cardholder')" v-if="orderByField !== 'cardholder'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'cardholder'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('donor_phone')" :class="{'text-primary': orderByField === 'donor_phone'}">
+                        Donor phone
+                        <i @click="setOrderByField('donor_phone')" v-if="orderByField !== 'donor_phone'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'donor_phone'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('donor_email')" :class="{'text-primary': orderByField === 'donor_email'}">
+                        Donor Email
+                        <i @click="setOrderByField('donor_email')" v-if="orderByField !== 'donor_email'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'donor_email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('fund_name')" :class="{'text-primary': orderByField === 'fund_name'}">
+                        Fund Name
+                        <i @click="setOrderByField('fund_name')" v-if="orderByField !== 'fund_name'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'fund_name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th v-if="isActive('created_at')" :class="{'text-primary': orderByField === 'created_at'}">
+                        Created
+                        <i @click="setOrderByField('created_at')" v-if="orderByField !== 'created_at'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'created_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
+                    <th><i class="fa fa-cog"></i></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="transaction in transactions|filterBy search|orderBy orderByField direction">
+                    <td v-if="isActive('type')">
+                        <span class="label label-default" v-text="transaction.type|capitalize"></span>
+                    </td>
+                    <td v-if="isActive('description')" v-text="transaction.description"></td>
+                    <td v-if="isActive('amount')">
+                        <span v-text="transaction.amount|currency" :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}"></span>
+                    </td>
+                    <td v-if="isActive('donor')" v-text="transaction.donor.data.name"></td>
+                    <td v-if="isActive('class')" v-text="transaction.fund.data.class"></td>
+                    <td v-if="isActive('item')" v-text="transaction.fund.data.item"></td>
+                    <td v-if="isActive('last_four')" v-text="transaction.payment.last_four"></td>
+                    <td v-if="isActive('card_brand')" v-text="transaction.payment.brand"></td>
+                    <td v-if="isActive('cardholder')" v-text="transaction.payment.cardholder"></td>
+                    <td v-if="isActive('donor_phone')" v-text="transaction.donor.data.phone"></td>
+                    <td v-if="isActive('donor_email')" v-text="transaction.donor.data.email"></td>
+                    <td v-if="isActive('fund_name')" v-text="transaction.fund.data.name"></td>
+                    <td v-if="isActive('created_at')" v-text="transaction.created_at|moment 'll'"></td>
+                    <td><a href="/admin/transactions/{{ transaction.id }}"><i class="fa fa-cog"></i></a></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="7">
+                        <div class="col-sm-12 text-center">
+                            <pagination :pagination.sync="pagination" size="small" :callback="searchTransactions"></pagination>
+                        </div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
 
-                <th><i class="fa fa-cog"></i></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="transaction in transactions|filterBy search|orderBy orderByField direction">
-                <td v-if="isActive('type')">
-                    <span class="label label-default" v-text="transaction.type|capitalize"></span>
-                </td>
-                <td v-if="isActive('description')" v-text="transaction.description"></td>
-                <td v-if="isActive('amount')">
-                    <span v-text="transaction.amount|currency" :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}"></span>
-                </td>
-                <td v-if="isActive('donor')" v-text="transaction.donor.data.name"></td>
-                <td v-if="isActive('class')" v-text="transaction.fund.data.class"></td>
-                <td v-if="isActive('item')" v-text="transaction.fund.data.item"></td>
-                <td v-if="isActive('last_four')" v-text="transaction.payment.last_four"></td>
-                <td v-if="isActive('card_brand')" v-text="transaction.payment.brand"></td>
-                <td v-if="isActive('cardholder')" v-text="transaction.payment.cardholder"></td>
-                <td v-if="isActive('donor_phone')" v-text="transaction.donor.data.phone"></td>
-                <td v-if="isActive('donor_email')" v-text="transaction.donor.data.email"></td>
-                <td v-if="isActive('fund_name')" v-text="transaction.fund.data.name"></td>
-                <td v-if="isActive('created_at')" v-text="transaction.created_at|moment 'll'"></td>
-                <td><a href="/admin/transactions/{{ transaction.id }}"><i class="fa fa-cog"></i></a></td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="7">
-                    <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" size="small" :callback="searchTransactions"></pagination>
-                    </div>
-                </td>
-            </tr>
-            </tfoot>
-        </table>
+        </div>
     </div>
 </template>
 <style>
@@ -336,10 +339,12 @@
                     description: 'Description',
                     amount: 'Amount',
                     payment_type: 'Payment Type',
-                    type: 'Transaction Type',
+                    transaction_type: 'Transaction Type',
                     date: 'Transaction Date',
                     class: 'QuickBooks Class',
                     item: 'QuickBooks Item',
+                    type: 'QuickBooks Type',
+                    account: 'QuickBooks Account',
                     fund_name: 'Fund Name',
                     donor_name: 'Donor Name',
                     donor_email: 'Donor Email',
@@ -371,7 +376,7 @@
                 this.searchTransactions();
             },
             'tagsString': function (val) {
-                var tags = val.split(/[\s,]+/);
+                let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchTransactions();
             },
@@ -446,7 +451,7 @@
                 });
             },
             getListSettings(){
-                var params = {
+                let params = {
                     include: 'donor,fund',
                     search: this.search,
                     per_page: this.per_page,
@@ -469,11 +474,16 @@
                 })
             },
             searchTransactions(){
-                var params = this.getListSettings();
+                let params = this.getListSettings();
+                // this.$refs.spinner.show();
                 this.$http.get('transactions', params).then(function (response) {
-                    var self = this;
+                    let self = this;
                     this.transactions = response.data.data;
                     this.pagination = response.data.meta.pagination;
+                    // this.$refs.spinner.hide();
+                }, function (error) {
+                    // this.$refs.spinner.hide();
+                    // TODO add error alert
                 }).then(function () {
                     this.updateConfig();
                 });
@@ -487,11 +497,12 @@
         ready() {
             // load view state
             if (localStorage[this.storageName]) {
-                var config = JSON.parse(localStorage[this.storageName]);
+                let config = JSON.parse(localStorage[this.storageName]);
                 this.filters = config.filters;
             }
 
             // populate
+            // this.$refs.spinner.show();
             this.getDonors();
             if(this.fund || this.donor) {
                 this.filters.fund = this.fund;
@@ -503,9 +514,9 @@
 
             //Manually handle dropdown functionality to keep dropdown open until finished
             $('.form-toggle-menu .dropdown-menu').on('click', function(event){
-                var events = $._data(document, 'events') || {};
+                let events = $._data(document, 'events') || {};
                 events = events.click || [];
-                for(var i = 0; i < events.length; i++) {
+                for(let i = 0; i < events.length; i++) {
                     if(events[i].selector) {
 
                         //Check if the clicked element matches the event selector

@@ -1,6 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="CreateUpdatePassport" @touched="onTouched">
         <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="row">
                 <div class="col-sm-6">
                     <div :class="{ 'has-error': checkForError('givennames') }">
@@ -121,7 +122,7 @@
 
     </validator>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     export default{
@@ -193,7 +194,8 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdatePassport.valid) {
-                    var resource = this.$resource('passports{/id}');
+                    // this.$refs.spinner.show();
+                    let resource = this.$resource('passports{/id}');
                     resource.save(null, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -212,6 +214,7 @@
                     }, function (error) {
                         this.showError = true;
                         debugger;
+                        // this.$refs.spinner.hide();
                     });
                 } else {
                     this.showError = true;
@@ -220,7 +223,8 @@
             update(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdatePassport.valid) {
-                    var resource = this.$resource('passports{/id}');
+                    // this.$refs.spinner.show();
+                    let resource = this.$resource('passports{/id}');
                     resource.update({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -236,7 +240,9 @@
 //                        window.location.href = '/dashboard/passports';
                         this.showSuccess = true;
                         this.hasChanged = false;
+                        // this.$refs.spinner.hide();
                     }, function (error) {
+                        // this.$refs.spinner.hide();
                         debugger;
                     });
                 }
@@ -256,22 +262,24 @@
             }
         },
         ready(){
+            // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.data.countries;
             });
 
-            var fetchURL = this.isUpdate ? 'users/me?include=passports' : 'users/me';
+            let fetchURL = this.isUpdate ? 'users/me?include=passports' : 'users/me';
             this.$http(fetchURL).then(function (response) {
                 // this.user = response.data.data;
                 this.user_id = response.data.data.id;
 
                 if (this.isUpdate) {
-                    var passport = _.findWhere(response.data.data.passports.data, {id: this.id});
+                    let passport = _.findWhere(response.data.data.passports.data, {id: this.id});
                     $.extend(this, passport);
 
                     this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country})
                     this.citizenshipObj = _.findWhere(this.countries, {code: passport.citizenship})
                 }
+                // this.$refs.spinner.hide();
             });
         }
 

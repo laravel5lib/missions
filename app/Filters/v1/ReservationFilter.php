@@ -4,6 +4,8 @@ use Carbon\Carbon;
 
 class ReservationFilter extends Filter
 {
+    use Manageable;
+
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
     * As [relatedModel => [method1, method2]]
@@ -11,7 +13,7 @@ class ReservationFilter extends Filter
     * @var array
     */
     public $relations = [
-        'trip' => ['groups', 'campaign']
+        'trip' => ['groups', 'campaign', 'type']
     ];
 
     /**

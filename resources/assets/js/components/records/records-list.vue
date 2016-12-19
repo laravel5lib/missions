@@ -1,11 +1,12 @@
 <template>
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
                 <h3>Passports <a href="/dashboard/passports" class="btn btn-xs btn-default-hollow">View All</a></h3>
             </div>
             <div class="col-sm-12" v-if="loaded && !passports.length">
-                <div class="alert alert-info" role="alert">No records found</div>
+                <p class="text-muted text-center" role="alert"><em>No records found</em></p>
             </div>
 
             <div class="col-md-4 col-sm-6" v-for="passport in passports">
@@ -38,7 +39,7 @@
                 <h3>Visas <a href="/dashboard/visas" class="btn btn-xs btn-default-hollow">View All</a></h3>
             </div>
             <div class="col-sm-12" v-if="loaded && !visas.length">
-                <div class="alert alert-info" role="alert">No records found</div>
+                <div role="alert"><p class="text-center text-muted"><em>No records found</em></p></div>
             </div>
 
             <div class="col-md-4 col-sm-6" v-for="visa in visas">
@@ -65,7 +66,7 @@
     </div>
     <hr class="divider inv lg">
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'records-list',
         data(){
@@ -78,10 +79,12 @@
             }
         },
         ready(){
+            // this.$refs.spinner.show();
             this.$http('users/me?include=passports,visas').then(function (response) {
                 this.visas = response.data.data.visas.data;
                 this.passports = response.data.data.passports.data;
                 this.loaded = true;
+                // this.$refs.spinner.hide();
             });
         }
     }

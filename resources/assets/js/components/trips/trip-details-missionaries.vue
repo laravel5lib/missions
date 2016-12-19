@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div style="position:relative">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <template v-if="reservations.length">
             <div class="col-xs-6 col-md-4" v-for="reservation in paginatedReservations">
                 <div class="panel panel-default">

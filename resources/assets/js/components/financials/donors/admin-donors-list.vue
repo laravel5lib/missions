@@ -1,5 +1,6 @@
 <template>
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
@@ -186,7 +187,7 @@
             </span>
         </div>
         <hr class="divider sm">
-        <table class="table table-hover">
+        <table class="table table-hover table-striped">
             <thead>
             <tr>
                 <th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">
@@ -370,7 +371,7 @@
                 this.searchDonors();
             },
             'tagsString': function (val) {
-                var tags = val.split(/[\s,]+/);
+                let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchDonors();
             },
@@ -459,7 +460,7 @@
                 });
             },
             getListSettings(){
-                var params = {
+                let params = {
                     include: '',
                     search: this.search,
                     per_page: this.per_page,
@@ -530,11 +531,13 @@
                 })
             },
             searchDonors(){
-                var params = this.getListSettings();
+                let params = this.getListSettings();
+                // this.$refs.spinner.show();
                 this.$http.get('donors', params).then(function (response) {
-                    var self = this;
+                    let self = this;
                     this.donors = response.data.data;
                     this.pagination = response.data.meta.pagination;
+                    // this.$refs.spinner.hide();
                 }).then(function () {
                     this.updateConfig();
                 });
@@ -543,19 +546,20 @@
         ready() {
             // load view state
             if (localStorage[this.storageName]) {
-                var config = JSON.parse(localStorage[this.storageName]);
+                let config = JSON.parse(localStorage[this.storageName]);
                 this.filters = config.filters;
             }
             // populate
+            // this.$refs.spinner.show();
             this.getGroups();
             this.getCampaigns();
             this.searchDonors();
 
             //Manually handle dropdown functionality to keep dropdown open until finished
             $('.form-toggle-menu .dropdown-menu').on('click', function(event){
-                var events = $._data(document, 'events') || {};
+                let events = $._data(document, 'events') || {};
                 events = events.click || [];
-                for(var i = 0; i < events.length; i++) {
+                for(let i = 0; i < events.length; i++) {
                     if(events[i].selector) {
 
                         //Check if the clicked element matches the event selector

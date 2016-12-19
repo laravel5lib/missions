@@ -204,12 +204,12 @@
                 return params;
             },
             searchInitiatives(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 var params = this.getParameters();
                 this.$http.get('causes/' + this.causeId + '/initiatives', params).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.initiatives = response.data.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 })
             }
         },

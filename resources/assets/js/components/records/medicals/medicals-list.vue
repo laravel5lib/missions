@@ -1,33 +1,34 @@
 <template>
 	<div class="row">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<div class="col-sm-12" v-if="loaded && !medical_releases.length">
-			<div class="alert alert-info" role="alert">No records found</div>
+			<p class="text-center text-muted" role="alert"><em>No records found</em></p>
 		</div>
 
-		<div class="col-sm-4" v-for="medical_release in paginatedMedical_releases">
+		<div class="col-sm-6 col-md-4" v-for="medical_release in paginatedMedical_releases">
 			<div class="panel panel-default">
-				<div style="min-height:120px;" class="panel-body">
+				<div class="panel-body">
 					<a role="button" :href="'/dashboard' + medical_release.links[0].uri">
-						<h5 style="text-transform:capitalize;" class="text-primary">
+						<h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
 							{{medical_release.name}}
 						</h5>
 					</a>
-					<hr class="divider lg">
-					<p class="small">
-						<b>Medication:</b> {{medical_release.medication ? 'Yes' : 'No'}}
-						<br>
-						<b>Diagnosed:</b> {{medical_release.diagnosed ? 'Yes' : 'No'}}
-					</p>
-				</div><!-- end panel-body -->
-				<div class="panel-footer" style="padding: 0;">
-					<div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
-						<a class="btn btn-info" :href="'/dashboard' + medical_release.links[0].uri + '/edit'"><i
+					<div style="position:absolute;right:25px;top:12px;">
+						<a style="margin-right:3px;" :href="'/dashboard' + medical_release.links[0].uri + '/edit'"><i
 								class="fa fa-pencil"></i></a>
-						<a class="btn btn-danger"
-						   @click="selectedMedicalRelease = medical_release,deleteModal = true"><i
+						<a @click="selectedMedicalRelease = medical_release,deleteModal = true"><i
 								class="fa fa-times"></i></a>
 					</div>
-				</div>
+					<hr class="divider">
+					<div class="row">
+						<div class="col-sm-6">
+							<label>Medication</label><p class="small">{{medical_release.medication ? 'Yes' : 'No'}}</p>
+						</div><!-- end col -->
+						<div class="col-sm-6">
+							<label>Diagnosed</label><p class="small">{{medical_release.diagnosed ? 'Yes' : 'No'}}</p>
+						</div><!-- end col -->
+					</div><!-- end row -->
+				</div><!-- end panel-body -->
 			</div>
 		</div>
 		<div class="col-sm-12 text-center">
@@ -92,10 +93,10 @@
 		methods: {
 			// emulate pagination
 			paginate(){
-				var array = [];
-				var start = (this.pagination.current_page - 1) * this.per_page;
-				var end = start + this.per_page;
-				var range = _.range(start, end);
+				let array = [];
+				let start = (this.pagination.current_page - 1) * this.per_page;
+				let end = start + this.per_page;
+				let range = _.range(start, end);
 				_.each(range, function (index) {
 					if (this.medical_releases[index])
 						array.push(this.medical_releases[index]);
@@ -104,19 +105,23 @@
 			},
 			removeMedicalRelease(medical_release){
 				if (medical_release) {
+					// this.$refs.spinner.show();
 					this.$http.delete('medical/releases/' + medical_release.id).then(function (response) {
 						this.medical_releases.$remove(medical_release);
 						this.paginatedMedical_releases.$remove(medical_release);
 						this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
+						// this.$refs.spinner.hide();
 					});
 				}
 			}
 		},
 		ready(){
+			// this.$refs.spinner.show();
 			this.$http('users/me?include=medical_releases').then(function (response) {
 				this.medical_releases = response.data.data.medical_releases.data;
 				this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
 				this.loaded = true;
+				// this.$refs.spinner.hide();
 			});
 		}
 	}

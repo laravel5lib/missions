@@ -12,6 +12,15 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     $if.attr("src", src);
 });
 </script>
+<script>
+  // init controller
+  var controller = new ScrollMagic.Controller({globalSceneOptions: {triggerHook: "onEnter", duration: "250%"}});
+  // build scenes
+  new ScrollMagic.Scene({triggerElement: "#parallax1"})
+          .setTween("#parallax1 > div", {y: "80%", ease: Linear.easeNone})
+          .addIndicators()
+          .addTo(controller);
+</script>
 @endsection
 @section('content')
 <div class="vid-bg">
@@ -41,26 +50,33 @@ $('.video-modal').on('hide.bs.modal', function(e) {
   </div><!-- end container -->
 </div><!-- end vid-bg -->
 
-<div class="gray-darker-bg">
-  <div class="container">
-    <div class="content-section" style="padding:30px 0px;">
-      <div class="row">
-        <div class="col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 text-center">
-          <h5 class="text-uppercase">Missions.Me empowers people to change the world.<hr class="divider inv visible-sm visible-xs"> <a class="btn btn-primary btn-sm launch-modal" data-toggle="modal" data-target="#video-modal">Watch Video</a></h5>
+<div class="gray-lighter-bg">
+    <div class="content-section" style="padding:0;">
+      <div class="row" style="margin-left:0;margin-right:0;">
+        <div class="col-sm-8 col-sm-offset-0 col-xs-10 col-xs-offset-1 text-center home-vision">
+          <h4>See how it all began because of you.<hr class="divider inv visible-sm visible-xs"> <a style="margin-left:10px;" class="btn btn-primary-hollow btn-sm launch-modal" data-toggle="modal" data-target="#video-modal"><i class="fa fa-play"></i></a></h4>
+        </div><!-- end col -->
+        <div class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1 text-center home-social">
+          <ul class="social-network-hollow social-circle-hollow">
+            <li><a href="https://instagram.com/missionsme" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a></li>
+            <li><a href="https://www.facebook.com/missionsme" target="_blank" title="Facebook"><i class="fa fa-facebook"></i></a></li>
+            <li><a href="https://twitter.com/missionsme" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></li>
+          </ul>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->
-  </div><!-- end container -->
+  <hr style="margin-top:0;margin-bottom:0;" class="divider xs">
 </div><!-- end white-bg -->
 <div class="gray-lighter-bg">
   <div class="container">
     <div class="content-section">
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 text-center">
+          <img data-aos="fade-up" class="img-responsive" src="../images/home/take-group.png">
           <h1 data-aos="fade-up">Take Your Group</h1>
           <hr data-aos="fade-up" class="divider red-small">
           <hr class="divider inv">
-          <p data-aos="fade-up">Missions.Me specializes in taking groups around the world on life-changing missions experiences. Missions.Me can provide your group with custom missions trips created especially for your group.</p>
+          <p class="large-line-height" data-aos="fade-up">Missions.Me specializes in taking groups around the world on life-changing missions experiences. Missions.Me can provide your group with custom missions trips created especially for your group.</p>
           <hr class="divider inv">
           <a data-aos="fade-up" href="{{ url('groups') }}" class="btn btn-info">Take Your Group</a>
         </div><!-- end col -->
@@ -68,37 +84,39 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     </div><!-- end content-section -->
   </div><!-- end container -->
 </div><!-- end white-bg -->
-<div class="gray-darker-bg">
-  <div class="container">
-    <div class="content-section">
-      <div class="row">
-        <div class="col-sm-6">
-          <img data-aos="fade-right" class="img-responsive img-rounded" src="../images/home/1nation1day.jpg">
-        </div><!-- end col -->
-        <hr class="divider inv lg visible-xs visible-sm">
-        <div class="col-sm-6 home-half-section">
-          <h1 class="dash-trailing" data-aos="fade-left">1Nation1Day</h1>
-          <p class="large-type" data-aos="fade-left">The mission of 1Nation1Day is to unite the global church for the salvation and transformation of nations.  We believe we are living in a New Missions Era.</p>
-          <hr class="divider inv">
-          <a href="/orphans" class="btn btn-info" data-aos="fade-left">Learn More</a>
-        </div><!-- end col -->
-      </div><!-- end row -->
-    </div><!-- end content-section -->
-  </div><!-- end container -->
-</div><!-- end white-bg -->
-<div class="gray-light-bg">
+
+<div id="parallax1" class="parallaxOnenation">
+  <div class="onenation-home-bg">
+    <div class="container">
+      <div class="onenation-home-section">
+        <div class="row">
+          <div class="col-sm-6">
+            <img data-aos="fade-right" class="img-responsive img-rounded" src="../images/home/1nation1day.jpg">
+          </div><!-- end col -->
+          <div class="col-sm-6 home-half-section">
+            <h1 class="dash-trailing" data-aos="fade-left">1Nation1Day</h1>
+            <p class="large-line-height large-type" data-aos="fade-left">The mission of 1Nation1Day is to unite the global church for the salvation and transformation of nations.  We believe we are living in a New Missions Era.</p>
+            <hr class="divider inv">
+            <a href="/orphans" class="btn btn-info" data-aos="fade-left">Learn More</a>
+          </div><!-- end col -->
+        </div><!-- end row -->
+      </div><!-- end content-section -->
+    </div><!-- end container -->
+  </div><!-- end onenation-home-bg -->
+</div><!-- end parallax -->
+<div class="gray-lighter-bg">
   <div class="container">
     <div class="content-section">
       <div class="row">
         <div class="col-sm-6 home-half-section">
           <h1 class="dash-trailing" data-aos="fade-right">Angel House</h1>
-          <p class="large-type" data-aos="fade-right">Our mission is to bring abandoned children from the slum to safety and into the loving arms of caretakers that will educate, love and raise them to become future leaders in their generation.</p>
+          <p class="large-line-height large-type" data-aos="fade-right">Our mission is to bring abandoned children from the slum to safety and into the loving arms of caretakers that will educate, love and raise them to become future leaders in their generation.</p>
           <hr class="divider inv">
           <a href="{{ url('orphans') }}" class="btn btn-info" data-aos="fade-right">Learn More</a>
         </div><!-- end col -->
         <hr class="divider inv lg visible-xs visible-sm">
         <div class="col-sm-6">
-          <img data-aos="fade-left" class="img-responsive img-rounded" src="../images/home/angel-house.jpg">
+          <img data-aos="fade-up" class="img-responsive img-rounded" src="../images/home/angel-house.jpg">
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->
@@ -119,7 +137,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
         <h1 class="home-college-header text-white" data-aos="fade-up">Missions.Me College</h1>
         <hr class="divider red-small" data-aos="fade-up">
         <hr class="divider inv">
-        <p class="text-white" data-aos="fade-up">We believe success is a byproduct of significance and strive to develop a premiere training facility where individuals are equipped with the tools to live impact filled lives.</p>
+        <p class="large-line-height text-white" data-aos="fade-up">We believe success is a byproduct of significance and strive to develop a premiere training facility where individuals are equipped with the tools to live impact filled lives.</p>
         <hr class="divider inv">
         <a href="{{ url('college') }}" class="btn btn-white-hollow" data-aos="fade-up">Learn More</a>
         <hr class="divider inv xlg">
@@ -130,14 +148,14 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     </div><!-- end row -->
   </div><!-- end container -->
 </div>
-<div class="gray-lighter-bg">
+<div class="dark-bg-primary">
   <div class="container">
     <div class="content-section">
       <div class="row">
         <div class="col-sm-12 text-center">
-          <h1 data-aos="zoom-in" data-aos-duration="800" data-aos-delay="100">Change The World</h1>
-          <a data-aos="zoom-in" data-aos-duration="800" data-aos-delay="200" href="{{ url('login?action=signup') }}" class="btn btn-primary btn-lg">Create Your Account</a>
-          <h5 data-aos="zoom-in" data-aos-duration="800" data-aos-delay="300" class="text-uppercase"><a href="{{ url('donate') }}">Or Donate</a></h5>
+          <h1 data-aos="zoom-in" data-aos-duration="800" data-aos-delay="100">Begin changing the world with us.</h1>
+          <a data-aos="zoom-in" data-aos-duration="800" data-aos-delay="200" href="{{ url('login?action=signup') }}" class="btn btn-info btn-lg">Create Your Account</a>
+          <a href="{{ url('donate') }}"><h6 data-aos="zoom-in" data-aos-duration="800" data-aos-delay="300" class="text-uppercase text-white">Or Donate</h6></a>
         </div><!-- end col -->
       </div><!-- end row -->
     </div><!-- end content-section -->

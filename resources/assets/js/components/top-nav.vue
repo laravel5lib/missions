@@ -35,6 +35,8 @@
 					<li><a href="/dashboard/reservations"><i class="fa fa-ticket"></i> Reservations</a></li>
 					<li><a href="/dashboard/records"><i class="fa fa-archive"></i> Records</a></li>
 					<li v-if="managing"><a href="/dashboard/groups"><i class="fa fa-users"></i> Groups</a></li>
+					<li><a href="/dashboard/projects"><i class="fa fa-tint"></i> My Projects</a></li>
+
 				</template>
 
 				<template v-if="isAdmin()">

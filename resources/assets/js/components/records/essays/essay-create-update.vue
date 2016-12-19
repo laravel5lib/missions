@@ -1,26 +1,33 @@
 <template>
     <validator name="CreateUpdateEssay" @touched="onTouched">
         <form id="CreateUpdateEssay" class="form-horizontal" novalidate>
-            <div class="form-group" :class="{ 'has-error': checkForError('author') }">
-                <label for="author" class="control-label">Author Name</label>
-                <input type="text" class="form-control" name="author" id="author" v-model="author_name"
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <div class="row" :class="{ 'has-error': checkForError('author') }">
+                <div class="col-sm-12">
+                    <label for="author" class="control-label">Author Name</label>
+                    <input type="text" class="form-control" name="author" id="author" v-model="author_name"
                        placeholder="Author Name" v-validate:author="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
+                </div>
             </div>
 
-            <!--<div class="form-group" :class="{ 'has-error': checkForError('subject') }">
+            <!--<div class="row" :class="{ 'has-error': checkForError('subject') }">
+                <div class="col-sm-12">
                 <label for="subject" class="control-label">Subject</label>
                 <input type="text" class="form-control" name="subject" id="subject" v-model="subject"
                        placeholder="Subject" v-validate:subject="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
+                </div>
             </div>-->
 
-            <div class="form-group" v-for="QA in content">
+            <div class="row" v-for="QA in content">
+                <div class="col-sm-12">
                 <label class="control-label" v-text="QA.q"></label>
                 <textarea class="form-control" v-model="QA.a"></textarea>
+                </div>
             </div>
-
-            <div class="form-group">
+            <hr class="divider inv">
+            <div class="row">
                 <div class="col-sm-12 text-center">
                     <a v-if="!isUpdate" href="/dashboard/records/essays" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
@@ -103,6 +110,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateEssay.valid) {
+                    // this.$refs.spinner.show();
                     this.resource.save({
                         author_name: this.author_name,
                         subject: this.subject,
@@ -115,6 +123,7 @@
                     }, function (error) {
                         this.showError = true;
                         console.log(error);
+                        // this.$refs.spinner.hide();
                     });
                 } else {
                     this.showError = true;
@@ -123,6 +132,7 @@
             update(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateEssay.valid) {
+                    // this.$refs.spinner.show();
                     this.resource.update({id: this.id}, {
                         author_name: this.author_name,
                         subject: this.subject,
@@ -130,7 +140,9 @@
                         user_id: this.user_id,
                     }).then(function (resp) {
                         this.showSuccess = true;
+                        // this.$refs.spinner.hide();
                     }, function (error) {
+                        // this.$refs.spinner.hide();
                         debugger;
                     });
                 }
@@ -138,14 +150,16 @@
         },
         ready(){
             if (this.isUpdate) {
+                // this.$refs.spinner.show();
                 this.$http('essays/' + this.id).then(function (response) {
                 // this.user = response.data.data;
 
-                    var essay = response.data.data;
+                    let essay = response.data.data;
                     this.author_name = essay.author_name;
                     this.subject = essay.subject;
                     this.content = essay.content;
                     // this.user_id = essay.user_id;
+                    // this.$refs.spinner.hide();
                 });
             }
         }

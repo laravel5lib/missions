@@ -2,8 +2,15 @@
 
 namespace App\Jobs;
 
+use App\Models\v1\Donor;
+
 class ExportDonors extends Exporter
 {
+    public function data($request)
+    {
+        return Donor::filter($request)->get();
+    }
+
     public function columns($donor)
     {
         return [

@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import contactForm from './components/contact-form.vue';
 import login from './components/login.vue';
 import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
@@ -19,6 +20,7 @@ import groupTripWrapper from './components/campaigns/groups-trips-selection-wrap
 import groupInterestSignup from './components/groups/group-interest-signup.vue';
 import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
 import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
+import userProjectsList from './components/projects/user-projects-list.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import donationsList from './components/reservations/donations-list.vue';
 import recordsList from './components/records/records-list.vue';
@@ -35,11 +37,6 @@ import reservationAvatar from './components/reservations/reservation-avatar.vue'
 import reservationCosts from './components/reservations/reservation-costs.vue';
 import reservationDues from './components/reservations/reservation-dues.vue';
 import reservationFunding from './components/reservations/reservation-funding.vue';
-import reservationsPassportsManager from './components/reservations/reservations-passports-manager.vue';
-import reservationsMedicalReleasesManager from './components/reservations/reservations-medical-releases-manager.vue';
-import reservationsEssaysManager from './components/reservations/reservations-essays-manager.vue';
-import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
-import reservationsArrivalDesignation from './components/reservations/reservations-arrival-designation.vue';
 import userSettings from './components/users/user-settings.vue';
 import userProfileCountries from './components/users/user-profile-countries.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
@@ -54,6 +51,7 @@ import notes from './components/notes.vue';
 import todos from './components/todos.vue';
 import userPermissions from './components/users/user-permissions.vue';
 import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
+import reservationRequirements from './components/reservations/reservation-requirements.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -148,6 +146,8 @@ Vue.component('tooltip', VueStrap.tooltip);
 import myDatepicker from './components/date-picker.vue'
 Vue.component('date-picker', myDatepicker);
 
+// Vue Cookie
+Vue.use(require('vue-cookie'));
 // Vue Resource
 Vue.use(require('vue-resource'));
 // Vue Validator
@@ -170,8 +170,30 @@ Vue.http.interceptors.push({
             headers.Authorization = token
         }
 
+
+        // Show Spinners in all components where they exist
+        if (_.contains(['GET', 'POST', 'PUT'],request.method)) {
+            // debugger;
+            if (this.$refs.spinner) {
+                switch (request.method) {
+                    case 'GET':
+                        this.$refs.spinner.show({text: 'Loading'});
+                        break;
+                    case 'POST':
+                        this.$refs.spinner.show({text: 'Saving'});
+                        break;
+                    case 'PUT':
+                        this.$refs.spinner.show({text: 'Updating'});
+                        break;
+                }
+            }
+        }
+
         // Only POST and PUT Requests
         if (_.contains(['POST', 'PUT'],request.method)) {
+            console.log(this);
+            console.log(request);
+
             /*
              * Date Conversion: Local to UTC
              */
@@ -212,6 +234,11 @@ Vue.http.interceptors.push({
     },
 
     response: function (response) {
+        // Hide Spinners in all components where they exist
+        if (this.$refs.spinner && !_.isUndefined(this.$refs.spinner._started)) {
+            this.$refs.spinner.hide();
+        }
+
         if (response.status && response.status === 401) {
             $.removeCookie('api_token');
             console.log('not logged in');
@@ -334,17 +361,29 @@ Vue.directive('crop', {
 });
 
 Vue.mixin({
-    methods: {}
+    methods: {
+        /*showSpinner(){
+            this.$refs.spinner.show();
+        },
+        hideSpinner(){
+            this.$refs.spinner.hide();
+        },*/
+    },
+    ready() {
+        function isTouchDevice(){
+            return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+        }
+        // Disable tooltips on all components on mobile
+        if(isTouchDevice()) {
+            $("[rel='tooltip']").tooltip('destroy');
+        }
+
+    }
 });
 
 new Vue({
     el: '#app',
     data: {
-        user: {
-            name: '',
-            email: '',
-            public: false
-        },
         datePickerSettings: {
             type: 'min',
             week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
@@ -357,8 +396,14 @@ new Vue({
         showError: false,
         message: ''
     },
+    computed: {
+        user() {
+            return JSON.parse(this.$cookie.get('user'));
+        }
+    },
     components: {
         login,
+        contactForm,
         fundraisers,
         campaigns,
         groups,
@@ -372,6 +417,7 @@ new Vue({
         tripDetailsMissionaries,
         tripRegistrationWizard,
         reservationsList,
+        userProjectsList,
         donationsList,
         fundraisersManager,
         fundraisersStories,
@@ -384,6 +430,7 @@ new Vue({
         todos,
         userPermissions,
         uploadCreateUpdate,
+        reservationRequirements,
 
         //dashboard components
         recordsList,
@@ -400,11 +447,6 @@ new Vue({
         reservationCosts,
         reservationDues,
         reservationFunding,
-        reservationsPassportsManager,
-        reservationsMedicalReleasesManager,
-        reservationsVisasManager,
-        reservationsEssaysManager,
-        reservationsArrivalDesignation,
         userSettings,
         userProfileCountries,
         userProfileStories,
@@ -471,15 +513,26 @@ new Vue({
         }
     },
     ready: function() {
-        // console.log('vue is ready'),
-        this.$on('userHasLoggedIn', function (user) {
-          this.setUser(user)
-        });
-
         // Track window resizing
         $(window).on('resize', function(){
             this.$emit('Window:resize');
         }.bind(this));
+
+        this.$on('userHasLoggedIn', function (user) {
+            this.user = user;
+            this.authenticated = true;
+        });
+
+        this.$on('showSuccess', function (msg) {
+            this.message = msg;
+            this.showSuccess = true;
+        });
+
+        this.$on('showError', function (msg) {
+            this.message = msg;
+            this.showError = true;
+        });
+
     },
     methods: {
         setUser: function (user) {
@@ -496,6 +549,9 @@ new Vue({
         'showError': function (msg) {
             this.message = msg;
             this.showError = true;
+        },
+        'userHasLoggedIn': function (user) {
+            this.$cookie.set('user', JSON.stringify(user), 1);
         }
     }
 });

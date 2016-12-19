@@ -19,8 +19,7 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'member', 'passport', 'visa', 'dues',
-        'medicalRelease', 'fund', 'testimony'
+        'fundraisers', 'dues', 'fund'
     ];
 
     /**
@@ -202,7 +201,7 @@ class ReservationTransformer extends TransformerAbstract
     {
         $requirements = $reservation->requirements;
 
-        return $this->collection($requirements, new RequirementTransformer);
+        return $this->collection($requirements, new ReservationRequirementTransformer);
     }
 
     /**
@@ -255,55 +254,6 @@ class ReservationTransformer extends TransformerAbstract
         $fundraisers = $reservation->fundraisers()->get();
 
         return $this->collection($fundraisers, new FundraiserTransformer);
-    }
-
-    /**
-     * Include Member
-     *
-     * @param Reservation $reservation
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeMember(Reservation $reservation)
-    {
-        $member = $reservation->member;
-
-        return $this->item($member, new TeamMemberTransformer);
-    }
-
-    public function includePassport(Reservation $reservation)
-    {
-        $passport = $reservation->passport;
-
-        if ( ! $passport) return null;
-
-        return $this->item($passport, new PassportTransformer);
-    }
-
-    public function includeTestimony(Reservation $reservation)
-    {
-        $testimony = $reservation->testimony;
-
-        if ( ! $testimony) return null;
-
-        return $this->item($testimony, new EssayTransformer);
-    }
-
-    public function includeVisa(Reservation $reservation)
-    {
-        $visa = $reservation->visa;
-
-        if ( ! $visa) return null;
-
-        return $this->item($visa, new VisaTransformer);
-    }
-
-    public function includeMedicalRelease(Reservation $reservation)
-    {
-        $release = $reservation->medicalRelease;
-
-        if ( ! $release) return null;
-
-        return $this->item($release, new MedicalReleaseTransformer);
     }
 
     private function validateParams($params)

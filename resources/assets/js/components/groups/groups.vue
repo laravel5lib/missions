@@ -169,6 +169,7 @@
         </div>
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="col-sm-6 col-md-3" v-for="group in groups|limitBy groupsLimit" v-if="groups.length" style="display:flex">
             <div class="panel panel-default">
                 <a :href="'/groups/' + group.url" role="button">
@@ -374,6 +375,7 @@
 					this.groupsLimit = this.groups.length
 				},*/
             searchGroups(){
+                // this.$refs.spinner.show();
                 this.resource.query(null, {
                     search: this.search,
                     page: this.pagination.current_page,
@@ -381,6 +383,10 @@
                 }).then(function(groups){
                     this.groups = groups.data.data;
                     this.pagination = groups.data.meta.pagination;
+                    // this.$refs.spinner.hide();
+                }, function (error) {
+                    // this.$refs.spinner.hide();
+                    //TODO add error alert
                 }).then(function () {
 
                 });
@@ -411,6 +417,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateGroup.valid) {
+                    // this.$refs.spinner.show();
                     this.$http.post('groups/submit', {
                         name: this.name,
                         type: this.type,
@@ -433,9 +440,12 @@
                     }).then(function (response) {
                         console.log(response);
                         this.showSuccess = true;
+                        //TODO use universal alert
                         this.resetForm();
+                        // this.$refs.spinner.hide();
                     }, function (error) {
                         this.errors = error.data.errors
+                        // this.$refs.spinner.hide();
                     });
                 }
             }
@@ -454,6 +464,8 @@
             this.$http.get('campaigns').then(function (response) {
                 this.campaigns = response.data.data;
             })
+
+            //TODO use promise defer
         }
     }
 </script>

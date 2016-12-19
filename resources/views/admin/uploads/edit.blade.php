@@ -33,8 +33,12 @@
 <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
-                <upload-create-update :is-update="true" :lock-type="true" upload-id="{{ $id }}"></upload-create-update>
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <upload-create-update :is-update="true" :lock-type="true" upload-id="{{ $id }}"></upload-create-update>
+                    </div><!-- end panel-body -->
+                </div><!-- end panel -->
             </div>
         </div>
     </div>

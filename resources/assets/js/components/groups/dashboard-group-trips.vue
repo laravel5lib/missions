@@ -1,5 +1,6 @@
 <template>
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="row">
             <p v-if="trips.length < 1" class="text-center text-muted lead">
                 This group does not have any trips yet. Please check back soon!
@@ -41,9 +42,14 @@
         },
         methods:{
             searchTrips(){
+                // this.$refs.spinner.show();
                 this.resource.query().then(function(response){
                     this.trips = response.data.data;
                     this.pagination = response.data.meta.pagination;
+                    // this.$refs.spinner.hide();
+                }, function (error) {
+                    // this.$refs.spinner.hide();
+                    //TODO add error alert
                 }).then(function () {
                     $('[data-toggle="tooltip"]').tooltip();
                 });

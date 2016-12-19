@@ -1,5 +1,6 @@
 <template>
     <div class="row">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <template v-if="fundraisers.length">
             <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
                 <div class="panel panel-default">
@@ -42,12 +43,17 @@
         },
         methods: {
             getFundraisers(){
+                // this.$refs.spinner.show();
                 this.$http.get('fundraisers', {
                     sponsor: 'groups/' + this.groupUrl,
                     page: this.pagination.current_page
                 }).then(function (response) {
                     this.fundraisers = response.data.data;
                     this.pagination = response.data.meta.pagination;
+                    // this.$refs.spinner.hide();
+                }, function (error) {
+                    // this.$refs.spinner.hide();
+                    //TODO add error alert
                 });
             }
         },

@@ -4,29 +4,35 @@
             <label>{{ reservation.arrival_designation | capitalize }} Missionary</label>
         </div>
         <div class="row" v-else>
-            <label>Please select the appropriate designation:</label>
             <div class="col-xs-8">
-                <select v-model="arrival_designation" @change="updateInfo" class="form-control">
-                    <option value="" selected>--select--</option>
-                    <option value="eastern">Eastern Missionary</option>
-                    <option value="western">Western Missionary</option>
-                    <option value="international">International</option>
-                </select>
+                <label>Select designation</label>
+                <div class="form-inline">
+                    <select v-model="arrival_designation" @change="updateInfo" class="form-control">
+                        <option value="" selected>Select</option>
+                        <option value="eastern">Eastern Missionary</option>
+                        <option value="western">Western Missionary</option>
+                        <option value="international">International</option>
+                    </select>
+                    <button class="btn btn-primary btn-md" @click="save">Save</button>
+                </div>
             </div>
             <div class="col-xs-4">
-                <button class="btn btn-primary btn-md" @click="save">Save</button>
             </div>
         </div>
         <hr class="divider inv">
-        <p class="text-muted" v-text="moreInfo"></p>
+        <p class="small" v-text="moreInfo"></p>
         <p v-if="!editMode"><button @click="editMode = !editMode" class="btn btn-default-hollow btn-xs">Edit</button></p>
     </div>
 </template>
 <script>
     export default {
-        name: 'reservations-arrival-designation',
+        name: 'arrival-designation',
         props: {
             'reservationId': {
+                type: String,
+                required: true
+            },
+            'requirementId': {
                 type: String,
                 required: true
             }

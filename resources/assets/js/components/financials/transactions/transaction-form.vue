@@ -41,7 +41,7 @@
                 <div class="row" v-if="transaction.type == 'credit'">
                     <div class="col-xs-12">
                         <label>Reason for Credit</label>
-                        <textarea class="form-control" v-model="transaction.payment.reason"></textarea>
+                        <textarea class="form-control" v-model="transaction.details.reason"></textarea>
                     </div>
                 </div>
                 <div class="row" v-if="transaction.type == 'transfer'">
@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-xs-6">
                             <label>Payment Method</label>
-                            <select class="form-control" v-model="transaction.payment.type" :disabled="editingCreditCard">
+                            <select class="form-control" v-model="transaction.details.type" :disabled="editingCreditCard">
                                 <option value="card">Credit Card</option>
                                 <option value="check">Check</option>
                                 <option value="cash">Cash</option>
@@ -86,7 +86,7 @@
                             <textarea class="form-control" v-model="transaction.comment"></textarea>
                         </div>
                     </div>
-                    <div class="row" v-if="transaction.payment.type == 'card'">
+                    <div class="row" v-if="transaction.details.type == 'card'">
                         <div class="col-xs-6">
                             <label>Card Holder's Name</label>
                             <input class="form-control" type="text" v-model="card.cardholder" />
@@ -113,10 +113,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" v-if="transaction.payment.type == 'check'">
+                <div class="row" v-if="transaction.details.type == 'check'">
                     <div class="col-xs-12">
                         <label>Check Number</label>
-                        <input class="form-control" type="text" v-model="transaction.payment.number" />
+                        <input class="form-control" type="text" v-model="transaction.details.number" />
                     </div>
                 </div>
             </div>
@@ -262,7 +262,7 @@
             return {
                 transaction: {
                     type: 'donation',
-                    payment: {
+                    details: {
                         type: "card",
                         reason: null
                     }
@@ -290,7 +290,7 @@
         },
         computed: {
             editingCreditCard() {
-                if (this.editing && this.transaction.payment.type == 'card') {
+                if (this.editing && this.transaction.details.type == 'card') {
                     return true;
                 }
                 return false;
@@ -339,7 +339,7 @@
             reset() {
                 this.transaction = {
                     type: 'donation',
-                    payment: {
+                    details: {
                         type: "card",
                         reason: null
                     }
@@ -372,22 +372,22 @@
 
                     if (this.transaction.type == 'transfer') {
                         this.transaction.amount < 0 ? this.transfer_type = 'from' : this.transfer_type = 'to';
-                        this.selectedFund.id = this.transaction.payment.fund_id;
+                        this.selectedFund.id = this.transaction.details.fund_id;
                     }
 
                     if (this.transaction.type == 'donation') {
 
                         this.selectedDonor = this.transaction.donor.data;
 
-                        if (this.transaction.payment.type == 'card') {
-                            this.card.cardholder = this.transaction.payment.cardholder;
-                            this.card.number = this.transaction.payment.last_four;
+                        if (this.transaction.details.type == 'card') {
+                            this.card.cardholder = this.transaction.details.cardholder;
+                            this.card.number = this.transaction.details.last_four;
                         }
                     }
 
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.$dispatch('showError', 'Unable to retrieve transaction.');
+                    this.$root.$emit('showError', 'Unable to retrieve transaction.');
                 });
             },
             create() {
@@ -397,11 +397,11 @@
 
                 this.$http.post('transactions', data).then(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.$dispatch('showSuccess', 'Transaction successfully created.');
-                    this.$dispatch('transactionCreated');
+                    this.$root.$emit('showSuccess', 'Transaction successfully created.');
+                    this.$root.$emit('transactionCreated');
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.$dispatch('showError', 'There are errors on the form.');
+                    this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
             update() {
@@ -411,15 +411,15 @@
 
                 this.$http.put('transactions/' + this.id, data).then(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.$dispatch('showSuccess', 'Transaction updated successfully.');
+                    this.$root.$emit('showSuccess', 'Transaction updated successfully.');
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.$dispatch('showError', 'There are errors on the form.');
+                    this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
             prepareData() {
                 var data = {
-                    payment: {}
+                    details: {}
                 };
 
                 if (this.transaction.type == 'transfer') {
@@ -433,7 +433,7 @@
                     data.type = this.transaction.type;
                     data.amount = this.transaction.amount;
                     data.fund_id = this.fundId;
-                    data.reason = this.transaction.payment.reason;
+                    data.reason = this.transaction.details.reason;
                 }
 
                 if (this.transaction.type == 'donation') {
@@ -446,11 +446,12 @@
                     } else {
                         data.donor = this.selectedDonor;
                     }
-                    data.payment.type = this.transaction.payment.type;
-                    if (this.transaction.payment.type == 'check') {
-                        data.payment.number = this.transaction.payment.number;
+                    data.details.type = this.transaction.details.type;
+                    if (this.transaction.details.type == 'check') {
+                        data.details.number = this.transaction.details.number;
+                        data.details.comment = this.transaction.comment;
                     }
-                    if (this.transaction.payment.type == 'card') {
+                    if (this.transaction.details.type == 'card') {
                         data.card = this.card;
                     }
                 }

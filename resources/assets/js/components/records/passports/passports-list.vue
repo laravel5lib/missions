@@ -1,35 +1,38 @@
 <template>
     <div class="row">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="col-sm-12" v-if="loaded && !passports.length">
-            <div class="alert alert-info" role="alert">No records found</div>
+            <p class="text-center text-muted" role="alert"><em>No records found</em></p>
         </div>
 
-        <div class="col-md-4 col-sm-6" v-for="passport in paginatedPassports">
+        <div class="col-sm-6 col-md-4" v-for="passport in paginatedPassports">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{passport.citizenship_name}}</h6>
                     <a role="button" :href="'/dashboard' + passport.links[0].uri">
-                        <h4 style="text-transform:capitalize;" class="text-primary">
+                        <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
                             {{passport.given_names}} {{passport.surname}}
-                        </h4>
+                        </h5>
                     </a>
-                    <hr class="divider lg">
-                    <p class="small">
-                        <b>ID:</b> {{passport.number}}
-                        <br>
-                        <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}
-                        <br>
-                        <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}
-                        <br>
-                        <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}
-                    </p>
-                </div><!-- end panel-body -->
-                <div class="panel-footer" style="padding: 0;">
-                    <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
-                        <a class="btn btn-info" :href="'/dashboard' + passport.links[0].uri + '/edit'"><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger" @click="selectedPassport = passport,deleteModal = true"><i class="fa fa-times"></i></a>
+                    <div style="position:absolute;right:25px;top:12px;">
+                        <a style="margin-right:3px;" :href="'/dashboard' + passport.links[0].uri + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a @click="selectedPassport = passport,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
-                </div>
+                    <hr class="divider">
+                    <label>ID</label>
+                    <p class="small">{{passport.number}}</p>
+                    <label>BIRTH COUNTRY</label>
+                    <p class="small">{{passport.citizenship_name}}</p>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>ISSUED ON</label>
+                            <p class="small">{{passport.issued_at|moment 'll'}}</p>
+                        </div><!-- end col -->
+                        <div class="col-sm-6">
+                            <label>EXPIRES ON</label>
+                            <p class="small">{{passport.expires_at|moment 'll'}}</p>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                </div><!-- end panel-body -->
             </div>
         </div>
         <div class="col-sm-12 text-center">
@@ -58,7 +61,7 @@
         </modal>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'passports-list',
         data(){
@@ -91,10 +94,10 @@
         methods:{
             // emulate pagination
             paginate(){
-                var array = [];
-                var start = (this.pagination.current_page - 1) * this.per_page;
-                var end   = start + this.per_page;
-                var range = _.range(start, end);
+                let array = [];
+                let start = (this.pagination.current_page - 1) * this.per_page;
+                let end   = start + this.per_page;
+                let range = _.range(start, end);
                 _.each(range, function (index) {
                     if (this.passports[index])
                         array.push(this.passports[index]);
@@ -103,20 +106,24 @@
             },
             removePassport(passport){
                 if(passport) {
+                    // this.$refs.spinner.show();
                     this.$http.delete('passports/' + passport.id).then(function (response) {
                         this.passports = _.reject(this.passports, function (item) {
                             return item.id === passport.id;
                         });
                         this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
+                        // this.$refs.spinner.hide();
                     });
                 }
             }
         },
         ready(){
+            // this.$refs.spinner.show();
             this.$http('users/me?include=passports').then(function (response) {
                 this.passports = response.data.data.passports.data;
                 this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
                 this.loaded = true;
+                // this.$refs.spinner.hide();
             });
         }
     }

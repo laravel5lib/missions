@@ -7,6 +7,7 @@ use Dingo\Api\Contract\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class UtilitiesController extends Controller
 {
@@ -34,5 +35,26 @@ class UtilitiesController extends Controller
     {
         $timezones = \DateTimeZone::listIdentifiers();
         return response()->json(compact('timezones'));
+    }
+
+    public function  sendContactEmail(Request $request)
+    {
+        $data = [
+            'email' => $request->get('email'),
+            'name' => $request->get('name'),
+            'organization' => $request->get('organization'),
+            'phone_one' => $request->get('phone_one'),
+            'comments' => $request->get('comments'),
+        ];
+
+        Mail::queue('emails.contact', ['data' => $data], function ($m) use ($data) {
+            $m->to('go@missions.me', 'Missions.me')->subject('Contact from Missions.Me Visitor!');
+        });
+
+    }
+
+    public function getPastTrips()
+    {
+       return config('accolades.trips');
     }
 }

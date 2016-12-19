@@ -1,5 +1,7 @@
 <template>
     <div class="panel panel-default">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+
         <div class="panel-heading">
             <h4>Campaign Regions</h4>
         </div>

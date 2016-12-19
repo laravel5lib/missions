@@ -42,7 +42,7 @@
 		opacity: 0;
 	}
 </style>
-<script>
+<script type="text/javascript">
 	import campaignGroups from './campaign-groups.vue';
 	import groupTrips from './group-trips.vue';
 	export default{

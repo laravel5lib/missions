@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div style="position:relative">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <template v-if="isUser()">
             <!--<div class="panel panel-default">-->
                 <!--<div class="panel-body">-->
@@ -167,6 +168,7 @@
                 }
             },
             doUpdate(type){
+                // this.$refs.spinner.show();
                 this.resource.update({id: this.id}, this.fundraiser).then(function (response) {
                     this.fundraiser = response.data.data;
                     this.newMarkedContentToggle = true;
@@ -176,13 +178,19 @@
                         this.showSettingsSuccess = true;
                         // page refresh might be necessary for updated url
                     }
-				});
+                    // this.$refs.spinner.hide();
+                }, function (error) {
+                    // this.$refs.spinner.hide();
+                    //TODO add error alert
+                });
             }
         },
         ready(){
+            // this.$refs.spinner.show();
             this.resource.get({id: this.id}).then(function (response) {
                 this.fundraiser = response.data.data;
-				this.$root.$emit('Fundraiser:DisplayDonors', this.fundraiser.show_donors)
+				this.$root.$emit('Fundraiser:DisplayDonors', this.fundraiser.show_donors);
+                // this.$refs.spinner.hide();
             });
         }
     }

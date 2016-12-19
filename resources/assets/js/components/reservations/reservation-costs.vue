@@ -1,5 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-xs-4">
                 <button class="btn btn-primary btn-sm" @click="add">
@@ -19,7 +20,7 @@
         <hr class="divider inv sm">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h5>Costs</h5>
+                <h5>Applied Costs</h5>
             </div><!-- end panel-heading -->
 
             <div class="list-group">
@@ -120,8 +121,8 @@
         },
         methods: {
             dateIsBetween(a, b){
-                var start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
-                var stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
+                let start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
+                let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
             },
@@ -146,8 +147,8 @@
                 this.deleteModal = true;
             },
             remove(){
-                var temporaryDues = [];
-                var res = jQuery.extend(true, {}, this.reservation);
+                let temporaryDues = [];
+                let res = jQuery.extend(true, {}, this.reservation);
 
                 // remove cost from temporary array
                 if (this.selectedCost.unsaved) {
@@ -167,7 +168,7 @@
                         if (tempCost === this.selectedCost) {
                             res.dues.data = _.reject(res.dues.data, function (due) {
                                 return due.cost === tempCost.name;
-                            })
+                            });
                             return true;
                         }
                     }.bind(this));
@@ -189,8 +190,8 @@
 
             },
             addCosts(){
-                var temporaryDues = [];
-                var res = jQuery.extend(true, {}, this.reservation);
+                let temporaryDues = [];
+                let res = jQuery.extend(true, {}, this.reservation);
 
                 // Add selected costs to temporary list
                 _.each(this.selectedCosts, function (cost) {
@@ -214,7 +215,7 @@
                 this.$root.$emit('Reservation:CostsUpdated', res);
             },
             generatePaymentsFromCost(cost){
-                var temporaryDues = [];
+                let temporaryDues = [];
                 // generate due based on added costs' payments
                 _.each(cost.payments.data, function (payment) {
                     temporaryDues.push({
@@ -231,13 +232,13 @@
                 return temporaryDues;
             },
             doUpdate(){
-                var costIds = [];
+                let costIds = [];
 
                 _.each(this.listedCosts, function (cost) {
                     costIds.push({id: cost.id || cost.cost_id, locked: cost.locked})
                 });
 
-                var res = jQuery.extend(true, {}, this.reservation);
+                let res = jQuery.extend(true, {}, this.reservation);
                 res.costs = costIds
 
                 return this.resource.update(res).then(function (response) {
@@ -274,8 +275,7 @@
                     if (!_.findWhere(this.reservation.costs.data, {cost_id: cost.id}) && !_.findWhere(this.temporaryCosts, {id: cost.id}) && cost.type === 'optional') {
                         cost.removal = false;
                         return true;
-                    }
-                    ;
+                    };
                 }.bind(this));
             },
             revert(){
@@ -286,8 +286,10 @@
             },
         },
         ready(){
+            // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
                 this.setReservationData(response.data.data);
+                // this.$refs.spinner.hide();
             });
         }
     }

@@ -12,7 +12,8 @@
 			</div>
 			</div>
 		</div><!-- end panel-heading -->
-		<div class="panel-body">
+		<div class="panel-body" style="position:relative">
+			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 			<div class="col-sm-6 col-xs-12" v-for="facilitator in facilitators" track-by="id">
 				<div class="media-left media-top">
 					<a href="#">

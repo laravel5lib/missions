@@ -163,10 +163,11 @@ class Reservation extends Model
      */
     public function requirements()
     {
-        return $this->belongsToMany(Requirement::class, 'reservation_requirements')
-                    ->withPivot('grace_period', 'status', 'completed_at')
-                    ->withTimestamps()
-                    ->orderBy('due_at', 'desc');
+        return $this->hasMany(ReservationRequirement::class);
+//        return $this->belongsToMany(Requirement::class, 'reservation_requirements')
+//                    ->withPivot('grace_period', 'status', 'completed_at', 'document_type', 'document_id')
+//                    ->withTimestamps()
+//                    ->orderBy('due_at', 'desc');
     }
 
     /**
@@ -192,57 +193,6 @@ class Reservation extends Model
     public function donors()
     {
         return $this->fund()->donors();
-    }
-
-    /**
-     * Get the reservation's passport.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function passport()
-    {
-        return $this->belongsTo(Passport::class);
-    }
-
-    /**
-     * Get the reservation's testimony.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function testimony()
-    {
-        return $this->belongsTo(Essay::class, 'testimony_id');
-    }
-
-    /**
-     * Get the reservation's visa.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function visa()
-    {
-        return $this->belongsTo(Visa::class);
-    }
-
-    /**
-     * Get the reservation's medical release.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function medicalRelease()
-    {
-        return $this->belongsTo(MedicalRelease::class);
-    }
-
-
-    /**
-     * Get the reservation's team member details
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function membership()
-    {
-        return $this->morphOne(TeamMember::class, 'assignable');
     }
 
     /**
@@ -368,15 +318,17 @@ class Reservation extends Model
         if ( ! $requirements instanceof Collection)
             $requirements = collect($requirements);
 
-        $data = $requirements->keyBy('id')->map(function($item, $key) {
+        $requirements->map(function($item, $key) {
             return [
+                'requirement_id' => $item->id,
+                'document_type' => $item->document_type,
                 'grace_period' => $item->grace_period,
                 'status' => $item->status ? $item->status : 'incomplete',
                 'completed_at' => $item->completed_at ? $item->completed_at : null
             ];
-        })->toArray();
-
-        $this->requirements()->sync($data);
+        })->each(function($requirement) {
+            $this->requirements()->create($requirement);
+        });
     }
 
     /**

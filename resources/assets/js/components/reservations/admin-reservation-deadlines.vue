@@ -1,5 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+
         <button class="btn btn-primary btn-xs" @click="add">
             <span class="fa fa-plus"></span> Add Existing
         </button>
@@ -120,7 +122,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select';
     export default{
         name: 'admin-reservation-deadlines',
@@ -196,20 +198,20 @@
             },
             update(){
                 // prep current deadlines
-                var currentDeadlineIds = [];
+                let currentDeadlineIds = [];
                 _.some(this.reservation.deadlines.data, function (dl) {
                     if (dl.id === this.editedDeadline.id) {
                         return dl = this.editedDeadline;
                     }
                 }.bind(this));
 
-                var reservation = this.preppedReservation;
+                let reservation = this.preppedReservation;
                 reservation.deadlines = this.reservation.deadlines.data;
 
                 return this.doUpdate(reservation);
             },
             remove(deadline){
-                var reservation = this.preppedReservation;
+                let reservation = this.preppedReservation;
                 reservation.deadlines = _.reject(this.reservation.deadlines.data, function (dl) {
                     return dl.id === deadline.id
                 });
@@ -218,29 +220,29 @@
             },
             addDeadlines(){
                 // prep current deadlines
-                var currentDeadlineIds = [];
+                let currentDeadlineIds = [];
                 _.each(this.reservation.deadlines.data, function (dl) {
                     currentDeadlineIds.push({ id: dl.id, grace_period: dl.grace_period })
                 });
                 // prep added deadlines
-                var selectedDeadlineIds = [];
+                let selectedDeadlineIds = [];
                 _.each(this.selectedDeadlines, function (dl) {
                     selectedDeadlineIds.push({ id: dl.id, grace_period: dl.grace_period })
                 });
 
                 // merge arrays
-                var newDeadlines = _.union(currentDeadlineIds, selectedDeadlineIds);
+                let newDeadlines = _.union(currentDeadlineIds, selectedDeadlineIds);
                 // filter possible duplicates
                 newDeadlines = _.uniq(newDeadlines);
 
-                var reservation = this.preppedReservation;
+                let reservation = this.preppedReservation;
                 reservation.deadlines = newDeadlines;
 
                 return this.doUpdate(reservation);
             },
             addNew(){
                 // get trip object
-                var trip = this.reservation.trip.data;
+                let trip = this.reservation.trip.data;
 
                 // get only ids of current deadlines so we don't change anything
                 trip.deadlines = [];
@@ -252,8 +254,9 @@
                 delete trip.difficulty;
                 delete trip.rep_id;
 
+                // this.$refs.spinner.show();
                 this.$http.put('trips/' + trip.id + '?include=deadlines', trip).then(function (response) {
-                    var thisTrip = response.data.data;
+                    let thisTrip = response.data.data;
                     this.selectedDeadlines = new Array(_.findWhere(response.data.data.deadlines.data, { name: this.newDeadline.name }));
 
                     return this.addDeadlines();
@@ -261,6 +264,7 @@
                 });
             },
             doUpdate(reservation){
+                // this.$refs.spinner.show();
                 return this.resource.update(reservation).then(function (response) {
                     this.setReservationData(response.data.data);
                     this.selectedDeadlines = [];
@@ -269,6 +273,7 @@
                     this.showAddModal = false;
                     this.showEditModal = false;
                     this.showNewModal = false;
+                    // this.$refs.spinner.hide();
                 });
             },
             getDeadlines(search, loading){
@@ -296,8 +301,10 @@
             }
         },
         ready(){
+            // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
                 this.setReservationData(response.data.data)
+                // this.$refs.spinner.hide();
             });
 
         }

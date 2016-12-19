@@ -215,7 +215,8 @@
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
-                    sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
+                    sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc'),
+                    cause: this.causeId
                 };
 
                 switch (this.list){
@@ -230,12 +231,12 @@
                 return params;
             },
             searchProjects(){
-                this.$refs.spinner.show();
+                // this.$refs.spinner.show();
                 var params = this.getParameters();
-                this.$http.get('causes/' + this.causeId + '/projects', params).then(function (response) {
+                this.$http.get('projects', params).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.projects = response.data.data;
-                    this.$refs.spinner.hide();
+                    // this.$refs.spinner.hide();
                 })
             }
         },

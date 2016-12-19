@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Jobs\SendReferralRequestEmail;
 use App\Models\v1\Project;
 use App\Models\v1\Campaign;
 use App\Models\v1\ProjectCause;
+use App\Models\v1\Referral;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
@@ -90,6 +92,10 @@ class EventServiceProvider extends ServiceProvider
 
         User::created(function ($user) {
             $user->assign('member');
+        });
+
+        Referral::created(function ($referral) {
+           dispatch(new SendReferralRequestEmail($referral));
         });
     }
 }

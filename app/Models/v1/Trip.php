@@ -369,4 +369,29 @@ class Trip extends Model
         return $query->where('ended_at', '<', Carbon::now());
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('closed_at', '>', Carbon::now())
+                    ->where('spots', '>', 0)
+                    ->whereNotNull('published_at')
+                    ->where('published_at', '<=', Carbon::now());
+    }
+
+    public function scopeClosed($query)
+    {
+        return $query->where('closed_at', '<=', Carbon::now())
+                    ->orWhere('spots', 0);
+    }
+
+    public function scopeScheduled($query)
+    {
+        return $query->whereNotNull('published_at')
+                    ->where('published_at', '>', Carbon::now());
+    }
+
+    public function scopeDraft($query)
+    {
+        return $query->whereNull('published_at');
+    }
+
 }

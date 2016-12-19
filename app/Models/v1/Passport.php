@@ -33,14 +33,4 @@ class Passport extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    /**
-     * Get all the passport's reservations.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function reservations()
-    {
-        return $this->hasMany(Reservation::class);
-    }
 }

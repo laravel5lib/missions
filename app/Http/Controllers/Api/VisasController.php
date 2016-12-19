@@ -24,9 +24,6 @@ class VisasController extends Controller
     public function __construct(Visa $visa)
     {
         $this->visa = $visa;
-
-        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
     }
 
     /**
@@ -37,12 +34,9 @@ class VisasController extends Controller
      */
     public function index(Request $request)
     {
-        $visas = $this->visa;
-
-        if($request->has('user_id'))
-            $visas = $visas->where('user_id', $request->get('user_id'));
-
-        $visas = $visas->paginate(25);
+        $visas = $this->visa
+                    ->filter($request->all())
+                    ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($visas, new VisaTransformer);
     }

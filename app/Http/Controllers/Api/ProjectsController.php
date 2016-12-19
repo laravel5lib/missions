@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\v1\ProjectRequest;
 use App\Http\Transformers\v1\ProjectTransformer;
 use App\Models\v1\Project;
-use App\Models\v1\ProjectCause;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,20 +15,14 @@ class ProjectsController extends Controller
      * @var Project
      */
     private $project;
-    /**
-     * @var ProjectCause
-     */
-    private $cause;
 
     /**
      * ProjectsController constructor.
      * @param Project $project
-     * @param ProjectCause $cause
      */
-    public function __construct(Project $project, ProjectCause $cause)
+    public function __construct(Project $project)
     {
         $this->project = $project;
-        $this->cause = $cause;
     }
 
     /**
@@ -38,11 +31,9 @@ class ProjectsController extends Controller
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function index($causeId, Request $request)
+    public function index(Request $request)
     {
-        $projects = $this->cause
-                         ->findOrFail($causeId)
-                         ->projects()
+        $projects = $this->project
                          ->filter($request->all())
                          ->paginate($request->get('per_page', 10));
 

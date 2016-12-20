@@ -127,7 +127,7 @@
             </span>
         </div>
         <hr class="divider sm">
-        <table class="table table-hover">
+        <table class="table table-hover table-striped">
             <thead>
             <tr>
                 <th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">

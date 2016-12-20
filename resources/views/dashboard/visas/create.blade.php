@@ -14,6 +14,10 @@
                 <div class="col-sm-8">
                     <h3>My Visas <small>&middot; Create</small></h3>
                 </div>
+                <div class="col-sm-4 text-right">
+                    <hr class="divider inv sm">
+                    <a href="/dashboard/records/visas" class="btn btn-primary"><i class="fa fa-chevron-left icon-left"></i> Back To All</a>
+                </div>
             </div>
         </div>
 </div>
@@ -21,7 +25,11 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
-                <visa-create-update></visa-create-update>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <visa-create-update></visa-create-update>
+                    </div><!-- end panel-body -->
+                </div><!-- end panel -->
             </div>
         </div>
     </div>

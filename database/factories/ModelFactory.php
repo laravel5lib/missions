@@ -82,9 +82,6 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         'phone_two'          => $faker->phoneNumber,
         'trip_id'            => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
         'companion_limit'    => random_int(0, 3),
-        'passport_id'        => $faker->randomElement(App\Models\v1\Passport::lists('id')->toArray()),
-        'visa_id'            => $faker->randomElement(App\Models\v1\Visa::lists('id')->toArray()),
-        'medical_release_id' => $faker->randomElement(App\Models\v1\MedicalRelease::lists('id')->toArray()),
         'avatar_upload_id'   => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray())
     ];
 });
@@ -873,10 +870,16 @@ $factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
     ];
 });
 
+/**
+ * Transaction Factory
+ */
 $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\Generator $faker)
 {
     $fund = $faker->randomElement(App\Models\v1\Fund::get()->toArray());
     $donor = $faker->randomElement(App\Models\v1\Donor::get()->toArray());
+
+//    $date = $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray());
+    $date = $faker->dateTimeThisMonth;
 
     return [
         'fund_id' => $fund['id'],
@@ -890,7 +893,29 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\
             'brand' => $faker->creditCardType,
             'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
         ],
-        'created_at' => $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray()),
+        'created_at' => $date,
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Transaction::class, 'check', function(Faker\Generator $faker)
+{
+    $fund = $faker->randomElement(App\Models\v1\Fund::get()->toArray());
+    $donor = $faker->randomElement(App\Models\v1\Donor::get()->toArray());
+
+//    $date = $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray());
+    $date = $faker->dateTimeThisMonth;
+
+    return [
+        'fund_id' => $fund['id'],
+        'donor_id' => $donor['id'],
+        'type' => 'donation',
+        'amount' => $faker->randomNumber(2),
+        'details' => [
+            'type' => 'check',
+            'number' => $faker->randomDigitNotNull,
+            'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
+        ],
+        'created_at' => $date,
     ];
 });
 
@@ -909,7 +934,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'anonymous', function(Faker
             'cardholder' => $faker->name,
             'brand' => $faker->creditCardType,
         ],
-        'created_at' => $faker->dateTimeThisYear
+        'created_at' => $faker->dateTimeThisMonth
     ];
 });
 
@@ -923,6 +948,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_from', function(F
         'type' => 'transfer',
         'amount' => -$faker->randomNumber(2),
         'details' => null,
+        'created_at' => $faker->dateTimeThisMonth
     ];
 });
 
@@ -936,6 +962,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Fak
         'type' => 'transfer',
         'amount' => $faker->randomNumber(2),
         'details' => null,
+        'created_at' => $faker->dateTimeThisMonth
     ];
 });
 

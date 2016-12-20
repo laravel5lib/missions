@@ -21,7 +21,7 @@
 							<img class="img-responsive" src="images/speakers/dom.jpg" alt="Dominic Russo">
 							<div class="panel-body">
 								<h5>Dominic Russo</h5>
-								<ul class="social-network social-circle">
+								<ul class="list-inline social-network social-circle">
 									<li><a href="https://instagram.com/dominicjrusso" title="Instagram"><i class="fa fa-instagram"></i></a></li>
 			                        <li><a href="https://www.facebook.com/Dominic-Russo-129305547108336/?fref=ts" title="Facebook"><i class="fa fa-facebook"></i></a></li>
 			                        <li><a href="https://twitter.com/dominicrusso" title="Twitter"><i class="fa fa-twitter"></i></a></li>
@@ -34,7 +34,7 @@
 							<img class="img-responsive" src="images/speakers/jed.jpg" alt="Jedidiah Thurner">
 							<div class="panel-body">
 								<h5>Jedidiah Thurner</h5>
-								<ul class="social-network social-circle">
+								<ul class="list-inline social-network social-circle">
 									<li><a href="https://instagram.com/jedidiahthurner" title="Instagram"><i class="fa fa-instagram"></i></a></li>
 			                        <li><a href="https://www.facebook.com/jedidiahthurner" title="Facebook"><i class="fa fa-facebook"></i></a></li>
 			                        <li><a href="https://twitter.com/jedidiahthurner" title="Twitter"><i class="fa fa-twitter"></i></a></li>
@@ -47,7 +47,7 @@
 							<img class="img-responsive" src="images/speakers/gabe.jpg" alt="Gabe Bahlhorn">
 							<div class="panel-body">
 								<h5>Gabe Bahlhorn</h5>
-								<ul class="social-network social-circle">
+								<ul class="list-inline social-network social-circle">
 									<li><a href="https://instagram.com/bahlhorn" title="Instagram"><i class="fa fa-instagram"></i></a></li>
 			                        <li><a href="https://www.facebook.com/gabebahlhorn?fref=ts" title="Facebook"><i class="fa fa-facebook"></i></a></li>
 			                        <li><a href="https://twitter.com/bahlhorn" title="Twitter"><i class="fa fa-twitter"></i></a></li>

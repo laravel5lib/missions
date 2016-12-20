@@ -4,67 +4,63 @@
         <div class="col-sm-12">
             <div class="text-center">
                 <form novalidate>
-                    <a class="btn btn-default-hollow btn-sm" @click="toggleChangeState()"><i class="fa fa-pencil icon-left"></i> Change Medical Release</a>
-                    <a class="btn btn-primary-hollow btn-sm" href="/dashboard/records/medical-releases/create"><i class="fa fa-plus"></i> Add New Medical Release</a>
+                    <a class="btn btn-default-hollow btn-sm" @click="toggleChangeState()"><i class="fa fa-pencil icon-left"></i> Change Visa</a>
+                    <a class="btn btn-primary-hollow btn-sm" href="/dashboard/records/visas/create"><i class="fa fa-plus icon-left"></i> Add New Visa</a>
                 </form>
             </div>
             <hr class="divider inv">
-            <div class="panel panel-default" v-if="medicalRelease">
+            <div class="panel panel-default" v-if="visa">
                 <div style="min-height:220px;" class="panel-body">
-                    <a role="button" :href="'/dashboard/records' + medicalRelease.links[0].uri">
+                    <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{visa.citizenship_name}}</h6>
+                    <a role="button" :href="'/dashboard/records' + visa.links[0].uri">
                         <h5 style="text-transform:capitalize;" class="text-primary">
-                            {{medicalRelease.name}}
+                            {{visa.given_names}} {{visa.surname}}
                         </h5>
                     </a>
                     <hr class="divider lg">
                     <p class="small">
-                        <b>Insurance Provider:</b> {{medicalRelease.ins_provider}}
+                        <b>ID:</b> {{visa.number}}
                         <br>
-                        <b>Insurance Policy #:</b> {{medicalRelease.ins_policy_no}}
+                        <b>BIRTH COUNTRY:</b> {{visa.citizenship_name}}
                         <br>
-                        <b>Emergency Contact:</b><br>
-                        {{medicalRelease.emergency_contact.name}} - {{medicalRelease.emergency_contact.relationship}}<br>
-                        {{medicalRelease.emergency_contact.email}}<br>
-                        {{medicalRelease.emergency_contact.phone | phone}}<br>
-                        <!--<br>-->
-                        <!--<b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment 'll'}}-->
+                        <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}
+                        <br>
+                        <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}
                     </p>
                 </div>
             </div>
-            <div v-if="!medicalRelease" role="alert"><p class="text-center text-muted"><em>This reservation has no Medical Release(s) assigned to it. Please select one or add one.</em></p></div>
+            <div v-if="!visa" role="alert"><p class="text-muted text-center"><em>This reservation has no visa(s) assigned to it. Please select one or add one.</em></p></div>
         </div>
 
         <div class="col-sm-12" v-if="changeState">
-            <div class="col-sm-12" v-if="loaded && !medicalReleases.length">
-                <div class="alert alert-info" role="alert">No Medical Releases found. Please create add one.</div>
+            <div class="col-sm-12" v-if="loaded && !visas.length">
+                <div class="alert alert-info" role="alert">No visas found. Please create add one.</div>
             </div>
-            <div class="row" v-if="loaded && medicalReleases.length">
-                <div class="col-sm-6" v-for="medicalRelease in paginatedMedicalReleases">
+            <div class="row" v-if="loaded && visas.length">
+                <div class="col-sm-4" v-for="visa in paginatedVisas">
                     <div class="panel panel-default">
                         <div style="min-height:220px;" class="panel-body">
-                            <a role="button" :href="'/dashboard/records' + medicalRelease.links[0].uri">
+                            <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{visa.citizenship_name}}</h6>
+                            <a role="button" :href="'/dashboard/records' + visa.links[0].uri">
                                 <h5 style="text-transform:capitalize;" class="text-primary">
-                                    {{medicalRelease.name}}
+                                    {{visa.given_names}} {{visa.surname}}
                                 </h5>
                             </a>
                             <hr class="divider lg">
                             <p class="small">
-                                <b>Insurance Provider:</b> {{medicalRelease.ins_provider}}
+                                <b>ID:</b> {{visa.number}}
                                 <br>
-                                <b>Insurance Policy #:</b> {{medicalRelease.ins_policy_no}}
+                                <b>BIRTH COUNTRY:</b> {{visa.citizenship_name}}
                                 <br>
-                                <b>Emergency Contact:</b><br>
-                                {{medicalRelease.emergency_contact.name}} - {{medicalRelease.emergency_contact.relationship}}<br>
-                                {{medicalRelease.emergency_contact.email}}<br>
-                                {{medicalRelease.emergency_contact.phone | phone}}<br>
-                                <!--<br>-->
-                                <!--<b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment 'll'}}-->
+                                <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}
+                                <br>
+                                <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}
                             </p>
                         </div><!-- end panel-body -->
                         <div class="panel-footer" style="padding: 0;">
                             <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
-                                <a class="btn btn-danger" @click="setMedicalRelease(medicalRelease)">
-                                    Select Medical Release
+                                <a class="btn btn-danger" @click="setVisa(visa)">
+                                    Select Visa
                                 </a>
                             </div>
                         </div>
@@ -91,32 +87,32 @@
         </div>
 
         <!--<div class="col-sm-12" v-if="newState">
-            <medicalRelease-create-update></medicalRelease-create-update>
+            <visa-create-update></visa-create-update>
         </div>-->
 
     </div>
 </template>
-<script type="text/javascript">
-    import medicalCreateUpdate from '../records/medicals/medical-create-update.vue';
+<script>
+    import visaCreateUpdate from '../records/visas/visa-create-update.vue';
     export default{
-        name: 'reservations-medical-releases-manager',
-        components:{medicalCreateUpdate},
-        props:['reservationId', 'medicalReleaseId'],
+        name: 'visa-manager',
+        components:{visaCreateUpdate},
+        props:['reservationId', 'visaId', 'requirementId'],
         data(){
             return{
-                medicalRelease:null,
-                medicalReleases: [],
+                visa:null,
+                visas: [],
 
                 //logic vars
-                medicalReleaseResource: this.$resource('medical/releases{/id}'),
+                visaResource: this.$resource('visas{/id}'),
                 reservationResource: this.$resource('reservations{/id}'),
                 loaded: false,
                 newState: false,
                 changeState: false,
 
                 // pagination vars
-                paginatedMedicalReleases: [],
-                selectedMedicalRelease: null,
+                paginatedVisas: [],
+                selectedVisa: null,
                 page: 1,
                 per_page: 3,
                 pagination: {
@@ -131,7 +127,7 @@
                 this.pagination.current_page = val;
                 this.paginate();
             },
-            'medicalReleases':function (val) {
+            'visas':function (val) {
                 if(val.length) {
                     this.paginate();
                 }
@@ -145,16 +141,16 @@
                 var end   = start + this.per_page;
                 var range = _.range(start, end);
                 _.each(range, function (index) {
-                    if (this.medicalReleases[index])
-                        array.push(this.medicalReleases[index]);
+                    if (this.visas[index])
+                        array.push(this.visas[index]);
                 }, this);
-                this.paginatedMedicalReleases = array;
+                this.paginatedVisas = array;
             },
-            setMedicalRelease(medicalRelease){
-                if(medicalRelease) {
-                    this.medicalRelease = medicalRelease;
+            setVisa(visa){
+                if(visa) {
+                    this.visa = visa;
                     this.reservationResource.update({id: this.reservationId}, {
-                        medical_release_id: medicalRelease.id
+                        visa_id: visa.id
                     }).then(function (response) {
                         this.toggleChangeState();
                     });
@@ -171,13 +167,12 @@
             },
         },
         ready(){
-            this.$http('users/me?include=medical_releases').then(function (response) {
-                this.medicalReleases = response.data.data.medical_releases.data;
-                this.pagination.total_pages = Math.ceil(this.medicalReleases.length / this.per_page);
-                this.medicalRelease = _.findWhere(this.medicalReleases, {id: this.medicalReleaseId});
+            this.$http('users/me?include=visas').then(function (response) {
+                this.visas = response.data.data.visas.data;
+                this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
+                this.visa = _.findWhere(response.data.data.visas.data, {id: this.visaId});
                 this.loaded = true;
             });
-
         }
     }
 </script>

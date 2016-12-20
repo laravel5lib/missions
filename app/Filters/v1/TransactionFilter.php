@@ -60,6 +60,17 @@ class TransactionFilter extends Filter
     }
 
     /**
+     * By payment method.
+     *
+     * @param $method
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function payment($method)
+    {
+        return $this->where('details->type', $method);
+    }
+
+    /**
      * From minimum amount.
      *
      * @param $amount
@@ -83,5 +94,31 @@ class TransactionFilter extends Filter
         if (! $amount) return null;
 
         return $this->where('amount', '<=', $amount);
+    }
+
+    /**
+     * To minimum date.
+     *
+     * @param $date
+     * @return \Illuminate\Database\Eloquent\Builder|null
+     */
+    public function minDate($date)
+    {
+        if (! $date) return null;
+
+        return $this->whereDate('created_at', '>=', $date);
+    }
+
+    /**
+     * To maximum date.
+     *
+     * @param $date
+     * @return \Illuminate\Database\Eloquent\Builder|null
+     */
+    public function maxDate($date)
+    {
+        if (! $date) return null;
+
+        return $this->whereDate('created_at', '<=', $date);
     }
 }

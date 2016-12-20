@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h3>Create Your Group</h3>
+                <h3>Group <small>&middot; Create</small></h3>
             </div>
         </div>
     </div>

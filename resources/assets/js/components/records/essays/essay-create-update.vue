@@ -2,26 +2,32 @@
     <validator name="CreateUpdateEssay" @touched="onTouched">
         <form id="CreateUpdateEssay" class="form-horizontal" novalidate>
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            <div class="form-group" :class="{ 'has-error': checkForError('author') }">
-                <label for="author" class="control-label">Author Name</label>
-                <input type="text" class="form-control" name="author" id="author" v-model="author_name"
+            <div class="row" :class="{ 'has-error': checkForError('author') }">
+                <div class="col-sm-12">
+                    <label for="author" class="control-label">Author Name</label>
+                    <input type="text" class="form-control" name="author" id="author" v-model="author_name"
                        placeholder="Author Name" v-validate:author="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
+                </div>
             </div>
 
-            <!--<div class="form-group" :class="{ 'has-error': checkForError('subject') }">
+            <!--<div class="row" :class="{ 'has-error': checkForError('subject') }">
+                <div class="col-sm-12">
                 <label for="subject" class="control-label">Subject</label>
                 <input type="text" class="form-control" name="subject" id="subject" v-model="subject"
                        placeholder="Subject" v-validate:subject="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
+                </div>
             </div>-->
 
-            <div class="form-group" v-for="QA in content">
+            <div class="row" v-for="QA in content">
+                <div class="col-sm-12">
                 <label class="control-label" v-text="QA.q"></label>
-                <textarea autosize class="form-control" v-model="QA.a" rows="10"></textarea>
+                <textarea class="form-control" v-model="QA.a"></textarea>
+                </div>
             </div>
-
-            <div class="form-group">
+            <hr class="divider inv">
+            <div class="row">
                 <div class="col-sm-12 text-center">
                     <a v-if="!isUpdate" href="/dashboard/records/essays" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>

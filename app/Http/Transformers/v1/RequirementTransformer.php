@@ -8,15 +8,6 @@ use League\Fractal\TransformerAbstract;
 class RequirementTransformer extends TransformerAbstract
 {
     /**
-     * List of resources available to include
-     *
-     * @var array
-     */
-    protected $availableIncludes = [
-        'reservations'
-    ];
-
-    /**
      * Transform the object into a basic array
      *
      * @param Requirement $requirement
@@ -35,15 +26,6 @@ class RequirementTransformer extends TransformerAbstract
             'updated_at'    => $requirement->updated_at->toDateTimeString()
         ];
 
-        if ($requirement->pivot)
-        {
-                $array['grace_period'] = (int) $requirement->pivot->grace_period
-                    ? $requirement->pivot->grace_period
-                    : $requirement->grace_period;
-                $array['status'] = $requirement->pivot->status;
-                $array['updated_at'] = $requirement->pivot->updated_at->toDateTimeString();
-        }
-
         $array['links'] = [
             [
                 'rel' => 'self',
@@ -52,18 +34,5 @@ class RequirementTransformer extends TransformerAbstract
         ];
 
         return $array;
-    }
-
-    /**
-     * Include Reservation
-     *
-     * @param Requirement $requirement
-     * @return \League\Fractal\Resource\Item
-     */
-    public function includeReservations(Requirement $requirement)
-    {
-        $reservations = $requirement->reservations;
-
-        return $this->collection($reservations, new ReservationTransformer);
     }
 }

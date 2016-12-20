@@ -30,6 +30,12 @@ class FundsTableSeeder extends Seeder
                 $t->fund->balance = $balance;
                 $t->fund->save();
             });
+        factory(App\Models\v1\Transaction::class, 'check', 100)->create()
+            ->each(function($t) {
+                $balance = $t->fund->balance + $t->amount;
+                $t->fund->balance = $balance;
+                $t->fund->save();
+            });
         factory(App\Models\v1\Transaction::class, 'transfer_to', 25)->create()
             ->each(function($t) {
                 $balance = $t->fund->balance + $t->amount;

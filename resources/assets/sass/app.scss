@@ -413,6 +413,10 @@ body:not(.modal-open) {
   }
 }
 
+.input-group .form-control.date-picker-active {
+  z-index: initial;
+}
+
 /* File Upload styles */
 .inputfile {
   width: 0.1px;
@@ -1214,6 +1218,10 @@ a.socialIcon:hover, .socialHoverClass {
 }
 
 .social-circle {
+  > li {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
   li a {
     display:inline-block;
     position:relative;

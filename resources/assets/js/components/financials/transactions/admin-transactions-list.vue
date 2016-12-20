@@ -13,10 +13,32 @@
                         <option value="credit">Credit</option>
                     </select>
                 </div>
+
                 <div class="form-group" v-if="!donor">
+                    <label>Donor</label>
                     <v-select class="form-control" id="donorFilter" :debounce="250" :on-search="getDonors"
                               :value.sync="donorObj" :options="donorsOptions" label="name"
                               placeholder="Filter by Donor"></v-select>
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select class="form-control" v-model="filters.payment">
+                        <option value="">All Methods</option>
+                        <option value="card">Credit Card</option>
+                        <option value="check">Check</option>
+                        <option value="cash">Cash</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>From Date</label>
+                    <date-picker class="form-control" :time.sync="filters.minDate"></date-picker>
+                </div>
+
+                <div class="form-group">
+                    <label>To Date</label>
+                    <date-picker class="form-control" :time.sync="filters.maxDate"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -170,7 +192,7 @@
         <hr class="divider sm">
         <div style="position: relative">
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            <table class="table table-hover">
+            <table class="table table-hover table-striped">
                 <thead>
                 <tr>
                     <th v-if="isActive('type')" :class="{'text-primary': orderByField === 'type'}">
@@ -238,7 +260,6 @@
                         <i @click="setOrderByField('created_at')" v-if="orderByField !== 'created_at'" class="fa fa-sort pull-right"></i>
                         <i @click="direction=direction*-1" v-if="orderByField === 'created_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                     </th>
-
                     <th><i class="fa fa-cog"></i></th>
                 </tr>
                 </thead>
@@ -254,9 +275,9 @@
                     <td v-if="isActive('donor')" v-text="transaction.donor.data.name"></td>
                     <td v-if="isActive('class')" v-text="transaction.fund.data.class"></td>
                     <td v-if="isActive('item')" v-text="transaction.fund.data.item"></td>
-                    <td v-if="isActive('last_four')" v-text="transaction.payment.last_four"></td>
-                    <td v-if="isActive('card_brand')" v-text="transaction.payment.brand"></td>
-                    <td v-if="isActive('cardholder')" v-text="transaction.payment.cardholder"></td>
+                    <td v-if="isActive('last_four')" v-text="transaction.details.last_four"></td>
+                    <td v-if="isActive('card_brand')" v-text="transaction.details.brand"></td>
+                    <td v-if="isActive('cardholder')" v-text="transaction.details.cardholder"></td>
                     <td v-if="isActive('donor_phone')" v-text="transaction.donor.data.phone"></td>
                     <td v-if="isActive('donor_email')" v-text="transaction.donor.data.email"></td>
                     <td v-if="isActive('fund_name')" v-text="transaction.fund.data.name"></td>
@@ -334,16 +355,21 @@
                     minAmount: null,
                     maxAmount: null,
                     type: null,
+                    maxDate: null,
+                    minDate: null,
+                    payment: ''
                 },
                 showFilters: false,
                 exportOptions: {
                     description: 'Description',
                     amount: 'Amount',
                     payment_type: 'Payment Type',
-                    type: 'Transaction Type',
+                    transaction_type: 'Transaction Type',
                     date: 'Transaction Date',
                     class: 'QuickBooks Class',
                     item: 'QuickBooks Item',
+                    type: 'QuickBooks Type',
+                    account: 'QuickBooks Account',
                     fund_name: 'Fund Name',
                     donor_name: 'Donor Name',
                     donor_email: 'Donor Email',

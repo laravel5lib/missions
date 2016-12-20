@@ -34,7 +34,7 @@
 
         <div class="col-sm-12" v-if="changeState">
             <div class="row">
-                <div class="col-sm-4" v-for="passport in paginatedPassports">
+                <div class="col-sm-4" v-for="passport in passports">
                     <div class="panel panel-default">
                         <div style="min-height:220px;" class="panel-body">
                             <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{passport.citizenship_name}}</h6>
@@ -65,89 +65,65 @@
                 </div>
             </div>
             <div class="col-sm-12 text-center">
-                <nav>
-                    <ul class="pagination pagination-sm">
-                        <li :class="{ 'disabled': pagination.current_page == 1 }">
-                            <a aria-label="Previous" @click="page=pagination.current_page-1">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                        <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                            <a aria-label="Next" @click="page=pagination.current_page+1">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                <pagination :pagination.sync="pagination"
+                            :callback="fetch"
+                            size="small">
+                </pagination>
             </div>
         </div>
-
-        <!--<div class="col-sm-12" v-if="newState">
-            <passport-create-update></passport-create-update>
-        </div>-->
-
     </div>
 </template>
 <script>
-    import passportCreateUpdate from '../records/passports/passport-create-update.vue';
     export default{
-        name: 'reservations-passports-manager',
-        components:{passportCreateUpdate},
-        props:['reservationId', 'passportId'],
+        name: 'passport-manager',
+        props:{
+            'reservationId': {
+                type: String,
+                required: true
+            },
+            'requirementId': {
+                type: String,
+                required: true
+            }
+        },
         data(){
             return{
-                passport:null,
+                passport: null,
                 passports: [],
+                requirement: {},
 
                 //logic vars
-                passportResource: this.$resource('passports{/id}'),
-                reservationResource: this.$resource('reservations{/id}'),
+                requirementResource: this.$resource('reservations/{reservationId}/requirements/{requirementId}'),
                 loaded: false,
                 newState: false,
                 changeState: false,
-
-                // pagination vars
-                paginatedPassports: [],
-                selectedPassport: null,
                 page: 1,
-                per_page: 3,
-                pagination: {
-                    current_page:1,
-                    total_pages: 0
-                },
+                per_page: 10,
+                perPageOptions: [5, 10, 25, 50, 100],
+                pagination: { current_page: 1 },
+                search: '',
 
             }
         },
         watch:{
-            'page': function (val, oldVal) {
-                this.pagination.current_page = val;
-                this.paginate();
+            'search': function (val, oldVal) {
+                this.page = 1;
+                this.fetch();
             },
-            'passports':function (val) {
-                if(val.length) {
-                    this.paginate();
-                }
+            'page': function (val, oldVal) {
+                this.fetch();
+            },
+            'per_page': function (val, oldVal) {
+                this.fetch();
             }
         },
         methods:{
-            // emulate pagination
-            paginate(){
-                var array = [];
-                var start = (this.pagination.current_page - 1) * this.per_page;
-                var end   = start + this.per_page;
-                var range = _.range(start, end);
-                _.each(range, function (index) {
-                    if (this.passports[index])
-                        array.push(this.passports[index]);
-                }, this);
-                this.paginatedPassports = array;
-            },
             setPassport(passport){
                 if(passport) {
                     this.passport = passport;
-                    this.reservationResource.update({id: this.reservationId}, {
-                        passport_id: passport.id
+                    this.requirementResource.update({reservationId: this.reservationId, requirementId: this.requirementId}, {
+                        document_id: passport.id,
+                        status: 'reviewing'
                     }).then(function (response) {
                         this.toggleChangeState();
                     });
@@ -160,16 +136,29 @@
             toggleNewState(){
                 this.newState=!this.newState;
                 this.changeState = false;
-
             },
+            fetch() {
+                console.log(this.$root.user.id);
+                var params = {
+                    user: this.$root.user.id,
+                    manager: this.$root.user.id,
+                    include: 'document'
+                };
+                this.requirementResource.get({
+                    reservationId: this.reservationId,
+                    requirementId: this.requirementId
+                }).then(function (response) {
+                    this.requirement = response.data.data;
+                });
+                this.$http.get('passports', params).then(function (response) {
+                    this.passports = response.data.data;
+                    this.passport = _.findWhere(response.data.data, {id: this.requirement.document_id});
+                    this.loaded = true;
+                });
+            }
         },
         ready(){
-            this.$http('users/me?include=passports').then(function (response) {
-                this.passports = response.data.data.passports.data;
-                this.pagination.total_pages = Math.ceil(this.passports.length / this.per_page);
-                this.passport = _.findWhere(response.data.data.passports.data, {id: this.passportId});
-                this.loaded = true;
-            });
+            this.fetch();
         }
     }
 </script>

@@ -75,7 +75,7 @@
             </div>
         </div>
         <hr>
-        <table class="table table-hover">
+        <table class="table table-hover table-striped">
             <thead>
             <tr>
                 <th :class="{'text-primary': orderByField === 'name'}">

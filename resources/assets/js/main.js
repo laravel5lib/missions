@@ -37,11 +37,6 @@ import reservationAvatar from './components/reservations/reservation-avatar.vue'
 import reservationCosts from './components/reservations/reservation-costs.vue';
 import reservationDues from './components/reservations/reservation-dues.vue';
 import reservationFunding from './components/reservations/reservation-funding.vue';
-import reservationsPassportsManager from './components/reservations/reservations-passports-manager.vue';
-import reservationsMedicalReleasesManager from './components/reservations/reservations-medical-releases-manager.vue';
-import reservationsEssaysManager from './components/reservations/reservations-essays-manager.vue';
-import reservationsVisasManager from './components/reservations/reservations-visas-manager.vue';
-import reservationsArrivalDesignation from './components/reservations/reservations-arrival-designation.vue';
 import userSettings from './components/users/user-settings.vue';
 import userProfileCountries from './components/users/user-profile-countries.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
@@ -56,6 +51,7 @@ import notes from './components/notes.vue';
 import todos from './components/todos.vue';
 import userPermissions from './components/users/user-permissions.vue';
 import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
+import reservationRequirements from './components/reservations/reservation-requirements.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -436,11 +432,6 @@ Vue.mixin({
 new Vue({
     el: '#app',
     data: {
-        user: {
-            name: '',
-            email: '',
-            public: false
-        },
         datePickerSettings: {
             type: 'min',
             week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
@@ -452,6 +443,11 @@ new Vue({
         showSuccess: false,
         showError: false,
         message: ''
+    },
+    computed: {
+        user() {
+            return JSON.parse(this.$cookie.get('user'));
+        }
     },
     components: {
         login,
@@ -482,6 +478,7 @@ new Vue({
         todos,
         userPermissions,
         uploadCreateUpdate,
+        reservationRequirements,
 
         //dashboard components
         recordsList,
@@ -498,11 +495,6 @@ new Vue({
         reservationCosts,
         reservationDues,
         reservationFunding,
-        reservationsPassportsManager,
-        reservationsMedicalReleasesManager,
-        reservationsVisasManager,
-        reservationsEssaysManager,
-        reservationsArrivalDesignation,
         userSettings,
         userProfileCountries,
         userProfileStories,
@@ -569,15 +561,15 @@ new Vue({
         }
     },
     ready: function() {
-        // console.log('vue is ready'),
-        this.$on('userHasLoggedIn', function (user) {
-          this.setUser(user)
-        });
-
         // Track window resizing
         $(window).on('resize', function(){
             this.$emit('Window:resize');
         }.bind(this));
+
+        this.$on('userHasLoggedIn', function (user) {
+            this.user = user;
+            this.authenticated = true;
+        });
 
         this.$on('showSuccess', function (msg) {
             this.message = msg;
@@ -605,6 +597,9 @@ new Vue({
         'showError': function (msg) {
             this.message = msg;
             this.showError = true;
+        },
+        'userHasLoggedIn': function (user) {
+            this.$cookie.set('user', JSON.stringify(user), 1);
         }
     }
 });

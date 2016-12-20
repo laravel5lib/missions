@@ -387,7 +387,9 @@
 				let deferred = $.Deferred();
 				that.$http.get('users/me').then(
 						function (response) {
-							that.$dispatch('userHasLoggedIn', response.data.data);
+							console.log(response.data.data);
+							that.$root.$emit('userHasLoggedIn', response.data.data);
+							// that.$dispatch('userHasLoggedIn', response.data.data);
 
 							if (that.isChildComponent || ignoreRedirect) {
 								that.userData = response.data.data;

@@ -55,11 +55,11 @@ class Donor extends Model
             // and between a start date and end date.
             // These values are passed by default when querying
             // for donations related to a fundraiser.
-            $transactions = $transactions->where('fund_id', $designation->get('fund_id'))
-                ->whereBetween('created_at', [
-                    $designation->get('started_at'),
-                    $designation->get('ended_at')
-                ]);
+            $transactions = $transactions->where('fund_id', $designation->get('fund_id'));
+//                ->whereBetween('created_at', [
+//                    $designation->get('started_at'),
+//                    $designation->get('ended_at')
+//                ]);
         }
 
         return $transactions;

@@ -7,8 +7,8 @@
             <tbody>
             @forelse(auth()->user()->outstandingRequirements() as $requirement)
                 <tr>
-                    <td style="padding:10px 15px;">{{ $requirement->name }}</td>
-                    <td style="padding:10px 15px;font-size:10px;vertical-align:middle;" class="text-right text-muted">{{ $requirement->due_at->format('M j') }}</td>
+                    <td style="padding:10px 15px;">{{ $requirement->requirement->name }}</td>
+                    <td style="padding:10px 15px;font-size:10px;vertical-align:middle;" class="text-right text-muted">{{ $requirement->requirement->due_at->format('M j') }}</td>
                 </tr>
                 @empty
                     <div style="padding: 40px 0;">

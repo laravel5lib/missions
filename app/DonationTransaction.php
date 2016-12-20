@@ -17,7 +17,7 @@ class DonationTransaction extends TransactionHandler
     {
         $this->validate();
 
-        if ($request->get('details.type') == 'card') {
+        if ($request->get('details')['type'] == 'card') {
             // has a credit card token already been created and provided?
             // if not, tokenize the card details.
             $request->has('token') ?
@@ -31,13 +31,14 @@ class DonationTransaction extends TransactionHandler
             $this->merchant->captureCharge($charge['id']);
 
             // rebuild the payment array with new details
-            $request['details'] = [
+            $request->merge(['details' => [
                 'type' => 'card',
+                'comment' => $request->get('comment'),
                 'charge_id' => $charge['id'],
                 'brand' => $charge['source']['brand'],
                 'last_four' => $charge['source']['last4'],
                 'cardholder' => $charge['source']['name'],
-            ];
+            ]]);
         }
 
         // we can pass donor details to try and find a match

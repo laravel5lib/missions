@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TripTableSeeder::class);
         $this->call(DonorTableSeeder::class);
         $this->call(ReservationTableSeeder::class);
+        $this->call(ProjectTablesSeeder::class);
         $this->call(FundsTableSeeder::class);
         $this->call(AssignmentTableSeeder::class);
         $this->call(ContactTableSeeder::class);
@@ -37,7 +38,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TransportSeeder::class);
         $this->call(AccommodationSeeder::class);
         $this->call(StoriesTableSeeder::class);
-        $this->call(ProjectTablesSeeder::class);
 
         config(['mail.driver' => 'smtp']);
         config(['queue.default' => 'sqs']);

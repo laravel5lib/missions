@@ -161,6 +161,22 @@ Route::get('/trips/{id}/register', function ($id = null) use ($dispatcher) {
     return view('site.trips.register')->with('trip', $trip);
 });
 
+/**
+ * Referrals
+ */
+Route::get('referrals/{id}', function($id) use($dispatcher) {
+    try {
+        $referral = $dispatcher->get('referrals/'. $id);
+    } catch (Dingo\Api\Exception\InternalHttpException $e) {
+        // We can get the response here to check the status code of the error or response body.
+        $response = $e->getResponse();
+
+        return $response;
+    }
+
+    return view('site.referrals.response')->with(compact('referral'));
+});
+
 
 Route::get('/login', 'Auth\AuthController@login');
 Route::post('/login', 'Auth\AuthController@authenticate');

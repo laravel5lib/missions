@@ -15,7 +15,7 @@
             <template v-if="activeView==='donors'">
                 <div class="panel panel-default" v-for="donor in donors">
                     <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
-                        <h5>
+                        <h5 class="text-capitalize">
                             <a role="button">
                                 {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
                             </a>
@@ -29,7 +29,7 @@
                     <div class="panel-heading" role="tab" id="heading-{{ donation.id }}">
                         <h5>
                             <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
-                            <small class="small">by <a :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>
+                            <small class="small">by <a class="text-capitalize" :href="'@' + donation.donor.data.account_url">{{ donation.name }}</a> on {{ donation.created_at|moment 'll'}}</small>
                             <br /><small>{{ donation.details.comment }}</small>
                         </h5>
                     </div>

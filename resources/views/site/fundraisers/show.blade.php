@@ -24,9 +24,9 @@
         <div class="row">
             <hr class="divider inv xlg">
             <h3 class="text-center text-primary">{{ $fundraiser->name }}</h3>
-            <h5 class="text-center">organized by <a href="{{ url($fundraiser->sponsor_type.'/'.$fundraiser->sponsor->url) }}">{{ $fundraiser->sponsor->name }}</a></h5>
+            <h5 class="text-center text-capitalize">organized by <a href="{{ url($fundraiser->sponsor_type.'/'.$fundraiser->sponsor->url) }}">{{ $fundraiser->sponsor->name }}</a></h5>
             <hr class="divider inv lg">
-            <div class="col-sm-4 col-sm-push-8">
+            <div class="col-xs-12 col-sm-6 col-sm-push-6 col-md-4 col-md-push-8">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h1 class="text-center text-success">${{ $fundraiser->raised() ? $fundraiser->raised() : 0 }} <span style="font-size: 18px;">Raised</span></h1>
@@ -58,7 +58,7 @@
                     <user-profile-fundraisers-donors id="{{ $fundraiser->id }}"></user-profile-fundraisers-donors>
                 </div><!-- end panel-group -->
             </div>
-            <div class="col-sm-8 col-sm-pull-4">
+            <div class="col-xs-12 col-sm-6 col-sm-pull-6 col-md-8 col-md-pull-4">
                 <fundraisers-uploads id="{{ $fundraiser->id }}" sponsor-id="{{ $fundraiser->sponsor_id }}" auth-id="{{ (auth()->check() ? auth()->id() : '') }}"></fundraisers-uploads>
                 <hr class="divider inv">
                 <ul class="nav nav-tabs">

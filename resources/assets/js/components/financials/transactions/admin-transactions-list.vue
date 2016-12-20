@@ -176,6 +176,18 @@
                 Donor
                 <i class="fa fa-close"></i>
             </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.payment" @click="filters.payment = ''" >
+                Payment Method
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.minDate" @click="filters.minDate = ''" >
+                From Date
+                <i class="fa fa-close"></i>
+            </span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.maxDate" @click="filters.maxDate = ''" >
+                To Date
+                <i class="fa fa-close"></i>
+            </span>
             <span style="margin-right:2px;" class="label label-default" v-show="filters.minAmount" @click="filters.minAmount = ''" >
                 Min Amount
                 <i class="fa fa-close"></i>

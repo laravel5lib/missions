@@ -39,7 +39,8 @@
 						<div class="col-sm-6">
 							<div class="input-group" :class="{ 'has-error': checkForError('start') }">
 								<span class="input-group-addon">Start</span>
-								<input type="date" class="form-control" v-model="started_at" id="started_at"
+								<date-picker class="form-control" :time.sync="started_at|moment 'MM-DD-YYYY HH:mm:ss'"></date-picker>
+								<input type="date" class="form-control hidden" v-model="started_atdden|moment 'MM-DD-YYYY HH:mm:ss'" id="started_at"
 									   v-validate:start="{ required: true }" required>
 							</div>
 							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
@@ -47,7 +48,8 @@
 						<div class="col-sm-6">
 							<div class="input-group" :class="{ 'has-error': checkForError('end') }">
 								<span class="input-group-addon">End</span>
-								<input type="date" class="form-control" v-model="ended_at" id="ended_at"
+								<date-picker class="form-control" :time.sync="ended_at|moment 'MM-DD-YYYY HH:mm:ss'"></date-picker>
+								<input type="date" class="form-control hidden" v-model="ended_at|moment 'MM-DD-YYYY HH:mm:ss'" id="ended_at"
 									   :min="started_at"
 									   v-validate:end="{ required: true }" required>
 							</div>
@@ -60,7 +62,8 @@
 			<div class="form-group">
 				<div class="col-sm-12">
 					<label for="published_at">Published</label>
-					<input type="datetime-local" class="form-control" v-model="published_at" id="published_at">
+					<date-picker class="form-control" :time.sync="published_at|moment 'MM-DD-YYYY HH:mm:ss'"></date-picker>
+					<input type="datetime-local" class="form-control hidden" v-model="published_at|moment 'MM-DD-YYYY HH:mm:ss'" id="published_at">
 				</div>
 			</div>
 

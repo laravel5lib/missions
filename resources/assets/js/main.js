@@ -266,6 +266,10 @@ Vue.http.interceptors.push({
 Vue.validator('email', function (val) {
     return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 });
+// Validate datetime inputs
+Vue.validator('datetime ', function (val) {
+    return moment(val).isValid();
+});
 
 Vue.filter('phone', {
     read:function (phone) {
@@ -298,22 +302,39 @@ Vue.filter('percentage', {
     }
 });
 
+// MVC concept of handling dates
+// Model/Server -> UTC | Vue Model/Controller -> UTC | View/Template -> Local
+// This filter should convert date assigned property from UTC to local when being displayed -> read()
+// This filter should convert date assigned property from Local to UTC when being changed via input -> writer5
 Vue.filter('moment', {
     read: function(val, format, diff = false) {
+        // console.log('before: ', val);
         var date = moment.utc(val).local().format(format||'LL');
 
         if(diff) {
             date = moment.utc(val).local().fromNow();
         }
+        // console.log('after: ', date);
 
         return date;
     },
     write: function(val, oldVal) {
-        return val
+        let format = 'YYYY-MM-DD HH:mm:ss';
+        // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
+        return   moment(val).local().utc().format(format);
     }
 });
 
-Vue.filter('momentUTC', {
+Vue.filter('mDateToDatetime', {
+    read: function(value) {
+        return moment.utc(value).local().format(format||'LL');
+    },
+    write: function(value, oldVal) {
+        return moment(value).utc();
+    }
+});
+
+Vue.filter('mUTC', {
     read: function(value) {
         return moment.utc(value);
     },
@@ -322,12 +343,21 @@ Vue.filter('momentUTC', {
     }
 });
 
-Vue.filter('momentLocal', {
+Vue.filter('mLocal', {
     read: function(value) {
         return moment.isMoment(value) ? value.local() : null;
     },
     write: function(value, oldVal) {
         return moment.isMoment(value) ? value.local() : null;
+    }
+});
+
+Vue.filter('mFormat', {
+    read: function(value, format) {
+        return moment(value).format(format);
+    },
+    write: function(value, oldVal) {
+        return value;
     }
 });
 

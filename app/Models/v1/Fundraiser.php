@@ -83,9 +83,19 @@ class Fundraiser extends Model
      */
     public function donations()
     {
-        return $this->fund->donations()
-                          ->from($this->started_at)
-                          ->to($this->ended_at);
+        return $this->fund->donations();
+//                          ->from($this->started_at)
+//                          ->to($this->ended_at);
+    }
+
+    /**
+     * Get all the transactions related to the fundraiser.
+     *
+     * @return mixed
+     */
+    public function transactions()
+    {
+        return $this->fund->transactions();
     }
 
     /**
@@ -96,9 +106,9 @@ class Fundraiser extends Model
     public function donors()
     {
         return $this->fund
-                    ->donors()
-                    ->wherePivot('created_at', '>=', $this->started_at)
-                    ->wherePivot('created_at', '<=', $this->ended_at);
+                    ->donors();
+//                    ->wherePivot('created_at', '>=', $this->started_at)
+//                    ->wherePivot('created_at', '<=', $this->ended_at);
     }
 
     /**
@@ -108,7 +118,7 @@ class Fundraiser extends Model
      */
     public function raised()
     {
-        return $this->donations()->sum('amount');
+        return $this->transactions()->sum('amount');
     }
 
     public function getPercentRaised()

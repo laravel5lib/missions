@@ -878,6 +878,9 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\
     $fund = $faker->randomElement(App\Models\v1\Fund::get()->toArray());
     $donor = $faker->randomElement(App\Models\v1\Donor::get()->toArray());
 
+//    $date = $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray());
+    $date = $faker->dateTimeThisMonth;
+
     return [
         'fund_id' => $fund['id'],
         'donor_id' => $donor['id'],
@@ -890,7 +893,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\
             'brand' => $faker->creditCardType,
             'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
         ],
-        'created_at' => $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray()),
+        'created_at' => $date,
     ];
 });
 
@@ -898,6 +901,9 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'check', function(Faker\Gen
 {
     $fund = $faker->randomElement(App\Models\v1\Fund::get()->toArray());
     $donor = $faker->randomElement(App\Models\v1\Donor::get()->toArray());
+
+//    $date = $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray());
+    $date = $faker->dateTimeThisMonth;
 
     return [
         'fund_id' => $fund['id'],
@@ -909,7 +915,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'check', function(Faker\Gen
             'number' => $faker->randomDigitNotNull,
             'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
         ],
-        'created_at' => $faker->randomElement(App\Models\v1\Fundraiser::pluck('started_at')->toArray()),
+        'created_at' => $date,
     ];
 });
 
@@ -928,7 +934,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'anonymous', function(Faker
             'cardholder' => $faker->name,
             'brand' => $faker->creditCardType,
         ],
-        'created_at' => $faker->dateTimeThisYear
+        'created_at' => $faker->dateTimeThisMonth
     ];
 });
 
@@ -942,6 +948,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_from', function(F
         'type' => 'transfer',
         'amount' => -$faker->randomNumber(2),
         'details' => null,
+        'created_at' => $faker->dateTimeThisMonth
     ];
 });
 
@@ -955,6 +962,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'transfer_to', function(Fak
         'type' => 'transfer',
         'amount' => $faker->randomNumber(2),
         'details' => null,
+        'created_at' => $faker->dateTimeThisMonth
     ];
 });
 

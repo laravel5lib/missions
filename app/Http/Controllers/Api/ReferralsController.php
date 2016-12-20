@@ -73,9 +73,6 @@ class ReferralsController extends Controller
             'sent_at' => Carbon::now()
         ]);
 
-        // generate a url to response form
-        // email url to referral_email
-
         $location = url('/referrals/' . $referral->id);
 
         return $this->response->created($location);
@@ -100,7 +97,8 @@ class ReferralsController extends Controller
             'referral_email' => $request->get('referral_email', $referral->referral_email),
             'referral_phone' => $request->get('referral_phone', $referral->referral_phone),
             'status' => $request->get('status', $referral->status),
-            'sent_at' => $request->get('sent_at', $referral->sent_at)
+            'sent_at' => $request->get('sent_at', $referral->sent_at),
+            'response' => $request->get('response', $referral->response)
         ]);
 
         return $this->response->item($referral, new ReferralTransformer);

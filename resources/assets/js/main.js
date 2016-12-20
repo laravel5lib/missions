@@ -52,6 +52,7 @@ import todos from './components/todos.vue';
 import userPermissions from './components/users/user-permissions.vue';
 import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
 import reservationRequirements from './components/reservations/reservation-requirements.vue';
+import referralResponse from './components/referrals/referral-response.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -431,6 +432,7 @@ new Vue({
         userPermissions,
         uploadCreateUpdate,
         reservationRequirements,
+        referralResponse,
 
         //dashboard components
         recordsList,

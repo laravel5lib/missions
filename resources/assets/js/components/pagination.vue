@@ -23,6 +23,7 @@
                 </a>
             </li>
         </ul>
+        <p class="text-center text-muted">Total: {{ pagination.total }}</p>
     </nav>
 </template>
 <script type="text/javascript">

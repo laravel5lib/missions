@@ -52,8 +52,8 @@ class Exporter extends Job implements ShouldQueue
      */
     public function handle(Mailer $mailer)
     {
-        Log::debug('request data', $this->request);
-        
+        Log::info('request data', $this->request);
+
         $collection = $this->data($this->request);
 
         $data = $collection->map(function($collection) {

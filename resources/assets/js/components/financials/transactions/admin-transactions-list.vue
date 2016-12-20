@@ -13,10 +13,32 @@
                         <option value="credit">Credit</option>
                     </select>
                 </div>
+
                 <div class="form-group" v-if="!donor">
+                    <label>Donor</label>
                     <v-select class="form-control" id="donorFilter" :debounce="250" :on-search="getDonors"
                               :value.sync="donorObj" :options="donorsOptions" label="name"
                               placeholder="Filter by Donor"></v-select>
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select class="form-control" v-model="filters.payment">
+                        <option value="">All Methods</option>
+                        <option value="card">Credit Card</option>
+                        <option value="check">Check</option>
+                        <option value="cash">Cash</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>From Date</label>
+                    <date-picker class="form-control" :time.sync="filters.minDate"></date-picker>
+                </div>
+
+                <div class="form-group">
+                    <label>To Date</label>
+                    <date-picker class="form-control" :time.sync="filters.maxDate"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -253,9 +275,9 @@
                     <td v-if="isActive('donor')" v-text="transaction.donor.data.name"></td>
                     <td v-if="isActive('class')" v-text="transaction.fund.data.class"></td>
                     <td v-if="isActive('item')" v-text="transaction.fund.data.item"></td>
-                    <td v-if="isActive('last_four')" v-text="transaction.payment.last_four"></td>
-                    <td v-if="isActive('card_brand')" v-text="transaction.payment.brand"></td>
-                    <td v-if="isActive('cardholder')" v-text="transaction.payment.cardholder"></td>
+                    <td v-if="isActive('last_four')" v-text="transaction.details.last_four"></td>
+                    <td v-if="isActive('card_brand')" v-text="transaction.details.brand"></td>
+                    <td v-if="isActive('cardholder')" v-text="transaction.details.cardholder"></td>
                     <td v-if="isActive('donor_phone')" v-text="transaction.donor.data.phone"></td>
                     <td v-if="isActive('donor_email')" v-text="transaction.donor.data.email"></td>
                     <td v-if="isActive('fund_name')" v-text="transaction.fund.data.name"></td>
@@ -333,6 +355,9 @@
                     minAmount: null,
                     maxAmount: null,
                     type: null,
+                    maxDate: null,
+                    minDate: null,
+                    payment: ''
                 },
                 showFilters: false,
                 exportOptions: {

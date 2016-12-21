@@ -31,7 +31,7 @@
             <div class="form-group" :class="{ 'has-error': checkForError('comments') }">
                 <div class="col-sm-12">
                     <label for="name">Questions, Comments, or Ideas</label>
-                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" v-validate:comments="{required: true}" rows=10></textarea>
+                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" v-validate:comments="{required: true}" rows=10 autosize></textarea>
                 </div>
             </div>
             <div class="form-group">

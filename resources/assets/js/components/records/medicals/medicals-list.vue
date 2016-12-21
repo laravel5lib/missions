@@ -107,7 +107,7 @@
 				showFilters: false,
 				includeManaging: false,
 				search: '',
-				per_page: 3,
+				per_page: 15,
 				pagination: {
 					current_page: 1
 				},

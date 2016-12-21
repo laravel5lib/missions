@@ -46,21 +46,31 @@
             <p class="text-center text-muted" role="alert"><em>No records found</em></p>
         </div>
 
-        <div class="col-sm-6 col-md-4" v-for="passport in passports">
+        <div class="col-sm-12" style="display:flex; flex-wrap: wrap;">
+        <div class="col-xs-12 col-sm-6 col-md-4" v-for="passport in passports" style="display:flex; flex-direction:column;">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <a role="button" :href="'/dashboard' + passport.links[0].uri">
+                    <a role="button" :href="'/dashboard/records/passports/' + passport.id">
                         <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
                             {{passport.given_names}} {{passport.surname}}
                         </h5>
                     </a>
                     <div style="position:absolute;right:25px;top:12px;">
-                        <a style="margin-right:3px;" :href="'/dashboard' + passport.links[0].uri + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a style="margin-right:3px;" :href="'/dashboard/records/passports/' + passport.id + '/edit'"><i class="fa fa-pencil"></i></a>
                         <a @click="selectedPassport = passport,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                     <hr class="divider">
-                    <label>ID</label>
-                    <p class="small">{{passport.number}}</p>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label>ID</label>
+                            <p class="small">{{passport.number}}</p>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <span class="label label-primary" v-if="passport.expired">
+                                <i class="fa fa-exclamation-triangle"></i> Expired
+                            </span>
+                        </div>
+                    </div>
                     <label>BIRTH COUNTRY</label>
                     <p class="small">{{passport.citizenship_name}}</p>
                     <div class="row">
@@ -76,6 +86,8 @@
                 </div><!-- end panel-body -->
             </div>
         </div>
+        </div>
+
         <div class="col-sm-12 text-center">
             <pagination :pagination.sync="pagination" :callback="searchPassports"></pagination>
 
@@ -110,7 +122,7 @@
                 showFilters: false,
                 includeManaging: false,
                 search: '',
-                per_page: 3,
+                per_page: 9,
                 pagination: {
                     current_page:1,
                 },

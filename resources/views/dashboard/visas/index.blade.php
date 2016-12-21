@@ -18,6 +18,6 @@
 
 @section('tab')
 
-<visas-list></visas-list>
+<visas-list user-id="{{ auth()->user()->id }}"></visas-list>
 
 @endsection

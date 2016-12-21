@@ -85,7 +85,7 @@
                                         <span class="input-group-addon">Start</span>
 										<date-picker class="form-control" :time.sync="started_at"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="started_at | moment 'LLLL'" id="started_at"
-                                               v-validate:start="{ required: true }" required>
+                                               v-validate:start="['required']" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -94,7 +94,7 @@
                                         <span class="input-group-addon">End</span>
 										<date-picker class="form-control" :time.sync="ended_at"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="ended_at | moment 'LLLL'" id="ended_at"
-                                               v-validate:end="{ required: true }" required>
+                                               v-validate:end="['required']" required>
                                     </div>
                                 </div>
                             </div>

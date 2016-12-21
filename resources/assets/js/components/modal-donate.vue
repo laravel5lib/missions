@@ -7,7 +7,7 @@
         <div class="panel panel-default collapse" id="collapseDonate">
             <div class="panel-body">
                 <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
-                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :fund-id="fundId" :recipient="recipient"></donate>
+                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :fund-id="fundId" :recipient="recipient" identifier="modal"></donate>
                 <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
                 <div class="text-center">
                     <button type="button" class="btn btn-default btn-sm" @click="prevState()" v-if="!isState('form', 1)"><i style="margin-right:3px;font-size:.8em;" class="fa fa-chevron-left"></i> Back</button>
@@ -24,7 +24,7 @@
         </div><!-- end panel -->
     </div>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select';
     import donateComponent from './donate.vue';
     export default{
@@ -136,15 +136,17 @@
                 this.donateModalOpen = false;
                 this.showModal = false;
                 this.showRight = false;
+                $('#collapseDonate').collapse('hide');
+                let t = setTimeout(this.resetState, 1000);
             }
         },
         ready: function () {
             // media query event handler
-            if (matchMedia) {
+            /*if (matchMedia) {
                 this.mediaQuery = window.matchMedia("(max-width: 767px)");
                 this.mediaQuery.addListener(this.widthChange);
                 this.widthChange(this.mediaQuery);
-            }
+            }*/
         },
     }
 </script>

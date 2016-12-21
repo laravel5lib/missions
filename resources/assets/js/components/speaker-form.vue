@@ -1,5 +1,5 @@
 <template>
-    <validator name="CreateGroup">
+    <validator name="SpeakerForm">
         <form class="form-horizontal" novalidate style="position:relative;">
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="form-group">
@@ -9,11 +9,11 @@
                            placeholder="John Smith" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="1" required>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6" :class="{ 'has-error': checkForError('organization') }">
                     <label for="name">Your Church/Organization</label>
                     <input type="text" class="form-control" name="organization" id="organization" v-model="organization"
-                           placeholder="Church Name"
-                           maxlength="100" minlength="1">
+                           placeholder="Church Name" v-validate:organization="{ required: true, minlength:1, maxlength:100 }"
+                           maxlength="100" minlength="1" required>
                 </div>
             </div>
 
@@ -28,15 +28,41 @@
                 </div>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': checkForError('comments') }">
-                <div class="col-sm-12">
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label for="infoAddress">Address 1</label>
+                    <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
+                </div>
+                <div class="col-sm-6">
+                    <label for="infoAddress2">Address 2</label>
+                    <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
+                </div>
+            </div>
+
+            <div class="row form-group col-sm-offset-2">
+                <div class="col-sm-4">
+                    <label for="infoCity">City</label>
+                    <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
+                </div>
+                <div class="col-sm-4">
+                    <label for="infoState">State/Prov.</label>
+                    <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
+                </div>
+                <div class="col-sm-4">
+                    <label for="infoZip">ZIP/Postal Code</label>
+                    <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12" :class="{ 'has-error': checkForError('comments') }">
                     <label for="name">Questions, Comments, or Ideas</label>
                     <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" v-validate:comments="{required: true}" rows=10 autosize></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a @click="submit()" class="btn btn-primary">Submit</a>
+                    <a @click="submit()" class="btn btn-primary">Send Request</a>
                 </div>
             </div>
         </form>
@@ -44,29 +70,40 @@
 </template>
 <script type="text/javascript">
     export default{
-        name: 'contact-form',
+    	name: 'speaker-form',
         data(){
-            return {
-                name: '',
-                organization: '',
+            return{
+                name:'',
+                organization:'',
                 phone_one: '',
                 email: '',
+                address_one: '',
+                address_two: '',
+                city: '',
+                state: '',
+                zip: '',
                 comments: '',
-                attemptSubmit: false,
+                attemptSubmit:false,
             }
         },
-        methods: {
+        methods:{
             checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateGroup[field].invalid && this.attemptSubmit;
+                return this.$SpeakerForm[field].invalid && this.attemptSubmit;
             },
             reset(){
                 $.extend(this, {
-                    name: '',
-                    organization: '',
+                    name:'',
+                    organization:'',
                     phone_one: '',
                     email: '',
+                    address_one: '',
+                    address_two: '',
+                    city: '',
+                    state: '',
+                    zip: '',
                     comments: '',
+                    attemptSubmit:false,
                 });
                 this.attemptSubmit = false;
             },
@@ -77,20 +114,22 @@
                     organization: this.organization,
                     phone_one: this.phone_one,
                     email: this.email,
+                    address_one: this.address_one,
+                    address_two: this.address_two,
+                    city: this.city,
+                    state: this.state,
+                    zip: this.zip,
                     comments: this.comments,
                 };
 
-                if (this.$CreateGroup.valid) {
-                    // this.$refs.spinner.show();
-                    this.$http.post('contact', data).then(function (response) {
+                if (this.$SpeakerForm.valid) {
+                    this.$http.post('speaker', data).then(function (response) {
                         console.log(response);
-                        // this.$refs.spinner.hide();
                         this.$root.$emit('showSuccess', 'Message Sent. Thank you for contacting us!');
                         this.reset();
                     }, function (error) {
                         console.log(error);
                         this.$root.$emit('showError', 'Something went wrong...');
-                        // this.$refs.spinner.hide();
                     });
                 } else {
                     this.$root.$emit('showError', 'Please check that the form is complete');
@@ -98,7 +137,7 @@
             }
         },
         ready(){
-
+            
         }
     }
 </script>

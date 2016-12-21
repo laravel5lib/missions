@@ -4,13 +4,13 @@
             <hr class="divider inv sm">
             <form class="col-sm-12">
 
-                <div class="form-group" v-if="!tripId">
+                <div class="form-group">
                     <v-select class="form-control" id="causeFilter" :debounce="250" :on-search="getCauses"
                               :value.sync="causeObj" :options="causeOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>
 
-                <div class="form-group">
+                <!--<div class="form-group">
                     <select  class="form-control input-sm" v-model="filters.type">
                         <option value="">Any Type</option>
                         <option value="ministry">Ministry</option>
@@ -20,7 +20,7 @@
                         <option value="medical">Medical</option>
                         <option value="leader">Leader</option>
                     </select>
-                </div>
+                </div>-->
 
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
@@ -142,11 +142,11 @@
                     page: this.pagination.current_page
                 };
 
-                /*if (this.includeManaging) {
-                    params.trip = this.trips;
+                if (this.includeManaging) {
+                    params.manager = this.userId;
                 } else {
-                    params.user = new Array(this.userId);
-                }*/
+                    params.user = this.userId;
+                }
 
                 switch (this.type) {
                     case 'active':
@@ -157,7 +157,6 @@
                         break;
                 }
                 $.extend(params, this.filters);
-
 
                 // this.$refs.spinner.show();
                 this.$http.get('projects', params).then(function (response) {

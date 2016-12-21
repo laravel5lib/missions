@@ -41,109 +41,176 @@
                     </div>
                 </div><!-- end panel-body -->
             </div><!-- end panel -->
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-8">
-                            <h5 class="panel-header">Conditions</h5>
-                        </div>
-                        <div class="col-xs-4 text-right">
-                            <button class="btn btn-xs btn-default-hollow" type="button" data-toggle="collapse" 
-                                    data-target="#newCondition" aria-expanded="false" aria-controls="newCondition">
-                                <i class="icon-left fa fa-plus"></i> Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group">
-                    <div class="list-group-item" v-for="condition in conditions">
-                        {{ condition | json }}
-                    </div>
-                    <div class="collapse" id="newCondition">
-                        <div class="list-group-item">
-                            <validator name="NewCondition">
-                                <form name="NewCondition">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control" v-model="newCondition.name">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" v-model="newCondition.medication"> Have Medication?
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" v-model="newCondition.diagnosed"> Medically Diagnosed?
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr class="divider inv sm">
-                                    <button class="btn btn-sm btn-success" type="button" @click="addCondition(newCondition)">Add Condition</button>
-                                </form>
-                            </validator>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-8">
-                            <h5 class="panel-header">Allergies</h5>
-                        </div>
-                        <div class="col-xs-4 text-right">
-                            <button class="btn btn-xs btn-default-hollow" type="button" data-toggle="collapse"
-                                    data-target="#newAllergy" aria-expanded="false" aria-controls="newAllergy">
-                                <i class="icon-left fa fa-plus"></i> Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group">
-                    <div class="list-group-item" v-for="allergy in allergies">
-                        {{ allergy | json }}
-                    </div>
-                    <div class="collapse" id="newAllergy">
-                        <div class="list-group-item">
-                            <validator name="newAllergy">
-                                <form name="newAllergy">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control" v-model="newAllergy.name">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" v-model="newAllergy.medication"> Have Medication?
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="checkbox">
-                                                <label>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <h5 class="panel-header">Conditions</h5>
+                                </div>
+                                <div class="col-xs-4 text-right">
 
-                                                    <input type="checkbox" v-model="newAllergy.diagnosed"> Medically Diagnosed?
-                                                </label>
-                                            </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group">
+                            <div class="list-group-item" v-for="condition in conditionsList|orderBy 'name'">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" v-model="condition.selected"> {{condition.name}}
+                                    </label>
+                                </div>
+                                <div class="row" v-if="condition.selected">
+                                    <div class="col-sm-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" v-model="condition.medication"> Have Medication?
+                                            </label>
                                         </div>
                                     </div>
-                                    <hr class="divider inv sm">
-                                    <button class="btn btn-sm btn-success" type="button" @click="addAllergy(newAllergy)">Add Allergy</button>
-                                </form>
-                            </validator>
+                                    <div class="col-sm-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" v-model="condition.diagnosed"> Medically Diagnosed?
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item" v-for="condition in additionalConditionsList">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" v-model="condition.selected"> {{condition.name}}
+                                    </label>
+                                </div>
+                                <div class="row" v-if="condition.selected">
+                                    <div class="col-sm-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" v-model="condition.medication"> Have Medication?
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" v-model="condition.diagnosed"> Medically Diagnosed?
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item text-center">
+                                <button class="btn btn-xs btn-default-hollow" type="button" data-toggle="collapse"
+                                        data-target="#newCondition" aria-expanded="false" aria-controls="newCondition">
+                                    <i class="icon-left fa fa-plus"></i> Add Unlisted Condition
+                                </button>
+                            </div>
+                            <div class="collapse" id="newCondition">
+                                <div class="list-group-item">
+                                    <validator name="NewCondition">
+                                        <form name="NewCondition">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" v-model="newCondition.name" required>
+                                            <hr class="divider inv sm">
+                                            <button class="btn btn-sm btn-success" type="button" @click="addCondition(newCondition)">Add Condition</button>
+                                        </form>
+                                    </validator>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <h5 class="panel-header">Allergies</h5>
+                                </div>
+                                <div class="col-xs-4 text-right">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group">
+                            <div class="list-group-item" v-for="allergy in allergiesList|orderBy 'name'">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" v-model="allergy.selected"> {{allergy.name}}
+                                    </label>
+                                </div>
+                                <div class="row" v-if="allergy.selected">
+                                    <div class="col-sm-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" v-model="allergy.medication"> Have Medication?
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" v-model="allergy.diagnosed"> Medically Diagnosed?
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item" v-for="allergy in additionalAllergiesList">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" v-model="allergy.selected"> {{allergy.name}}
+                                    </label>
+                                </div>
+                                <div class="row" v-if="allergy.selected">
+                                    <div class="col-sm-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" v-model="allergy.medication"> Have Medication?
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" v-model="allergy.diagnosed"> Medically Diagnosed?
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item text-center">
+                                <button class="btn btn-xs btn-default-hollow" type="button" data-toggle="collapse"
+                                        data-target="#newAllergy" aria-expanded="false" aria-controls="newAllergy">
+                                    <i class="icon-left fa fa-plus"></i> Add Unlisted Allergy
+                                </button>
+                            </div>
+                            <div class="collapse" id="newAllergy">
+                                <div class="list-group-item">
+                                    <validator name="newAllergy">
+                                        <form name="newAllergy">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" v-model="newAllergy.name">
+                                            <hr class="divider inv sm">
+                                            <button class="btn btn-sm btn-success" type="button" @click="addAllergy(newAllergy)">Add Allergy</button>
+                                        </form>
+                                    </validator>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5 class="panel-header">Doctor's Permission</h5>
+                </div>
+                <div class="panel-body">
+                    <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'medical-release-'+today"></upload-create-update>
+                </div>
+            </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h5 class="panel-header">Emergency Contact</h5>
@@ -250,14 +317,20 @@
                     name: '',
                     medication: false,
                     diagnosed: false,
+                    selected: true
                 },
                 newAllergy: {
                     name: '',
                     medication: false,
                     diagnosed: false,
+                    selected: true
                 },
 
                 // logic vars
+                conditionsList: [],
+                additionalConditionsList: [],
+                allergiesList: [],
+                additionalAllergiesList: [],
                 countries: [],
                 countryObj: null,
                 attemptSubmit: false,
@@ -294,11 +367,13 @@
                 return this.back(true);
             },
             addCondition(condition){
-                this.conditions.push(condition);
+                // condition.selected = true;
+                this.additionalConditionsList.push(condition);
                 this.reset('condition');
             },
             addAllergy(allergy){
-                this.allergies.push(allergy);
+                // allergy.selected = true;
+                this.additionalAllergiesList.push(allergy);
                 this.reset('allergy');
             },
             reset(type){
@@ -308,6 +383,7 @@
                             name: '',
                             medication: false,
                             diagnosed: false,
+                            selected: true
                         };
                         jQuery('#newCondition').collapse();
                         break;
@@ -316,15 +392,20 @@
                             name: '',
                             medication: false,
                             diagnosed: false,
+                            selected: true
                         };
                         jQuery('#newAllergy').collapse();
                         break;
                 }
             },
+            prepArrays(){
+                this.conditions = _.where(_.union(this.conditionsList, this.additionalConditionsList), { selected: true });
+                this.allergies = _.where(_.union(this.allergiesList, this.additionalAllergiesList), { selected: true });
+            },
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateMedicalRelease.valid) {
-                    // this.$refs.spinner.show();
+                    this.prepArrays();
                     this.resource.save(null, {
                         name: this.name,
                         ins_provider: this.ins_provider,
@@ -347,7 +428,7 @@
             update(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateMedicalRelease.valid) {
-                    // this.$refs.spinner.show();
+                    this.prepArrays();
                     this.resource.update({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -382,16 +463,65 @@
         },
         ready(){
             // this.$refs.spinner.show();
-            let fetchURL = this.isUpdate ? 'medical/releases/' + this.id : 'users/me';
+            let fetchURL = this.isUpdate ? 'medical/releases/' + this.id + '?include=conditions,allergies' : 'users/me';
             this.$http(fetchURL).then(function (response) {
                 // this.user = response.data.data;
                 this.user_id = response.data.data.id;
 
                 if (this.isUpdate) {
-                    let medical_releases = _.findWhere(response.data.data.medical_releases.data, {id: this.id});
-                    $.extend(this, medical_releases);
+                    let medical_release = response.data.data;
+                    $.extend(this, medical_release);
+
+                    this.$http('medical/conditions').then(function (response) {
+                        // prepare conditions for UI
+                        let med_conditions = medical_release.conditions.data;
+                        _.each(response.data.data, function (condition) {
+                            let obj = { name: condition, medication: false, diagnosed: false, selected: false };
+                            let match = _.find(med_conditions, function (c, i) {
+                                med_conditions[i].selected = true;
+                                return c.name === condition;
+                            });
+                            if (match) {
+                                med_conditions = _.reject(med_conditions, function (mc) {
+                                    return mc.name === match.name;
+                                });
+                                _.extend(obj, match, { selected: true });
+                            }
+                            this.conditionsList.push(obj);
+                        }.bind(this));
+                        this.additionalConditionsList = med_conditions;
+                    });
+                    this.$http('medical/allergies').then(function (response) {
+                        // prepare conditions for UI
+                        let med_allergies = medical_release.allergies.data;
+                        _.each(response.data.data, function (allergy) {
+                            let obj = { name: allergy, medication: false, diagnosed: false, selected: false };
+                            let match = _.find(med_allergies, function (a, i) {
+                                med_allergies[i].selected = true;
+                                return a.name === allergy;
+                            });
+                            if (match) {
+                                med_allergies = _.reject(med_allergies, function (ma) {
+                                    return ma.name === match.name;
+                                });
+                                _.extend(obj, match, { selected: true });
+                            }
+                            this.allergiesList.push(obj);
+                        }.bind(this));
+                        this.additionalAllergiesList = med_allergies;
+                    });
+                } else {
+                    this.$http('medical/conditions').then(function (response) {
+                        _.each(response.data.data, function (condition) {
+                            this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
+                        }.bind(this));
+                    })
+                    this.$http('medical/allergies').then(function (response) {
+                        _.each(response.data.data, function (allergy) {
+                            this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
+                        }.bind(this));
+                    });
                 }
-                // this.$refs.spinner.hide();
             });
         }
 

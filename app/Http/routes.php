@@ -100,6 +100,18 @@ Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
         return view('dashboard.essays.edit', compact('id'));
     });
 
+    Route::get('records/referrals/create', function () {
+        return view('dashboard.referrals.create');
+    });
+
+    Route::get('records/referrals/{id}', function ($id) {
+        return view('dashboard.referrals.index', compact('id'));
+    });
+
+    Route::get('records/referrals/{id}/edit', function ($id) {
+        return view('dashboard.referrals.edit', compact('id'));
+    });
+
     Route::get('reservations', 'ReservationsController@index');
     Route::get('reservations/{id}/{tab?}', 'ReservationsController@show');
 

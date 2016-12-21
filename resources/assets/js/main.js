@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import contactForm from './components/contact-form.vue';
+import speakerForm from './components/speaker-form.vue';
 import login from './components/login.vue';
 import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
@@ -30,15 +31,18 @@ import medicalsList from './components/records/medicals/medicals-list.vue';
 import passportsList from './components/records/passports/passports-list.vue';
 import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
 import essaysList from './components/records/essays/essays-list.vue';
+import referralsList from './components/records/referrals/referrals-list.vue';
 import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
 import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
 import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
+import referralCreateUpdate from './components/records/referrals/referral-create-update.vue';
 import reservationAvatar from './components/reservations/reservation-avatar.vue';
 import reservationCosts from './components/reservations/reservation-costs.vue';
 import reservationDues from './components/reservations/reservation-dues.vue';
 import reservationFunding from './components/reservations/reservation-funding.vue';
 import userSettings from './components/users/user-settings.vue';
 import userProfileCountries from './components/users/user-profile-countries.vue';
+import userProfileTripHistory from './components/users/user-profile-trip-history.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
 import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
 import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
@@ -190,8 +194,8 @@ Vue.http.interceptors.push({
             }
         }
 
-        // Only POST and PUT Requests
-        if (_.contains(['POST', 'PUT'],request.method)) {
+        // Only POST and PUT Requests to our API
+        if (_.contains(['POST', 'PUT'],request.method) && request.root === '/api') {
             console.log(this);
             console.log(request);
 
@@ -263,6 +267,10 @@ Vue.http.interceptors.push({
 Vue.validator('email', function (val) {
     return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 });
+// Validate datetime inputs
+Vue.validator('datetime ', function (val) {
+    return moment(val).isValid();
+});
 
 Vue.filter('phone', {
     read:function (phone) {
@@ -295,18 +303,62 @@ Vue.filter('percentage', {
     }
 });
 
+// MVC concept of handling dates
+// Model/Server -> UTC | Vue Model/Controller -> UTC | View/Template -> Local
+// This filter should convert date assigned property from UTC to local when being displayed -> read()
+// This filter should convert date assigned property from Local to UTC when being changed via input -> writer5
 Vue.filter('moment', {
     read: function(val, format, diff = false) {
+        // console.log('before: ', val);
         var date = moment.utc(val).local().format(format||'LL');
 
         if(diff) {
             date = moment.utc(val).local().fromNow();
         }
+        // console.log('after: ', date);
 
         return date;
     },
     write: function(val, oldVal) {
-        return val
+        let format = 'YYYY-MM-DD HH:mm:ss';
+        // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
+        return   moment(val).local().utc().format(format);
+    }
+});
+
+Vue.filter('mDateToDatetime', {
+    read: function(value) {
+        return moment.utc(value).local().format(format||'LL');
+    },
+    write: function(value, oldVal) {
+        return moment(value).utc();
+    }
+});
+
+Vue.filter('mUTC', {
+    read: function(value) {
+        return moment.utc(value);
+    },
+    write: function(value, oldVal) {
+        return moment.utc(value);
+    }
+});
+
+Vue.filter('mLocal', {
+    read: function(value) {
+        return moment.isMoment(value) ? value.local() : null;
+    },
+    write: function(value, oldVal) {
+        return moment.isMoment(value) ? value.local() : null;
+    }
+});
+
+Vue.filter('mFormat', {
+    read: function(value, format) {
+        return moment(value).format(format);
+    },
+    write: function(value, oldVal) {
+        return value;
     }
 });
 
@@ -405,6 +457,7 @@ new Vue({
     components: {
         login,
         contactForm,
+        speakerForm,
         fundraisers,
         campaigns,
         groups,
@@ -438,7 +491,9 @@ new Vue({
         recordsList,
         passportsList,
         essaysList,
+        referralsList,
         essayCreateUpdate,
+        referralCreateUpdate,
         passportCreateUpdate,
         visasList,
         visaCreateUpdate,
@@ -451,6 +506,7 @@ new Vue({
         reservationFunding,
         userSettings,
         userProfileCountries,
+        userProfileTripHistory,
         userProfileStories,
         userProfileFundraisers,
         userProfileFundraisersDonors,

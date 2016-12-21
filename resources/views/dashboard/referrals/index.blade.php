@@ -17,6 +17,6 @@
 @stop
 
 @section('tab')
-    <code>{ referrals list component here }</code>
+    <referrals-list user-id="{{ auth()->user()->id }}"></referrals-list>
     <hr class="divider inv lg">
 @stop

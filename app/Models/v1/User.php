@@ -368,7 +368,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get all the groups the user manages.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function managing()
     {
@@ -378,7 +378,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get all the trips the user facilitates.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function facilitating()
     {

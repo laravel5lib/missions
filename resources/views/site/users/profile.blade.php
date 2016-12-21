@@ -55,6 +55,7 @@
                 @endif
 
                     <user-profile-countries id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-countries>
+                    <user-profile-trip-history id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-trip-history>
 
             </div><!-- end col -->
             <div class="col-md-9 col-sm-8 col-xs-12">

@@ -457,6 +457,31 @@ table {
 		return obj && obj.__esModule ? obj : {default: obj};
 	}
 
+	let optionDefaults = {
+		type: 'min',
+		SundayFirst: false,
+		week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+		month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+		format: 'YYYY-MM-DD HH:mm:ss',
+		color: {
+			checked: '#F50057',
+			header: '#F74451',
+			headerText: '#fff'
+		},
+		inputStyle: {
+			width: '100%',
+			border: 'none'
+		},
+		inputClass: 'cov-datepicker',
+		placeholder: 'when?',
+		buttons: {
+			ok: 'OK',
+			cancel: 'Cancel'
+		},
+		overlayOpacity: 0.5,
+		dismissible: true
+	};
+
 	exports.default = {
 		name: 'date-picker',
 		props: {
@@ -467,31 +492,11 @@ table {
 			},
 			option: {
 				type: Object,
+				coerce: function(value){
+					return $.extend(optionDefaults, value);
+				},
 				default: function _default() {
-					return {
-						type: 'min',
-						SundayFirst: false,
-						week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-						month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-						format: 'YYYY-MM-DD HH:mm:ss',
-						color: {
-							checked: '#F50057',
-							header: '#F74451',
-							headerText: '#fff'
-						},
-						inputStyle: {
-							width: '100%',
-							border: 'none'
-						},
-						inputClass: 'cov-datepicker',
-						placeholder: 'when?',
-						buttons: {
-							ok: 'OK',
-							cancel: 'Cancel'
-						},
-						overlayOpacity: 0.5,
-						dismissible: true
-					};
+					return optionDefaults;
 				}
 			},
 			limit: {
@@ -833,6 +838,7 @@ table {
 					}
 				}
 				this.showInfo.check = true;
+				$('.input-group .form-control').addClass('date-picker-active').css('z-index', 'initial');
 			},
 			setTime: function setTime(type, obj, list) {
 				var _iteratorNormalCompletion2 = true;
@@ -874,12 +880,15 @@ table {
 				}
 				this.showInfo.check = false;
 				this.$emit('change', this.time);
+				console.log(this.time);
+				$('.input-group .form-control').removeClass('date-picker-active').css('z-index', 2);
 			},
 			dismiss: function dismiss(evt) {
 				if (evt.target.className === 'datepicker-overlay') {
 					if (this.option.dismissible === undefined || this.option.dismissible) {
 						this.showInfo.check = false;
 						this.$emit('cancel');
+						$('.input-group .form-control').removeClass('date-picker-active').css('z-index', 2);
 					}
 				}
 			},

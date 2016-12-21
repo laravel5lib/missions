@@ -81,7 +81,6 @@
                 <p class="text-muted"><em>Hmmmm. We couldn't find any fundraisers matching your search.</em></p>
             </div>
         </template>
-
     </div>
 </template>
 <script type="text/javascript">

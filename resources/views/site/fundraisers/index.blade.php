@@ -3,7 +3,7 @@
 @section('content')
     <fundraisers></fundraisers>
 <hr class="divider" style="margin-top:0;margin-bottom:0;">
-<div id="carousel-fundraising-platform" class="carousel slide" data-ride="carousel">
+<div id="carousel-fundraising-platform" class="carousel slide hidden-sm hidden-xs" data-ride="carousel">
           <ol class="carousel-indicators">
             <li data-target="#carousel-fundraising-platform" data-slide-to="0" class="active"></li>
             <li data-target="#carousel-fundraising-platform"></li>
@@ -54,6 +54,98 @@
             <span class="sr-only">Next</span>
           </a>
 </div><!-- end carousel -->
+<hr class="divider hidden-xs hidden-sm" style="margin-top:0;margin-bottom:0;">
+<div class="white-bg visible-sm visible-xs">
+	<div class="container">
+    	<div class="content-section">
+	    	<div class="row">
+	    		<div class="col-xs-12 col-sm-6">
+					<img class="img-responsive" src="../images/fundraising/mobile/fund-slide-1.png">
+	    		</div><!-- end col -->
+	    		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+					<h3 class="dash-trailing">Customize Your Fundraising Page</h3>
+	                <p>Fundraising pages are easily customizable with your personalized message, stories, photos, and videos to help you reach your goal.</p>
+	            </div><!-- end col -->
+	        </div><!-- end row -->
+	    </div><!-- end content-section -->
+	</div><!-- end container -->
+	<hr class="divider" style="margin-top:0;margin-bottom:0;">
+</div><!-- end gray-lighter-bg -->
+<div class="gray-lighter-bg visible-sm visible-xs">
+	<div class="container">
+    	<div class="content-section">
+	    	<div class="row">
+	    		<div class="col-xs-12 col-sm-6">
+					<img class="img-responsive" src="../images/fundraising/mobile/fund-slide-2.png">
+	    		</div><!-- end col -->
+	    		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+					<h3 class="dash-trailing">Share A Story</h3>
+	                <p>Keep your friends and family informed with the Stories feature that allows you to share your journey with supporters along the way. Post a story and share your page on your favorite social media platform.</p>
+	            </div><!-- end col -->
+	        </div><!-- end row -->
+	    </div><!-- end content-section -->
+	</div><!-- end container -->
+	<hr class="divider" style="margin-top:0;margin-bottom:0;">
+</div><!-- end gray-lighter-bg -->
+<div class="white-bg visible-sm visible-xs">
+	<div class="container">
+    	<div class="content-section">
+	    	<div class="row">
+	    		<div class="col-xs-12 col-sm-6">
+					<img class="img-responsive" src="../images/fundraising/mobile/fund-slide-3.png">
+	    		</div><!-- end col -->
+	    		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+					<h3 class="dash-trailing">Receive Donations</h3>
+	                <p>Receive donations through a simple, fast, and secure button right on your Fundraising page. No need to be directed to a clunky third party.</p>
+	            </div><!-- end col -->
+	        </div><!-- end row -->
+	    </div><!-- end content-section -->
+	</div><!-- end container -->
+	<hr class="divider" style="margin-top:0;margin-bottom:0;">
+</div><!-- end gray-lighter-bg -->
+<div class="gray-lighter-bg visible-sm visible-xs">
+	<div class="container">
+    	<div class="content-section">
+	    	<div class="row">
+	    		<div class="col-xs-12 col-sm-6">
+					<img class="img-responsive" src="../images/fundraising/mobile/fund-slide-4.png">
+	    		</div><!-- end col -->
+	    		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+					<h3 class="dash-trailing">View Donors & Donation Amounts</h3>
+	                <p>It’s always fun to see who’s supporting you. View each donor by name as well as the amount donated to your cause.</p>
+	            </div><!-- end col -->
+	        </div><!-- end row -->
+	    </div><!-- end content-section -->
+	</div><!-- end container -->
+	<hr class="divider" style="margin-top:0;margin-bottom:0;">
+</div><!-- end gray-lighter-bg -->
+<div class="white-bg visible-sm visible-xs">
+	<div class="container">
+    	<div class="content-section">
+	    	<div class="row">
+	    		<div class="col-xs-12 col-sm-6">
+		    		<img class="img-responsive" src="../images/fundraising/mobile/fund-slide-5.png">
+		    	</div><!-- end col -->
+	    		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+					<h3 class="dash-trailing">Track Progress</h3>
+	                <p>View your progress by dollar amount raised, percent, and how much you have to go until you’ve reached your goal. Fundrasing has never been this easy or fun!</p>
+	            </div><!-- end col -->
+	        </div><!-- end row -->
+	    </div><!-- end content-section -->
+	</div><!-- end container -->
+	<hr class="divider" style="margin-top:0;margin-bottom:0;">
+</div><!-- end gray-lighter-bg -->
+<div class="gray-lighter-bg">
+	<div class="container">
+    	<div class="content-section">
+	    	<div class="row">
+	    		<div class="col-sm-12 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+					<h2 class="text-center">Fundraising has never been this easy, or fun!</h2>
+	    		</div><!-- end col -->
+	    	</div><!-- end row -->
+	    </div><!-- end content-section -->
+	</div><!-- end container -->
+</div><!-- end gray-darker-bg -->
 <div class="dark-bg-primary">
     <div class="container">
     	<div class="content-section">

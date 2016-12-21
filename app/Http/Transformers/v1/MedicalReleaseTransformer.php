@@ -48,7 +48,7 @@ class MedicalReleaseTransformer extends TransformerAbstract
      * Include Reservations
      *
      * @param MedicalRelease $release
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeReservations(MedicalRelease $release)
     {
@@ -74,7 +74,7 @@ class MedicalReleaseTransformer extends TransformerAbstract
      * Include Notes
      *
      * @param MedicalRelease $release
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeNotes(MedicalRelease $release)
     {

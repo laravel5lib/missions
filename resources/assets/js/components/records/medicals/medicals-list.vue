@@ -8,13 +8,13 @@
 		<div class="col-sm-6 col-md-4" v-for="medical_release in paginatedMedical_releases">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<a role="button" :href="'/dashboard' + medical_release.links[0].uri">
+					<a role="button" :href="'/dashboard/records/medical-releases/' + medical_release.id">
 						<h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
 							{{medical_release.name}}
 						</h5>
 					</a>
 					<div style="position:absolute;right:25px;top:12px;">
-						<a style="margin-right:3px;" :href="'/dashboard' + medical_release.links[0].uri + '/edit'"><i
+						<a style="margin-right:3px;" :href="'/dashboard/records/medical-releases/' + medical_release.id + '/edit'"><i
 								class="fa fa-pencil"></i></a>
 						<a @click="selectedMedicalRelease = medical_release,deleteModal = true"><i
 								class="fa fa-times"></i></a>

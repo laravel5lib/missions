@@ -1,12 +1,54 @@
 <template>
     <div class="row">
+        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+            <hr class="divider inv sm">
+            <form class="col-sm-12">
+
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" v-model="filters.expired"> Expired
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>Sort By</label>
+                    <select class="form-control input-sm" v-model="filters.sort">
+                        <option value="given_names">Given Names</option>
+                        <option value="surname">Surname</option>
+                        <option value="number">Passport Number</option>
+                    </select>
+                </div>
+
+                <hr class="divider inv sm">
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+            </form>
+        </aside>
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+
+        <div class="col-xs-12 text-right">
+            <form class="form-inline">
+                <div style="margin-right:5px;" class="checkbox">
+                    <label>
+                        <input type="checkbox" v-model="includeManaging"> Include my group's visas
+                    </label>
+                </div>
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+                <!--<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
+                    Filters
+                    <i class="fa fa-filter"></i>
+                </button>-->
+            </form>
+            <hr class="divider sm inv">
+        </div>
 
         <div class="col-sm-12" v-if="loaded && !visas.length">
             <div role="alert"><p class="text-center text-muted"><em>No records found</em></p></div>
         </div>
 
-        <div class="col-sm-6 col-md-4" v-for="visa in paginatedVisas">
+        <div class="col-sm-6 col-md-4" v-for="visa in visas">
             <div class="panel panel-default">
                 <div style="min-height:220px;" class="panel-body">
                     <a role="button" :href="'/dashboard' + visa.links[0].uri">
@@ -35,21 +77,8 @@
             </div>
         </div>
         <div class="col-sm-12 text-center">
-            <nav>
-                <ul class="pagination pagination-sm">
-                    <li :class="{ 'disabled': pagination.current_page == 1 }">
-                        <a aria-label="Previous" @click="page=pagination.current_page-1">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                        <a aria-label="Next" @click="page=pagination.current_page+1">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <pagination :pagination.sync="pagination" :callback="searchVisas"></pagination>
+
         </div>
         <modal :show.sync="deleteModal" title="Remove Visa" small="true">
             <div slot="modal-body" class="modal-body">Are you sure you want to delete this Visa?</div>
@@ -63,45 +92,59 @@
 <script type="text/javascript">
     export default{
         name: 'visas-list',
+        props: {
+            'userId': {
+                type: String,
+                required: true
+            }
+        },
         data(){
             return{
                 visas: [],
-                paginatedVisas: [],
                 selectedVisa: null,
                 //logic vars
-                page: 1,
+                filters: {
+                    expired: false,
+                    sort: 'surname'
+                },
+                showFilters: false,
+                includeManaging: false,
+                search: '',
                 per_page: 3,
                 pagination: {
-                    current_page:1,
-                    total_pages: 0
+                    current_page:1
                 },
                 loaded: false,
                 deleteModal: false,
             }
         },
         watch:{
-            'page': function (val, oldVal) {
-                this.pagination.current_page = val;
-                this.paginate();
+            'filters': {
+                handler: function (val) {
+                    this.searchVisas();
+                },
+                deep: true
             },
-            'visas':function (val) {
-                if(val.length) {
-                    this.paginate();
-                }
+            'search': function (val, oldVal) {
+                this.searchVisas();
+            },
+            'includeManaging': function (val, oldVal) {
+                this.searchVisas();
             }
         },
         methods:{
             // emulate pagination
-            paginate(){
-                let array = [];
-                let start = (this.pagination.current_page - 1) * this.per_page;
-                let end   = start + this.per_page;
-                let range = _.range(start, end);
-                _.each(range, function (index) {
-                    if (this.visas[index])
-                        array.push(this.visas[index]);
-                }, this);
-                this.paginatedVisas = array;
+            searchVisas(){
+                let params = {user: this.userId, sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
+                if (this.includeManaging)
+                    params.manager = this.userId;
+                $.extend(params, this.filters);
+                this.$http.get('visas', params).then(function (response) {
+                    this.visas = response.data.data;
+                    this.pagination = response.data.meta.pagination;
+                    this.loaded = true;
+                    // this.$refs.spinner.hide();
+                });
             },
             removeVisa(visa){
                 if(visa) {
@@ -117,13 +160,7 @@
             }
         },
         ready(){
-            // this.$refs.spinner.show();
-            this.$http('users/me?include=visas').then(function (response) {
-                this.visas = response.data.data.visas.data;
-                this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
-                this.loaded = true;
-                // this.$refs.spinner.hide();
-            });
+            this.searchVisas();
         }
     }
 </script>

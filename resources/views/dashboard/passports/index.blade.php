@@ -17,6 +17,6 @@
 @stop
 
 @section('tab')
-    <passports-list></passports-list>
+    <passports-list user-id="{{ auth()->user()->id }}"></passports-list>
     <hr class="divider inv lg">
 @stop

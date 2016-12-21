@@ -1,6 +1,25 @@
 <template>
-    <div class="row">
+    <div class="row" style="position:relative">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <div class="col-xs-12 text-right">
+            <form class="form-inline">
+                <div style="margin-right:5px;" class="checkbox">
+                    <label>
+                        <input type="checkbox" v-model="includeManaging"> Include my group's essays
+                    </label>
+                </div>
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+                <!--<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
+                    Filters
+                    <i class="fa fa-filter"></i>
+                </button>-->
+            </form>
+            <hr class="divider sm inv">
+        </div>
+
         <div class="col-sm-12" v-if="loaded && !essays.length">
             <p class="text-center text-muted" role="alert"><em>No records found</em></p>
         </div>
@@ -47,13 +66,22 @@
                 essays: [],
                 selectedEssay: '',
                 //logic vars
-                page: 1,
+                includeManaging: false,
+                search: '',
                 per_page: 3,
                 pagination: {
                     current_page:1,
                 },
                 loaded: false,
                 deleteModal: false,
+            }
+        },
+        watch:{
+            'search': function (val, oldVal) {
+                this.searchEssays();
+            },
+            'includeManaging': function (val, oldVal) {
+                this.searchEssays();
             }
         },
         methods:{
@@ -68,8 +96,10 @@
                 }
             },
             searchEssays(){
-                // this.$refs.spinner.show();
-                this.$http('essays?user=' + this.userId).then(function (response) {
+                let params = {user: this.userId, sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
+                if (this.includeManaging)
+                    params.manager = this.userId;
+                this.$http.get('essays', params).then(function (response) {
                     this.essays = response.data.data;
                     this.pagination = response.data.meta.pagination;
                     this.loaded = true;

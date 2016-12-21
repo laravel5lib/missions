@@ -17,6 +17,6 @@
 @stop
 
 @section('tab')
-    <medicals-list></medicals-list>
+    <medicals-list user-id="{{ auth()->user()->id }}"></medicals-list>
     <hr class="divider inv xlg">
 @stop

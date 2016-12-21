@@ -1,11 +1,51 @@
 <template>
 	<div class="row">
+		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+			<hr class="divider inv sm">
+			<form class="col-sm-12">
+
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" v-model="filters.expired"> Expired
+					</label>
+				</div>
+
+				<div class="form-group">
+					<label>Sort By</label>
+					<select class="form-control input-sm" v-model="filters.sort">
+						<option value="name">Name</option>
+						<option value="created_at">Created At</option>
+					</select>
+				</div>
+
+				<hr class="divider inv sm">
+				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+			</form>
+		</aside>
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<div class="col-xs-12 text-right">
+			<form class="form-inline">
+				<div style="margin-right:5px;" class="checkbox">
+					<label>
+						<input type="checkbox" v-model="includeManaging"> Include my group's medical releases
+					</label>
+				</div>
+				<div class="input-group input-group-sm">
+					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+					<span class="input-group-addon"><i class="fa fa-search"></i></span>
+				</div>
+				<!--<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
+					Filters
+					<i class="fa fa-filter"></i>
+				</button>-->
+			</form>
+			<hr class="divider sm inv">
+		</div>
 		<div class="col-sm-12" v-if="loaded && !medical_releases.length">
 			<p class="text-center text-muted" role="alert"><em>No records found</em></p>
 		</div>
 
-		<div class="col-sm-6 col-md-4" v-for="medical_release in paginatedMedical_releases">
+		<div class="col-sm-6 col-md-4" v-for="medical_release in medical_releases">
 			<div class="panel panel-default">
 				<div class="panel-body">
 					<a role="button" :href="'/dashboard/records/medical-releases/' + medical_release.id">
@@ -32,22 +72,8 @@
 			</div>
 		</div>
 		<div class="col-sm-12 text-center">
-			<nav>
-				<ul class="pagination pagination-sm">
-					<li :class="{ 'disabled': pagination.current_page == 1 }">
-						<a aria-label="Previous" @click="page=pagination.current_page-1">
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a
-							@click="page=(n+1)">{{(n+1)}}</a></li>
-					<li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-						<a aria-label="Next" @click="page=pagination.current_page+1">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-				</ul>
-			</nav>
+			<pagination :pagination.sync="pagination" :callback="searchMedicals"></pagination>
+
 		</div>
 		<modal :show.sync="deleteModal" title="Remove Medical Release" small="true">
 			<div slot="modal-body" class="modal-body">Are you sure you want to delete this Medical Release?</div>
@@ -63,45 +89,60 @@
 <script type="text/javascript">
 	export default{
 		name: 'medicals-list',
+		props: {
+			'userId': {
+				type: String,
+				required: true
+			}
+		},
 		data(){
 			return {
 				medical_releases: [],
-				paginatedMedical_releases: [],
 				selectedMedicalRelease: null,
 				//logic vars
-				page: 1,
+				filters: {
+					expired: false,
+					sort: 'name'
+				},
+				showFilters: false,
+				includeManaging: false,
+				search: '',
 				per_page: 3,
 				pagination: {
-					current_page: 1,
-					total_pages: 0
+					current_page: 1
 				},
 				loaded: false,
 				deleteModal: false,
 			}
 		},
 		watch: {
-			'page': function (val, oldVal) {
-				this.pagination.current_page = val;
-				this.paginate();
+            'filters': {
+                handler: function (val) {
+                    this.searchMedicals();
+                },
+                deep: true
+            },
+			'search': function (val, oldVal) {
+				this.searchMedicals();
 			},
-			'medical_releases': function (val) {
-				if (val.length) {
-					this.paginate();
-				}
+			'includeManaging': function (val, oldVal) {
+				this.searchMedicals();
 			}
+
 		},
 		methods: {
 			// emulate pagination
-			paginate(){
-				let array = [];
-				let start = (this.pagination.current_page - 1) * this.per_page;
-				let end = start + this.per_page;
-				let range = _.range(start, end);
-				_.each(range, function (index) {
-					if (this.medical_releases[index])
-						array.push(this.medical_releases[index]);
-				}, this);
-				this.paginatedMedical_releases = array;
+			searchMedicals(){
+				let params = {user: this.userId, sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
+				if (this.includeManaging)
+					params.manager = this.userId;
+				$.extend(params, this.filters);
+				this.$http.get('medical/releases', params).then(function (response) {
+					this.medical_releases = response.data.data;
+					this.pagination = response.data.meta.pagination;
+					this.loaded = true;
+					// this.$refs.spinner.hide();
+				});
 			},
 			removeMedicalRelease(medical_release){
 				if (medical_release) {
@@ -116,13 +157,7 @@
 			}
 		},
 		ready(){
-			// this.$refs.spinner.show();
-			this.$http('users/me?include=medical_releases').then(function (response) {
-				this.medical_releases = response.data.data.medical_releases.data;
-				this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
-				this.loaded = true;
-				// this.$refs.spinner.hide();
-			});
+			this.searchMedicals();
 		}
 	}
 </script>

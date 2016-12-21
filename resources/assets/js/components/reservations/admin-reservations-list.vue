@@ -491,6 +491,7 @@
 			'filters': {
 				handler: function (val) {
 					// console.log(val);
+					this.pagination.current_page = 1;
 					this.searchReservations();
 				},
 				deep: true
@@ -533,7 +534,8 @@
 			},
             'search': function (val, oldVal) {
 				this.page = 1;
-                this.searchReservations();
+				this.pagination.current_page = 1;
+				this.searchReservations();
             },
             'page': function (val, oldVal) {
 				this.searchReservations();

@@ -121,14 +121,17 @@
         watch:{
             'filters': {
                 handler: function (val) {
+                    this.pagination.current_page = 1;
                     this.searchPassports();
                 },
                 deep: true
             },
             'search': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.searchPassports();
             },
             'includeManaging': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.searchPassports();
             }
 

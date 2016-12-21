@@ -510,7 +510,6 @@
                     this.additionalAllergiesList = med_allergies;
                 });
                 });
-
             } else {
                 this.$http('medical/conditions').then(function (response) {
                     _.each(response.data.data, function (condition) {
@@ -524,6 +523,5 @@
                 });
             }
         }
-
     }
 </script>

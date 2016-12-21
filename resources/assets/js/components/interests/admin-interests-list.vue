@@ -257,6 +257,7 @@
             'filters': {
                 handler: function (val) {
                     // console.log(val);
+                    this.pagination.current_page = 1;
                     this.searchInterests();
                 },
                 deep: true
@@ -271,6 +272,7 @@
                 this.filters.campaign = val ? val.id : '';
             },
             'search': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.page = 1;
                 this.searchInterests();
             },

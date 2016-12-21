@@ -121,14 +121,17 @@
         watch:{
             'filters': {
                 handler: function (val) {
+                    this.pagination.current_page = 1;
                     this.searchVisas();
                 },
                 deep: true
             },
             'search': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.searchVisas();
             },
             'includeManaging': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.searchVisas();
             }
         },

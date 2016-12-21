@@ -118,14 +118,17 @@
 		watch: {
             'filters': {
                 handler: function (val) {
-                    this.searchMedicals();
+					this.pagination.current_page = 1;
+					this.searchMedicals();
                 },
                 deep: true
             },
 			'search': function (val, oldVal) {
+				this.pagination.current_page = 1;
 				this.searchMedicals();
 			},
 			'includeManaging': function (val, oldVal) {
+				this.pagination.current_page = 1;
 				this.searchMedicals();
 			}
 

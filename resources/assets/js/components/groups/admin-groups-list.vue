@@ -178,6 +178,7 @@
         watch: {
             'search': function (val, oldVal) {
                 this.page = 1;
+                this.pagination.current_page = 1;
                 this.searchGroups();
             },
             'per_page': function (val, oldVal) {

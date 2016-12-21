@@ -125,12 +125,13 @@
 			'filters': {
 				handler: function (val) {
 					// console.log(val);
-					this.searchUploads();
+                    this.pagination.current_page = 1;
+                    this.searchUploads();
 				},
 				deep: true
 			},
             'search': function (val, oldVal) {
-				this.page = 1;
+                this.pagination.current_page = 1;
                 this.searchUploads();
             },
             'orderByField': function (val, oldVal) {

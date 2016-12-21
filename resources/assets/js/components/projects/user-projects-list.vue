@@ -114,6 +114,7 @@
             'filters': {
                 handler: function (val) {
                     // console.log(val);
+                    this.pagination.current_page = 1;
                     this.getProjects();
                 },
                 deep: true
@@ -125,9 +126,11 @@
                 this.filters.cause = val ? val.id : '';
             },
             'search': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.getProjects();
             },
             'includeManaging': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.getProjects();
             }
         },

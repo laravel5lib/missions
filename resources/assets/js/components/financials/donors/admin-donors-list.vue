@@ -331,6 +331,7 @@
             'filters': {
                 handler: function (val) {
                     console.log(val);
+                    this.pagination.current_page = 1;
                     this.searchDonors();
                 },
                 deep: true
@@ -385,6 +386,7 @@
             },
             'search': function (val, oldVal) {
                 this.page = 1;
+                this.pagination.current_page = 1;
                 this.searchDonors();
             },
             'per_page': function (val, oldVal) {

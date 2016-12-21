@@ -58,6 +58,7 @@
         },
         watch: {
             'search': function (val) {
+                this.pagination.current_page = 1;
                 this.searchInterests();
             }
         },

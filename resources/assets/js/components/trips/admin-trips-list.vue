@@ -139,12 +139,14 @@
             'filters': {
                 handler: function (val) {
                     // console.log(val);
+                    this.pagination.current_page = 1;
                     this.searchTrips();
                 },
                 deep: true
             },
             'search': function (val, oldVal) {
                 this.page = 1;
+                this.pagination.current_page = 1;
                 this.searchTrips();
             },
             'page': function (val, oldVal) {

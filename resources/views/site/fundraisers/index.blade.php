@@ -2,6 +2,7 @@
 
 @section('content')
     <fundraisers></fundraisers>
+<hr class="divider" style="margin-top:0;margin-bottom:0;">
 <div id="carousel-fundraising-platform" class="carousel slide" data-ride="carousel">
           <ol class="carousel-indicators">
             <li data-target="#carousel-fundraising-platform" data-slide-to="0" class="active"></li>
@@ -9,19 +10,40 @@
           </ol>
           <div class="carousel-inner" role="listbox">
           	<div class="item active">
-	            <img class="img-responsive" src="../images/cover-photo2.jpg">
+	            <img class="img-responsive" src="../images/fundraising/fund-slide-1.jpg">
 	            <div class="carousel-caption">
-	            	<h3 class="dash-trailing">Fundraising Made Easy</h3>
-	                <p>The whole idea is to make fundraising easy. We've done that with your personalized Missions.Me Profile.</p>
+	            	<h3 class="dash-trailing">Customize Your Fundraising Page</h3>
+	                <p>Fundraising pages are easily customizable with your personalized message, stories, photos, and videos to help you reach your goal.</p>
 	            </div>
-	        </div>
+	        </div><!-- end item -->
 			<div class="item">
-	            <img class="img-responsive" src="../images/cover-photo.jpg">
+	            <img class="img-responsive" src="../images/fundraising/fund-slide-2.jpg">
 	            <div class="carousel-caption">
-	            	<h3 class="dash-trailing">Your Profile</h3>
-	                <p>The whole idea is to make fundraising easy. We've done that with your personalized Missions.Me Profile.</p>
+	            	<h3 class="dash-trailing">Share A Story</h3>
+	                <p>Keep your friends and family informed with the Stories feature that allows you to share your journey with supporters along the way. Post a story and share your page on your favorite social media platform.</p>
 	            </div>
-	        </div>	        
+	        </div><!-- end item -->	 
+	        <div class="item">
+	            <img class="img-responsive" src="../images/fundraising/fund-slide-3.jpg">
+	            <div class="carousel-caption">
+	            	<h3 class="dash-trailing">Receive Donations</h3>
+	                <p>Receive donations through a simple, fast, and secure button right on your Fundraising page. No need to be directed to a clunky third party.</p>
+	            </div>
+	        </div><!-- end item -->
+	        <div class="item">
+	            <img class="img-responsive" src="../images/fundraising/fund-slide-4.jpg">
+	            <div class="carousel-caption">
+	            	<h3 class="dash-trailing">View Donors & Donation Amounts</h3>
+	                <p>It’s always fun to see who’s supporting you. View each donor by name as well as the amount donated to your cause.</p>
+	            </div>
+	        </div><!-- end item --> 
+	        <div class="item">
+	            <img class="img-responsive" src="../images/fundraising/fund-slide-5.jpg">
+	            <div class="carousel-caption">
+	            	<h3 class="dash-trailing">Track Progress</h3>
+	                <p>View your progress by dollar amount raised, percent, and how much you have to go until you’ve reached your goal. Fundrasing has never been this easy or fun!</p>
+	            </div>
+	        </div><!-- end item -->   
           </div>
           <a class="left carousel-control" href="#carousel-fundraising-platform" role="button" data-slide="prev">
             <span class="fa fa-angle-left" aria-hidden="true"></span>

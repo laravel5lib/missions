@@ -1,40 +1,27 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
         <div class="text-center">
-        <a class="btn btn-success" @click="launchDonate">Donate<span class="hidden-sm"> To The Cause</span></a>
-        <!--<a class="btn btn-primary btn-justified show-xs" @click="showRight=!showRight">Donate</a>-->
+        <a class="btn btn-success" data-toggle="collapse" href="#collapseDonate" aria-expanded="false" aria-controls="collapseDonate">Donate<span class="hidden-sm"> To The Cause</span></a>
         </div>
         <hr class="divider inv sm">
-        <modal :title="'Donate to ' + title" :show.sync="showModal" effect="fade" width="500">
-            <div slot="modal-body" class="modal-body">
+        <div class="panel panel-default collapse" id="collapseDonate">
+            <div class="panel-body">
                 <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
-                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :fund-id="fundId" :recipient="recipient" identifier="modal"></donate>
-            </div>
-            <div slot="modal-footer" class="modal-footer">
+                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :fund-id="fundId" :recipient="recipient"></donate>
                 <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
-                <button type="button" class="btn btn-default" @click="prevState()" v-if="!isState('form', 1)">Back</button>
+                <div class="text-center">
+                    <button type="button" class="btn btn-default btn-sm" @click="prevState()" v-if="!isState('form', 1)"><i style="margin-right:3px;font-size:.8em;" class="fa fa-chevron-left"></i> Back</button>
 
-                <button type="button" class="btn btn-primary" @click="nextState()" v-if="isState('form', 1)">Next</button>
-                <button type="button" class="btn btn-primary" @click="reviewDonation('modal')" v-if="isState('form', 2)">Review</button>
-                <button type="button" class="btn btn-primary" @click="donate('modal')" v-if="donationState==='review'">Donate</button>
-                <button type="button" class="btn btn-success" @click="done" v-if="donationState==='confirmation'">Close</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click="nextState()" v-if="isState('form', 1)">Next <i style="margin-left:3px;font-size:.8em;" class="fa fa-chevron-right"></i></button>
+                    <button type="button" class="btn btn-primary btn-sm" @click="reviewDonation('modal')" v-if="isState('form', 2)">Review</button>
+                    <button type="button" class="btn btn-primary btn-sm" @click="donate('modal')" v-if="donationState==='review'">Donate</button>
+                    <button type="button" class="btn btn-success btn-sm" @click="done" v-if="donationState==='confirmation'">Close</button>
+                </div><!-- end buttons -->
+            </div><!-- end panel-body -->
+            <div class="panel-footer text-center">
+                <a href="https://stripe.com/" target="_blank"><span style="font-size:.6em;color:#bcbcbc;text-transform:uppercase;letter-spacing:1px;">Securely</span> <img style="width:90px; height:20px;opacity:.65;" src="../images/powered-by-stripe@2x.png" alt="Powered by Stripe"></a>
             </div>
-        </modal>
-
-        <aside :show.sync="showRight" placement="right" header="Donate" :width="375">
-            <div class="col-sm-12">
-                <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
-                        :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :fund-id="fundId" :recipient="recipient" identifier="aside"></donate>
-                <div class="modal-footer">
-                    <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
-                    <button type="button" class="btn btn-default btn-xs" @click="prevState()" v-if="!isState('form', 1) && donationState!=='confirmation'">Back</button>
-                    <button type="button" class="btn btn-primary btn-xs" @click="nextState()" v-if="isState('form', 1)">Next</button>
-                    <button type="button" class="btn btn-primary btn-xs" @click="reviewDonation('aside')" v-if="isState('form', 2)">Review Donation</button>
-                    <button type="button" class="btn btn-primary btn-xs" @click="donate('aside')" v-if="donationState==='review'">Donate</button>
-                    <button type="button" class="btn btn-success btn-xs" @click="done" v-if="donationState==='confirmation'">Close</button>
-                </div>
-            </div>
-        </aside>
+        </div><!-- end panel -->
     </div>
 </template>
 <script>
